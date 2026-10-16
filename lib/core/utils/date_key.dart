@@ -102,8 +102,10 @@ final class DateKey implements Comparable<DateKey> {
 /// A calendar month in the family timezone, written 'yyyy-MM'.
 final class MonthKey implements Comparable<MonthKey> {
   MonthKey(this.year, this.month)
-      : assert(year >= 1 && year <= 9999 && month >= 1 && month <= 12,
-            'Invalid month $year-$month');
+      : assert(
+          year >= 1 && year <= 9999 && month >= 1 && month <= 12,
+          'Invalid month $year-$month',
+        );
 
   factory MonthKey.fromInstant(
     DateTime instant, {
@@ -166,7 +168,8 @@ final class DateKeyRange {
   final DateKey start;
   final DateKey end;
 
-  bool contains(DateKey key) => key.compareTo(start) >= 0 && key.compareTo(end) <= 0;
+  bool contains(DateKey key) =>
+      key.compareTo(start) >= 0 && key.compareTo(end) <= 0;
 
   @override
   bool operator ==(Object other) =>

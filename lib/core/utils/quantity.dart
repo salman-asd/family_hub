@@ -33,8 +33,10 @@ final class Quantity implements Comparable<Quantity> {
   /// Plain decimal text without trailing zeros: 2500 -> '2.5', 2000 -> '2'.
   String toDecimalString() {
     final whole = milli ~/ 1000;
-    final fraction =
-        (milli % 1000).toString().padLeft(3, '0').replaceFirst(RegExp(r'0+$'), '');
+    final fraction = (milli % 1000)
+        .toString()
+        .padLeft(3, '0')
+        .replaceFirst(RegExp(r'0+$'), '');
     return fraction.isEmpty ? '$whole' : '$whole.$fraction';
   }
 

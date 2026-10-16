@@ -9,7 +9,10 @@ void main() {
       expect(Quantity.parse('2.5').valueOrNull, const Quantity.milli(2500));
       expect(Quantity.parse('২.৫').valueOrNull, const Quantity.milli(2500));
       expect(Quantity.parse('0.001').valueOrNull, const Quantity.milli(1));
-      expect(Quantity.parse('1,000').valueOrNull, const Quantity.milli(1000000));
+      expect(
+        Quantity.parse('1,000').valueOrNull,
+        const Quantity.milli(1000000),
+      );
     });
 
     test('rejects 4 decimals and negatives', () {

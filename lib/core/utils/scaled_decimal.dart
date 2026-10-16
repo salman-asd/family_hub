@@ -17,9 +17,8 @@ Result<int> parseScaledDecimal(
   required String field,
   bool allowNegative = true,
 }) {
-  final cleaned = toEnglishDigits(raw)
-      .replaceAll(',', '')
-      .replaceAll(RegExp(r'\s'), '');
+  final cleaned =
+      toEnglishDigits(raw).replaceAll(',', '').replaceAll(RegExp(r'\s'), '');
   if (cleaned.isEmpty) {
     return Failure<int>(Validation(field, 'empty'));
   }
@@ -42,7 +41,8 @@ Result<int> parseScaledDecimal(
   if (whole.length > 12) {
     return Failure<int>(Validation(field, 'too_large'));
   }
-  final digits = '${whole.isEmpty ? '0' : whole}${fraction.padRight(scale, '0')}';
+  final digits =
+      '${whole.isEmpty ? '0' : whole}${fraction.padRight(scale, '0')}';
   final value = int.parse(digits);
   return Success<int>(negative ? -value : value);
 }

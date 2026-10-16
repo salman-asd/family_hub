@@ -13,8 +13,7 @@ final class Money implements Comparable<Money> {
   /// Parses '৳১,২৫০.৫০', '12.5', '১২' and similar. Never goes through a
   /// floating point type. More than 2 decimal places is a Validation failure
   /// with code `too_many_decimals`.
-  static Result<Money> parse(String input) =>
-      parseScaledDecimal(
+  static Result<Money> parse(String input) => parseScaledDecimal(
         input.replaceAll('৳', ''),
         scale: 2,
         field: 'money',
