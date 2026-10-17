@@ -48,9 +48,19 @@ void main() {
             Validation() => 'validation',
             Conflict() => 'conflict',
             Network() => 'network',
+            InvalidCredentials() => 'invalidCredentials',
+            UserNotFound() => 'userNotFound',
+            EmailAlreadyInUse() => 'emailAlreadyInUse',
+            WeakPassword() => 'weakPassword',
+            TooManyRequests() => 'tooManyRequests',
+            UserDisabled() => 'userDisabled',
+            RequiresRecentLogin() => 'requiresRecentLogin',
+            InvalidEmail() => 'invalidEmail',
+            NoCurrentUser() => 'noCurrentUser',
             Unknown() => 'unknown',
           };
       expect(name(const Validation('x', 'y')), 'validation');
+      expect(name(const InvalidCredentials()), 'invalidCredentials');
       expect(name(const Unknown('boom')), 'unknown');
     });
   });

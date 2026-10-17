@@ -6,6 +6,12 @@ import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/app/theme/theme_prefs.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/features/auth/presentation/auth_routes.dart';
+import 'package:family_hub/features/auth/presentation/screens/forgot_password_screen.dart';
+import 'package:family_hub/features/auth/presentation/screens/login_screen.dart';
+import 'package:family_hub/features/auth/presentation/screens/sign_up_screen.dart';
+import 'package:family_hub/features/auth/presentation/screens/verify_email_screen.dart';
+import 'package:family_hub/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
 import 'package:family_hub/features/settings/presentation/theme_settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +50,30 @@ class FamilyHubApp extends ConsumerWidget {
         GoRoute(
           path: '/dev/tokens',
           builder: (context, state) => const DevTokensScreen(),
+        ),
+        // ── Auth (Step 7) ────────────────────────────────────────────────────
+        // Mounted here so the screens are reachable before Step 8 replaces the
+        // ad-hoc router with the guarded one.  The paths come from [AuthRoutes]
+        // so the two cannot drift.
+        GoRoute(
+          path: AuthRoutes.welcome,
+          builder: (context, state) => const WelcomeScreen(),
+        ),
+        GoRoute(
+          path: AuthRoutes.login,
+          builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: AuthRoutes.signUp,
+          builder: (context, state) => const SignUpScreen(),
+        ),
+        GoRoute(
+          path: AuthRoutes.forgotPassword,
+          builder: (context, state) => const ForgotPasswordScreen(),
+        ),
+        GoRoute(
+          path: AuthRoutes.verifyEmail,
+          builder: (context, state) => const VerifyEmailScreen(),
         ),
       ],
     );

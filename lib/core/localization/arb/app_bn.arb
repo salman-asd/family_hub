@@ -34,9 +34,9 @@
   "actionDone": "সম্পন্ন",
   "@actionDone": {},
 
-  "authSignInTitle": "লগ ইন",
+  "authSignInTitle": "লগ ইন করুন",
   "@authSignInTitle": {},
-  "authSignUpTitle": "নতুন অ্যাকাউন্ট",
+  "authSignUpTitle": "নতুন অ্যাকাউন্ট খুলুন",
   "@authSignUpTitle": {},
   "authEmailLabel": "ইমেইল",
   "@authEmailLabel": {},
@@ -48,6 +48,139 @@
   "@authSignOut": {},
   "authEmailVerificationSent": "যাচাইকরণ ইমেইল পাঠানো হয়েছে।",
   "@authEmailVerificationSent": {},
+
+  "authWelcomeHeadline": "পরিবারের হিসাব, এক জায়গায়",
+  "@authWelcomeHeadline": {
+    "description": "Headline on the welcome screen."
+  },
+  "authWelcomeMessage": "বাজার খরচ, পরিবারের তহবিল আর কাজের রুটিন — সবাই মিলে একসাথে সামলান।",
+  "@authWelcomeMessage": {},
+  "authGetStarted": "শুরু করুন",
+  "@authGetStarted": {},
+  "authSignInAction": "লগ ইন",
+  "@authSignInAction": {},
+  "authCreateAccountAction": "নতুন অ্যাকাউন্ট খুলুন",
+  "@authCreateAccountAction": {},
+
+  "authSignInSubtitle": "আপনার ইমেইল ও পাসওয়ার্ড দিয়ে প্রবেশ করুন।",
+  "@authSignInSubtitle": {},
+  "authSignUpSubtitle": "অ্যাকাউন্ট খুললে একটি যাচাইকরণ ইমেইল পাঠানো হবে।",
+  "@authSignUpSubtitle": {},
+  "authNoAccountYet": "অ্যাকাউন্ট নেই?",
+  "@authNoAccountYet": {},
+  "authAlreadyHaveAccount": "আগেই অ্যাকাউন্ট আছে?",
+  "@authAlreadyHaveAccount": {},
+  "authShowPassword": "পাসওয়ার্ড দেখান",
+  "@authShowPassword": {},
+  "authHidePassword": "পাসওয়ার্ড লুকান",
+  "@authHidePassword": {},
+  "authEmailHint": "যেমন name@example.com",
+  "@authEmailHint": {},
+  "authPasswordHint": "অন্তত ৮ অক্ষর",
+  "@authPasswordHint": {},
+  "authEmailConfirmed": "ইমেইল",
+  "@authEmailConfirmed": {},
+  "authPasswordTooShortHelper": "কমপক্ষে ৮ অক্ষরের পাসওয়ার্ড দিন।",
+  "@authPasswordTooShortHelper": {},
+  "authPasswordConfirmLabel": "পাসওয়ার্ড আবার লিখুন",
+  "@authPasswordConfirmLabel": {},
+  "authFailureValidationPasswordMismatch": "দুটি পাসওয়ার্ড মিলছে না।",
+  "@authFailureValidationPasswordMismatch": {},
+  "authFailureValidationPasswordConfirmRequired": "পাসওয়ার্ডটি আবার লিখুন।",
+  "@authFailureValidationPasswordConfirmRequired": {},
+
+  "authForgotPasswordTitle": "পাসওয়ার্ড রিসেট",
+  "@authForgotPasswordTitle": {},
+  "authForgotPasswordSubtitle": "ইমেইল দিন, আমরা একটি রিসেট লিংক পাঠাব।",
+  "@authForgotPasswordSubtitle": {},
+  "authForgotPasswordSend": "রিসেট লিংক পাঠান",
+  "@authForgotPasswordSend": {},
+  "authForgotPasswordSentTitle": "ইমেইল পাঠানো হয়েছে",
+  "@authForgotPasswordSentTitle": {},
+  "authForgotPasswordSentMessage": "{email} ঠিকানায় একটি রিসেট লিংক পাঠানো হয়েছে। স্প্যাম ফোল্ডারও দেখে নিন।",
+  "@authForgotPasswordSentMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+
+  "authVerifyEmailTitle": "ইমেইল যাচাই করুন",
+  "@authVerifyEmailTitle": {},
+  "authVerifyEmailMessage": "{email} ঠিকানায় একটি যাচাইকরণ লিংক পাঠানো হয়েছে। লিংকে চাপ দিয়ে তারপর নিচের বাটনে চাপ দিন।",
+  "@authVerifyEmailMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerifyEmailIHaveVerified": "আমি যাচাই করেছি",
+  "@authVerifyEmailIHaveVerified": {},
+  "authVerifyEmailResend": "আবার ইমেইল পাঠান",
+  "@authVerifyEmailResend": {},
+  "authVerifyEmailStillUnverified": "এখনো যাচাই হয়নি। ইমেইলের লিংকে চাপ দিন, তারপর আবার চেষ্টা করুন।",
+  "@authVerifyEmailStillUnverified": {},
+  "authVerifyEmailVerified": "ইমেইল যাচাই সম্পন্ন হয়েছে।",
+  "@authVerifyEmailVerified": {},
+  "authVerifyEmailSignOutInstead": "অন্য অ্যাকাউন্টে ঢুকুন",
+  "@authVerifyEmailSignOutInstead": {},
+
+  "authUsingAccount": "লগ ইন করা আছে: {email}",
+  "@authUsingAccount": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+
+  "authFailurePermissionDenied": "আপনার এই কাজটি করার অনুমতি নেই।",
+  "@authFailurePermissionDenied": {},
+  "authFailureNotFound": "আপনার অ্যাকাউন্টটি খুঁজে পাওয়া যায়নি।",
+  "@authFailureNotFound": {},
+  "authFailureConflict": "কেউ ইতিমধ্যে তথ্য বদলেছে। অ্যাপটি আবার খুলে চেষ্টা করুন।",
+  "@authFailureConflict": {},
+  "authFailureNetwork": "ইন্টারনেট সংযোগ পাওয়া যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।",
+  "@authFailureNetwork": {},
+  "authFailureInvalidCredentials": "ইমেইল বা পাসওয়ার্ড ঠিক নয়।",
+  "@authFailureInvalidCredentials": {},
+  "authFailureUserNotFound": "এই ইমেইলে কোনো অ্যাকাউন্ট নেই।",
+  "@authFailureUserNotFound": {},
+  "authFailureEmailInUse": "এই ইমেইলে আগেই একটি অ্যাকাউন্ট আছে। লগ ইন করে দেখুন।",
+  "@authFailureEmailInUse": {},
+  "authFailureWeakPassword": "পাসওয়ার্ডটি দুর্বল। অন্তত ৮ অক্ষরের পাসওয়ার্ড দিন।",
+  "@authFailureWeakPassword": {},
+  "authFailureTooManyRequests": "অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।",
+  "@authFailureTooManyRequests": {},
+  "authFailureUserDisabled": "এই অ্যাকাউন্টটি বন্ধ করা হয়েছে। পরিবারের অ্যাডমিনের সাথে কথা বলুন।",
+  "@authFailureUserDisabled": {},
+  "authFailureRequiresRecentLogin": "নিরাপত্তার জন্য আবার লগ ইন করুন, তারপর চেষ্টা করুন।",
+  "@authFailureRequiresRecentLogin": {},
+  "authFailureInvalidEmail": "ইমেইল ঠিকানাটি সঠিক নয়।",
+  "@authFailureInvalidEmail": {},
+  "authFailureNoCurrentUser": "আপনি আগে লগ আউট করেছেন। আবার লগ ইন করুন।",
+  "@authFailureNoCurrentUser": {},
+  "authFailureValidationRequired": "{field} পূরণ করুন।",
+  "@authFailureValidationRequired": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "authFailureValidationInvalidEmail": "সঠিক ইমেইল ঠিকানা দিন।",
+  "@authFailureValidationInvalidEmail": {},
+  "authFailureValidationPasswordTooShort": "পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে।",
+  "@authFailureValidationPasswordTooShort": {},
+  "authFailureUnknown": "কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।",
+  "@authFailureUnknown": {},
+
+  "authFieldEmail": "ইমেইল",
+  "@authFieldEmail": {},
+  "authFieldPassword": "পাসওয়ার্ড",
+  "@authFieldPassword": {},
 
   "errorPermissionDenied": "আপনার এই কাজটি করার অনুমতি নেই।",
   "@errorPermissionDenied": {},

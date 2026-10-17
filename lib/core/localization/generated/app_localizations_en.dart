@@ -72,6 +72,182 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authEmailVerificationSent => 'Verification email sent.';
 
   @override
+  String get authWelcomeHeadline => 'Your family\'s money, in one place';
+
+  @override
+  String get authWelcomeMessage =>
+      'Bazar spending, the family fund and the chore rota — managed together.';
+
+  @override
+  String get authGetStarted => 'Get started';
+
+  @override
+  String get authSignInAction => 'Sign in';
+
+  @override
+  String get authCreateAccountAction => 'Create an account';
+
+  @override
+  String get authSignInSubtitle => 'Enter with your email and password.';
+
+  @override
+  String get authSignUpSubtitle =>
+      'We will send a verification email when you sign up.';
+
+  @override
+  String get authNoAccountYet => 'No account yet?';
+
+  @override
+  String get authAlreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get authShowPassword => 'Show password';
+
+  @override
+  String get authHidePassword => 'Hide password';
+
+  @override
+  String get authEmailHint => 'e.g. name@example.com';
+
+  @override
+  String get authPasswordHint => 'At least 8 characters';
+
+  @override
+  String get authEmailConfirmed => 'Email';
+
+  @override
+  String get authPasswordTooShortHelper => 'Use at least 8 characters.';
+
+  @override
+  String get authPasswordConfirmLabel => 'Repeat password';
+
+  @override
+  String get authFailureValidationPasswordMismatch =>
+      'The two passwords do not match.';
+
+  @override
+  String get authFailureValidationPasswordConfirmRequired =>
+      'Please repeat the password.';
+
+  @override
+  String get authForgotPasswordTitle => 'Reset password';
+
+  @override
+  String get authForgotPasswordSubtitle =>
+      'Enter your email and we will send a reset link.';
+
+  @override
+  String get authForgotPasswordSend => 'Send reset link';
+
+  @override
+  String get authForgotPasswordSentTitle => 'Email sent';
+
+  @override
+  String authForgotPasswordSentMessage(String email) {
+    return 'A reset link was sent to $email. Check your spam folder too.';
+  }
+
+  @override
+  String get authVerifyEmailTitle => 'Verify your email';
+
+  @override
+  String authVerifyEmailMessage(String email) {
+    return 'We sent a verification link to $email. Tap the link, then press the button below.';
+  }
+
+  @override
+  String get authVerifyEmailIHaveVerified => 'I have verified';
+
+  @override
+  String get authVerifyEmailResend => 'Send the email again';
+
+  @override
+  String get authVerifyEmailStillUnverified =>
+      'Not verified yet. Tap the link in the email, then try again.';
+
+  @override
+  String get authVerifyEmailVerified => 'Your email is verified.';
+
+  @override
+  String get authVerifyEmailSignOutInstead => 'Use a different account';
+
+  @override
+  String authUsingAccount(String email) {
+    return 'Signed in as $email';
+  }
+
+  @override
+  String get authFailurePermissionDenied =>
+      'You do not have permission to do this.';
+
+  @override
+  String get authFailureNotFound => 'Your account could not be found.';
+
+  @override
+  String get authFailureConflict =>
+      'Someone already changed this. Reopen the app and try again.';
+
+  @override
+  String get authFailureNetwork =>
+      'No internet connection. Check your connection and try again.';
+
+  @override
+  String get authFailureInvalidCredentials =>
+      'That email or password is not correct.';
+
+  @override
+  String get authFailureUserNotFound => 'There is no account for this email.';
+
+  @override
+  String get authFailureEmailInUse =>
+      'An account already uses this email. Try signing in.';
+
+  @override
+  String get authFailureWeakPassword =>
+      'That password is too weak. Use at least 8 characters.';
+
+  @override
+  String get authFailureTooManyRequests =>
+      'Too many attempts. Please try again in a little while.';
+
+  @override
+  String get authFailureUserDisabled =>
+      'This account is disabled. Talk to your family admin.';
+
+  @override
+  String get authFailureRequiresRecentLogin =>
+      'For security, sign in again and then retry.';
+
+  @override
+  String get authFailureInvalidEmail => 'That email address is not valid.';
+
+  @override
+  String get authFailureNoCurrentUser =>
+      'You were signed out. Please sign in again.';
+
+  @override
+  String authFailureValidationRequired(String field) {
+    return 'Please fill in $field.';
+  }
+
+  @override
+  String get authFailureValidationInvalidEmail =>
+      'Enter a valid email address.';
+
+  @override
+  String get authFailureValidationPasswordTooShort =>
+      'Password must be at least 8 characters.';
+
+  @override
+  String get authFailureUnknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get authFieldEmail => 'email';
+
+  @override
+  String get authFieldPassword => 'password';
+
+  @override
   String get errorPermissionDenied => 'You do not have permission to do this.';
 
   @override

@@ -49,6 +49,139 @@
   "authEmailVerificationSent": "Verification email sent.",
   "@authEmailVerificationSent": {},
 
+  "authWelcomeHeadline": "Your family's money, in one place",
+  "@authWelcomeHeadline": {
+    "description": "Headline on the welcome screen."
+  },
+  "authWelcomeMessage": "Bazar spending, the family fund and the chore rota — managed together.",
+  "@authWelcomeMessage": {},
+  "authGetStarted": "Get started",
+  "@authGetStarted": {},
+  "authSignInAction": "Sign in",
+  "@authSignInAction": {},
+  "authCreateAccountAction": "Create an account",
+  "@authCreateAccountAction": {},
+
+  "authSignInSubtitle": "Enter with your email and password.",
+  "@authSignInSubtitle": {},
+  "authSignUpSubtitle": "We will send a verification email when you sign up.",
+  "@authSignUpSubtitle": {},
+  "authNoAccountYet": "No account yet?",
+  "@authNoAccountYet": {},
+  "authAlreadyHaveAccount": "Already have an account?",
+  "@authAlreadyHaveAccount": {},
+  "authShowPassword": "Show password",
+  "@authShowPassword": {},
+  "authHidePassword": "Hide password",
+  "@authHidePassword": {},
+  "authEmailHint": "e.g. name@example.com",
+  "@authEmailHint": {},
+  "authPasswordHint": "At least 8 characters",
+  "@authPasswordHint": {},
+  "authEmailConfirmed": "Email",
+  "@authEmailConfirmed": {},
+  "authPasswordTooShortHelper": "Use at least 8 characters.",
+  "@authPasswordTooShortHelper": {},
+  "authPasswordConfirmLabel": "Repeat password",
+  "@authPasswordConfirmLabel": {},
+  "authFailureValidationPasswordMismatch": "The two passwords do not match.",
+  "@authFailureValidationPasswordMismatch": {},
+  "authFailureValidationPasswordConfirmRequired": "Please repeat the password.",
+  "@authFailureValidationPasswordConfirmRequired": {},
+
+  "authForgotPasswordTitle": "Reset password",
+  "@authForgotPasswordTitle": {},
+  "authForgotPasswordSubtitle": "Enter your email and we will send a reset link.",
+  "@authForgotPasswordSubtitle": {},
+  "authForgotPasswordSend": "Send reset link",
+  "@authForgotPasswordSend": {},
+  "authForgotPasswordSentTitle": "Email sent",
+  "@authForgotPasswordSentTitle": {},
+  "authForgotPasswordSentMessage": "A reset link was sent to {email}. Check your spam folder too.",
+  "@authForgotPasswordSentMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+
+  "authVerifyEmailTitle": "Verify your email",
+  "@authVerifyEmailTitle": {},
+  "authVerifyEmailMessage": "We sent a verification link to {email}. Tap the link, then press the button below.",
+  "@authVerifyEmailMessage": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "authVerifyEmailIHaveVerified": "I have verified",
+  "@authVerifyEmailIHaveVerified": {},
+  "authVerifyEmailResend": "Send the email again",
+  "@authVerifyEmailResend": {},
+  "authVerifyEmailStillUnverified": "Not verified yet. Tap the link in the email, then try again.",
+  "@authVerifyEmailStillUnverified": {},
+  "authVerifyEmailVerified": "Your email is verified.",
+  "@authVerifyEmailVerified": {},
+  "authVerifyEmailSignOutInstead": "Use a different account",
+  "@authVerifyEmailSignOutInstead": {},
+
+  "authUsingAccount": "Signed in as {email}",
+  "@authUsingAccount": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+
+  "authFailurePermissionDenied": "You do not have permission to do this.",
+  "@authFailurePermissionDenied": {},
+  "authFailureNotFound": "Your account could not be found.",
+  "@authFailureNotFound": {},
+  "authFailureConflict": "Someone already changed this. Reopen the app and try again.",
+  "@authFailureConflict": {},
+  "authFailureNetwork": "No internet connection. Check your connection and try again.",
+  "@authFailureNetwork": {},
+  "authFailureInvalidCredentials": "That email or password is not correct.",
+  "@authFailureInvalidCredentials": {},
+  "authFailureUserNotFound": "There is no account for this email.",
+  "@authFailureUserNotFound": {},
+  "authFailureEmailInUse": "An account already uses this email. Try signing in.",
+  "@authFailureEmailInUse": {},
+  "authFailureWeakPassword": "That password is too weak. Use at least 8 characters.",
+  "@authFailureWeakPassword": {},
+  "authFailureTooManyRequests": "Too many attempts. Please try again in a little while.",
+  "@authFailureTooManyRequests": {},
+  "authFailureUserDisabled": "This account is disabled. Talk to your family admin.",
+  "@authFailureUserDisabled": {},
+  "authFailureRequiresRecentLogin": "For security, sign in again and then retry.",
+  "@authFailureRequiresRecentLogin": {},
+  "authFailureInvalidEmail": "That email address is not valid.",
+  "@authFailureInvalidEmail": {},
+  "authFailureNoCurrentUser": "You were signed out. Please sign in again.",
+  "@authFailureNoCurrentUser": {},
+  "authFailureValidationRequired": "Please fill in {field}.",
+  "@authFailureValidationRequired": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "authFailureValidationInvalidEmail": "Enter a valid email address.",
+  "@authFailureValidationInvalidEmail": {},
+  "authFailureValidationPasswordTooShort": "Password must be at least 8 characters.",
+  "@authFailureValidationPasswordTooShort": {},
+  "authFailureUnknown": "Something went wrong. Please try again.",
+  "@authFailureUnknown": {},
+
+  "authFieldEmail": "email",
+  "@authFieldEmail": {},
+  "authFieldPassword": "password",
+  "@authFieldPassword": {},
+
   "errorPermissionDenied": "You do not have permission to do this.",
   "@errorPermissionDenied": {},
   "errorNotFound": "That item could not be found.",

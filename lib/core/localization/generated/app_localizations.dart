@@ -185,13 +185,13 @@ abstract class AppLocalizations {
   /// No description provided for @authSignInTitle.
   ///
   /// In bn, this message translates to:
-  /// **'লগ ইন'**
+  /// **'লগ ইন করুন'**
   String get authSignInTitle;
 
   /// No description provided for @authSignUpTitle.
   ///
   /// In bn, this message translates to:
-  /// **'নতুন অ্যাকাউন্ট'**
+  /// **'নতুন অ্যাকাউন্ট খুলুন'**
   String get authSignUpTitle;
 
   /// No description provided for @authEmailLabel.
@@ -223,6 +223,306 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'যাচাইকরণ ইমেইল পাঠানো হয়েছে।'**
   String get authEmailVerificationSent;
+
+  /// Headline on the welcome screen.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের হিসাব, এক জায়গায়'**
+  String get authWelcomeHeadline;
+
+  /// No description provided for @authWelcomeMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার খরচ, পরিবারের তহবিল আর কাজের রুটিন — সবাই মিলে একসাথে সামলান।'**
+  String get authWelcomeMessage;
+
+  /// No description provided for @authGetStarted.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুরু করুন'**
+  String get authGetStarted;
+
+  /// No description provided for @authSignInAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'লগ ইন'**
+  String get authSignInAction;
+
+  /// No description provided for @authCreateAccountAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন অ্যাকাউন্ট খুলুন'**
+  String get authCreateAccountAction;
+
+  /// No description provided for @authSignInSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার ইমেইল ও পাসওয়ার্ড দিয়ে প্রবেশ করুন।'**
+  String get authSignInSubtitle;
+
+  /// No description provided for @authSignUpSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাকাউন্ট খুললে একটি যাচাইকরণ ইমেইল পাঠানো হবে।'**
+  String get authSignUpSubtitle;
+
+  /// No description provided for @authNoAccountYet.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাকাউন্ট নেই?'**
+  String get authNoAccountYet;
+
+  /// No description provided for @authAlreadyHaveAccount.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগেই অ্যাকাউন্ট আছে?'**
+  String get authAlreadyHaveAccount;
+
+  /// No description provided for @authShowPassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড দেখান'**
+  String get authShowPassword;
+
+  /// No description provided for @authHidePassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড লুকান'**
+  String get authHidePassword;
+
+  /// No description provided for @authEmailHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'যেমন name@example.com'**
+  String get authEmailHint;
+
+  /// No description provided for @authPasswordHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্তত ৮ অক্ষর'**
+  String get authPasswordHint;
+
+  /// No description provided for @authEmailConfirmed.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমেইল'**
+  String get authEmailConfirmed;
+
+  /// No description provided for @authPasswordTooShortHelper.
+  ///
+  /// In bn, this message translates to:
+  /// **'কমপক্ষে ৮ অক্ষরের পাসওয়ার্ড দিন।'**
+  String get authPasswordTooShortHelper;
+
+  /// No description provided for @authPasswordConfirmLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড আবার লিখুন'**
+  String get authPasswordConfirmLabel;
+
+  /// No description provided for @authFailureValidationPasswordMismatch.
+  ///
+  /// In bn, this message translates to:
+  /// **'দুটি পাসওয়ার্ড মিলছে না।'**
+  String get authFailureValidationPasswordMismatch;
+
+  /// No description provided for @authFailureValidationPasswordConfirmRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ডটি আবার লিখুন।'**
+  String get authFailureValidationPasswordConfirmRequired;
+
+  /// No description provided for @authForgotPasswordTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড রিসেট'**
+  String get authForgotPasswordTitle;
+
+  /// No description provided for @authForgotPasswordSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমেইল দিন, আমরা একটি রিসেট লিংক পাঠাব।'**
+  String get authForgotPasswordSubtitle;
+
+  /// No description provided for @authForgotPasswordSend.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিসেট লিংক পাঠান'**
+  String get authForgotPasswordSend;
+
+  /// No description provided for @authForgotPasswordSentTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমেইল পাঠানো হয়েছে'**
+  String get authForgotPasswordSentTitle;
+
+  /// No description provided for @authForgotPasswordSentMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'{email} ঠিকানায় একটি রিসেট লিংক পাঠানো হয়েছে। স্প্যাম ফোল্ডারও দেখে নিন।'**
+  String authForgotPasswordSentMessage(String email);
+
+  /// No description provided for @authVerifyEmailTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমেইল যাচাই করুন'**
+  String get authVerifyEmailTitle;
+
+  /// No description provided for @authVerifyEmailMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'{email} ঠিকানায় একটি যাচাইকরণ লিংক পাঠানো হয়েছে। লিংকে চাপ দিয়ে তারপর নিচের বাটনে চাপ দিন।'**
+  String authVerifyEmailMessage(String email);
+
+  /// No description provided for @authVerifyEmailIHaveVerified.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমি যাচাই করেছি'**
+  String get authVerifyEmailIHaveVerified;
+
+  /// No description provided for @authVerifyEmailResend.
+  ///
+  /// In bn, this message translates to:
+  /// **'আবার ইমেইল পাঠান'**
+  String get authVerifyEmailResend;
+
+  /// No description provided for @authVerifyEmailStillUnverified.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো যাচাই হয়নি। ইমেইলের লিংকে চাপ দিন, তারপর আবার চেষ্টা করুন।'**
+  String get authVerifyEmailStillUnverified;
+
+  /// No description provided for @authVerifyEmailVerified.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমেইল যাচাই সম্পন্ন হয়েছে।'**
+  String get authVerifyEmailVerified;
+
+  /// No description provided for @authVerifyEmailSignOutInstead.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্য অ্যাকাউন্টে ঢুকুন'**
+  String get authVerifyEmailSignOutInstead;
+
+  /// No description provided for @authUsingAccount.
+  ///
+  /// In bn, this message translates to:
+  /// **'লগ ইন করা আছে: {email}'**
+  String authUsingAccount(String email);
+
+  /// No description provided for @authFailurePermissionDenied.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার এই কাজটি করার অনুমতি নেই।'**
+  String get authFailurePermissionDenied;
+
+  /// No description provided for @authFailureNotFound.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার অ্যাকাউন্টটি খুঁজে পাওয়া যায়নি।'**
+  String get authFailureNotFound;
+
+  /// No description provided for @authFailureConflict.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেউ ইতিমধ্যে তথ্য বদলেছে। অ্যাপটি আবার খুলে চেষ্টা করুন।'**
+  String get authFailureConflict;
+
+  /// No description provided for @authFailureNetwork.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইন্টারনেট সংযোগ পাওয়া যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।'**
+  String get authFailureNetwork;
+
+  /// No description provided for @authFailureInvalidCredentials.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমেইল বা পাসওয়ার্ড ঠিক নয়।'**
+  String get authFailureInvalidCredentials;
+
+  /// No description provided for @authFailureUserNotFound.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ইমেইলে কোনো অ্যাকাউন্ট নেই।'**
+  String get authFailureUserNotFound;
+
+  /// No description provided for @authFailureEmailInUse.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ইমেইলে আগেই একটি অ্যাকাউন্ট আছে। লগ ইন করে দেখুন।'**
+  String get authFailureEmailInUse;
+
+  /// No description provided for @authFailureWeakPassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ডটি দুর্বল। অন্তত ৮ অক্ষরের পাসওয়ার্ড দিন।'**
+  String get authFailureWeakPassword;
+
+  /// No description provided for @authFailureTooManyRequests.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।'**
+  String get authFailureTooManyRequests;
+
+  /// No description provided for @authFailureUserDisabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই অ্যাকাউন্টটি বন্ধ করা হয়েছে। পরিবারের অ্যাডমিনের সাথে কথা বলুন।'**
+  String get authFailureUserDisabled;
+
+  /// No description provided for @authFailureRequiresRecentLogin.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিরাপত্তার জন্য আবার লগ ইন করুন, তারপর চেষ্টা করুন।'**
+  String get authFailureRequiresRecentLogin;
+
+  /// No description provided for @authFailureInvalidEmail.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমেইল ঠিকানাটি সঠিক নয়।'**
+  String get authFailureInvalidEmail;
+
+  /// No description provided for @authFailureNoCurrentUser.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি আগে লগ আউট করেছেন। আবার লগ ইন করুন।'**
+  String get authFailureNoCurrentUser;
+
+  /// No description provided for @authFailureValidationRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'{field} পূরণ করুন।'**
+  String authFailureValidationRequired(String field);
+
+  /// No description provided for @authFailureValidationInvalidEmail.
+  ///
+  /// In bn, this message translates to:
+  /// **'সঠিক ইমেইল ঠিকানা দিন।'**
+  String get authFailureValidationInvalidEmail;
+
+  /// No description provided for @authFailureValidationPasswordTooShort.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে।'**
+  String get authFailureValidationPasswordTooShort;
+
+  /// No description provided for @authFailureUnknown.
+  ///
+  /// In bn, this message translates to:
+  /// **'কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।'**
+  String get authFailureUnknown;
+
+  /// No description provided for @authFieldEmail.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমেইল'**
+  String get authFieldEmail;
+
+  /// No description provided for @authFieldPassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড'**
+  String get authFieldPassword;
 
   /// No description provided for @errorPermissionDenied.
   ///

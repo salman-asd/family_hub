@@ -5,6 +5,8 @@ import 'package:family_hub/app/app.dart';
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/core/firebase/firebase_bootstrap.dart';
+import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
+import 'package:family_hub/features/auth/domain/auth_providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,10 +53,15 @@ Future<void> bootstrap(Flavor flavor) async {
       // synchronously — avoids a one-frame flash of the wrong theme.
       final prefs = await SharedPreferences.getInstance();
 
+      // Built once and shared: the repository is stateless apart from the
+      // FirebaseAuth handle, and one instance keeps the auth stream single.
+      final authRepository = FirebaseAuthRepository();
+
       runApp(
         ProviderScope(
           overrides: [
             sharedPreferencesProvider.overrideWithValue(prefs),
+            authRepositoryProvider.overrideWithValue(authRepository),
           ],
           child: FamilyHubApp(flavor: flavor),
         ),
