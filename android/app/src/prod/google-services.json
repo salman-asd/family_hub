@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "200000000002",
+    "project_id": "familyhub-prod",
+    "storage_bucket": "familyhub-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:200000000002:android:prodplaceholder00002",
+        "android_client_info": {
+          "package_name": "com.familyhub.family_hub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSy-prod-android-placeholder-key"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

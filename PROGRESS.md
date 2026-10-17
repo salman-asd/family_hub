@@ -7,7 +7,8 @@
 | 3 Theme tokens | Done | app_tokens, modern_light, modern_dark, theme_registry, theme_builder, dev_tokens_screen; WCAG contrast + no-raw-color tests pass |
 | 4 Theme controller and Settings → Theme screen | Done | ThemePrefs + ThemeController (early-load in bootstrap), ThemePreferenceSync no-op, /settings/theme screen; persistence + registry tests pass |
 | 5 Localization (Bangla default), fonts, formatting | Done | l10n.yaml + bn/en ARBs, context.l10n, LocaleController + /settings/language screen, Hind Siliguri bundled, formatters, overflow + hard-coded-string tests; flutter test 126/126 |
-| 6 Firebase setup (dev and prod) and bootstrap | Next | |
+| 6 Firebase setup (dev and prod) and bootstrap | Done | firebase_core, firebase_auth, cloud_firestore, options per flavor, persistence, emulator routing, paths, TxRunner + FakeTxRunner, BaseMapper, deny-all rules, indexes, README; flutter test 142/142 |
+| 7 Authentication feature | Next | |
 
 ## Step 2 assumptions
 - Money.parse, Quantity.parse, DateKey.parse and MonthKey.parse return Result (no exceptions).
@@ -37,3 +38,14 @@
 - Dates are formatted manually in `AppFormatters` (Bengali Gregorian month names, lakh grouping for bn) rather than through `intl`'s locale data, to keep the exact strings the roadmap specifies ('১৪ অক্টোবর ২০২৬').
 - The hard-coded-string guard is a **test** (`test/core/localization/no_hard_coded_strings_test.dart`) that scans `lib/` for `Text('…')` literals, with `lib/app/theme/dev_tokens_screen.dart` allow-listed (its labels are developer token names, not copy). A line may opt out with a `// i18n-exempt` comment.
 - `context.l10n` is provided by `lib/core/localization/l10n_ext.dart`, which also exposes `appFormattersProvider` and `supportedLocales`.
+
+## Step 6 assumptions
+- Firebase packages pinned at stable versions: `firebase_core: ^5.0.0`, `firebase_auth: ^7.0.0`, `cloud_firestore: ^7.0.0`.
+- Dedicated `FirebaseOptions` classes created for `dev` (`familyhub-dev`) and `prod` (`familyhub-prod`) with platform-specific options for Android, iOS, Web, macOS, Windows, resolved via `firebaseOptionsForFlavor(flavor)`.
+- Placeholder `google-services.json` placed in `android/app/src/dev` and `android/app/src/prod` with matching package names `com.familyhub.family_hub.dev` and `com.familyhub.family_hub`, and Google Services gradle plugin added.
+- Firestore offline persistence explicitly enabled (`Settings(persistenceEnabled: true)`).
+- Passing `--dart-define=USE_EMULATOR=true` connects Firestore (port 8080) and Auth (port 9099) to `10.0.2.2` on Android and `127.0.0.1` elsewhere.
+- `FirestorePaths` centralizes all 25+ collection and subcollection path helpers from roadmap 12.2 and 12.5.
+- `TxRunner` abstraction provided with `FirestoreTxRunner` for production and `FakeTxRunner` for deterministic in-memory tests.
+- `BaseMapper` handles `createdAt`, `createdBy`, `updatedAt`, `updatedBy`, `schemaVersion`, `deletedAt`, `deletedBy` with UTC conversion and Firestore `Timestamp` interop.
+- `firebase.json` seeds emulator ports and links `firebase/firestore.rules` (temporary deny-all) and `firebase/firestore.indexes.json` (seeded with composite indexes from roadmap 12.3).
