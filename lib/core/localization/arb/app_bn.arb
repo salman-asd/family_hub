@@ -1,0 +1,155 @@
+{
+  "@@locale": "bn",
+
+  "appName": "ফ্যামিলি হাব",
+  "@appName": {
+    "description": "The application name shown in the app bar and store listing."
+  },
+
+  "navHome": "হোম",
+  "@navHome": {},
+  "navChores": "কাজ",
+  "@navChores": {},
+  "navBazar": "বাজার",
+  "@navBazar": {},
+  "navFamily": "পরিবার",
+  "@navFamily": {},
+
+  "actionSave": "সংরক্ষণ",
+  "@actionSave": {},
+  "actionCancel": "বাতিল",
+  "@actionCancel": {},
+  "actionRetry": "আবার চেষ্টা করুন",
+  "@actionRetry": {},
+  "actionDelete": "মুছুন",
+  "@actionDelete": {},
+  "actionEdit": "সম্পাদনা",
+  "@actionEdit": {},
+  "actionClose": "বন্ধ করুন",
+  "@actionClose": {},
+  "actionBack": "ফিরে যান",
+  "@actionBack": {},
+  "actionContinue": "চালিয়ে যান",
+  "@actionContinue": {},
+  "actionDone": "সম্পন্ন",
+  "@actionDone": {},
+
+  "authSignInTitle": "লগ ইন",
+  "@authSignInTitle": {},
+  "authSignUpTitle": "নতুন অ্যাকাউন্ট",
+  "@authSignUpTitle": {},
+  "authEmailLabel": "ইমেইল",
+  "@authEmailLabel": {},
+  "authPasswordLabel": "পাসওয়ার্ড",
+  "@authPasswordLabel": {},
+  "authForgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+  "@authForgotPassword": {},
+  "authSignOut": "লগ আউট",
+  "@authSignOut": {},
+  "authEmailVerificationSent": "যাচাইকরণ ইমেইল পাঠানো হয়েছে।",
+  "@authEmailVerificationSent": {},
+
+  "errorPermissionDenied": "আপনার এই কাজটি করার অনুমতি নেই।",
+  "@errorPermissionDenied": {},
+  "errorNotFound": "তথ্যটি খুঁজে পাওয়া যায়নি।",
+  "@errorNotFound": {},
+  "errorConflict": "কেউ ইতিমধ্যে এই তথ্য পরিবর্তন করেছে। আবার চেষ্টা করুন।",
+  "@errorConflict": {},
+  "errorNetwork": "ইন্টারনেট সংযোগ পাওয়া যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।",
+  "@errorNetwork": {},
+  "errorUnknown": "কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।",
+  "@errorUnknown": {},
+  "errorValidationRequired": "{field} পূরণ করুন।",
+  "@errorValidationRequired": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "errorValidationEmail": "সঠিক ইমেইল ঠিকানা দিন।",
+  "@errorValidationEmail": {},
+  "errorValidationPasswordTooShort": "পাসওয়ার্ড অন্তত ৮ অক্ষরের হতে হবে।",
+  "@errorValidationPasswordTooShort": {},
+
+  "emptyGenericTitle": "এখনো কিছু নেই",
+  "@emptyGenericTitle": {},
+  "emptyGenericMessage": "শুরু করতে নিচের বাটনে চাপ দিন।",
+  "@emptyGenericMessage": {},
+  "emptyNoDataTitle": "কোনো তথ্য নেই",
+  "@emptyNoDataTitle": {},
+  "emptyNoDataMessage": "এই তালিকাটি এখন খালি।",
+  "@emptyNoDataMessage": {},
+
+  "loadingGeneric": "লোড হচ্ছে…",
+  "@loadingGeneric": {},
+
+  "offlineBanner": "আপনি অফলাইনে আছেন। সংযোগ ফিরলে তথ্য সিঙ্ক হবে।",
+  "@offlineBanner": {},
+
+  "settingsTitle": "সেটিংস",
+  "@settingsTitle": {},
+  "settingsThemeTitle": "অ্যাপিয়ারেন্স",
+  "@settingsThemeTitle": {},
+  "settingsThemeMode": "থিম মোড",
+  "@settingsThemeMode": {},
+  "settingsColourPalette": "রঙের প্যালেট",
+  "@settingsColourPalette": {},
+  "settingsFollowDevice": "ডিভাইস অনুসরণ করুন",
+  "@settingsFollowDevice": {},
+  "settingsFollowDeviceSubtitle": "আপনার সিস্টেমের আলো / অন্ধকার সেটিং ব্যবহার করবে",
+  "@settingsFollowDeviceSubtitle": {},
+  "settingsThemeSelected": "নির্বাচিত",
+  "@settingsThemeSelected": {},
+  "settingsThemeSelectedSemantics": "{theme} থিম, নির্বাচিত",
+  "@settingsThemeSelectedSemantics": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsThemeUnselectedSemantics": "{theme} থিম",
+  "@settingsThemeUnselectedSemantics": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+
+  "settingsLanguageTitle": "ভাষা",
+  "@settingsLanguageTitle": {},
+  "settingsLanguageSection": "ভাষা নির্বাচন করুন",
+  "@settingsLanguageSection": {},
+  "settingsLanguageBangla": "বাংলা",
+  "@settingsLanguageBangla": {},
+  "settingsLanguageEnglish": "ইংরেজি",
+  "@settingsLanguageEnglish": {},
+  "settingsLanguageSubtitle": "অ্যাপের ভাষা তাৎক্ষণিকভাবে পরিবর্তিত হয়",
+  "@settingsLanguageSubtitle": {},
+  "settingsBanglaDigits": "বাংলা অঙ্ক ব্যবহার করুন",
+  "@settingsBanglaDigits": {},
+  "settingsBanglaDigitsSubtitle": "সংখ্যা ও তারিখ বাংলা অঙ্কে (০১২৩) দেখাবে",
+  "@settingsBanglaDigitsSubtitle": {},
+  "settingsLanguageSelectedSemantics": "{language} ভাষা, নির্বাচিত",
+  "@settingsLanguageSelectedSemantics": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+
+  "languageNameBn": "বাংলা",
+  "@languageNameBn": {},
+  "languageNameEn": "English",
+  "@languageNameEn": {},
+
+  "devTokensTitle": "ডেভ — থিম টোকেন",
+  "@devTokensTitle": {},
+  "devGalleryTitle": "ডেভ — গ্যালারি",
+  "@devGalleryTitle": {},
+  "homeViewThemeTokens": "থিম টোকেন দেখুন",
+  "@homeViewThemeTokens": {}
+}

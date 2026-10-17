@@ -4,6 +4,9 @@ import 'package:family_hub/app/theme/dev_tokens_screen.dart';
 import 'package:family_hub/app/theme/theme_builder.dart';
 import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/app/theme/theme_prefs.dart';
+import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
 import 'package:family_hub/features/settings/presentation/theme_settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +23,7 @@ class FamilyHubApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(themeControllerProvider);
+    final localePrefs = ref.watch(localeControllerProvider);
     final specs = resolveThemeSpecs(prefs);
 
     final router = GoRouter(
@@ -34,6 +38,10 @@ class FamilyHubApp extends ConsumerWidget {
           builder: (context, state) => const ThemeSettingsScreen(),
         ),
         GoRoute(
+          path: '/settings/language',
+          builder: (context, state) => const LanguageSettingsScreen(),
+        ),
+        GoRoute(
           path: '/dev/tokens',
           builder: (context, state) => const DevTokensScreen(),
         ),
@@ -46,6 +54,9 @@ class FamilyHubApp extends ConsumerWidget {
       theme: buildThemeData(specs.light),
       darkTheme: buildThemeData(specs.dark),
       themeMode: prefs.themeMode,
+      locale: localePrefs.locale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: router,
     );
   }
@@ -61,8 +72,9 @@ class _HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final t = context.tokens;
     final prefs = ref.watch(themeControllerProvider);
+    final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(flavor.label)),
+      appBar: AppBar(title: Text(l10n.appName)),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -83,12 +95,17 @@ class _HomeScreen extends ConsumerWidget {
             const SizedBox(height: 24),
             FilledButton(
               onPressed: () => context.push('/settings/theme'),
-              child: const Text('Appearance'),
+              child: Text(l10n.settingsThemeTitle),
+            ),
+            const SizedBox(height: 12),
+            OutlinedButton(
+              onPressed: () => context.push('/settings/language'),
+              child: Text(l10n.settingsLanguageTitle),
             ),
             const SizedBox(height: 12),
             OutlinedButton(
               onPressed: () => context.push('/dev/tokens'),
-              child: const Text('View Theme Tokens'),
+              child: Text(l10n.homeViewThemeTokens),
             ),
           ],
         ),

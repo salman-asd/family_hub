@@ -1,0 +1,155 @@
+{
+  "@@locale": "en",
+
+  "appName": "Family Hub",
+  "@appName": {
+    "description": "The application name shown in the app bar and store listing."
+  },
+
+  "navHome": "Home",
+  "@navHome": {},
+  "navChores": "Chores",
+  "@navChores": {},
+  "navBazar": "Bazar",
+  "@navBazar": {},
+  "navFamily": "Family",
+  "@navFamily": {},
+
+  "actionSave": "Save",
+  "@actionSave": {},
+  "actionCancel": "Cancel",
+  "@actionCancel": {},
+  "actionRetry": "Retry",
+  "@actionRetry": {},
+  "actionDelete": "Delete",
+  "@actionDelete": {},
+  "actionEdit": "Edit",
+  "@actionEdit": {},
+  "actionClose": "Close",
+  "@actionClose": {},
+  "actionBack": "Back",
+  "@actionBack": {},
+  "actionContinue": "Continue",
+  "@actionContinue": {},
+  "actionDone": "Done",
+  "@actionDone": {},
+
+  "authSignInTitle": "Sign in",
+  "@authSignInTitle": {},
+  "authSignUpTitle": "Create account",
+  "@authSignUpTitle": {},
+  "authEmailLabel": "Email",
+  "@authEmailLabel": {},
+  "authPasswordLabel": "Password",
+  "@authPasswordLabel": {},
+  "authForgotPassword": "Forgot password?",
+  "@authForgotPassword": {},
+  "authSignOut": "Sign out",
+  "@authSignOut": {},
+  "authEmailVerificationSent": "Verification email sent.",
+  "@authEmailVerificationSent": {},
+
+  "errorPermissionDenied": "You do not have permission to do this.",
+  "@errorPermissionDenied": {},
+  "errorNotFound": "That item could not be found.",
+  "@errorNotFound": {},
+  "errorConflict": "Someone already changed this. Please try again.",
+  "@errorConflict": {},
+  "errorNetwork": "No internet connection. Check your connection and try again.",
+  "@errorNetwork": {},
+  "errorUnknown": "Something went wrong. Please try again.",
+  "@errorUnknown": {},
+  "errorValidationRequired": "Please fill in {field}.",
+  "@errorValidationRequired": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      }
+    }
+  },
+  "errorValidationEmail": "Enter a valid email address.",
+  "@errorValidationEmail": {},
+  "errorValidationPasswordTooShort": "Password must be at least 8 characters.",
+  "@errorValidationPasswordTooShort": {},
+
+  "emptyGenericTitle": "Nothing here yet",
+  "@emptyGenericTitle": {},
+  "emptyGenericMessage": "Tap the button below to get started.",
+  "@emptyGenericMessage": {},
+  "emptyNoDataTitle": "No data",
+  "@emptyNoDataTitle": {},
+  "emptyNoDataMessage": "This list is empty right now.",
+  "@emptyNoDataMessage": {},
+
+  "loadingGeneric": "Loading…",
+  "@loadingGeneric": {},
+
+  "offlineBanner": "You are offline. Data will sync when the connection returns.",
+  "@offlineBanner": {},
+
+  "settingsTitle": "Settings",
+  "@settingsTitle": {},
+  "settingsThemeTitle": "Appearance",
+  "@settingsThemeTitle": {},
+  "settingsThemeMode": "Theme mode",
+  "@settingsThemeMode": {},
+  "settingsColourPalette": "Colour palette",
+  "@settingsColourPalette": {},
+  "settingsFollowDevice": "Follow device",
+  "@settingsFollowDevice": {},
+  "settingsFollowDeviceSubtitle": "Uses your system light / dark setting",
+  "@settingsFollowDeviceSubtitle": {},
+  "settingsThemeSelected": "Selected",
+  "@settingsThemeSelected": {},
+  "settingsThemeSelectedSemantics": "{theme} theme, selected",
+  "@settingsThemeSelectedSemantics": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsThemeUnselectedSemantics": "{theme} theme",
+  "@settingsThemeUnselectedSemantics": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      }
+    }
+  },
+
+  "settingsLanguageTitle": "Language",
+  "@settingsLanguageTitle": {},
+  "settingsLanguageSection": "Choose a language",
+  "@settingsLanguageSection": {},
+  "settingsLanguageBangla": "Bangla",
+  "@settingsLanguageBangla": {},
+  "settingsLanguageEnglish": "English",
+  "@settingsLanguageEnglish": {},
+  "settingsLanguageSubtitle": "The app language changes instantly",
+  "@settingsLanguageSubtitle": {},
+  "settingsBanglaDigits": "Use Bangla digits",
+  "@settingsBanglaDigits": {},
+  "settingsBanglaDigitsSubtitle": "Numbers and dates shown with Bangla digits (০১২৩)",
+  "@settingsBanglaDigitsSubtitle": {},
+  "settingsLanguageSelectedSemantics": "{language} language, selected",
+  "@settingsLanguageSelectedSemantics": {
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+
+  "languageNameBn": "বাংলা",
+  "@languageNameBn": {},
+  "languageNameEn": "English",
+  "@languageNameEn": {},
+
+  "devTokensTitle": "Dev — Theme Tokens",
+  "@devTokensTitle": {},
+  "devGalleryTitle": "Dev — Gallery",
+  "@devGalleryTitle": {},
+  "homeViewThemeTokens": "View Theme Tokens",
+  "@homeViewThemeTokens": {}
+}

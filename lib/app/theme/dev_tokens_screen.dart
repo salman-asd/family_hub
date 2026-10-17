@@ -1,4 +1,5 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
+import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:flutter/material.dart';
 
 /// Debug-only screen at `/dev/tokens`.
@@ -124,7 +125,7 @@ class DevTokensScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Dev — Theme Tokens')),
+      appBar: AppBar(title: Text(context.l10n.devTokensTitle)),
       backgroundColor: t.background,
       body: ListView(
         padding: const EdgeInsets.all(16),

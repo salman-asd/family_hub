@@ -57,4 +57,3 @@ class ThemePrefs {
   @override
   String toString() => 'ThemePrefs(mode: ${themeMode.name}, id: $themeId)';
 }
-

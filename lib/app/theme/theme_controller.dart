@@ -109,4 +109,3 @@ class ThemeController extends Notifier<ThemePrefs> {
 void unawaited(Future<void> future) {
   future.ignore();
 }
-

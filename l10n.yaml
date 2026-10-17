@@ -1,0 +1,11 @@
+# Flutter gen-l10n configuration.
+#
+# Bangla (bn) is the TEMPLATE and default locale; English (en) is optional.
+# Generated classes land in lib/core/localization/generated/ (checked in so
+# `flutter analyze` and CI work without running codegen first).
+arb-dir: lib/core/localization/arb
+template-arb-file: app_bn.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+output-dir: lib/core/localization/generated
+nullable-getter: false

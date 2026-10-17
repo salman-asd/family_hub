@@ -6,28 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
-/// Creates a [ProviderContainer] with an in-memory [SharedPreferences] store
-/// pre-populated with [initialData].
-ProviderContainer _makeContainer({
-  Map<String, Object> initialData = const {},
-}) {
-  SharedPreferences.setMockInitialValues(initialData);
-  // ignore: discarded_futures — test helper, result unused intentionally
-  final prefs = SharedPreferences.getInstance();
-  late SharedPreferences resolved;
-  prefs.then((p) => resolved = p);
-  // Pump the microtask queue synchronously so `resolved` is available.
-  // In tests SharedPreferences.getInstance() completes synchronously when
-  // setMockInitialValues has been called.
-  return ProviderContainer(
-    overrides: [
-      sharedPreferencesProvider.overrideWith((ref) => resolved),
-    ],
-  );
-}
-
 // ── Unit tests ────────────────────────────────────────────────────────────────
 
 void main() {
@@ -203,4 +181,3 @@ void main() {
     });
   });
 }
-

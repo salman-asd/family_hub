@@ -2,6 +2,100 @@ import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:flutter/material.dart';
 
+/// The bundled Bangla-first font family declared in pubspec.yaml.
+///
+/// Chosen in Step 5 after evaluating Hind Siliguri, Noto Sans Bengali and
+/// Anek Bangla (see PROGRESS.md): Hind Siliguri has the best weight coverage
+/// for UI (300–700), a clean humanist look that stays readable at small sizes,
+/// complete Bengali coverage, and is SIL OFL 1.1 licensed (free to bundle).
+const String kAppFontFamily = 'HindSiliguri';
+
+/// Builds the app [TextTheme] on top of [kAppFontFamily].
+///
+/// Body text >= 14sp and small labels >= 12sp as required by the roadmap.
+/// Latin glyphs fall back to the same family's Latin coverage; a dedicated
+/// Latin fallback family can be added later without touching screens.
+TextTheme _buildTextTheme() {
+  const family = kAppFontFamily;
+  return const TextTheme(
+    displayLarge: TextStyle(
+      fontFamily: family,
+      fontSize: 57,
+      fontWeight: FontWeight.w400,
+    ),
+    displayMedium: TextStyle(
+      fontFamily: family,
+      fontSize: 45,
+      fontWeight: FontWeight.w400,
+    ),
+    displaySmall: TextStyle(
+      fontFamily: family,
+      fontSize: 36,
+      fontWeight: FontWeight.w400,
+    ),
+    headlineLarge: TextStyle(
+      fontFamily: family,
+      fontSize: 32,
+      fontWeight: FontWeight.w600,
+    ),
+    headlineMedium: TextStyle(
+      fontFamily: family,
+      fontSize: 28,
+      fontWeight: FontWeight.w600,
+    ),
+    headlineSmall: TextStyle(
+      fontFamily: family,
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+    ),
+    titleLarge: TextStyle(
+      fontFamily: family,
+      fontSize: 22,
+      fontWeight: FontWeight.w600,
+    ),
+    titleMedium: TextStyle(
+      fontFamily: family,
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+    ),
+    titleSmall: TextStyle(
+      fontFamily: family,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+    ),
+    bodyLarge: TextStyle(
+      fontFamily: family,
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+    ),
+    bodyMedium: TextStyle(
+      fontFamily: family,
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+    ),
+    bodySmall: TextStyle(
+      fontFamily: family,
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+    ),
+    labelLarge: TextStyle(
+      fontFamily: family,
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+    ),
+    labelMedium: TextStyle(
+      fontFamily: family,
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+    ),
+    labelSmall: TextStyle(
+      fontFamily: family,
+      fontSize: 11,
+      fontWeight: FontWeight.w500,
+    ),
+  );
+}
+
 /// Converts an [AppThemeSpec] into a complete Material 3 [ThemeData].
 ///
 /// All colors come from the spec's [AppTokens]; no raw Color literal is used
@@ -42,8 +136,8 @@ ThemeData buildThemeData(AppThemeSpec spec) {
     inversePrimary: isDark ? t.accentStrong : t.accentSoft,
   );
 
-  // Placeholder TextTheme — font declared in Step 5
-  const textTheme = TextTheme();
+  // Bangla-first TextTheme (font bundled in assets/fonts, Step 5).
+  final textTheme = _buildTextTheme();
 
   return ThemeData(
     useMaterial3: true,

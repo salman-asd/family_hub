@@ -1,8 +1,7 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
-import 'package:family_hub/app/theme/theme_builder.dart';
 import 'package:family_hub/app/theme/theme_controller.dart';
-import 'package:family_hub/app/theme/theme_prefs.dart';
 import 'package:family_hub/app/theme/theme_registry.dart';
+import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,22 +21,25 @@ class ThemeSettingsScreen extends ConsumerWidget {
     final prefs = ref.watch(themeControllerProvider);
     final controller = ref.read(themeControllerProvider.notifier);
     final t = context.tokens;
+    final l10n = context.l10n;
     final isFollowDevice = prefs.themeMode == ThemeMode.system;
 
     final availableThemes = appThemes.where((s) => s.available).toList();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Appearance')),
+      appBar: AppBar(title: Text(l10n.settingsThemeTitle)),
       backgroundColor: t.background,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // ── Follow device toggle ───────────────────────────────────────
-          _SectionLabel(label: 'Theme Mode', tokens: t),
+          _SectionLabel(label: l10n.settingsThemeMode, tokens: t),
           const SizedBox(height: 8),
           _FollowDeviceTile(
             value: isFollowDevice,
             tokens: t,
+            title: l10n.settingsFollowDevice,
+            subtitle: l10n.settingsFollowDeviceSubtitle,
             onChanged: (v) => controller.setThemeMode(
               v ? ThemeMode.system : _defaultModeForId(prefs.themeId),
             ),
@@ -45,7 +47,7 @@ class ThemeSettingsScreen extends ConsumerWidget {
           const SizedBox(height: 24),
 
           // ── Theme picker grid ──────────────────────────────────────────
-          _SectionLabel(label: 'Colour Palette', tokens: t),
+          _SectionLabel(label: l10n.settingsColourPalette, tokens: t),
           const SizedBox(height: 8),
           GridView.builder(
             shrinkWrap: true,
@@ -88,7 +90,9 @@ class ThemeSettingsScreen extends ConsumerWidget {
   /// chosen spec's brightness.
   static ThemeMode _defaultModeForId(String id) {
     final spec = themeById(id);
-    return spec.brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
+    return spec.brightness == Brightness.dark
+        ? ThemeMode.dark
+        : ThemeMode.light;
   }
 }
 
@@ -119,10 +123,14 @@ class _FollowDeviceTile extends StatelessWidget {
   const _FollowDeviceTile({
     required this.value,
     required this.tokens,
+    required this.title,
+    required this.subtitle,
     required this.onChanged,
   });
   final bool value;
   final AppTokens tokens;
+  final String title;
+  final String subtitle;
   final ValueChanged<bool> onChanged;
 
   @override
@@ -152,7 +160,7 @@ class _FollowDeviceTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Follow device',
+                      title,
                       style: TextStyle(
                         color: tokens.textPrimary,
                         fontSize: 15,
@@ -161,7 +169,7 @@ class _FollowDeviceTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Uses your system light / dark setting',
+                      subtitle,
                       style: TextStyle(
                         color: tokens.textSecondary,
                         fontSize: 13,
@@ -173,7 +181,7 @@ class _FollowDeviceTile extends StatelessWidget {
               Switch(
                 value: value,
                 onChanged: onChanged,
-                activeColor: tokens.accent,
+                activeThumbColor: tokens.accent,
               ),
             ],
           ),
@@ -201,10 +209,18 @@ class _ThemeCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final borderColor = isSelected ? tokens.accent : tokens.divider;
     final borderWidth = isSelected ? 2.0 : 1.0;
+    final l10n = context.l10n;
+    final label = spec.labelBn.isNotEmpty &&
+            Localizations.localeOf(context).languageCode == 'bn'
+        ? spec.labelBn
+        : spec.labelEn;
 
     return Semantics(
-      label: '${spec.labelEn} theme${isSelected ? ', selected' : ''}',
+      label: isSelected
+          ? l10n.settingsThemeSelectedSemantics(label)
+          : l10n.settingsThemeUnselectedSemantics(label),
       button: true,
+      selected: isSelected,
       child: GestureDetector(
         onTap: onTap,
         child: AnimatedContainer(
@@ -230,7 +246,7 @@ class _ThemeCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          spec.labelEn,
+                          label,
                           style: TextStyle(
                             color: tokens.textPrimary,
                             fontSize: 13,
@@ -245,7 +261,7 @@ class _ThemeCard extends StatelessWidget {
                           Icons.check_circle_rounded,
                           color: tokens.accent,
                           size: 18,
-                          semanticLabel: 'Selected',
+                          semanticLabel: l10n.settingsThemeSelected,
                         ),
                     ],
                   ),
@@ -359,4 +375,3 @@ class _Dot extends StatelessWidget {
 extension ThemeSettingsTestKeys on ThemeSettingsScreen {
   static Key cardKey(String themeId) => ValueKey('theme_card_$themeId');
 }
-

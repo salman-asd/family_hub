@@ -26,4 +26,3 @@ class NoOpThemePreferenceSync implements ThemePreferenceSync {
   @override
   Stream<ThemePrefs?> watch() => const Stream.empty();
 }
-
