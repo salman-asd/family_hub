@@ -7,6 +7,7 @@
 | 3 Theme tokens | Done | app_tokens, modern_light, modern_dark, theme_registry, theme_builder, dev_tokens_screen; WCAG contrast + no-raw-color tests pass |
 | 4 Theme controller and Settings → Theme screen | Done | ThemePrefs + ThemeController (early-load in bootstrap), ThemePreferenceSync no-op, /settings/theme screen; persistence + registry tests pass |
 | 5 Localization (Bangla default), fonts, formatting | Done | l10n.yaml + bn/en ARBs, context.l10n, LocaleController + /settings/language screen, Hind Siliguri bundled, formatters, overflow + hard-coded-string tests; flutter test 126/126 |
+| 6 Firebase setup (dev and prod) and bootstrap | Next | |
 
 ## Step 2 assumptions
 - Money.parse, Quantity.parse, DateKey.parse and MonthKey.parse return Result (no exceptions).
