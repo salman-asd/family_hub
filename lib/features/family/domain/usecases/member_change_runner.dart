@@ -1,12 +1,12 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/member.dart';
-import 'package:family_hub/features/family/domain/member_access.dart';
-import 'package:family_hub/features/family/domain/member_role.dart';
+import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Shared skeleton of the single-member use cases: check the actor, load the
 /// members, let the use case decide the new state of the target, save it and
@@ -26,15 +26,15 @@ class MemberChangeRunner {
     required String actorUid,
     required String familyId,
     required String targetUid,
-    required Set<MemberRole> allowed,
+    required Permission permission,
     required String eventType,
     required Result<Member> Function(Member target, List<Member> all) decide,
   }) async {
-    final actor = await requireActor(
+    final actor = await requirePermission(
       families,
       familyId: familyId,
       actorUid: actorUid,
-      allowed: allowed,
+      permission: permission,
     );
     final denied = actor.failureOrNull;
     if (denied != null) return Failure<Member>(denied);

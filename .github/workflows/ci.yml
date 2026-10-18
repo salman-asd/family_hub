@@ -21,3 +21,25 @@ jobs:
       - run: flutter analyze
       - run: flutter test
       - run: flutter build apk --flavor dev -t lib/main_dev.dart
+
+  # Firestore Security Rules v1 must stay green: every rule has an allowed and a
+  # denied case (roadmap Step 10).  Separate job so a rules failure is obvious
+  # and does not wait behind the Android build.
+  rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: firebase/rules_test/package-lock.json
+      # The Firestore emulator is a JVM program, and firebase-tools 15 requires
+      # a JDK of 21 or newer.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci --prefix firebase/rules_test
+      - run: npm run test:emulator --prefix firebase/rules_test
+

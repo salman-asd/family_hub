@@ -1,15 +1,15 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/member_access.dart';
-import 'package:family_hub/features/family/domain/member_role.dart';
+import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Saves family settings: name, timezone, currency and module switches
-/// (admin only).
+/// (`Permission.editFamilySettings`: admin only).
 class UpdateFamilySettings {
   const UpdateFamilySettings({
     required FamilyRepository families,
@@ -27,11 +27,11 @@ class UpdateFamilySettings {
     required String actorUid,
     required Family family,
   }) async {
-    final actor = await requireActor(
+    final actor = await requirePermission(
       _families,
       familyId: family.id,
       actorUid: actorUid,
-      allowed: {MemberRole.admin},
+      permission: Permission.editFamilySettings,
     );
     final denied = actor.failureOrNull;
     if (denied != null) return Failure<Family>(denied);

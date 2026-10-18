@@ -1,14 +1,17 @@
-/// Role inside a family (roadmap 2.2).
-enum MemberRole {
-  admin,
-  moderator,
-  member;
+/// Role inside a family, under the name the family feature already uses.
+///
+/// Step 10 moved the canonical enum to `core/permissions/role.dart` so that the
+/// permission policy can use it without `core/` importing a feature.  This file
+/// keeps `MemberRole` as a typedef (and re-exports `Role`), so every Step 9 call
+/// site — including `MemberRole.parse(...)` and `MemberRole.values` — still
+/// compiles unchanged.
+///
+/// The `import` is needed as well as the `export`: `export` only affects the
+/// libraries that import this file, it does not put `Role` in scope here.
+library;
 
-  static MemberRole parse(String? value) => MemberRole.values.firstWhere(
-        (r) => r.name == value,
-        orElse: () => MemberRole.member,
-      );
+import 'package:family_hub/core/permissions/role.dart';
 
-  /// Admins and moderators.
-  bool get canManageMembers => this != MemberRole.member;
-}
+export 'package:family_hub/core/permissions/role.dart' show Role;
+
+typedef MemberRole = Role;

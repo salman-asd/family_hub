@@ -1,136 +1,385 @@
 rules_version = '2';
 
-// INTERIM RULES for Step 9 (profile, family, invitations, approval).
-// Step 10 replaces this with the full permission matrix + emulator tests.
-// Everything not matched below stays denied (default deny).
+// ============================================================================
+// Family Hub — Firestore Security Rules v1 (Step 10)
+//
+// One permission matrix, twice: `lib/core/permissions/permission_policy.dart`
+// for the app, and this file for the backend.  CLAUDE.md hard rule 12: every
+// permission is enforced here as well as in the UI.
+//
+// Collections covered today (roadmap Steps 6-9):
+//   users/{uid}
+//   inviteCodes/{code}
+//   families/{f}
+//   families/{f}/members/{m}
+//   families/{f}/invitations/{i}
+//   families/{f}/settings/{s}
+//   families/{f}/activity/{a}
+//   families/{f}/auditLogs/{a}
+//
+// Everything else is denied (default deny at the bottom).  From Step 10 onward
+// CLAUDE.md requires every step that adds a collection to extend this file AND
+// `firebase/rules_test/` in the same commit.
+//
+// NOT EXPRESSIBLE HERE: "the last admin may not be demoted, disabled or
+// removed" needs to enumerate members/{m}, which rules cannot do.  It stays a
+// domain rule (`leavesNoActiveAdmin` in permission_access.dart), unit-tested in
+// test/features/family/domain/member_management_test.dart.
+// ============================================================================
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function signedIn() { return request.auth != null; }
-    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    // ── Primitives ─────────────────────────────────────────────────────────
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+    function writesAsSelf() {
+      return request.resource.data.get('updatedBy', '') == request.auth.uid;
+    }
+    function createsAsSelf() {
+      return request.resource.data.get('createdBy', '') == request.auth.uid;
+    }
+    function inList(value, allowed) {
+      return value in allowed;
+    }
+    // Enums are validated against the closed sets of the domain models, so a
+    // forged document fails here rather than at the next read.
+    function relationshipOk(data) {
+      return data.get('relationship', 'other') in
+        ['father', 'mother', 'son', 'daughter', 'husband', 'wife', 'housewife',
+         'daughterInLaw', 'sonInLaw', 'other'];
+    }
+    function genderOk(data) {
+      return !('gender' in data.keys())
+        || data.gender == null
+        || data.gender in ['male', 'female', 'other'];
+    }
+    // users/{uid}.preferences {themeId, themeMode, language, banglaDigits}.
+    function preferencesOk(data) {
+      return !('preferences' in data.keys())
+        || (
+          data.preferences is map
+          && data.preferences.get('themeId', '') is string
+          && data.preferences.get('themeMode', 'system') in ['system', 'light', 'dark']
+          && data.preferences.get('language', 'bn') in ['bn', 'en']
+          && data.preferences.get('banglaDigits', false) is bool
+        );
+    }
+    // Money is integer paisa (CLAUDE.md rule 1).  Applied to the money
+    // collections from Step 13 (`expenses`) onwards; no money field exists yet,
+    // so this helper is the guard those steps must use rather than a new one.
+    function isNonNegativeInt(value) {
+      return value is int && value >= 0;
+    }
+    function isNonNegativeIntOrMissing(data, key) {
+      return !(key in data.keys()) || isNonNegativeInt(data[key]);
+    }
 
+    // ── Family membership helpers (roadmap Section 13 names) ───────────────
     function memberPath(f, uid) {
       return /databases/$(database)/documents/families/$(f)/members/$(uid);
     }
-    function me(f) { return get(memberPath(f, request.auth.uid)).data; }
-    function hasMe(f) { return signedIn() && exists(memberPath(f, request.auth.uid)); }
-    function isActive(f) {
-      return hasMe(f) && me(f).status == 'active' && me(f).get('removedAt', null) == null;
+    // The caller's member document, or an empty map when there is none.
+    //
+    // The empty-map fallback matters: in rules an *error* in an operand makes
+    // the whole condition an error, and `get(...).data` on a missing document
+    // is exactly such an error.  With `{}` every helper below is a clean false
+    // instead, so a denial is reported for the right reason.
+    function me(f) {
+      return exists(memberPath(f, request.auth.uid))
+        ? get(memberPath(f, request.auth.uid)).data
+        : {};
     }
-    function isAdmin(f) { return isActive(f) && me(f).role == 'admin'; }
-    function isMod(f) { return isActive(f) && me(f).role == 'moderator'; }
-    function isManager(f) { return isAdmin(f) || isMod(f); }
+    function isMember(f) {
+      return signedIn() && exists(memberPath(f, request.auth.uid));
+    }
+    function role(f) {
+      return me(f).get('role', '');
+    }
+    // Active = approved, and not rejected (soft delete) or disabled.
+    function isActiveMember(f) {
+      return signedIn()
+        && me(f).get('status', 'pending') == 'active'
+        && me(f).get('removedAt', null) == null;
+    }
+    function isAdmin(f) {
+      return isActiveMember(f) && role(f) == 'admin';
+    }
+    function isMod(f) {
+      return isActiveMember(f) && role(f) == 'moderator';
+    }
+    // Admin or moderator: may invite and decide requests (Step 9 rule).
+    function isManager(f) {
+      return isAdmin(f) || isMod(f);
+    }
 
-    // True only inside the batch that creates the family: the family document
-    // does not exist yet and is being written by the caller.
+    // ── Enrollment helpers ────────────────────────────────────────────────
+    // True only inside the ONE batch that creates a family: the family document
+    // does not exist yet and the caller is its creator.
     function creatingFamily(f) {
       return signedIn()
         && !exists(/databases/$(database)/documents/families/$(f))
-        && getAfter(/databases/$(database)/documents/families/$(f)).data.createdBy == request.auth.uid;
+        && getAfter(/databases/$(database)/documents/families/$(f)).data.createdBy
+             == request.auth.uid;
     }
-
     function codeDoc(code) {
-      return get(/databases/$(database)/documents/inviteCodes/$(code)).data;
+      return exists(/databases/$(database)/documents/inviteCodes/$(code))
+        ? get(/databases/$(database)/documents/inviteCodes/$(code)).data
+        : {};
     }
-    // A joining member document: pending, plain member, from a live code.
+    function liveCode(code) {
+      return codeDoc(code).get('status', '') == 'active'
+        // A missing timestamp defaults to "now", which is never > now.
+        && codeDoc(code).get('expiresAt', request.time) > request.time;
+    }
+    // A joining member document: pending, plain member, created by the joiner,
+    // backed by a live code for this family.
     function validJoin(f) {
-      return request.resource.data.status == 'pending'
-        && request.resource.data.role == 'member'
-        && request.resource.data.createdBy == request.auth.uid
-        && codeDoc(request.resource.data.inviteCode).familyId == f
-        && codeDoc(request.resource.data.inviteCode).status == 'active'
-        && codeDoc(request.resource.data.inviteCode).expiresAt > request.time;
+      return request.resource.data.get('status', '') == 'pending'
+        && request.resource.data.get('role', '') == 'member'
+        && request.resource.data.get('uid', '') == request.auth.uid
+        && createsAsSelf()
+        && request.resource.data.get('inviteCode', null) is string
+        && liveCode(request.resource.data.inviteCode)
+        && codeDoc(request.resource.data.inviteCode).get('familyId', '') == f;
     }
+    // A self-write may never change who it is...
+    function identityStable() {
+      return request.resource.data.uid == resource.data.uid;
+    }
+    // ...nor promote itself...
+    function roleUnchanged() {
+      return request.resource.data.role == resource.data.role;
+    }
+    // ...nor approve itself.
+    function statusUnchanged() {
+      return request.resource.data.status == resource.data.status;
+    }
+    // What a decision on a pending request may produce: approve, reject
+    // (back to pending, with removedAt) or decline a pending request.
+    function validDecision() {
+      return (request.resource.data.status == 'active'
+              && request.resource.data.get('removedAt', null) == null)
+        || request.resource.data.status == 'disabled'
+        || (request.resource.data.status == 'pending'
+            && request.resource.data.get('removedAt', null) != null);
+    }
+    // True inside the ONE batch that creates the caller's pending member
+    // document.  The activity and audit entries of that batch are written by
+    // the same user, so they use this instead of `validJoin` (their own
+    // document has no `status` or `role` field to inspect).
     function joiningNow(f) {
-      return signedIn() && existsAfter(memberPath(f, request.auth.uid));
+      return signedIn()
+        && existsAfter(memberPath(f, request.auth.uid))
+        && getAfter(memberPath(f, request.auth.uid)).data.get('status', '') == 'pending'
+        && getAfter(memberPath(f, request.auth.uid)).data.get('role', '') == 'member';
+    }
+    function memberDocIsValid() {
+      return inList(request.resource.data.get('role', 'member'),
+                    ['admin', 'moderator', 'member'])
+        && inList(request.resource.data.get('status', 'pending'),
+                  ['pending', 'active', 'disabled'])
+        && request.resource.data.get('uid', '') is string
+        && relationshipOk(request.resource.data);
     }
 
-    // ── users/{uid}: the owner only ──────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════════
+    // users/{uid} — the owner only.  Holds the profile, `familyId` and
+    // `preferences {themeId, themeMode, language, banglaDigits}`.
+    // ══════════════════════════════════════════════════════════════════════
     match /users/{uid} {
-      allow read, write: if isSelf(uid);
+      // The document may exist before the profile does (preference sync merges
+      // `preferences` into it), so every profile field is optional — but the
+      // ones that are present must be well formed, and the owner may never
+      // claim to be somebody else.
+      function userDocOk() {
+        return request.resource.data.get('uid', uid) == uid
+          && (!('familyId' in request.resource.data.keys())
+              || request.resource.data.get('familyId', null) is string)
+          && request.resource.data.get('updatedBy', uid) == uid
+          && (!('fullName' in request.resource.data.keys())
+              || request.resource.data.fullName is string)
+          && preferencesOk(request.resource.data)
+          && relationshipOk(request.resource.data)
+          && genderOk(request.resource.data);
+      }
+
+      allow get, list: if isSelf(uid);
+      allow create: if isSelf(uid) && userDocOk();
+      allow update: if isSelf(uid) && userDocOk();
+      // Closing an account is not a feature: profile data is soft-deleted.
+      allow delete: if false;
     }
 
-    // ── inviteCodes/{code}: exact-id get only, never list ────────────────
+    // ══════════════════════════════════════════════════════════════════════
+    // inviteCodes/{code} — the discovery index for joining.
+    //
+    // Exact-id `get` only, never `list`: a signed-in user with a code may learn
+    // the family it belongs to, nobody may enumerate codes or families.
+    // ══════════════════════════════════════════════════════════════════════
     match /inviteCodes/{code} {
       allow get: if signedIn();
       allow list: if false;
+
       allow create: if signedIn()
-        && (isManager(request.resource.data.familyId))
-        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.familyId is string
+        && request.resource.data.familyId.size() > 0
+        && isManager(request.resource.data.familyId)
+        && createsAsSelf()
         && request.resource.data.status == 'active'
-        && request.resource.data.role == 'member';
-      // A joiner marks the code used; nothing else may change.
+        && request.resource.data.role == 'member'
+        && request.resource.data.expiresAt is timestamp;
+
+      // A joiner marks their code used; nothing else may change, ever.
       allow update: if signedIn()
         && resource.data.status == 'active'
+        && resource.data.expiresAt > request.time
         && request.resource.data.status == 'used'
         && request.resource.data.usedBy == request.auth.uid
         && request.resource.data.diff(resource.data).affectedKeys()
              .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy']);
+
+      // An expired or revoked code is a tombstone, not a deleted document.
       allow delete: if false;
     }
 
+    // ══════════════════════════════════════════════════════════════════════
+    // families/{f}
+    // ══════════════════════════════════════════════════════════════════════
     match /families/{f} {
       allow create: if signedIn()
-        && request.resource.data.createdBy == request.auth.uid;
-      allow read: if isActive(f);
-      allow update: if isAdmin(f);
+        && createsAsSelf()
+        && request.resource.data.get('name', '') is string
+        && request.resource.data.get('name', '').size() > 0;
+
+      // Active members only: a pending or rejected user reads nothing here,
+      // and a member of another family reads nothing.
+      allow read: if isActiveMember(f);
+
+      // Family administration.  `editFamilySettings` is admin-only, so a
+      // moderator cannot rename the family or flip a module.
+      allow update: if isAdmin(f)
+        && writesAsSelf()
+        && request.resource.data.get('name', '') is string
+        && request.resource.data.get('name', '').size() > 0;
+
       allow delete: if false;
 
+      // ── members/{m} ────────────────────────────────────────────────────
       match /members/{m} {
-        allow read: if isActive(f) || isSelf(m);
+        // A member sees the family roster; everyone may read their own
+        // document so the pending screen can listen to it.
+        allow read: if isActiveMember(f) || isSelf(m);
 
-        // Creating the family: first member, active admin.
-        allow create: if isSelf(m) && creatingFamily(f)
-          && request.resource.data.role == 'admin'
-          && request.resource.data.status == 'active'
-          && request.resource.data.createdBy == request.auth.uid;
+        // 1. Creating the family: the first member is an active admin.
+        allow create: if isSelf(m)
+          && creatingFamily(f)
+          && createsAsSelf()
+          && request.resource.data.get('role', '') == 'admin'
+          && request.resource.data.get('status', '') == 'active';
 
-        // Joining: pending member, role from a valid, unused, unexpired code.
+        // 2. Joining with a live code: pending, plain member.
         allow create: if isSelf(m) && validJoin(f);
 
-        // Admin: any change.  Moderator: approve or reject pending only.
-        // Owner: own profile fields only (never role or status).
-        // A rejected person (removedAt set) may ask again with a fresh code.
+        // 3. Admin: any change (role, status, removal) — the last-admin guard
+        //    lives in the domain, see the header.
         allow update: if isAdmin(f)
-          || (isSelf(m) && resource.data.get('removedAt', null) != null && validJoin(f))
-          || (isMod(f) && resource.data.status == 'pending'
-              && request.resource.data.diff(resource.data).affectedKeys()
-                   .hasOnly(['status', 'removedAt', 'updatedAt', 'updatedBy']))
-          || (isSelf(m)
-              && request.resource.data.diff(resource.data).affectedKeys()
-                   .hasOnly(['fullName', 'nickname', 'relationship', 'spouseId',
-                             'avatarKey', 'updatedAt', 'updatedBy']));
-        allow delete: if false;   // soft delete only (removedAt)
+          && writesAsSelf()
+          && memberDocIsValid()
+          && request.resource.data.get('uid', '') == m;
+
+        // 4. Moderator: decide a PENDING request only — approve, reject or
+        //    decline.  Never a role, never an active member (roadmap Step 10,
+        //    "moderator approve-only").
+        allow update: if isMod(f)
+          && writesAsSelf()
+          && resource.data.get('status', 'pending') == 'pending'
+          && identityStable()
+          && roleUnchanged()
+          && validDecision()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'removedAt', 'updatedAt', 'updatedBy']);
+
+        // 5. A rejected person may ask again with a fresh code.
+        allow update: if isSelf(m)
+          && resource.data.get('removedAt', null) != null
+          && validJoin(f);
+
+        // 6. A member edits their own profile fields — never role or status,
+        //    and never anyone else's document.
+        allow update: if isSelf(m)
+          && isActiveMember(f)
+          && writesAsSelf()
+          && identityStable()
+          && roleUnchanged()
+          && statusUnchanged()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['fullName', 'nickname', 'relationship', 'spouseId',
+                         'avatarKey', 'inviteCode', 'updatedAt', 'updatedBy']);
+
+        // Leaving and removal are soft (removedAt / status), never hard.
+        allow delete: if false;
       }
 
+      // ── invitations/{i} — the family-side mirror of inviteCodes ────────
       match /invitations/{i} {
         allow read: if isManager(f);
-        allow create: if isManager(f) || creatingFamily(f);
+        allow create: if (isManager(f) || creatingFamily(f))
+          && createsAsSelf()
+          && request.resource.data.familyId == f;
         allow update: if signedIn()
           && request.resource.data.diff(resource.data).affectedKeys()
-               .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy']);
+               .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy'])
+          && request.resource.data.get('usedBy', '') == request.auth.uid;
         allow delete: if false;
       }
 
+      // ── settings/{s} — general, modules, rotationPolicy, notificationDefaults
       match /settings/{s} {
-        allow read: if isActive(f);
-        allow create: if isAdmin(f) || creatingFamily(f);
-        allow update: if isAdmin(f);
+        allow read: if isActiveMember(f);
+        allow create: if (isAdmin(f) || creatingFamily(f)) && createsAsSelf();
+        allow update: if isAdmin(f) && writesAsSelf();
         allow delete: if false;
       }
 
-      // Append-only logs.
+      // ── Append-only logs ───────────────────────────────────────────────
       match /activity/{a} {
-        allow read: if isActive(f);
-        allow create: if isActive(f) || creatingFamily(f) || joiningNow(f);
+        allow read: if isActiveMember(f);
+        allow create: if createsAsSelf()
+          && (isActiveMember(f) || creatingFamily(f) || joiningNow(f));
         allow update, delete: if false;
       }
       match /auditLogs/{a} {
         allow read: if isAdmin(f);
-        allow create: if isActive(f) || creatingFamily(f) || joiningNow(f);
+        allow create: if createsAsSelf()
+          && (isActiveMember(f) || creatingFamily(f) || joiningNow(f));
         allow update, delete: if false;
       }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // Financial and chore data: never hard-deleted (CLAUDE.md rule 5, soft
+    // delete only).  The collections arrive in Steps 12-31; this deny-only
+    // rule is in place first so that a forgotten collection can only ever
+    // under-grant.  Each of those steps must still add its own read/write and
+    // field-validation rules here.
+    //   bazarCategories, bazarItems, expenses, bazarTrips, budgets,
+    //   contributions, contributionPlans, fundTransactions, memberAdvances,
+    //   settlements, choreTemplates, dutyGroups, choreOccurrences,
+    //   memberAvailability, swapRequests, notificationInbox, memberStats
+    // ══════════════════════════════════════════════════════════════════════
+    match /families/{f}/{collection}/{doc} {
+      allow read, write: if false;
+      allow delete: if false;
+    }
+
+    // Default deny for everything not matched above.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

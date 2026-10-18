@@ -1,13 +1,13 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/member.dart';
-import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/usecases/member_change_runner.dart';
 
 /// Approves a pending request, or re-enables a disabled member.
 ///
-/// Admins and moderators may do both.
+/// `Permission.approveMembers`: admins and moderators.
 class ApproveMember {
   const ApproveMember(this._runner);
 
@@ -22,7 +22,7 @@ class ApproveMember {
         actorUid: actorUid,
         familyId: familyId,
         targetUid: targetUid,
-        allowed: {MemberRole.admin, MemberRole.moderator},
+        permission: Permission.approveMembers,
         eventType: 'member.approved',
         decide: (target, all) {
           if (target.status == MembershipStatus.active) {

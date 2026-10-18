@@ -1,13 +1,13 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/member.dart';
-import 'package:family_hub/features/family/domain/member_access.dart';
-import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
+import 'package:family_hub/features/family/domain/permission_access.dart';
 import 'package:family_hub/features/family/domain/usecases/member_change_runner.dart';
 
-/// Disables an active member (admin only).  The only active admin cannot be
-/// disabled: that returns `Conflict(code: 'last_admin')`.
+/// Disables an active member (`Permission.removeMembers`: admin only).  The only
+/// active admin cannot be disabled: that returns `Conflict(code: 'last_admin')`.
 class DisableMember {
   const DisableMember(this._runner);
 
@@ -22,7 +22,7 @@ class DisableMember {
         actorUid: actorUid,
         familyId: familyId,
         targetUid: targetUid,
-        allowed: {MemberRole.admin},
+        permission: Permission.removeMembers,
         eventType: 'member.disabled',
         decide: (target, all) {
           final updated = target.copyWith(status: MembershipStatus.disabled);

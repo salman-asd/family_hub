@@ -1,16 +1,17 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/invite_code_generator.dart';
-import 'package:family_hub/features/family/domain/member_access.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
+import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Creates a single-use invitation: 8 unambiguous characters, valid for 7 days,
-/// role `member`.  Admins and moderators only.
+/// role `member`.  `Permission.inviteMembers`: admins and moderators.
 class CreateInvitation {
   const CreateInvitation({
     required FamilyRepository families,
@@ -34,11 +35,11 @@ class CreateInvitation {
     required String actorUid,
     required String familyId,
   }) async {
-    final actor = await requireActor(
+    final actor = await requirePermission(
       _families,
       familyId: familyId,
       actorUid: actorUid,
-      allowed: {MemberRole.admin, MemberRole.moderator},
+      permission: Permission.inviteMembers,
     );
     final denied = actor.failureOrNull;
     if (denied != null) return Failure<Invitation>(denied);

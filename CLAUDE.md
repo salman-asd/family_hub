@@ -38,7 +38,13 @@ Before coding, list the files you will create or change. Write tests together wi
 Teal accent token; chore verification off by default; absence policy A (ask for cover); members see only their own contributions; equal-split contributions; onion and potato are items under Vegetables; client-side scoring; Hub Level shown as a plant; Android only; Spark plan only.
 
 ## Rules extension (from Step 10 onward)
-Every step that adds a collection must extend firestore.rules and the rules tests in the same commit.
+Every step that adds a collection must extend `firebase/firestore.rules` AND the rules tests in `firebase/rules_test/` in the same commit. For every rule there must be one allowed case and one denied case. Run them with:
+
+```
+npx firebase emulators:exec --only firestore --project demo-family-hub \
+  "npm --prefix firebase/rules_test test"
+```
+(a JDK 21+ must be on `JAVA_HOME`/`PATH`; CI runs this in the `rules` job).
 
 ## Routing and session (from Step 8)
 - Navigation is decided only by `lib/app/router.dart` (guards = `resolveRedirect`). Screens never navigate on auth/membership changes themselves.
@@ -51,4 +57,10 @@ Every step that adds a collection must extend firestore.rules and the rules test
 - `families/{id}/members/{uid}` carries denormalised `fullName`, `nickname`, `relationship`, `spouseId`, `avatarKey`, `inviteCode` and `removedAt` (a rejected request is soft-deleted; the person returns to family choice and may join again).
 - `families/{id}/settings/{general,modules,rotationPolicy,notificationDefaults}` are created with the family.
 - Every family use case writes its activity + audit entry in the same batch (`FamilyEvent`).
-- Permissions until Step 10 (`requireActor` in `member_access.dart`): admin does everything; moderator may invite, approve and reject; members and pending members may not.
+
+## Permissions (from Step 10)
+- One matrix, `lib/core/permissions/permission_policy.dart`: `PermissionPolicy.can(actor, permission, {ownerId, settings, template})`. One `Permission` per row of the roadmap 2.2 matrix; `PermissionActor` is the member reduced to `{uid, role, isActive}` so `core/` never imports a feature; `Member.permissionActor` builds it. `PermissionSettings` carries the module switches and the family verification switch, `PermissionTemplate` the per-template switch.
+- `Role` lives in `core/permissions/role.dart`; `features/family/domain/member_role.dart` re-exports it and keeps `MemberRole` as a typedef, so old call sites still compile.
+- Every mutating use case calls `requirePermission(...)` in `features/family/domain/permission_access.dart` FIRST. `leavesNoActiveAdmin` (same file) is the last-admin guard; rules cannot express it (a subcollection cannot be enumerated).
+- The UI uses `PermissionGate` (`lib/shared/widgets/`): `hide` removes the action, `disable` dims it, blocks it and shows a localized reason (icon + label, never colour alone). The gate takes a `bool`, so no Firebase and no feature import reach the widget.
+- Backend mirror: `firebase/firestore.rules` v1 with `isMember(f)`, `role(f)`, `isAdmin(f)`, `isMod(f)`. It is tested by `firebase/rules_test/` against the emulator; the roadmap's own permission matrix was never available in this repo, so the table at the top of `permission_policy.dart` is the source of truth.

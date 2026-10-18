@@ -1,3 +1,4 @@
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 
@@ -39,6 +40,13 @@ class Member {
   bool get isRemoved => removedAt != null;
   bool get isActive => status == MembershipStatus.active && !isRemoved;
   bool get isActiveAdmin => isActive && role == MemberRole.admin;
+
+  /// This member as the permission policy sees them (Step 10).
+  PermissionActor get permissionActor => PermissionActor(
+        uid: uid,
+        role: role,
+        isActive: isActive,
+      );
 
   /// Short name for lists.
   String get displayName =>

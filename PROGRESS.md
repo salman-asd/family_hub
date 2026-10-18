@@ -10,6 +10,8 @@
 | 6 Firebase setup (dev and prod) and bootstrap | Done | firebase_core, firebase_auth, cloud_firestore, options per flavor, persistence, emulator routing, paths, TxRunner + FakeTxRunner, BaseMapper, deny-all rules, indexes, README; flutter test 142/142 |
 | 7 Authentication feature | Done (verified in Step 8 review) | domain use cases, FirebaseAuthRepository, 5 screens, controllers, fakes; flutter test 234/234 on the author's machine |
 | 8 Router, guards, app shell, module registry | Done | guarded GoRouter, 4-tab shell with PillBottomBar, FamilyModule + registry, module flags, placeholder session (TODO(step-9)) |
+| 9 Profile, family create/join, invitations, approval | Done (code + tests committed at cc17b69; never ran `dart format`/`flutter analyze`/`flutter test` on a machine with the SDK) | onboarding + family features, 10 use cases, Firestore repositories, 11 screens, interim rules v0, use-case/mapper/widget tests |
+| 10 Permission policy and Firestore rules v1 | Done (rules **proved** by 99 emulator tests; Dart not compiled here) | `core/permissions` matrix + table-driven test, `requirePermission`, `PermissionGate`, rules v1 with allowed+denied cases for every rule, `rules` CI job |
 
 ## Step 2 assumptions
 - Money.parse, Quantity.parse, DateKey.parse and MonthKey.parse return Result (no exceptions).
@@ -88,3 +90,24 @@ Assumptions / limitations:
 - Spouse picker appears only when editing a profile inside a family (nobody to pick during onboarding).
 - Firestore composite indexes: none new are required (single-field `createdAt` ordering on invitations).
 - Open from earlier steps: real Firebase keys, Step 4 golden/widget tests, Windows-generated goldens in CI.
+
+## Step 10 — Permission policy and Firestore rules v1
+
+Done:
+- `lib/core/permissions/` (pure Dart, no Flutter/Firebase): `Role`, `Permission` (one value per roadmap 2.2 row), `PermissionActor`, `PermissionSettings`, `PermissionTemplate`, `PermissionPolicy.can(...)` with a documented matrix, plus a `permissions.dart` barrel.
+- `requirePermission(...)` and `leavesNoActiveAdmin(...)` in `features/family/domain/permission_access.dart`: the Step 9 `requireActor` + its per-use-case role sets are gone, so the rule lives in exactly one place. All 8 mutating use cases now pass a `Permission`.
+- `PermissionGate` in `lib/shared/widgets/`, with `hide` and `disable` modes; a blocked action is dimmed, non-tappable, announced to assistive technology and explained with an icon plus a localized message.
+- `firebase/firestore.rules` **v1**: named helpers (`isMember`, `role`, `isAdmin`, `isMod`, `isManager`), field and enum validation, `createdBy`/`updatedBy` must be the caller, a moderator may only decide a pending request, a user may never write their own role or status, invite codes stay `get`-only and single-use, the logs stay append-only, and a deny-first guard covers the financial and chore collections before Steps 12-31 open them.
+- `firebase/rules_test/` (JS, `@firebase/rules-unit-testing`): **99 tests, all green** against the Firestore emulator — one allowed and one denied case per rule, the four cases the roadmap names, and the Phase 1 scenario end to end.
+- New CI `rules` job (Node 24 + Temurin 21, `npm ci` + `npm run test:emulator`); the existing `build` job is untouched.
+
+Assumptions / limitations:
+- Roadmap 2.2 was not in ROADMAP.md, so the matrix was derived from the rules the roadmap states elsewhere. It is now written twice, as a table at the top of `permission_policy.dart` and as the test table; those two are the source of truth. `removeMembers`/`changeRoles`/`editFamilySettings`/`exportData`/`manageCatalogAndBudgets`/`recordContribution` are admin (or admin+moderator) only; `viewFamilyReports`, `addOwnExpense` and `commentOnChore` are open to every active member.
+- "moderator approve-only" is read as one `approveMembers` permission covering approve, reject and decline of a pending request; a moderator can never change a role or touch an active member.
+- `requirePermission` loads the member document itself (one extra read per mutation) — deliberate, so a use case cannot forget the check.
+- The last-admin guard is **not** expressible in rules (a subcollection cannot be enumerated); it stays in `leavesNoActiveAdmin` and is unit-tested. The rules file says so in its header.
+- `isNonNegativeInt` / `isNonNegativeIntOrMissing` are in place for the money fields but nothing applies them yet: no money field exists until Step 13, which must use these helpers rather than add new ones.
+- `Role` moved to `core/permissions/role.dart`; `MemberRole` is now a typedef, so Step 9 call sites and tests are unchanged.
+- The Dart side of Step 10 could **not** be compiled or tested here (no Flutter SDK on this machine): `dart format .`, `flutter analyze` and `flutter test` still have to run on a machine that has it. The rules side was fully verified with the emulator.
+- Housekeeping, unchanged: `*.log`, `android/.gradle`, `android/.kotlin`, `test/**/failures/` are committed or untracked noise; `node_modules/` is now ignored.
+

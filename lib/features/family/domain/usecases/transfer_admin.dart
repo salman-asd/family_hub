@@ -1,16 +1,17 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/member.dart';
-import 'package:family_hub/features/family/domain/member_access.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
+import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Hands the admin role to another active member; the previous admin becomes a
 /// regular member.  Both changes are saved in ONE batch, so the family is never
-/// without an admin.
+/// without an admin.  `Permission.changeRoles`: admins only.
 class TransferAdmin {
   const TransferAdmin({
     required FamilyRepository families,
@@ -32,11 +33,11 @@ class TransferAdmin {
     if (targetUid == actorUid) {
       return const Failure<Member>(Conflict(code: 'same_member'));
     }
-    final actor = await requireActor(
+    final actor = await requirePermission(
       _families,
       familyId: familyId,
       actorUid: actorUid,
-      allowed: {MemberRole.admin},
+      permission: Permission.changeRoles,
     );
     final denied = actor.failureOrNull;
     if (denied != null) return Failure<Member>(denied);
