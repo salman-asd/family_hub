@@ -57,6 +57,16 @@ class LocaleController extends Notifier<LocalePrefs> {
     await _persist();
   }
 
+  /// Applies preferences that came from the account (after sign-in).  Stores
+  /// them locally but does NOT push them back, so sync cannot loop.
+  Future<void> applyRemote(LocalePrefs remote) async {
+    if (remote == state) return;
+    state = remote;
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setString(_kLanguageKey, state.languageCode);
+    await prefs.setBool(_kBanglaDigitsKey, state.useBanglaDigits);
+  }
+
   Future<void> _persist() async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(_kLanguageKey, state.languageCode);

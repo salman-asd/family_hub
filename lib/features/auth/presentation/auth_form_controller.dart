@@ -1,10 +1,10 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/features/auth/domain/app_user.dart';
-import 'package:family_hub/features/auth/domain/auth_providers.dart';
+import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Re-export so screens import one file for controllers and providers.
-export 'package:family_hub/features/auth/domain/auth_providers.dart'
+export 'package:family_hub/features/auth/presentation/auth_providers.dart'
     show
         authFailureCode,
         authRepositoryProvider,

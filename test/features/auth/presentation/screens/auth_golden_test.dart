@@ -4,7 +4,7 @@ import 'package:family_hub/app/theme/theme_builder.dart';
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
-import 'package:family_hub/features/auth/domain/auth_providers.dart';
+import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/auth/presentation/screens/login_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';

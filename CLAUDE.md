@@ -39,3 +39,16 @@ Teal accent token; chore verification off by default; absence policy A (ask for 
 
 ## Rules extension (from Step 10 onward)
 Every step that adds a collection must extend firestore.rules and the rules tests in the same commit.
+
+## Routing and session (from Step 8)
+- Navigation is decided only by `lib/app/router.dart` (guards = `resolveRedirect`). Screens never navigate on auth/membership changes themselves.
+- Providers live in `presentation/` (or `app/`), never in `domain/`. `test/architecture/layer_boundaries_test.dart` enforces the layer table.
+- Anything marked `TODO(step-9)` (placeholder session, gate screens) is throwaway and must be deleted in Step 9.
+
+## Data model additions (from Step 9, extends roadmap 12.2)
+- `users/{uid}`: profile fields (`fullName`, `nickname`, `gender`, `relationship`, `spouseId`, `avatarKey`), **`familyId`** (set when the user creates or joins a family), and `preferences {themeId, themeMode, language, banglaDigits}`.  "Has a profile" means `fullName` is non-empty (the document may exist earlier because preferences are merged into it).
+- `inviteCodes/{code}` -> `{familyId, role, status active|used|revoked, expiresAt, createdBy, usedBy?}`; **exact-id `get` only, never `list`**.  Mirrored at `families/{id}/invitations/{code}`.  Codes are single-use, 8 characters from `ABCDEFGHJKMNPQRSTUVWXYZ23456789`, valid 7 days, role `member`.
+- `families/{id}/members/{uid}` carries denormalised `fullName`, `nickname`, `relationship`, `spouseId`, `avatarKey`, `inviteCode` and `removedAt` (a rejected request is soft-deleted; the person returns to family choice and may join again).
+- `families/{id}/settings/{general,modules,rotationPolicy,notificationDefaults}` are created with the family.
+- Every family use case writes its activity + audit entry in the same batch (`FamilyEvent`).
+- Permissions until Step 10 (`requireActor` in `member_access.dart`): admin does everything; moderator may invite, approve and reject; members and pending members may not.

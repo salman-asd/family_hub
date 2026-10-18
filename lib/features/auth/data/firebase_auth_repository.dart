@@ -27,9 +27,15 @@ class FirebaseAuthRepository implements AuthRepository {
   /// Maximum time to wait for a backend round trip.
   final Duration timeout;
 
+  /// Backed by `userChanges()` rather than `authStateChanges()` on purpose.
+  ///
+  /// `authStateChanges()` only fires on sign-in and sign-out, so after
+  /// `reloadUser()` flips `emailVerified` to true nothing would be emitted and
+  /// the router guard (Step 8) would leave the user stuck on /verify-email.
+  /// `userChanges()` also fires on `User.reload()` and token refreshes, which is
+  /// what the [AuthRepository.authStateChanges] contract promises.
   @override
-  Stream<AppUser?> authStateChanges() =>
-      _auth.authStateChanges().map(toAppUser);
+  Stream<AppUser?> authStateChanges() => _auth.userChanges().map(toAppUser);
 
   @override
   Future<Result<AppUser?>> signUp({

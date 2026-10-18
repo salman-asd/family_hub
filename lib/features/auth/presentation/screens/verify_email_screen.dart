@@ -1,6 +1,6 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
-import 'package:family_hub/features/auth/domain/auth_providers.dart';
+import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/auth/presentation/auth_routes.dart';
 import 'package:family_hub/features/auth/presentation/auth_form_controller.dart';
 import 'package:family_hub/features/auth/presentation/controllers/verify_email_controller.dart';

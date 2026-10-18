@@ -18,7 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// final prefs = await SharedPreferences.getInstance();
 /// runApp(ProviderScope(
 ///   overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
-///   child: FamilyHubApp(flavor: flavor),
+///   child: FamilyHubApp(),
 /// ));
 /// ```
 final sharedPreferencesProvider = Provider<SharedPreferences>(
@@ -73,6 +73,17 @@ class ThemeController extends Notifier<ThemePrefs> {
   Future<void> setThemeMode(ThemeMode mode) async {
     state = state.copyWith(themeMode: mode);
     await _persist();
+  }
+
+  /// Applies preferences that came from the account (after sign-in).  Stores
+  /// them locally but does NOT push them back, so sync cannot loop.
+  Future<void> applyRemote(ThemePrefs remote) async {
+    final resolved = remote.copyWith(themeId: themeById(remote.themeId).id);
+    if (resolved == state) return;
+    state = resolved;
+    final prefs = ref.read(sharedPreferencesProvider);
+    await prefs.setString(_kModeKey, state.themeMode.name);
+    await prefs.setString(_kIdKey, state.themeId);
   }
 
   Future<void> _persist() async {

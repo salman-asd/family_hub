@@ -1,11 +1,136 @@
 rules_version = '2';
+
+// INTERIM RULES for Step 9 (profile, family, invitations, approval).
+// Step 10 replaces this with the full permission matrix + emulator tests.
+// Everything not matched below stays denied (default deny).
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Temporary deny-all rule for Step 6.
-    // Full security rules are implemented in Step 10.
-    match /{document=**} {
-      allow read, write: if false;
+
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+
+    function memberPath(f, uid) {
+      return /databases/$(database)/documents/families/$(f)/members/$(uid);
+    }
+    function me(f) { return get(memberPath(f, request.auth.uid)).data; }
+    function hasMe(f) { return signedIn() && exists(memberPath(f, request.auth.uid)); }
+    function isActive(f) {
+      return hasMe(f) && me(f).status == 'active' && me(f).get('removedAt', null) == null;
+    }
+    function isAdmin(f) { return isActive(f) && me(f).role == 'admin'; }
+    function isMod(f) { return isActive(f) && me(f).role == 'moderator'; }
+    function isManager(f) { return isAdmin(f) || isMod(f); }
+
+    // True only inside the batch that creates the family: the family document
+    // does not exist yet and is being written by the caller.
+    function creatingFamily(f) {
+      return signedIn()
+        && !exists(/databases/$(database)/documents/families/$(f))
+        && getAfter(/databases/$(database)/documents/families/$(f)).data.createdBy == request.auth.uid;
+    }
+
+    function codeDoc(code) {
+      return get(/databases/$(database)/documents/inviteCodes/$(code)).data;
+    }
+    // A joining member document: pending, plain member, from a live code.
+    function validJoin(f) {
+      return request.resource.data.status == 'pending'
+        && request.resource.data.role == 'member'
+        && request.resource.data.createdBy == request.auth.uid
+        && codeDoc(request.resource.data.inviteCode).familyId == f
+        && codeDoc(request.resource.data.inviteCode).status == 'active'
+        && codeDoc(request.resource.data.inviteCode).expiresAt > request.time;
+    }
+    function joiningNow(f) {
+      return signedIn() && existsAfter(memberPath(f, request.auth.uid));
+    }
+
+    // ── users/{uid}: the owner only ──────────────────────────────────────
+    match /users/{uid} {
+      allow read, write: if isSelf(uid);
+    }
+
+    // ── inviteCodes/{code}: exact-id get only, never list ────────────────
+    match /inviteCodes/{code} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && (isManager(request.resource.data.familyId))
+        && request.resource.data.createdBy == request.auth.uid
+        && request.resource.data.status == 'active'
+        && request.resource.data.role == 'member';
+      // A joiner marks the code used; nothing else may change.
+      allow update: if signedIn()
+        && resource.data.status == 'active'
+        && request.resource.data.status == 'used'
+        && request.resource.data.usedBy == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy']);
+      allow delete: if false;
+    }
+
+    match /families/{f} {
+      allow create: if signedIn()
+        && request.resource.data.createdBy == request.auth.uid;
+      allow read: if isActive(f);
+      allow update: if isAdmin(f);
+      allow delete: if false;
+
+      match /members/{m} {
+        allow read: if isActive(f) || isSelf(m);
+
+        // Creating the family: first member, active admin.
+        allow create: if isSelf(m) && creatingFamily(f)
+          && request.resource.data.role == 'admin'
+          && request.resource.data.status == 'active'
+          && request.resource.data.createdBy == request.auth.uid;
+
+        // Joining: pending member, role from a valid, unused, unexpired code.
+        allow create: if isSelf(m) && validJoin(f);
+
+        // Admin: any change.  Moderator: approve or reject pending only.
+        // Owner: own profile fields only (never role or status).
+        // A rejected person (removedAt set) may ask again with a fresh code.
+        allow update: if isAdmin(f)
+          || (isSelf(m) && resource.data.get('removedAt', null) != null && validJoin(f))
+          || (isMod(f) && resource.data.status == 'pending'
+              && request.resource.data.diff(resource.data).affectedKeys()
+                   .hasOnly(['status', 'removedAt', 'updatedAt', 'updatedBy']))
+          || (isSelf(m)
+              && request.resource.data.diff(resource.data).affectedKeys()
+                   .hasOnly(['fullName', 'nickname', 'relationship', 'spouseId',
+                             'avatarKey', 'updatedAt', 'updatedBy']));
+        allow delete: if false;   // soft delete only (removedAt)
+      }
+
+      match /invitations/{i} {
+        allow read: if isManager(f);
+        allow create: if isManager(f) || creatingFamily(f);
+        allow update: if signedIn()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy']);
+        allow delete: if false;
+      }
+
+      match /settings/{s} {
+        allow read: if isActive(f);
+        allow create: if isAdmin(f) || creatingFamily(f);
+        allow update: if isAdmin(f);
+        allow delete: if false;
+      }
+
+      // Append-only logs.
+      match /activity/{a} {
+        allow read: if isActive(f);
+        allow create: if isActive(f) || creatingFamily(f) || joiningNow(f);
+        allow update, delete: if false;
+      }
+      match /auditLogs/{a} {
+        allow read: if isAdmin(f);
+        allow create: if isActive(f) || creatingFamily(f) || joiningNow(f);
+        allow update, delete: if false;
+      }
     }
   }
 }
-

@@ -4,7 +4,7 @@ import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/auth/domain/app_user.dart';
-import 'package:family_hub/features/auth/domain/auth_providers.dart';
+import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/login_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/sign_up_screen.dart';

@@ -9,3 +9,6 @@ build/
 key.properties
 android/local.properties
 .env
+
+# Golden-test failure artefacts (generated on a failed comparison)
+**/failures/

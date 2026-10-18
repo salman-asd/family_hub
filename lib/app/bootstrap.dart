@@ -6,7 +6,18 @@ import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/core/firebase/firebase_bootstrap.dart';
 import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
-import 'package:family_hub/features/auth/domain/auth_providers.dart';
+import 'package:family_hub/features/auth/presentation/auth_providers.dart';
+import 'package:family_hub/core/firebase/tx_runner.dart';
+import 'package:family_hub/core/localization/locale_controller.dart';
+import 'package:family_hub/core/utils/clock.dart';
+import 'package:family_hub/features/family/data/firestore_family_repository.dart';
+import 'package:family_hub/features/family/data/firestore_membership_repository.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:family_hub/features/family/presentation/membership_providers.dart';
+import 'package:family_hub/features/onboarding/data/firestore_profile_repository.dart';
+import 'package:family_hub/features/settings/data/firestore_preference_sync.dart';
+import 'package:family_hub/features/onboarding/presentation/profile_providers.dart';
+import 'package:family_hub/modules/module_providers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -57,13 +68,30 @@ Future<void> bootstrap(Flavor flavor) async {
       // FirebaseAuth handle, and one instance keeps the auth stream single.
       final authRepository = FirebaseAuthRepository();
 
+      // Firestore-backed repositories (Step 9).
+      const clock = SystemClock();
+      final tx = FirestoreTxRunner();
+      final profiles = FirestoreProfileRepository(tx: tx, clock: clock);
+      final memberships = FirestoreMembershipRepository();
+      final families = FirestoreFamilyRepository(tx: tx, clock: clock);
+
       runApp(
         ProviderScope(
           overrides: [
+            flavorProvider.overrideWithValue(flavor),
             sharedPreferencesProvider.overrideWithValue(prefs),
             authRepositoryProvider.overrideWithValue(authRepository),
+            profileRepositoryProvider.overrideWithValue(profiles),
+            userProfileRepositoryProvider.overrideWithValue(profiles),
+            membershipRepositoryProvider.overrideWithValue(memberships),
+            moduleFlagsRepositoryProvider.overrideWithValue(memberships),
+            familyRepositoryProvider.overrideWithValue(families),
+            themePreferenceSyncProvider
+                .overrideWithValue(FirestoreThemePreferenceSync()),
+            localePreferenceSyncProvider
+                .overrideWithValue(FirestoreLocalePreferenceSync()),
           ],
-          child: FamilyHubApp(flavor: flavor),
+          child: const FamilyHubApp(),
         ),
       );
     },

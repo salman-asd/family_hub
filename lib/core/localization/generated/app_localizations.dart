@@ -739,6 +739,558 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'থিম টোকেন দেখুন'**
   String get homeViewThemeTokens;
+
+  /// No description provided for @moduleComingSoonTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'শীঘ্রই আসছে'**
+  String get moduleComingSoonTitle;
+
+  /// No description provided for @moduleComingSoonMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই অংশটি এখনো তৈরি হচ্ছে।'**
+  String get moduleComingSoonMessage;
+
+  /// No description provided for @profileSetupTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার প্রোফাইল তৈরি করুন'**
+  String get profileSetupTitle;
+
+  /// No description provided for @profileSetupMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারকে জানান আপনি কে। প্রোফাইল সেটআপ শীঘ্রই আসছে।'**
+  String get profileSetupMessage;
+
+  /// No description provided for @familyChoiceTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারে যোগ দিন বা নতুন তৈরি করুন'**
+  String get familyChoiceTitle;
+
+  /// No description provided for @familyChoiceMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন পরিবার তৈরি করুন অথবা কোড দিয়ে যোগ দিন। এটি শীঘ্রই আসছে।'**
+  String get familyChoiceMessage;
+
+  /// No description provided for @pendingTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদনের অপেক্ষায়'**
+  String get pendingTitle;
+
+  /// No description provided for @pendingMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'চালিয়ে যেতে পরিবারের অ্যাডমিনকে আপনার অনুরোধ অনুমোদন করতে হবে।'**
+  String get pendingMessage;
+
+  /// No description provided for @disabledTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রবেশ বন্ধ আছে'**
+  String get disabledTitle;
+
+  /// No description provided for @disabledMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিবারে আপনার প্রবেশ বন্ধ করা হয়েছে। অনুগ্রহ করে অ্যাডমিনের সাথে যোগাযোগ করুন।'**
+  String get disabledMessage;
+
+  /// No description provided for @placeholderContinueProfile.
+  ///
+  /// In bn, this message translates to:
+  /// **'চালিয়ে যান (অস্থায়ী)'**
+  String get placeholderContinueProfile;
+
+  /// No description provided for @placeholderCreateFamily.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরীক্ষামূলক পরিবার তৈরি করুন (অস্থায়ী)'**
+  String get placeholderCreateFamily;
+
+  /// No description provided for @placeholderApproveMe.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদিত ধরে নিন (অস্থায়ী)'**
+  String get placeholderApproveMe;
+
+  /// No description provided for @notFoundTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাতাটি পাওয়া যায়নি'**
+  String get notFoundTitle;
+
+  /// No description provided for @notFoundMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি যে পাতাটি খুলেছেন সেটি নেই।'**
+  String get notFoundMessage;
+
+  /// No description provided for @notFoundAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'হোমে যান'**
+  String get notFoundAction;
+
+  /// No description provided for @profileFullName.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুরো নাম'**
+  String get profileFullName;
+
+  /// No description provided for @profileNickname.
+  ///
+  /// In bn, this message translates to:
+  /// **'ডাকনাম (ঐচ্ছিক)'**
+  String get profileNickname;
+
+  /// No description provided for @profileGender.
+  ///
+  /// In bn, this message translates to:
+  /// **'লিঙ্গ (ঐচ্ছিক)'**
+  String get profileGender;
+
+  /// No description provided for @genderMale.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুরুষ'**
+  String get genderMale;
+
+  /// No description provided for @genderFemale.
+  ///
+  /// In bn, this message translates to:
+  /// **'নারী'**
+  String get genderFemale;
+
+  /// No description provided for @genderOther.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যান্য'**
+  String get genderOther;
+
+  /// No description provided for @genderNone.
+  ///
+  /// In bn, this message translates to:
+  /// **'বলতে চাই না'**
+  String get genderNone;
+
+  /// No description provided for @profileRelationship.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পর্ক'**
+  String get profileRelationship;
+
+  /// No description provided for @profileAvatar.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি অ্যাভাটার বেছে নিন'**
+  String get profileAvatar;
+
+  /// No description provided for @profileSave.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রোফাইল সংরক্ষণ করুন'**
+  String get profileSave;
+
+  /// No description provided for @profileSpouse.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্বামী/স্ত্রী (ঐচ্ছিক)'**
+  String get profileSpouse;
+
+  /// No description provided for @profileSpouseNone.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেউ নয়'**
+  String get profileSpouseNone;
+
+  /// No description provided for @relFather.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাবা'**
+  String get relFather;
+
+  /// No description provided for @relMother.
+  ///
+  /// In bn, this message translates to:
+  /// **'মা'**
+  String get relMother;
+
+  /// No description provided for @relSon.
+  ///
+  /// In bn, this message translates to:
+  /// **'ছেলে'**
+  String get relSon;
+
+  /// No description provided for @relDaughter.
+  ///
+  /// In bn, this message translates to:
+  /// **'মেয়ে'**
+  String get relDaughter;
+
+  /// No description provided for @relHusband.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্বামী'**
+  String get relHusband;
+
+  /// No description provided for @relWife.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্ত্রী'**
+  String get relWife;
+
+  /// No description provided for @relHousewife.
+  ///
+  /// In bn, this message translates to:
+  /// **'গৃহিণী'**
+  String get relHousewife;
+
+  /// No description provided for @relDaughterInLaw.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুত্রবধূ'**
+  String get relDaughterInLaw;
+
+  /// No description provided for @relSonInLaw.
+  ///
+  /// In bn, this message translates to:
+  /// **'জামাই'**
+  String get relSonInLaw;
+
+  /// No description provided for @relOther.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যান্য'**
+  String get relOther;
+
+  /// No description provided for @familyCreateAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন পরিবার তৈরি করুন'**
+  String get familyCreateAction;
+
+  /// No description provided for @familyJoinAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোড দিয়ে যোগ দিন'**
+  String get familyJoinAction;
+
+  /// No description provided for @familyNameLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের নাম'**
+  String get familyNameLabel;
+
+  /// No description provided for @familyCreateSubmit.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার তৈরি করুন'**
+  String get familyCreateSubmit;
+
+  /// No description provided for @joinCodeLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমন্ত্রণ কোড'**
+  String get joinCodeLabel;
+
+  /// No description provided for @joinSubmit.
+  ///
+  /// In bn, this message translates to:
+  /// **'যোগদানের অনুরোধ করুন'**
+  String get joinSubmit;
+
+  /// No description provided for @joinHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের অ্যাডমিনের কাছ থেকে ৮ অক্ষরের কোড নিন।'**
+  String get joinHint;
+
+  /// No description provided for @membersTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য'**
+  String get membersTitle;
+
+  /// No description provided for @membersPending.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদনের অপেক্ষায়'**
+  String get membersPending;
+
+  /// No description provided for @membersActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'সক্রিয়'**
+  String get membersActive;
+
+  /// No description provided for @membersDisabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিষ্ক্রিয়'**
+  String get membersDisabled;
+
+  /// No description provided for @memberYou.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি'**
+  String get memberYou;
+
+  /// No description provided for @memberApprove.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদন'**
+  String get memberApprove;
+
+  /// No description provided for @memberReject.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রত্যাখ্যান'**
+  String get memberReject;
+
+  /// No description provided for @memberDisable.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিষ্ক্রিয় করুন'**
+  String get memberDisable;
+
+  /// No description provided for @memberReenable.
+  ///
+  /// In bn, this message translates to:
+  /// **'আবার সক্রিয় করুন'**
+  String get memberReenable;
+
+  /// No description provided for @roleAdmin.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাডমিন'**
+  String get roleAdmin;
+
+  /// No description provided for @roleModerator.
+  ///
+  /// In bn, this message translates to:
+  /// **'মডারেটর'**
+  String get roleModerator;
+
+  /// No description provided for @roleMember.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য'**
+  String get roleMember;
+
+  /// No description provided for @memberProfileTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্যের প্রোফাইল'**
+  String get memberProfileTitle;
+
+  /// No description provided for @memberEditProfile.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমার প্রোফাইল সম্পাদনা'**
+  String get memberEditProfile;
+
+  /// No description provided for @memberRoleLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'ভূমিকা'**
+  String get memberRoleLabel;
+
+  /// No description provided for @memberStatusLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'অবস্থা'**
+  String get memberStatusLabel;
+
+  /// No description provided for @invitationsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমন্ত্রণ'**
+  String get invitationsTitle;
+
+  /// No description provided for @invitationCreate.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমন্ত্রণ কোড তৈরি করুন'**
+  String get invitationCreate;
+
+  /// No description provided for @invitationCopy.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোড কপি করুন'**
+  String get invitationCopy;
+
+  /// No description provided for @invitationCopied.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোড কপি হয়েছে'**
+  String get invitationCopied;
+
+  /// No description provided for @invitationExpiresOn.
+  ///
+  /// In bn, this message translates to:
+  /// **'মেয়াদ শেষ'**
+  String get invitationExpiresOn;
+
+  /// No description provided for @invStatusActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'অব্যবহৃত'**
+  String get invStatusActive;
+
+  /// No description provided for @invStatusUsed.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যবহৃত'**
+  String get invStatusUsed;
+
+  /// No description provided for @invStatusExpired.
+  ///
+  /// In bn, this message translates to:
+  /// **'মেয়াদোত্তীর্ণ'**
+  String get invStatusExpired;
+
+  /// No description provided for @invStatusRevoked.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল'**
+  String get invStatusRevoked;
+
+  /// No description provided for @invitationsEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো আমন্ত্রণ নেই'**
+  String get invitationsEmpty;
+
+  /// No description provided for @rolesTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ভূমিকা'**
+  String get rolesTitle;
+
+  /// No description provided for @rolesMakeAdmin.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাডমিন বানান'**
+  String get rolesMakeAdmin;
+
+  /// No description provided for @rolesTransferTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাডমিনের দায়িত্ব হস্তান্তর করবেন?'**
+  String get rolesTransferTitle;
+
+  /// No description provided for @rolesTransferMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি সাধারণ সদস্য হয়ে যাবেন।'**
+  String get rolesTransferMessage;
+
+  /// No description provided for @actionConfirm.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিশ্চিত করুন'**
+  String get actionConfirm;
+
+  /// No description provided for @familySettingsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের সেটিংস'**
+  String get familySettingsTitle;
+
+  /// No description provided for @settingsTimezone.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় অঞ্চল'**
+  String get settingsTimezone;
+
+  /// No description provided for @settingsCurrency.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুদ্রা'**
+  String get settingsCurrency;
+
+  /// No description provided for @settingsModules.
+  ///
+  /// In bn, this message translates to:
+  /// **'মডিউল'**
+  String get settingsModules;
+
+  /// No description provided for @settingsSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষিত হয়েছে'**
+  String get settingsSaved;
+
+  /// No description provided for @famFailureNameRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি নাম লিখুন।'**
+  String get famFailureNameRequired;
+
+  /// No description provided for @famFailureCodeInvalid.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোডটি সঠিক নয়। কোডে ৮টি অক্ষর ও সংখ্যা থাকে।'**
+  String get famFailureCodeInvalid;
+
+  /// No description provided for @famFailureCodeNotFound.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কোডে কোনো আমন্ত্রণ পাওয়া যায়নি।'**
+  String get famFailureCodeNotFound;
+
+  /// No description provided for @famFailureCodeUsed.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কোডটি আগেই ব্যবহার করা হয়েছে।'**
+  String get famFailureCodeUsed;
+
+  /// No description provided for @famFailureCodeExpired.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোডটির মেয়াদ শেষ। নতুন কোড চান।'**
+  String get famFailureCodeExpired;
+
+  /// No description provided for @famFailureCodeRevoked.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোডটি বাতিল করা হয়েছে।'**
+  String get famFailureCodeRevoked;
+
+  /// No description provided for @famFailureAlreadyMember.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি ইতিমধ্যে এই পরিবারে আছেন।'**
+  String get famFailureAlreadyMember;
+
+  /// No description provided for @famFailureLastAdmin.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারে অন্তত একজন অ্যাডমিন থাকতে হবে। আগে অন্য কাউকে অ্যাডমিন বানান।'**
+  String get famFailureLastAdmin;
+
+  /// No description provided for @famFailureNotAllowed.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি করার অনুমতি আপনার নেই।'**
+  String get famFailureNotAllowed;
+
+  /// No description provided for @famFailureProfileRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগে আপনার প্রোফাইল সম্পূর্ণ করুন।'**
+  String get famFailureProfileRequired;
+
+  /// No description provided for @avatarOption.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাভাটার {number}'**
+  String avatarOption(String number);
 }
 
 class _AppLocalizationsDelegate

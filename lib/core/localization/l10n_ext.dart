@@ -1,3 +1,4 @@
+import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/locale_controller.dart';
@@ -33,7 +34,7 @@ List<Locale> get supportedLocales =>
     LocalePrefs.supportedLanguageCodes.map(Locale.new).toList(growable: false);
 
 /// Resolves the message code produced by `authFailureCode` (see
-/// `features/auth/domain/auth_providers.dart`) into localized text.
+/// `features/auth/presentation/auth_providers.dart`) into localized text.
 ///
 /// The domain layer never holds user-visible strings (CLAUDE.md rule 7), so it
 /// returns a stable code and this extension owns the single mapping from code
@@ -88,4 +89,26 @@ extension AuthFailureMessages on AppLocalizations {
       _ => authFailureUnknown,
     };
   }
+}
+
+/// Localized text for failures of the family / onboarding use cases.
+///
+/// Conflict and validation codes are defined by those use cases
+/// (`code_used`, `code_expired`, `last_admin`, ...).  Anything unexpected falls
+/// back to the generic message; a raw code is never shown.
+extension FamilyFailureMessages on AppLocalizations {
+  String familyFailureMessage(AppFailure failure) => switch (failure) {
+        Validation(field: 'code') => famFailureCodeInvalid,
+        Validation(field: 'profile') => famFailureProfileRequired,
+        Validation(field: 'name' || 'fullName') => famFailureNameRequired,
+        NotFound(entity: 'invitation') => famFailureCodeNotFound,
+        Conflict(code: 'code_used') => famFailureCodeUsed,
+        Conflict(code: 'code_expired') => famFailureCodeExpired,
+        Conflict(code: 'code_revoked') => famFailureCodeRevoked,
+        Conflict(code: 'already_member') => famFailureAlreadyMember,
+        Conflict(code: 'last_admin') => famFailureLastAdmin,
+        PermissionDenied() => famFailureNotAllowed,
+        Network() => errorNetwork,
+        _ => errorUnknown,
+      };
 }

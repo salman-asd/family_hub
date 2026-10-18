@@ -367,4 +367,282 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeViewThemeTokens => 'View Theme Tokens';
+
+  @override
+  String get moduleComingSoonTitle => 'Coming soon';
+
+  @override
+  String get moduleComingSoonMessage => 'This section is still being built.';
+
+  @override
+  String get profileSetupTitle => 'Set up your profile';
+
+  @override
+  String get profileSetupMessage => 'Tell your family who you are.';
+
+  @override
+  String get familyChoiceTitle => 'Join or create a family';
+
+  @override
+  String get familyChoiceMessage => 'Create a new family, or join one with an invitation code.';
+
+  @override
+  String get pendingTitle => 'Waiting for approval';
+
+  @override
+  String get pendingMessage => 'A family admin needs to approve your request before you can continue.';
+
+  @override
+  String get disabledTitle => 'Access turned off';
+
+  @override
+  String get disabledMessage => 'Your access to this family has been turned off. Please contact a family admin.';
+
+  @override
+  String get placeholderContinueProfile => 'Continue (temporary)';
+
+  @override
+  String get placeholderCreateFamily => 'Create a test family (temporary)';
+
+  @override
+  String get placeholderApproveMe => 'Pretend I was approved (temporary)';
+
+  @override
+  String get notFoundTitle => 'Page not found';
+
+  @override
+  String get notFoundMessage => 'The page you opened does not exist.';
+
+  @override
+  String get notFoundAction => 'Go to Home';
+
+  @override
+  String get profileFullName => 'Full name';
+
+  @override
+  String get profileNickname => 'Nickname (optional)';
+
+  @override
+  String get profileGender => 'Gender (optional)';
+
+  @override
+  String get genderMale => 'Male';
+
+  @override
+  String get genderFemale => 'Female';
+
+  @override
+  String get genderOther => 'Other';
+
+  @override
+  String get genderNone => 'Prefer not to say';
+
+  @override
+  String get profileRelationship => 'Relationship';
+
+  @override
+  String get profileAvatar => 'Choose an avatar';
+
+  @override
+  String get profileSave => 'Save profile';
+
+  @override
+  String get profileSpouse => 'Spouse (optional)';
+
+  @override
+  String get profileSpouseNone => 'None';
+
+  @override
+  String get relFather => 'Father';
+
+  @override
+  String get relMother => 'Mother';
+
+  @override
+  String get relSon => 'Son';
+
+  @override
+  String get relDaughter => 'Daughter';
+
+  @override
+  String get relHusband => 'Husband';
+
+  @override
+  String get relWife => 'Wife';
+
+  @override
+  String get relHousewife => 'Housewife';
+
+  @override
+  String get relDaughterInLaw => 'Daughter-in-law';
+
+  @override
+  String get relSonInLaw => 'Son-in-law';
+
+  @override
+  String get relOther => 'Other';
+
+  @override
+  String get familyCreateAction => 'Create a family';
+
+  @override
+  String get familyJoinAction => 'Join with a code';
+
+  @override
+  String get familyNameLabel => 'Family name';
+
+  @override
+  String get familyCreateSubmit => 'Create family';
+
+  @override
+  String get joinCodeLabel => 'Invitation code';
+
+  @override
+  String get joinSubmit => 'Request to join';
+
+  @override
+  String get joinHint => 'Ask a family admin for the 8-character code.';
+
+  @override
+  String get membersTitle => 'Members';
+
+  @override
+  String get membersPending => 'Waiting for approval';
+
+  @override
+  String get membersActive => 'Active';
+
+  @override
+  String get membersDisabled => 'Disabled';
+
+  @override
+  String get memberYou => 'You';
+
+  @override
+  String get memberApprove => 'Approve';
+
+  @override
+  String get memberReject => 'Reject';
+
+  @override
+  String get memberDisable => 'Disable';
+
+  @override
+  String get memberReenable => 'Re-enable';
+
+  @override
+  String get roleAdmin => 'Admin';
+
+  @override
+  String get roleModerator => 'Moderator';
+
+  @override
+  String get roleMember => 'Member';
+
+  @override
+  String get memberProfileTitle => 'Member profile';
+
+  @override
+  String get memberEditProfile => 'Edit my profile';
+
+  @override
+  String get memberRoleLabel => 'Role';
+
+  @override
+  String get memberStatusLabel => 'Status';
+
+  @override
+  String get invitationsTitle => 'Invitations';
+
+  @override
+  String get invitationCreate => 'Create invitation code';
+
+  @override
+  String get invitationCopy => 'Copy code';
+
+  @override
+  String get invitationCopied => 'Code copied';
+
+  @override
+  String get invitationExpiresOn => 'Expires';
+
+  @override
+  String get invStatusActive => 'Unused';
+
+  @override
+  String get invStatusUsed => 'Used';
+
+  @override
+  String get invStatusExpired => 'Expired';
+
+  @override
+  String get invStatusRevoked => 'Cancelled';
+
+  @override
+  String get invitationsEmpty => 'No invitations yet';
+
+  @override
+  String get rolesTitle => 'Roles';
+
+  @override
+  String get rolesMakeAdmin => 'Make admin';
+
+  @override
+  String get rolesTransferTitle => 'Transfer the admin role?';
+
+  @override
+  String get rolesTransferMessage => 'You will become a regular member.';
+
+  @override
+  String get actionConfirm => 'Confirm';
+
+  @override
+  String get familySettingsTitle => 'Family settings';
+
+  @override
+  String get settingsTimezone => 'Time zone';
+
+  @override
+  String get settingsCurrency => 'Currency';
+
+  @override
+  String get settingsModules => 'Modules';
+
+  @override
+  String get settingsSaved => 'Saved';
+
+  @override
+  String get famFailureNameRequired => 'Please enter a name.';
+
+  @override
+  String get famFailureCodeInvalid => 'That code does not look right. Codes have 8 letters and digits.';
+
+  @override
+  String get famFailureCodeNotFound => 'No invitation found for that code.';
+
+  @override
+  String get famFailureCodeUsed => 'That code was already used.';
+
+  @override
+  String get famFailureCodeExpired => 'That code has expired. Ask for a new one.';
+
+  @override
+  String get famFailureCodeRevoked => 'That code was cancelled.';
+
+  @override
+  String get famFailureAlreadyMember => 'You already belong to this family.';
+
+  @override
+  String get famFailureLastAdmin => 'A family needs at least one admin. Make someone else admin first.';
+
+  @override
+  String get famFailureNotAllowed => 'You do not have permission to do that.';
+
+  @override
+  String get famFailureProfileRequired => 'Complete your profile first.';
+
+  @override
+  String avatarOption(String number) {
+    return 'Avatar $number';
+  }
 }

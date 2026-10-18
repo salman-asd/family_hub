@@ -1,5 +1,5 @@
 import 'package:family_hub/core/errors/app_failure.dart';
-import 'package:family_hub/features/auth/domain/auth_providers.dart';
+import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/auth/presentation/controllers/forgot_password_controller.dart';
 import 'package:family_hub/features/auth/presentation/controllers/login_controller.dart';
 import 'package:family_hub/features/auth/presentation/controllers/sign_up_controller.dart';

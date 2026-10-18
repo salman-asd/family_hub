@@ -366,4 +366,282 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get homeViewThemeTokens => 'থিম টোকেন দেখুন';
+
+  @override
+  String get moduleComingSoonTitle => 'শীঘ্রই আসছে';
+
+  @override
+  String get moduleComingSoonMessage => 'এই অংশটি এখনো তৈরি হচ্ছে।';
+
+  @override
+  String get profileSetupTitle => 'আপনার প্রোফাইল তৈরি করুন';
+
+  @override
+  String get profileSetupMessage => 'পরিবারকে জানান আপনি কে।';
+
+  @override
+  String get familyChoiceTitle => 'পরিবারে যোগ দিন বা নতুন তৈরি করুন';
+
+  @override
+  String get familyChoiceMessage => 'নতুন পরিবার তৈরি করুন, অথবা আমন্ত্রণ কোড দিয়ে যোগ দিন।';
+
+  @override
+  String get pendingTitle => 'অনুমোদনের অপেক্ষায়';
+
+  @override
+  String get pendingMessage => 'চালিয়ে যেতে পরিবারের অ্যাডমিনকে আপনার অনুরোধ অনুমোদন করতে হবে।';
+
+  @override
+  String get disabledTitle => 'প্রবেশ বন্ধ আছে';
+
+  @override
+  String get disabledMessage => 'এই পরিবারে আপনার প্রবেশ বন্ধ করা হয়েছে। অনুগ্রহ করে অ্যাডমিনের সাথে যোগাযোগ করুন।';
+
+  @override
+  String get placeholderContinueProfile => 'চালিয়ে যান (অস্থায়ী)';
+
+  @override
+  String get placeholderCreateFamily => 'পরীক্ষামূলক পরিবার তৈরি করুন (অস্থায়ী)';
+
+  @override
+  String get placeholderApproveMe => 'অনুমোদিত ধরে নিন (অস্থায়ী)';
+
+  @override
+  String get notFoundTitle => 'পাতাটি পাওয়া যায়নি';
+
+  @override
+  String get notFoundMessage => 'আপনি যে পাতাটি খুলেছেন সেটি নেই।';
+
+  @override
+  String get notFoundAction => 'হোমে যান';
+
+  @override
+  String get profileFullName => 'পুরো নাম';
+
+  @override
+  String get profileNickname => 'ডাকনাম (ঐচ্ছিক)';
+
+  @override
+  String get profileGender => 'লিঙ্গ (ঐচ্ছিক)';
+
+  @override
+  String get genderMale => 'পুরুষ';
+
+  @override
+  String get genderFemale => 'নারী';
+
+  @override
+  String get genderOther => 'অন্যান্য';
+
+  @override
+  String get genderNone => 'বলতে চাই না';
+
+  @override
+  String get profileRelationship => 'সম্পর্ক';
+
+  @override
+  String get profileAvatar => 'একটি অ্যাভাটার বেছে নিন';
+
+  @override
+  String get profileSave => 'প্রোফাইল সংরক্ষণ করুন';
+
+  @override
+  String get profileSpouse => 'স্বামী/স্ত্রী (ঐচ্ছিক)';
+
+  @override
+  String get profileSpouseNone => 'কেউ নয়';
+
+  @override
+  String get relFather => 'বাবা';
+
+  @override
+  String get relMother => 'মা';
+
+  @override
+  String get relSon => 'ছেলে';
+
+  @override
+  String get relDaughter => 'মেয়ে';
+
+  @override
+  String get relHusband => 'স্বামী';
+
+  @override
+  String get relWife => 'স্ত্রী';
+
+  @override
+  String get relHousewife => 'গৃহিণী';
+
+  @override
+  String get relDaughterInLaw => 'পুত্রবধূ';
+
+  @override
+  String get relSonInLaw => 'জামাই';
+
+  @override
+  String get relOther => 'অন্যান্য';
+
+  @override
+  String get familyCreateAction => 'নতুন পরিবার তৈরি করুন';
+
+  @override
+  String get familyJoinAction => 'কোড দিয়ে যোগ দিন';
+
+  @override
+  String get familyNameLabel => 'পরিবারের নাম';
+
+  @override
+  String get familyCreateSubmit => 'পরিবার তৈরি করুন';
+
+  @override
+  String get joinCodeLabel => 'আমন্ত্রণ কোড';
+
+  @override
+  String get joinSubmit => 'যোগদানের অনুরোধ করুন';
+
+  @override
+  String get joinHint => 'পরিবারের অ্যাডমিনের কাছ থেকে ৮ অক্ষরের কোড নিন।';
+
+  @override
+  String get membersTitle => 'সদস্য';
+
+  @override
+  String get membersPending => 'অনুমোদনের অপেক্ষায়';
+
+  @override
+  String get membersActive => 'সক্রিয়';
+
+  @override
+  String get membersDisabled => 'নিষ্ক্রিয়';
+
+  @override
+  String get memberYou => 'আপনি';
+
+  @override
+  String get memberApprove => 'অনুমোদন';
+
+  @override
+  String get memberReject => 'প্রত্যাখ্যান';
+
+  @override
+  String get memberDisable => 'নিষ্ক্রিয় করুন';
+
+  @override
+  String get memberReenable => 'আবার সক্রিয় করুন';
+
+  @override
+  String get roleAdmin => 'অ্যাডমিন';
+
+  @override
+  String get roleModerator => 'মডারেটর';
+
+  @override
+  String get roleMember => 'সদস্য';
+
+  @override
+  String get memberProfileTitle => 'সদস্যের প্রোফাইল';
+
+  @override
+  String get memberEditProfile => 'আমার প্রোফাইল সম্পাদনা';
+
+  @override
+  String get memberRoleLabel => 'ভূমিকা';
+
+  @override
+  String get memberStatusLabel => 'অবস্থা';
+
+  @override
+  String get invitationsTitle => 'আমন্ত্রণ';
+
+  @override
+  String get invitationCreate => 'আমন্ত্রণ কোড তৈরি করুন';
+
+  @override
+  String get invitationCopy => 'কোড কপি করুন';
+
+  @override
+  String get invitationCopied => 'কোড কপি হয়েছে';
+
+  @override
+  String get invitationExpiresOn => 'মেয়াদ শেষ';
+
+  @override
+  String get invStatusActive => 'অব্যবহৃত';
+
+  @override
+  String get invStatusUsed => 'ব্যবহৃত';
+
+  @override
+  String get invStatusExpired => 'মেয়াদোত্তীর্ণ';
+
+  @override
+  String get invStatusRevoked => 'বাতিল';
+
+  @override
+  String get invitationsEmpty => 'এখনো কোনো আমন্ত্রণ নেই';
+
+  @override
+  String get rolesTitle => 'ভূমিকা';
+
+  @override
+  String get rolesMakeAdmin => 'অ্যাডমিন বানান';
+
+  @override
+  String get rolesTransferTitle => 'অ্যাডমিনের দায়িত্ব হস্তান্তর করবেন?';
+
+  @override
+  String get rolesTransferMessage => 'আপনি সাধারণ সদস্য হয়ে যাবেন।';
+
+  @override
+  String get actionConfirm => 'নিশ্চিত করুন';
+
+  @override
+  String get familySettingsTitle => 'পরিবারের সেটিংস';
+
+  @override
+  String get settingsTimezone => 'সময় অঞ্চল';
+
+  @override
+  String get settingsCurrency => 'মুদ্রা';
+
+  @override
+  String get settingsModules => 'মডিউল';
+
+  @override
+  String get settingsSaved => 'সংরক্ষিত হয়েছে';
+
+  @override
+  String get famFailureNameRequired => 'একটি নাম লিখুন।';
+
+  @override
+  String get famFailureCodeInvalid => 'কোডটি সঠিক নয়। কোডে ৮টি অক্ষর ও সংখ্যা থাকে।';
+
+  @override
+  String get famFailureCodeNotFound => 'এই কোডে কোনো আমন্ত্রণ পাওয়া যায়নি।';
+
+  @override
+  String get famFailureCodeUsed => 'এই কোডটি আগেই ব্যবহার করা হয়েছে।';
+
+  @override
+  String get famFailureCodeExpired => 'কোডটির মেয়াদ শেষ। নতুন কোড চান।';
+
+  @override
+  String get famFailureCodeRevoked => 'কোডটি বাতিল করা হয়েছে।';
+
+  @override
+  String get famFailureAlreadyMember => 'আপনি ইতিমধ্যে এই পরিবারে আছেন।';
+
+  @override
+  String get famFailureLastAdmin => 'পরিবারে অন্তত একজন অ্যাডমিন থাকতে হবে। আগে অন্য কাউকে অ্যাডমিন বানান।';
+
+  @override
+  String get famFailureNotAllowed => 'এটি করার অনুমতি আপনার নেই।';
+
+  @override
+  String get famFailureProfileRequired => 'আগে আপনার প্রোফাইল সম্পূর্ণ করুন।';
+
+  @override
+  String avatarOption(String number) {
+    return 'অ্যাভাটার $number';
+  }
 }
