@@ -383,25 +383,29 @@ class AppLocalizationsBn extends AppLocalizations {
   String get familyChoiceTitle => 'পরিবারে যোগ দিন বা নতুন তৈরি করুন';
 
   @override
-  String get familyChoiceMessage => 'নতুন পরিবার তৈরি করুন, অথবা আমন্ত্রণ কোড দিয়ে যোগ দিন।';
+  String get familyChoiceMessage =>
+      'নতুন পরিবার তৈরি করুন, অথবা আমন্ত্রণ কোড দিয়ে যোগ দিন।';
 
   @override
   String get pendingTitle => 'অনুমোদনের অপেক্ষায়';
 
   @override
-  String get pendingMessage => 'চালিয়ে যেতে পরিবারের অ্যাডমিনকে আপনার অনুরোধ অনুমোদন করতে হবে।';
+  String get pendingMessage =>
+      'চালিয়ে যেতে পরিবারের অ্যাডমিনকে আপনার অনুরোধ অনুমোদন করতে হবে।';
 
   @override
   String get disabledTitle => 'প্রবেশ বন্ধ আছে';
 
   @override
-  String get disabledMessage => 'এই পরিবারে আপনার প্রবেশ বন্ধ করা হয়েছে। অনুগ্রহ করে অ্যাডমিনের সাথে যোগাযোগ করুন।';
+  String get disabledMessage =>
+      'এই পরিবারে আপনার প্রবেশ বন্ধ করা হয়েছে। অনুগ্রহ করে অ্যাডমিনের সাথে যোগাযোগ করুন।';
 
   @override
   String get placeholderContinueProfile => 'চালিয়ে যান (অস্থায়ী)';
 
   @override
-  String get placeholderCreateFamily => 'পরীক্ষামূলক পরিবার তৈরি করুন (অস্থায়ী)';
+  String get placeholderCreateFamily =>
+      'পরীক্ষামূলক পরিবার তৈরি করুন (অস্থায়ী)';
 
   @override
   String get placeholderApproveMe => 'অনুমোদিত ধরে নিন (অস্থায়ী)';
@@ -614,7 +618,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get famFailureNameRequired => 'একটি নাম লিখুন।';
 
   @override
-  String get famFailureCodeInvalid => 'কোডটি সঠিক নয়। কোডে ৮টি অক্ষর ও সংখ্যা থাকে।';
+  String get famFailureCodeInvalid =>
+      'কোডটি সঠিক নয়। কোডে ৮টি অক্ষর ও সংখ্যা থাকে।';
 
   @override
   String get famFailureCodeNotFound => 'এই কোডে কোনো আমন্ত্রণ পাওয়া যায়নি।';
@@ -632,7 +637,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get famFailureAlreadyMember => 'আপনি ইতিমধ্যে এই পরিবারে আছেন।';
 
   @override
-  String get famFailureLastAdmin => 'পরিবারে অন্তত একজন অ্যাডমিন থাকতে হবে। আগে অন্য কাউকে অ্যাডমিন বানান।';
+  String get famFailureLastAdmin =>
+      'পরিবারে অন্তত একজন অ্যাডমিন থাকতে হবে। আগে অন্য কাউকে অ্যাডমিন বানান।';
 
   @override
   String get famFailureNotAllowed => 'এটি করার অনুমতি আপনার নেই।';
@@ -644,4 +650,84 @@ class AppLocalizationsBn extends AppLocalizations {
   String avatarOption(String number) {
     return 'অ্যাভাটার $number';
   }
+
+  @override
+  String get statusScheduled => 'সময় নির্ধারিত';
+
+  @override
+  String get statusInProgress => 'চলছে';
+
+  @override
+  String get statusCompleted => 'সম্পন্ন';
+
+  @override
+  String get statusVerified => 'যাচাইকৃত';
+
+  @override
+  String get statusOverdue => 'সময় পার হয়েছে';
+
+  @override
+  String get commonSeeAll => 'সব দেখুন';
+
+  @override
+  String get errorViewTitle => 'কিছু ভুল হয়েছে';
+
+  @override
+  String get loadingSemantics => 'লোড হচ্ছে';
+
+  @override
+  String progressSemantics(String label, String percent) {
+    return '$label, $percent শতাংশ সম্পন্ন';
+  }
+
+  @override
+  String thumbSemantics(String name) {
+    return '$name ছবি';
+  }
+
+  @override
+  String get galleryAvatar => 'অ্যাভাটার';
+
+  @override
+  String get galleryItemThumb => 'জিনিসের ছবি';
+
+  @override
+  String get galleryStatusChip => 'অবস্থার চিপ';
+
+  @override
+  String get gallerySectionHeader => 'সেকশন হেডার';
+
+  @override
+  String get galleryAppCard => 'কার্ড';
+
+  @override
+  String get galleryMoneyText => 'টাকার লেখা';
+
+  @override
+  String get galleryProgressRing => 'প্রগ্রেস রিং';
+
+  @override
+  String get galleryEmptyState => 'খালি অবস্থা';
+
+  @override
+  String get galleryLoadingView => 'লোডিং দৃশ্য';
+
+  @override
+  String get galleryErrorView => 'ত্রুটির দৃশ্য';
+
+  @override
+  String get galleryPillBottomBar => 'পিল নেভিগেশন বার';
+
+  @override
+  String get gallerySampleTitle => 'নমুনা শিরোনাম';
+
+  @override
+  String get gallerySampleMessage =>
+      'এটি একটি নমুনা বার্তা যা ওভারফ্লো যাচাই করে।';
+
+  @override
+  String get gallerySampleItemName => 'আলু';
+
+  @override
+  String get gallerySamplePersonName => 'করিম উদ্দিন';
 }

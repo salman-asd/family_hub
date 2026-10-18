@@ -423,8 +423,7 @@ void main() {
       expect(_tab('bazar'), findsOneWidget);
     });
 
-    testWidgets('all modules off still leaves Home and Family',
-        (tester) async {
+    testWidgets('all modules off still leaves Home and Family', (tester) async {
       final h = await _pumpApp(
         tester,
         user: _verified,
@@ -475,10 +474,10 @@ void main() {
       );
       await _openTab(tester, 'family');
       expect(find.byKey(const Key('family_dev_tokens')), findsOneWidget);
+      expect(find.byKey(const Key('family_dev_gallery')), findsOneWidget);
     });
 
-    testWidgets('prod flavor hides the developer tokens entry',
-        (tester) async {
+    testWidgets('prod flavor hides the developer tokens entry', (tester) async {
       await _pumpApp(
         tester,
         user: _verified,
@@ -488,6 +487,7 @@ void main() {
       );
       await _openTab(tester, 'family');
       expect(find.byKey(const Key('family_dev_tokens')), findsNothing);
+      expect(find.byKey(const Key('family_dev_gallery')), findsNothing);
     });
   });
 }

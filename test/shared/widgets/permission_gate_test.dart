@@ -132,10 +132,8 @@ void main() {
     expect(find.byIcon(Icons.lock_outline), findsNothing);
   });
 
-  testWidgets('a denied action is announced to assistive tech',
-      (tester) async {
+  testWidgets('a denied action is announced to assistive tech', (tester) async {
     final handle = tester.ensureSemantics();
-    addTearDown(handle.dispose);
 
     await _pump(
       tester,
@@ -146,5 +144,8 @@ void main() {
     );
 
     expect(find.bySemanticsLabel('Only an admin can do this'), findsWidgets);
+    // Disposed in the body, not in addTearDown: the binding checks for leaked
+    // handles before tear-down callbacks run.
+    handle.dispose();
   });
 }

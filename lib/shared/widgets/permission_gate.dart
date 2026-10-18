@@ -69,10 +69,13 @@ class PermissionGate extends StatelessWidget {
       );
     }
 
+    // excludeSemantics: the message is announced once, from this node.  The
+    // child copy of it would otherwise be merged in and read twice.
     return Semantics(
       container: true,
       enabled: false,
       label: message,
+      excludeSemantics: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

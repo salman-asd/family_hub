@@ -5,7 +5,6 @@ import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/presentation/action_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
-import 'package:family_hub/features/family/presentation/widgets/labels.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:family_hub/shared/widgets/choice_wrap.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';

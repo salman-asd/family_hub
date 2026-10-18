@@ -455,5 +455,76 @@
         "type": "String"
       }
     }
-  }
+  },
+  "statusScheduled": "সময় নির্ধারিত",
+  "@statusScheduled": {
+    "description": "Status label for a chore occurrence that is scheduled."
+  },
+  "statusInProgress": "চলছে",
+  "@statusInProgress": {},
+  "statusCompleted": "সম্পন্ন",
+  "@statusCompleted": {},
+  "statusVerified": "যাচাইকৃত",
+  "@statusVerified": {},
+  "statusOverdue": "সময় পার হয়েছে",
+  "@statusOverdue": {},
+  "commonSeeAll": "সব দেখুন",
+  "@commonSeeAll": {
+    "description": "'See all' link on a section header."
+  },
+  "errorViewTitle": "কিছু ভুল হয়েছে",
+  "@errorViewTitle": {},
+  "loadingSemantics": "লোড হচ্ছে",
+  "@loadingSemantics": {
+    "description": "Screen-reader label for a loading skeleton."
+  },
+  "progressSemantics": "{label}, {percent} শতাংশ সম্পন্ন",
+  "@progressSemantics": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "thumbSemantics": "{name} ছবি",
+  "@thumbSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "galleryAvatar": "অ্যাভাটার",
+  "@galleryAvatar": {},
+  "galleryItemThumb": "জিনিসের ছবি",
+  "@galleryItemThumb": {},
+  "galleryStatusChip": "অবস্থার চিপ",
+  "@galleryStatusChip": {},
+  "gallerySectionHeader": "সেকশন হেডার",
+  "@gallerySectionHeader": {},
+  "galleryAppCard": "কার্ড",
+  "@galleryAppCard": {},
+  "galleryMoneyText": "টাকার লেখা",
+  "@galleryMoneyText": {},
+  "galleryProgressRing": "প্রগ্রেস রিং",
+  "@galleryProgressRing": {},
+  "galleryEmptyState": "খালি অবস্থা",
+  "@galleryEmptyState": {},
+  "galleryLoadingView": "লোডিং দৃশ্য",
+  "@galleryLoadingView": {},
+  "galleryErrorView": "ত্রুটির দৃশ্য",
+  "@galleryErrorView": {},
+  "galleryPillBottomBar": "পিল নেভিগেশন বার",
+  "@galleryPillBottomBar": {},
+  "gallerySampleTitle": "নমুনা শিরোনাম",
+  "@gallerySampleTitle": {},
+  "gallerySampleMessage": "এটি একটি নমুনা বার্তা যা ওভারফ্লো যাচাই করে।",
+  "@gallerySampleMessage": {},
+  "gallerySampleItemName": "আলু",
+  "@gallerySampleItemName": {},
+  "gallerySamplePersonName": "করিম উদ্দিন",
+  "@gallerySamplePersonName": {}
 }

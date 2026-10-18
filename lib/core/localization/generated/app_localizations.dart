@@ -761,7 +761,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileSetupMessage.
   ///
   /// In bn, this message translates to:
-  /// **'পরিবারকে জানান আপনি কে। প্রোফাইল সেটআপ শীঘ্রই আসছে।'**
+  /// **'পরিবারকে জানান আপনি কে।'**
   String get profileSetupMessage;
 
   /// No description provided for @familyChoiceTitle.
@@ -773,7 +773,7 @@ abstract class AppLocalizations {
   /// No description provided for @familyChoiceMessage.
   ///
   /// In bn, this message translates to:
-  /// **'নতুন পরিবার তৈরি করুন অথবা কোড দিয়ে যোগ দিন। এটি শীঘ্রই আসছে।'**
+  /// **'নতুন পরিবার তৈরি করুন, অথবা আমন্ত্রণ কোড দিয়ে যোগ দিন।'**
   String get familyChoiceMessage;
 
   /// No description provided for @pendingTitle.
@@ -1291,6 +1291,156 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'অ্যাভাটার {number}'**
   String avatarOption(String number);
+
+  /// Status label for a chore occurrence that is scheduled.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় নির্ধারিত'**
+  String get statusScheduled;
+
+  /// No description provided for @statusInProgress.
+  ///
+  /// In bn, this message translates to:
+  /// **'চলছে'**
+  String get statusInProgress;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পন্ন'**
+  String get statusCompleted;
+
+  /// No description provided for @statusVerified.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাইকৃত'**
+  String get statusVerified;
+
+  /// No description provided for @statusOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় পার হয়েছে'**
+  String get statusOverdue;
+
+  /// 'See all' link on a section header.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব দেখুন'**
+  String get commonSeeAll;
+
+  /// No description provided for @errorViewTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কিছু ভুল হয়েছে'**
+  String get errorViewTitle;
+
+  /// Screen-reader label for a loading skeleton.
+  ///
+  /// In bn, this message translates to:
+  /// **'লোড হচ্ছে'**
+  String get loadingSemantics;
+
+  /// No description provided for @progressSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'{label}, {percent} শতাংশ সম্পন্ন'**
+  String progressSemantics(String label, String percent);
+
+  /// No description provided for @thumbSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} ছবি'**
+  String thumbSemantics(String name);
+
+  /// No description provided for @galleryAvatar.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাভাটার'**
+  String get galleryAvatar;
+
+  /// No description provided for @galleryItemThumb.
+  ///
+  /// In bn, this message translates to:
+  /// **'জিনিসের ছবি'**
+  String get galleryItemThumb;
+
+  /// No description provided for @galleryStatusChip.
+  ///
+  /// In bn, this message translates to:
+  /// **'অবস্থার চিপ'**
+  String get galleryStatusChip;
+
+  /// No description provided for @gallerySectionHeader.
+  ///
+  /// In bn, this message translates to:
+  /// **'সেকশন হেডার'**
+  String get gallerySectionHeader;
+
+  /// No description provided for @galleryAppCard.
+  ///
+  /// In bn, this message translates to:
+  /// **'কার্ড'**
+  String get galleryAppCard;
+
+  /// No description provided for @galleryMoneyText.
+  ///
+  /// In bn, this message translates to:
+  /// **'টাকার লেখা'**
+  String get galleryMoneyText;
+
+  /// No description provided for @galleryProgressRing.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রগ্রেস রিং'**
+  String get galleryProgressRing;
+
+  /// No description provided for @galleryEmptyState.
+  ///
+  /// In bn, this message translates to:
+  /// **'খালি অবস্থা'**
+  String get galleryEmptyState;
+
+  /// No description provided for @galleryLoadingView.
+  ///
+  /// In bn, this message translates to:
+  /// **'লোডিং দৃশ্য'**
+  String get galleryLoadingView;
+
+  /// No description provided for @galleryErrorView.
+  ///
+  /// In bn, this message translates to:
+  /// **'ত্রুটির দৃশ্য'**
+  String get galleryErrorView;
+
+  /// No description provided for @galleryPillBottomBar.
+  ///
+  /// In bn, this message translates to:
+  /// **'পিল নেভিগেশন বার'**
+  String get galleryPillBottomBar;
+
+  /// No description provided for @gallerySampleTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নমুনা শিরোনাম'**
+  String get gallerySampleTitle;
+
+  /// No description provided for @gallerySampleMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি একটি নমুনা বার্তা যা ওভারফ্লো যাচাই করে।'**
+  String get gallerySampleMessage;
+
+  /// No description provided for @gallerySampleItemName.
+  ///
+  /// In bn, this message translates to:
+  /// **'আলু'**
+  String get gallerySampleItemName;
+
+  /// No description provided for @gallerySamplePersonName.
+  ///
+  /// In bn, this message translates to:
+  /// **'করিম উদ্দিন'**
+  String get gallerySamplePersonName;
 }
 
 class _AppLocalizationsDelegate

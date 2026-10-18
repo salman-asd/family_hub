@@ -91,6 +91,15 @@ class FamilyScreen extends ConsumerWidget {
               label: l10n.homeViewThemeTokens,
               onTap: () => context.push(AppRoutes.devTokens),
             ),
+            const SizedBox(height: 8),
+            // The component gallery (Step 11).  A route alone is not reachable
+            // on a phone, so the dev flavor gets an entry next to the tokens.
+            _SettingsTile(
+              key: const Key('family_dev_gallery'),
+              icon: Icons.widgets_outlined,
+              label: l10n.devGalleryTitle,
+              onTap: () => context.push(AppRoutes.devGallery),
+            ),
           ],
           const SizedBox(height: 24),
           _SettingsTile(

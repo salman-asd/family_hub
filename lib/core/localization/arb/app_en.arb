@@ -455,5 +455,76 @@
         "type": "String"
       }
     }
-  }
+  },
+  "statusScheduled": "Scheduled",
+  "@statusScheduled": {
+    "description": "Status label for a chore occurrence that is scheduled."
+  },
+  "statusInProgress": "In progress",
+  "@statusInProgress": {},
+  "statusCompleted": "Completed",
+  "@statusCompleted": {},
+  "statusVerified": "Verified",
+  "@statusVerified": {},
+  "statusOverdue": "Overdue",
+  "@statusOverdue": {},
+  "commonSeeAll": "See all",
+  "@commonSeeAll": {
+    "description": "'See all' link on a section header."
+  },
+  "errorViewTitle": "Something went wrong",
+  "@errorViewTitle": {},
+  "loadingSemantics": "Loading",
+  "@loadingSemantics": {
+    "description": "Screen-reader label for a loading skeleton."
+  },
+  "progressSemantics": "{label}, {percent} percent complete",
+  "@progressSemantics": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "thumbSemantics": "Image of {name}",
+  "@thumbSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "galleryAvatar": "Avatar",
+  "@galleryAvatar": {},
+  "galleryItemThumb": "Item thumbnail",
+  "@galleryItemThumb": {},
+  "galleryStatusChip": "Status chip",
+  "@galleryStatusChip": {},
+  "gallerySectionHeader": "Section header",
+  "@gallerySectionHeader": {},
+  "galleryAppCard": "Card",
+  "@galleryAppCard": {},
+  "galleryMoneyText": "Money text",
+  "@galleryMoneyText": {},
+  "galleryProgressRing": "Progress ring",
+  "@galleryProgressRing": {},
+  "galleryEmptyState": "Empty state",
+  "@galleryEmptyState": {},
+  "galleryLoadingView": "Loading view",
+  "@galleryLoadingView": {},
+  "galleryErrorView": "Error view",
+  "@galleryErrorView": {},
+  "galleryPillBottomBar": "Pill navigation bar",
+  "@galleryPillBottomBar": {},
+  "gallerySampleTitle": "Sample title",
+  "@gallerySampleTitle": {},
+  "gallerySampleMessage": "This is a sample message used to check for overflow.",
+  "@gallerySampleMessage": {},
+  "gallerySampleItemName": "Potato",
+  "@gallerySampleItemName": {},
+  "gallerySamplePersonName": "Karim Uddin",
+  "@gallerySamplePersonName": {}
 }

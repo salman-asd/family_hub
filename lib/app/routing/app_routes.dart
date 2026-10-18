@@ -47,6 +47,9 @@ abstract final class AppRoutes {
   // ── Developer tools (dev flavor only) ─────────────────────────────────────
   static const String devTokens = '/dev/tokens';
 
+  /// Component gallery: every shared widget in every state (Step 11).
+  static const String devGallery = '/dev/gallery';
+
   /// Routes a signed-out visitor may open.
   static const Set<String> publicAuth = {
     welcome,
@@ -76,5 +79,6 @@ abstract final class AppRoutes {
     settingsTheme,
     settingsLanguage,
     devTokens,
+    devGallery,
   };
 }

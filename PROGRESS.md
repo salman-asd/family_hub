@@ -111,3 +111,25 @@ Assumptions / limitations:
 - The Dart side of Step 10 could **not** be compiled or tested here (no Flutter SDK on this machine): `dart format .`, `flutter analyze` and `flutter test` still have to run on a machine that has it. The rules side was fully verified with the emulator.
 - Housekeeping, unchanged: `*.log`, `android/.gradle`, `android/.kotlin`, `test/**/failures/` are committed or untracked noise; `node_modules/` is now ignored.
 
+## Step 11 — Shared widget set and component gallery
+
+Done:
+- `lib/app/gallery/gallery_sections.dart` is the single source of truth: 11 sections (`app_avatar`, `item_thumb`, `status_chip`, `empty_state`, `loading_view`, `error_view`, `section_header`, `app_card`, `money_text`, `progress_ring`, `pill_bottom_bar`), each listing every state of its widget (plain, with image, failed image, empty, loading, error, retry, ...). The screen and both test suites iterate that list, so a widget cannot reach the gallery without gaining a golden and an overflow test.
+- `lib/app/gallery/dev_gallery_screen.dart`: the debug-only `/dev/gallery` route (`AppRoutes.devGallery`, dev flavour only, in `alwaysOpen`) plus a dev-only entry beside the theme-tokens tile in the Family tab (a route alone cannot be opened on a phone).
+- New shared widgets: `LoadingView` (skeleton, honours `MediaQuery.disableAnimations`, live-region announcement, localized default label), `ErrorView` (message plus optional retry, built on `EmptyState`), `ProgressRing` (clamped `value`, indeterminate when null, optional centre and semantic label).
+- Real bugs found while wiring the gallery and fixed: `money_text.dart` imported a non-existent `app_tokens_ext.dart`; `status_chip.dart` used `context.l10n` without importing `l10n_ext.dart`; `StatusChip`, `MoneyText`, `AppAvatar`, `ItemThumb` and `PermissionGate` announced their text twice (own label merged with the child's); `ProgressRing` did not clamp its value; `roles_screen.dart` had an unused import (the only analyzer *warning*, and warnings are fatal).
+- Tests: 44 goldens (11 sections x 2 themes x 2 languages, `test/shared/widgets/goldens/`), 45 overflow tests (11 sections x 2 themes x 2 locales at text scale 2.0, plus one long-copy test), behaviour tests for the new widgets and a gallery smoke test. The overflow test fails on any overflow; the goldens skip *with a reason* while the goldens directory is missing or `autoUpdateGoldenFiles` is on, so a fresh clone stays green.
+- `analysis_options.yaml` now excludes `node_modules/**` (firebase-tools ships Dart templates the analyzer reported 6 errors for).
+
+Verification (Flutter 3.47.7, Dart 3.13.5, Windows):
+- `dart format` is clean on every file touched here.
+- `flutter test`: **655 passed, 3 failed, 0 skipped** (the 44 goldens run and compare). The 3 failures are pre-existing Step 9 **test-assertion** bugs, not Step 11: `test/app/router_test.dart` "settings are reachable from the Family tab" and two in `test/features/family/presentation/onboarding_flow_test.dart`. All three fail identically with the Step 11 changes reverted to HEAD, and a probe of the router one shows the pushed screen *is* on screen (`ThemeSettingsScreen` found) while go_router 18's `routeInformationProvider.value.uri` still reports the branch path `/family`: the tests assert the URL of a `context.push`, which go_router 18 does not reflect. Fix = assert the screen, not the path (or make the app `go` instead of `push`).
+- Known CI gaps, all pre-existing: `flutter analyze` exits 1 on 26 info-level lints (`require_trailing_commas`, two removed `unnecessary_import`s) in Steps 9/10 files, and `dart format --set-exit-if-changed .` reports 17 unformatted files. `flutter analyze` exits non-zero on any issue, so CI's `build` job stays red until those are cleaned (`dart format .` + trailing commas).
+- The 44 goldens were generated on Windows; CI runs `ubuntu-latest`. If the golden step fails there, regenerate on Linux with `flutter test --update-goldens test/shared/widgets`.
+
+Assumptions / limitations:
+- Gallery image states use a deliberately unreachable URL (`invalid.invalid`) so the mandatory failed-load fallback is deterministic; the working-image path is covered synchronously by `_SyncImageProvider` in the widget tests.
+- `ErrorView` reuses `EmptyState`, so it inherits the same scroll-safety and accessibility; its default title is `l10n.errorViewTitle` and `onRetry` is optional (no button when null).
+- `ItemThumb` gained an `imageProvider` parameter (mirroring `AppAvatar`) for testability only.
+- No new ARB keys were needed: `errorViewTitle`, `commonSeeAll`, `progressSemantics`, `thumbSemantics`, `loadingSemantics`, `loadingGeneric` and the 15 `gallery*`/`devGalleryTitle` keys already existed.
+

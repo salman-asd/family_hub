@@ -1,4 +1,5 @@
 import 'package:family_hub/app/flavor.dart';
+import 'package:family_hub/app/gallery/dev_gallery_screen.dart';
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/routing/not_found_screen.dart';
 import 'package:family_hub/app/routing/redirect_rules.dart';
@@ -228,6 +229,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         GoRoute(
           path: AppRoutes.devTokens,
           builder: (context, state) => const DevTokensScreen(),
+        ),
+      if (flavor == Flavor.dev)
+        GoRoute(
+          path: AppRoutes.devGallery,
+          builder: (context, state) => const DevGalleryScreen(),
         ),
 
       // ── The shell ───────────────────────────────────────────────────────

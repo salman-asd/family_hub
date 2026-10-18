@@ -384,19 +384,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familyChoiceTitle => 'Join or create a family';
 
   @override
-  String get familyChoiceMessage => 'Create a new family, or join one with an invitation code.';
+  String get familyChoiceMessage =>
+      'Create a new family, or join one with an invitation code.';
 
   @override
   String get pendingTitle => 'Waiting for approval';
 
   @override
-  String get pendingMessage => 'A family admin needs to approve your request before you can continue.';
+  String get pendingMessage =>
+      'A family admin needs to approve your request before you can continue.';
 
   @override
   String get disabledTitle => 'Access turned off';
 
   @override
-  String get disabledMessage => 'Your access to this family has been turned off. Please contact a family admin.';
+  String get disabledMessage =>
+      'Your access to this family has been turned off. Please contact a family admin.';
 
   @override
   String get placeholderContinueProfile => 'Continue (temporary)';
@@ -615,7 +618,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get famFailureNameRequired => 'Please enter a name.';
 
   @override
-  String get famFailureCodeInvalid => 'That code does not look right. Codes have 8 letters and digits.';
+  String get famFailureCodeInvalid =>
+      'That code does not look right. Codes have 8 letters and digits.';
 
   @override
   String get famFailureCodeNotFound => 'No invitation found for that code.';
@@ -624,7 +628,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get famFailureCodeUsed => 'That code was already used.';
 
   @override
-  String get famFailureCodeExpired => 'That code has expired. Ask for a new one.';
+  String get famFailureCodeExpired =>
+      'That code has expired. Ask for a new one.';
 
   @override
   String get famFailureCodeRevoked => 'That code was cancelled.';
@@ -633,7 +638,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get famFailureAlreadyMember => 'You already belong to this family.';
 
   @override
-  String get famFailureLastAdmin => 'A family needs at least one admin. Make someone else admin first.';
+  String get famFailureLastAdmin =>
+      'A family needs at least one admin. Make someone else admin first.';
 
   @override
   String get famFailureNotAllowed => 'You do not have permission to do that.';
@@ -645,4 +651,84 @@ class AppLocalizationsEn extends AppLocalizations {
   String avatarOption(String number) {
     return 'Avatar $number';
   }
+
+  @override
+  String get statusScheduled => 'Scheduled';
+
+  @override
+  String get statusInProgress => 'In progress';
+
+  @override
+  String get statusCompleted => 'Completed';
+
+  @override
+  String get statusVerified => 'Verified';
+
+  @override
+  String get statusOverdue => 'Overdue';
+
+  @override
+  String get commonSeeAll => 'See all';
+
+  @override
+  String get errorViewTitle => 'Something went wrong';
+
+  @override
+  String get loadingSemantics => 'Loading';
+
+  @override
+  String progressSemantics(String label, String percent) {
+    return '$label, $percent percent complete';
+  }
+
+  @override
+  String thumbSemantics(String name) {
+    return 'Image of $name';
+  }
+
+  @override
+  String get galleryAvatar => 'Avatar';
+
+  @override
+  String get galleryItemThumb => 'Item thumbnail';
+
+  @override
+  String get galleryStatusChip => 'Status chip';
+
+  @override
+  String get gallerySectionHeader => 'Section header';
+
+  @override
+  String get galleryAppCard => 'Card';
+
+  @override
+  String get galleryMoneyText => 'Money text';
+
+  @override
+  String get galleryProgressRing => 'Progress ring';
+
+  @override
+  String get galleryEmptyState => 'Empty state';
+
+  @override
+  String get galleryLoadingView => 'Loading view';
+
+  @override
+  String get galleryErrorView => 'Error view';
+
+  @override
+  String get galleryPillBottomBar => 'Pill navigation bar';
+
+  @override
+  String get gallerySampleTitle => 'Sample title';
+
+  @override
+  String get gallerySampleMessage =>
+      'This is a sample message used to check for overflow.';
+
+  @override
+  String get gallerySampleItemName => 'Potato';
+
+  @override
+  String get gallerySamplePersonName => 'Karim Uddin';
 }
