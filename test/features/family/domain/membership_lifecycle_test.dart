@@ -192,6 +192,18 @@ void main() {
     });
   });
 
+  group('leave edge cases', () {
+    test('a plain member can leave even if the family has no active admin',
+        () async {
+      f = Fixture()
+        ..seedFamily({'kid': (MemberRole.member, MembershipStatus.active)});
+      leave =
+          LeaveFamily(families: f.backend, clock: f.clock, newId: f.ids.call);
+      final result = await leave(actorUid: 'kid', familyId: 'fam');
+      expect(result.isSuccess, isTrue);
+    });
+  });
+
   group('cancel a join request', () {
     test('a pending person cancels, then is free again', () async {
       final code = await newCode();

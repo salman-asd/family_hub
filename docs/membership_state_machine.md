@@ -20,6 +20,8 @@ A user belongs to **at most one family** at a time (CLAUDE.md rule 17). The stat
   is true for all three removed states, so routing sends them to `/family-choice`.
 * **Blocked** (`Conflict('already_in_family')`): pending, active, and *disabled by an admin*.
   A disabled member must be re-enabled by an admin before anything else.
+* **Removed is final:** rules deny any admin/moderator write to a member with
+  `removedAt` or `leftAt` (no revival); the person must join again with a fresh code.
 * **Last admin:** `LeaveFamily` (and role change, disable) fail with `Conflict('last_admin')`
   while the actor is the only active admin; use `TransferAdmin` first.
 * **Retries:** `CreateFamily`/`JoinWithCode` accept the ids generated once per screen, so a

@@ -1346,6 +1346,54 @@ describe('H4 one family per user (users/{uid}.familyId)', () => {
   });
 });
 
+describe('H4 removed members cannot be revived', () => {
+  const seedRemoved = async (uid, status) =>
+    testEnv.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(
+        doc(ctx.firestore(), `families/${FAM_A}/members/${uid}`),
+        memberDoc(uid, 'member', status, { removedAt: nowTs(), leftAt: nowTs() }),
+      );
+    });
+
+  it('denies an admin re-activating a member who left', async () => {
+    await seedRemoved(CARA, 'disabled');
+    await assertFails(
+      setDoc(
+        doc(as(ALICE), `families/${FAM_A}/members/${CARA}`),
+        memberChange(ALICE, { role: 'member', status: 'active', removedAt: null }),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a moderator approving a rejected request', async () => {
+    await seedRemoved(DAVE, 'pending');
+    await assertFails(
+      setDoc(
+        doc(as(BOB), `families/${FAM_A}/members/${DAVE}`),
+        memberChange(BOB, { role: 'member', status: 'active', removedAt: null }),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('still allows an admin to re-enable a disabled (not removed) member', async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(
+        doc(ctx.firestore(), `families/${FAM_A}/members/${CARA}`),
+        memberDoc(CARA, 'member', 'disabled'),
+      );
+    });
+    await assertSucceeds(
+      setDoc(
+        doc(as(ALICE), `families/${FAM_A}/members/${CARA}`),
+        memberChange(ALICE, { role: 'member', status: 'active', removedAt: null }),
+        { merge: true },
+      ),
+    );
+  });
+});
+
 describe('H4 acceptance: leave and join another family', () => {
   it('Cara leaves famA, then joins famB with a live code', async () => {
     const cara = as(CARA);

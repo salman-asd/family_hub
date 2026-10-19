@@ -1,7 +1,7 @@
 rules_version = '2';
 
 // ============================================================================
-// Family Hub — Firestore Security Rules v1.1 (Step 10 + hardening H4)
+// Family Hub — Firestore Security Rules v1.2 (Step 10 + hardening H4)
 //
 // One permission matrix, twice: `lib/core/permissions/permission_policy.dart`
 // for the app, and this file for the backend.  CLAUDE.md hard rule 12: every
@@ -309,8 +309,12 @@ service cloud.firestore {
         allow create: if isSelf(m) && validJoin(f);
 
         // 3. Admin: any change (role, status, removal) — the last-admin guard
-        //    lives in the domain, see the header.
+        //    lives in the domain, see the header.  A REMOVED member (rejected,
+        //    cancelled or left) can never be revived by a write: they may belong
+        //    to another family by now (rule 17); they must join again (rule 5).
         allow update: if isAdmin(f)
+          && resource.data.get('removedAt', null) == null
+          && resource.data.get('leftAt', null) == null
           && writesAsSelf()
           && memberDocIsValid()
           && request.resource.data.get('uid', '') == m;
@@ -321,6 +325,8 @@ service cloud.firestore {
         allow update: if isMod(f)
           && writesAsSelf()
           && resource.data.get('status', 'pending') == 'pending'
+          && resource.data.get('removedAt', null) == null
+          && resource.data.get('leftAt', null) == null
           && identityStable()
           && roleUnchanged()
           && validDecision()

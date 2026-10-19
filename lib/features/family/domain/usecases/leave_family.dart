@@ -48,7 +48,8 @@ class LeaveFamily {
       leftAt: now,
       removedAt: now,
     );
-    if (leavesNoActiveAdmin(listed.valueOrNull ?? const <Member>[], updated)) {
+    if (me.isActiveAdmin &&
+        leavesNoActiveAdmin(listed.valueOrNull ?? const <Member>[], updated)) {
       return const Failure<Member>(Conflict(code: 'last_admin'));
     }
 
