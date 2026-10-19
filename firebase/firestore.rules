@@ -35,10 +35,18 @@ rules_version = '2';
 //   * `verified()`: a verified email is required for every mutating action
 //     except the owner's own `users/{uid}` profile/preferences.
 //
-// NOT EXPRESSIBLE HERE: "the last admin may not be demoted, disabled or
-// removed" needs to enumerate members/{m}, which rules cannot do.  It stays a
-// domain rule (`leavesNoActiveAdmin` in permission_access.dart), unit-tested in
-// test/features/family/domain/member_management_test.dart.
+// H6 additions (decision D4: at most three admins):
+//   * `families/{f}.adminIds` lists 1..3 uids of ACTIVE admins.  A family
+//     create writes the creator alone; a family update re-checks every listed
+//     uid against its member document (`adminIdsOk`), so the list can never
+//     name a non-admin, an inactive member or an empty set;
+//   * a member update that changes the active-admin set (demote, disable,
+//     remove, leave or promote) MUST rewrite the family document in the SAME
+//     batch (`adminIdsRewritten`), so the check above always runs and the last
+//     admin cannot leave, be demoted or be disabled — the invariant the rules
+//     could not express before.  `leavesNoActiveAdmin` in permission_access.dart
+//     stays as the client-side guard with a localized message; the rules are
+//     the real enforcement.
 // ============================================================================
 
 service cloud.firestore {
@@ -127,8 +135,8 @@ service cloud.firestore {
               'schemaVersion', 'deletedAt', 'deletedBy'];
     }
     function familyKeys() {
-      return ['name', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
-              'schemaVersion', 'deletedAt', 'deletedBy'];
+      return ['name', 'adminIds', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
     }
     // inviteCodes/{code} and families/{f}/invitations/{i} share one shape.
     function invitationKeys() {
@@ -188,6 +196,9 @@ service cloud.firestore {
     }
 
     // ── Family membership helpers (roadmap Section 13 names) ───────────────
+    function familyPath(f) {
+      return /databases/$(database)/documents/families/$(f);
+    }
     function memberPath(f, uid) {
       return /databases/$(database)/documents/families/$(f)/members/$(uid);
     }
@@ -223,6 +234,48 @@ service cloud.firestore {
     // Admin or moderator: may invite and decide requests (Step 9 rule).
     function isManager(f) {
       return isAdmin(f) || isMod(f);
+    }
+
+    // ── Active-admin set (H6) ──────────────────────────────────────────────
+    // `families/{f}.adminIds` is the denormalised list of ACTIVE admins.  The
+    // rules re-check it against the member documents, so a forged list is
+    // rejected and the family can never be left without an admin.
+    function isActiveAdminData(d) {
+      return d.get('role', '') == 'admin'
+        && d.get('status', '') == 'active'
+        && d.get('removedAt', null) == null
+        && d.get('leftAt', null) == null;
+    }
+    // Index [i] of `ids` names an active admin after the batch.  The size guard
+    // keeps the list index in range (evaluated first, `||` short-circuits).
+    function adminAfterOk(f, ids, i) {
+      return i >= ids.size()
+        || isActiveAdminData(getAfter(memberPath(f, ids[i])).data);
+    }
+    // The family document after a write: 1..3 uids, each an active admin.
+    function adminIdsOk(f) {
+      let ids = request.resource.data.get('adminIds', []);
+      return ids.size() >= 1
+        && ids.size() <= 3
+        && adminAfterOk(f, ids, 0)
+        && adminAfterOk(f, ids, 1)
+        && adminAfterOk(f, ids, 2);
+    }
+    // A newly created family has exactly its creator as its only admin.
+    function creatorIsAdmin() {
+      let ids = request.resource.data.get('adminIds', []);
+      return ids.size() == 1 && ids[0] == request.auth.uid;
+    }
+    // Did this member write change whether the member is an active admin?
+    function adminSetChanges() {
+      return isActiveAdminData(resource.data)
+        != isActiveAdminData(request.resource.data);
+    }
+    // The family document must be part of THIS batch and its `adminIds` must
+    // change (a no-op family write does not satisfy the requirement).
+    function adminIdsRewritten(f) {
+      return getAfter(familyPath(f)).data.diff(get(familyPath(f)).data)
+        .affectedKeys().hasAny(['adminIds']);
     }
 
     // ── Enrollment helpers ────────────────────────────────────────────────
@@ -406,6 +459,7 @@ service cloud.firestore {
       allow create: if verified()
         && createsAsSelf()
         && str(request.resource.data.get('name', ''), 1, 80)
+        && creatorIsAdmin()
         && request.resource.data.keys().hasOnly(familyKeys());
 
       // Active members only: a pending or rejected user reads nothing here,
@@ -417,6 +471,7 @@ service cloud.firestore {
       allow update: if isAdmin(f)
         && writesAsSelf()
         && str(request.resource.data.get('name', ''), 1, 80)
+        && adminIdsOk(f)
         && request.resource.data.keys().hasOnly(familyKeys());
 
       allow delete: if false;
@@ -450,7 +505,9 @@ service cloud.firestore {
           && resource.data.get('leftAt', null) == null
           && writesAsSelf()
           && memberDocIsValid()
-          && request.resource.data.get('uid', '') == m;
+          && request.resource.data.get('uid', '') == m
+          // H6: a change to the active-admin set must rewrite the family doc.
+          && (!adminSetChanges() || adminIdsRewritten(f));
 
         // 4. Moderator: decide a PENDING request only — approve, reject or
         //    decline.  Never a role, never an active member (roadmap Step 10,
@@ -466,7 +523,9 @@ service cloud.firestore {
           && validDecision()
           && request.resource.data.keys().hasOnly(memberKeys())
           && request.resource.data.diff(resource.data).affectedKeys()
-               .hasOnly(['status', 'removedAt', 'updatedAt', 'updatedBy']);
+               .hasOnly(['status', 'removedAt', 'updatedAt', 'updatedBy'])
+          // H6: approving a pending admin still changes the active-admin set.
+          && (!adminSetChanges() || adminIdsRewritten(f));
 
         // 5. A rejected person may ask again with a fresh code.
         allow update: if isSelf(m)
@@ -504,7 +563,9 @@ service cloud.firestore {
           && request.resource.data.keys().hasOnly(memberKeys())
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['status', 'leftAt', 'removedAt', 'updatedAt',
-                         'updatedBy']);
+                         'updatedBy'])
+          // H6: an admin leaving changes the active-admin set.
+          && (!adminSetChanges() || adminIdsRewritten(f));
 
         // 8. CANCEL: a pending person withdraws their own request.  Only
         //    `removedAt` (the same soft delete a rejection uses) changes.

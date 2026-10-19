@@ -41,6 +41,7 @@ class LeaveFamily {
     final listed = await _families.getMembers(familyId);
     final listFailure = listed.failureOrNull;
     if (listFailure != null) return Failure<Member>(listFailure);
+    final all = listed.valueOrNull ?? const <Member>[];
 
     final now = _clock.nowUtc();
     final updated = me.copyWith(
@@ -48,10 +49,15 @@ class LeaveFamily {
       leftAt: now,
       removedAt: now,
     );
-    if (me.isActiveAdmin &&
-        leavesNoActiveAdmin(listed.valueOrNull ?? const <Member>[], updated)) {
+    if (me.isActiveAdmin && leavesNoActiveAdmin(all, updated)) {
       return const Failure<Member>(Conflict(code: 'last_admin'));
     }
+
+    // H6: an admin leaving changes the active-admin set, so the family document
+    // must be rewritten in the same batch (a plain member leaving does not).
+    final adminIds = activeAdminIds(rosterWith(all, updated));
+    final writeAdminIds =
+        sameAdminSet(activeAdminIds(all), adminIds) ? null : adminIds;
 
     final saved = await _families.saveMembers(
       familyId,
@@ -65,6 +71,7 @@ class LeaveFamily {
         refId: actorUid,
         at: now,
       ),
+      adminIds: writeAdminIds,
     );
     final failure = saved.failureOrNull;
     return failure != null

@@ -57,6 +57,16 @@ class MemberChangeRunner {
     if (decideFailure != null) return Failure<Member>(decideFailure);
     final updated = decided.valueOrNull!;
 
+    // H6: the family document must be rewritten whenever the active-admin set
+    // changes, and a family may never exceed three admins (D4).
+    final after = rosterWith(all, updated);
+    final adminIds = activeAdminIds(after);
+    if (adminIds.length > maxActiveAdmins) {
+      return const Failure<Member>(Conflict(code: 'too_many_admins'));
+    }
+    final writeAdminIds =
+        sameAdminSet(activeAdminIds(all), adminIds) ? null : adminIds;
+
     final saved = await families.saveMembers(
       familyId,
       [updated],
@@ -69,6 +79,7 @@ class MemberChangeRunner {
         refId: targetUid,
         at: clock.nowUtc(),
       ),
+      adminIds: writeAdminIds,
     );
     final failure = saved.failureOrNull;
     return failure != null

@@ -132,8 +132,33 @@ abstract final class FamilyMappers {
 
   // ── Family and settings ───────────────────────────────────────────────────
 
-  static Map<String, dynamic> familyDocMap(Family f, BaseDocumentMetadata m) =>
-      <String, dynamic>{'name': f.name, ...BaseMapper.metadataToMap(m)};
+  static Map<String, dynamic> familyDocMap(
+    Family f,
+    BaseDocumentMetadata m, {
+    List<String>? adminIds,
+  }) =>
+      <String, dynamic>{
+        'name': f.name,
+        // H6: the active admins, re-checked against the member documents by the
+        // rules.  A family is created with its creator as the only admin.
+        'adminIds': adminIds ?? <String>[m.createdBy],
+        ...BaseMapper.metadataToMap(m),
+      };
+
+  /// Fields changed when the active-admin set changes (H6).
+  ///
+  /// The full new list is written in the SAME batch as the member change; the
+  /// rules reject the batch when a listed uid is not an active admin afterwards.
+  static Map<String, dynamic> familyAdminIdsMap(
+    List<String> adminIds, {
+    required String actorUid,
+    required DateTime now,
+  }) =>
+      <String, dynamic>{
+        'adminIds': adminIds,
+        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
+        BaseMapper.keyUpdatedBy: actorUid,
+      };
 
   static Map<String, dynamic> generalSettingsMap(
     Family f,

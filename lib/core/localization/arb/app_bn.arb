@@ -444,6 +444,8 @@
   "@famFailureAlreadyMember": {},
   "famFailureLastAdmin": "পরিবারে অন্তত একজন অ্যাডমিন থাকতে হবে। আগে অন্য কাউকে অ্যাডমিন বানান।",
   "@famFailureLastAdmin": {},
+  "famFailureTooManyAdmins": "একটি পরিবারে সর্বোচ্চ তিনজন অ্যাডমিন থাকতে পারে।",
+  "@famFailureTooManyAdmins": {},
   "famFailureNotAllowed": "এটি করার অনুমতি আপনার নেই।",
   "@famFailureNotAllowed": {},
   "famFailureProfileRequired": "আগে আপনার প্রোফাইল সম্পূর্ণ করুন।",

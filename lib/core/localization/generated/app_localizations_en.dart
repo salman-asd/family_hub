@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -642,6 +643,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'A family needs at least one admin. Make someone else admin first.';
 
   @override
+  String get famFailureTooManyAdmins =>
+      'A family can have at most three admins.';
+
+  @override
   String get famFailureNotAllowed => 'You do not have permission to do that.';
 
   @override
@@ -736,7 +741,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get syncWaitingTitle => 'Waiting for connection…';
 
   @override
-  String get syncWaitingMessage => 'Check your internet connection and try again. Your data is safe.';
+  String get syncWaitingMessage =>
+      'Check your internet connection and try again. Your data is safe.';
 
   @override
   String get syncSavedOffline => 'Saved on this device – will sync when online';
@@ -755,7 +761,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gallerySyncBanner => 'Sync banner';
 
   @override
-  String get famFailureAlreadyInFamily => 'You already belong to a family. Leave it first.';
+  String get famFailureAlreadyInFamily =>
+      'You already belong to a family. Leave it first.';
 
   @override
   String get familyLeave => 'Leave family';
@@ -764,10 +771,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familyLeaveConfirmTitle => 'Leave this family?';
 
   @override
-  String get familyLeaveConfirmBody => 'Your past activity stays in the family\'s history. Afterwards you can create or join a family again.';
+  String get familyLeaveConfirmBody =>
+      'Your past activity stays in the family\'s history. Afterwards you can create or join a family again.';
 
   @override
-  String get familyLeaveLastAdminReason => 'You are the only admin. Make someone else an admin before leaving.';
+  String get familyLeaveLastAdminReason =>
+      'You are the only admin. Make someone else an admin before leaving.';
 
   @override
   String get pendingCancelRequest => 'Cancel request';
@@ -779,5 +788,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get invitationRevokeConfirmTitle => 'Revoke this code?';
 
   @override
-  String get invitationRevokeConfirmBody => 'Nobody will be able to join with this code any more.';
+  String get invitationRevokeConfirmBody =>
+      'Nobody will be able to join with this code any more.';
 }

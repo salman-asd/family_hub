@@ -54,3 +54,30 @@ bool leavesNoActiveAdmin(List<Member> members, Member updated) {
   ];
   return !after.any((m) => m.isActiveAdmin);
 }
+
+/// Decision D4 (Step H6): a family may have at most three active admins.
+///
+/// `families/{f}.adminIds` holds 1..3 uids of ACTIVE admins and the security
+/// rules enforce the same bound.  Enforced here as well so a promotion fails
+/// with a localized `too_many_admins` conflict instead of a bare permission
+/// error from the family-document write.
+const int maxActiveAdmins = 3;
+
+/// The uids of the active admins in [members], in roster order.
+///
+/// This is exactly what `families/{f}.adminIds` must contain after a write
+/// (H6); the rules re-check every uid against its member document.
+List<String> activeAdminIds(Iterable<Member> members) => <String>[
+      for (final m in members)
+        if (m.isActiveAdmin) m.uid,
+    ];
+
+/// [members] with [updated] replacing the member of the same uid.
+List<Member> rosterWith(List<Member> members, Member updated) => <Member>[
+      for (final m in members)
+        if (m.uid == updated.uid) updated else m,
+    ];
+
+/// True when [a] and [b] contain the same uids (order-independent).
+bool sameAdminSet(List<String> a, List<String> b) =>
+    a.length == b.length && a.every(b.contains);

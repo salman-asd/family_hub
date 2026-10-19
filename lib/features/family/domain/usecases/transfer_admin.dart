@@ -53,8 +53,23 @@ class TransferAdmin {
       return const Failure<Member>(Conflict(code: 'not_active'));
     }
 
+    // H6: the new `adminIds` is computed from the whole roster and written in
+    // the same batch; a family never exceeds three admins (D4).
+    final listed = await _families.getMembers(familyId);
+    final listFailure = listed.failureOrNull;
+    if (listFailure != null) return Failure<Member>(listFailure);
+    final all = listed.valueOrNull ?? const <Member>[];
+
     final newAdmin = next.copyWith(role: MemberRole.admin);
     final oldAdmin = actor.valueOrNull!.copyWith(role: MemberRole.member);
+    final adminIds =
+        activeAdminIds(rosterWith(rosterWith(all, newAdmin), oldAdmin));
+    if (adminIds.length > maxActiveAdmins) {
+      return const Failure<Member>(Conflict(code: 'too_many_admins'));
+    }
+    final writeAdminIds =
+        sameAdminSet(activeAdminIds(all), adminIds) ? null : adminIds;
+
     final saved = await _families.saveMembers(
       familyId,
       [newAdmin, oldAdmin],
@@ -67,6 +82,7 @@ class TransferAdmin {
         refId: targetUid,
         at: _clock.nowUtc(),
       ),
+      adminIds: writeAdminIds,
     );
     final saveFailure = saved.failureOrNull;
     return saveFailure != null

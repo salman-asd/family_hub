@@ -28,6 +28,9 @@ class InMemoryBackend
   final Map<String, Map<String, Member>> members = {};
   final Map<String, Invitation> invitations = {};
   final Map<String, String> userFamily = {};
+
+  /// H6: the active-admin uids per family, mirroring `families/{f}.adminIds`.
+  final Map<String, List<String>> adminIds = {};
   final List<FamilyEvent> events = [];
 
   /// Number of write batches that were applied (one per mutating call).
@@ -127,6 +130,7 @@ class InMemoryBackend
     if (failed != null) return failed;
     families[family.id] = family;
     members[family.id] = {owner.uid: owner};
+    adminIds[family.id] = <String>[owner.uid];
     userFamily[owner.uid] = family.id;
     events.add(event);
     writes++;

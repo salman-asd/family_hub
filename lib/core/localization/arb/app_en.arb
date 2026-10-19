@@ -444,6 +444,8 @@
   "@famFailureAlreadyMember": {},
   "famFailureLastAdmin": "A family needs at least one admin. Make someone else admin first.",
   "@famFailureLastAdmin": {},
+  "famFailureTooManyAdmins": "A family can have at most three admins.",
+  "@famFailureTooManyAdmins": {},
   "famFailureNotAllowed": "You do not have permission to do that.",
   "@famFailureNotAllowed": {},
   "famFailureProfileRequired": "Complete your profile first.",

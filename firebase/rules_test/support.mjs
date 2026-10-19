@@ -55,8 +55,20 @@ export const baseDoc = (uid, extra = {}) => ({
   ...extra,
 });
 
-export const familyDoc = (createdBy, name = 'Family A') =>
-  baseDoc(createdBy, { name });
+export const familyDoc = (createdBy, name = 'Family A', extra = {}) =>
+  baseDoc(createdBy, {
+    name,
+    // H6: 1..3 active-admin uids; the creator is the only admin.
+    adminIds: [createdBy],
+    ...extra,
+  });
+
+/** FamilyMappers.familyAdminIdsMap: rewriting the active-admin set (H6). */
+export const familyAdminIds = (actorUid, adminIds) => ({
+  adminIds,
+  updatedAt: nowTs(),
+  updatedBy: actorUid,
+});
 
 export const memberDoc = (uid, role, status, extra = {}) => ({
   uid,

@@ -42,6 +42,7 @@ import {
   asUser,
   baseDoc,
   eventDoc,
+  familyAdminIds,
   familyDoc,
   futureTs,
   invitationUsed,
@@ -1564,7 +1565,7 @@ describe('H5 closed key sets', () => {
     await assertFails(
       setDoc(doc(db, 'families/famKey'), {
         ...familyDoc(FRANK, 'Key'),
-        adminIds: [FRANK],
+        maxMembers: 20,
       }),
     );
   });
@@ -1729,6 +1730,202 @@ describe('H5 verified email', () => {
         doc(db, `users/${FRANK}`),
         { fullName: 'Frank Islam' },
         { merge: true },
+      ),
+    );
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Hardening H6: never zero admins (`families/{f}.adminIds`, decision D4)
+// ─────────────────────────────────────────────────────────────────────────────
+describe('H6 active-admin set', () => {
+  /** famA with two active admins: ALICE and BOB. */
+  const seedTwoAdmins = () =>
+    testEnv.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(
+        doc(db, `families/${FAM_A}/members/${BOB}`),
+        memberDoc(BOB, 'admin', 'active'),
+      );
+      await setDoc(
+        doc(db, `families/${FAM_A}`),
+        familyDoc(ALICE, 'Family A', { adminIds: [ALICE, BOB] }),
+      );
+    });
+
+  it('allows an admin to demote another admin, rewriting adminIds in the batch', async () => {
+    await seedTwoAdmins();
+    const db = as(ALICE);
+    const b = writeBatch(db);
+    b.set(
+      doc(db, `families/${FAM_A}/members/${BOB}`),
+      memberChange(ALICE, { role: 'member', status: 'active' }),
+      { merge: true },
+    );
+    b.set(doc(db, `families/${FAM_A}`), familyAdminIds(ALICE, [ALICE]), {
+      merge: true,
+    });
+    b.set(doc(db, `families/${FAM_A}/activity/h6a`), eventDoc(ALICE));
+    b.set(doc(db, `families/${FAM_A}/auditLogs/h6a`), eventDoc(ALICE));
+    await assertSucceeds(b.commit());
+  });
+
+  it('denies demoting an admin WITHOUT rewriting the family adminIds', async () => {
+    await seedTwoAdmins();
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${BOB}`),
+        memberChange(ALICE, { role: 'member', status: 'active' }),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies the second of two admins demoting each other in separate batches', async () => {
+    await seedTwoAdmins();
+
+    // ALICE demotes BOB first.
+    const alice = as(ALICE);
+    const first = writeBatch(alice);
+    first.set(
+      doc(alice, `families/${FAM_A}/members/${BOB}`),
+      memberChange(ALICE, { role: 'member', status: 'active' }),
+      { merge: true },
+    );
+    first.set(doc(alice, `families/${FAM_A}`), familyAdminIds(ALICE, [ALICE]), {
+      merge: true,
+    });
+    await assertSucceeds(first.commit());
+
+    // BOB is now a plain member, so his demotion of ALICE is refused — the
+    // family can never be left with zero admins.
+    const bob = as(BOB);
+    const second = writeBatch(bob);
+    second.set(
+      doc(bob, `families/${FAM_A}/members/${ALICE}`),
+      memberChange(BOB, { role: 'member', status: 'active' }),
+      { merge: true },
+    );
+    second.set(doc(bob, `families/${FAM_A}`), familyAdminIds(BOB, []), {
+      merge: true,
+    });
+    await assertFails(second.commit());
+
+    await assertSucceeds(getDoc(doc(bob, `families/${FAM_A}/members/${ALICE}`)));
+  });
+
+  it('allows a TransferAdmin batch (two member writes + family + logs)', async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(doc(db, `families/${FAM_A}`), familyDoc(ALICE));
+      await setDoc(
+        doc(db, `families/${FAM_A}/members/${FRANK}`),
+        memberDoc(FRANK, 'member', 'active'),
+      );
+    });
+
+    const db = as(ALICE);
+    const b = writeBatch(db);
+    b.set(
+      doc(db, `families/${FAM_A}/members/${FRANK}`),
+      memberChange(ALICE, { role: 'admin', status: 'active' }),
+      { merge: true },
+    );
+    b.set(
+      doc(db, `families/${FAM_A}/members/${ALICE}`),
+      memberChange(ALICE, { role: 'member', status: 'active' }),
+      { merge: true },
+    );
+    b.set(doc(db, `families/${FAM_A}`), familyAdminIds(ALICE, [FRANK]), {
+      merge: true,
+    });
+    b.set(doc(db, `families/${FAM_A}/activity/h6t`), eventDoc(ALICE));
+    b.set(doc(db, `families/${FAM_A}/auditLogs/h6t`), eventDoc(ALICE));
+    await assertSucceeds(b.commit());
+  });
+
+  it('denies the only admin leaving (empty adminIds)', async () => {
+    const db = as(ALICE);
+    const b = writeBatch(db);
+    b.set(
+      doc(db, `families/${FAM_A}/members/${ALICE}`),
+      memberLeave(ALICE, 'admin'),
+      { merge: true },
+    );
+    b.set(doc(db, `families/${FAM_A}`), familyAdminIds(ALICE, []), {
+      merge: true,
+    });
+    await assertFails(b.commit());
+  });
+
+  it('denies the only admin leaving without rewriting the family adminIds', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${ALICE}`),
+        memberLeave(ALICE, 'admin'),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies an admin rewriting adminIds to name a non-admin', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}`),
+        familyAdminIds(ALICE, [ALICE, CARA]),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies an admin rewriting adminIds to an empty list', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(doc(db, `families/${FAM_A}`), familyAdminIds(ALICE, []), {
+        merge: true,
+      }),
+    );
+  });
+
+  it('denies more than three admins', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}`),
+        familyAdminIds(ALICE, [ALICE, BOB, CARA, DAVE]),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a plain member rewriting the family adminIds', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(doc(db, `families/${FAM_A}`), familyAdminIds(CARA, [CARA]), {
+        merge: true,
+      }),
+    );
+  });
+
+  it('denies creating a family whose adminIds is not the creator', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(
+        doc(db, 'families/famAdminForge'),
+        familyDoc(FRANK, 'Forge', { adminIds: [ALICE] }),
+      ),
+    );
+  });
+
+  it('denies a family create with an empty adminIds', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(
+        doc(db, 'families/famAdminEmpty'),
+        familyDoc(FRANK, 'Empty', { adminIds: [] }),
       ),
     );
   });

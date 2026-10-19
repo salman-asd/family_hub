@@ -85,6 +85,13 @@ const seeders = {
       memberDoc(JOINER, 'member', 'active'),
     );
   },
+  transfer_admin: async (db) => {
+    await seedFamilyWithAdmin(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/members/${JOINER}`),
+      memberDoc(JOINER, 'member', 'active'),
+    );
+  },
   create_invitation: async (db) => {
     await seedFamilyWithAdmin(db);
   },

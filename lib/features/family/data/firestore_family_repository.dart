@@ -218,8 +218,9 @@ class FirestoreFamilyRepository implements FamilyRepository {
   Future<Result<void>> saveMembers(
     String familyId,
     List<Member> members,
-    FamilyEvent event,
-  ) =>
+    FamilyEvent event, {
+    List<String>? adminIds,
+  }) =>
       guardWrite(
         probe: _probe(event.actorId),
         () => _tx.runBatch((b) {
@@ -229,6 +230,19 @@ class FirestoreFamilyRepository implements FamilyRepository {
               FirestorePaths.memberDoc(familyId, m.uid),
               FamilyMappers.memberChangeMap(
                 m,
+                actorUid: event.actorId,
+                now: now,
+              ),
+            );
+          }
+          // H6: keep `families/{f}.adminIds` truthful in the SAME batch.  The
+          // rules require this document to change whenever the active-admin set
+          // does, and re-check every listed uid against its member document.
+          if (adminIds != null) {
+            b.update(
+              FirestorePaths.familyDoc(familyId),
+              FamilyMappers.familyAdminIdsMap(
+                adminIds,
                 actorUid: event.actorId,
                 now: now,
               ),

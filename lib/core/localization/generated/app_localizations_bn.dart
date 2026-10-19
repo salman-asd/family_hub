@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -641,6 +642,10 @@ class AppLocalizationsBn extends AppLocalizations {
       'পরিবারে অন্তত একজন অ্যাডমিন থাকতে হবে। আগে অন্য কাউকে অ্যাডমিন বানান।';
 
   @override
+  String get famFailureTooManyAdmins =>
+      'একটি পরিবারে সর্বোচ্চ তিনজন অ্যাডমিন থাকতে পারে।';
+
+  @override
   String get famFailureNotAllowed => 'এটি করার অনুমতি আপনার নেই।';
 
   @override
@@ -735,10 +740,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get syncWaitingTitle => 'সংযোগের অপেক্ষায়…';
 
   @override
-  String get syncWaitingMessage => 'ইন্টারনেট সংযোগ আছে কিনা দেখুন, তারপর আবার চেষ্টা করুন। আপনার তথ্য নিরাপদ আছে।';
+  String get syncWaitingMessage =>
+      'ইন্টারনেট সংযোগ আছে কিনা দেখুন, তারপর আবার চেষ্টা করুন। আপনার তথ্য নিরাপদ আছে।';
 
   @override
-  String get syncSavedOffline => 'এই ডিভাইসে সংরক্ষিত হয়েছে — অনলাইনে এলে সিঙ্ক হবে';
+  String get syncSavedOffline =>
+      'এই ডিভাইসে সংরক্ষিত হয়েছে — অনলাইনে এলে সিঙ্ক হবে';
 
   @override
   String syncBannerSyncing(int count) {
@@ -754,7 +761,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get gallerySyncBanner => 'সিঙ্ক ব্যানার';
 
   @override
-  String get famFailureAlreadyInFamily => 'আপনি ইতিমধ্যে একটি পরিবারে আছেন। আগে সেটি ছেড়ে দিন।';
+  String get famFailureAlreadyInFamily =>
+      'আপনি ইতিমধ্যে একটি পরিবারে আছেন। আগে সেটি ছেড়ে দিন।';
 
   @override
   String get familyLeave => 'পরিবার ছেড়ে যান';
@@ -763,10 +771,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get familyLeaveConfirmTitle => 'পরিবার ছেড়ে যাবেন?';
 
   @override
-  String get familyLeaveConfirmBody => 'আপনার আগের কাজ ও হিসাবের ইতিহাস পরিবারে থেকে যাবে। পরে আপনি নতুন পরিবার খুলতে বা অন্য পরিবারে যোগ দিতে পারবেন।';
+  String get familyLeaveConfirmBody =>
+      'আপনার আগের কাজ ও হিসাবের ইতিহাস পরিবারে থেকে যাবে। পরে আপনি নতুন পরিবার খুলতে বা অন্য পরিবারে যোগ দিতে পারবেন।';
 
   @override
-  String get familyLeaveLastAdminReason => 'আপনিই একমাত্র অ্যাডমিন। ছেড়ে যাওয়ার আগে আরেকজনকে অ্যাডমিন করুন।';
+  String get familyLeaveLastAdminReason =>
+      'আপনিই একমাত্র অ্যাডমিন। ছেড়ে যাওয়ার আগে আরেকজনকে অ্যাডমিন করুন।';
 
   @override
   String get pendingCancelRequest => 'অনুরোধ বাতিল করুন';
@@ -778,5 +788,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get invitationRevokeConfirmTitle => 'কোডটি বাতিল করবেন?';
 
   @override
-  String get invitationRevokeConfirmBody => 'এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।';
+  String get invitationRevokeConfirmBody =>
+      'এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।';
 }

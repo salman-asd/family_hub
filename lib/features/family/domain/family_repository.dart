@@ -44,11 +44,18 @@ abstract interface class FamilyRepository {
   Future<Result<List<Member>>> getMembers(String familyId);
 
   /// ONE batch updating [members] (status / role / removal) plus the event.
+  ///
+  /// When the active-admin set changes (H6) the caller passes the new
+  /// [adminIds]; the family document is written in the SAME batch so the rules
+  /// can prove the family never loses its last admin.  `null` means the set is
+  /// unchanged and the family document is left alone (a moderator may still
+  /// approve or reject without being an admin).
   Future<Result<void>> saveMembers(
     String familyId,
     List<Member> members,
-    FamilyEvent event,
-  );
+    FamilyEvent event, {
+    List<String>? adminIds,
+  });
 
   Future<Result<void>> updateFamily(Family family, FamilyEvent event);
 
