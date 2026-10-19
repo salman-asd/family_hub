@@ -106,6 +106,7 @@ extension FamilyFailureMessages on AppLocalizations {
         Conflict(code: 'code_expired') => famFailureCodeExpired,
         Conflict(code: 'code_revoked') => famFailureCodeRevoked,
         Conflict(code: 'already_member') => famFailureAlreadyMember,
+        Conflict(code: 'already_in_family') => famFailureAlreadyInFamily,
         Conflict(code: 'last_admin') => famFailureLastAdmin,
         PermissionDenied() => famFailureNotAllowed,
         Network() => errorNetwork,

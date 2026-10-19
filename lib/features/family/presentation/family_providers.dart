@@ -11,9 +11,12 @@ import 'package:family_hub/features/family/domain/usecases/change_role.dart';
 import 'package:family_hub/features/family/domain/usecases/create_family.dart';
 import 'package:family_hub/features/family/domain/usecases/create_invitation.dart';
 import 'package:family_hub/features/family/domain/usecases/disable_member.dart';
+import 'package:family_hub/features/family/domain/usecases/cancel_join_request.dart';
 import 'package:family_hub/features/family/domain/usecases/join_with_code.dart';
+import 'package:family_hub/features/family/domain/usecases/leave_family.dart';
 import 'package:family_hub/features/family/domain/usecases/member_change_runner.dart';
 import 'package:family_hub/features/family/domain/usecases/reject_member.dart';
+import 'package:family_hub/features/family/domain/usecases/revoke_invitation.dart';
 import 'package:family_hub/features/family/domain/usecases/transfer_admin.dart';
 import 'package:family_hub/features/family/domain/usecases/update_family_settings.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
@@ -125,3 +128,37 @@ final updateFamilySettingsProvider = Provider<UpdateFamilySettings>(
     newId: ref.watch(idGeneratorProvider),
   ),
 );
+
+final leaveFamilyProvider = Provider<LeaveFamily>(
+  (ref) => LeaveFamily(
+    families: ref.watch(familyRepositoryProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
+
+final cancelJoinRequestProvider = Provider<CancelJoinRequest>(
+  (ref) => CancelJoinRequest(
+    families: ref.watch(familyRepositoryProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
+
+final revokeInvitationProvider = Provider<RevokeInvitation>(
+  (ref) => RevokeInvitation(
+    families: ref.watch(familyRepositoryProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
+
+/// True while the signed-in user is the only active admin, so "Leave family"
+/// is explained instead of failing (the use case enforces it too).
+final soleAdminProvider = Provider<bool>((ref) {
+  final uid = ref.watch(currentUidProvider);
+  final members = ref.watch(membersProvider).value;
+  if (uid == null || members == null) return false;
+  final admins = members.where((m) => m.isActiveAdmin).toList();
+  return admins.length == 1 && admins.single.uid == uid;
+});

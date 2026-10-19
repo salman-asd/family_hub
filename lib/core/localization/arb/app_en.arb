@@ -526,5 +526,47 @@
   "gallerySampleItemName": "Potato",
   "@gallerySampleItemName": {},
   "gallerySamplePersonName": "Karim Uddin",
-  "@gallerySamplePersonName": {}
+  "@gallerySamplePersonName": {},
+  "syncWaitingTitle": "Waiting for connection…",
+  "@syncWaitingTitle": {},
+  "syncWaitingMessage": "Check your internet connection and try again. Your data is safe.",
+  "@syncWaitingMessage": {},
+  "syncSavedOffline": "Saved on this device – will sync when online",
+  "@syncSavedOffline": {},
+  "syncBannerSyncing": "Syncing {count} change(s)",
+  "@syncBannerSyncing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncBannerOffline": "Offline – {count} change(s) waiting",
+  "@syncBannerOffline": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gallerySyncBanner": "Sync banner",
+  "@gallerySyncBanner": {},
+  "famFailureAlreadyInFamily": "You already belong to a family. Leave it first.",
+  "@famFailureAlreadyInFamily": {},
+  "familyLeave": "Leave family",
+  "@familyLeave": {},
+  "familyLeaveConfirmTitle": "Leave this family?",
+  "@familyLeaveConfirmTitle": {},
+  "familyLeaveConfirmBody": "Your past activity stays in the family's history. Afterwards you can create or join a family again.",
+  "@familyLeaveConfirmBody": {},
+  "familyLeaveLastAdminReason": "You are the only admin. Make someone else an admin before leaving.",
+  "@familyLeaveLastAdminReason": {},
+  "pendingCancelRequest": "Cancel request",
+  "@pendingCancelRequest": {},
+  "invitationRevoke": "Revoke code",
+  "@invitationRevoke": {},
+  "invitationRevokeConfirmTitle": "Revoke this code?",
+  "@invitationRevokeConfirmTitle": {},
+  "invitationRevokeConfirmBody": "Nobody will be able to join with this code any more.",
+  "@invitationRevokeConfirmBody": {}
 }

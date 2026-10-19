@@ -13,6 +13,7 @@ import 'package:family_hub/shared/widgets/pill_bottom_bar.dart';
 import 'package:family_hub/shared/widgets/progress_ring.dart';
 import 'package:family_hub/shared/widgets/section_header.dart';
 import 'package:family_hub/shared/widgets/status_chip.dart';
+import 'package:family_hub/shared/widgets/sync_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -57,6 +58,7 @@ List<GallerySection> gallerySections() => <GallerySection>[
       _money,
       _progress,
       _pillBar,
+      _syncBanner,
     ];
 
 // ── Sample values ─────────────────────────────────────────────────────────────
@@ -355,4 +357,19 @@ final GallerySection _pillBar = GallerySection(
       ],
     );
   },
+);
+
+final GallerySection _syncBanner = GallerySection(
+  id: 'sync_banner',
+  label: (l10n) => l10n.gallerySyncBanner,
+  build: (context) => const Column(
+    children: [
+      SyncBanner(pendingWrites: 3),
+      SizedBox(height: 12),
+      SyncBanner(pendingWrites: 12, offline: true),
+      SizedBox(height: 12),
+      // Zero pending writes renders nothing.
+      SyncBanner(pendingWrites: 0),
+    ],
+  ),
 );

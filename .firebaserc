@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "familyhub-dev",
+    "dev": "familyhub-dev",
+    "prod": "familyhub-prod"
+  }
+}

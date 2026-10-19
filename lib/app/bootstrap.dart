@@ -7,6 +7,7 @@ import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/core/firebase/firebase_bootstrap.dart';
 import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
+import 'package:family_hub/core/firebase/sync_status.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
 import 'package:family_hub/core/localization/locale_controller.dart';
 import 'package:family_hub/core/utils/clock.dart';
@@ -79,6 +80,7 @@ Future<void> bootstrap(Flavor flavor) async {
         ProviderScope(
           overrides: [
             flavorProvider.overrideWithValue(flavor),
+            pendingWriteCounterProvider.overrideWithValue(tx.pendingWrites),
             sharedPreferencesProvider.overrideWithValue(prefs),
             authRepositoryProvider.overrideWithValue(authRepository),
             profileRepositoryProvider.overrideWithValue(profiles),

@@ -1,0 +1,28 @@
+name: Update goldens
+
+# Goldens must be rendered on the platform CI compares them on (Linux).
+# Run this workflow manually, download the artifact, unzip it at the repo root
+# and commit the PNGs.  Never commit goldens made on Windows or macOS.
+on:
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.7'
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter test --update-goldens --tags golden
+      - name: Collect goldens
+        run: |
+          mkdir -p out
+          find test -type d -name goldens -print0 | xargs -0 -I{} cp -r --parents {} out/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-goldens
+          path: out/

@@ -72,6 +72,32 @@ export const memberChange = (actorUid, { role, status, removedAt = null }) => ({
   updatedBy: actorUid,
 });
 
+/** FamilyMappers.memberChangeMap for LEAVE: status disabled + leftAt/removedAt. */
+export const memberLeave = (uid, role, at = nowTs()) => ({
+  role,
+  status: 'disabled',
+  removedAt: at,
+  leftAt: at,
+  updatedAt: nowTs(),
+  updatedBy: uid,
+});
+
+/** memberChangeMap for CANCEL: only removedAt changes. */
+export const memberCancel = (uid, role, status = 'pending') => ({
+  role,
+  status,
+  removedAt: nowTs(),
+  updatedAt: nowTs(),
+  updatedBy: uid,
+});
+
+/** FamilyMappers.invitationRevokedMap. */
+export const invitationRevoked = (uid) => ({
+  status: 'revoked',
+  updatedAt: nowTs(),
+  updatedBy: uid,
+});
+
 export const inviteCodeDoc = (createdBy, familyId, code, overrides = {}) => ({
   code,
   familyId,

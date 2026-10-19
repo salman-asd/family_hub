@@ -1441,6 +1441,96 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'করিম উদ্দিন'**
   String get gallerySamplePersonName;
+
+  /// No description provided for @syncWaitingTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংযোগের অপেক্ষায়…'**
+  String get syncWaitingTitle;
+
+  /// No description provided for @syncWaitingMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইন্টারনেট সংযোগ আছে কিনা দেখুন, তারপর আবার চেষ্টা করুন। আপনার তথ্য নিরাপদ আছে।'**
+  String get syncWaitingMessage;
+
+  /// No description provided for @syncSavedOffline.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ডিভাইসে সংরক্ষিত হয়েছে — অনলাইনে এলে সিঙ্ক হবে'**
+  String get syncSavedOffline;
+
+  /// No description provided for @syncBannerSyncing.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি পরিবর্তন সিঙ্ক হচ্ছে'**
+  String syncBannerSyncing(int count);
+
+  /// No description provided for @syncBannerOffline.
+  ///
+  /// In bn, this message translates to:
+  /// **'অফলাইন — {count}টি পরিবর্তন অপেক্ষায়'**
+  String syncBannerOffline(int count);
+
+  /// No description provided for @gallerySyncBanner.
+  ///
+  /// In bn, this message translates to:
+  /// **'সিঙ্ক ব্যানার'**
+  String get gallerySyncBanner;
+
+  /// No description provided for @famFailureAlreadyInFamily.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি ইতিমধ্যে একটি পরিবারে আছেন। আগে সেটি ছেড়ে দিন।'**
+  String get famFailureAlreadyInFamily;
+
+  /// No description provided for @familyLeave.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার ছেড়ে যান'**
+  String get familyLeave;
+
+  /// No description provided for @familyLeaveConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার ছেড়ে যাবেন?'**
+  String get familyLeaveConfirmTitle;
+
+  /// No description provided for @familyLeaveConfirmBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার আগের কাজ ও হিসাবের ইতিহাস পরিবারে থেকে যাবে। পরে আপনি নতুন পরিবার খুলতে বা অন্য পরিবারে যোগ দিতে পারবেন।'**
+  String get familyLeaveConfirmBody;
+
+  /// No description provided for @familyLeaveLastAdminReason.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনিই একমাত্র অ্যাডমিন। ছেড়ে যাওয়ার আগে আরেকজনকে অ্যাডমিন করুন।'**
+  String get familyLeaveLastAdminReason;
+
+  /// No description provided for @pendingCancelRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধ বাতিল করুন'**
+  String get pendingCancelRequest;
+
+  /// No description provided for @invitationRevoke.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোড বাতিল করুন'**
+  String get invitationRevoke;
+
+  /// No description provided for @invitationRevokeConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোডটি বাতিল করবেন?'**
+  String get invitationRevokeConfirmTitle;
+
+  /// No description provided for @invitationRevokeConfirmBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।'**
+  String get invitationRevokeConfirmBody;
 }
 
 class _AppLocalizationsDelegate

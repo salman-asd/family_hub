@@ -2,6 +2,7 @@ import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
+import 'package:family_hub/features/family/domain/ensure_free_to_join.dart';
 import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
@@ -35,6 +36,7 @@ class JoinWithCode {
   Future<Result<Member>> call({
     required String actorUid,
     required String rawCode,
+    String? eventId,
   }) async {
     final code = InviteCodeGenerator.normalize(rawCode);
     if (!InviteCodeGenerator.isWellFormed(code)) {
@@ -52,6 +54,15 @@ class JoinWithCode {
     final now = _clock.nowUtc();
     switch (invitation.status) {
       case InvitationStatus.used:
+        // A repeat of my own request (the first write was only queued, or the
+        // reply was lost): answer with the membership that already exists.
+        if (invitation.usedBy == actorUid) {
+          final mine = await _families.getMember(invitation.familyId, actorUid);
+          final existingMember = mine.valueOrNull;
+          if (existingMember != null && !existingMember.isRemoved) {
+            return Success<Member>(existingMember);
+          }
+        }
         return const Failure<Member>(Conflict(code: 'code_used'));
       case InvitationStatus.revoked:
         return const Failure<Member>(Conflict(code: 'code_revoked'));
@@ -61,6 +72,15 @@ class JoinWithCode {
     if (invitation.isExpiredAt(now)) {
       return const Failure<Member>(Conflict(code: 'code_expired'));
     }
+
+    // One family per user (rule 17).
+    final free = await ensureFreeToJoinAnyFamily(
+      _families,
+      actorUid,
+      allowFamilyId: invitation.familyId,
+    );
+    final freeFailure = free.failureOrNull;
+    if (freeFailure != null) return Failure<Member>(freeFailure);
 
     final profileResult = await _profiles.getProfile(actorUid);
     final profileFailure = profileResult.failureOrNull;
@@ -93,7 +113,7 @@ class JoinWithCode {
       invitation: invitation,
       member: member,
       event: FamilyEvent(
-        id: _newId(),
+        id: eventId ?? _newId(),
         type: 'member.requested',
         actorId: actorUid,
         summary: '${profile.fullName} asked to join',

@@ -1,5 +1,6 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/presentation/action_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/widgets/failure_banner.dart';
@@ -21,6 +22,9 @@ class JoinFamilyScreen extends ConsumerStatefulWidget {
 class _JoinFamilyScreenState extends ConsumerState<JoinFamilyScreen> {
   final _code = TextEditingController();
 
+  // One event id per screen: a retry reuses it (rule 15).
+  final String _eventId = randomId();
+
   @override
   void initState() {
     super.initState();
@@ -40,6 +44,7 @@ class _JoinFamilyScreenState extends ConsumerState<JoinFamilyScreen> {
           () => ref.read(joinWithCodeProvider)(
             actorUid: uid,
             rawCode: _code.text,
+            eventId: _eventId,
           ),
         );
   }

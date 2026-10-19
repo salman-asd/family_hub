@@ -526,5 +526,47 @@
   "gallerySampleItemName": "আলু",
   "@gallerySampleItemName": {},
   "gallerySamplePersonName": "করিম উদ্দিন",
-  "@gallerySamplePersonName": {}
+  "@gallerySamplePersonName": {},
+  "syncWaitingTitle": "সংযোগের অপেক্ষায়…",
+  "@syncWaitingTitle": {},
+  "syncWaitingMessage": "ইন্টারনেট সংযোগ আছে কিনা দেখুন, তারপর আবার চেষ্টা করুন। আপনার তথ্য নিরাপদ আছে।",
+  "@syncWaitingMessage": {},
+  "syncSavedOffline": "এই ডিভাইসে সংরক্ষিত হয়েছে — অনলাইনে এলে সিঙ্ক হবে",
+  "@syncSavedOffline": {},
+  "syncBannerSyncing": "{count}টি পরিবর্তন সিঙ্ক হচ্ছে",
+  "@syncBannerSyncing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncBannerOffline": "অফলাইন — {count}টি পরিবর্তন অপেক্ষায়",
+  "@syncBannerOffline": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gallerySyncBanner": "সিঙ্ক ব্যানার",
+  "@gallerySyncBanner": {},
+  "famFailureAlreadyInFamily": "আপনি ইতিমধ্যে একটি পরিবারে আছেন। আগে সেটি ছেড়ে দিন।",
+  "@famFailureAlreadyInFamily": {},
+  "familyLeave": "পরিবার ছেড়ে যান",
+  "@familyLeave": {},
+  "familyLeaveConfirmTitle": "পরিবার ছেড়ে যাবেন?",
+  "@familyLeaveConfirmTitle": {},
+  "familyLeaveConfirmBody": "আপনার আগের কাজ ও হিসাবের ইতিহাস পরিবারে থেকে যাবে। পরে আপনি নতুন পরিবার খুলতে বা অন্য পরিবারে যোগ দিতে পারবেন।",
+  "@familyLeaveConfirmBody": {},
+  "familyLeaveLastAdminReason": "আপনিই একমাত্র অ্যাডমিন। ছেড়ে যাওয়ার আগে আরেকজনকে অ্যাডমিন করুন।",
+  "@familyLeaveLastAdminReason": {},
+  "pendingCancelRequest": "অনুরোধ বাতিল করুন",
+  "@pendingCancelRequest": {},
+  "invitationRevoke": "কোড বাতিল করুন",
+  "@invitationRevoke": {},
+  "invitationRevokeConfirmTitle": "কোডটি বাতিল করবেন?",
+  "@invitationRevokeConfirmTitle": {},
+  "invitationRevokeConfirmBody": "এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।",
+  "@invitationRevokeConfirmBody": {}
 }

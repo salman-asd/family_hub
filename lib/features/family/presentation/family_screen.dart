@@ -3,7 +3,10 @@ import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
+import 'package:family_hub/features/family/presentation/action_controller.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
+import 'package:family_hub/shared/widgets/permission_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -102,6 +105,8 @@ class FamilyScreen extends ConsumerWidget {
             ),
           ],
           const SizedBox(height: 24),
+          _LeaveFamilyTile(familyId: membership?.familyId),
+          const SizedBox(height: 8),
           _SettingsTile(
             key: const Key('family_sign_out'),
             icon: Icons.logout_rounded,
@@ -161,6 +166,73 @@ class _SettingsTile extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+final _leaveActionProvider = newActionProvider();
+
+/// "Leave family": a confirmation first, and disabled with a reason (icon +
+/// text) while the user is the only admin.
+class _LeaveFamilyTile extends ConsumerWidget {
+  const _LeaveFamilyTile({required this.familyId});
+
+  final String? familyId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final soleAdmin = ref.watch(soleAdminProvider);
+    final busy = ref.watch(_leaveActionProvider).busy;
+
+    ref.listen(_leaveActionProvider, (_, next) {
+      final f = next.failure;
+      if (f != null) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(l10n.familyFailureMessage(f))));
+      }
+    });
+
+    Future<void> onTap() async {
+      final uid = ref.read(currentUidProvider);
+      final fid = familyId;
+      if (uid == null || fid == null || busy) return;
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialog) => AlertDialog(
+          title: Text(l10n.familyLeaveConfirmTitle),
+          content: Text(l10n.familyLeaveConfirmBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialog).pop(false),
+              child: Text(l10n.actionCancel),
+            ),
+            FilledButton(
+              key: const Key('family_leave_confirm'),
+              onPressed: () => Navigator.of(dialog).pop(true),
+              child: Text(l10n.familyLeave),
+            ),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+      // On success the membership stream makes the router open family choice.
+      await ref.read(_leaveActionProvider.notifier).run(
+            () => ref.read(leaveFamilyProvider)(actorUid: uid, familyId: fid),
+          );
+    }
+
+    return PermissionGate(
+      allowed: !soleAdmin,
+      mode: PermissionGateMode.disable,
+      deniedMessage: l10n.familyLeaveLastAdminReason,
+      child: _SettingsTile(
+        key: const Key('family_leave'),
+        icon: Icons.exit_to_app_rounded,
+        label: l10n.familyLeave,
+        onTap: onTap,
       ),
     );
   }

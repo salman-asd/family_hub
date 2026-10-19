@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:family_hub/core/firebase/doc_watch.dart';
 import 'package:family_hub/core/firebase/firestore_paths.dart';
 import 'package:family_hub/core/utils/stream_utils.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
@@ -16,19 +17,18 @@ class FirestoreMembershipRepository
 
   @override
   Stream<Membership> watchMembership(String uid) {
-    final userDoc = _db.doc(FirestorePaths.userDoc(uid)).snapshots();
-    return switchMap<DocumentSnapshot<Map<String, dynamic>>, Membership>(
+    // Unknown (offline, nothing cached) emits nothing, so the session stays in
+    // `loading` instead of being routed as "no profile / no family" (rule 14).
+    final userDoc = watchKnownDoc(_db.doc(FirestorePaths.userDoc(uid)));
+    return switchMap<Map<String, dynamic>?, Membership>(
       userDoc,
       (user) {
-        final familyId = user.data()?['familyId'];
+        final familyId = user?['familyId'];
         if (familyId is! String || familyId.isEmpty) {
           return Stream<Membership>.value(Membership.none);
         }
-        return _db
-            .doc(FirestorePaths.memberDoc(familyId, uid))
-            .snapshots()
-            .map((m) {
-          final data = m.data();
+        return watchKnownDoc(_db.doc(FirestorePaths.memberDoc(familyId, uid)))
+            .map((data) {
           return FamilyMappers.membershipFromMember(
             familyId,
             data == null ? null : FamilyMappers.memberFromMap(data),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/features/family/domain/family_event.dart';
@@ -31,6 +32,19 @@ class InMemoryBackend
 
   /// Number of write batches that were applied (one per mutating call).
   int writes = 0;
+
+  /// Tests: the next server pointer read fails with this (offline).
+  AppFailure? failNextPointerRead;
+
+  /// Tests: the next mutating call fails with this and writes nothing.
+  AppFailure? failNextWrite;
+
+  Result<void>? _consumeFailure() {
+    final f = failNextWrite;
+    if (f == null) return null;
+    failNextWrite = null;
+    return Failure<void>(f);
+  }
 
   final StreamController<void> _changes = StreamController<void>.broadcast();
 
@@ -92,6 +106,7 @@ class InMemoryBackend
           avatarKey: profile.avatarKey,
           inviteCode: m.inviteCode,
           removedAt: m.removedAt,
+          leftAt: m.leftAt,
         );
       }
     }
@@ -108,6 +123,8 @@ class InMemoryBackend
     required Member owner,
     required FamilyEvent event,
   }) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
     families[family.id] = family;
     members[family.id] = {owner.uid: owner};
     userFamily[owner.uid] = family.id;
@@ -139,9 +156,42 @@ class InMemoryBackend
     required Member member,
     required FamilyEvent event,
   }) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
     members.putIfAbsent(invitation.familyId, () => {})[member.uid] = member;
     userFamily[member.uid] = invitation.familyId;
     invitations[invitation.code] = invitation.markUsed(member.uid);
+    events.add(event);
+    writes++;
+    _notify();
+    return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<Membership>> getUserFamilyPointer(String uid) async {
+    final failure = failNextPointerRead;
+    if (failure != null) {
+      failNextPointerRead = null;
+      return Failure<Membership>(failure);
+    }
+    final fid = userFamily[uid];
+    final m = fid == null ? null : members[fid]?[uid];
+    if (fid == null || m == null || m.isRemoved) {
+      return const Success<Membership>(Membership.none);
+    }
+    return Success<Membership>(
+      Membership(status: m.status, familyId: fid, role: m.role),
+    );
+  }
+
+  @override
+  Future<Result<void>> revokeInvitation(
+    Invitation invitation,
+    FamilyEvent event,
+  ) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
+    invitations[invitation.code] = invitation.markRevoked();
     events.add(event);
     writes++;
     _notify();

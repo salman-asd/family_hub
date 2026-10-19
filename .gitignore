@@ -17,3 +17,10 @@ firestore-debug.log
 
 # Golden-test failure artefacts (generated on a failed comparison)
 **/failures/
+
+# Logs and tool noise (never commit)
+*.log
+android/.kotlin/
+android/.gradle/
+.fvm/
+coverage/

@@ -14,9 +14,9 @@ Future<void> initializeFirebase({
       const bool.fromEnvironment('USE_EMULATOR', defaultValue: false);
 
   if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(
-      options: firebaseOptionsForFlavor(flavor),
-    );
+    final options = firebaseOptionsForFlavor(flavor);
+    assertFirebaseConfigured(flavor, options, useEmulator: shouldEmulate);
+    await Firebase.initializeApp(options: options);
   }
 
   // Configure Firestore offline persistence (enabled by default on mobile platforms,

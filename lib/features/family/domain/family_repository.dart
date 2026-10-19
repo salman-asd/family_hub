@@ -3,6 +3,7 @@ import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/membership.dart';
 
 /// Port for family data.  Every mutating method is atomic (one batch) and
 /// writes its [FamilyEvent] in the same batch.
@@ -26,6 +27,16 @@ abstract interface class FamilyRepository {
     required Member member,
     required FamilyEvent event,
   });
+
+  /// The family the user currently belongs to, read from the SERVER:
+  /// `users/{uid}.familyId` plus that member document.  `Membership.none` when
+  /// there is no pointer or the member left / was rejected / cancelled.  Fails
+  /// with `Network` when the server cannot be reached (rule 16).
+  Future<Result<Membership>> getUserFamilyPointer(String uid);
+
+  /// Marks the invitation revoked on BOTH `inviteCodes/{code}` and the family
+  /// mirror, plus the event, in one batch.
+  Future<Result<void>> revokeInvitation(Invitation invitation, FamilyEvent event);
 
   Future<Result<Member?>> getMember(String familyId, String uid);
 

@@ -1,3 +1,6 @@
+@Tags(['golden'])
+library;
+
 import 'dart:io';
 
 import 'package:family_hub/app/gallery/gallery_sections.dart';

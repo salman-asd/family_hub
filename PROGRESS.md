@@ -133,3 +133,24 @@ Assumptions / limitations:
 - `ItemThumb` gained an `imageProvider` parameter (mirroring `AppAvatar`) for testability only.
 - No new ARB keys were needed: `errorViewTitle`, `commonSeeAll`, `progressSemantics`, `thumbSemantics`, `loadingSemantics`, `loadingGeneric` and the 15 `gallery*`/`devGalleryTitle` keys already existed.
 
+## Phase 1 hardening - Part A (H1-H4), written statically
+**Nothing in Part A was compiled or run by the author** (no Flutter SDK and no Firestore emulator
+download in the authoring environment). Before merging run, in this order:
+`flutter pub get`, `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden`,
+`npx firebase emulators:exec --only firestore --project demo-family-hub "npm --prefix firebase/rules_test test"`,
+`node tools/check_indexes.mjs && node tools/check_indexes.test.mjs`, then the *Update goldens* workflow.
+
+| Step | What changed |
+| --- | --- |
+| H1 | Green-baseline fixes, `golden` tag + Linux-only goldens workflow, pinned Flutter in CI, codegen deps removed (ADR 0004), golden policy (ADR 0005), repo hygiene (.gitignore/.gitattributes, logs and goldens removed), README, CLAUDE.md rules 14-24 |
+| H2 | `.firebaserc`, `firebase/README.md`, invalid single-field indexes removed + `tools/check_indexes.mjs`, INTERNET permission, release signing via `android/key.properties` (prod fails without it), placeholder-key guard (`FirebaseNotConfiguredException`), `docs/RELEASE.md` |
+| H3 | `DocState` (unknown vs absent) + `watchKnownDoc` in the profile/membership/family listeners, `guardWrite` (server probe + queued-write semantics), pending-write counter, `SyncBanner` in the shell and gallery, splash "waiting for connection", idempotent create/join ids |
+| H4 | One family per user (`ensureFreeToJoinAnyFamily`), `LeaveFamily`, `CancelJoinRequest`, `RevokeInvitation`, `Member.leftAt`, rules v1.1 (leave, cancel, revoke, `familyPointerChangeOk`) with 24 new rules tests, UI (leave dialog, cancel request, revoke code), `docs/membership_state_machine.md` |
+
+### Assumptions / deviations
+- Repository interfaces still return `Result<void>` (no `WriteOutcome`): a write that is only queued offline returns success and is surfaced by the sync banner.
+- "Offline" in the banner = writes pending for more than 10 s (no listener-based detection).
+- Leaving sets BOTH `leftAt` and `removedAt` so the existing rejoin rule and routing work unchanged.
+- Generated l10n files were edited by hand (`tools` helper); run `flutter gen-l10n` to confirm they are identical.
+- `flutterfire configure`, real `google-services.json`, the upload keystore and `firebase deploy` are manual steps (`firebase/README.md`, `docs/RELEASE.md`).
+

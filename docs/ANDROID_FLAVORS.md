@@ -1,6 +1,6 @@
 # Android flavors (dev / prod)
 
-After `tools/setup.sh`, edit `android/app/build.gradle.kts`
+The flavors are already configured in `android/app/build.gradle.kts`
 (or `build.gradle` on older Flutter templates) inside `android { ... }`:
 
 ```kotlin

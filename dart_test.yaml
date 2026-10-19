@@ -1,0 +1,9 @@
+# Test tags used by this project.
+#
+# golden: image-comparison tests.  Goldens are generated on Linux in CI
+# (.github/workflows/update-goldens.yml) and compared exactly there.  Locally on
+# Windows/macOS run everything else with:
+#
+#   flutter test --exclude-tags golden
+tags:
+  golden:

@@ -27,6 +27,7 @@ abstract final class FamilyMappers {
         'avatarKey': m.avatarKey,
         'inviteCode': m.inviteCode,
         'removedAt': BaseMapper.dateTimeToTimestamp(m.removedAt),
+        'leftAt': BaseMapper.dateTimeToTimestamp(m.leftAt),
         ...BaseMapper.metadataToMap(meta),
       };
 
@@ -40,6 +41,10 @@ abstract final class FamilyMappers {
         'role': m.role.name,
         'status': m.status.name,
         'removedAt': BaseMapper.dateTimeToTimestamp(m.removedAt),
+        // Only written when set: older documents have no `leftAt`, and adding
+        // a null key would count as a changed field in the security rules.
+        if (m.leftAt != null)
+          'leftAt': BaseMapper.dateTimeToTimestamp(m.leftAt),
         BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
         BaseMapper.keyUpdatedBy: actorUid,
       };
@@ -55,6 +60,7 @@ abstract final class FamilyMappers {
         avatarKey: d['avatarKey'] as String?,
         inviteCode: d['inviteCode'] as String?,
         removedAt: BaseMapper.timestampToDateTime(d['removedAt']),
+        leftAt: BaseMapper.timestampToDateTime(d['leftAt']),
       );
 
   static MembershipStatus _status(String? v) {
@@ -99,6 +105,17 @@ abstract final class FamilyMappers {
         status: InvitationStatus.parse(d['status'] as String?),
         usedBy: d['usedBy'] as String?,
       );
+
+  /// Fields changed when an invitation is revoked.
+  static Map<String, dynamic> invitationRevokedMap(
+    String uid,
+    DateTime now,
+  ) =>
+      <String, dynamic>{
+        'status': InvitationStatus.revoked.name,
+        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
+        BaseMapper.keyUpdatedBy: uid,
+      };
 
   /// Fields changed when an invitation is consumed.
   static Map<String, dynamic> invitationUsedMap(

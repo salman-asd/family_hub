@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/firebase/base_mapper.dart';
+import 'package:family_hub/core/firebase/doc_watch.dart';
 import 'package:family_hub/core/firebase/firestore_guard.dart';
 import 'package:family_hub/core/firebase/firestore_paths.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
@@ -53,17 +54,15 @@ class FirestoreProfileRepository
       };
 
   @override
-  Stream<bool> watchHasProfile(String uid) => _db
-      .doc(FirestorePaths.userDoc(uid))
-      .snapshots()
-      .map((s) => profileFromMap(uid, s.data()) != null)
-      .distinct();
+  Stream<bool> watchHasProfile(String uid) =>
+      watchKnownDoc(_db.doc(FirestorePaths.userDoc(uid)))
+          .map((data) => profileFromMap(uid, data) != null)
+          .distinct();
 
   @override
-  Stream<UserProfile?> watchProfile(String uid) => _db
-      .doc(FirestorePaths.userDoc(uid))
-      .snapshots()
-      .map((s) => profileFromMap(uid, s.data()));
+  Stream<UserProfile?> watchProfile(String uid) =>
+      watchKnownDoc(_db.doc(FirestorePaths.userDoc(uid)))
+          .map((data) => profileFromMap(uid, data));
 
   @override
   Future<Result<UserProfile?>> getProfile(String uid) =>
@@ -74,7 +73,8 @@ class FirestoreProfileRepository
 
   @override
   Future<Result<void>> saveProfile(UserProfile profile, {String? familyId}) =>
-      guardFirestore(
+      // Not server-required: offline the save is queued and syncs later.
+      guardWrite(
         () => _tx.runBatch((b) {
           final now = BaseMapper.dateTimeToTimestamp(_clock.nowUtc());
           final stamp = <String, dynamic>{

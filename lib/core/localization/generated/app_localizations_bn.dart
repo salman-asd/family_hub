@@ -730,4 +730,53 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get gallerySamplePersonName => 'করিম উদ্দিন';
+
+  @override
+  String get syncWaitingTitle => 'সংযোগের অপেক্ষায়…';
+
+  @override
+  String get syncWaitingMessage => 'ইন্টারনেট সংযোগ আছে কিনা দেখুন, তারপর আবার চেষ্টা করুন। আপনার তথ্য নিরাপদ আছে।';
+
+  @override
+  String get syncSavedOffline => 'এই ডিভাইসে সংরক্ষিত হয়েছে — অনলাইনে এলে সিঙ্ক হবে';
+
+  @override
+  String syncBannerSyncing(int count) {
+    return '$countটি পরিবর্তন সিঙ্ক হচ্ছে';
+  }
+
+  @override
+  String syncBannerOffline(int count) {
+    return 'অফলাইন — $countটি পরিবর্তন অপেক্ষায়';
+  }
+
+  @override
+  String get gallerySyncBanner => 'সিঙ্ক ব্যানার';
+
+  @override
+  String get famFailureAlreadyInFamily => 'আপনি ইতিমধ্যে একটি পরিবারে আছেন। আগে সেটি ছেড়ে দিন।';
+
+  @override
+  String get familyLeave => 'পরিবার ছেড়ে যান';
+
+  @override
+  String get familyLeaveConfirmTitle => 'পরিবার ছেড়ে যাবেন?';
+
+  @override
+  String get familyLeaveConfirmBody => 'আপনার আগের কাজ ও হিসাবের ইতিহাস পরিবারে থেকে যাবে। পরে আপনি নতুন পরিবার খুলতে বা অন্য পরিবারে যোগ দিতে পারবেন।';
+
+  @override
+  String get familyLeaveLastAdminReason => 'আপনিই একমাত্র অ্যাডমিন। ছেড়ে যাওয়ার আগে আরেকজনকে অ্যাডমিন করুন।';
+
+  @override
+  String get pendingCancelRequest => 'অনুরোধ বাতিল করুন';
+
+  @override
+  String get invitationRevoke => 'কোড বাতিল করুন';
+
+  @override
+  String get invitationRevokeConfirmTitle => 'কোডটি বাতিল করবেন?';
+
+  @override
+  String get invitationRevokeConfirmBody => 'এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।';
 }

@@ -84,6 +84,45 @@ void main() {
     expect(flags.isEnabled('bazar'), isTrue);
   });
 
+  test('a member who LEFT round-trips and routes as none', () {
+    final at = DateTime.utc(2026, 10, 2, 8);
+    final m = Member(
+      uid: 'u1',
+      role: MemberRole.member,
+      status: MembershipStatus.disabled,
+      fullName: 'Karim',
+      relationship: 'other',
+      removedAt: at,
+      leftAt: at,
+    );
+    expect(FamilyMappers.memberFromMap(FamilyMappers.memberToMap(m, _meta())), m);
+    expect(m.hasLeft, isTrue);
+    expect(m.isRemoved, isTrue);
+    expect(FamilyMappers.membershipFromMember('f', m), Membership.none);
+  });
+
+  test('memberChangeMap writes leftAt only when it is set', () {
+    final now = DateTime.utc(2026, 10, 2, 8);
+    const base = Member(
+      uid: 'u1',
+      role: MemberRole.member,
+      status: MembershipStatus.active,
+      fullName: 'Karim',
+      relationship: 'other',
+    );
+    expect(
+      FamilyMappers.memberChangeMap(base, actorUid: 'a', now: now)
+          .containsKey('leftAt'),
+      isFalse,
+    );
+    final left = base.copyWith(leftAt: now, removedAt: now);
+    expect(
+      FamilyMappers.memberChangeMap(left, actorUid: 'u1', now: now)
+          .containsKey('leftAt'),
+      isTrue,
+    );
+  });
+
   test('family default settings are Asia/Dhaka and BDT', () {
     final f = FamilyMappers.familyFromDocs('f', family: {'name': 'N'});
     expect(f.timezone, 'Asia/Dhaka');

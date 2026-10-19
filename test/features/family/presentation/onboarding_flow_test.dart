@@ -1,3 +1,5 @@
+import 'package:family_hub/features/family/presentation/screens/join_family_screen.dart';
+import 'package:family_hub/features/family/presentation/screens/create_family_screen.dart';
 import 'package:family_hub/app/app.dart';
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/router.dart';
@@ -94,7 +96,9 @@ void main() {
     expect(_path(tester), '/family-choice');
 
     await _tap(tester, 'choice_create');
-    expect(_path(tester), '/family-choice/create');
+    // A pushed route does not change go_router's reported URI, so assert the
+    // screen that is actually shown.
+    expect(find.byType(CreateFamilyScreen), findsOneWidget);
     await _type(tester, 'family_name', 'Rahman family');
     await _tap(tester, 'family_create_submit');
 
@@ -135,12 +139,12 @@ void main() {
     expect(_path(tester), '/family-choice');
 
     await _tap(tester, 'choice_join');
-    expect(_path(tester), '/family-choice/join');
+    expect(find.byType(JoinFamilyScreen), findsOneWidget);
 
     // A wrong code shows a message and stays on the screen.
     await _type(tester, 'join_code', 'ZZZZ9999');
     await _tap(tester, 'join_submit');
-    expect(_path(tester), '/family-choice/join');
+    expect(find.byType(JoinFamilyScreen), findsOneWidget);
     expect(find.byIcon(Icons.error_outline_rounded), findsOneWidget);
 
     // The right code (typed in lower case) leaves the person pending.

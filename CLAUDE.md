@@ -12,7 +12,7 @@ ARCHITECTURE: feature-first Clean Architecture. Each feature has data/, domain/,
 5. Soft delete only (deletedAt, deletedBy). Every document has createdAt, createdBy, updatedAt, updatedBy, schemaVersion.
 6. No raw Color(0x...) or hex outside lib/app/theme/. Screens read tokens via context.tokens.
 7. No hard-coded user-visible strings. Use ARB localization (bn default, en). Test long Bangla strings for overflow.
-8. Riverpod (Notifier/AsyncNotifier), freezed immutable models, go_router with auth and family guards.
+8. Riverpod (Notifier/AsyncNotifier), immutable hand-written models with ==/hashCode/copyWith (no code generation; see docs/decisions), go_router with auth and family guards.
 9. Use cases return Result<T> with a sealed AppFailure. UI maps failures to localized messages. No silent catches.
 10. Business rules live in domain with unit tests. Every screen handles loading, empty, error and offline states.
 11. Queries are bounded by a monthKey/dateKey range and a limit. One listener per screen; cancel on dispose.
@@ -74,3 +74,16 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 - Test harness: `test/shared/widgets/shared_widgets_test_support.dart` (`pumpSharedWidget`) - 320dp wide, both themes, `disableAnimations`, plus the `sharedPreferencesProvider` override that Riverpod-backed widgets (`MoneyText`, `ProgressRing`) need. `MoneyText` and `ProgressRing` read the active locale through `appFormattersProvider`, so any test that pumps them needs `SharedPreferences.setMockInitialValues({})` + `sharedPreferencesProvider.overrideWithValue(prefs)`.
 - Golden/overflow tests use `createTestImage` inside `tester.runAsync(...)`: it talks to the engine and never completes inside the fake-async zone.
 - Gotcha: `flutter analyze` exits **1 on any issue, including info-level lints**, and CI runs it without `--no-fatal-infos`. The tree must be lint-clean, not just error-free.
+
+## Rules added by the Phase 1 hardening (H1-H13)
+14. Offline-first: a "does not exist" snapshot that isFromCache is UNKNOWN, never "absent". Routing/guard decisions use only server-confirmed or cached-and-existing data.
+15. Writes go through `guardWrite`. A commit that has not been acknowledged after the ack wait is treated as QUEUED (it will sync later), never as a failure. Retries reuse the same document ids (generate ids once per user intent, not once per attempt).
+16. Onboarding and administrative actions (create family, join, approve, reject, role change, transfer admin, leave, cancel, revoke, settings) require the server and fail fast with Network when offline.
+17. A user belongs to at most ONE family at a time (enforced in use cases AND rules).
+18. Audit/activity entries are written ONLY through AuditWriter (H8), in the same batch as the change. They carry a type + params, never display text.
+19. UI permission checks use PermissionPolicy (via canProvider / PermissionGate). `presentation/` must not test roles directly (isAdmin, MemberRole.admin ...). A test enforces it (H7).
+20. Every rules `create`/`update` validates field types, string lengths and the closed key set (keys().hasOnly). Every rule has one allowed and one denied test, and the Dart mappers' real output is pushed through the rules in a contract test (H5).
+21. domain/ and core/ (except core/firebase and core/localization) are pure Dart: no flutter, firebase, riverpod or go_router imports, directly OR transitively. A graph-based test enforces it (H8).
+22. No `Colors.*` (except Colors.transparent) and no `Color(0x` outside lib/app/theme/.
+23. No TODO(step-N) may survive its step.
+24. Goldens are generated on Linux only (Update goldens workflow). Locally run `flutter test --exclude-tags golden`.

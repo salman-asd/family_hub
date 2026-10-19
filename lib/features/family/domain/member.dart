@@ -18,6 +18,7 @@ class Member {
     this.avatarKey,
     this.inviteCode,
     this.removedAt,
+    this.leftAt,
   });
 
   final String uid;
@@ -34,10 +35,19 @@ class Member {
   /// Code used to join; checked by the security rules.
   final String? inviteCode;
 
-  /// Set when an admin rejected the request (soft delete).
+  /// Set when the request was rejected, cancelled by the person, or the person
+  /// left the family (soft delete).  The person is then free to create or join
+  /// a family again.
   final DateTime? removedAt;
 
-  bool get isRemoved => removedAt != null;
+  /// Set (together with [removedAt]) when the member left on their own.  Kept
+  /// only to tell "left" apart from "rejected" in the history.
+  final DateTime? leftAt;
+
+  bool get hasLeft => leftAt != null;
+
+  /// Rejected, cancelled or left: the member counts as gone everywhere.
+  bool get isRemoved => removedAt != null || leftAt != null;
   bool get isActive => status == MembershipStatus.active && !isRemoved;
   bool get isActiveAdmin => isActive && role == MemberRole.admin;
 
@@ -61,6 +71,7 @@ class Member {
     String? spouseId,
     String? avatarKey,
     DateTime? removedAt,
+    DateTime? leftAt,
   }) =>
       Member(
         uid: uid,
@@ -73,6 +84,7 @@ class Member {
         avatarKey: avatarKey ?? this.avatarKey,
         inviteCode: inviteCode,
         removedAt: removedAt ?? this.removedAt,
+        leftAt: leftAt ?? this.leftAt,
       );
 
   @override
@@ -87,11 +99,12 @@ class Member {
       other.spouseId == spouseId &&
       other.avatarKey == avatarKey &&
       other.inviteCode == inviteCode &&
-      other.removedAt == removedAt;
+      other.removedAt == removedAt &&
+      other.leftAt == leftAt;
 
   @override
   int get hashCode => Object.hash(uid, role, status, fullName, relationship,
-      nickname, spouseId, avatarKey, inviteCode, removedAt);
+      nickname, spouseId, avatarKey, inviteCode, removedAt, leftAt);
 
   @override
   String toString() => 'Member($uid, $role, $status)';

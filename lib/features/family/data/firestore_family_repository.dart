@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/firebase/base_mapper.dart';
+import 'package:family_hub/core/firebase/doc_watch.dart';
 import 'package:family_hub/core/firebase/firestore_guard.dart';
 import 'package:family_hub/core/firebase/firestore_paths.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
@@ -11,6 +12,7 @@ import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/membership.dart';
 
 /// Cloud Firestore implementation of [FamilyRepository].
 ///
@@ -35,6 +37,9 @@ class FirestoreFamilyRepository implements FamilyRepository {
   BaseDocumentMetadata _meta(String uid) =>
       BaseMapper.createMetadata(uid: uid, clock: _clock);
 
+  /// Administrative writes need the server (rule 16); see [guardWrite].
+  ServerProbe _probe(String uid) => serverProbeFor(_db, uid);
+
   void _writeEvent(BatchContext b, String familyId, FamilyEvent e) {
     final data = FamilyMappers.eventMap(e);
     b
@@ -48,7 +53,8 @@ class FirestoreFamilyRepository implements FamilyRepository {
     required Member owner,
     required FamilyEvent event,
   }) =>
-      guardFirestore(
+      guardWrite(
+        probe: _probe(owner.uid),
         () => _tx.runBatch((b) {
           final meta = _meta(owner.uid);
           final fid = family.id;
@@ -99,7 +105,8 @@ class FirestoreFamilyRepository implements FamilyRepository {
     Invitation invitation,
     FamilyEvent event,
   ) =>
-      guardFirestore(
+      guardWrite(
+        probe: _probe(event.actorId),
         () => _tx.runBatch((b) {
           final data = FamilyMappers.invitationToMap(invitation);
           b
@@ -121,7 +128,8 @@ class FirestoreFamilyRepository implements FamilyRepository {
     required Member member,
     required FamilyEvent event,
   }) =>
-      guardFirestore(
+      guardWrite(
+        probe: _probe(member.uid),
         () => _tx.runBatch((b) {
           final fid = invitation.familyId;
           final used = FamilyMappers.invitationUsedMap(
@@ -144,6 +152,47 @@ class FirestoreFamilyRepository implements FamilyRepository {
               used,
             );
           _writeEvent(b, fid, event);
+        }),
+      );
+
+  @override
+  Future<Result<Membership>> getUserFamilyPointer(String uid) =>
+      guardFirestore(() async {
+        // Server reads only: a cached answer could say "free" while the user
+        // is in a family elsewhere (rule 16 / 17).
+        const server = GetOptions(source: Source.server);
+        final user = await _db.doc(FirestorePaths.userDoc(uid)).get(server);
+        final familyId = user.data()?['familyId'];
+        if (familyId is! String || familyId.isEmpty) return Membership.none;
+        final member =
+            await _db.doc(FirestorePaths.memberDoc(familyId, uid)).get(server);
+        final data = member.data();
+        return FamilyMappers.membershipFromMember(
+          familyId,
+          data == null ? null : FamilyMappers.memberFromMap(data),
+        );
+      });
+
+  @override
+  Future<Result<void>> revokeInvitation(
+    Invitation invitation,
+    FamilyEvent event,
+  ) =>
+      guardWrite(
+        probe: _probe(event.actorId),
+        () => _tx.runBatch((b) {
+          final changes =
+              FamilyMappers.invitationRevokedMap(event.actorId, event.at);
+          b
+            ..update(FirestorePaths.inviteCodeDoc(invitation.code), changes)
+            ..update(
+              FirestorePaths.invitationDoc(
+                invitation.familyId,
+                invitation.code,
+              ),
+              changes,
+            );
+          _writeEvent(b, invitation.familyId, event);
         }),
       );
 
@@ -171,7 +220,8 @@ class FirestoreFamilyRepository implements FamilyRepository {
     List<Member> members,
     FamilyEvent event,
   ) =>
-      guardFirestore(
+      guardWrite(
+        probe: _probe(event.actorId),
         () => _tx.runBatch((b) {
           final now = _clock.nowUtc();
           for (final m in members) {
@@ -190,7 +240,8 @@ class FirestoreFamilyRepository implements FamilyRepository {
 
   @override
   Future<Result<void>> updateFamily(Family family, FamilyEvent event) =>
-      guardFirestore(
+      guardWrite(
+        probe: _probe(event.actorId),
         () => _tx.runBatch((b) {
           final meta = _meta(event.actorId);
           final changes = <String, dynamic>{
@@ -237,16 +288,16 @@ class FirestoreFamilyRepository implements FamilyRepository {
   @override
   Stream<Family?> watchFamily(String familyId) {
     // Three small documents; re-read all of them whenever any one changes.
-    final family = _db.doc(FirestorePaths.familyDoc(familyId)).snapshots();
-    return family.asyncMap((snap) async {
-      if (!snap.exists) return null;
+    final family = watchKnownDoc(_db.doc(FirestorePaths.familyDoc(familyId)));
+    return family.asyncMap((familyData) async {
+      if (familyData == null) return null;
       final general =
           await _db.doc(FirestorePaths.settingsDoc(familyId, 'general')).get();
       final modules =
           await _db.doc(FirestorePaths.settingsDoc(familyId, 'modules')).get();
       return FamilyMappers.familyFromDocs(
         familyId,
-        family: snap.data(),
+        family: familyData,
         general: general.data(),
         modules: modules.data(),
       );

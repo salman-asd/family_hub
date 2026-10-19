@@ -45,7 +45,10 @@ import {
   futureTs,
   invitationUsed,
   inviteCodeDoc,
+  invitationRevoked,
+  memberCancel,
   memberChange,
+  memberLeave,
   memberDoc,
   nowTs,
   seedWorld,
@@ -1050,5 +1053,338 @@ describe('Phase 1 acceptance scenario', () => {
 
     // B now reads the family.
     await assertSucceeds(getDoc(doc(b, 'families/famZ')));
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Hardening H4: membership lifecycle (leave, cancel, revoke, one family)
+// ─────────────────────────────────────────────────────────────────────────────
+describe('H4 leave family', () => {
+  it('allows an active member to leave (status disabled + leftAt/removedAt)', async () => {
+    const db = as(CARA);
+    await assertSucceeds(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${CARA}`),
+        memberLeave(CARA, 'member'),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('allows the leave batch with its activity entry', async () => {
+    const db = as(CARA);
+    const b = writeBatch(db);
+    b.set(
+      doc(db, `families/${FAM_A}/members/${CARA}`),
+      memberLeave(CARA, 'member'),
+      { merge: true },
+    );
+    b.set(doc(db, `families/${FAM_A}/activity/left1`), eventDoc(CARA));
+    b.set(doc(db, `families/${FAM_A}/auditLogs/left1`), eventDoc(CARA));
+    await assertSucceeds(b.commit());
+  });
+
+  it('denies leaving on behalf of somebody else', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${BOB}`),
+        memberLeave(CARA, 'moderator'),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a leave that also changes the role', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${CARA}`),
+        memberLeave(CARA, 'admin'),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a leave without leftAt', async () => {
+    const db = as(CARA);
+    const { leftAt, ...noLeftAt } = memberLeave(CARA, 'member');
+    await assertFails(
+      setDoc(doc(db, `families/${FAM_A}/members/${CARA}`), noLeftAt, { merge: true }),
+    );
+  });
+
+  it('denies a pending person using the leave path', async () => {
+    const db = as(DAVE);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${DAVE}`),
+        memberLeave(DAVE, 'member'),
+        { merge: true },
+      ),
+    );
+  });
+});
+
+describe('H4 cancel join request', () => {
+  it('allows a pending person to cancel their own request', async () => {
+    const db = as(DAVE);
+    await assertSucceeds(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${DAVE}`),
+        memberCancel(DAVE, 'member'),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('allows the cancel batch with its activity entry', async () => {
+    const db = as(DAVE);
+    const b = writeBatch(db);
+    b.set(
+      doc(db, `families/${FAM_A}/members/${DAVE}`),
+      memberCancel(DAVE, 'member'),
+      { merge: true },
+    );
+    b.set(doc(db, `families/${FAM_A}/activity/cancel1`), eventDoc(DAVE));
+    b.set(doc(db, `families/${FAM_A}/auditLogs/cancel1`), eventDoc(DAVE));
+    await assertSucceeds(b.commit());
+  });
+
+  it('denies cancelling somebody else’s request', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${DAVE}`),
+        memberCancel(CARA, 'member'),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies an ACTIVE member using the cancel path (status stays active)', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${CARA}`),
+        memberCancel(CARA, 'member', 'active'),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a cancel that approves the request at the same time', async () => {
+    const db = as(DAVE);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${DAVE}`),
+        memberCancel(DAVE, 'member', 'active'),
+        { merge: true },
+      ),
+    );
+  });
+});
+
+describe('H4 revoke invitation', () => {
+  it('allows a manager to revoke an active code (both documents)', async () => {
+    const db = as(BOB);
+    const b = writeBatch(db);
+    b.set(doc(db, `inviteCodes/${CODES.live}`), invitationRevoked(BOB), { merge: true });
+    b.set(
+      doc(db, `families/${FAM_A}/invitations/${CODES.live}`),
+      invitationRevoked(BOB),
+      { merge: true },
+    );
+    b.set(doc(db, `families/${FAM_A}/activity/rev1`), eventDoc(BOB));
+    b.set(doc(db, `families/${FAM_A}/auditLogs/rev1`), eventDoc(BOB));
+    await assertSucceeds(b.commit());
+  });
+
+  it('denies a plain member revoking a code', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(doc(db, `inviteCodes/${CODES.live}`), invitationRevoked(CARA), { merge: true }),
+    );
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/invitations/${CODES.live}`),
+        invitationRevoked(CARA),
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a manager of ANOTHER family revoking this family’s code', async () => {
+    const db = as(ERIN);
+    await assertFails(
+      setDoc(doc(db, `inviteCodes/${CODES.live}`), invitationRevoked(ERIN), { merge: true }),
+    );
+  });
+
+  it('denies revoking a code that was already used', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(doc(db, `inviteCodes/${CODES.used}`), invitationRevoked(ALICE), { merge: true }),
+    );
+  });
+
+  it('denies a revoke that also extends the expiry', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(
+        doc(db, `inviteCodes/${CODES.live}`),
+        { ...invitationRevoked(ALICE), expiresAt: nowTs() },
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a revoke with a forged updatedBy', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(
+        doc(db, `inviteCodes/${CODES.live}`),
+        { ...invitationRevoked(ALICE), updatedBy: BOB },
+        { merge: true },
+      ),
+    );
+  });
+});
+
+describe('H4 one family per user (users/{uid}.familyId)', () => {
+  it('allows keeping the same familyId', async () => {
+    const db = as(ALICE);
+    await assertSucceeds(
+      setDoc(doc(db, `users/${ALICE}`), { familyId: FAM_A }, { merge: true }),
+    );
+  });
+
+  it('denies pointing an ACTIVE member at another family', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(doc(db, `users/${ALICE}`), { familyId: 'famB' }, { merge: true }),
+    );
+  });
+
+  it('denies a PENDING member moving to another family', async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(doc(ctx.firestore(), `users/${DAVE}`), {
+        uid: DAVE,
+        fullName: 'Dave',
+        relationship: 'other',
+        familyId: FAM_A,
+        ...baseDoc(DAVE),
+      });
+    });
+    const db = as(DAVE);
+    await assertFails(
+      setDoc(doc(db, `users/${DAVE}`), { familyId: 'famB' }, { merge: true }),
+    );
+  });
+
+  it('denies an admin-DISABLED member moving to another family', async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(
+        doc(db, `families/${FAM_A}/members/${CARA}`),
+        memberDoc(CARA, 'member', 'disabled'),
+      );
+      await setDoc(doc(db, `users/${CARA}`), {
+        uid: CARA,
+        fullName: 'Cara',
+        relationship: 'other',
+        familyId: FAM_A,
+        ...baseDoc(CARA),
+      });
+    });
+    const db = as(CARA);
+    await assertFails(
+      setDoc(doc(db, `users/${CARA}`), { familyId: 'famB' }, { merge: true }),
+    );
+  });
+
+  it('allows moving on after LEAVING the old family', async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(
+        doc(db, `families/${FAM_A}/members/${CARA}`),
+        memberDoc(CARA, 'member', 'disabled', { removedAt: nowTs(), leftAt: nowTs() }),
+      );
+      await setDoc(doc(db, `users/${CARA}`), {
+        uid: CARA,
+        fullName: 'Cara',
+        relationship: 'other',
+        familyId: FAM_A,
+        ...baseDoc(CARA),
+      });
+    });
+    const db = as(CARA);
+    await assertSucceeds(
+      setDoc(doc(db, `users/${CARA}`), { familyId: 'famB' }, { merge: true }),
+    );
+  });
+
+  it('allows moving on after a CANCELLED / rejected request', async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(
+        doc(db, `families/${FAM_A}/members/${DAVE}`),
+        memberDoc(DAVE, 'member', 'pending', { removedAt: nowTs() }),
+      );
+      await setDoc(doc(db, `users/${DAVE}`), {
+        uid: DAVE,
+        fullName: 'Dave',
+        relationship: 'other',
+        familyId: FAM_A,
+        ...baseDoc(DAVE),
+      });
+    });
+    const db = as(DAVE);
+    await assertSucceeds(
+      setDoc(doc(db, `users/${DAVE}`), { familyId: 'famB' }, { merge: true }),
+    );
+  });
+});
+
+describe('H4 acceptance: leave and join another family', () => {
+  it('Cara leaves famA, then joins famB with a live code', async () => {
+    const cara = as(CARA);
+    await assertSucceeds(
+      setDoc(
+        doc(cara, `families/${FAM_A}/members/${CARA}`),
+        memberLeave(CARA, 'member'),
+        { merge: true },
+      ),
+    );
+
+    // A manager of famB invites; Cara joins.
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(
+        doc(ctx.firestore(), 'inviteCodes/BBBBBBBB'),
+        inviteCodeDoc(ERIN, 'famB', 'BBBBBBBB'),
+      );
+      await setDoc(doc(ctx.firestore(), `users/${CARA}`), {
+        uid: CARA,
+        fullName: 'Cara',
+        relationship: 'other',
+        familyId: FAM_A,
+        ...baseDoc(CARA),
+      });
+    });
+
+    const join = writeBatch(cara);
+    join.set(
+      doc(cara, `families/famB/members/${CARA}`),
+      memberDoc(CARA, 'member', 'pending', { inviteCode: 'BBBBBBBB' }),
+    );
+    join.set(doc(cara, `users/${CARA}`), { familyId: 'famB' }, { merge: true });
+    join.set(doc(cara, 'families/famB/activity/j1'), eventDoc(CARA, { refId: 'famB' }));
+    join.set(doc(cara, 'families/famB/auditLogs/j1'), eventDoc(CARA, { refId: 'famB' }));
+    join.set(
+      doc(cara, 'inviteCodes/BBBBBBBB'),
+      { status: 'used', usedBy: CARA, updatedAt: nowTs(), updatedBy: CARA },
+      { merge: true },
+    );
+    await assertSucceeds(join.commit());
   });
 });

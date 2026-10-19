@@ -58,4 +58,37 @@ void main() {
     expect(result.failureOrNull, const Validation('profile', 'required'));
     expect(f.backend.families, isEmpty);
   });
+
+  test('retry with the same ids after a Network failure creates ONE family',
+      () async {
+    f.profile('u1');
+    f.backend.failNextWrite = const Network();
+
+    final first = await useCase(
+      actorUid: 'u1',
+      name: 'Home',
+      familyId: 'fam-x',
+      eventId: 'evt-x',
+    );
+    expect(first.failureOrNull, const Network());
+    expect(f.backend.families, isEmpty);
+
+    final second = await useCase(
+      actorUid: 'u1',
+      name: 'Home',
+      familyId: 'fam-x',
+      eventId: 'evt-x',
+    );
+    expect(second.isSuccess, isTrue);
+    expect(f.backend.families.keys, ['fam-x']);
+    expect(f.backend.events.map((e) => e.id), ['evt-x']);
+  });
+
+  test('repeating a write that was only queued does not duplicate the family',
+      () async {
+    f.profile('u1');
+    await useCase(actorUid: 'u1', name: 'Home', familyId: 'fam-x', eventId: 'e');
+    await useCase(actorUid: 'u1', name: 'Home', familyId: 'fam-x', eventId: 'e');
+    expect(f.backend.families.length, 1);
+  });
 }

@@ -1,4 +1,5 @@
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/presentation/action_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/widgets/failure_banner.dart';
@@ -20,6 +21,11 @@ class CreateFamilyScreen extends ConsumerStatefulWidget {
 class _CreateFamilyScreenState extends ConsumerState<CreateFamilyScreen> {
   final _name = TextEditingController();
 
+  // Generated ONCE per screen so that a retry after a failure or a queued write
+  // reuses the same ids and can never create a second family (rule 15).
+  final String _familyId = randomId();
+  final String _eventId = randomId();
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +44,12 @@ class _CreateFamilyScreenState extends ConsumerState<CreateFamilyScreen> {
     final uid = ref.read(currentUidProvider);
     if (uid == null) return;
     await ref.read(_createFamilyActionProvider.notifier).run(
-          () => ref.read(createFamilyProvider)(actorUid: uid, name: _name.text),
+          () => ref.read(createFamilyProvider)(
+            actorUid: uid,
+            name: _name.text,
+            familyId: _familyId,
+            eventId: _eventId,
+          ),
         );
   }
 

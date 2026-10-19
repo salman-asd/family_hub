@@ -731,4 +731,53 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gallerySamplePersonName => 'Karim Uddin';
+
+  @override
+  String get syncWaitingTitle => 'Waiting for connection…';
+
+  @override
+  String get syncWaitingMessage => 'Check your internet connection and try again. Your data is safe.';
+
+  @override
+  String get syncSavedOffline => 'Saved on this device – will sync when online';
+
+  @override
+  String syncBannerSyncing(int count) {
+    return 'Syncing $count change(s)';
+  }
+
+  @override
+  String syncBannerOffline(int count) {
+    return 'Offline – $count change(s) waiting';
+  }
+
+  @override
+  String get gallerySyncBanner => 'Sync banner';
+
+  @override
+  String get famFailureAlreadyInFamily => 'You already belong to a family. Leave it first.';
+
+  @override
+  String get familyLeave => 'Leave family';
+
+  @override
+  String get familyLeaveConfirmTitle => 'Leave this family?';
+
+  @override
+  String get familyLeaveConfirmBody => 'Your past activity stays in the family\'s history. Afterwards you can create or join a family again.';
+
+  @override
+  String get familyLeaveLastAdminReason => 'You are the only admin. Make someone else an admin before leaving.';
+
+  @override
+  String get pendingCancelRequest => 'Cancel request';
+
+  @override
+  String get invitationRevoke => 'Revoke code';
+
+  @override
+  String get invitationRevokeConfirmTitle => 'Revoke this code?';
+
+  @override
+  String get invitationRevokeConfirmBody => 'Nobody will be able to join with this code any more.';
 }

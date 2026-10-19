@@ -1,3 +1,5 @@
+import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
+import 'package:family_hub/features/settings/presentation/theme_settings_screen.dart';
 import 'package:family_hub/app/app.dart';
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/router.dart';
@@ -453,7 +455,7 @@ void main() {
 
       await tester.tap(find.byKey(const Key('family_settings_theme')));
       await tester.pumpAndSettle();
-      expect(h.path(tester), '/settings/theme');
+      expect(find.byType(ThemeSettingsScreen), findsOneWidget);
 
       h.router(tester).pop();
       await tester.pumpAndSettle();
@@ -461,7 +463,7 @@ void main() {
 
       await tester.tap(find.byKey(const Key('family_settings_language')));
       await tester.pumpAndSettle();
-      expect(h.path(tester), '/settings/language');
+      expect(find.byType(LanguageSettingsScreen), findsOneWidget);
     });
 
     testWidgets('the developer tokens entry exists only in the dev flavor',

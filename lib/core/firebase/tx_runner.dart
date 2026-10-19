@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:family_hub/core/firebase/sync_status.dart';
 
 /// Context for staging atomic batch writes.
 abstract class BatchContext {
@@ -46,10 +47,16 @@ abstract class TxRunner {
 
 /// Production implementation of [TxRunner] backed by Cloud Firestore.
 class FirestoreTxRunner implements TxRunner {
-  FirestoreTxRunner({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  FirestoreTxRunner({
+    FirebaseFirestore? firestore,
+    PendingWriteCounter? pendingWrites,
+  })  : _firestore = firestore ?? FirebaseFirestore.instance,
+        pendingWrites = pendingWrites ?? PendingWriteCounter();
 
   final FirebaseFirestore _firestore;
+
+  /// Commits sent but not yet acknowledged by the server (drives the banner).
+  final PendingWriteCounter pendingWrites;
 
   @override
   Future<void> runBatch(
@@ -58,7 +65,7 @@ class FirestoreTxRunner implements TxRunner {
     final writeBatch = _firestore.batch();
     final context = _FirestoreBatchContext(_firestore, writeBatch);
     await action(context);
-    await writeBatch.commit();
+    await pendingWrites.track(writeBatch.commit);
   }
 
   @override
@@ -142,6 +149,15 @@ class FakeTxRunner implements TxRunner {
   /// In-memory document storage: path -> fields map.
   final Map<String, Map<String, dynamic>> store;
 
+  /// Same counter the real runner exposes, so widget tests can drive the banner.
+  final PendingWriteCounter pendingWrites = PendingWriteCounter();
+
+  /// Tests: when set, the next commit waits for it (simulates being offline).
+  Future<void>? holdNextCommit;
+
+  /// Tests: when set, the next batch throws this and writes nothing.
+  Object? failNextBatchWith;
+
   @override
   Future<void> runBatch(
     FutureOr<void> Function(BatchContext batch) action,
@@ -150,10 +166,22 @@ class FakeTxRunner implements TxRunner {
     final context = _FakeBatchContext(pendingOps);
     await action(context);
 
-    // Atomically commit staged operations
-    for (final op in pendingOps) {
-      op.apply(store);
-    }
+    await pendingWrites.track(() async {
+      final failure = failNextBatchWith;
+      if (failure != null) {
+        failNextBatchWith = null;
+        throw failure;
+      }
+      final hold = holdNextCommit;
+      if (hold != null) {
+        holdNextCommit = null;
+        await hold;
+      }
+      // Atomically commit staged operations
+      for (final op in pendingOps) {
+        op.apply(store);
+      }
+    });
   }
 
   @override

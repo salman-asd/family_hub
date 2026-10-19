@@ -44,6 +44,48 @@ class _InvitationsScreenState extends ConsumerState<InvitationsScreen> {
         );
   }
 
+  /// Status is shown as icon + label (never colour alone).
+  IconData _statusIcon(Invitation i, DateTime now) {
+    if (i.status == InvitationStatus.used) return Icons.check_circle_outline;
+    if (i.status == InvitationStatus.revoked) return Icons.block_rounded;
+    return i.isExpiredAt(now)
+        ? Icons.schedule_rounded
+        : Icons.mark_email_unread_outlined;
+  }
+
+  Future<void> _revoke(Invitation invitation) async {
+    final l10n = context.l10n;
+    final uid = ref.read(currentUidProvider);
+    final familyId = ref.read(currentFamilyIdProvider);
+    if (uid == null || familyId == null) return;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialog) => AlertDialog(
+        title: Text(l10n.invitationRevokeConfirmTitle),
+        content: Text(l10n.invitationRevokeConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialog).pop(false),
+            child: Text(l10n.actionCancel),
+          ),
+          FilledButton(
+            key: const Key('invitation_revoke_confirm'),
+            onPressed: () => Navigator.of(dialog).pop(true),
+            child: Text(l10n.invitationRevoke),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    await ref.read(_inviteActionProvider.notifier).run(
+          () => ref.read(revokeInvitationProvider)(
+            actorUid: uid,
+            familyId: familyId,
+            code: invitation.code,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -111,24 +153,42 @@ class _InvitationsScreenState extends ConsumerState<InvitationsScreen> {
                                 '${formatters.fullDate(i.expiresAt.toLocal())}',
                                 style: TextStyle(color: t.textSecondary),
                               ),
+                              leading: Icon(
+                                _statusIcon(i, now),
+                                color: t.textSecondary,
+                              ),
                               trailing: i.status == InvitationStatus.active &&
                                       !i.isExpiredAt(now)
-                                  ? IconButton(
-                                      tooltip: l10n.invitationCopy,
-                                      icon: const Icon(Icons.copy_rounded),
-                                      onPressed: () async {
-                                        final messenger =
-                                            ScaffoldMessenger.of(context);
-                                        await Clipboard.setData(
-                                          ClipboardData(text: i.code),
-                                        );
-                                        messenger.showSnackBar(
-                                          SnackBar(
-                                            content:
-                                                Text(l10n.invitationCopied),
+                                  ? Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          tooltip: l10n.invitationCopy,
+                                          icon: const Icon(Icons.copy_rounded),
+                                          onPressed: () async {
+                                            final messenger =
+                                                ScaffoldMessenger.of(context);
+                                            await Clipboard.setData(
+                                              ClipboardData(text: i.code),
+                                            );
+                                            messenger.showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  l10n.invitationCopied,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        IconButton(
+                                          key: Key('invitation_revoke_${i.code}'),
+                                          tooltip: l10n.invitationRevoke,
+                                          icon: const Icon(
+                                            Icons.block_rounded,
                                           ),
-                                        );
-                                      },
+                                          onPressed: () => _revoke(i),
+                                        ),
+                                      ],
                                     )
                                   : null,
                             ),

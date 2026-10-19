@@ -1,0 +1,8 @@
+# Normalise line endings: LF in the repo, whatever the OS checks out.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ttf binary
+*.jar binary
+*.keystore binary
+*.jks binary

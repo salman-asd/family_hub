@@ -47,4 +47,15 @@ class Invitation {
         status: InvitationStatus.used,
         usedBy: uid,
       );
+
+  Invitation markRevoked() => Invitation(
+        code: code,
+        familyId: familyId,
+        role: role,
+        expiresAt: expiresAt,
+        createdBy: createdBy,
+        createdAt: createdAt,
+        status: InvitationStatus.revoked,
+        usedBy: usedBy,
+      );
 }

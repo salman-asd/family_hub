@@ -1,7 +1,7 @@
 rules_version = '2';
 
 // ============================================================================
-// Family Hub — Firestore Security Rules v1 (Step 10)
+// Family Hub — Firestore Security Rules v1.1 (Step 10 + hardening H4)
 //
 // One permission matrix, twice: `lib/core/permissions/permission_policy.dart`
 // for the app, and this file for the backend.  CLAUDE.md hard rule 12: every
@@ -208,9 +208,22 @@ service cloud.firestore {
           && genderOk(request.resource.data);
       }
 
+      // One family per user (CLAUDE.md rule 17): `familyId` may be set when
+      // absent, kept as it is, or moved once the OLD membership is gone (the
+      // member document is missing, rejected, cancelled or left).  Pending,
+      // active and admin-disabled members cannot be pointed elsewhere.
+      function familyPointerChangeOk() {
+        let before = resource.data.get('familyId', null);
+        let after = request.resource.data.get('familyId', null);
+        return before == null
+          || before == after
+          || !exists(memberPath(before, uid))
+          || get(memberPath(before, uid)).data.get('removedAt', null) != null;
+      }
+
       allow get, list: if isSelf(uid);
       allow create: if isSelf(uid) && userDocOk();
-      allow update: if isSelf(uid) && userDocOk();
+      allow update: if isSelf(uid) && userDocOk() && familyPointerChangeOk();
       // Closing an account is not a feature: profile data is soft-deleted.
       allow delete: if false;
     }
@@ -242,6 +255,16 @@ service cloud.firestore {
         && request.resource.data.usedBy == request.auth.uid
         && request.resource.data.diff(resource.data).affectedKeys()
              .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy']);
+
+      // A manager of the code's family revokes a still-active code; nothing
+      // else may change.
+      allow update: if signedIn()
+        && resource.data.status == 'active'
+        && request.resource.data.status == 'revoked'
+        && isManager(resource.data.familyId)
+        && writesAsSelf()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'updatedAt', 'updatedBy']);
 
       // An expired or revoked code is a tombstone, not a deleted document.
       allow delete: if false;
@@ -321,6 +344,35 @@ service cloud.firestore {
                .hasOnly(['fullName', 'nickname', 'relationship', 'spouseId',
                          'avatarKey', 'inviteCode', 'updatedAt', 'updatedBy']);
 
+        // 7. LEAVE: an active member leaves on their own.  The document is kept
+        //    (history): status becomes `disabled` and `leftAt` / `removedAt`
+        //    carry the same timestamp.  Role never changes.
+        allow update: if isSelf(m)
+          && isActiveMember(f)
+          && writesAsSelf()
+          && identityStable()
+          && roleUnchanged()
+          && request.resource.data.status == 'disabled'
+          && request.resource.data.get('leftAt', null) is timestamp
+          && request.resource.data.get('removedAt', null)
+               == request.resource.data.get('leftAt', null)
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'leftAt', 'removedAt', 'updatedAt',
+                         'updatedBy']);
+
+        // 8. CANCEL: a pending person withdraws their own request.  Only
+        //    `removedAt` (the same soft delete a rejection uses) changes.
+        allow update: if isSelf(m)
+          && resource.data.get('status', '') == 'pending'
+          && resource.data.get('removedAt', null) == null
+          && writesAsSelf()
+          && identityStable()
+          && roleUnchanged()
+          && statusUnchanged()
+          && request.resource.data.get('removedAt', null) is timestamp
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['removedAt', 'updatedAt', 'updatedBy']);
+
         // Leaving and removal are soft (removedAt / status), never hard.
         allow delete: if false;
       }
@@ -335,6 +387,13 @@ service cloud.firestore {
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy'])
           && request.resource.data.get('usedBy', '') == request.auth.uid;
+        // A manager revokes a still-active code.
+        allow update: if isManager(f)
+          && resource.data.get('status', '') == 'active'
+          && request.resource.data.get('status', '') == 'revoked'
+          && writesAsSelf()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'updatedAt', 'updatedBy']);
         allow delete: if false;
       }
 
