@@ -1,0 +1,76 @@
+{
+  "scenario": "revoke_invitation",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "update",
+      "path": "inviteCodes/ABCD2345",
+      "data": {
+        "status": "revoked",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin"
+      }
+    },
+    {
+      "op": "update",
+      "path": "families/fixFam/invitations/ABCD2345",
+      "data": {
+        "status": "revoked",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin"
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev6",
+      "data": {
+        "type": "invitation.revoked",
+        "actorId": "fixAdmin",
+        "summary": "Invitation revoked",
+        "refType": "invitation",
+        "refId": "ABCD2345",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev6",
+      "data": {
+        "type": "invitation.revoked",
+        "actorId": "fixAdmin",
+        "summary": "Invitation revoked",
+        "refType": "invitation",
+        "refId": "ABCD2345",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

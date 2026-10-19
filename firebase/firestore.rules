@@ -1,13 +1,13 @@
 rules_version = '2';
 
 // ============================================================================
-// Family Hub — Firestore Security Rules v1.2 (Step 10 + hardening H4)
+// Family Hub — Firestore Security Rules v2.0 (Step 10 + hardening H4 + H5)
 //
 // One permission matrix, twice: `lib/core/permissions/permission_policy.dart`
 // for the app, and this file for the backend.  CLAUDE.md hard rule 12: every
 // permission is enforced here as well as in the UI.
 //
-// Collections covered today (roadmap Steps 6-9):
+// Collections covered today (roadmap Steps 6-9, hardening H4/H5):
 //   users/{uid}
 //   inviteCodes/{code}
 //   families/{f}
@@ -20,6 +20,20 @@ rules_version = '2';
 // Everything else is denied (default deny at the bottom).  From Step 10 onward
 // CLAUDE.md requires every step that adds a collection to extend this file AND
 // `firebase/rules_test/` in the same commit.
+//
+// H5 additions:
+//   * field validation helpers (`str`, `optStr`, `memberProfileOk`) on every
+//     member write and on `users/{uid}.fullName`/`nickname`;
+//   * closed key sets (`keys().hasOnly(...)`) for members, families, invites,
+//     settings and logs — the lists live in ONE place here as `*Keys()`
+//     functions and are mirrored by `test/contract/rules_key_sets_test.dart`;
+//   * log integrity: an activity/audit `create` must be written by its own
+//     actor, with a known `type`/`refType`, bounded `refId`, a small `params`
+//     map and a SERVER `recordedAt` (the client `createdAt` is untouched);
+//   * an invite may only be burned in the SAME batch that creates the caller's
+//     pending member document;
+//   * `verified()`: a verified email is required for every mutating action
+//     except the owner's own `users/{uid}` profile/preferences.
 //
 // NOT EXPRESSIBLE HERE: "the last admin may not be demoted, disabled or
 // removed" needs to enumerate members/{m}, which rules cannot do.  It stays a
@@ -34,6 +48,12 @@ service cloud.firestore {
     function signedIn() {
       return request.auth != null;
     }
+    // H5: an address-verified account is required for every mutating action
+    // outside the owner's own profile.  The claim is refreshed by
+    // FirebaseAuthRepository.reloadUser() (`getIdToken(true)`).
+    function verified() {
+      return signedIn() && request.auth.token.email_verified == true;
+    }
     function isSelf(uid) {
       return signedIn() && request.auth.uid == uid;
     }
@@ -45,6 +65,13 @@ service cloud.firestore {
     }
     function inList(value, allowed) {
       return value in allowed;
+    }
+    // H5 field validation.
+    function str(v, lo, hi) {
+      return v is string && v.size() >= lo && v.size() <= hi;
+    }
+    function optStr(d, k, hi) {
+      return !(k in d.keys()) || d[k] == null || str(d[k], 0, hi);
     }
     // Enums are validated against the closed sets of the domain models, so a
     // forged document fails here rather than at the next read.
@@ -77,6 +104,87 @@ service cloud.firestore {
     }
     function isNonNegativeIntOrMissing(data, key) {
       return !(key in data.keys()) || isNonNegativeInt(data[key]);
+    }
+    // H5: the denormalised member profile.  Applied to every member create and
+    // to the admin/self updates (the field set is the same).
+    function memberProfileOk(d) {
+      return str(d.get('fullName', ''), 1, 80)
+        && optStr(d, 'nickname', 40)
+        && relationshipOk(d)
+        && optStr(d, 'spouseId', 40)
+        && optStr(d, 'avatarKey', 40)
+        && optStr(d, 'inviteCode', 16);
+    }
+
+    // ── Closed key sets (H5) ───────────────────────────────────────────────
+    // The exact fields each mapper writes.  A document with an unknown field is
+    // denied.  Mirrored in test/contract/rules_key_sets_test.dart so a mapper
+    // change that is not reflected here fails the build.
+    function memberKeys() {
+      return ['uid', 'role', 'status', 'fullName', 'nickname', 'relationship',
+              'spouseId', 'avatarKey', 'inviteCode', 'removedAt', 'leftAt',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function familyKeys() {
+      return ['name', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    // inviteCodes/{code} and families/{f}/invitations/{i} share one shape.
+    function invitationKeys() {
+      return ['code', 'familyId', 'role', 'status', 'expiresAt', 'usedBy',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion'];
+    }
+    // The union of the four settings documents created with the family.
+    function settingsKeys() {
+      return ['timezone', 'currency', 'flags', 'absencePolicy', 'enabled',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function eventKeys() {
+      return ['type', 'actorId', 'summary', 'refType', 'refId', 'params',
+              'recordedAt', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion'];
+    }
+    function settingsOk(d) {
+      return d.keys().hasOnly(settingsKeys())
+        && optStr(d, 'timezone', 64)
+        && optStr(d, 'currency', 8)
+        && (!('flags' in d.keys())
+            || (d.flags is map && d.flags.size() <= 8))
+        && optStr(d, 'absencePolicy', 32);
+    }
+
+    // ── Log integrity (H5) ─────────────────────────────────────────────────
+    // The closed `type` list, mirrored by lib/core/audit/audit_event_type.dart
+    // (compared to this literal by test/core/audit/audit_event_type_test.dart).
+    function eventTypes() {
+      return ['family.created', 'member.requested', 'member.approved',
+              'member.rejected', 'member.disabled', 'member.role_changed',
+              'member.admin_transferred', 'member.left', 'member.cancelled',
+              'invitation.created', 'invitation.revoked', 'family.updated'];
+    }
+    function refTypes() {
+      return ['family', 'member', 'invitation'];
+    }
+    function paramsOk(d) {
+      return !('params' in d.keys())
+        || (d.params is map && d.params.size() <= 8);
+    }
+    // An append-only log entry: written by its own actor, with a known shape and
+    // a SERVER timestamp.  `createdAt` is the device clock and is deliberately
+    // NOT compared with request.time (a queued offline write would be refused).
+    function eventOk(d) {
+      return createsAsSelf()
+        && d.get('actorId', '') == request.auth.uid
+        && d.get('type', '') in eventTypes()
+        && d.get('refType', '') in refTypes()
+        && str(d.get('refId', ''), 0, 64)
+        && optStr(d, 'summary', 200)
+        && paramsOk(d)
+        && d.get('recordedAt', null) == request.time
+        && d.keys().hasOnly(eventKeys());
     }
 
     // ── Family membership helpers (roadmap Section 13 names) ───────────────
@@ -121,7 +229,7 @@ service cloud.firestore {
     // True only inside the ONE batch that creates a family: the family document
     // does not exist yet and the caller is its creator.
     function creatingFamily(f) {
-      return signedIn()
+      return verified()
         && !exists(/databases/$(database)/documents/families/$(f))
         && getAfter(/databases/$(database)/documents/families/$(f)).data.createdBy
              == request.auth.uid;
@@ -139,10 +247,13 @@ service cloud.firestore {
     // A joining member document: pending, plain member, created by the joiner,
     // backed by a live code for this family.
     function validJoin(f) {
-      return request.resource.data.get('status', '') == 'pending'
+      return verified()
+        && request.resource.data.get('status', '') == 'pending'
         && request.resource.data.get('role', '') == 'member'
         && request.resource.data.get('uid', '') == request.auth.uid
         && createsAsSelf()
+        && memberProfileOk(request.resource.data)
+        && request.resource.data.keys().hasOnly(memberKeys())
         && request.resource.data.get('inviteCode', null) is string
         && liveCode(request.resource.data.inviteCode)
         && codeDoc(request.resource.data.inviteCode).get('familyId', '') == f;
@@ -173,10 +284,18 @@ service cloud.firestore {
     // the same user, so they use this instead of `validJoin` (their own
     // document has no `status` or `role` field to inspect).
     function joiningNow(f) {
-      return signedIn()
+      return verified()
         && existsAfter(memberPath(f, request.auth.uid))
         && getAfter(memberPath(f, request.auth.uid)).data.get('status', '') == 'pending'
         && getAfter(memberPath(f, request.auth.uid)).data.get('role', '') == 'member';
+    }
+    // The member document the caller is creating in THIS batch is a pending
+    // plain member backed by [code] (H5).  Used to require that burning an
+    // invite and joining happen atomically.
+    function pendingJoinAfter(f, code) {
+      return existsAfter(memberPath(f, request.auth.uid))
+        && getAfter(memberPath(f, request.auth.uid)).data.get('status', '') == 'pending'
+        && getAfter(memberPath(f, request.auth.uid)).data.get('inviteCode', null) == code;
     }
     function memberDocIsValid() {
       return inList(request.resource.data.get('role', 'member'),
@@ -184,12 +303,16 @@ service cloud.firestore {
         && inList(request.resource.data.get('status', 'pending'),
                   ['pending', 'active', 'disabled'])
         && request.resource.data.get('uid', '') is string
-        && relationshipOk(request.resource.data);
+        && memberProfileOk(request.resource.data)
+        && request.resource.data.keys().hasOnly(memberKeys());
     }
 
     // ══════════════════════════════════════════════════════════════════════
     // users/{uid} — the owner only.  Holds the profile, `familyId` and
     // `preferences {themeId, themeMode, language, banglaDigits}`.
+    //
+    // The owner may write this WITHOUT a verified email (the verification
+    // screen and the preference sync run before verification).
     // ══════════════════════════════════════════════════════════════════════
     match /users/{uid} {
       // The document may exist before the profile does (preference sync merges
@@ -201,8 +324,8 @@ service cloud.firestore {
           && (!('familyId' in request.resource.data.keys())
               || request.resource.data.get('familyId', null) is string)
           && request.resource.data.get('updatedBy', uid) == uid
-          && (!('fullName' in request.resource.data.keys())
-              || request.resource.data.fullName is string)
+          && optStr(request.resource.data, 'fullName', 80)
+          && optStr(request.resource.data, 'nickname', 40)
           && preferencesOk(request.resource.data)
           && relationshipOk(request.resource.data)
           && genderOk(request.resource.data);
@@ -231,40 +354,46 @@ service cloud.firestore {
     // ══════════════════════════════════════════════════════════════════════
     // inviteCodes/{code} — the discovery index for joining.
     //
-    // Exact-id `get` only, never `list`: a signed-in user with a code may learn
-    // the family it belongs to, nobody may enumerate codes or families.
+    // Exact-id `get` only, never `list`: a signed-in, VERIFIED user with a code
+    // may learn the family it belongs to, nobody may enumerate codes or
+    // families.
     // ══════════════════════════════════════════════════════════════════════
     match /inviteCodes/{code} {
-      allow get: if signedIn();
+      allow get: if verified();
       allow list: if false;
 
-      allow create: if signedIn()
+      allow create: if verified()
         && request.resource.data.familyId is string
         && request.resource.data.familyId.size() > 0
         && isManager(request.resource.data.familyId)
         && createsAsSelf()
         && request.resource.data.status == 'active'
         && request.resource.data.role == 'member'
-        && request.resource.data.expiresAt is timestamp;
+        && request.resource.data.expiresAt is timestamp
+        && request.resource.data.keys().hasOnly(invitationKeys());
 
-      // A joiner marks their code used; nothing else may change, ever.
-      allow update: if signedIn()
+      // A joiner marks their code used IN THE SAME BATCH that creates their
+      // pending member document (H5); nothing else may change, ever.
+      allow update: if verified()
         && resource.data.status == 'active'
         && resource.data.expiresAt > request.time
         && request.resource.data.status == 'used'
         && request.resource.data.usedBy == request.auth.uid
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy']);
+             .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy'])
+        && request.resource.data.keys().hasOnly(invitationKeys())
+        && pendingJoinAfter(resource.data.familyId, code);
 
       // A manager of the code's family revokes a still-active code; nothing
       // else may change.
-      allow update: if signedIn()
+      allow update: if verified()
         && resource.data.status == 'active'
         && request.resource.data.status == 'revoked'
         && isManager(resource.data.familyId)
         && writesAsSelf()
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(['status', 'updatedAt', 'updatedBy']);
+             .hasOnly(['status', 'updatedAt', 'updatedBy'])
+        && request.resource.data.keys().hasOnly(invitationKeys());
 
       // An expired or revoked code is a tombstone, not a deleted document.
       allow delete: if false;
@@ -274,10 +403,10 @@ service cloud.firestore {
     // families/{f}
     // ══════════════════════════════════════════════════════════════════════
     match /families/{f} {
-      allow create: if signedIn()
+      allow create: if verified()
         && createsAsSelf()
-        && request.resource.data.get('name', '') is string
-        && request.resource.data.get('name', '').size() > 0;
+        && str(request.resource.data.get('name', ''), 1, 80)
+        && request.resource.data.keys().hasOnly(familyKeys());
 
       // Active members only: a pending or rejected user reads nothing here,
       // and a member of another family reads nothing.
@@ -287,8 +416,8 @@ service cloud.firestore {
       // moderator cannot rename the family or flip a module.
       allow update: if isAdmin(f)
         && writesAsSelf()
-        && request.resource.data.get('name', '') is string
-        && request.resource.data.get('name', '').size() > 0;
+        && str(request.resource.data.get('name', ''), 1, 80)
+        && request.resource.data.keys().hasOnly(familyKeys());
 
       allow delete: if false;
 
@@ -300,10 +429,13 @@ service cloud.firestore {
 
         // 1. Creating the family: the first member is an active admin.
         allow create: if isSelf(m)
+          && verified()
           && creatingFamily(f)
           && createsAsSelf()
           && request.resource.data.get('role', '') == 'admin'
-          && request.resource.data.get('status', '') == 'active';
+          && request.resource.data.get('status', '') == 'active'
+          && memberProfileOk(request.resource.data)
+          && request.resource.data.keys().hasOnly(memberKeys());
 
         // 2. Joining with a live code: pending, plain member.
         allow create: if isSelf(m) && validJoin(f);
@@ -313,6 +445,7 @@ service cloud.firestore {
         //    cancelled or left) can never be revived by a write: they may belong
         //    to another family by now (rule 17); they must join again (rule 5).
         allow update: if isAdmin(f)
+          && verified()
           && resource.data.get('removedAt', null) == null
           && resource.data.get('leftAt', null) == null
           && writesAsSelf()
@@ -323,6 +456,7 @@ service cloud.firestore {
         //    decline.  Never a role, never an active member (roadmap Step 10,
         //    "moderator approve-only").
         allow update: if isMod(f)
+          && verified()
           && writesAsSelf()
           && resource.data.get('status', 'pending') == 'pending'
           && resource.data.get('removedAt', null) == null
@@ -330,6 +464,7 @@ service cloud.firestore {
           && identityStable()
           && roleUnchanged()
           && validDecision()
+          && request.resource.data.keys().hasOnly(memberKeys())
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['status', 'removedAt', 'updatedAt', 'updatedBy']);
 
@@ -341,11 +476,14 @@ service cloud.firestore {
         // 6. A member edits their own profile fields — never role or status,
         //    and never anyone else's document.
         allow update: if isSelf(m)
+          && verified()
           && isActiveMember(f)
           && writesAsSelf()
           && identityStable()
           && roleUnchanged()
           && statusUnchanged()
+          && memberProfileOk(request.resource.data)
+          && request.resource.data.keys().hasOnly(memberKeys())
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['fullName', 'nickname', 'relationship', 'spouseId',
                          'avatarKey', 'inviteCode', 'updatedAt', 'updatedBy']);
@@ -354,6 +492,7 @@ service cloud.firestore {
         //    (history): status becomes `disabled` and `leftAt` / `removedAt`
         //    carry the same timestamp.  Role never changes.
         allow update: if isSelf(m)
+          && verified()
           && isActiveMember(f)
           && writesAsSelf()
           && identityStable()
@@ -362,6 +501,7 @@ service cloud.firestore {
           && request.resource.data.get('leftAt', null) is timestamp
           && request.resource.data.get('removedAt', null)
                == request.resource.data.get('leftAt', null)
+          && request.resource.data.keys().hasOnly(memberKeys())
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['status', 'leftAt', 'removedAt', 'updatedAt',
                          'updatedBy']);
@@ -369,6 +509,7 @@ service cloud.firestore {
         // 8. CANCEL: a pending person withdraws their own request.  Only
         //    `removedAt` (the same soft delete a rejection uses) changes.
         allow update: if isSelf(m)
+          && verified()
           && resource.data.get('status', '') == 'pending'
           && resource.data.get('removedAt', null) == null
           && writesAsSelf()
@@ -376,6 +517,7 @@ service cloud.firestore {
           && roleUnchanged()
           && statusUnchanged()
           && request.resource.data.get('removedAt', null) is timestamp
+          && request.resource.data.keys().hasOnly(memberKeys())
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['removedAt', 'updatedAt', 'updatedBy']);
 
@@ -386,42 +528,61 @@ service cloud.firestore {
       // ── invitations/{i} — the family-side mirror of inviteCodes ────────
       match /invitations/{i} {
         allow read: if isManager(f);
-        allow create: if (isManager(f) || creatingFamily(f))
+        allow create: if verified()
+          && (isManager(f) || creatingFamily(f))
           && createsAsSelf()
-          && request.resource.data.familyId == f;
-        allow update: if signedIn()
+          && request.resource.data.familyId == f
+          && request.resource.data.keys().hasOnly(invitationKeys());
+        // A joiner marks the mirror used IN THE SAME BATCH that creates their
+        // pending member document (H5); a manager revokes a still-active code.
+        allow update: if verified()
+          && resource.data.get('status', '') == 'active'
+          && request.resource.data.get('status', '') in ['used', 'revoked']
+          && request.resource.data.keys().hasOnly(invitationKeys())
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy'])
-          && request.resource.data.get('usedBy', '') == request.auth.uid;
-        // A manager revokes a still-active code.
-        allow update: if isManager(f)
-          && resource.data.get('status', '') == 'active'
-          && request.resource.data.get('status', '') == 'revoked'
-          && writesAsSelf()
-          && request.resource.data.diff(resource.data).affectedKeys()
-               .hasOnly(['status', 'updatedAt', 'updatedBy']);
+          && (
+            (
+              request.resource.data.status == 'revoked'
+              && isManager(f)
+              && writesAsSelf()
+            )
+            || (
+              request.resource.data.status == 'used'
+              && request.resource.data.get('usedBy', '') == request.auth.uid
+              && pendingJoinAfter(f, i)
+            )
+          );
         allow delete: if false;
       }
 
       // ── settings/{s} — general, modules, rotationPolicy, notificationDefaults
       match /settings/{s} {
         allow read: if isActiveMember(f);
-        allow create: if (isAdmin(f) || creatingFamily(f)) && createsAsSelf();
-        allow update: if isAdmin(f) && writesAsSelf();
+        allow create: if verified()
+          && (isAdmin(f) || creatingFamily(f))
+          && createsAsSelf()
+          && settingsOk(request.resource.data);
+        allow update: if isAdmin(f)
+          && verified()
+          && writesAsSelf()
+          && settingsOk(request.resource.data);
         allow delete: if false;
       }
 
       // ── Append-only logs ───────────────────────────────────────────────
       match /activity/{a} {
         allow read: if isActiveMember(f);
-        allow create: if createsAsSelf()
-          && (isActiveMember(f) || creatingFamily(f) || joiningNow(f));
+        allow create: if verified()
+          && (isActiveMember(f) || creatingFamily(f) || joiningNow(f))
+          && eventOk(request.resource.data);
         allow update, delete: if false;
       }
       match /auditLogs/{a} {
         allow read: if isAdmin(f);
-        allow create: if createsAsSelf()
-          && (isActiveMember(f) || creatingFamily(f) || joiningNow(f));
+        allow create: if verified()
+          && (isActiveMember(f) || creatingFamily(f) || joiningNow(f))
+          && eventOk(request.resource.data);
         allow update, delete: if false;
       }
     }

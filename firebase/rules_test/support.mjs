@@ -3,12 +3,22 @@
 // Run against the emulator, never against a real project: the project id is a
 // `demo-` id, which the emulator accepts without credentials.
 
-import { Timestamp, doc, setDoc } from 'firebase/firestore';
+import { Timestamp, doc, serverTimestamp, setDoc } from 'firebase/firestore';
 
 export const PROJECT_ID = 'demo-family-hub';
 
 /** Where the Firestore emulator listens; `emulators:exec` sets this. */
 export const EMULATOR = process.env.FIRESTORE_EMULATOR_HOST ?? '127.0.0.1:8080';
+
+/**
+ * Firestore as a signed-in user (H5).
+ *
+ * Every mutating rule now requires a verified email, so the default context
+ * carries `email_verified: true`.  Pass `{verified: false}` to model a user who
+ * has not opened the verification link yet.
+ */
+export const asUser = (testEnv, uid, { verified = true } = {}) =>
+  testEnv.authenticatedContext(uid, { email_verified: verified }).firestore();
 
 // Actors used by the tests.
 export const ALICE = 'alice'; // active admin of famA
@@ -119,11 +129,13 @@ export const invitationUsed = (uid) => ({
 
 export const eventDoc = (actorId, extra = {}) =>
   baseDoc(actorId, {
-    type: 'test.event',
+    type: 'member.approved',
     actorId,
     summary: 'Something happened',
     refType: 'family',
     refId: FAM_A,
+    params: {},
+    recordedAt: serverTimestamp(),
     ...extra,
   });
 

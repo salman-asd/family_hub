@@ -97,6 +97,10 @@ class FirebaseAuthRepository implements AuthRepository {
         final user = _auth.currentUser;
         if (user == null) return null;
         await user.reload().timeout(timeout);
+        // The `email_verified` claim does not change when the user verifies in
+        // the browser, so the Firestore rules would still see `false` until the
+        // token is refreshed.  Force it (H5).
+        await user.getIdToken(true).timeout(timeout);
         // `reload()` mutates the cached record; `currentUser` re-reads it.
         return toAppUser(_auth.currentUser);
       });

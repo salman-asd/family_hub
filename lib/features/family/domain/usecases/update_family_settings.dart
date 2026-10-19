@@ -45,7 +45,7 @@ class UpdateFamilySettings {
       family,
       FamilyEvent(
         id: _newId(),
-        type: 'family.settings_updated',
+        type: 'family.updated',
         actorId: actorUid,
         summary: 'Family settings updated',
         refType: 'family',
@@ -54,8 +54,6 @@ class UpdateFamilySettings {
       ),
     );
     final failure = saved.failureOrNull;
-    return failure != null
-        ? Failure<Family>(failure)
-        : Success<Family>(family);
+    return failure != null ? Failure<Family>(failure) : Success<Family>(family);
   }
 }

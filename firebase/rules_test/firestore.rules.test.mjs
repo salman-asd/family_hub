@@ -39,6 +39,7 @@ import {
   FAM_A,
   FRANK,
   PROJECT_ID,
+  asUser,
   baseDoc,
   eventDoc,
   familyDoc,
@@ -51,6 +52,7 @@ import {
   memberLeave,
   memberDoc,
   nowTs,
+  pastTs,
   seedWorld,
 } from './support.mjs';
 
@@ -58,8 +60,11 @@ const [host, port] = EMULATOR.split(':');
 
 let testEnv;
 
-/** Firestore as a signed-in user. */
-const as = (uid) => testEnv.authenticatedContext(uid).firestore();
+/** Firestore as a signed-in, email-verified user (the H5 default). */
+const as = (uid) => asUser(testEnv, uid);
+
+/** Firestore as a signed-in user whose email is NOT verified yet. */
+const asUnverified = (uid) => asUser(testEnv, uid, { verified: false });
 
 /** Firestore with no credentials at all. */
 const anonymous = () => testEnv.unauthenticatedContext().firestore();
@@ -226,9 +231,24 @@ describe('inviteCodes/{code}', () => {
     );
   });
 
-  it('allows a joiner to mark a live code used, as themselves', async () => {
+  it('allows a joiner to mark a live code used in the same batch as joining', async () => {
     const db = as(FRANK);
-    await assertSucceeds(
+    const batch = writeBatch(db);
+    batch.set(
+      doc(db, `families/${FAM_A}/members/${FRANK}`),
+      memberDoc(FRANK, 'member', 'pending', { inviteCode: CODES.live }),
+    );
+    batch.set(
+      doc(db, `inviteCodes/${CODES.live}`),
+      { status: 'used', usedBy: FRANK, updatedAt: nowTs(), updatedBy: FRANK },
+      { merge: true },
+    );
+    await assertSucceeds(batch.commit());
+  });
+
+  it('[H5] denies burning a code without joining (no member document)', async () => {
+    const db = as(FRANK);
+    await assertFails(
       setDoc(
         doc(db, `inviteCodes/${CODES.live}`),
         { status: 'used', usedBy: FRANK, updatedAt: nowTs(), updatedBy: FRANK },
@@ -239,13 +259,17 @@ describe('inviteCodes/{code}', () => {
 
   it('denies marking a code used on behalf of somebody else', async () => {
     const db = as(FRANK);
-    await assertFails(
-      setDoc(
-        doc(db, `inviteCodes/${CODES.live}`),
-        { status: 'used', usedBy: ALICE, updatedAt: nowTs(), updatedBy: FRANK },
-        { merge: true },
-      ),
+    const batch = writeBatch(db);
+    batch.set(
+      doc(db, `families/${FAM_A}/members/${FRANK}`),
+      memberDoc(FRANK, 'member', 'pending', { inviteCode: CODES.live }),
     );
+    batch.set(
+      doc(db, `inviteCodes/${CODES.live}`),
+      { status: 'used', usedBy: ALICE, updatedAt: nowTs(), updatedBy: FRANK },
+      { merge: true },
+    );
+    await assertFails(batch.commit());
   });
 
   it('denies marking an expired code used', async () => {
@@ -752,9 +776,24 @@ describe('families/{f}/invitations/{i}', () => {
     await assertSucceeds(batch.commit());
   });
 
-  it('allows a joiner to mark the mirror used, as themselves', async () => {
+  it('allows a joiner to mark the mirror used in the same batch as joining', async () => {
     const db = as(FRANK);
-    await assertSucceeds(
+    const batch = writeBatch(db);
+    batch.set(
+      doc(db, `families/${FAM_A}/members/${FRANK}`),
+      memberDoc(FRANK, 'member', 'pending', { inviteCode: CODES.live }),
+    );
+    batch.set(
+      doc(db, `families/${FAM_A}/invitations/${CODES.live}`),
+      invitationUsed(FRANK),
+      { merge: true },
+    );
+    await assertSucceeds(batch.commit());
+  });
+
+  it('[H5] denies flipping a mirror without a member document', async () => {
+    const db = as(FRANK);
+    await assertFails(
       setDoc(
         doc(db, `families/${FAM_A}/invitations/${CODES.live}`),
         invitationUsed(FRANK),
@@ -765,13 +804,17 @@ describe('families/{f}/invitations/{i}', () => {
 
   it('denies a joiner marking the mirror used for somebody else', async () => {
     const db = as(FRANK);
-    await assertFails(
-      setDoc(
-        doc(db, `families/${FAM_A}/invitations/${CODES.live}`),
-        invitationUsed(ALICE),
-        { merge: true },
-      ),
+    const batch = writeBatch(db);
+    batch.set(
+      doc(db, `families/${FAM_A}/members/${FRANK}`),
+      memberDoc(FRANK, 'member', 'pending', { inviteCode: CODES.live }),
     );
+    batch.set(
+      doc(db, `families/${FAM_A}/invitations/${CODES.live}`),
+      invitationUsed(ALICE),
+      { merge: true },
+    );
+    await assertFails(batch.commit());
   });
 
   it('denies deleting an invitation', async () => {
@@ -1434,5 +1477,259 @@ describe('H4 acceptance: leave and join another family', () => {
       { merge: true },
     );
     await assertSucceeds(join.commit());
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Hardening H5: field validation, closed key sets, log integrity, invites,
+// verified email
+// ─────────────────────────────────────────────────────────────────────────────
+describe('H5 member profile validation', () => {
+  it('denies joining with a non-string fullName', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${FRANK}`),
+        memberDoc(FRANK, 'member', 'pending', {
+          inviteCode: CODES.live,
+          fullName: 123,
+        }),
+      ),
+    );
+  });
+
+  it('denies joining with a 5000-character name', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${FRANK}`),
+        memberDoc(FRANK, 'member', 'pending', {
+          inviteCode: CODES.live,
+          fullName: 'x'.repeat(5000),
+        }),
+      ),
+    );
+  });
+
+  it('denies a self-edit with an oversized nickname', async () => {
+    const db = as(CARA);
+    await assertFails(
+      updateDoc(doc(db, `families/${FAM_A}/members/${CARA}`), {
+        nickname: 'n'.repeat(41),
+        updatedAt: nowTs(),
+        updatedBy: CARA,
+      }),
+    );
+  });
+
+  it('denies an admin write that smuggles in a numeric fullName', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${CARA}`),
+        { ...memberChange(ALICE, { role: 'member', status: 'active' }), fullName: 7 },
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies an oversized users/{uid}.fullName', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(
+        doc(db, `users/${FRANK}`),
+        { fullName: 'x'.repeat(81) },
+        { merge: true },
+      ),
+    );
+  });
+});
+
+describe('H5 closed key sets', () => {
+  it('denies a member document with an unknown field', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${FRANK}`),
+        memberDoc(FRANK, 'member', 'pending', {
+          inviteCode: CODES.live,
+          isAdmin: true,
+        }),
+      ),
+    );
+  });
+
+  it('denies a family document with an unknown field', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(doc(db, 'families/famKey'), {
+        ...familyDoc(FRANK, 'Key'),
+        adminIds: [FRANK],
+      }),
+    );
+  });
+
+  it('denies an invite code with an unknown field', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      setDoc(doc(db, 'inviteCodes/KEYCODE1'), {
+        ...inviteCodeDoc(ALICE, FAM_A, 'KEYCODE1'),
+        maxUses: 3,
+      }),
+    );
+  });
+
+  it('denies a settings write with an unknown field', async () => {
+    const db = as(ALICE);
+    await assertFails(
+      updateDoc(doc(db, `families/${FAM_A}/settings/general`), {
+        bogus: true,
+        updatedAt: nowTs(),
+        updatedBy: ALICE,
+      }),
+    );
+  });
+
+  it('denies an activity entry with an unknown field', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtKey`),
+        eventDoc(CARA, { hacked: true }),
+      ),
+    );
+  });
+});
+
+describe('H5 log integrity', () => {
+  it('denies an unknown activity type', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtType`),
+        eventDoc(CARA, { type: 'family.destroyed' }),
+      ),
+    );
+  });
+
+  it('denies an unknown refType', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtRef`),
+        eventDoc(CARA, { refType: 'planet' }),
+      ),
+    );
+  });
+
+  it('denies an actorId that is not the caller', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtActor`),
+        eventDoc(CARA, { actorId: ALICE }),
+      ),
+    );
+  });
+
+  it('denies an oversized refId', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtRefId`),
+        eventDoc(CARA, { refId: 'x'.repeat(65) }),
+      ),
+    );
+  });
+
+  it('denies more than 8 params', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtParams`),
+        eventDoc(CARA, {
+          params: { a: '1', b: '2', c: '3', d: '4', e: '5', f: '6', g: '7', h: '8', i: '9' },
+        }),
+      ),
+    );
+  });
+
+  it('allows exactly 8 params', async () => {
+    const db = as(CARA);
+    await assertSucceeds(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtParams8`),
+        eventDoc(CARA, {
+          params: { a: '1', b: '2', c: '3', d: '4', e: '5', f: '6', g: '7', h: '8' },
+        }),
+      ),
+    );
+  });
+
+  it('denies a missing recordedAt', async () => {
+    const db = as(CARA);
+    const { recordedAt, ...withoutRecordedAt } = eventDoc(CARA);
+    await assertFails(
+      setDoc(doc(db, `families/${FAM_A}/activity/evtNoTime`), withoutRecordedAt),
+    );
+  });
+
+  it('denies a client-clock recordedAt', async () => {
+    const db = as(CARA);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtPast`),
+        eventDoc(CARA, { recordedAt: pastTs() }),
+      ),
+    );
+  });
+
+  it('allows a valid audit entry', async () => {
+    const db = as(ALICE);
+    await assertSucceeds(
+      setDoc(doc(db, `families/${FAM_A}/auditLogs/evtOk`), eventDoc(ALICE)),
+    );
+  });
+});
+
+describe('H5 verified email', () => {
+  it('denies an unverified user creating a family', async () => {
+    const db = asUnverified(FRANK);
+    await assertFails(
+      setDoc(doc(db, 'families/famUnverified'), familyDoc(FRANK, 'Nope')),
+    );
+  });
+
+  it('denies an unverified user joining with a code', async () => {
+    const db = asUnverified(FRANK);
+    await assertFails(
+      setDoc(
+        doc(db, `families/${FAM_A}/members/${FRANK}`),
+        memberDoc(FRANK, 'member', 'pending', { inviteCode: CODES.live }),
+      ),
+    );
+  });
+
+  it('denies an unverified user reading an invite code', async () => {
+    const db = asUnverified(FRANK);
+    await assertFails(getDoc(doc(db, `inviteCodes/${CODES.live}`)));
+  });
+
+  it('denies an unverified active member appending activity', async () => {
+    const db = asUnverified(CARA);
+    await assertFails(
+      setDoc(doc(db, `families/${FAM_A}/activity/evtUnverified`), eventDoc(CARA)),
+    );
+  });
+
+  it('still allows an unverified owner to write their own profile', async () => {
+    const db = asUnverified(FRANK);
+    await assertSucceeds(
+      setDoc(
+        doc(db, `users/${FRANK}`),
+        { fullName: 'Frank Islam' },
+        { merge: true },
+      ),
+    );
   });
 });

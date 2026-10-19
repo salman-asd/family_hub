@@ -29,6 +29,10 @@ jobs:
       - run: flutter analyze
       # Goldens run in their own job (Linux-generated images only).
       - run: flutter test --exclude-tags golden --coverage
+      - name: Rules contract fixtures are current (H5)
+        run: |
+          flutter test test/contract/rules_fixtures_test.dart
+          git diff --exit-code firebase/rules_test/fixtures
       - name: Coverage summary
         run: |
           awk -F: '/^LF:/{lf+=$2} /^LH:/{lh+=$2} END{ if (lf>0) printf "Line coverage: %.1f%% (%d of %d lines)\n", 100*lh/lf, lh, lf }' coverage/lcov.info

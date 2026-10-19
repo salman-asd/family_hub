@@ -1,4 +1,5 @@
 import 'package:family_hub/core/firebase/base_mapper.dart';
+import 'package:family_hub/core/firebase/server_time.dart';
 import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
@@ -204,6 +205,9 @@ abstract final class FamilyMappers {
         'summary': e.summary,
         'refType': e.refType,
         'refId': e.refId,
+        'params': e.params,
+        // The server clock: the rules require recordedAt == request.time.
+        'recordedAt': ServerTime.instance,
         BaseMapper.keyCreatedAt: BaseMapper.dateTimeToTimestamp(e.at),
         BaseMapper.keyCreatedBy: e.actorId,
         BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(e.at),

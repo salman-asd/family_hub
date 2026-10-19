@@ -1,0 +1,73 @@
+{
+  "scenario": "role_change",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "update",
+      "path": "families/fixFam/members/fixJoiner",
+      "data": {
+        "role": "moderator",
+        "status": "active",
+        "removedAt": null,
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin"
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev4",
+      "data": {
+        "type": "member.role_changed",
+        "actorId": "fixAdmin",
+        "summary": "Role changed",
+        "refType": "member",
+        "refId": "fixJoiner",
+        "params": {
+          "memberName": "Fix Joiner",
+          "newRole": "moderator"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev4",
+      "data": {
+        "type": "member.role_changed",
+        "actorId": "fixAdmin",
+        "summary": "Role changed",
+        "refType": "member",
+        "refId": "fixJoiner",
+        "params": {
+          "memberName": "Fix Joiner",
+          "newRole": "moderator"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

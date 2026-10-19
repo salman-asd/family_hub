@@ -1,0 +1,28 @@
+{
+  "scenario": "profile",
+  "actor": "fixJoiner",
+  "writes": [
+    {
+      "op": "merge",
+      "path": "users/fixJoiner",
+      "data": {
+        "uid": "fixJoiner",
+        "fullName": "Fix Joiner",
+        "nickname": null,
+        "gender": null,
+        "relationship": "other",
+        "spouseId": null,
+        "avatarKey": null,
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixJoiner",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixJoiner",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

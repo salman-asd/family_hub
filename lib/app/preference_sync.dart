@@ -40,7 +40,8 @@ final preferenceSyncProvider = Provider<void>((ref) {
               .push(ref.read(themeControllerProvider)),
         );
       } else {
-        unawaited(ref.read(themeControllerProvider.notifier).applyRemote(remote));
+        unawaited(
+            ref.read(themeControllerProvider.notifier).applyRemote(remote));
       }
     });
 
@@ -61,8 +62,14 @@ final preferenceSyncProvider = Provider<void>((ref) {
     });
   }
 
+  // Only start once the email is verified (H5): every write except the owner's
+  // own profile is denied by the rules until then, so an early push would just
+  // be rejected.
   ref.listen<String?>(
-    authStateProvider.select((v) => v.value?.uid),
+    authStateProvider.select((v) {
+      final user = v.value;
+      return user != null && user.emailVerified ? user.uid : null;
+    }),
     (_, uid) => uid == null ? stop() : start(),
     fireImmediately: true,
   );

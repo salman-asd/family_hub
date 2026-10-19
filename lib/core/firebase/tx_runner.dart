@@ -1,6 +1,35 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:family_hub/core/firebase/server_time.dart';
 import 'package:family_hub/core/firebase/sync_status.dart';
+import 'package:family_hub/core/utils/clock.dart';
+
+/// Replaces every top-level [ServerTime] value with `FieldValue.serverTimestamp()`.
+///
+/// Only the top level is scanned: [ServerTime] is a document-field marker, and
+/// every writer puts `recordedAt` at the top level.
+Map<String, dynamic> _withServerTimestamps(Map<String, dynamic> data) {
+  if (!data.values.any((v) => v is ServerTime)) return data;
+  return <String, dynamic>{
+    for (final entry in data.entries)
+      entry.key: entry.value is ServerTime
+          ? FieldValue.serverTimestamp()
+          : entry.value,
+  };
+}
+
+/// Replaces every top-level [ServerTime] value with the [clock]'s "now".
+Map<String, dynamic> _resolveServerTimes(
+  Map<String, dynamic> data,
+  Clock clock,
+) {
+  if (!data.values.any((v) => v is ServerTime)) return data;
+  final now = clock.nowUtc();
+  return <String, dynamic>{
+    for (final entry in data.entries)
+      entry.key: entry.value is ServerTime ? now : entry.value,
+  };
+}
 
 /// Context for staging atomic batch writes.
 abstract class BatchContext {
@@ -93,12 +122,16 @@ class _FirestoreBatchContext implements BatchContext {
 
   @override
   void set(String path, Map<String, dynamic> data, {bool merge = false}) {
-    _batch.set(_firestore.doc(path), data, SetOptions(merge: merge));
+    _batch.set(
+      _firestore.doc(path),
+      _withServerTimestamps(data),
+      SetOptions(merge: merge),
+    );
   }
 
   @override
   void update(String path, Map<String, dynamic> data) {
-    _batch.update(_firestore.doc(path), data);
+    _batch.update(_firestore.doc(path), _withServerTimestamps(data));
   }
 
   @override
@@ -122,12 +155,16 @@ class _FirestoreTransactionContext implements TransactionContext {
 
   @override
   void set(String path, Map<String, dynamic> data, {bool merge = false}) {
-    _transaction.set(_firestore.doc(path), data, SetOptions(merge: merge));
+    _transaction.set(
+      _firestore.doc(path),
+      _withServerTimestamps(data),
+      SetOptions(merge: merge),
+    );
   }
 
   @override
   void update(String path, Map<String, dynamic> data) {
-    _transaction.update(_firestore.doc(path), data);
+    _transaction.update(_firestore.doc(path), _withServerTimestamps(data));
   }
 
   @override
@@ -138,8 +175,11 @@ class _FirestoreTransactionContext implements TransactionContext {
 
 /// In-memory fake implementation of [TxRunner] for fast unit and use-case tests.
 class FakeTxRunner implements TxRunner {
-  FakeTxRunner([Map<String, Map<String, dynamic>>? initialStore])
-      : store = initialStore != null
+  FakeTxRunner([
+    Map<String, Map<String, dynamic>>? initialStore,
+    Clock? clock,
+  ])  : clock = clock ?? const SystemClock(),
+        store = initialStore != null
             ? Map<String, Map<String, dynamic>>.from(
                 initialStore
                     .map((k, v) => MapEntry(k, Map<String, dynamic>.from(v))),
@@ -148,6 +188,9 @@ class FakeTxRunner implements TxRunner {
 
   /// In-memory document storage: path -> fields map.
   final Map<String, Map<String, dynamic>> store;
+
+  /// Resolves [ServerTime] markers (used by the log `recordedAt`).
+  final Clock clock;
 
   /// Same counter the real runner exposes, so widget tests can drive the banner.
   final PendingWriteCounter pendingWrites = PendingWriteCounter();
@@ -163,7 +206,7 @@ class FakeTxRunner implements TxRunner {
     FutureOr<void> Function(BatchContext batch) action,
   ) async {
     final pendingOps = <_PendingOp>[];
-    final context = _FakeBatchContext(pendingOps);
+    final context = _FakeBatchContext(pendingOps, clock);
     await action(context);
 
     await pendingWrites.track(() async {
@@ -191,7 +234,7 @@ class FakeTxRunner implements TxRunner {
     int maxAttempts = 5,
   }) async {
     final pendingOps = <_PendingOp>[];
-    final context = _FakeTransactionContext(store, pendingOps);
+    final context = _FakeTransactionContext(store, pendingOps, clock);
     final result = await action(context);
 
     // Atomically commit staged operations
@@ -256,18 +299,19 @@ class _DeleteOp implements _PendingOp {
 }
 
 class _FakeBatchContext implements BatchContext {
-  _FakeBatchContext(this._pendingOps);
+  _FakeBatchContext(this._pendingOps, this._clock);
 
   final List<_PendingOp> _pendingOps;
+  final Clock _clock;
 
   @override
   void set(String path, Map<String, dynamic> data, {bool merge = false}) {
-    _pendingOps.add(_SetOp(path, data, merge));
+    _pendingOps.add(_SetOp(path, _resolveServerTimes(data, _clock), merge));
   }
 
   @override
   void update(String path, Map<String, dynamic> data) {
-    _pendingOps.add(_UpdateOp(path, data));
+    _pendingOps.add(_UpdateOp(path, _resolveServerTimes(data, _clock)));
   }
 
   @override
@@ -277,10 +321,11 @@ class _FakeBatchContext implements BatchContext {
 }
 
 class _FakeTransactionContext implements TransactionContext {
-  _FakeTransactionContext(this._store, this._pendingOps);
+  _FakeTransactionContext(this._store, this._pendingOps, this._clock);
 
   final Map<String, Map<String, dynamic>> _store;
   final List<_PendingOp> _pendingOps;
+  final Clock _clock;
 
   @override
   Future<Map<String, dynamic>?> get(String path) async {
@@ -300,12 +345,12 @@ class _FakeTransactionContext implements TransactionContext {
 
   @override
   void set(String path, Map<String, dynamic> data, {bool merge = false}) {
-    _pendingOps.add(_SetOp(path, data, merge));
+    _pendingOps.add(_SetOp(path, _resolveServerTimes(data, _clock), merge));
   }
 
   @override
   void update(String path, Map<String, dynamic> data) {
-    _pendingOps.add(_UpdateOp(path, data));
+    _pendingOps.add(_UpdateOp(path, _resolveServerTimes(data, _clock)));
   }
 
   @override

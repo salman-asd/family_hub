@@ -50,6 +50,10 @@ class FakeAuthRepository implements AuthRepository {
   /// `true` and the next `reloadUser` reports a verified address.
   bool reloadVerified = false;
 
+  /// How many times [reloadUser] refreshed the ID token (H5 mirrors the real
+  /// repository's `getIdToken(true)`).
+  int tokenRefreshes = 0;
+
   /// When true, every method parks until [release] is called — used to observe
   /// the in-flight (`isSubmitting`) state.
   ///
@@ -158,6 +162,9 @@ class FakeAuthRepository implements AuthRepository {
     }
     final current = _current;
     if (current == null) return const Success<AppUser?>(null);
+    // Mirror FirebaseAuthRepository.reloadUser(): force a token refresh so the
+    // `email_verified` claim the rules read is up to date (H5).
+    tokenRefreshes++;
     _setCurrent(current.copyWith(emailVerified: reloadVerified));
     return Success<AppUser?>(_current);
   }
