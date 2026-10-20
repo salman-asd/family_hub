@@ -1,4 +1,4 @@
-import 'package:family_hub/core/utils/clock.dart';
+import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
@@ -19,6 +19,7 @@ import 'package:family_hub/features/family/domain/usecases/reject_member.dart';
 import 'package:family_hub/features/family/domain/usecases/revoke_invitation.dart';
 import 'package:family_hub/features/family/domain/usecases/transfer_admin.dart';
 import 'package:family_hub/features/family/domain/usecases/update_family_settings.dart';
+import 'package:family_hub/features/family/domain/usecases/update_permission_settings.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/features/onboarding/presentation/profile_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -123,6 +124,14 @@ final transferAdminProvider = Provider<TransferAdmin>(
 
 final updateFamilySettingsProvider = Provider<UpdateFamilySettings>(
   (ref) => UpdateFamilySettings(
+    families: ref.watch(familyRepositoryProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
+
+final updatePermissionSettingsProvider = Provider<UpdatePermissionSettings>(
+  (ref) => UpdatePermissionSettings(
     families: ref.watch(familyRepositoryProvider),
     clock: ref.watch(clockProvider),
     newId: ref.watch(idGeneratorProvider),

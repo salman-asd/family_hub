@@ -3,7 +3,7 @@ import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/invite_code_generator.dart';
@@ -69,7 +69,7 @@ class CreateInvitation {
     );
     final saved = await _families.saveInvitation(
       invitation,
-      FamilyEvent(
+      AuditEvent(
         id: _newId(),
         type: 'invitation.created',
         actorId: actorUid,

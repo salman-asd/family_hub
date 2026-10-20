@@ -4,7 +4,7 @@ import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/domain/family.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/permission_access.dart';
 
@@ -43,7 +43,7 @@ class UpdateFamilySettings {
     }
     final saved = await _families.updateFamily(
       family,
-      FamilyEvent(
+      AuditEvent(
         id: _newId(),
         type: 'family.updated',
         actorId: actorUid,

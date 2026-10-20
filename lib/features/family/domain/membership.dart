@@ -17,8 +17,8 @@ enum MembershipStatus {
 
 /// The current user's membership, as far as routing cares.
 ///
-/// Roles (admin / moderator / member) arrive with Step 9/10; the router only
-/// needs the status and which family to read module flags from.
+/// Carries the role as DATA only: what a role may do is decided by
+/// `PermissionPolicy` (via `canProvider`), never by testing the role (H7).
 class Membership {
   const Membership({required this.status, this.familyId, this.role});
 
@@ -32,12 +32,6 @@ class Membership {
 
   /// Role in the family; `null` when unknown (no membership, or a test double).
   final MemberRole? role;
-
-  bool get isAdmin => role == MemberRole.admin;
-  bool get isModerator => role == MemberRole.moderator;
-
-  /// Admin or moderator.
-  bool get canManageMembers => isAdmin || isModerator;
 
   @override
   bool operator ==(Object other) =>

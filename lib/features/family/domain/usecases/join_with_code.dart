@@ -3,7 +3,7 @@ import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/domain/ensure_free_to_join.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/invite_code_generator.dart';
@@ -112,7 +112,7 @@ class JoinWithCode {
     final saved = await _families.requestToJoin(
       invitation: invitation,
       member: member,
-      event: FamilyEvent(
+      event: AuditEvent(
         id: eventId ?? _newId(),
         type: 'member.requested',
         actorId: actorUid,

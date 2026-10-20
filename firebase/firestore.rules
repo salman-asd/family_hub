@@ -1,19 +1,20 @@
 rules_version = '2';
 
 // ============================================================================
-// Family Hub — Firestore Security Rules v2.0 (Step 10 + hardening H4 + H5)
+// Family Hub — Firestore Security Rules v2.1 (Step 10 + hardening H4-H7)
 //
 // One permission matrix, twice: `lib/core/permissions/permission_policy.dart`
 // for the app, and this file for the backend.  CLAUDE.md hard rule 12: every
 // permission is enforced here as well as in the UI.
 //
-// Collections covered today (roadmap Steps 6-9, hardening H4/H5):
+// Collections covered today (roadmap Steps 6-9, hardening H4-H7):
 //   users/{uid}
 //   inviteCodes/{code}
 //   families/{f}
 //   families/{f}/members/{m}
 //   families/{f}/invitations/{i}
-//   families/{f}/settings/{s}
+//   families/{f}/settings/{s}   (general, modules, rotationPolicy,
+//                                notificationDefaults, permissions)
 //   families/{f}/activity/{a}
 //   families/{f}/auditLogs/{a}
 //
@@ -34,6 +35,16 @@ rules_version = '2';
 //     pending member document;
 //   * `verified()`: a verified email is required for every mutating action
 //     except the owner's own `users/{uid}` profile/preferences.
+//
+// H7 additions:
+//   * `families/{f}/settings/permissions` (booleans: moderatorManagesFinance,
+//     membersViewFamilyReports, membersViewAllContributions, membersCanInvite,
+//     choreVerificationEnabled) rides the generic `settings/{s}` rule: every
+//     active member reads it, only an admin writes it.  `membersCanInvite`
+//     lets a plain member create invitations and revoke their own
+//     (`canInvite`, `membersMayInvite`);
+//   * the Dart matrix (`PermissionPolicy`) reads the same document, and
+//     docs/permission_matrix.md is generated from it.
 //
 // H6 additions (decision D4: at most three admins):
 //   * `families/{f}.adminIds` lists 1..3 uids of ACTIVE admins.  A family
@@ -147,7 +158,9 @@ service cloud.firestore {
     // The union of the four settings documents created with the family.
     function settingsKeys() {
       return ['timezone', 'currency', 'flags', 'absencePolicy', 'enabled',
-              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'moderatorManagesFinance', 'membersViewFamilyReports',
+              'membersViewAllContributions', 'membersCanInvite',
+              'choreVerificationEnabled', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
               'schemaVersion', 'deletedAt', 'deletedBy'];
     }
     function eventKeys() {
@@ -155,8 +168,17 @@ service cloud.firestore {
               'recordedAt', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
               'schemaVersion'];
     }
+    // H7: the `settings/permissions` switches are booleans or absent.
+    function boolOk(d, k) {
+      return !(k in d.keys()) || d[k] is bool;
+    }
     function settingsOk(d) {
       return d.keys().hasOnly(settingsKeys())
+        && boolOk(d, 'moderatorManagesFinance')
+        && boolOk(d, 'membersViewFamilyReports')
+        && boolOk(d, 'membersViewAllContributions')
+        && boolOk(d, 'membersCanInvite')
+        && boolOk(d, 'choreVerificationEnabled')
         && optStr(d, 'timezone', 64)
         && optStr(d, 'currency', 8)
         && (!('flags' in d.keys())
@@ -234,6 +256,21 @@ service cloud.firestore {
     // Admin or moderator: may invite and decide requests (Step 9 rule).
     function isManager(f) {
       return isAdmin(f) || isMod(f);
+    }
+
+    // ── Member invitations (H7) ────────────────────────────────────────────
+    // `settings/permissions.membersCanInvite` lets plain members create (and
+    // revoke their own) invitations.  Absent document or key = false.
+    function permissionsPath(f) {
+      return /databases/$(database)/documents/families/$(f)/settings/permissions;
+    }
+    function membersMayInvite(f) {
+      return isActiveMember(f)
+        && exists(permissionsPath(f))
+        && get(permissionsPath(f)).data.get('membersCanInvite', false) == true;
+    }
+    function canInvite(f) {
+      return isManager(f) || membersMayInvite(f);
     }
 
     // ── Active-admin set (H6) ──────────────────────────────────────────────
@@ -418,7 +455,7 @@ service cloud.firestore {
       allow create: if verified()
         && request.resource.data.familyId is string
         && request.resource.data.familyId.size() > 0
-        && isManager(request.resource.data.familyId)
+        && canInvite(request.resource.data.familyId)
         && createsAsSelf()
         && request.resource.data.status == 'active'
         && request.resource.data.role == 'member'
@@ -437,12 +474,15 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(invitationKeys())
         && pendingJoinAfter(resource.data.familyId, code);
 
-      // A manager of the code's family revokes a still-active code; nothing
-      // else may change.
+      // A manager of the code's family (or the member who created it, while
+      // members may invite) revokes a still-active code; nothing else may
+      // change.
       allow update: if verified()
         && resource.data.status == 'active'
         && request.resource.data.status == 'revoked'
-        && isManager(resource.data.familyId)
+        && (isManager(resource.data.familyId)
+            || (membersMayInvite(resource.data.familyId)
+                && resource.data.createdBy == request.auth.uid))
         && writesAsSelf()
         && request.resource.data.diff(resource.data).affectedKeys()
              .hasOnly(['status', 'updatedAt', 'updatedBy'])
@@ -588,9 +628,9 @@ service cloud.firestore {
 
       // ── invitations/{i} — the family-side mirror of inviteCodes ────────
       match /invitations/{i} {
-        allow read: if isManager(f);
+        allow read: if isManager(f) || membersMayInvite(f);
         allow create: if verified()
-          && (isManager(f) || creatingFamily(f))
+          && (canInvite(f) || creatingFamily(f))
           && createsAsSelf()
           && request.resource.data.familyId == f
           && request.resource.data.keys().hasOnly(invitationKeys());
@@ -605,7 +645,10 @@ service cloud.firestore {
           && (
             (
               request.resource.data.status == 'revoked'
-              && isManager(f)
+              && (isManager(f)
+                  || (membersMayInvite(f)
+                      && resource.data.get('createdBy', '')
+                           == request.auth.uid))
               && writesAsSelf()
             )
             || (

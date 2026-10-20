@@ -15,3 +15,11 @@ import 'package:family_hub/core/permissions/role.dart';
 export 'package:family_hub/core/permissions/role.dart' show Role;
 
 typedef MemberRole = Role;
+
+/// The roles an admin may hand out from the roles screen (admin is moved with
+/// "transfer admin", never assigned directly).  Domain data, so no widget has
+/// to name a role.
+const List<MemberRole> assignableRoles = <MemberRole>[
+  Role.moderator,
+  Role.member,
+];

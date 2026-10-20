@@ -1,6 +1,5 @@
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
-import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/relationship.dart';
 
@@ -23,12 +22,6 @@ extension FamilyLabels on AppLocalizations {
         Gender.male => genderMale,
         Gender.female => genderFemale,
         Gender.other => genderOther,
-      };
-
-  String roleLabel(MemberRole r) => switch (r) {
-        MemberRole.admin => roleAdmin,
-        MemberRole.moderator => roleModerator,
-        MemberRole.member => roleMember,
       };
 
   String statusLabel(MembershipStatus s) => switch (s) {

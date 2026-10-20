@@ -154,3 +154,13 @@ download in the authoring environment). Before merging run, in this order:
 - Generated l10n files were edited by hand (`tools` helper); run `flutter gen-l10n` to confirm they are identical.
 - `flutterfire configure`, real `google-services.json`, the upload keystore and `firebase deploy` are manual steps (`firebase/README.md`, `docs/RELEASE.md`).
 
+
+## Phase 1 hardening - Part B (H5-H8), written statically
+Not compiled or run (no Flutter SDK / emulator available). Run the Part A checklist above, then
+`UPDATE_PERMISSION_MATRIX=1 flutter test test/core/permissions/permission_matrix_doc_test.dart` only if the matrix test reports drift.
+
+- **H5/H6 verified**: rules (validation, closed key sets, log integrity, verified email, invite burn-in-same-batch, adminIds guard) and token refresh are in place. Fixed during verification: contract fixtures lacked `adminIds` (create_family) and a `transfer_admin` fixture; `InMemoryBackend.saveMembers` did not match the H6 interface (`adminIds`); no Dart tests covered adminIds (added `admin_ids_test.dart`).
+- **H7**: permission providers (`currentActorProvider`, `canProvider`, `ref.can`), `settings/permissions` (rules, mapper, repository, `UpdatePermissionSettings`), new `viewAllContributions` permission, configurable cells, `Membership.isAdmin/...` removed, screens use `ref.can`/`PermissionGate`, `requiredPermission` is a `Permission?` with `visibleModulesProvider`, generated `docs/permission_matrix.md`, architecture test.
+- **H8**: pure `clock.dart` + `clock_provider.dart`, `ModuleFlags` moved to the family domain, `AuditEvent` + `AuditWriter` (`FamilyEvent` deleted), import-graph layer test, TODO cleanup + test + hard CI failure, exhaustive failure mapping + test.
+
+Assumptions: no UI yet for editing the five permission switches (use case and rules exist); `AuditEvent.summary` kept (optional) until H9; `requirePermission` falls back to default settings when the settings read fails.

@@ -110,6 +110,21 @@ extension FamilyFailureMessages on AppLocalizations {
         Conflict(code: 'last_admin') => famFailureLastAdmin,
         PermissionDenied() => famFailureNotAllowed,
         Network() => errorNetwork,
-        _ => errorUnknown,
+        // Exhaustive on purpose (H8): a new AppFailure subtype is a compile
+        // error here until it is given a message, never a silent fallback.
+        Validation() ||
+        NotFound() ||
+        Conflict() ||
+        Unknown() ||
+        InvalidCredentials() ||
+        UserNotFound() ||
+        EmailAlreadyInUse() ||
+        WeakPassword() ||
+        TooManyRequests() ||
+        UserDisabled() ||
+        RequiresRecentLogin() ||
+        InvalidEmail() ||
+        NoCurrentUser() =>
+          errorUnknown,
       };
 }

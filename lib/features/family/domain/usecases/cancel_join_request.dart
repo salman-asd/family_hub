@@ -2,7 +2,7 @@ import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
@@ -44,7 +44,7 @@ class CancelJoinRequest {
     final saved = await _families.saveMembers(
       familyId,
       [updated],
-      FamilyEvent(
+      AuditEvent(
         id: _newId(),
         type: 'member.cancelled',
         actorId: actorUid,

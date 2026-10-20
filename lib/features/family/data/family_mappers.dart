@@ -1,12 +1,13 @@
 import 'package:family_hub/core/firebase/base_mapper.dart';
-import 'package:family_hub/core/firebase/server_time.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
+import 'package:family_hub/core/firebase/audit_writer.dart';
 import 'package:family_hub/features/family/domain/family.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 
 /// Pure functions between domain objects and Firestore maps.  Kept free of any
 /// Firestore instance so they are unit-testable.
@@ -207,6 +208,61 @@ abstract final class FamilyMappers {
         modules: modulesFromMap(modules),
       );
 
+  /// `settings/permissions` (H7): the five family switches.  The module
+  /// switches live in `settings/modules`.
+  static Map<String, dynamic> permissionsMap(
+    PermissionSettings s,
+    BaseDocumentMetadata m,
+  ) =>
+      <String, dynamic>{
+        ..._permissionFields(s),
+        ...BaseMapper.metadataToMap(m),
+      };
+
+  /// Fields changed when an admin edits the permission switches.
+  static Map<String, dynamic> permissionsChangeMap(
+    PermissionSettings s, {
+    required String actorUid,
+    required DateTime now,
+  }) =>
+      <String, dynamic>{
+        ..._permissionFields(s),
+        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
+        BaseMapper.keyUpdatedBy: actorUid,
+      };
+
+  static Map<String, dynamic> _permissionFields(PermissionSettings s) =>
+      <String, dynamic>{
+        'moderatorManagesFinance': s.moderatorManagesFinance,
+        'membersViewFamilyReports': s.membersViewFamilyReports,
+        'membersViewAllContributions': s.membersViewAllContributions,
+        'membersCanInvite': s.membersCanInvite,
+        'choreVerificationEnabled': s.choreVerificationEnabled,
+      };
+
+  /// A missing document, or a missing/ill-typed field, means the default.
+  static PermissionSettings permissionsFromMap(Map<String, dynamic>? d) {
+    bool flag(String key, bool fallback) {
+      final v = d?[key];
+      return v is bool ? v : fallback;
+    }
+
+    const base = PermissionSettings.defaults;
+    return PermissionSettings(
+      moderatorManagesFinance:
+          flag('moderatorManagesFinance', base.moderatorManagesFinance),
+      membersViewFamilyReports:
+          flag('membersViewFamilyReports', base.membersViewFamilyReports),
+      membersViewAllContributions: flag(
+        'membersViewAllContributions',
+        base.membersViewAllContributions,
+      ),
+      membersCanInvite: flag('membersCanInvite', base.membersCanInvite),
+      choreVerificationEnabled:
+          flag('choreVerificationEnabled', base.choreVerificationEnabled),
+    );
+  }
+
   /// Defaults written once when a family is created.
   static Map<String, dynamic> rotationPolicyMap(BaseDocumentMetadata m) =>
       <String, dynamic>{
@@ -224,19 +280,5 @@ abstract final class FamilyMappers {
 
   // ── Activity / audit ──────────────────────────────────────────────────────
 
-  static Map<String, dynamic> eventMap(FamilyEvent e) => <String, dynamic>{
-        'type': e.type,
-        'actorId': e.actorId,
-        'summary': e.summary,
-        'refType': e.refType,
-        'refId': e.refId,
-        'params': e.params,
-        // The server clock: the rules require recordedAt == request.time.
-        'recordedAt': ServerTime.instance,
-        BaseMapper.keyCreatedAt: BaseMapper.dateTimeToTimestamp(e.at),
-        BaseMapper.keyCreatedBy: e.actorId,
-        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(e.at),
-        BaseMapper.keyUpdatedBy: e.actorId,
-        BaseMapper.keySchemaVersion: 1,
-      };
+  static Map<String, dynamic> eventMap(AuditEvent e) => AuditWriter.toMap(e);
 }

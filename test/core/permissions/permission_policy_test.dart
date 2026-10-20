@@ -20,6 +20,7 @@ const List<(Permission, bool, bool, bool)> _matrix =
   (Permission.addOwnExpense, true, true, true),
   (Permission.editOthersExpense, true, true, false),
   (Permission.recordContribution, true, true, false),
+  (Permission.viewAllContributions, true, true, false),
   // Chores.
   (Permission.manageChoreTemplates, true, true, false),
   (Permission.reassignChore, true, true, false),

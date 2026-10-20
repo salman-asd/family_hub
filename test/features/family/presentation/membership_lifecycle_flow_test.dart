@@ -3,7 +3,7 @@ import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/router.dart';
 import 'package:family_hub/app/theme/theme_controller.dart'
     show sharedPreferencesProvider;
-import 'package:family_hub/core/utils/clock.dart';
+import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/features/auth/domain/app_user.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';

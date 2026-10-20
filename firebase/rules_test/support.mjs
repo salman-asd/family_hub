@@ -151,6 +151,17 @@ export const eventDoc = (actorId, extra = {}) =>
     ...extra,
   });
 
+/** FamilyMappers.permissionsMap: `settings/permissions` (H7). */
+export const permissionsDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    moderatorManagesFinance: true,
+    membersViewFamilyReports: true,
+    membersViewAllContributions: false,
+    membersCanInvite: false,
+    choreVerificationEnabled: false,
+    ...extra,
+  });
+
 /** Seeds the world the tests assume, with rules switched off. */
 export const seedWorld = (testEnv) =>
   testEnv.withSecurityRulesDisabled(async (ctx) => {

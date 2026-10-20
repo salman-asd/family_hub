@@ -54,6 +54,7 @@ import {
   memberDoc,
   nowTs,
   pastTs,
+  permissionsDoc,
   seedWorld,
 } from './support.mjs';
 
@@ -1927,6 +1928,166 @@ describe('H6 active-admin set', () => {
         doc(db, 'families/famAdminEmpty'),
         familyDoc(FRANK, 'Empty', { adminIds: [] }),
       ),
+    );
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// H7: settings/permissions and member invitations
+// ─────────────────────────────────────────────────────────────────────────────
+const seedPermissions = (extra = {}) =>
+  testEnv.withSecurityRulesDisabled((ctx) =>
+    setDoc(
+      doc(ctx.firestore(), `families/${FAM_A}/settings/permissions`),
+      permissionsDoc(ALICE, extra),
+    ),
+  );
+
+describe('H7 settings/permissions', () => {
+  it('allows an admin to create the permissions document', async () => {
+    const db = as(ALICE);
+    await assertSucceeds(
+      setDoc(doc(db, `families/${FAM_A}/settings/permissions`), permissionsDoc(ALICE)),
+    );
+  });
+
+  it('denies a moderator creating the permissions document', async () => {
+    const db = as(BOB);
+    await assertFails(
+      setDoc(doc(db, `families/${FAM_A}/settings/permissions`), permissionsDoc(BOB)),
+    );
+  });
+
+  it('allows the family-creation batch to write the permissions document', async () => {
+    const db = as(FRANK);
+    const batch = writeBatch(db);
+    batch.set(doc(db, 'families/famP'), familyDoc(FRANK, 'Perm family'));
+    batch.set(
+      doc(db, `families/famP/members/${FRANK}`),
+      memberDoc(FRANK, 'admin', 'active'),
+    );
+    batch.set(doc(db, 'families/famP/settings/permissions'), permissionsDoc(FRANK));
+    batch.set(doc(db, 'families/famP/activity/evt1'), eventDoc(FRANK, { refId: 'famP' }));
+    batch.set(doc(db, 'families/famP/auditLogs/evt1'), eventDoc(FRANK, { refId: 'famP' }));
+    await assertSucceeds(batch.commit());
+  });
+
+  it('allows an active member to read the permissions document', async () => {
+    await seedPermissions();
+    await assertSucceeds(getDoc(doc(as(CARA), `families/${FAM_A}/settings/permissions`)));
+  });
+
+  it('denies a pending member reading the permissions document', async () => {
+    await seedPermissions();
+    await assertFails(getDoc(doc(as(DAVE), `families/${FAM_A}/settings/permissions`)));
+  });
+
+  it('allows an admin to flip a switch', async () => {
+    await seedPermissions();
+    await assertSucceeds(
+      updateDoc(doc(as(ALICE), `families/${FAM_A}/settings/permissions`), {
+        membersCanInvite: true,
+        updatedAt: nowTs(),
+        updatedBy: ALICE,
+      }),
+    );
+  });
+
+  it('denies a moderator flipping a switch', async () => {
+    await seedPermissions();
+    await assertFails(
+      updateDoc(doc(as(BOB), `families/${FAM_A}/settings/permissions`), {
+        moderatorManagesFinance: false,
+        updatedAt: nowTs(),
+        updatedBy: BOB,
+      }),
+    );
+  });
+
+  it('denies a member flipping a switch', async () => {
+    await seedPermissions();
+    await assertFails(
+      updateDoc(doc(as(CARA), `families/${FAM_A}/settings/permissions`), {
+        membersCanInvite: true,
+        updatedAt: nowTs(),
+        updatedBy: CARA,
+      }),
+    );
+  });
+
+  it('denies a switch that is not a boolean', async () => {
+    await seedPermissions();
+    await assertFails(
+      updateDoc(doc(as(ALICE), `families/${FAM_A}/settings/permissions`), {
+        membersCanInvite: 'yes',
+        updatedAt: nowTs(),
+        updatedBy: ALICE,
+      }),
+    );
+  });
+
+  it('denies an unknown key in the permissions document', async () => {
+    await seedPermissions();
+    await assertFails(
+      updateDoc(doc(as(ALICE), `families/${FAM_A}/settings/permissions`), {
+        everyoneIsAdmin: true,
+        updatedAt: nowTs(),
+        updatedBy: ALICE,
+      }),
+    );
+  });
+});
+
+describe('H7 member invitations (membersCanInvite)', () => {
+  const createCode = (db, uid, code) => {
+    const b = writeBatch(db);
+    b.set(doc(db, `inviteCodes/${code}`), inviteCodeDoc(uid, FAM_A, code));
+    b.set(doc(db, `families/${FAM_A}/invitations/${code}`), inviteCodeDoc(uid, FAM_A, code));
+    b.set(doc(db, `families/${FAM_A}/activity/inv-${code}`), eventDoc(uid));
+    b.set(doc(db, `families/${FAM_A}/auditLogs/inv-${code}`), eventDoc(uid));
+    return b.commit();
+  };
+
+  it('allows a plain member to create a code once the family enables it', async () => {
+    await seedPermissions({ membersCanInvite: true });
+    await assertSucceeds(createCode(as(CARA), CARA, 'MEMBER01'));
+  });
+
+  it('denies a plain member creating a code while the switch is off', async () => {
+    await seedPermissions({ membersCanInvite: false });
+    await assertFails(createCode(as(CARA), CARA, 'MEMBER02'));
+  });
+
+  it('denies a PENDING member creating a code even with the switch on', async () => {
+    await seedPermissions({ membersCanInvite: true });
+    await assertFails(createCode(as(DAVE), DAVE, 'MEMBER03'));
+  });
+
+  it('allows a member to revoke the code they created', async () => {
+    await seedPermissions({ membersCanInvite: true });
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(doc(db, 'inviteCodes/OWNCODE1'), inviteCodeDoc(CARA, FAM_A, 'OWNCODE1'));
+      await setDoc(
+        doc(db, `families/${FAM_A}/invitations/OWNCODE1`),
+        inviteCodeDoc(CARA, FAM_A, 'OWNCODE1'),
+      );
+    });
+    const db = as(CARA);
+    const b = writeBatch(db);
+    b.set(doc(db, 'inviteCodes/OWNCODE1'), invitationRevoked(CARA), { merge: true });
+    b.set(doc(db, `families/${FAM_A}/invitations/OWNCODE1`), invitationRevoked(CARA), {
+      merge: true,
+    });
+    await assertSucceeds(b.commit());
+  });
+
+  it('denies a member revoking a code somebody else created', async () => {
+    await seedPermissions({ membersCanInvite: true });
+    await assertFails(
+      setDoc(doc(as(CARA), `inviteCodes/${CODES.live}`), invitationRevoked(CARA), {
+        merge: true,
+      }),
     );
   });
 });

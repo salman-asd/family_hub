@@ -5,7 +5,7 @@ import 'package:family_hub/core/utils/stream_utils.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/membership_repository.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 
 /// Membership and module flags, both found through `users/{uid}.familyId`.
 class FirestoreMembershipRepository

@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/firebase/audit_writer.dart';
 import 'package:family_hub/core/firebase/base_mapper.dart';
 import 'package:family_hub/core/firebase/doc_watch.dart';
 import 'package:family_hub/core/firebase/firestore_guard.dart';
 import 'package:family_hub/core/firebase/firestore_paths.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
@@ -40,18 +42,11 @@ class FirestoreFamilyRepository implements FamilyRepository {
   /// Administrative writes need the server (rule 16); see [guardWrite].
   ServerProbe _probe(String uid) => serverProbeFor(_db, uid);
 
-  void _writeEvent(BatchContext b, String familyId, FamilyEvent e) {
-    final data = FamilyMappers.eventMap(e);
-    b
-      ..set(FirestorePaths.activityDoc(familyId, e.id), data)
-      ..set(FirestorePaths.auditLogDoc(familyId, e.id), data);
-  }
-
   @override
   Future<Result<void>> createFamily({
     required Family family,
     required Member owner,
-    required FamilyEvent event,
+    required AuditEvent event,
   }) =>
       guardWrite(
         probe: _probe(owner.uid),
@@ -76,6 +71,10 @@ class FirestoreFamilyRepository implements FamilyRepository {
               FamilyMappers.modulesMap(family.modules, meta),
             )
             ..set(
+              FirestorePaths.settingsDoc(fid, 'permissions'),
+              FamilyMappers.permissionsMap(PermissionSettings.defaults, meta),
+            )
+            ..set(
               FirestorePaths.settingsDoc(fid, 'rotationPolicy'),
               FamilyMappers.rotationPolicyMap(meta),
             )
@@ -88,7 +87,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
               {'familyId': fid},
               merge: true,
             );
-          _writeEvent(b, fid, event);
+          AuditWriter.write(b, fid, event);
         }),
       );
 
@@ -103,7 +102,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
   @override
   Future<Result<void>> saveInvitation(
     Invitation invitation,
-    FamilyEvent event,
+    AuditEvent event,
   ) =>
       guardWrite(
         probe: _probe(event.actorId),
@@ -118,7 +117,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
               ),
               data,
             );
-          _writeEvent(b, invitation.familyId, event);
+          AuditWriter.write(b, invitation.familyId, event);
         }),
       );
 
@@ -126,7 +125,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
   Future<Result<void>> requestToJoin({
     required Invitation invitation,
     required Member member,
-    required FamilyEvent event,
+    required AuditEvent event,
   }) =>
       guardWrite(
         probe: _probe(member.uid),
@@ -151,7 +150,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
               FirestorePaths.invitationDoc(fid, invitation.code),
               used,
             );
-          _writeEvent(b, fid, event);
+          AuditWriter.write(b, fid, event);
         }),
       );
 
@@ -176,7 +175,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
   @override
   Future<Result<void>> revokeInvitation(
     Invitation invitation,
-    FamilyEvent event,
+    AuditEvent event,
   ) =>
       guardWrite(
         probe: _probe(event.actorId),
@@ -192,7 +191,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
               ),
               changes,
             );
-          _writeEvent(b, invitation.familyId, event);
+          AuditWriter.write(b, invitation.familyId, event);
         }),
       );
 
@@ -218,7 +217,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
   Future<Result<void>> saveMembers(
     String familyId,
     List<Member> members,
-    FamilyEvent event, {
+    AuditEvent event, {
     List<String>? adminIds,
   }) =>
       guardWrite(
@@ -248,12 +247,12 @@ class FirestoreFamilyRepository implements FamilyRepository {
               ),
             );
           }
-          _writeEvent(b, familyId, event);
+          AuditWriter.write(b, familyId, event);
         }),
       );
 
   @override
-  Future<Result<void>> updateFamily(Family family, FamilyEvent event) =>
+  Future<Result<void>> updateFamily(Family family, AuditEvent event) =>
       guardWrite(
         probe: _probe(event.actorId),
         () => _tx.runBatch((b) {
@@ -276,9 +275,59 @@ class FirestoreFamilyRepository implements FamilyRepository {
               FirestorePaths.settingsDoc(family.id, 'modules'),
               FamilyMappers.modulesMap(family.modules, meta),
             );
-          _writeEvent(b, family.id, event);
+          AuditWriter.write(b, family.id, event);
         }),
       );
+
+  @override
+  Future<Result<PermissionSettings>> getPermissionSettings(String familyId) =>
+      guardFirestore(() async {
+        final snap = await _db
+            .doc(FirestorePaths.settingsDoc(familyId, 'permissions'))
+            .get();
+        return FamilyMappers.permissionsFromMap(snap.data());
+      });
+
+  @override
+  Future<Result<void>> updatePermissionSettings(
+    String familyId,
+    PermissionSettings settings,
+    AuditEvent event,
+  ) =>
+      guardWrite(
+        probe: _probe(event.actorId),
+        () async {
+          final path = FirestorePaths.settingsDoc(familyId, 'permissions');
+          // A family created before H7 has no such document yet: create it
+          // (with its metadata) instead of updating it.
+          final exists = (await _db.doc(path).get()).exists;
+          await _tx.runBatch((b) {
+            if (exists) {
+              b.update(
+                path,
+                FamilyMappers.permissionsChangeMap(
+                  settings,
+                  actorUid: event.actorId,
+                  now: event.at,
+                ),
+              );
+            } else {
+              b.set(
+                path,
+                FamilyMappers.permissionsMap(settings, _meta(event.actorId)),
+              );
+            }
+            AuditWriter.write(b, familyId, event);
+          });
+        },
+      );
+
+  @override
+  Stream<PermissionSettings> watchPermissionSettings(String familyId) => _db
+      .doc(FirestorePaths.settingsDoc(familyId, 'permissions'))
+      .snapshots()
+      .map((s) => FamilyMappers.permissionsFromMap(s.data()))
+      .distinct();
 
   @override
   Stream<List<Member>> watchMembers(String familyId) => _db

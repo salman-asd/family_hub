@@ -5,7 +5,7 @@ import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,7 +1,7 @@
 import 'package:family_hub/features/bazar/bazar_module.dart';
 import 'package:family_hub/features/chores/chores_module.dart';
 import 'package:family_hub/modules/family_module.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 
 /// The modules the app knows about, in navigation order.
 class ModuleRegistry {

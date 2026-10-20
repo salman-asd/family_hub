@@ -11,6 +11,9 @@ import 'package:family_hub/features/family/domain/member.dart';
 /// replaces the Step 9 `requireActor` (which took a raw set of roles), so the
 /// rule lives in exactly one matrix instead of in each use case.
 ///
+/// [settings] defaults to the family's `settings/permissions` document (one
+/// extra read per mutation, deliberate: a use case cannot forget it).
+///
 /// Returns `PermissionDenied` for a missing, rejected, pending or disabled
 /// actor, and for an active actor the matrix does not allow.  A repository
 /// failure is passed through unchanged.
@@ -20,7 +23,7 @@ Future<Result<Member>> requirePermission(
   required String actorUid,
   required Permission permission,
   String? ownerId,
-  PermissionSettings settings = PermissionSettings.defaults,
+  PermissionSettings? settings,
   PermissionTemplate? template,
 }) async {
   final result = await repository.getMember(familyId, actorUid);
@@ -31,16 +34,29 @@ Future<Result<Member>> requirePermission(
   if (actor == null || actor.isRemoved) {
     return const Failure<Member>(PermissionDenied());
   }
+  // H7: the family's permission switches decide the configurable cells (a
+  // moderator's finance rights, whether members may invite ...).  An unreadable
+  // document falls back to the DEFAULTS, which never grant a member more than
+  // the matrix's base cell (members may not invite by default).
+  final effective = settings ?? await _loadSettings(repository, familyId);
   if (!PermissionPolicy.can(
     actor.permissionActor,
     permission,
     ownerId: ownerId,
-    settings: settings,
+    settings: effective,
     template: template,
   )) {
     return const Failure<Member>(PermissionDenied());
   }
   return Success<Member>(actor);
+}
+
+Future<PermissionSettings> _loadSettings(
+  FamilyRepository repository,
+  String familyId,
+) async {
+  final loaded = await repository.getPermissionSettings(familyId);
+  return loaded.valueOrNull ?? PermissionSettings.defaults;
 }
 
 /// True when applying [updated] to [members] leaves no active admin.

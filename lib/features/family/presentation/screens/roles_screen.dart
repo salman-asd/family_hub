@@ -1,5 +1,6 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/localization/role_labels.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
@@ -115,24 +116,20 @@ class RolesScreen extends ConsumerWidget {
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
-                            if (m.role == MemberRole.admin)
-                              Chip(label: Text(l10n.roleAdmin)),
+                            if (m.isActiveAdmin)
+                              Chip(label: Text(l10n.roleLabel(m.role))),
                           ],
                         ),
-                        if (m.uid != me && m.role != MemberRole.admin) ...[
+                        if (m.uid != me && !m.isActiveAdmin) ...[
                           const SizedBox(height: 8),
                           ChoiceWrap<MemberRole>(
                             options: [
-                              ChoiceOption(
-                                MemberRole.moderator,
-                                l10n.roleModerator,
-                                key: Key('role_mod_${m.uid}'),
-                              ),
-                              ChoiceOption(
-                                MemberRole.member,
-                                l10n.roleMember,
-                                key: Key('role_member_${m.uid}'),
-                              ),
+                              for (final r in assignableRoles)
+                                ChoiceOption(
+                                  r,
+                                  l10n.roleLabel(r),
+                                  key: Key('role_${r.name}_${m.uid}'),
+                                ),
                             ],
                             selected: m.role,
                             onChanged: busy ? (_) {} : (r) => setRole(m, r),

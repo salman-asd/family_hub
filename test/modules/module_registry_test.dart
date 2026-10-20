@@ -1,6 +1,6 @@
 import 'package:family_hub/features/bazar/bazar_module.dart';
 import 'package:family_hub/features/chores/chores_module.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:family_hub/modules/module_registry.dart';
 import 'package:flutter_test/flutter_test.dart';
 

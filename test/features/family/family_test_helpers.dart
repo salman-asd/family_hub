@@ -66,5 +66,12 @@ class Fixture {
     for (final uid in people.keys) {
       backend.userFamily[uid] = 'fam';
     }
+    // H6: `families/fam.adminIds` mirrors the active admins.
+    backend.adminIds['fam'] = [
+      for (final e in people.entries)
+        if (e.value.$1 == MemberRole.admin &&
+            e.value.$2 == MembershipStatus.active)
+          e.key,
+    ];
   }
 }

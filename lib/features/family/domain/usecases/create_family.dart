@@ -4,7 +4,7 @@ import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/domain/ensure_free_to_join.dart';
 import 'package:family_hub/features/family/domain/family.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
@@ -78,7 +78,7 @@ class CreateFamily {
       spouseId: profile.spouseId,
       avatarKey: profile.avatarKey,
     );
-    final event = FamilyEvent(
+    final event = AuditEvent(
       id: eventId ?? _newId(),
       type: 'family.created',
       actorId: actorUid,

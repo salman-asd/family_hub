@@ -5,10 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_hub/core/firebase/base_mapper.dart';
 import 'package:family_hub/core/firebase/firestore_paths.dart';
 import 'package:family_hub/core/firebase/server_time.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
@@ -59,6 +60,7 @@ List<Map<String, dynamic>> _fixtures() => <Map<String, dynamic>>[
       _join(),
       _approve(),
       _roleChange(),
+      _transferAdmin(),
       _createInvitation(),
       _revokeInvitation(),
       _profile(),
@@ -92,7 +94,7 @@ Map<String, dynamic> _createFamily() {
     fullName: 'Fix Admin',
     relationship: 'other',
   );
-  final created = FamilyEvent(
+  final created = AuditEvent(
     id: 'ev1',
     type: 'family.created',
     actorId: _admin,
@@ -111,6 +113,8 @@ Map<String, dynamic> _createFamily() {
         FamilyMappers.generalSettingsMap(family, meta)),
     _write('set', FirestorePaths.settingsDoc(_familyId, 'modules'),
         FamilyMappers.modulesMap(family.modules, meta)),
+    _write('set', FirestorePaths.settingsDoc(_familyId, 'permissions'),
+        FamilyMappers.permissionsMap(PermissionSettings.defaults, meta)),
     _write('set', FirestorePaths.settingsDoc(_familyId, 'rotationPolicy'),
         FamilyMappers.rotationPolicyMap(meta)),
     _write('set', FirestorePaths.settingsDoc(_familyId, 'notificationDefaults'),
@@ -134,7 +138,7 @@ Map<String, dynamic> _join() {
     relationship: 'other',
     inviteCode: _code,
   );
-  final requested = FamilyEvent(
+  final requested = AuditEvent(
     id: 'ev2',
     type: 'member.requested',
     actorId: _joiner,
@@ -166,7 +170,7 @@ Map<String, dynamic> _approve() {
     fullName: 'Fix Joiner',
     relationship: 'other',
   );
-  final event = FamilyEvent(
+  final event = AuditEvent(
     id: 'ev3',
     type: 'member.approved',
     actorId: _admin,
@@ -194,7 +198,7 @@ Map<String, dynamic> _roleChange() {
     fullName: 'Fix Joiner',
     relationship: 'other',
   );
-  final event = FamilyEvent(
+  final event = AuditEvent(
     id: 'ev4',
     type: 'member.role_changed',
     actorId: _admin,
@@ -214,6 +218,50 @@ Map<String, dynamic> _roleChange() {
   ]);
 }
 
+/// H6: handing the admin role over rewrites both members AND `adminIds` in one
+/// batch, exactly like `TransferAdmin`.
+Map<String, dynamic> _transferAdmin() {
+  const newAdmin = Member(
+    uid: _joiner,
+    role: MemberRole.admin,
+    status: MembershipStatus.active,
+    fullName: 'Fix Joiner',
+    relationship: 'other',
+  );
+  const oldAdmin = Member(
+    uid: _admin,
+    role: MemberRole.member,
+    status: MembershipStatus.active,
+    fullName: 'Fix Admin',
+    relationship: 'other',
+  );
+  final event = AuditEvent(
+    id: 'ev7',
+    type: 'member.admin_transferred',
+    actorId: _admin,
+    summary: 'Admin role moved',
+    refType: 'member',
+    refId: _joiner,
+    at: _at,
+    params: const {'memberName': 'Fix Joiner'},
+  );
+  return _fixture('transfer_admin', _admin, <Map<String, dynamic>>[
+    _write('update', FirestorePaths.memberDoc(_familyId, _joiner),
+        FamilyMappers.memberChangeMap(newAdmin, actorUid: _admin, now: _at)),
+    _write('update', FirestorePaths.memberDoc(_familyId, _admin),
+        FamilyMappers.memberChangeMap(oldAdmin, actorUid: _admin, now: _at)),
+    _write(
+        'update',
+        FirestorePaths.familyDoc(_familyId),
+        FamilyMappers.familyAdminIdsMap(<String>[_joiner],
+            actorUid: _admin, now: _at)),
+    _write('set', FirestorePaths.activityDoc(_familyId, 'ev7'),
+        FamilyMappers.eventMap(event)),
+    _write('set', FirestorePaths.auditLogDoc(_familyId, 'ev7'),
+        FamilyMappers.eventMap(event)),
+  ]);
+}
+
 Map<String, dynamic> _createInvitation() {
   final invitation = Invitation(
     code: _newCode,
@@ -223,7 +271,7 @@ Map<String, dynamic> _createInvitation() {
     createdBy: _admin,
     createdAt: _at,
   );
-  final event = FamilyEvent(
+  final event = AuditEvent(
     id: 'ev5',
     type: 'invitation.created',
     actorId: _admin,
@@ -245,7 +293,7 @@ Map<String, dynamic> _createInvitation() {
 
 Map<String, dynamic> _revokeInvitation() {
   final revoked = FamilyMappers.invitationRevokedMap(_admin, _at);
-  final event = FamilyEvent(
+  final event = AuditEvent(
     id: 'ev6',
     type: 'invitation.revoked',
     actorId: _admin,

@@ -1,13 +1,14 @@
 import 'package:family_hub/core/firebase/base_mapper.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/rules_source.dart';
@@ -62,6 +63,7 @@ void main() {
     final produced = <String>{
       ...FamilyMappers.generalSettingsMap(family, meta).keys,
       ...FamilyMappers.modulesMap(ModuleFlags.allOn, meta).keys,
+      ...FamilyMappers.permissionsMap(PermissionSettings.defaults, meta).keys,
       ...FamilyMappers.rotationPolicyMap(meta).keys,
       ...FamilyMappers.notificationDefaultsMap(meta).keys,
     };
@@ -69,7 +71,7 @@ void main() {
   });
 
   test('eventMap keys == eventKeys()', () {
-    final event = FamilyEvent(
+    final event = AuditEvent(
       id: 'e1',
       type: 'family.created',
       actorId: 'u1',

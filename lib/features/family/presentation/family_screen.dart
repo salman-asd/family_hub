@@ -2,10 +2,12 @@ import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/presentation/action_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
+import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/permission_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,8 +24,9 @@ class FamilyScreen extends ConsumerWidget {
     final t = context.tokens;
     final flavor = ref.watch(flavorProvider);
     final membership = ref.watch(membershipProvider).value;
-    final canManage = membership?.canManageMembers ?? false;
-    final isAdmin = membership?.isAdmin ?? false;
+    final canInvite = ref.can(Permission.inviteMembers);
+    final canChangeRoles = ref.can(Permission.changeRoles);
+    final canEditSettings = ref.can(Permission.editFamilySettings);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navFamily)),
@@ -37,31 +40,42 @@ class FamilyScreen extends ConsumerWidget {
             label: l10n.membersTitle,
             onTap: () => context.push(AppRoutes.familyMembers),
           ),
-          if (canManage) ...[
-            const SizedBox(height: 8),
-            _SettingsTile(
-              key: const Key('family_invitations'),
-              icon: Icons.mail_outline_rounded,
-              label: l10n.invitationsTitle,
-              onTap: () => context.push(AppRoutes.familyInvitations),
+          PermissionGate(
+            allowed: canInvite,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: _SettingsTile(
+                key: const Key('family_invitations'),
+                icon: Icons.mail_outline_rounded,
+                label: l10n.invitationsTitle,
+                onTap: () => context.push(AppRoutes.familyInvitations),
+              ),
             ),
-          ],
-          if (isAdmin) ...[
-            const SizedBox(height: 8),
-            _SettingsTile(
-              key: const Key('family_roles'),
-              icon: Icons.admin_panel_settings_outlined,
-              label: l10n.rolesTitle,
-              onTap: () => context.push(AppRoutes.familyRoles),
+          ),
+          PermissionGate(
+            allowed: canChangeRoles,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: _SettingsTile(
+                key: const Key('family_roles'),
+                icon: Icons.admin_panel_settings_outlined,
+                label: l10n.rolesTitle,
+                onTap: () => context.push(AppRoutes.familyRoles),
+              ),
             ),
-            const SizedBox(height: 8),
-            _SettingsTile(
-              key: const Key('family_settings'),
-              icon: Icons.tune_rounded,
-              label: l10n.familySettingsTitle,
-              onTap: () => context.push(AppRoutes.familySettings),
+          ),
+          PermissionGate(
+            allowed: canEditSettings,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: _SettingsTile(
+                key: const Key('family_settings'),
+                icon: Icons.tune_rounded,
+                label: l10n.familySettingsTitle,
+                onTap: () => context.push(AppRoutes.familySettings),
+              ),
             ),
-          ],
+          ),
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),

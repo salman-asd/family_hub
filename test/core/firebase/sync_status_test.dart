@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:family_hub/core/firebase/sync_status.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
 import 'package:family_hub/core/utils/clock.dart';
+import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 

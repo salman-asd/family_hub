@@ -36,10 +36,11 @@ jobs:
       - name: Coverage summary
         run: |
           awk -F: '/^LF:/{lf+=$2} /^LH:/{lh+=$2} END{ if (lf>0) printf "Line coverage: %.1f%% (%d of %d lines)\n", 100*lh/lf, lh, lf }' coverage/lcov.info
-      - name: Leftover step TODOs (warning until H8 makes this a failure)
+      - name: No leftover step TODOs (CLAUDE.md rule 23)
         run: |
           if grep -rn "TODO(step" lib test; then
-            echo "::warning::TODO(step-N) markers are still in the tree (CLAUDE.md rule 23)"
+            echo "::error::TODO(step-N) markers are still in the tree"
+            exit 1
           fi
       - run: flutter build apk --flavor dev -t lib/main_dev.dart
 

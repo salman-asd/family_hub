@@ -7,6 +7,9 @@
       "path": "families/fixFam",
       "data": {
         "name": "Fix Family",
+        "adminIds": [
+          "fixAdmin"
+        ],
         "createdAt": {
           "__ts": "2026-10-18T10:00:00.000Z"
         },
@@ -75,6 +78,28 @@
           "chores": true,
           "bazar": true
         },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/settings/permissions",
+      "data": {
+        "moderatorManagesFinance": true,
+        "membersViewFamilyReports": true,
+        "membersViewAllContributions": false,
+        "membersCanInvite": false,
+        "choreVerificationEnabled": false,
         "createdAt": {
           "__ts": "2026-10-18T10:00:00.000Z"
         },

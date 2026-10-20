@@ -2,23 +2,42 @@ import 'package:family_hub/core/permissions/permission.dart';
 
 /// The family-level switches a permission can depend on.
 ///
-/// The two module switches mirror `families/{id}/settings/modules`; a
-/// permission whose [Permission.module] is switched off is denied for
-/// everybody.  [choreVerificationEnabled] is the family half of the
-/// `verifyChore` cell: the family must want verification *and* the template must
-/// allow it.  Defaults follow CLAUDE.md: all modules on, verification off.
+/// Two sources feed it: the module switches mirror
+/// `families/{id}/settings/modules`, the rest mirrors
+/// `families/{id}/settings/permissions` (H7).  A permission whose
+/// [Permission.module] is switched off is denied for everybody.  Defaults
+/// follow CLAUDE.md: all modules on, verification off, moderators manage
+/// finance, members see the family reports but only their own contributions.
 final class PermissionSettings {
   const PermissionSettings({
     this.bazarEnabled = true,
     this.choresEnabled = true,
+    this.moderatorManagesFinance = true,
+    this.membersViewFamilyReports = true,
+    this.membersViewAllContributions = false,
+    this.membersCanInvite = false,
     this.choreVerificationEnabled = false,
   });
 
-  /// All modules on, verification off: what a family gets on creation.
+  /// What a family gets on creation (and what an unreadable document means).
   static const PermissionSettings defaults = PermissionSettings();
 
   final bool bazarEnabled;
   final bool choresEnabled;
+
+  /// Spec section 6, "Manage budgets/contributions: moderator configurable".
+  final bool moderatorManagesFinance;
+
+  /// Spec section 6, "View reports: according to family policy".
+  final bool membersViewFamilyReports;
+
+  /// Everybody sees every contribution (CLAUDE.md default: only their own).
+  final bool membersViewAllContributions;
+
+  /// Plain members may create invitations (default: admin and moderator only).
+  final bool membersCanInvite;
+
+  /// The family half of the `verifyChore` cell (the template has the other).
   final bool choreVerificationEnabled;
 
   bool isModuleEnabled(PermissionModule module) => switch (module) {
@@ -28,20 +47,58 @@ final class PermissionSettings {
         PermissionModule.chores => choresEnabled,
       };
 
+  PermissionSettings copyWith({
+    bool? bazarEnabled,
+    bool? choresEnabled,
+    bool? moderatorManagesFinance,
+    bool? membersViewFamilyReports,
+    bool? membersViewAllContributions,
+    bool? membersCanInvite,
+    bool? choreVerificationEnabled,
+  }) =>
+      PermissionSettings(
+        bazarEnabled: bazarEnabled ?? this.bazarEnabled,
+        choresEnabled: choresEnabled ?? this.choresEnabled,
+        moderatorManagesFinance:
+            moderatorManagesFinance ?? this.moderatorManagesFinance,
+        membersViewFamilyReports:
+            membersViewFamilyReports ?? this.membersViewFamilyReports,
+        membersViewAllContributions:
+            membersViewAllContributions ?? this.membersViewAllContributions,
+        membersCanInvite: membersCanInvite ?? this.membersCanInvite,
+        choreVerificationEnabled:
+            choreVerificationEnabled ?? this.choreVerificationEnabled,
+      );
+
   @override
   bool operator ==(Object other) =>
       other is PermissionSettings &&
       other.bazarEnabled == bazarEnabled &&
       other.choresEnabled == choresEnabled &&
+      other.moderatorManagesFinance == moderatorManagesFinance &&
+      other.membersViewFamilyReports == membersViewFamilyReports &&
+      other.membersViewAllContributions == membersViewAllContributions &&
+      other.membersCanInvite == membersCanInvite &&
       other.choreVerificationEnabled == choreVerificationEnabled;
 
   @override
-  int get hashCode =>
-      Object.hash(bazarEnabled, choresEnabled, choreVerificationEnabled);
+  int get hashCode => Object.hash(
+        bazarEnabled,
+        choresEnabled,
+        moderatorManagesFinance,
+        membersViewFamilyReports,
+        membersViewAllContributions,
+        membersCanInvite,
+        choreVerificationEnabled,
+      );
 
   @override
   String toString() => 'PermissionSettings(bazar: $bazarEnabled, '
-      'chores: $choresEnabled, verification: $choreVerificationEnabled)';
+      'chores: $choresEnabled, moderatorFinance: $moderatorManagesFinance, '
+      'memberReports: $membersViewFamilyReports, '
+      'memberAllContributions: $membersViewAllContributions, '
+      'memberInvite: $membersCanInvite, '
+      'verification: $choreVerificationEnabled)';
 }
 
 /// The template-level switch: the "if the template allows it" cell.

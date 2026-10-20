@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:family_hub/core/utils/clock.dart';
+import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,5 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 /// Source of "now". Domain code receives a [Clock] and never calls
 /// DateTime.now() itself, so tests stay deterministic.
 abstract interface class Clock {
@@ -27,7 +25,3 @@ final class FakeClock implements Clock {
 
   void advance(Duration duration) => _now = _now.add(duration);
 }
-
-final Provider<Clock> clockProvider = Provider<Clock>(
-  (ref) => const SystemClock(),
-);

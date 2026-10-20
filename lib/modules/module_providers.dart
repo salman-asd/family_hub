@@ -1,7 +1,7 @@
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/modules/family_module.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:family_hub/modules/module_registry.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final moduleRegistryProvider =
     Provider<ModuleRegistry>((ref) => ModuleRegistry.standard());
 
-/// Overridden in `bootstrap.dart` (TODO(step-9): Firestore implementation).
+/// Overridden in `bootstrap.dart`.
 final moduleFlagsRepositoryProvider = Provider<ModuleFlagsRepository>(
   (ref) => throw UnimplementedError(
     'moduleFlagsRepositoryProvider must be overridden (bootstrap.dart / tests).',

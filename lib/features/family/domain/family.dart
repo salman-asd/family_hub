@@ -1,4 +1,4 @@
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 
 /// A family and its general settings.
 class Family {

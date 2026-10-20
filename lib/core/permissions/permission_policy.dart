@@ -9,17 +9,18 @@ import 'package:family_hub/core/permissions/permission_settings.dart';
 ///
 /// | Permission | admin | moderator | member |
 /// | --- | --- | --- | --- |
-/// | inviteMembers | yes | yes | no |
+/// | inviteMembers | yes | yes | no (setting: membersCanInvite) |
 /// | approveMembers | yes | yes | no |
 /// | removeMembers | yes | no | no |
 /// | changeRoles | yes | no | no |
 /// | editFamilySettings | yes | no | no |
-/// | viewFamilyReports | yes | yes | yes |
+/// | viewFamilyReports | yes | yes | yes (setting: membersViewFamilyReports) |
 /// | exportData | yes | no | no |
-/// | manageCatalogAndBudgets | yes | yes | no |
+/// | manageCatalogAndBudgets | yes | yes (setting: moderatorManagesFinance) | no |
 /// | addOwnExpense | yes | yes | yes |
 /// | editOthersExpense | yes | yes | no |
-/// | recordContribution | yes | yes | no |
+/// | recordContribution | yes | yes (setting: moderatorManagesFinance) | no |
+/// | viewAllContributions | yes | yes | no (setting: membersViewAllContributions) |
 /// | manageChoreTemplates | yes | yes | no |
 /// | reassignChore | yes | yes | no |
 /// | requestSwap | own | own | own |
@@ -32,6 +33,10 @@ import 'package:family_hub/core/permissions/permission_settings.dart';
 ///
 /// Every cell is additionally false when the actor is not active, and false
 /// while the permission's module is switched off in [PermissionSettings].
+///
+/// The settings come from `families/{f}/settings/permissions` (H7).  The table
+/// above shows the DEFAULTS; `docs/permission_matrix.md` is generated from this
+/// class by `test/core/permissions/permission_matrix_doc_test.dart`.
 ///
 /// Roadmap 2.2 itself was not present in ROADMAP.md, so this table was derived
 /// from the rules the roadmap states elsewhere (Step 9's "admin does
@@ -56,19 +61,22 @@ abstract final class PermissionPolicy {
 
     return switch (permission) {
       // ── Family administration ──────────────────────────────────────────
-      Permission.inviteMembers => actor.isManager,
+      Permission.inviteMembers => actor.isManager || settings.membersCanInvite,
       Permission.approveMembers => actor.isManager,
       Permission.removeMembers => actor.isAdmin,
       Permission.changeRoles => actor.isAdmin,
       Permission.editFamilySettings => actor.isAdmin,
-      Permission.viewFamilyReports => true,
+      Permission.viewFamilyReports =>
+        actor.isManager || settings.membersViewFamilyReports,
       Permission.exportData => actor.isAdmin,
 
       // ── Bazar and family finance ───────────────────────────────────────
-      Permission.manageCatalogAndBudgets => actor.isManager,
+      Permission.manageCatalogAndBudgets => _managesFinance(actor, settings),
       Permission.addOwnExpense => true,
       Permission.editOthersExpense => actor.isManager,
-      Permission.recordContribution => actor.isManager,
+      Permission.recordContribution => _managesFinance(actor, settings),
+      Permission.viewAllContributions =>
+        actor.isManager || settings.membersViewAllContributions,
 
       // ── Chores ─────────────────────────────────────────────────────────
       Permission.manageChoreTemplates => actor.isManager,
@@ -86,6 +94,14 @@ abstract final class PermissionPolicy {
           ownerId != actor.uid,
     };
   }
+
+  /// Admin always; a moderator only while the family lets moderators manage
+  /// finance (spec section 6, "Configurable").
+  static bool _managesFinance(
+    PermissionActor actor,
+    PermissionSettings settings,
+  ) =>
+      actor.isAdmin || (actor.isModerator && settings.moderatorManagesFinance);
 
   /// The actor owns the record.  An unknown owner (`ownerId == null`) is never
   /// "own", so a caller that forgets the context is denied rather than trusted.

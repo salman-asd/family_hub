@@ -29,7 +29,7 @@ import 'package:family_hub/features/onboarding/presentation/screens/profile_setu
 import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
 import 'package:family_hub/features/settings/presentation/theme_settings_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
-import 'package:family_hub/modules/module_providers.dart';
+import 'package:family_hub/modules/module_visibility_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -57,7 +57,7 @@ final _locationMemoProvider = Provider<_LocationMemo>((ref) => _LocationMemo());
 ///   every phase change, so signing in, verifying e-mail, being approved or
 ///   disabled moves the user immediately, with no screen-level navigation.
 /// * **Shell** — a `StatefulShellRoute.indexedStack`: Home, then one branch per
-///   *enabled* module, then Family.  Disabled modules have no branch, no tab and
+///   *visible* module, then Family.  Disabled modules have no branch, no tab and
 ///   their paths redirect to `/home`.
 /// * **Structure vs. state** — the provider rebuilds the router only when the
 ///   set of enabled modules changes (a rare settings action), not on every auth
@@ -67,10 +67,10 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   // Rebuild only when the *set* of enabled modules changes.
   ref.watch(
-    enabledModulesProvider.select((m) => m.map((e) => e.id).join(',')),
+    visibleModulesProvider.select((m) => m.map((e) => e.id).join(',')),
   );
-  final enabled = ref.read(enabledModulesProvider);
-  final disabled = ref.read(disabledModulesProvider);
+  final enabled = ref.read(visibleModulesProvider);
+  final disabled = ref.read(hiddenModulesProvider);
 
   final memo = ref.read(_locationMemoProvider);
   final refresh = ValueNotifier<int>(0);
