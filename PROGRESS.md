@@ -170,24 +170,82 @@ Not compiled or run (no Flutter SDK / emulator available). Run the Part A checkl
 
 | Step | What changed |
 | --- | --- |
-| H9 | Change password, delete account (resumable), `/settings/security`, sign-out Firestore cache wipe, rules for soft-delete, ARB keys |
+| H9 | Change password, delete account (soft delete, resumable), `/settings/security`, sign-out Firestore cache wipe, rules for soft-delete, ARB keys, tests |
 | H10 | `saveProfile` stamps `createdAt` once, `watchFamily` via `combineLatest3`, auto-disposed action providers, language-neutral events + `activityText`, editable relationships (`RelationshipId`, catalog, rules, screen), `Membership.leftAt` |
-| H11 | `placeholderOnLight/Dark` tokens, stricter no-raw-colour test, settings screens split, `file_size_test`, `LoadingView` on list screens, error states, reduced-motion `ProgressRing` + tests, theme settings tests/goldens |
-| H12 | `FamilyDateKeys` + providers, `FamilySeeder` hook, 500-write batch budget, rules helper scaffold, checklist + test template, `query_limits` + unbounded-query test, paths-vs-rules test, ADRs 0001-0003 |
+| H11 | `placeholderOnLight/Dark` tokens, stricter no-raw-colour test, settings screens split, `file_size_test`, `LoadingView` on list screens, error states, reduced-motion tests, theme/language tests + goldens, `test/support/screen_states.dart` harness (Theme, Language, Security, Relationships) |
+| H12 | `FamilyDateKeys` + providers, `FamilySeeder` hook, 500-write batch budget, rules helper scaffold, checklist + test template, `query_limits` + unbounded-query test, paths-vs-rules test, ADRs 0001-0005 |
 
 ### Assumptions / deviations
 - `saveProfile` reads the current document and writes a batch instead of using a Firestore transaction (transactions fail offline; rule 15 wants the save queued).
 - The `FamilySeeder` port returns plain `SeedWrite`s (not `BatchContext`) so the domain stays free of Firebase.
 - `AuditEvent.summary` stays as an always-empty field because the rules' closed key set still lists it.
 - `firestore_family_repository.dart` is on the file-size allow-list (documented debt).
-- Not done: the per-screen state harness of H11 item 4 (`screen_states.dart` with accessibility guidelines) and the Linux-generated goldens; H13 is untouched.
-- Deleting an account while a solo admin leaves the family dormant (its member document stays active).
+- The screen-state harness covers only screens that need no Firebase; extend it to the Firebase-backed screens with provider overrides. The offline state is covered by the shell banner (H3).
+- Deleting an account as a solo admin leaves the family dormant (its member document stays active).
 
-## Phase 1 hardening - Part C (H9-H12), PARTIAL, written statically
-Not compiled or run (no Flutter SDK / emulator). Run: `flutter pub get`, `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden`, rules tests, then the Update goldens workflow.
+## Phase 1 hardening - Part D (H13), written statically
 
-- **H9 done**: change password, delete account (soft delete, resumable), Security screen `/settings/security`, sign-out Firestore cache wipe, rules for `deletedAt`, tests.
-- **H10 done**: `saveProfile` stamps `createdAt` once, `combineLatest3` + `watchFamily`, auto-dispose action providers, language-neutral audit events + `activityText`, `Membership.leftAt`, configurable relationships (catalog, mappers, rules, use case, screen), tests.
-- **H11 done**: placeholder tokens (no `Colors.*`), contrast/raw-colour tests, settings screens split, `file_size_test`, LoadingView on list screens, error states, reduced-motion tests, theme/language tests + goldens, `test/support/screen_states.dart` harness (applied to Theme, Language, Security, Relationships; extend to the Firebase-backed screens as they get overrides). The offline state is covered by the AppShell banner (H3), not per screen.
-- **H12 done** (already present from earlier parts): FamilyDateKeys + providers, FamilySeeder hook, rules helpers, query limits + no-unbounded-queries test, ADRs 0001-0005, paths-vs-rules test.
-- Known: `firestore_family_repository.dart` is over 300 lines (allow-listed in file_size_test); run `dart format` for long lines.
+H13 makes no feature change. It adds the sign-off tooling and documents; **nothing has been executed** (no Flutter SDK, Node or emulator in the authoring environment), so no result is claimed.
+
+| Deliverable | File |
+| --- | --- |
+| One-command verification (format, analyze, tests, goldens, indexes, rules, TODO grep, both APKs) writing PASS/FAIL + counts | `tools/phase1_evidence.sh` -> `docs/phase1_evidence.md` |
+| Coverage per top-level folder, files under 70% in `core/` and `features/*/domain/` | `tools/coverage_summary.dart` |
+| Security review with `file:line` evidence | `docs/phase1_security_review.md` |
+| Manual matrix (2 devices, bn/en, light/dark, online/offline) | `docs/phase1_manual_test.md` |
+| Guard: the sign-off files exist and the review names every rules collection | `test/architecture/phase1_docs_test.dart` |
+
+Security review result: 11 checklist items pass by reading rules and tests; one low finding **F-31** (`users/{uid}` has no closed key set; fix described in the review, not applied because H13 changes no features).
+
+### Tag `phase-1-complete`: NOT created. Blockers
+
+1. `bash tools/phase1_evidence.sh` has not been run: format, analyze, all tests, goldens, rules suite, indexes check and both APK builds are unverified.
+2. Goldens do not exist yet: run the *Update goldens* workflow once, review, commit.
+3. Manual matrix (`docs/phase1_manual_test.md`) not executed on real devices against the dev Firebase project.
+4. Real Firebase config, upload keystore and `firebase deploy` of rules/indexes are manual (`firebase/README.md`, `docs/RELEASE.md`).
+5. Optional before the tag: close F-31.
+
+Create the tag only when 1-4 are green: `git tag phase-1-complete && git push --tags`.
+
+## Status of every step
+
+"Written" = code and tests exist but were not compiled or run by the author. "Verified" is only claimed where a run produced evidence; today that is none, so every row needs the evidence run.
+
+| Step | Scope | Status | Evidence / notes |
+| --- | --- | --- | --- |
+| 1 | Scaffold, flavors, lints, CI | Written | `.github/workflows/ci.yml` |
+| 2 | Core value objects | Written | `test/core/utils/` |
+| 3 | Theme tokens, registry, builder | Written | `test/app/theme/` (contrast, raw colour) |
+| 4 | Theme controller + settings | Written; tests/goldens added in H11 | `test/features/settings/` |
+| 5 | Localization, fonts, formatting | Written | `test/core/localization/` |
+| 6 | Firebase setup, bootstrap | Written; config manual (H2) | `firebase/README.md` |
+| 7 | Authentication | Written | `test/features/auth/` |
+| 8 | Router, guards, shell, modules | Written | `test/app/` |
+| 9 | Profile, family, invitations, approval | Written | `test/features/family/`, `onboarding/` |
+| 10 | Permissions + rules v1 | Written; rules v2 in H4-H7, H9-H10 | `firebase/rules_test/` |
+| 11 | Shared widgets + gallery | Written | `test/shared/widgets/` |
+| H1 | Green baseline, goldens policy | Written | ADR 0004, 0005 |
+| H2 | Config, indexes, release signing | Written | `docs/RELEASE.md` |
+| H3 | Offline semantics | Written | `test/core/firebase/` |
+| H4 | Membership lifecycle | Written | `docs/membership_state_machine.md` |
+| H5 | Rules validation, verified email | Written | rules tests `H5 *` |
+| H6 | Admin set invariant | Written | rules tests `H6 *` |
+| H7 | Permission providers, configurable cells | Written | `docs/permission_matrix.md` |
+| H8 | Clean architecture, audit writer | Written | `test/architecture/` |
+| H9 | Account lifecycle | Written | `test/features/settings/`, rules `H9 *` |
+| H10 | Data consistency, relationships | Written | `test/features/family/domain/relationship_catalog_test.dart` |
+| H11 | UI conformance, accessibility | Written | `test/support/screen_states.dart` |
+| H12 | Phase 2 foundations | Written | `docs/new_collection_checklist.md` |
+| H13 | Sign-off tooling and review | Written; **not executed** | `docs/phase1_*.md` |
+
+## Known limitations (honest list)
+
+- Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
+- Generated l10n files were edited by hand; `flutter gen-l10n` must produce identical output.
+- Spark plan: no push notifications (a recipient learns of a request when the app opens), no server-trusted data, no App Check.
+- Offline "waiting to sync" is detected by pending writes older than 10 s, not by a connectivity listener.
+- F-31: `users/{uid}` lacks a closed key set (low).
+- Custom relationship entries have per-item shape checks only in the app, not in the rules (rules bound the list to 40 items).
+- Screen-state harness covers 4 screens so far.
+- `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
+- Phase 2 features (Bazar, Chores, Dashboard) are not started; Step 12 onward builds on H12.
