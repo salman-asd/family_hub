@@ -1,4 +1,5 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
+import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:flutter/material.dart';
 
 /// Square thumbnail for a bazar item (roadmap 9.7).
@@ -49,10 +50,7 @@ class ItemThumb extends StatelessWidget {
     final palette = context.tokens.placeholderPalette;
     final index = _stableHash(id) % palette.length;
     final background = palette[index];
-    final foreground =
-        ThemeData.estimateBrightnessForColor(background) == Brightness.dark
-            ? Colors.white
-            : Colors.black87;
+    final foreground = AppAvatar.foregroundFor(background, context.tokens);
 
     final placeholder = _Initials(
       initial: _initialOf(name),

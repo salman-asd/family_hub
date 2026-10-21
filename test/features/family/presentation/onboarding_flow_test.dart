@@ -92,7 +92,7 @@ void main() {
     await _tap(tester, 'rel_father');
     await _tap(tester, 'profile_save');
     expect(f.backend.profiles['me']!.fullName, 'Karim Rahman');
-    expect(f.backend.profiles['me']!.relationship.name, 'father');
+    expect(f.backend.profiles['me']!.relationship.value, 'father');
     expect(_path(tester), '/family-choice');
 
     await _tap(tester, 'choice_create');

@@ -4,6 +4,7 @@ import 'dart:developer' as developer;
 import 'package:family_hub/app/app.dart';
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/theme/theme_controller.dart';
+import 'package:family_hub/core/firebase/cache_wipe.dart';
 import 'package:family_hub/core/firebase/firebase_bootstrap.dart';
 import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
@@ -16,7 +17,9 @@ import 'package:family_hub/features/family/data/firestore_membership_repository.
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/features/onboarding/data/firestore_profile_repository.dart';
+import 'package:family_hub/features/settings/data/firestore_account_repository.dart';
 import 'package:family_hub/features/settings/data/firestore_preference_sync.dart';
+import 'package:family_hub/features/settings/presentation/account_providers.dart';
 import 'package:family_hub/features/onboarding/presentation/profile_providers.dart';
 import 'package:family_hub/modules/module_providers.dart';
 import 'package:flutter/foundation.dart';
@@ -58,12 +61,14 @@ Future<void> bootstrap(Flavor flavor) async {
         return true;
       };
 
-      // Initialize Firebase and configure Firestore persistence + emulators.
-      await initializeFirebase(flavor: flavor);
-
       // Pre-load SharedPreferences so ThemeController.build() can read it
-      // synchronously — avoids a one-frame flash of the wrong theme.
+      // synchronously — avoids a one-frame flash of the wrong theme.  It is
+      // loaded BEFORE Firebase so a pending cache wipe (H9) can run first.
       final prefs = await SharedPreferences.getInstance();
+
+      // Initialize Firebase and configure Firestore persistence + emulators;
+      // clears the previous user's cached data when a sign-out asked for it.
+      await initializeFirebase(flavor: flavor, prefs: prefs);
 
       // Built once and shared: the repository is stateless apart from the
       // FirebaseAuth handle, and one instance keeps the auth stream single.
@@ -83,6 +88,11 @@ Future<void> bootstrap(Flavor flavor) async {
             pendingWriteCounterProvider.overrideWithValue(tx.pendingWrites),
             sharedPreferencesProvider.overrideWithValue(prefs),
             authRepositoryProvider.overrideWithValue(authRepository),
+            afterSignOutProvider
+                .overrideWithValue(() => CacheWipe.request(prefs)),
+            accountRepositoryProvider.overrideWithValue(
+              FirestoreAccountRepository(tx: tx, clock: clock),
+            ),
             profileRepositoryProvider.overrideWithValue(profiles),
             userProfileRepositoryProvider.overrideWithValue(profiles),
             membershipRepositoryProvider.overrideWithValue(memberships),

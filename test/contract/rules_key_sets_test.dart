@@ -1,3 +1,4 @@
+import 'package:family_hub/features/family/data/relationship_mappers.dart';
 import 'package:family_hub/core/firebase/base_mapper.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
@@ -9,6 +10,7 @@ import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/module_flags.dart';
+import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/rules_source.dart';
@@ -64,6 +66,7 @@ void main() {
       ...FamilyMappers.generalSettingsMap(family, meta).keys,
       ...FamilyMappers.modulesMap(ModuleFlags.allOn, meta).keys,
       ...FamilyMappers.permissionsMap(PermissionSettings.defaults, meta).keys,
+      ...RelationshipMappers.relationshipsMap(RelationshipCatalog.defaults, meta).keys,
       ...FamilyMappers.rotationPolicyMap(meta).keys,
       ...FamilyMappers.notificationDefaultsMap(meta).keys,
     };

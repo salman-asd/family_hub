@@ -24,9 +24,11 @@ import 'package:family_hub/features/family/presentation/screens/join_family_scre
 import 'package:family_hub/features/family/presentation/screens/member_profile_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/members_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/pending_screen.dart';
+import 'package:family_hub/features/family/presentation/screens/relationships_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/roles_screen.dart';
 import 'package:family_hub/features/onboarding/presentation/screens/profile_setup_screen.dart';
 import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
+import 'package:family_hub/features/settings/presentation/security_screen.dart';
 import 'package:family_hub/features/settings/presentation/theme_settings_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
 import 'package:family_hub/modules/module_visibility_providers.dart';
@@ -129,6 +131,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               builder: (context, state) => const FamilySettingsScreen(),
             ),
             GoRoute(
+              path: 'relationships',
+              builder: (context, state) => const RelationshipsScreen(),
+            ),
+            GoRoute(
               path: 'profile',
               builder: (context, state) =>
                   const ProfileSetupScreen(editing: true),
@@ -224,6 +230,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.settingsLanguage,
         builder: (context, state) => const LanguageSettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.settingsSecurity,
+        builder: (context, state) => const SecurityScreen(),
       ),
       if (flavor == Flavor.dev)
         GoRoute(

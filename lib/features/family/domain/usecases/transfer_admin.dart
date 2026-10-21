@@ -77,7 +77,7 @@ class TransferAdmin {
         id: _newId(),
         type: 'member.admin_transferred',
         actorId: actorUid,
-        summary: 'Admin role moved to ${newAdmin.fullName}',
+        params: <String, String>{'memberName': newAdmin.fullName},
         refType: 'member',
         refId: targetUid,
         at: _clock.nowUtc(),

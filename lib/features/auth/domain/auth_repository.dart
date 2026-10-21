@@ -49,4 +49,18 @@ abstract interface class AuthRepository {
   /// Re-fetches the current user from the backend, refreshing
   /// [AppUser.emailVerified].
   Future<Result<AppUser?>> reloadUser();
+
+  /// Re-authenticates the CURRENT user with their password (H9).  Needed
+  /// before changing the password or deleting the account, which the backend
+  /// only allows for a recent sign-in.
+  Future<Result<void>> reauthenticate({required String password});
+
+  /// Sets a new password for the current user (H9).  Fails with
+  /// `RequiresRecentLogin` when the sign-in is too old; call
+  /// [reauthenticate] first.
+  Future<Result<void>> changePassword({required String newPassword});
+
+  /// Permanently deletes the Firebase Auth user (H9).  Local data is wiped by
+  /// the caller.  Fails with `RequiresRecentLogin` when the sign-in is too old.
+  Future<Result<void>> deleteAuthUser();
 }

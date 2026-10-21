@@ -61,7 +61,7 @@ class RevokeInvitation {
         id: _newId(),
         type: 'invitation.revoked',
         actorId: actorUid,
-        summary: 'Invitation $code revoked',
+        params: <String, String>{'code': code},
         refType: 'invitation',
         refId: code,
         at: now,

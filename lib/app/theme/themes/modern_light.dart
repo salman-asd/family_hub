@@ -88,6 +88,9 @@ final AppTokens modernLightTokens = AppTokens(
     Color(0xFFFFE082),
   ],
 
+  placeholderOnLight: const Color(0xFF1A1A1A),
+  placeholderOnDark: const Color(0xFFF5F5F5),
+
   // ── Shape ─────────────────────────────────────────────────────────────────
   radiusSm: 8,
   radiusMd: 16,

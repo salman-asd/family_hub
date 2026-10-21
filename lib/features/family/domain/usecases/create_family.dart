@@ -6,6 +6,7 @@ import 'package:family_hub/features/family/domain/ensure_free_to_join.dart';
 import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
+import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
@@ -19,15 +20,20 @@ class CreateFamily {
     required UserProfileRepository profiles,
     required Clock clock,
     required IdGenerator newId,
+    List<FamilySeeder> seeders = const <FamilySeeder>[],
   })  : _families = families,
         _profiles = profiles,
         _clock = clock,
-        _newId = newId;
+        _newId = newId,
+        _seeders = seeders;
 
   final FamilyRepository _families;
   final UserProfileRepository _profiles;
   final Clock _clock;
   final IdGenerator _newId;
+
+  /// Starter-data providers run inside the same batch (H12).
+  final List<FamilySeeder> _seeders;
 
   /// [familyId] / [eventId] make a retry idempotent (rule 15): the screen
   /// generates them ONCE per user intent and passes the same values again on a
@@ -74,7 +80,7 @@ class CreateFamily {
       status: MembershipStatus.active,
       fullName: profile.fullName,
       nickname: profile.nickname,
-      relationship: profile.relationship.name,
+      relationship: profile.relationship.value,
       spouseId: profile.spouseId,
       avatarKey: profile.avatarKey,
     );
@@ -82,16 +88,24 @@ class CreateFamily {
       id: eventId ?? _newId(),
       type: 'family.created',
       actorId: actorUid,
-      summary: 'Family "$trimmed" created',
+      params: <String, String>{'familyName': trimmed},
       refType: 'family',
       refId: family.id,
       at: _clock.nowUtc(),
     );
 
+    final context = SeedContext(
+      familyId: family.id,
+      actorUid: actorUid,
+      now: event.at,
+    );
     final saved = await _families.createFamily(
       family: family,
       owner: owner,
       event: event,
+      seedWrites: <SeedWrite>[
+        for (final s in _seeders) ...s.seed(context),
+      ],
     );
     final saveFailure = saved.failureOrNull;
     return saveFailure != null

@@ -46,8 +46,26 @@ final signInProvider = Provider<SignIn>(
   (ref) => SignIn(ref.watch(authRepositoryProvider)),
 );
 
+/// Runs after every successful sign-out (H9): the app schedules the wipe of the
+/// on-disk Firestore cache here.  No-op by default so tests need no override;
+/// `bootstrap.dart` installs the real one.
+final afterSignOutProvider = Provider<Future<void> Function()>(
+  (ref) => () async {},
+);
+
 final signOutProvider = Provider<SignOut>(
-  (ref) => SignOut(ref.watch(authRepositoryProvider)),
+  (ref) => SignOut(
+    ref.watch(authRepositoryProvider),
+    afterSignOut: ref.watch(afterSignOutProvider),
+  ),
+);
+
+final reauthenticateWithPasswordProvider = Provider<ReauthenticateWithPassword>(
+  (ref) => ReauthenticateWithPassword(ref.watch(authRepositoryProvider)),
+);
+
+final changePasswordProvider = Provider<ChangePassword>(
+  (ref) => ChangePassword(ref.watch(authRepositoryProvider)),
 );
 
 final sendPasswordResetProvider = Provider<SendPasswordReset>(

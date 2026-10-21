@@ -570,5 +570,160 @@
   "invitationRevokeConfirmTitle": "Revoke this code?",
   "@invitationRevokeConfirmTitle": {},
   "invitationRevokeConfirmBody": "Nobody will be able to join with this code any more.",
-  "@invitationRevokeConfirmBody": {}
+  "@invitationRevokeConfirmBody": {},
+  "securityTitle": "Security",
+  "@securityTitle": {},
+  "securityChangePassword": "Change password",
+  "@securityChangePassword": {},
+  "securityCurrentPassword": "Current password",
+  "@securityCurrentPassword": {},
+  "securityNewPassword": "New password",
+  "@securityNewPassword": {},
+  "securityPasswordChanged": "Password changed.",
+  "@securityPasswordChanged": {},
+  "securityPasswordSame": "The new password must differ from the current one.",
+  "@securityPasswordSame": {},
+  "securityCurrentPasswordRequired": "Enter your current password.",
+  "@securityCurrentPasswordRequired": {},
+  "securityCurrentPasswordWrong": "The current password is not correct.",
+  "@securityCurrentPasswordWrong": {},
+  "securityDeleteTitle": "Delete my account",
+  "@securityDeleteTitle": {},
+  "securityDeleteBody": "You leave your family and your sign-in is removed. Your name stays on past records so the family history stays complete.",
+  "@securityDeleteBody": {},
+  "securityDeletePending": "Deleting was not finished. Enter your password to finish.",
+  "@securityDeletePending": {},
+  "securityDeleteAction": "Delete account",
+  "@securityDeleteAction": {},
+  "securityDeleteFinish": "Finish deleting",
+  "@securityDeleteFinish": {},
+  "securityDeleteConfirmTitle": "Delete your account?",
+  "@securityDeleteConfirmTitle": {},
+  "securityDeleteConfirmBody": "This cannot be undone.",
+  "@securityDeleteConfirmBody": {},
+  "accountDeleteLastAdminHasMembers": "You are the only admin and others are still in the family. Transfer the admin role first.",
+  "@accountDeleteLastAdminHasMembers": {},
+  "relationshipsTitle": "Relationships",
+  "@relationshipsTitle": {},
+  "relationshipsHint": "Built-in entries are locked. You can add, rename and disable your own.",
+  "@relationshipsHint": {},
+  "relationshipsAdd": "Add relationship",
+  "@relationshipsAdd": {},
+  "relationshipsLabelBn": "Name in Bangla",
+  "@relationshipsLabelBn": {},
+  "relationshipsLabelEn": "Name in English",
+  "@relationshipsLabelEn": {},
+  "relationshipsSpouseRelevant": "Offer the spouse picker",
+  "@relationshipsSpouseRelevant": {},
+  "relationshipsBuiltIn": "Built in",
+  "@relationshipsBuiltIn": {},
+  "relationshipsActive": "In use",
+  "@relationshipsActive": {},
+  "relationshipsDisabled": "Disabled",
+  "@relationshipsDisabled": {},
+  "relationshipsEnable": "Enable",
+  "@relationshipsEnable": {},
+  "relationshipsDisable": "Disable",
+  "@relationshipsDisable": {},
+  "relationshipsFailureLabel": "Enter a name (at most 40 characters).",
+  "@relationshipsFailureLabel": {},
+  "relationshipsFailureTooMany": "The list is full.",
+  "@relationshipsFailureTooMany": {},
+  "relationshipsFailureBuiltIn": "Built-in entries cannot be changed.",
+  "@relationshipsFailureBuiltIn": {},
+  "activityFamilyCreated": "Family “{familyName}” was created",
+  "@activityFamilyCreated": {
+    "placeholders": {
+      "familyName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityFamilyUpdated": "Family settings were updated",
+  "@activityFamilyUpdated": {},
+  "activityMemberRequested": "{memberName} asked to join",
+  "@activityMemberRequested": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberApproved": "{memberName} was approved",
+  "@activityMemberApproved": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberRejected": "{memberName} was not accepted",
+  "@activityMemberRejected": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberDisabled": "{memberName} was disabled",
+  "@activityMemberDisabled": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberRoleChanged": "{memberName} is now {newRole}",
+  "@activityMemberRoleChanged": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      },
+      "newRole": {
+        "type": "String"
+      }
+    }
+  },
+  "activityAdminTransferred": "Admin role moved to {memberName}",
+  "@activityAdminTransferred": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberLeft": "{memberName} left the family",
+  "@activityMemberLeft": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberCancelled": "{memberName} withdrew the request",
+  "@activityMemberCancelled": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityInvitationCreated": "Invitation {code} was created",
+  "@activityInvitationCreated": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityInvitationRevoked": "Invitation {code} was revoked",
+  "@activityInvitationRevoked": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityUnknown": "Something changed",
+  "@activityUnknown": {}
 }

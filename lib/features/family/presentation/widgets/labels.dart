@@ -18,6 +18,17 @@ extension FamilyLabels on AppLocalizations {
         Relationship.other => relOther,
       };
 
+  /// Label of a stored relationship id (H10): a built-in uses its ARB string, a
+  /// custom entry its catalog label in the current language, and an unknown id
+  /// reads as "Other".
+  String relationshipIdLabel(RelationshipCatalog catalog, RelationshipId id) {
+    final builtIn = Relationship.tryFromId(id);
+    if (builtIn != null) return relationshipLabel(builtIn);
+    final language = localeName.startsWith('bn') ? 'bn' : 'en';
+    final entry = catalog.find(id);
+    return entry == null ? relOther : entry.label(language);
+  }
+
   String genderLabel(Gender g) => switch (g) {
         Gender.male => genderMale,
         Gender.female => genderFemale,

@@ -1,3 +1,4 @@
+import 'package:family_hub/features/family/data/relationship_mappers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/core/errors/result.dart';
@@ -9,12 +10,15 @@ import 'package:family_hub/core/firebase/firestore_paths.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
+import 'package:family_hub/core/utils/stream_utils.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
+import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
+import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 
 /// Cloud Firestore implementation of [FamilyRepository].
 ///
@@ -47,6 +51,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
     required Family family,
     required Member owner,
     required AuditEvent event,
+    List<SeedWrite> seedWrites = const <SeedWrite>[],
   }) =>
       guardWrite(
         probe: _probe(owner.uid),
@@ -75,6 +80,10 @@ class FirestoreFamilyRepository implements FamilyRepository {
               FamilyMappers.permissionsMap(PermissionSettings.defaults, meta),
             )
             ..set(
+              FirestorePaths.settingsDoc(fid, 'relationships'),
+              RelationshipMappers.relationshipsMap(RelationshipCatalog.defaults, meta),
+            )
+            ..set(
               FirestorePaths.settingsDoc(fid, 'rotationPolicy'),
               FamilyMappers.rotationPolicyMap(meta),
             )
@@ -87,6 +96,9 @@ class FirestoreFamilyRepository implements FamilyRepository {
               {'familyId': fid},
               merge: true,
             );
+          for (final w in seedWrites) {
+            b.set(w.path, w.data);
+          }
           AuditWriter.write(b, fid, event);
         }),
       );
@@ -330,6 +342,59 @@ class FirestoreFamilyRepository implements FamilyRepository {
       .distinct();
 
   @override
+  Stream<RelationshipCatalog> watchRelationshipCatalog(String familyId) => _db
+      .doc(FirestorePaths.settingsDoc(familyId, 'relationships'))
+      .snapshots()
+      .map((s) => RelationshipMappers.relationshipsFromMap(s.data()))
+      .distinct();
+
+  @override
+  Future<Result<RelationshipCatalog>> getRelationshipCatalog(String familyId) =>
+      guardFirestore(() async {
+        final snap = await _db
+            .doc(FirestorePaths.settingsDoc(familyId, 'relationships'))
+            .get();
+        return RelationshipMappers.relationshipsFromMap(snap.data());
+      });
+
+  @override
+  Future<Result<void>> saveRelationshipCatalog(
+    String familyId,
+    RelationshipCatalog catalog,
+    AuditEvent event,
+  ) =>
+      guardWrite(
+        probe: _probe(event.actorId),
+        () async {
+          final path = FirestorePaths.settingsDoc(familyId, 'relationships');
+          // A family created before H10 has no such document yet: create it
+          // (with its metadata) instead of updating it.
+          final exists = (await _db.doc(path).get()).exists;
+          await _tx.runBatch((b) {
+            if (exists) {
+              b.update(
+                path,
+                RelationshipMappers.relationshipsChangeMap(
+                  catalog,
+                  actorUid: event.actorId,
+                  now: event.at,
+                ),
+              );
+            } else {
+              b.set(
+                path,
+                RelationshipMappers.relationshipsMap(
+                  catalog,
+                  _meta(event.actorId),
+                ),
+              );
+            }
+            AuditWriter.write(b, familyId, event);
+          });
+        },
+      );
+
+  @override
   Stream<List<Member>> watchMembers(String familyId) => _db
       .collection(FirestorePaths.members(familyId))
       .limit(_memberLimit)
@@ -350,21 +415,32 @@ class FirestoreFamilyRepository implements FamilyRepository {
 
   @override
   Stream<Family?> watchFamily(String familyId) {
-    // Three small documents; re-read all of them whenever any one changes.
+    // H10: three small documents followed together.  The family document is
+    // the "known" one (an unknown/offline state emits nothing, rule 14); the two
+    // settings documents may legitimately be missing and then use defaults.
     final family = watchKnownDoc(_db.doc(FirestorePaths.familyDoc(familyId)));
-    return family.asyncMap((familyData) async {
-      if (familyData == null) return null;
-      final general =
-          await _db.doc(FirestorePaths.settingsDoc(familyId, 'general')).get();
-      final modules =
-          await _db.doc(FirestorePaths.settingsDoc(familyId, 'modules')).get();
-      return FamilyMappers.familyFromDocs(
-        familyId,
-        family: familyData,
-        general: general.data(),
-        modules: modules.data(),
-      );
-    });
+    final general = _db
+        .doc(FirestorePaths.settingsDoc(familyId, 'general'))
+        .snapshots()
+        .map((s) => s.data());
+    final modules = _db
+        .doc(FirestorePaths.settingsDoc(familyId, 'modules'))
+        .snapshots()
+        .map((s) => s.data());
+    return combineLatest3<Map<String, dynamic>?, Map<String, dynamic>?,
+        Map<String, dynamic>?, Family?>(
+      family,
+      general,
+      modules,
+      (familyData, generalData, modulesData) => familyData == null
+          ? null
+          : FamilyMappers.familyFromDocs(
+              familyId,
+              family: familyData,
+              general: generalData,
+              modules: modulesData,
+            ),
+    );
   }
 
   List<Member> _liveMembers(QuerySnapshot<Map<String, dynamic>> snap) => [

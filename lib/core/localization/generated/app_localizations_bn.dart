@@ -790,4 +790,155 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get invitationRevokeConfirmBody =>
       'এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।';
+
+  @override
+  String get securityTitle => 'নিরাপত্তা';
+
+  @override
+  String get securityChangePassword => 'পাসওয়ার্ড পরিবর্তন';
+
+  @override
+  String get securityCurrentPassword => 'বর্তমান পাসওয়ার্ড';
+
+  @override
+  String get securityNewPassword => 'নতুন পাসওয়ার্ড';
+
+  @override
+  String get securityPasswordChanged => 'পাসওয়ার্ড পরিবর্তন হয়েছে।';
+
+  @override
+  String get securityPasswordSame => 'নতুন পাসওয়ার্ড বর্তমানটির থেকে আলাদা হতে হবে।';
+
+  @override
+  String get securityCurrentPasswordRequired => 'আপনার বর্তমান পাসওয়ার্ড লিখুন।';
+
+  @override
+  String get securityCurrentPasswordWrong => 'বর্তমান পাসওয়ার্ডটি সঠিক নয়।';
+
+  @override
+  String get securityDeleteTitle => 'আমার অ্যাকাউন্ট মুছুন';
+
+  @override
+  String get securityDeleteBody => 'আপনি পরিবার ছেড়ে যাবেন এবং আপনার সাইন-ইন মুছে যাবে। পরিবারের ইতিহাস ঠিক রাখতে পুরোনো রেকর্ডে আপনার নাম থাকবে।';
+
+  @override
+  String get securityDeletePending => 'মুছে ফেলা শেষ হয়নি। শেষ করতে পাসওয়ার্ড লিখুন।';
+
+  @override
+  String get securityDeleteAction => 'অ্যাকাউন্ট মুছুন';
+
+  @override
+  String get securityDeleteFinish => 'মুছে ফেলা শেষ করুন';
+
+  @override
+  String get securityDeleteConfirmTitle => 'আপনার অ্যাকাউন্ট মুছবেন?';
+
+  @override
+  String get securityDeleteConfirmBody => 'এটি আর ফেরানো যাবে না।';
+
+  @override
+  String get accountDeleteLastAdminHasMembers => 'আপনি একমাত্র অ্যাডমিন এবং পরিবারে আরও সদস্য আছেন। আগে অ্যাডমিনের দায়িত্ব হস্তান্তর করুন।';
+
+  @override
+  String get relationshipsTitle => 'সম্পর্কের তালিকা';
+
+  @override
+  String get relationshipsHint => 'তৈরি-করা সম্পর্কগুলো পরিবর্তন করা যায় না। নিজের সম্পর্ক যোগ, নাম পরিবর্তন বা বন্ধ করতে পারেন।';
+
+  @override
+  String get relationshipsAdd => 'সম্পর্ক যোগ করুন';
+
+  @override
+  String get relationshipsLabelBn => 'বাংলায় নাম';
+
+  @override
+  String get relationshipsLabelEn => 'ইংরেজিতে নাম';
+
+  @override
+  String get relationshipsSpouseRelevant => 'স্বামী/স্ত্রী বাছাই দেখান';
+
+  @override
+  String get relationshipsBuiltIn => 'তৈরি-করা';
+
+  @override
+  String get relationshipsActive => 'চালু';
+
+  @override
+  String get relationshipsDisabled => 'বন্ধ';
+
+  @override
+  String get relationshipsEnable => 'চালু করুন';
+
+  @override
+  String get relationshipsDisable => 'বন্ধ করুন';
+
+  @override
+  String get relationshipsFailureLabel => 'একটি নাম লিখুন (সর্বোচ্চ ৪০ অক্ষর)।';
+
+  @override
+  String get relationshipsFailureTooMany => 'তালিকা পূর্ণ।';
+
+  @override
+  String get relationshipsFailureBuiltIn => 'তৈরি-করা সম্পর্ক পরিবর্তন করা যায় না।';
+
+  @override
+  String activityFamilyCreated(String familyName) {
+    return 'পরিবার “$familyName” তৈরি হয়েছে';
+  }
+
+  @override
+  String get activityFamilyUpdated => 'পরিবারের সেটিংস হালনাগাদ হয়েছে';
+
+  @override
+  String activityMemberRequested(String memberName) {
+    return '$memberName যোগ দিতে অনুরোধ করেছেন';
+  }
+
+  @override
+  String activityMemberApproved(String memberName) {
+    return '$memberName-কে অনুমোদন দেওয়া হয়েছে';
+  }
+
+  @override
+  String activityMemberRejected(String memberName) {
+    return '$memberName-কে গ্রহণ করা হয়নি';
+  }
+
+  @override
+  String activityMemberDisabled(String memberName) {
+    return '$memberName-কে বন্ধ করা হয়েছে';
+  }
+
+  @override
+  String activityMemberRoleChanged(String memberName, String newRole) {
+    return '$memberName এখন $newRole';
+  }
+
+  @override
+  String activityAdminTransferred(String memberName) {
+    return 'অ্যাডমিনের দায়িত্ব $memberName-কে দেওয়া হয়েছে';
+  }
+
+  @override
+  String activityMemberLeft(String memberName) {
+    return '$memberName পরিবার ছেড়ে গেছেন';
+  }
+
+  @override
+  String activityMemberCancelled(String memberName) {
+    return '$memberName অনুরোধ প্রত্যাহার করেছেন';
+  }
+
+  @override
+  String activityInvitationCreated(String code) {
+    return 'আমন্ত্রণ $code তৈরি হয়েছে';
+  }
+
+  @override
+  String activityInvitationRevoked(String code) {
+    return 'আমন্ত্রণ $code বাতিল হয়েছে';
+  }
+
+  @override
+  String get activityUnknown => 'কিছু পরিবর্তন হয়েছে';
 }

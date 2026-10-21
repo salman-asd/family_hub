@@ -4,12 +4,14 @@ import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/family.dart';
+import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/membership_repository.dart';
+import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 import 'package:family_hub/features/onboarding/domain/profile_repository.dart';
 import 'package:family_hub/features/onboarding/domain/user_profile.dart';
 import 'package:family_hub/features/onboarding/domain/user_profile_repository.dart';
@@ -35,7 +37,14 @@ class InMemoryBackend
 
   /// H7: `families/{f}/settings/permissions`; a missing entry means defaults.
   final Map<String, PermissionSettings> permissionSettings = {};
+
+  /// H10: `families/{f}/settings/relationships`; a missing entry means the
+  /// built-in defaults.
+  final Map<String, RelationshipCatalog> relationshipCatalogs = {};
   final List<AuditEvent> events = [];
+
+  /// H12: documents written by `FamilySeeder`s, by path.
+  final Map<String, Map<String, dynamic>> seeded = {};
 
   /// Number of write batches that were applied (one per mutating call).
   int writes = 0;
@@ -107,7 +116,7 @@ class InMemoryBackend
           role: m.role,
           status: m.status,
           fullName: profile.fullName,
-          relationship: profile.relationship.name,
+          relationship: profile.relationship.value,
           nickname: profile.nickname,
           spouseId: profile.spouseId,
           avatarKey: profile.avatarKey,
@@ -129,14 +138,46 @@ class InMemoryBackend
     required Family family,
     required Member owner,
     required AuditEvent event,
+    List<SeedWrite> seedWrites = const <SeedWrite>[],
   }) async {
     final failed = _consumeFailure();
     if (failed != null) return failed;
+    seeded.addAll(<String, Map<String, dynamic>>{
+      for (final w in seedWrites) w.path: w.data,
+    });
     families[family.id] = family;
     members[family.id] = {owner.uid: owner};
     adminIds[family.id] = <String>[owner.uid];
     permissionSettings[family.id] = PermissionSettings.defaults;
+    relationshipCatalogs[family.id] = RelationshipCatalog.defaults;
     userFamily[owner.uid] = family.id;
+    events.add(event);
+    writes++;
+    _notify();
+    return const Success<void>(null);
+  }
+
+  @override
+  Stream<RelationshipCatalog> watchRelationshipCatalog(String familyId) =>
+      _live(() => relationshipCatalogs[familyId] ?? RelationshipCatalog.defaults);
+
+  @override
+  Future<Result<RelationshipCatalog>> getRelationshipCatalog(
+    String familyId,
+  ) async =>
+      Success<RelationshipCatalog>(
+        relationshipCatalogs[familyId] ?? RelationshipCatalog.defaults,
+      );
+
+  @override
+  Future<Result<void>> saveRelationshipCatalog(
+    String familyId,
+    RelationshipCatalog catalog,
+    AuditEvent event,
+  ) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
+    relationshipCatalogs[familyId] = catalog;
     events.add(event);
     writes++;
     _notify();

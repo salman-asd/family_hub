@@ -28,8 +28,9 @@ class AuditEvent {
   /// When it happened on the device (the server time is `recordedAt`).
   final DateTime at;
 
-  /// Transitional English text kept for the rules' optional `summary` field.
-  /// H9 removes every caller; a screen localizes by [type] + [params] instead.
+  /// Always empty since H10: the document keeps an (empty) `summary` field only
+  /// because the closed key set in the rules still lists it.  Never put display
+  /// text here; a screen localizes by [type] + [params] (`activityText`).
   final String summary;
 
   /// Small machine payload (at most 8 keys, enforced by the rules) a screen

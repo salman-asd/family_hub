@@ -11,6 +11,7 @@ import 'package:family_hub/features/family/presentation/permission_providers.dar
 import 'package:family_hub/features/family/presentation/widgets/labels.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:family_hub/shared/widgets/permission_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,7 +44,7 @@ class MembersScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.membersTitle)),
       body: members.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const LoadingView(lines: 5, showAvatar: true),
         error: (_, __) => EmptyState(
           icon: Icons.cloud_off_rounded,
           title: l10n.errorUnknown,

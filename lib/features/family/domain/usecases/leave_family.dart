@@ -66,7 +66,7 @@ class LeaveFamily {
         id: _newId(),
         type: 'member.left',
         actorId: actorUid,
-        summary: '${me.fullName} left the family',
+        params: <String, String>{'memberName': me.fullName},
         refType: 'member',
         refId: actorUid,
         at: now,

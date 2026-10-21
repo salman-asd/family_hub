@@ -31,3 +31,10 @@ Set<String> rulesList(String functionName) {
       .map((m) => m.group(1)!)
       .toSet();
 }
+
+/// The whole `firebase/firestore.rules` text (H12).
+String rulesSource() {
+  final file = File('firebase/firestore.rules');
+  expect(file.existsSync(), isTrue, reason: 'run tests from the repository root');
+  return file.readAsStringSync();
+}

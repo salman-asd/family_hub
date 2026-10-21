@@ -12,6 +12,7 @@ import 'package:family_hub/features/family/presentation/widgets/failure_banner.d
 import 'package:family_hub/features/family/presentation/widgets/labels.dart';
 import 'package:family_hub/shared/widgets/busy_button.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:family_hub/shared/widgets/permission_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,12 +30,6 @@ class InvitationsScreen extends ConsumerStatefulWidget {
 }
 
 class _InvitationsScreenState extends ConsumerState<InvitationsScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() => ref.read(_inviteActionProvider.notifier).reset());
-  }
-
   Future<void> _create() async {
     final uid = ref.read(currentUidProvider);
     final familyId = ref.read(currentFamilyIdProvider);
@@ -125,7 +120,7 @@ class _InvitationsScreenState extends ConsumerState<InvitationsScreen> {
           ),
           Expanded(
             child: invitations.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => const LoadingView(lines: 5, showAvatar: true),
               error: (_, __) => EmptyState(
                 icon: Icons.cloud_off_rounded,
                 title: l10n.errorUnknown,

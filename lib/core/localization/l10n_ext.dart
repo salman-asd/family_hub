@@ -101,6 +101,9 @@ extension FamilyFailureMessages on AppLocalizations {
         Validation(field: 'code') => famFailureCodeInvalid,
         Validation(field: 'profile') => famFailureProfileRequired,
         Validation(field: 'name' || 'fullName') => famFailureNameRequired,
+        Validation(field: 'label') => relationshipsFailureLabel,
+        Validation(field: 'entries') => relationshipsFailureTooMany,
+        Conflict(code: 'built_in') => relationshipsFailureBuiltIn,
         NotFound(entity: 'invitation') => famFailureCodeNotFound,
         Conflict(code: 'code_used') => famFailureCodeUsed,
         Conflict(code: 'code_expired') => famFailureCodeExpired,
@@ -108,6 +111,8 @@ extension FamilyFailureMessages on AppLocalizations {
         Conflict(code: 'already_member') => famFailureAlreadyMember,
         Conflict(code: 'already_in_family') => famFailureAlreadyInFamily,
         Conflict(code: 'last_admin') => famFailureLastAdmin,
+        Conflict(code: 'last_admin_has_members') =>
+          accountDeleteLastAdminHasMembers,
         PermissionDenied() => famFailureNotAllowed,
         Network() => errorNetwork,
         // Exhaustive on purpose (H8): a new AppFailure subtype is a compile

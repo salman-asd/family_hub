@@ -1537,6 +1537,264 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।'**
   String get invitationRevokeConfirmBody;
+
+  /// No description provided for @securityTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিরাপত্তা'**
+  String get securityTitle;
+
+  /// No description provided for @securityChangePassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড পরিবর্তন'**
+  String get securityChangePassword;
+
+  /// No description provided for @securityCurrentPassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'বর্তমান পাসওয়ার্ড'**
+  String get securityCurrentPassword;
+
+  /// No description provided for @securityNewPassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন পাসওয়ার্ড'**
+  String get securityNewPassword;
+
+  /// No description provided for @securityPasswordChanged.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড পরিবর্তন হয়েছে।'**
+  String get securityPasswordChanged;
+
+  /// No description provided for @securityPasswordSame.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন পাসওয়ার্ড বর্তমানটির থেকে আলাদা হতে হবে।'**
+  String get securityPasswordSame;
+
+  /// No description provided for @securityCurrentPasswordRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার বর্তমান পাসওয়ার্ড লিখুন।'**
+  String get securityCurrentPasswordRequired;
+
+  /// No description provided for @securityCurrentPasswordWrong.
+  ///
+  /// In bn, this message translates to:
+  /// **'বর্তমান পাসওয়ার্ডটি সঠিক নয়।'**
+  String get securityCurrentPasswordWrong;
+
+  /// No description provided for @securityDeleteTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমার অ্যাকাউন্ট মুছুন'**
+  String get securityDeleteTitle;
+
+  /// No description provided for @securityDeleteBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি পরিবার ছেড়ে যাবেন এবং আপনার সাইন-ইন মুছে যাবে। পরিবারের ইতিহাস ঠিক রাখতে পুরোনো রেকর্ডে আপনার নাম থাকবে।'**
+  String get securityDeleteBody;
+
+  /// No description provided for @securityDeletePending.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে ফেলা শেষ হয়নি। শেষ করতে পাসওয়ার্ড লিখুন।'**
+  String get securityDeletePending;
+
+  /// No description provided for @securityDeleteAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাকাউন্ট মুছুন'**
+  String get securityDeleteAction;
+
+  /// No description provided for @securityDeleteFinish.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে ফেলা শেষ করুন'**
+  String get securityDeleteFinish;
+
+  /// No description provided for @securityDeleteConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার অ্যাকাউন্ট মুছবেন?'**
+  String get securityDeleteConfirmTitle;
+
+  /// No description provided for @securityDeleteConfirmBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি আর ফেরানো যাবে না।'**
+  String get securityDeleteConfirmBody;
+
+  /// No description provided for @accountDeleteLastAdminHasMembers.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি একমাত্র অ্যাডমিন এবং পরিবারে আরও সদস্য আছেন। আগে অ্যাডমিনের দায়িত্ব হস্তান্তর করুন।'**
+  String get accountDeleteLastAdminHasMembers;
+
+  /// No description provided for @relationshipsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পর্কের তালিকা'**
+  String get relationshipsTitle;
+
+  /// No description provided for @relationshipsHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'তৈরি-করা সম্পর্কগুলো পরিবর্তন করা যায় না। নিজের সম্পর্ক যোগ, নাম পরিবর্তন বা বন্ধ করতে পারেন।'**
+  String get relationshipsHint;
+
+  /// No description provided for @relationshipsAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পর্ক যোগ করুন'**
+  String get relationshipsAdd;
+
+  /// No description provided for @relationshipsLabelBn.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাংলায় নাম'**
+  String get relationshipsLabelBn;
+
+  /// No description provided for @relationshipsLabelEn.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইংরেজিতে নাম'**
+  String get relationshipsLabelEn;
+
+  /// No description provided for @relationshipsSpouseRelevant.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্বামী/স্ত্রী বাছাই দেখান'**
+  String get relationshipsSpouseRelevant;
+
+  /// No description provided for @relationshipsBuiltIn.
+  ///
+  /// In bn, this message translates to:
+  /// **'তৈরি-করা'**
+  String get relationshipsBuiltIn;
+
+  /// No description provided for @relationshipsActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'চালু'**
+  String get relationshipsActive;
+
+  /// No description provided for @relationshipsDisabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'বন্ধ'**
+  String get relationshipsDisabled;
+
+  /// No description provided for @relationshipsEnable.
+  ///
+  /// In bn, this message translates to:
+  /// **'চালু করুন'**
+  String get relationshipsEnable;
+
+  /// No description provided for @relationshipsDisable.
+  ///
+  /// In bn, this message translates to:
+  /// **'বন্ধ করুন'**
+  String get relationshipsDisable;
+
+  /// No description provided for @relationshipsFailureLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি নাম লিখুন (সর্বোচ্চ ৪০ অক্ষর)।'**
+  String get relationshipsFailureLabel;
+
+  /// No description provided for @relationshipsFailureTooMany.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকা পূর্ণ।'**
+  String get relationshipsFailureTooMany;
+
+  /// No description provided for @relationshipsFailureBuiltIn.
+  ///
+  /// In bn, this message translates to:
+  /// **'তৈরি-করা সম্পর্ক পরিবর্তন করা যায় না।'**
+  String get relationshipsFailureBuiltIn;
+
+  /// No description provided for @activityFamilyCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার “{familyName}” তৈরি হয়েছে'**
+  String activityFamilyCreated(String familyName);
+
+  /// No description provided for @activityFamilyUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের সেটিংস হালনাগাদ হয়েছে'**
+  String get activityFamilyUpdated;
+
+  /// No description provided for @activityMemberRequested.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName} যোগ দিতে অনুরোধ করেছেন'**
+  String activityMemberRequested(String memberName);
+
+  /// No description provided for @activityMemberApproved.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName}-কে অনুমোদন দেওয়া হয়েছে'**
+  String activityMemberApproved(String memberName);
+
+  /// No description provided for @activityMemberRejected.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName}-কে গ্রহণ করা হয়নি'**
+  String activityMemberRejected(String memberName);
+
+  /// No description provided for @activityMemberDisabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName}-কে বন্ধ করা হয়েছে'**
+  String activityMemberDisabled(String memberName);
+
+  /// No description provided for @activityMemberRoleChanged.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName} এখন {newRole}'**
+  String activityMemberRoleChanged(String memberName, String newRole);
+
+  /// No description provided for @activityAdminTransferred.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাডমিনের দায়িত্ব {memberName}-কে দেওয়া হয়েছে'**
+  String activityAdminTransferred(String memberName);
+
+  /// No description provided for @activityMemberLeft.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName} পরিবার ছেড়ে গেছেন'**
+  String activityMemberLeft(String memberName);
+
+  /// No description provided for @activityMemberCancelled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName} অনুরোধ প্রত্যাহার করেছেন'**
+  String activityMemberCancelled(String memberName);
+
+  /// No description provided for @activityInvitationCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমন্ত্রণ {code} তৈরি হয়েছে'**
+  String activityInvitationCreated(String code);
+
+  /// No description provided for @activityInvitationRevoked.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমন্ত্রণ {code} বাতিল হয়েছে'**
+  String activityInvitationRevoked(String code);
+
+  /// No description provided for @activityUnknown.
+  ///
+  /// In bn, this message translates to:
+  /// **'কিছু পরিবর্তন হয়েছে'**
+  String get activityUnknown;
 }
 
 class _AppLocalizationsDelegate

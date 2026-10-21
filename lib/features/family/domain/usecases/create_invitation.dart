@@ -73,7 +73,7 @@ class CreateInvitation {
         id: _newId(),
         type: 'invitation.created',
         actorId: actorUid,
-        summary: 'Invitation $code created',
+        params: <String, String>{'code': code},
         refType: 'invitation',
         refId: code,
         at: now,

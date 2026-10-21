@@ -44,6 +44,18 @@ class FakeAuthRepository implements AuthRepository {
   /// Programme the next [reloadUser] outcome.
   AppFailure? reloadUserFailure;
 
+  /// Programme the next [reauthenticate] outcome (H9).
+  AppFailure? reauthenticateFailure;
+
+  /// Programme the next [changePassword] outcome (H9).
+  AppFailure? changePasswordFailure;
+
+  /// Programme the next [deleteAuthUser] outcome (H9).
+  AppFailure? deleteAuthUserFailure;
+
+  /// The last password set through [changePassword].
+  String? lastNewPassword;
+
   /// The user [reloadUser] returns while [reloadVerified] is true.
   ///
   /// Lets a test model "the user opened the link in their inbox": flip this to
@@ -167,6 +179,42 @@ class FakeAuthRepository implements AuthRepository {
     tokenRefreshes++;
     _setCurrent(current.copyWith(emailVerified: reloadVerified));
     return Success<AppUser?>(_current);
+  }
+
+  @override
+  Future<Result<void>> reauthenticate({required String password}) async {
+    calls.add('reauthenticate');
+    lastPassword = password;
+    await _wait();
+    if (_current == null) return const Failure<void>(NoCurrentUser());
+    if (reauthenticateFailure != null) {
+      return Failure<void>(reauthenticateFailure!);
+    }
+    return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<void>> changePassword({required String newPassword}) async {
+    calls.add('changePassword');
+    await _wait();
+    if (_current == null) return const Failure<void>(NoCurrentUser());
+    if (changePasswordFailure != null) {
+      return Failure<void>(changePasswordFailure!);
+    }
+    lastNewPassword = newPassword;
+    return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<void>> deleteAuthUser() async {
+    calls.add('deleteAuthUser');
+    await _wait();
+    if (_current == null) return const Failure<void>(NoCurrentUser());
+    if (deleteAuthUserFailure != null) {
+      return Failure<void>(deleteAuthUserFailure!);
+    }
+    _setCurrent(null);
+    return const Success<void>(null);
   }
 
   /// Pushes [user] onto the stream and returns it.

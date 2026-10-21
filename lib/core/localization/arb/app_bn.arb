@@ -570,5 +570,160 @@
   "invitationRevokeConfirmTitle": "কোডটি বাতিল করবেন?",
   "@invitationRevokeConfirmTitle": {},
   "invitationRevokeConfirmBody": "এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।",
-  "@invitationRevokeConfirmBody": {}
+  "@invitationRevokeConfirmBody": {},
+  "securityTitle": "নিরাপত্তা",
+  "@securityTitle": {},
+  "securityChangePassword": "পাসওয়ার্ড পরিবর্তন",
+  "@securityChangePassword": {},
+  "securityCurrentPassword": "বর্তমান পাসওয়ার্ড",
+  "@securityCurrentPassword": {},
+  "securityNewPassword": "নতুন পাসওয়ার্ড",
+  "@securityNewPassword": {},
+  "securityPasswordChanged": "পাসওয়ার্ড পরিবর্তন হয়েছে।",
+  "@securityPasswordChanged": {},
+  "securityPasswordSame": "নতুন পাসওয়ার্ড বর্তমানটির থেকে আলাদা হতে হবে।",
+  "@securityPasswordSame": {},
+  "securityCurrentPasswordRequired": "আপনার বর্তমান পাসওয়ার্ড লিখুন।",
+  "@securityCurrentPasswordRequired": {},
+  "securityCurrentPasswordWrong": "বর্তমান পাসওয়ার্ডটি সঠিক নয়।",
+  "@securityCurrentPasswordWrong": {},
+  "securityDeleteTitle": "আমার অ্যাকাউন্ট মুছুন",
+  "@securityDeleteTitle": {},
+  "securityDeleteBody": "আপনি পরিবার ছেড়ে যাবেন এবং আপনার সাইন-ইন মুছে যাবে। পরিবারের ইতিহাস ঠিক রাখতে পুরোনো রেকর্ডে আপনার নাম থাকবে।",
+  "@securityDeleteBody": {},
+  "securityDeletePending": "মুছে ফেলা শেষ হয়নি। শেষ করতে পাসওয়ার্ড লিখুন।",
+  "@securityDeletePending": {},
+  "securityDeleteAction": "অ্যাকাউন্ট মুছুন",
+  "@securityDeleteAction": {},
+  "securityDeleteFinish": "মুছে ফেলা শেষ করুন",
+  "@securityDeleteFinish": {},
+  "securityDeleteConfirmTitle": "আপনার অ্যাকাউন্ট মুছবেন?",
+  "@securityDeleteConfirmTitle": {},
+  "securityDeleteConfirmBody": "এটি আর ফেরানো যাবে না।",
+  "@securityDeleteConfirmBody": {},
+  "accountDeleteLastAdminHasMembers": "আপনি একমাত্র অ্যাডমিন এবং পরিবারে আরও সদস্য আছেন। আগে অ্যাডমিনের দায়িত্ব হস্তান্তর করুন।",
+  "@accountDeleteLastAdminHasMembers": {},
+  "relationshipsTitle": "সম্পর্কের তালিকা",
+  "@relationshipsTitle": {},
+  "relationshipsHint": "তৈরি-করা সম্পর্কগুলো পরিবর্তন করা যায় না। নিজের সম্পর্ক যোগ, নাম পরিবর্তন বা বন্ধ করতে পারেন।",
+  "@relationshipsHint": {},
+  "relationshipsAdd": "সম্পর্ক যোগ করুন",
+  "@relationshipsAdd": {},
+  "relationshipsLabelBn": "বাংলায় নাম",
+  "@relationshipsLabelBn": {},
+  "relationshipsLabelEn": "ইংরেজিতে নাম",
+  "@relationshipsLabelEn": {},
+  "relationshipsSpouseRelevant": "স্বামী/স্ত্রী বাছাই দেখান",
+  "@relationshipsSpouseRelevant": {},
+  "relationshipsBuiltIn": "তৈরি-করা",
+  "@relationshipsBuiltIn": {},
+  "relationshipsActive": "চালু",
+  "@relationshipsActive": {},
+  "relationshipsDisabled": "বন্ধ",
+  "@relationshipsDisabled": {},
+  "relationshipsEnable": "চালু করুন",
+  "@relationshipsEnable": {},
+  "relationshipsDisable": "বন্ধ করুন",
+  "@relationshipsDisable": {},
+  "relationshipsFailureLabel": "একটি নাম লিখুন (সর্বোচ্চ ৪০ অক্ষর)।",
+  "@relationshipsFailureLabel": {},
+  "relationshipsFailureTooMany": "তালিকা পূর্ণ।",
+  "@relationshipsFailureTooMany": {},
+  "relationshipsFailureBuiltIn": "তৈরি-করা সম্পর্ক পরিবর্তন করা যায় না।",
+  "@relationshipsFailureBuiltIn": {},
+  "activityFamilyCreated": "পরিবার “{familyName}” তৈরি হয়েছে",
+  "@activityFamilyCreated": {
+    "placeholders": {
+      "familyName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityFamilyUpdated": "পরিবারের সেটিংস হালনাগাদ হয়েছে",
+  "@activityFamilyUpdated": {},
+  "activityMemberRequested": "{memberName} যোগ দিতে অনুরোধ করেছেন",
+  "@activityMemberRequested": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberApproved": "{memberName}-কে অনুমোদন দেওয়া হয়েছে",
+  "@activityMemberApproved": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberRejected": "{memberName}-কে গ্রহণ করা হয়নি",
+  "@activityMemberRejected": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberDisabled": "{memberName}-কে বন্ধ করা হয়েছে",
+  "@activityMemberDisabled": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberRoleChanged": "{memberName} এখন {newRole}",
+  "@activityMemberRoleChanged": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      },
+      "newRole": {
+        "type": "String"
+      }
+    }
+  },
+  "activityAdminTransferred": "অ্যাডমিনের দায়িত্ব {memberName}-কে দেওয়া হয়েছে",
+  "@activityAdminTransferred": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberLeft": "{memberName} পরিবার ছেড়ে গেছেন",
+  "@activityMemberLeft": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberCancelled": "{memberName} অনুরোধ প্রত্যাহার করেছেন",
+  "@activityMemberCancelled": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityInvitationCreated": "আমন্ত্রণ {code} তৈরি হয়েছে",
+  "@activityInvitationCreated": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityInvitationRevoked": "আমন্ত্রণ {code} বাতিল হয়েছে",
+  "@activityInvitationRevoked": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityUnknown": "কিছু পরিবর্তন হয়েছে",
+  "@activityUnknown": {}
 }

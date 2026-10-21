@@ -199,6 +199,19 @@ void main() {
           );
         });
 
+        // ── Placeholder initials (H11) ─────────────────────────────────────
+        // Mirrors AppAvatar.foregroundFor: dark ink on light backgrounds,
+        // light ink on dark ones.  EVERY palette entry must reach 4.5:1.
+        test('placeholder foreground on every palette entry >= 4.5', () {
+          for (var i = 0; i < t.placeholderPalette.length; i++) {
+            final bg = t.placeholderPalette[i];
+            final fg = ThemeData.estimateBrightnessForColor(bg) == Brightness.dark
+                ? t.placeholderOnDark
+                : t.placeholderOnLight;
+            _assertContrast('placeholder[$i]', fg, bg, 4.5);
+          }
+        });
+
         test('accent on surface >= 3', () {
           _assertContrast(
             'accent/surface',

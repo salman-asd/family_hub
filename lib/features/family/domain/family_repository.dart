@@ -2,19 +2,25 @@ import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/family.dart';
+import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
+import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 
 /// Port for family data.  Every mutating method is atomic (one batch) and
 /// writes its [AuditEvent] in the same batch.
 abstract interface class FamilyRepository {
   /// ONE batch: family, owner member, settings docs, user `familyId`, event.
+  ///
+  /// [seedWrites] (H12) are extra starter documents from `FamilySeeder`s,
+  /// written in the same batch.
   Future<Result<void>> createFamily({
     required Family family,
     required Member owner,
     required AuditEvent event,
+    List<SeedWrite> seedWrites = const <SeedWrite>[],
   });
 
   /// The invitation behind `inviteCodes/{code}`, or `null`.
@@ -75,6 +81,21 @@ abstract interface class FamilyRepository {
   /// The family's permission switches; module switches are NOT part of it
   /// (they come from `settings/modules`).
   Stream<PermissionSettings> watchPermissionSettings(String familyId);
+
+  /// `families/{f}/settings/relationships` (H10): the built-in defaults while
+  /// the document does not exist.  Never fails on a damaged document.
+  Stream<RelationshipCatalog> watchRelationshipCatalog(String familyId);
+
+  /// One-shot read of the same catalog (used by the update use case so an edit
+  /// is applied to the latest list).
+  Future<Result<RelationshipCatalog>> getRelationshipCatalog(String familyId);
+
+  /// Writes the relationship list plus the event in ONE batch.
+  Future<Result<void>> saveRelationshipCatalog(
+    String familyId,
+    RelationshipCatalog catalog,
+    AuditEvent event,
+  );
 
   Stream<List<Member>> watchMembers(String familyId);
   Stream<List<Invitation>> watchInvitations(String familyId);

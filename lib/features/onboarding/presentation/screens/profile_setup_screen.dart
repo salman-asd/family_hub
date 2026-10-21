@@ -34,7 +34,7 @@ class ProfileSetupScreen extends ConsumerStatefulWidget {
 class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
   final _name = TextEditingController();
   final _nickname = TextEditingController();
-  Relationship _relationship = Relationship.other;
+  RelationshipId _relationship = RelationshipId.other;
   Gender? _gender;
   String? _avatarKey;
   String? _spouseId;
@@ -82,7 +82,11 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
               relationship: _relationship,
               gender: _gender,
               avatarKey: _avatarKey,
-              spouseId: _relationship.canHaveSpouse ? _spouseId : null,
+              spouseId: ref
+                      .read(relationshipCatalogOrDefaultProvider)
+                      .canHaveSpouse(_relationship)
+                  ? _spouseId
+                  : null,
             ),
           ),
         );
@@ -97,6 +101,14 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
     final members = widget.editing
         ? (ref.watch(membersProvider).value ?? const <Member>[])
         : const <Member>[];
+    final catalog = ref.watch(relationshipCatalogOrDefaultProvider);
+    // The current choice stays visible even when an admin has since disabled it.
+    final relationshipOptions = <RelationshipEntry>[
+      ...catalog.selectable,
+      if (catalog.find(_relationship) != null &&
+          !catalog.selectable.any((e) => e.id == _relationship))
+        catalog.find(_relationship)!,
+    ];
     final uid = ref.watch(currentUidProvider) ?? '';
     final spouseCandidates =
         members.where((m) => m.uid != uid && m.isActive).toList();
@@ -156,10 +168,14 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
             ),
             const SizedBox(height: 20),
             _Label(l10n.profileRelationship),
-            ChoiceWrap<Relationship>(
+            ChoiceWrap<RelationshipId>(
               options: [
-                for (final r in Relationship.values)
-                  ChoiceOption(r, l10n.relationshipLabel(r), key: Key('rel_${r.name}')),
+                for (final e in relationshipOptions)
+                  ChoiceOption(
+                    e.id,
+                    l10n.relationshipIdLabel(catalog, e.id),
+                    key: Key('rel_${e.id.value}'),
+                  ),
               ],
               selected: _relationship,
               onChanged: (r) => setState(() => _relationship = r),
@@ -176,7 +192,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
               onChanged: (g) => setState(() => _gender = g),
             ),
             if (widget.editing &&
-                _relationship.canHaveSpouse &&
+                catalog.canHaveSpouse(_relationship) &&
                 spouseCandidates.isNotEmpty) ...[
               const SizedBox(height: 20),
               _Label(l10n.profileSpouse),

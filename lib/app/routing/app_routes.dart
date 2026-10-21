@@ -38,11 +38,15 @@ abstract final class AppRoutes {
   static const String familyInvitations = '/family/invitations';
   static const String familyRoles = '/family/roles';
   static const String familySettings = '/family/settings';
+  static const String familyRelationships = '/family/relationships';
   static const String profileEdit = '/family/profile';
 
   // ── Settings (full-screen, outside the shell) ─────────────────────────────
   static const String settingsTheme = '/settings/theme';
   static const String settingsLanguage = '/settings/language';
+
+  /// Password and account deletion (H9).  Account data: NOT in [alwaysOpen].
+  static const String settingsSecurity = '/settings/security';
 
   // ── Developer tools (dev flavor only) ─────────────────────────────────────
   static const String devTokens = '/dev/tokens';

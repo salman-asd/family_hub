@@ -105,6 +105,34 @@ class FirebaseAuthRepository implements AuthRepository {
         return toAppUser(_auth.currentUser);
       });
 
+  @override
+  Future<Result<void>> reauthenticate({required String password}) =>
+      _guard(() async {
+        final user = _auth.currentUser;
+        final email = user?.email;
+        if (user == null || email == null) throw const _MissingUser();
+        await user
+            .reauthenticateWithCredential(
+              EmailAuthProvider.credential(email: email, password: password),
+            )
+            .timeout(timeout);
+      });
+
+  @override
+  Future<Result<void>> changePassword({required String newPassword}) =>
+      _guard(() async {
+        final user = _auth.currentUser;
+        if (user == null) throw const _MissingUser();
+        await user.updatePassword(newPassword).timeout(timeout);
+      });
+
+  @override
+  Future<Result<void>> deleteAuthUser() => _guard(() async {
+        final user = _auth.currentUser;
+        if (user == null) throw const _MissingUser();
+        await user.delete().timeout(timeout);
+      });
+
   /// Runs [call], converting every backend failure into the matching
   /// [AppFailure].
   Future<Result<T>> _guard<T>(Future<T> Function() call) async {

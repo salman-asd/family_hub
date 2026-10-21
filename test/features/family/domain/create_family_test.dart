@@ -22,7 +22,7 @@ void main() {
   });
 
   test('creates the family with the caller as active admin in ONE write', () async {
-    f.profile('u1', relationship: Relationship.father);
+    f.profile('u1', relationship: RelationshipId.father);
     final result = await useCase(actorUid: 'u1', name: '  Rahman family ');
 
     final family = result.valueOrNull!;

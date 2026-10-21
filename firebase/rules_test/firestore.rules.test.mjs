@@ -2091,3 +2091,101 @@ describe('H7 member invitations (membersCanInvite)', () => {
     );
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// H9 / H10 — account soft-delete, relationship ids, settings/relationships
+// ─────────────────────────────────────────────────────────────────────────────
+describe('H9 account soft-delete', () => {
+  it('allows the owner to soft-delete their own profile', async () => {
+    const db = as(FRANK);
+    await assertSucceeds(
+      setDoc(
+        doc(db, `users/${FRANK}`),
+        { deletedAt: nowTs(), deletedBy: FRANK, nickname: null },
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a deletedBy that is somebody else', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(
+        doc(db, `users/${FRANK}`),
+        { deletedAt: nowTs(), deletedBy: ALICE },
+        { merge: true },
+      ),
+    );
+  });
+
+  it('denies a deletedAt that is not a timestamp', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(doc(db, `users/${FRANK}`), { deletedAt: 'yesterday', deletedBy: FRANK }, { merge: true }),
+    );
+  });
+
+  it('denies hard-deleting the user document', async () => {
+    const db = as(FRANK);
+    await assertFails(deleteDoc(doc(db, `users/${FRANK}`)));
+  });
+});
+
+describe('H10 relationship ids and the relationships settings', () => {
+  it('allows a custom, well-formed relationship id on the profile', async () => {
+    const db = as(FRANK);
+    await assertSucceeds(
+      setDoc(doc(db, `users/${FRANK}`), { relationship: 'uncleMaternal' }, { merge: true }),
+    );
+  });
+
+  it('denies a malformed relationship id', async () => {
+    const db = as(FRANK);
+    await assertFails(
+      setDoc(doc(db, `users/${FRANK}`), { relationship: 'Not Valid!' }, { merge: true }),
+    );
+  });
+
+  it('allows an admin to write settings/relationships', async () => {
+    const db = as(ALICE);
+    await assertSucceeds(
+      setDoc(doc(db, `families/${FAM_A}/settings/relationships`), {
+        items: [{ id: 'uncle', labelBn: 'চাচা', labelEn: 'Uncle', spouseRelevant: true, builtIn: false, active: true }],
+        createdAt: nowTs(),
+        createdBy: ALICE,
+        updatedAt: nowTs(),
+        updatedBy: ALICE,
+        schemaVersion: 1,
+      }),
+    );
+  });
+
+  it('denies a moderator writing settings/relationships', async () => {
+    const db = as(BOB);
+    await assertFails(
+      setDoc(doc(db, `families/${FAM_A}/settings/relationships`), {
+        items: [],
+        createdAt: nowTs(),
+        createdBy: BOB,
+        updatedAt: nowTs(),
+        updatedBy: BOB,
+        schemaVersion: 1,
+      }),
+    );
+  });
+
+  it('denies more than 40 items', async () => {
+    const db = as(ALICE);
+    const items = Array.from({ length: 41 }, (_, i) => ({ id: `c${i}x`, labelBn: 'a', labelEn: 'a' }));
+    await assertFails(
+      setDoc(doc(db, `families/${FAM_A}/settings/relationships`), {
+        items,
+        createdAt: nowTs(),
+        createdBy: ALICE,
+        updatedAt: nowTs(),
+        updatedBy: ALICE,
+        schemaVersion: 1,
+      }),
+    );
+  });
+});

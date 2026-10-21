@@ -1,0 +1,45 @@
+// Template for the rules tests of a NEW collection (H12).
+//
+// Copy to firebase/rules_test/<collection>.test.mjs, replace __COLLECTION__ and
+// the document shape, and import the helpers the same way firestore.rules.test.mjs
+// does.  One allowed and one denied case per rule - no exceptions.
+
+describe('families/{f}/__COLLECTION__', () => {
+  const path = (id) => `families/${FAM_A}/__COLLECTION__/${id}`;
+  const valid = (uid) => baseDoc(uid, { /* closed key set of the mapper */ });
+
+  it('allows an active member to read', async () => {
+    await assertSucceeds(getDoc(doc(as(CARA), path('r1'))));
+  });
+  it('denies a pending member reading', async () => {
+    await assertFails(getDoc(doc(as(DAVE), path('r1'))));
+  });
+  it('denies another family reading', async () => {
+    await assertFails(getDoc(doc(as(ERIN), path('r1'))));
+  });
+
+  it('allows an active member creating their own record', async () => {
+    await assertSucceeds(setDoc(doc(as(CARA), path('r2')), valid(CARA)));
+  });
+  it('denies a forged createdBy', async () => {
+    await assertFails(setDoc(doc(as(CARA), path('r3')), valid(ALICE)));
+  });
+  it('denies an unknown field (closed key set)', async () => {
+    await assertFails(setDoc(doc(as(CARA), path('r4')), { ...valid(CARA), extra: 1 }));
+  });
+  it('denies a negative or non-integer money field', async () => {
+    await assertFails(setDoc(doc(as(CARA), path('r5')), { ...valid(CARA), total: -1 }));
+    await assertFails(setDoc(doc(as(CARA), path('r6')), { ...valid(CARA), total: 1.5 }));
+  });
+  it('denies a malformed dateKey / monthKey', async () => {
+    await assertFails(setDoc(doc(as(CARA), path('r7')), { ...valid(CARA), dateKey: '2026-13-40' }));
+  });
+
+  it('allows a soft delete (deletedAt / deletedBy only)', async () => {
+    // seed r8 with security rules disabled, then:
+    // await assertSucceeds(updateDoc(doc(as(CARA), path('r8')), { deletedAt: nowTs(), deletedBy: CARA, updatedAt: nowTs(), updatedBy: CARA }));
+  });
+  it('denies a hard delete', async () => {
+    await assertFails(deleteDoc(doc(as(ALICE), path('r8'))));
+  });
+});

@@ -8,6 +8,7 @@ import 'package:family_hub/modules/module_providers.dart';
 import 'package:family_hub/shared/widgets/busy_button.dart';
 import 'package:family_hub/shared/widgets/choice_wrap.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,12 +36,6 @@ class _FamilySettingsScreenState extends ConsumerState<FamilySettingsScreen> {
 
   final _name = TextEditingController();
   Family? _draft;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() => ref.read(_settingsActionProvider.notifier).reset());
-  }
 
   @override
   void dispose() {
@@ -90,7 +85,7 @@ class _FamilySettingsScreenState extends ConsumerState<FamilySettingsScreen> {
                   actionLabel: l10n.actionRetry,
                   onAction: () => ref.invalidate(familyProvider),
                 )
-              : const Center(child: CircularProgressIndicator()))
+              : const LoadingView())
           : ListView(
               padding: const EdgeInsets.all(20),
               children: [

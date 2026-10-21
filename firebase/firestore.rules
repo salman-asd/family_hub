@@ -14,7 +14,8 @@ rules_version = '2';
 //   families/{f}/members/{m}
 //   families/{f}/invitations/{i}
 //   families/{f}/settings/{s}   (general, modules, rotationPolicy,
-//                                notificationDefaults, permissions)
+//                                notificationDefaults, permissions,
+//                                relationships)
 //   families/{f}/activity/{a}
 //   families/{f}/auditLogs/{a}
 //
@@ -92,13 +93,15 @@ service cloud.firestore {
     function optStr(d, k, hi) {
       return !(k in d.keys()) || d[k] == null || str(d[k], 0, hi);
     }
+    // H10: relationships are an editable list (`settings/relationships`), so the
+    // stored value is an ID checked by pattern, not a closed enum.  Mirrors
+    // `RelationshipId.isValid`.
+    function relationshipOk(data) {
+      return data.get('relationship', 'other') is string
+        && data.get('relationship', 'other').matches('^[a-z][a-zA-Z0-9_]{1,30}$');
+    }
     // Enums are validated against the closed sets of the domain models, so a
     // forged document fails here rather than at the next read.
-    function relationshipOk(data) {
-      return data.get('relationship', 'other') in
-        ['father', 'mother', 'son', 'daughter', 'husband', 'wife', 'housewife',
-         'daughterInLaw', 'sonInLaw', 'other'];
-    }
     function genderOk(data) {
       return !('gender' in data.keys())
         || data.gender == null
@@ -123,6 +126,33 @@ service cloud.firestore {
     }
     function isNonNegativeIntOrMissing(data, key) {
       return !(key in data.keys()) || isNonNegativeInt(data[key]);
+    }
+    // ── Phase 2 scaffold (H12) ─────────────────────────────────────────────
+    // Reusable guards for the collections Steps 12+ add.  Nothing uses them
+    // yet; a new collection composes these instead of inventing its own.
+    // See docs/new_collection_checklist.md.
+    function canReadFamilyData(f) {
+      return isActiveMember(f);
+    }
+    // A record the caller creates for themselves in their own family.
+    function canWriteOwnRecord(f) {
+      return verified() && isActiveMember(f) && createsAsSelf();
+    }
+    // Integer paisa that is present and non-negative.
+    function moneyOk(data, key) {
+      return key in data.keys() && isNonNegativeInt(data[key]);
+    }
+    // `yyyy-MM-dd` / `yyyy-MM` keys in the family time zone.
+    function dateKeyOk(s) {
+      return s is string && s.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$');
+    }
+    function monthKeyOk(s) {
+      return s is string && s.matches('^[0-9]{4}-(0[1-9]|1[0-2])$');
+    }
+    // CLAUDE.md rule 5: an update may only set the soft-delete and update stamps.
+    function softDeleteOnly() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(['deletedAt', 'deletedBy', 'updatedAt', 'updatedBy']);
     }
     // H5: the denormalised member profile.  Applied to every member create and
     // to the admin/self updates (the field set is the same).
@@ -160,7 +190,7 @@ service cloud.firestore {
       return ['timezone', 'currency', 'flags', 'absencePolicy', 'enabled',
               'moderatorManagesFinance', 'membersViewFamilyReports',
               'membersViewAllContributions', 'membersCanInvite',
-              'choreVerificationEnabled', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'choreVerificationEnabled', 'items', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
               'schemaVersion', 'deletedAt', 'deletedBy'];
     }
     function eventKeys() {
@@ -183,7 +213,11 @@ service cloud.firestore {
         && optStr(d, 'currency', 8)
         && (!('flags' in d.keys())
             || (d.flags is map && d.flags.size() <= 8))
-        && optStr(d, 'absencePolicy', 32);
+        && optStr(d, 'absencePolicy', 32)
+        // H10: `settings/relationships.items` is a bounded list (the per-item
+        // shape cannot be iterated in rules; the app tolerates ill-formed items).
+        && (!('items' in d.keys())
+            || (d.items is list && d.items.size() <= 40));
     }
 
     // ── Log integrity (H5) ─────────────────────────────────────────────────
@@ -416,9 +450,20 @@ service cloud.firestore {
           && request.resource.data.get('updatedBy', uid) == uid
           && optStr(request.resource.data, 'fullName', 80)
           && optStr(request.resource.data, 'nickname', 40)
+          && accountDeletionOk()
           && preferencesOk(request.resource.data)
           && relationshipOk(request.resource.data)
           && genderOk(request.resource.data);
+      }
+
+      // H9: an owner may soft-delete their own account: `deletedAt` is a
+      // timestamp, `deletedBy` is the owner, and a deletion can never be undone
+      // (once set, `deletedAt` stays set).
+      function accountDeletionOk() {
+        let d = request.resource.data;
+        return (!('deletedAt' in d.keys()) || d.deletedAt == null || d.deletedAt is timestamp)
+          && (!('deletedBy' in d.keys()) || d.deletedBy == null || d.deletedBy == uid)
+          && (!('deletedAt' in d.keys()) || d.deletedAt != null || !(resource != null && resource.data.get('deletedAt', null) != null));
       }
 
       // One family per user (CLAUDE.md rule 17): `familyId` may be set when
@@ -437,7 +482,8 @@ service cloud.firestore {
       allow get, list: if isSelf(uid);
       allow create: if isSelf(uid) && userDocOk();
       allow update: if isSelf(uid) && userDocOk() && familyPointerChangeOk();
-      // Closing an account is not a feature: profile data is soft-deleted.
+      // H9: an account is closed by a SOFT delete (`deletedAt`, `deletedBy`);
+      // the document itself is never removed, so history stays attributable.
       allow delete: if false;
     }
 

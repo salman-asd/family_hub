@@ -47,7 +47,6 @@ class UpdateFamilySettings {
         id: _newId(),
         type: 'family.updated',
         actorId: actorUid,
-        summary: 'Family settings updated',
         refType: 'family',
         refId: family.id,
         at: _clock.nowUtc(),

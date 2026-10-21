@@ -164,3 +164,30 @@ Not compiled or run (no Flutter SDK / emulator available). Run the Part A checkl
 - **H8**: pure `clock.dart` + `clock_provider.dart`, `ModuleFlags` moved to the family domain, `AuditEvent` + `AuditWriter` (`FamilyEvent` deleted), import-graph layer test, TODO cleanup + test + hard CI failure, exhaustive failure mapping + test.
 
 Assumptions: no UI yet for editing the five permission switches (use case and rules exist); `AuditEvent.summary` kept (optional) until H9; `requirePermission` falls back to default settings when the settings read fails.
+
+## Phase 1 hardening - Part C (H9-H12), written statically
+Not compiled or run (no Flutter SDK / emulator available). Run the Part A checklist, then `flutter gen-l10n` (confirms the generated l10n files), `dart format .`, and the *Update goldens* workflow (new settings goldens).
+
+| Step | What changed |
+| --- | --- |
+| H9 | Change password, delete account (resumable), `/settings/security`, sign-out Firestore cache wipe, rules for soft-delete, ARB keys |
+| H10 | `saveProfile` stamps `createdAt` once, `watchFamily` via `combineLatest3`, auto-disposed action providers, language-neutral events + `activityText`, editable relationships (`RelationshipId`, catalog, rules, screen), `Membership.leftAt` |
+| H11 | `placeholderOnLight/Dark` tokens, stricter no-raw-colour test, settings screens split, `file_size_test`, `LoadingView` on list screens, error states, reduced-motion `ProgressRing` + tests, theme settings tests/goldens |
+| H12 | `FamilyDateKeys` + providers, `FamilySeeder` hook, 500-write batch budget, rules helper scaffold, checklist + test template, `query_limits` + unbounded-query test, paths-vs-rules test, ADRs 0001-0003 |
+
+### Assumptions / deviations
+- `saveProfile` reads the current document and writes a batch instead of using a Firestore transaction (transactions fail offline; rule 15 wants the save queued).
+- The `FamilySeeder` port returns plain `SeedWrite`s (not `BatchContext`) so the domain stays free of Firebase.
+- `AuditEvent.summary` stays as an always-empty field because the rules' closed key set still lists it.
+- `firestore_family_repository.dart` is on the file-size allow-list (documented debt).
+- Not done: the per-screen state harness of H11 item 4 (`screen_states.dart` with accessibility guidelines) and the Linux-generated goldens; H13 is untouched.
+- Deleting an account while a solo admin leaves the family dormant (its member document stays active).
+
+## Phase 1 hardening - Part C (H9-H12), PARTIAL, written statically
+Not compiled or run (no Flutter SDK / emulator). Run: `flutter pub get`, `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden`, rules tests, then the Update goldens workflow.
+
+- **H9 done**: change password, delete account (soft delete, resumable), Security screen `/settings/security`, sign-out Firestore cache wipe, rules for `deletedAt`, tests.
+- **H10 done**: `saveProfile` stamps `createdAt` once, `combineLatest3` + `watchFamily`, auto-dispose action providers, language-neutral audit events + `activityText`, `Membership.leftAt`, configurable relationships (catalog, mappers, rules, use case, screen), tests.
+- **H11 done**: placeholder tokens (no `Colors.*`), contrast/raw-colour tests, settings screens split, `file_size_test`, LoadingView on list screens, error states, reduced-motion tests, theme/language tests + goldens, `test/support/screen_states.dart` harness (applied to Theme, Language, Security, Relationships; extend to the Firebase-backed screens as they get overrides). The offline state is covered by the AppShell banner (H3), not per screen.
+- **H12 done** (already present from earlier parts): FamilyDateKeys + providers, FamilySeeder hook, rules helpers, query limits + no-unbounded-queries test, ADRs 0001-0005, paths-vs-rules test.
+- Known: `firestore_family_repository.dart` is over 300 lines (allow-listed in file_size_test); run `dart format` for long lines.

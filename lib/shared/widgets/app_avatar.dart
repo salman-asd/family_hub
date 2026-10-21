@@ -67,11 +67,12 @@ class AppAvatar extends StatelessWidget {
     return presetIndex(avatarKey) ?? stableHash(id) % paletteLength;
   }
 
-  /// Contrasting text colour for a placeholder [background].
-  static Color foregroundFor(Color background) =>
+  /// Contrasting text colour for a placeholder [background], from the theme's
+  /// own `placeholderOnLight` / `placeholderOnDark` tokens (rule 22).
+  static Color foregroundFor(Color background, AppTokens tokens) =>
       ThemeData.estimateBrightnessForColor(background) == Brightness.dark
-          ? Colors.white
-          : Colors.black87;
+          ? tokens.placeholderOnDark
+          : tokens.placeholderOnLight;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +83,7 @@ class AppAvatar extends StatelessWidget {
     final placeholder = _Initials(
       initial: _initialOf(name),
       background: background,
-      foreground: foregroundFor(background),
+      foreground: foregroundFor(background, context.tokens),
       size: size,
     );
 

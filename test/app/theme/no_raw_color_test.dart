@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// the pattern `Color(0x` appears. This enforces the rule that raw color
 /// literals must only appear inside theme files.
 void main() {
-  test('no raw Color(0x...) literals outside lib/app/theme/', () async {
+  test('no raw colours (Color(0x, Colors.*, fromRGBO/ARGB) outside lib/app/theme/', () async {
     final libDir = Directory('lib');
     final themeDir = Directory('lib/app/theme');
 
@@ -29,8 +29,14 @@ void main() {
       final lines = entity.readAsLinesSync();
       for (var i = 0; i < lines.length; i++) {
         final line = lines[i];
-        // Match Color(0x...) — hex literal colors
-        if (line.contains('Color(0x')) {
+        // Match Color(0x...) — hex literal colors — and (H11, rule 22) any
+        // `Colors.*` palette colour except `Colors.transparent`, plus the
+        // `Color.fromRGBO` / `Color.fromARGB` constructors.
+        final withoutTransparent = line.replaceAll('Colors.transparent', '');
+        if (line.contains('Color(0x') ||
+            RegExp(r'\bColors\.').hasMatch(withoutTransparent) ||
+            line.contains('Color.fromRGBO') ||
+            line.contains('Color.fromARGB')) {
           violations.add('${entity.path}:${i + 1}: $line');
         }
       }

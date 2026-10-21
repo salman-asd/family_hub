@@ -39,7 +39,7 @@ class Fixture {
   UserProfile profile(
     String uid, {
     String name = 'Person',
-    Relationship relationship = Relationship.other,
+    RelationshipId relationship = RelationshipId.other,
   }) {
     final p = UserProfile(
       uid: uid,

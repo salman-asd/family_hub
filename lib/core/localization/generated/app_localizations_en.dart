@@ -790,4 +790,155 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get invitationRevokeConfirmBody =>
       'Nobody will be able to join with this code any more.';
+
+  @override
+  String get securityTitle => 'Security';
+
+  @override
+  String get securityChangePassword => 'Change password';
+
+  @override
+  String get securityCurrentPassword => 'Current password';
+
+  @override
+  String get securityNewPassword => 'New password';
+
+  @override
+  String get securityPasswordChanged => 'Password changed.';
+
+  @override
+  String get securityPasswordSame => 'The new password must differ from the current one.';
+
+  @override
+  String get securityCurrentPasswordRequired => 'Enter your current password.';
+
+  @override
+  String get securityCurrentPasswordWrong => 'The current password is not correct.';
+
+  @override
+  String get securityDeleteTitle => 'Delete my account';
+
+  @override
+  String get securityDeleteBody => 'You leave your family and your sign-in is removed. Your name stays on past records so the family history stays complete.';
+
+  @override
+  String get securityDeletePending => 'Deleting was not finished. Enter your password to finish.';
+
+  @override
+  String get securityDeleteAction => 'Delete account';
+
+  @override
+  String get securityDeleteFinish => 'Finish deleting';
+
+  @override
+  String get securityDeleteConfirmTitle => 'Delete your account?';
+
+  @override
+  String get securityDeleteConfirmBody => 'This cannot be undone.';
+
+  @override
+  String get accountDeleteLastAdminHasMembers => 'You are the only admin and others are still in the family. Transfer the admin role first.';
+
+  @override
+  String get relationshipsTitle => 'Relationships';
+
+  @override
+  String get relationshipsHint => 'Built-in entries are locked. You can add, rename and disable your own.';
+
+  @override
+  String get relationshipsAdd => 'Add relationship';
+
+  @override
+  String get relationshipsLabelBn => 'Name in Bangla';
+
+  @override
+  String get relationshipsLabelEn => 'Name in English';
+
+  @override
+  String get relationshipsSpouseRelevant => 'Offer the spouse picker';
+
+  @override
+  String get relationshipsBuiltIn => 'Built in';
+
+  @override
+  String get relationshipsActive => 'In use';
+
+  @override
+  String get relationshipsDisabled => 'Disabled';
+
+  @override
+  String get relationshipsEnable => 'Enable';
+
+  @override
+  String get relationshipsDisable => 'Disable';
+
+  @override
+  String get relationshipsFailureLabel => 'Enter a name (at most 40 characters).';
+
+  @override
+  String get relationshipsFailureTooMany => 'The list is full.';
+
+  @override
+  String get relationshipsFailureBuiltIn => 'Built-in entries cannot be changed.';
+
+  @override
+  String activityFamilyCreated(String familyName) {
+    return 'Family “$familyName” was created';
+  }
+
+  @override
+  String get activityFamilyUpdated => 'Family settings were updated';
+
+  @override
+  String activityMemberRequested(String memberName) {
+    return '$memberName asked to join';
+  }
+
+  @override
+  String activityMemberApproved(String memberName) {
+    return '$memberName was approved';
+  }
+
+  @override
+  String activityMemberRejected(String memberName) {
+    return '$memberName was not accepted';
+  }
+
+  @override
+  String activityMemberDisabled(String memberName) {
+    return '$memberName was disabled';
+  }
+
+  @override
+  String activityMemberRoleChanged(String memberName, String newRole) {
+    return '$memberName is now $newRole';
+  }
+
+  @override
+  String activityAdminTransferred(String memberName) {
+    return 'Admin role moved to $memberName';
+  }
+
+  @override
+  String activityMemberLeft(String memberName) {
+    return '$memberName left the family';
+  }
+
+  @override
+  String activityMemberCancelled(String memberName) {
+    return '$memberName withdrew the request';
+  }
+
+  @override
+  String activityInvitationCreated(String code) {
+    return 'Invitation $code was created';
+  }
+
+  @override
+  String activityInvitationRevoked(String code) {
+    return 'Invitation $code was revoked';
+  }
+
+  @override
+  String get activityUnknown => 'Something changed';
 }

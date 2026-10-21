@@ -27,14 +27,6 @@ class _CreateFamilyScreenState extends ConsumerState<CreateFamilyScreen> {
   final String _eventId = randomId();
 
   @override
-  void initState() {
-    super.initState();
-    Future.microtask(
-      () => ref.read(_createFamilyActionProvider.notifier).reset(),
-    );
-  }
-
-  @override
   void dispose() {
     _name.dispose();
     super.dispose();

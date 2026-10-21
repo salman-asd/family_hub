@@ -74,7 +74,10 @@ class MemberChangeRunner {
         id: newId(),
         type: eventType,
         actorId: actorUid,
-        summary: '$eventType: ${updated.fullName}',
+        params: <String, String>{
+          'memberName': updated.fullName,
+          'newRole': updated.role.name,
+        },
         refType: 'member',
         refId: targetUid,
         at: clock.nowUtc(),

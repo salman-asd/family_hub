@@ -1,4 +1,6 @@
 import 'package:family_hub/core/utils/clock_provider.dart';
+import 'package:family_hub/core/utils/time_zones.dart';
+import 'package:family_hub/core/utils/family_date_keys.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
@@ -6,6 +8,7 @@ import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/invite_code_generator.dart';
 import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 import 'package:family_hub/features/family/domain/usecases/approve_member.dart';
 import 'package:family_hub/features/family/domain/usecases/change_role.dart';
 import 'package:family_hub/features/family/domain/usecases/create_family.dart';
@@ -20,6 +23,7 @@ import 'package:family_hub/features/family/domain/usecases/revoke_invitation.dar
 import 'package:family_hub/features/family/domain/usecases/transfer_admin.dart';
 import 'package:family_hub/features/family/domain/usecases/update_family_settings.dart';
 import 'package:family_hub/features/family/domain/usecases/update_permission_settings.dart';
+import 'package:family_hub/features/family/domain/usecases/update_relationship_catalog.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/features/onboarding/presentation/profile_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -63,6 +67,38 @@ final familyProvider = StreamProvider<Family?>((ref) {
   if (familyId == null) return Stream.value(null);
   return ref.watch(familyRepositoryProvider).watchFamily(familyId);
 });
+
+/// The family's IANA time zone (`settings/general.timezone`); Asia/Dhaka while
+/// the family is loading, offline or absent (H12).
+final familyTimezoneProvider = Provider<String>(
+  (ref) => ref.watch(familyProvider.select((f) => f.value?.timezone)) ??
+      defaultTimezone,
+);
+
+/// Date keys in the family's zone, on the injected clock (H12).  Phase 2 stamps
+/// every `dateKey` / `monthKey` through this and nothing else.
+final familyDateKeysProvider = Provider<FamilyDateKeys>(
+  (ref) => FamilyDateKeys(
+    clock: ref.watch(clockProvider),
+    timezone: ref.watch(familyTimezoneProvider),
+  ),
+);
+
+/// The family's relationship list (H10).  Falls back to the built-in defaults
+/// while loading, offline, outside a family (profile setup) or on an error, so a
+/// screen never has to handle "no catalog".
+final relationshipCatalogProvider = StreamProvider<RelationshipCatalog>((ref) {
+  final familyId = ref.watch(currentFamilyIdProvider);
+  if (familyId == null) return Stream.value(RelationshipCatalog.defaults);
+  return ref.watch(familyRepositoryProvider).watchRelationshipCatalog(familyId);
+});
+
+/// Synchronous view of [relationshipCatalogProvider] with the default fallback.
+final relationshipCatalogOrDefaultProvider = Provider<RelationshipCatalog>(
+  (ref) =>
+      ref.watch(relationshipCatalogProvider).value ??
+      RelationshipCatalog.defaults,
+);
 
 // ── Use cases ─────────────────────────────────────────────────────────────
 
@@ -132,6 +168,14 @@ final updateFamilySettingsProvider = Provider<UpdateFamilySettings>(
 
 final updatePermissionSettingsProvider = Provider<UpdatePermissionSettings>(
   (ref) => UpdatePermissionSettings(
+    families: ref.watch(familyRepositoryProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
+
+final updateRelationshipCatalogProvider = Provider<UpdateRelationshipCatalog>(
+  (ref) => UpdateRelationshipCatalog(
     families: ref.watch(familyRepositoryProvider),
     clock: ref.watch(clockProvider),
     newId: ref.watch(idGeneratorProvider),

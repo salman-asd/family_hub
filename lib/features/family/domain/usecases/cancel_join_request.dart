@@ -48,7 +48,7 @@ class CancelJoinRequest {
         id: _newId(),
         type: 'member.cancelled',
         actorId: actorUid,
-        summary: '${me.fullName} cancelled the join request',
+        params: <String, String>{'memberName': me.fullName},
         refType: 'member',
         refId: actorUid,
         at: now,

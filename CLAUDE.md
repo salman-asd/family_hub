@@ -100,3 +100,12 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 22. No `Colors.*` (except Colors.transparent) and no `Color(0x` outside lib/app/theme/.
 23. No TODO(step-N) may survive its step.
 24. Goldens are generated on Linux only (Update goldens workflow). Locally run `flutter test --exclude-tags golden`.
+
+## Part C additions (H9-H12)
+- **Account lifecycle (H9):** `ChangePassword` / `ReauthenticateWithPassword` / `DeleteAccount` (`features/settings`, screen `/settings/security`, NOT in `alwaysOpen`). Deletion order: re-authenticate -> leave family (a sole admin of a family with other members gets `Conflict('last_admin_has_members')`) -> soft-delete `users/{uid}` (`deletedAt`, `deletedBy`, PII cleared, names kept) -> delete the Auth user; every step is resumable. Sign-out raises `CacheWipe` (`core/firebase/cache_wipe.dart`); `initializeFirebase(prefs:)` clears the Firestore cache at the next start, before Firestore is used.
+- **Events (H10):** no use case sets `summary`; they pass `params`. Localize with `activityText(type, params)`.
+- **Relationships (H10):** stored as a `RelationshipId`; the family's list is `settings/relationships` (`RelationshipCatalog`, `UpdateRelationshipCatalog`, screen `/family/relationships`); built-ins are locked. Rules check the id by pattern, not an enum.
+- **Action providers (H10):** `newActionProvider()` is `autoDispose`; never reset one by hand.
+- **Colours (H11):** foregrounds on placeholder colours come from `placeholderOnLight` / `placeholderOnDark`; `no_raw_color_test` forbids `Colors.*` (except `transparent`) and `Color.fromRGBO/ARGB` outside `lib/app/theme/`.
+- **File size (H11):** `file_size_test` caps lib files at 300 lines (documented allow-list).
+- **Phase 2 foundations (H12):** dates only through `FamilyDateKeys` (`familyDateKeysProvider`); starter data only through `FamilySeeder`s given to `CreateFamily`; one batch <= 500 writes (`kMaxBatchWrites`, enforced by the runners); collection reads need `.limit(` (`no_unbounded_queries_test`); follow `docs/new_collection_checklist.md` for every new collection.

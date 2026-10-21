@@ -29,7 +29,7 @@ void main() {
         UserProfile(
           uid: uid,
           fullName: name,
-          relationship: Relationship.father,
+          relationship: RelationshipId.father,
           nickname: nick,
           spouseId: spouse,
         );

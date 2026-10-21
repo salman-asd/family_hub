@@ -53,6 +53,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     required this.chartGrid,
     // ── Placeholder palette ─────────────────────────────────────────────────
     required this.placeholderPalette,
+    required this.placeholderOnLight,
+    required this.placeholderOnDark,
     // ── Shape ───────────────────────────────────────────────────────────────
     required this.radiusSm,
     required this.radiusMd,
@@ -127,6 +129,12 @@ class AppTokens extends ThemeExtension<AppTokens> {
   // ── Placeholder palette ───────────────────────────────────────────────────
   final List<Color> placeholderPalette; // exactly 12
 
+  /// Initial/foreground on a LIGHT placeholder background (dark ink), and on a
+  /// DARK one (light ink).  Both reach >= 4.5:1 on every palette entry of the
+  /// theme that defines them (contrast_test.dart).
+  final Color placeholderOnLight;
+  final Color placeholderOnDark;
+
   // ── Shape ─────────────────────────────────────────────────────────────────
   final double radiusSm; // 8
   final double radiusMd; // 16
@@ -186,6 +194,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     List<Color>? chart,
     Color? chartGrid,
     List<Color>? placeholderPalette,
+    Color? placeholderOnLight,
+    Color? placeholderOnDark,
     double? radiusSm,
     double? radiusMd,
     double? radiusLg,
@@ -242,6 +252,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
       chart: chart ?? this.chart,
       chartGrid: chartGrid ?? this.chartGrid,
       placeholderPalette: placeholderPalette ?? this.placeholderPalette,
+      placeholderOnLight: placeholderOnLight ?? this.placeholderOnLight,
+      placeholderOnDark: placeholderOnDark ?? this.placeholderOnDark,
       radiusSm: radiusSm ?? this.radiusSm,
       radiusMd: radiusMd ?? this.radiusMd,
       radiusLg: radiusLg ?? this.radiusLg,
@@ -330,6 +342,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
         (i) =>
             Color.lerp(placeholderPalette[i], other.placeholderPalette[i], t)!,
       ),
+      placeholderOnLight:
+          Color.lerp(placeholderOnLight, other.placeholderOnLight, t)!,
+      placeholderOnDark:
+          Color.lerp(placeholderOnDark, other.placeholderOnDark, t)!,
       radiusSm: lerpDouble(radiusSm, other.radiusSm, t),
       radiusMd: lerpDouble(radiusMd, other.radiusMd, t),
       radiusLg: lerpDouble(radiusLg, other.radiusLg, t),

@@ -316,7 +316,7 @@ Map<String, dynamic> _profile() {
   const profile = UserProfile(
     uid: _joiner,
     fullName: 'Fix Joiner',
-    relationship: Relationship.other,
+    relationship: RelationshipId.other,
   );
   final stamp = BaseMapper.dateTimeToTimestamp(_at);
   return _fixture('profile', _joiner, <Map<String, dynamic>>[

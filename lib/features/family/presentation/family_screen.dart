@@ -8,6 +8,7 @@ import 'package:family_hub/features/family/presentation/action_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
+import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:family_hub/shared/widgets/permission_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,14 +24,20 @@ class FamilyScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final t = context.tokens;
     final flavor = ref.watch(flavorProvider);
-    final membership = ref.watch(membershipProvider).value;
+    final membershipAsync = ref.watch(membershipProvider);
+    final membership = membershipAsync.value;
     final canInvite = ref.can(Permission.inviteMembers);
     final canChangeRoles = ref.can(Permission.changeRoles);
     final canEditSettings = ref.can(Permission.editFamilySettings);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navFamily)),
-      body: ListView(
+      body: membershipAsync.hasError && membership == null
+          ? ErrorView(
+              message: l10n.errorUnknown,
+              onRetry: () => ref.invalidate(membershipProvider),
+            )
+          : ListView(
         key: const PageStorageKey<String>('family_tab_list'),
         padding: const EdgeInsets.all(16),
         children: [
@@ -76,6 +83,18 @@ class FamilyScreen extends ConsumerWidget {
               ),
             ),
           ),
+          PermissionGate(
+            allowed: canEditSettings,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: _SettingsTile(
+                key: const Key('family_relationships'),
+                icon: Icons.diversity_3_rounded,
+                label: l10n.relationshipsTitle,
+                onTap: () => context.push(AppRoutes.familyRelationships),
+              ),
+            ),
+          ),
           const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
@@ -99,6 +118,13 @@ class FamilyScreen extends ConsumerWidget {
             icon: Icons.translate_rounded,
             label: l10n.settingsLanguageTitle,
             onTap: () => context.push(AppRoutes.settingsLanguage),
+          ),
+          const SizedBox(height: 8),
+          _SettingsTile(
+            key: const Key('family_settings_security'),
+            icon: Icons.lock_outline_rounded,
+            label: l10n.securityTitle,
+            onTap: () => context.push(AppRoutes.settingsSecurity),
           ),
           if (flavor == Flavor.dev) ...[
             const SizedBox(height: 8),
