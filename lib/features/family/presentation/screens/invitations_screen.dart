@@ -1,5 +1,3 @@
-import 'dart:ui' show FontFeature;
-
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
@@ -34,7 +32,9 @@ class _InvitationsScreenState extends ConsumerState<InvitationsScreen> {
     final uid = ref.read(currentUidProvider);
     final familyId = ref.read(currentFamilyIdProvider);
     if (uid == null || familyId == null) return;
-    await ref.read(_inviteActionProvider.notifier).run(
+    await ref
+        .read(_inviteActionProvider.notifier)
+        .run(
           () => ref.read(createInvitationProvider)(
             actorUid: uid,
             familyId: familyId,
@@ -75,7 +75,9 @@ class _InvitationsScreenState extends ConsumerState<InvitationsScreen> {
       ),
     );
     if (confirmed != true || !mounted) return;
-    await ref.read(_inviteActionProvider.notifier).run(
+    await ref
+        .read(_inviteActionProvider.notifier)
+        .run(
           () => ref.read(revokeInvitationProvider)(
             actorUid: uid,
             familyId: familyId,
@@ -121,7 +123,7 @@ class _InvitationsScreenState extends ConsumerState<InvitationsScreen> {
           Expanded(
             child: invitations.when(
               loading: () => const LoadingView(lines: 5, showAvatar: true),
-              error: (_, __) => EmptyState(
+              error: (_, _) => EmptyState(
                 icon: Icons.cloud_off_rounded,
                 title: l10n.errorUnknown,
                 actionLabel: l10n.actionRetry,
@@ -159,7 +161,8 @@ class _InvitationsScreenState extends ConsumerState<InvitationsScreen> {
                                 _statusIcon(i, now),
                                 color: t.textSecondary,
                               ),
-                              trailing: i.status == InvitationStatus.active &&
+                              trailing:
+                                  i.status == InvitationStatus.active &&
                                       !i.isExpiredAt(now)
                                   ? Row(
                                       mainAxisSize: MainAxisSize.min,

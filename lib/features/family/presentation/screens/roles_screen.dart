@@ -39,7 +39,9 @@ class RolesScreen extends ConsumerWidget {
 
     Future<void> setRole(Member m, MemberRole role) async {
       if (me == null || familyId == null) return;
-      await ref.read(_roleActionProvider.notifier).run(
+      await ref
+          .read(_roleActionProvider.notifier)
+          .run(
             () => ref.read(changeRoleProvider)(
               actorUid: me,
               familyId: familyId,
@@ -70,7 +72,9 @@ class RolesScreen extends ConsumerWidget {
         ),
       );
       if (ok != true) return;
-      await ref.read(_roleActionProvider.notifier).run(
+      await ref
+          .read(_roleActionProvider.notifier)
+          .run(
             () => ref.read(transferAdminProvider)(
               actorUid: me,
               familyId: familyId,
@@ -83,15 +87,16 @@ class RolesScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.rolesTitle)),
       body: members.when(
         loading: () => const LoadingView(lines: 5, showAvatar: true),
-        error: (_, __) => EmptyState(
+        error: (_, _) => EmptyState(
           icon: Icons.cloud_off_rounded,
           title: l10n.errorUnknown,
           actionLabel: l10n.actionRetry,
           onAction: () => ref.invalidate(membersProvider),
         ),
         data: (list) {
-          final active =
-              list.where((m) => m.status == MembershipStatus.active).toList();
+          final active = list
+              .where((m) => m.status == MembershipStatus.active)
+              .toList();
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [

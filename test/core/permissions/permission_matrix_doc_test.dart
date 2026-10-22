@@ -10,26 +10,124 @@ import 'package:flutter_test/flutter_test.dart';
 /// `UPDATE_PERMISSION_MATRIX=1 flutter test test/core/permissions/permission_matrix_doc_test.dart`.
 
 /// (permission, family setting, project spec section 6, decision needed).
-const List<(Permission, String, String, String?)> _rows =
-    <(Permission, String, String, String?)>[
-  (Permission.inviteMembers, '`membersCanInvite` lets plain members invite', 'Manage family and invitations: admin Yes, moderator Limited, member No', 'Moderator "Limited": is inviting enough, or should it be admin-only?'),
-  (Permission.approveMembers, '-', 'Manage family and invitations: admin Yes, moderator Limited, member No', 'Moderator "Limited": approve and reject are allowed, roles are not. Confirm.'),
-  (Permission.removeMembers, '-', 'Manage family and invitations: admin Yes, moderator Limited, member No', null),
-  (Permission.changeRoles, '-', 'Change member roles: admin Yes, moderator No, member No', null),
-  (Permission.editFamilySettings, '-', 'Change family settings: admin Yes, moderator Limited, member Personal settings', 'Moderator "Limited": code gives moderators nothing here. Which settings, if any?'),
-  (Permission.viewFamilyReports, '`membersViewFamilyReports` (default on)', 'View reports: admin Yes, moderator Yes, member According to family policy', 'Default for members is "on". Confirm or switch the default off.'),
-  (Permission.exportData, '-', '(not in spec section 6)', 'Not in the spec: admin only. Confirm.'),
-  (Permission.manageCatalogAndBudgets, '`moderatorManagesFinance` (default on)', 'Manage budgets/contributions: admin Yes, moderator Configurable, member View/add', 'Default for moderators is "on". Confirm or switch the default off.'),
-  (Permission.addOwnExpense, '-', 'Create/edit expenses: admin Yes, moderator Yes, member Yes', null),
-  (Permission.editOthersExpense, '-', 'Create/edit expenses: admin Yes, moderator Yes, member Yes', 'Spec lets members create/edit expenses; code lets a member edit only their own. Confirm.'),
-  (Permission.recordContribution, '`moderatorManagesFinance` (default on)', 'Manage budgets/contributions: admin Yes, moderator Configurable, member View/add', 'Members "add" in the spec: should a member record their OWN contribution?'),
-  (Permission.viewAllContributions, '`membersViewAllContributions` (default off)', 'Manage budgets/contributions: member View/add', 'Project default is "members see only their own". Confirm.'),
-  (Permission.manageChoreTemplates, '-', 'Manage chore templates: admin Yes, moderator Yes, member No', null),
-  (Permission.reassignChore, '-', 'Reassign chores: admin Yes, moderator Yes, member Request/exchange', null),
-  (Permission.requestSwap, '-', 'Reassign chores: member Request/exchange', null),
+const List<(Permission, String, String, String?)>
+_rows = <(Permission, String, String, String?)>[
+  (
+    Permission.inviteMembers,
+    '`membersCanInvite` lets plain members invite',
+    'Manage family and invitations: admin Yes, moderator Limited, member No',
+    'Household Manager "Limited": is inviting enough, or should it be admin-only?',
+  ),
+  (
+    Permission.approveMembers,
+    '-',
+    'Manage family and invitations: admin Yes, moderator Limited, member No',
+    'Household Manager "Limited": approve and reject are allowed, roles are not. Confirm.',
+  ),
+  (
+    Permission.removeMembers,
+    '-',
+    'Manage family and invitations: admin Yes, moderator Limited, member No',
+    null,
+  ),
+  (
+    Permission.changeRoles,
+    '-',
+    'Change member roles: admin Yes, moderator No, member No',
+    null,
+  ),
+  (
+    Permission.editFamilySettings,
+    '-',
+    'Change family settings: admin Yes, moderator Limited, member Personal settings',
+    'Household Manager "Limited": code gives Household Managers nothing here. Which settings, if any?',
+  ),
+  (
+    Permission.viewFamilyReports,
+    '`membersViewFamilyReports` (default on)',
+    'View reports: admin Yes, moderator Yes, member According to family policy',
+    'Default for members is "on". Confirm or switch the default off.',
+  ),
+  (
+    Permission.exportData,
+    '-',
+    '(not in spec section 6)',
+    'Not in the spec: admin only. Confirm.',
+  ),
+  (
+    Permission.manageCatalogAndBudgets,
+    '`moderatorManagesFinance` (default on)',
+    'Manage budgets/contributions: admin Yes, moderator Configurable, member View/add',
+    'Default for Household Managers is "on". Confirm or switch the default off.',
+  ),
+  (
+    Permission.addOwnExpense,
+    '-',
+    'Create/edit expenses: admin Yes, moderator Yes, member Yes',
+    null,
+  ),
+  (
+    Permission.editOthersExpense,
+    '-',
+    'Create/edit expenses: admin Yes, moderator Yes, member Yes',
+    'Spec lets members create/edit expenses; code lets a member edit only their own. Confirm.',
+  ),
+  (
+    Permission.recordContribution,
+    '`moderatorManagesFinance` (default on)',
+    'Manage budgets/contributions: admin Yes, moderator Configurable, member View/add',
+    'Members "add" in the spec: should a member record their OWN contribution?',
+  ),
+  (
+    Permission.viewAllContributions,
+    '`membersViewAllContributions` (default off)',
+    'Manage budgets/contributions: member View/add',
+    'Project default is "members see only their own". Confirm.',
+  ),
+  (
+    Permission.closeBazarMonth,
+    '`moderatorManagesFinance` (default on)',
+    '(not in spec section 6)',
+    'Admin only, or Household Manager while the family allows finance? Confirm.',
+  ),
+  (
+    Permission.importBazarData,
+    '`moderatorManagesFinance` (default on)',
+    '(not in spec section 6)',
+    'Admin only, or Household Manager while the family allows finance? Confirm.',
+  ),
+  (
+    Permission.requestContribution,
+    '-',
+    'Manage budgets/contributions: member View/add',
+    null,
+  ),
+  (
+    Permission.manageChoreTemplates,
+    '-',
+    'Manage chore templates: admin Yes, moderator Yes, member No',
+    null,
+  ),
+  (
+    Permission.reassignChore,
+    '-',
+    'Reassign chores: admin Yes, moderator Yes, member Request/exchange',
+    null,
+  ),
+  (
+    Permission.requestSwap,
+    '-',
+    'Reassign chores: member Request/exchange',
+    null,
+  ),
   (Permission.completeOwnChore, '-', 'Comment/complete chores: all Yes', null),
   (Permission.commentOnChore, '-', 'Comment/complete chores: all Yes', null),
-  (Permission.verifyChore, '`choreVerificationEnabled` + the template switch', '(not in spec section 6)', 'Not in the spec: verification is off by default and nobody verifies their own work. Confirm.'),
+  (
+    Permission.verifyChore,
+    '`choreVerificationEnabled` + the template switch',
+    '(not in spec section 6)',
+    'Not in the spec: verification is off by default and nobody verifies their own work. Confirm.',
+  ),
 ];
 
 const PermissionSettings _defaults = PermissionSettings.defaults;
@@ -64,7 +162,7 @@ String buildPermissionMatrixDoc() {
     '',
     'Cells show the answer with the DEFAULT family settings for an active member. `own` = only for the record\'s owner, `other` = only for somebody else\'s work (and only when verification is switched on for the family and the template). Every cell is `no` for a member who is not active or while the module is switched off.',
     '',
-    '| Permission | Admin | Moderator | Member | Family setting that changes it | Project spec section 6 | Matches spec? |',
+    '| Permission | Admin | Household Manager | Member | Family setting that changes it | Project spec section 6 | Matches spec? |',
     '| --- | --- | --- | --- | --- | --- | --- |',
     for (final (p, setting, spec, decision) in _rows)
       '| `${p.name}` | ${_cell(Role.admin, p)} | ${_cell(Role.moderator, p)} | '
@@ -98,7 +196,8 @@ void main() {
     expect(
       file.readAsStringSync(),
       expected,
-      reason: 'the matrix document drifted from PermissionPolicy; regenerate '
+      reason:
+          'the matrix document drifted from PermissionPolicy; regenerate '
           'it with UPDATE_PERMISSION_MATRIX=1',
     );
   });

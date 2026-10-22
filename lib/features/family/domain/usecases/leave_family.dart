@@ -15,12 +15,10 @@ import 'package:family_hub/features/family/domain/permission_access.dart';
 /// admin cannot leave: `Conflict(code: 'last_admin')` (transfer admin first).
 class LeaveFamily {
   const LeaveFamily({
-    required FamilyRepository families,
-    required Clock clock,
-    required IdGenerator newId,
-  })  : _families = families,
-        _clock = clock,
-        _newId = newId;
+    required this._families,
+    required this._clock,
+    required this._newId,
+  });
 
   final FamilyRepository _families;
   final Clock _clock;
@@ -56,8 +54,9 @@ class LeaveFamily {
     // H6: an admin leaving changes the active-admin set, so the family document
     // must be rewritten in the same batch (a plain member leaving does not).
     final adminIds = activeAdminIds(rosterWith(all, updated));
-    final writeAdminIds =
-        sameAdminSet(activeAdminIds(all), adminIds) ? null : adminIds;
+    final writeAdminIds = sameAdminSet(activeAdminIds(all), adminIds)
+        ? null
+        : adminIds;
 
     final saved = await _families.saveMembers(
       familyId,

@@ -69,7 +69,7 @@ class ItemThumb extends StatelessWidget {
               Image(
                 image: provider,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                errorBuilder: (_, _, _) => const SizedBox.shrink(),
                 frameBuilder: (_, widget, frame, wasSynchronouslyLoaded) {
                   if (wasSynchronouslyLoaded) return widget;
                   return AnimatedOpacity(
@@ -91,8 +91,9 @@ class ItemThumb extends StatelessWidget {
       decoration: BoxDecoration(
         color: background,
         shape: shape,
-        borderRadius:
-            rounded ? null : BorderRadius.circular(context.tokens.radiusSm),
+        borderRadius: rounded
+            ? null
+            : BorderRadius.circular(context.tokens.radiusSm),
       ),
       child: child,
     );
@@ -112,8 +113,8 @@ class ItemThumb extends StatelessWidget {
     final url = (imageUrl != null && imageUrl!.isNotEmpty)
         ? imageUrl
         : (categoryImageUrl != null && categoryImageUrl!.isNotEmpty)
-            ? categoryImageUrl
-            : null;
+        ? categoryImageUrl
+        : null;
     if (url == null) return null;
     return NetworkImage(url);
   }

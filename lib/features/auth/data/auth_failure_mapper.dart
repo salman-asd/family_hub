@@ -22,8 +22,7 @@ AppFailure mapFirebaseAuthException(FirebaseAuthException error) =>
       // `user-not-found` still arrives from other flows and older SDKs.
       'invalid-credential' ||
       'invalid-login-credentials' ||
-      'wrong-password' =>
-        const InvalidCredentials(),
+      'wrong-password' => const InvalidCredentials(),
       'user-not-found' => const UserNotFound(),
       'email-already-in-use' => const EmailAlreadyInUse(),
       'weak-password' => const WeakPassword(),
@@ -33,15 +32,13 @@ AppFailure mapFirebaseAuthException(FirebaseAuthException error) =>
       'user-disabled' => const UserDisabled(),
       'user-mismatch' ||
       'requires-recent-login' ||
-      'recent-login-required' =>
-        const RequiresRecentLogin(),
+      'recent-login-required' => const RequiresRecentLogin(),
       'operation-not-allowed' => const PermissionDenied(),
 
       // ── Transport and throttling ─────────────────────────────────────────
       'network-request-failed' ||
       'internal-error' ||
-      'timeout' =>
-        const Network(),
+      'timeout' => const Network(),
       'too-many-requests' => const TooManyRequests(),
 
       // ── Everything else ──────────────────────────────────────────────────

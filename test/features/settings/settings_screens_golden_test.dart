@@ -47,7 +47,9 @@ void main() {
                 final prefs = await SharedPreferences.getInstance();
                 await tester.pumpWidget(
                   ProviderScope(
-                    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+                    overrides: [
+                      sharedPreferencesProvider.overrideWithValue(prefs),
+                    ],
                     child: MaterialApp(
                       debugShowCheckedModeBanner: false,
                       theme: buildThemeData(spec),

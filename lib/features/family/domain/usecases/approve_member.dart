@@ -17,18 +17,17 @@ class ApproveMember {
     required String actorUid,
     required String familyId,
     required String targetUid,
-  }) =>
-      _runner.run(
-        actorUid: actorUid,
-        familyId: familyId,
-        targetUid: targetUid,
-        permission: Permission.approveMembers,
-        eventType: 'member.approved',
-        decide: (target, all) {
-          if (target.status == MembershipStatus.active) {
-            return const Failure<Member>(Conflict(code: 'already_active'));
-          }
-          return Success<Member>(target.copyWith(status: MembershipStatus.active));
-        },
-      );
+  }) => _runner.run(
+    actorUid: actorUid,
+    familyId: familyId,
+    targetUid: targetUid,
+    permission: Permission.approveMembers,
+    eventType: 'member.approved',
+    decide: (target, all) {
+      if (target.status == MembershipStatus.active) {
+        return const Failure<Member>(Conflict(code: 'already_active'));
+      }
+      return Success<Member>(target.copyWith(status: MembershipStatus.active));
+    },
+  );
 }

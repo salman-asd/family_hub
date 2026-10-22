@@ -2,6 +2,27 @@ import 'package:family_hub/features/family/data/relationship_mappers.dart';
 import 'package:family_hub/core/firebase/base_mapper.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
+import 'package:family_hub/core/utils/date_key.dart';
+import 'package:family_hub/core/utils/money.dart';
+import 'package:family_hub/core/utils/quantity.dart';
+import 'package:family_hub/features/bazar/advances/data/advance_mappers.dart';
+import 'package:family_hub/features/bazar/advances/domain/member_advance.dart';
+import 'package:family_hub/features/bazar/advances/domain/settlement.dart';
+import 'package:family_hub/features/bazar/expenses/data/expense_mappers.dart';
+import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
+import 'package:family_hub/features/bazar/expenses/domain/expense_repository.dart';
+import 'package:family_hub/features/bazar/expenses/domain/funding.dart';
+import 'package:family_hub/features/bazar/expenses/domain/trip.dart';
+import 'package:family_hub/features/bazar/fund/data/fund_mappers.dart';
+import 'package:family_hub/features/bazar/fund/data/month_closing_mappers.dart';
+import 'package:family_hub/features/bazar/fund/domain/fund_transaction.dart';
+import 'package:family_hub/features/bazar/fund/domain/month_closing.dart';
+import 'package:family_hub/features/bazar/items_categories/data/catalog_mappers.dart';
+import 'package:family_hub/features/bazar/items_categories/domain/category.dart';
+import 'package:family_hub/features/bazar/items_categories/domain/item.dart';
+import 'package:family_hub/features/bazar/items_categories/domain/item_usage_bump.dart';
+import 'package:family_hub/features/bazar/settings/data/bazar_settings_mappers.dart';
+import 'package:family_hub/features/bazar/settings/domain/bazar_settings.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/core/audit/audit_event.dart';
@@ -33,8 +54,10 @@ void main() {
       relationship: 'other',
       inviteCode: 'ABCD2345',
     );
-    expect(FamilyMappers.memberToMap(m, meta).keys.toSet(),
-        rulesList('memberKeys'));
+    expect(
+      FamilyMappers.memberToMap(m, meta).keys.toSet(),
+      rulesList('memberKeys'),
+    );
   });
 
   test('familyDocMap keys == familyKeys()', () {
@@ -66,9 +89,13 @@ void main() {
       ...FamilyMappers.generalSettingsMap(family, meta).keys,
       ...FamilyMappers.modulesMap(ModuleFlags.allOn, meta).keys,
       ...FamilyMappers.permissionsMap(PermissionSettings.defaults, meta).keys,
-      ...RelationshipMappers.relationshipsMap(RelationshipCatalog.defaults, meta).keys,
+      ...RelationshipMappers.relationshipsMap(
+        RelationshipCatalog.defaults,
+        meta,
+      ).keys,
       ...FamilyMappers.rotationPolicyMap(meta).keys,
       ...FamilyMappers.notificationDefaultsMap(meta).keys,
+      ...BazarSettingsMappers.toMap(BazarSettings.defaults, meta).keys,
     };
     expect(produced, rulesList('settingsKeys'));
   });
@@ -85,5 +112,240 @@ void main() {
       params: const {'familyName': 'Family'},
     );
     expect(FamilyMappers.eventMap(event).keys.toSet(), rulesList('eventKeys'));
+  });
+
+  test('categoryToMap keys == categoryKeys()', () {
+    const category = Category(
+      id: 'c1',
+      nameBn: 'মুদি',
+      nameEn: 'Staples',
+      colorIndex: 2,
+      emoji: '🌾',
+      imageData: 'abc',
+      sortOrder: 0,
+      builtIn: true,
+      seedKey: 'staples',
+    );
+    expect(
+      CatalogMappers.categoryToMap(category, meta).keys.toSet(),
+      rulesList('categoryKeys'),
+    );
+  });
+
+  test('itemToMap keys == itemKeys()', () {
+    final item = Item(
+      id: 'i1',
+      nameBn: 'চাল',
+      nameEn: 'Rice',
+      categoryId: 'c1',
+      defaultUnit: Unit.kg,
+      aliases: const <String>['rice'],
+      emoji: '🍚',
+      imageData: 'abc',
+      useCount: 2,
+      lastPrice: const Money.paisa(12500),
+      lastUnitPrice: const Money.paisa(6500),
+      lastUsedAt: DateTime.utc(2026, 10, 18, 9),
+      builtIn: true,
+      seedKey: 'rice',
+    );
+    expect(
+      CatalogMappers.itemToMap(item, meta).keys.toSet(),
+      rulesList('itemKeys'),
+    );
+  });
+
+  test('itemUsageMap keys stay inside itemKeys()', () {
+    final bump = ItemUsageBump(
+      itemId: 'i1',
+      increments: 1,
+      lastPrice: const Money.paisa(12500),
+      lastUnitPrice: const Money.paisa(6500),
+      at: DateTime.utc(2026, 10, 18, 9),
+    );
+    final keys = CatalogMappers.itemUsageMap(
+      bump,
+      actorUid: 'u1',
+      now: DateTime.utc(2026, 10, 18, 9),
+    ).keys.toSet();
+    expect(rulesList('itemKeys').containsAll(keys), isTrue);
+  });
+
+  test('expenseToMap keys == expenseKeys()', () {
+    final expense = Expense(
+      id: 'e1',
+      dateKey: DateKey(2026, 10, 18),
+      monthKey: MonthKey(2026, 10),
+      occurredAt: DateTime.utc(2026, 10, 18, 9),
+      itemId: 'i1',
+      itemName: 'Rice',
+      categoryId: 'c1',
+      qty: const Quantity.milli(1000),
+      unit: Unit.kg,
+      unitPrice: const Money.paisa(6000),
+      total: const Money.paisa(6000),
+      funding: FundingSource.member,
+      paidByMemberId: 'u1',
+      reimbursable: true,
+      purchaserId: 'u1',
+      tripId: 't1',
+      shop: 'Bazar',
+      note: 'note',
+      importBatchId: 'ib1',
+      createdBy: 'u1',
+      createdAt: DateTime.utc(2026, 10, 18, 9),
+    );
+    expect(
+      ExpenseMappers.expenseToMap(expense, meta).keys.toSet(),
+      rulesList('expenseKeys'),
+    );
+  });
+
+  test(
+    'expenseChangeMap and expenseSoftDeleteMap stay inside expenseKeys()',
+    () {
+      final expense = Expense(
+        id: 'e1',
+        dateKey: DateKey(2026, 10, 18),
+        monthKey: MonthKey(2026, 10),
+        occurredAt: DateTime.utc(2026, 10, 18, 9),
+        itemName: 'Rice',
+        categoryId: 'c1',
+        total: const Money.paisa(6000),
+        funding: FundingSource.fund,
+        createdBy: 'u1',
+        createdAt: DateTime.utc(2026, 10, 18, 9),
+      );
+      final allowed = rulesList('expenseKeys');
+      expect(
+        allowed.containsAll(
+          ExpenseMappers.expenseChangeMap(
+            expense,
+            actorUid: 'u1',
+            now: DateTime.utc(2026, 10, 18, 9),
+          ).keys,
+        ),
+        isTrue,
+      );
+      expect(
+        allowed.containsAll(
+          ExpenseMappers.expenseSoftDeleteMap(
+            expense,
+            actorUid: 'u1',
+            now: DateTime.utc(2026, 10, 18, 9),
+          ).keys,
+        ),
+        isTrue,
+      );
+    },
+  );
+
+  test('revisionToMap keys == revisionKeys()', () {
+    final revision = ExpenseRevision(
+      id: 'r1',
+      before: const <String, Object?>{'itemName': 'Rice'},
+      changedFields: const <String>['itemName'],
+      reason: 'typo',
+      at: DateTime.utc(2026, 10, 18, 9),
+      by: 'u1',
+    );
+    expect(
+      ExpenseMappers.revisionToMap(revision, meta).keys.toSet(),
+      rulesList('revisionKeys'),
+    );
+  });
+
+  test('tripToMap keys == tripKeys()', () {
+    final trip = Trip(
+      id: 't1',
+      dateKey: DateKey(2026, 10, 18),
+      monthKey: MonthKey(2026, 10),
+      shop: 'Bazar',
+      funding: FundingSource.fund,
+      lineCount: 2,
+      total: const Money.paisa(6000),
+      note: 'note',
+    );
+    expect(
+      ExpenseMappers.tripToMap(trip, meta).keys.toSet(),
+      rulesList('tripKeys'),
+    );
+  });
+
+  test('fundTxToMap keys == fundTxKeys()', () {
+    final row = FundTransaction.forExpense(
+      expenseId: 'e1',
+      total: const Money.paisa(6000),
+      dateKey: DateKey(2026, 10, 18),
+      createdBy: 'u1',
+      createdAt: DateTime.utc(2026, 10, 18, 9),
+      note: 'note',
+    );
+    expect(
+      FundMappers.fundTxToMap(row, meta).keys.toSet(),
+      rulesList('fundTxKeys'),
+    );
+  });
+
+  test('closingToMap keys == closingKeys()', () {
+    final closing = MonthClosing(
+      monthKey: MonthKey(2026, 10),
+      status: MonthStatus.closed,
+      closedAt: DateTime.utc(2026, 10, 18, 9),
+      closedBy: 'u1',
+      closingBalance: const Money.paisa(6000),
+      reopenedAt: DateTime.utc(2026, 10, 18, 10),
+      reopenedBy: 'u1',
+      reopenNote: 'note',
+      reopenCount: 1,
+    );
+    expect(
+      MonthClosingMappers.closingToMap(closing, meta).keys.toSet(),
+      rulesList('closingKeys'),
+    );
+  });
+
+  test('advanceToMap keys == advanceKeys()', () {
+    final advance = MemberAdvance(
+      expenseId: 'e1',
+      memberId: 'u1',
+      amount: const Money.paisa(6000),
+      settled: Money.zero,
+      status: AdvanceStatus.pending,
+      dateKey: DateKey(2026, 10, 18),
+      monthKey: MonthKey(2026, 10),
+    );
+    expect(
+      AdvanceMappers.advanceToMap(advance, meta).keys.toSet(),
+      rulesList('advanceKeys'),
+    );
+    expect(
+      rulesList('advanceKeys').containsAll(
+        AdvanceMappers.advanceChangeMap(
+          advance,
+          actorUid: 'u1',
+          now: DateTime.utc(2026, 10, 18, 9),
+        ).keys,
+      ),
+      isTrue,
+    );
+  });
+
+  test('settlementToMap keys == settlementKeys()', () {
+    final settlement = Settlement(
+      id: 's1',
+      advanceId: 'e1',
+      memberId: 'u1',
+      amount: const Money.paisa(3000),
+      dateKey: DateKey(2026, 10, 18),
+      monthKey: MonthKey(2026, 10),
+      fundTxId: 'stl_s1',
+      method: 'cash',
+      note: 'note',
+    );
+    expect(
+      AdvanceMappers.settlementToMap(settlement, meta).keys.toSet(),
+      rulesList('settlementKeys'),
+    );
   });
 }

@@ -20,16 +20,15 @@ Map<String, dynamic> _resolveServerTimes(
 
 /// In-memory fake implementation of [TxRunner] for fast unit and use-case tests.
 class FakeTxRunner implements TxRunner {
-  FakeTxRunner([
-    Map<String, Map<String, dynamic>>? initialStore,
-    Clock? clock,
-  ])  : clock = clock ?? const SystemClock(),
-        store = initialStore != null
-            ? Map<String, Map<String, dynamic>>.from(
-                initialStore
-                    .map((k, v) => MapEntry(k, Map<String, dynamic>.from(v))),
-              )
-            : <String, Map<String, dynamic>>{};
+  FakeTxRunner([Map<String, Map<String, dynamic>>? initialStore, Clock? clock])
+    : clock = clock ?? const SystemClock(),
+      store = initialStore != null
+          ? Map<String, Map<String, dynamic>>.from(
+              initialStore.map(
+                (k, v) => MapEntry(k, Map<String, dynamic>.from(v)),
+              ),
+            )
+          : <String, Map<String, dynamic>>{};
 
   /// In-memory document storage: path -> fields map.
   final Map<String, Map<String, dynamic>> store;
@@ -104,10 +103,7 @@ class _SetOp implements _PendingOp {
   @override
   void apply(Map<String, Map<String, dynamic>> store) {
     if (merge && store.containsKey(path)) {
-      store[path] = <String, dynamic>{
-        ...store[path]!,
-        ...data,
-      };
+      store[path] = <String, dynamic>{...store[path]!, ...data};
     } else {
       store[path] = Map<String, dynamic>.from(data);
     }
@@ -125,10 +121,7 @@ class _UpdateOp implements _PendingOp {
     if (!store.containsKey(path)) {
       throw StateError('Cannot update non-existent document at $path');
     }
-    store[path] = <String, dynamic>{
-      ...store[path]!,
-      ...data,
-    };
+    store[path] = <String, dynamic>{...store[path]!, ...data};
   }
 }
 

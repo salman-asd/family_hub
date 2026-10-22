@@ -11,7 +11,7 @@ import 'package:family_hub/features/family/domain/module_flags.dart';
 class FirestoreMembershipRepository
     implements MembershipRepository, ModuleFlagsRepository {
   FirestoreMembershipRepository({FirebaseFirestore? firestore})
-      : _db = firestore ?? FirebaseFirestore.instance;
+    : _db = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _db;
 
@@ -20,22 +20,19 @@ class FirestoreMembershipRepository
     // Unknown (offline, nothing cached) emits nothing, so the session stays in
     // `loading` instead of being routed as "no profile / no family" (rule 14).
     final userDoc = watchKnownDoc(_db.doc(FirestorePaths.userDoc(uid)));
-    return switchMap<Map<String, dynamic>?, Membership>(
-      userDoc,
-      (user) {
-        final familyId = user?['familyId'];
-        if (familyId is! String || familyId.isEmpty) {
-          return Stream<Membership>.value(Membership.none);
-        }
-        return watchKnownDoc(_db.doc(FirestorePaths.memberDoc(familyId, uid)))
-            .map((data) {
-          return FamilyMappers.membershipFromMember(
-            familyId,
-            data == null ? null : FamilyMappers.memberFromMap(data),
-          );
-        });
-      },
-    ).distinct();
+    return switchMap<Map<String, dynamic>?, Membership>(userDoc, (user) {
+      final familyId = user?['familyId'];
+      if (familyId is! String || familyId.isEmpty) {
+        return Stream<Membership>.value(Membership.none);
+      }
+      return watchKnownDoc(_db.doc(FirestorePaths.memberDoc(familyId, uid)))
+          .map((data) {
+            return FamilyMappers.membershipFromMember(
+              familyId,
+              data == null ? null : FamilyMappers.memberFromMap(data),
+            );
+          });
+    }).distinct();
   }
 
   @override

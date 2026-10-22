@@ -28,9 +28,9 @@ enum Relationship {
   RelationshipId get id => RelationshipId(name);
 
   static Relationship parse(String? value) => Relationship.values.firstWhere(
-        (r) => r.name == value,
-        orElse: () => Relationship.other,
-      );
+    (r) => r.name == value,
+    orElse: () => Relationship.other,
+  );
 
   /// The built-in with [id], or `null` for a custom id.
   static Relationship? tryFromId(RelationshipId id) {

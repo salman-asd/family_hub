@@ -63,10 +63,12 @@ void main() {
     );
   });
 
-  testWidgets('tapping the dark card changes the scaffold background',
-      (tester) async {
+  testWidgets('tapping the dark card changes the scaffold background', (
+    tester,
+  ) async {
     await _pumpHost(tester);
-    Color? bg() => tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor;
+    Color? bg() =>
+        tester.widget<Scaffold>(find.byType(Scaffold)).backgroundColor;
     expect(bg(), modernLightSpec.tokens.background);
 
     await tester.tap(find.text('Modern Dark'));
@@ -75,14 +77,16 @@ void main() {
     expect(bg(), modernDarkSpec.tokens.background);
   });
 
-  testWidgets('the selected card shows a check icon, not colour alone',
-      (tester) async {
+  testWidgets('the selected card shows a check icon, not colour alone', (
+    tester,
+  ) async {
     await _pumpHost(tester);
     expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
   });
 
-  testWidgets('a third registered theme appears with no screen change',
-      (tester) async {
+  testWidgets('a third registered theme appears with no screen change', (
+    tester,
+  ) async {
     final third = AppThemeSpec(
       id: 'test_third',
       labelBn: '',

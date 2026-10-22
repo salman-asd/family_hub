@@ -1,0 +1,2221 @@
+{
+  "scenario": "create_family_catalog",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam",
+      "data": {
+        "name": "Fix Family",
+        "adminIds": [
+          "fixAdmin"
+        ],
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/members/fixAdmin",
+      "data": {
+        "uid": "fixAdmin",
+        "role": "admin",
+        "status": "active",
+        "fullName": "Fix Admin",
+        "nickname": null,
+        "relationship": "other",
+        "spouseId": null,
+        "avatarKey": null,
+        "inviteCode": null,
+        "removedAt": null,
+        "leftAt": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/settings/general",
+      "data": {
+        "timezone": "Asia/Dhaka",
+        "currency": "BDT",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/settings/modules",
+      "data": {
+        "flags": {
+          "chores": true,
+          "bazar": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/settings/permissions",
+      "data": {
+        "moderatorManagesFinance": true,
+        "membersViewFamilyReports": true,
+        "membersViewAllContributions": false,
+        "membersCanInvite": false,
+        "choreVerificationEnabled": false,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/settings/relationships",
+      "data": {
+        "items": [
+          {
+            "id": "father",
+            "labelBn": "বাবা",
+            "labelEn": "Father",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "mother",
+            "labelBn": "মা",
+            "labelEn": "Mother",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "son",
+            "labelBn": "ছেলে",
+            "labelEn": "Son",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "daughter",
+            "labelBn": "মেয়ে",
+            "labelEn": "Daughter",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "husband",
+            "labelBn": "স্বামী",
+            "labelEn": "Husband",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "wife",
+            "labelBn": "স্ত্রী",
+            "labelEn": "Wife",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "housewife",
+            "labelBn": "গৃহিণী",
+            "labelEn": "Housewife",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "daughterInLaw",
+            "labelBn": "পুত্রবধূ",
+            "labelEn": "Daughter-in-law",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "sonInLaw",
+            "labelBn": "জামাই",
+            "labelEn": "Son-in-law",
+            "spouseRelevant": true,
+            "builtIn": true,
+            "active": true
+          },
+          {
+            "id": "other",
+            "labelBn": "অন্যান্য",
+            "labelEn": "Other",
+            "spouseRelevant": false,
+            "builtIn": true,
+            "active": true
+          }
+        ],
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/settings/rotationPolicy",
+      "data": {
+        "absencePolicy": "ask_cover",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/settings/notificationDefaults",
+      "data": {
+        "enabled": true,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "merge",
+      "path": "users/fixAdmin",
+      "data": {
+        "familyId": "fixFam"
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_vegetables",
+      "data": {
+        "nameBn": "সবজি",
+        "nameEn": "Vegetables",
+        "colorIndex": 0,
+        "emoji": "🫑",
+        "imageData": null,
+        "sortOrder": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "vegetables",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_fish",
+      "data": {
+        "nameBn": "মাছ",
+        "nameEn": "Fish",
+        "colorIndex": 1,
+        "emoji": "🐟",
+        "imageData": null,
+        "sortOrder": 1,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "fish",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_fruits",
+      "data": {
+        "nameBn": "ফল",
+        "nameEn": "Fruits",
+        "colorIndex": 2,
+        "emoji": "🍎",
+        "imageData": null,
+        "sortOrder": 2,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "fruits",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_beef",
+      "data": {
+        "nameBn": "গরুর মাংস",
+        "nameEn": "Beef",
+        "colorIndex": 3,
+        "emoji": "🐄",
+        "imageData": null,
+        "sortOrder": 3,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "beef",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_chicken",
+      "data": {
+        "nameBn": "মুরগির মাংস",
+        "nameEn": "Chicken",
+        "colorIndex": 4,
+        "emoji": "🐔",
+        "imageData": null,
+        "sortOrder": 4,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "chicken",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_eggs",
+      "data": {
+        "nameBn": "ডিম",
+        "nameEn": "Eggs",
+        "colorIndex": 5,
+        "emoji": "🥚",
+        "imageData": null,
+        "sortOrder": 5,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "eggs",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_dry_groceries",
+      "data": {
+        "nameBn": "শুকনা বাজার",
+        "nameEn": "Dry groceries",
+        "colorIndex": 6,
+        "emoji": "🛒",
+        "imageData": null,
+        "sortOrder": 6,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "dry_groceries",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_gas",
+      "data": {
+        "nameBn": "গ্যাস",
+        "nameEn": "Gas",
+        "colorIndex": 7,
+        "emoji": "⛽",
+        "imageData": null,
+        "sortOrder": 7,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "gas",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_medicine",
+      "data": {
+        "nameBn": "ঔষধ",
+        "nameEn": "Medicine",
+        "colorIndex": 8,
+        "emoji": "💊",
+        "imageData": null,
+        "sortOrder": 8,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "medicine",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_other",
+      "data": {
+        "nameBn": "অন্যান্য",
+        "nameEn": "Other",
+        "colorIndex": 9,
+        "emoji": "🅾️",
+        "imageData": null,
+        "sortOrder": 9,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "other",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_fixed_bills",
+      "data": {
+        "nameBn": "স্থায়ী বিল",
+        "nameEn": "Fixed bills",
+        "colorIndex": 10,
+        "emoji": "🏠",
+        "imageData": null,
+        "sortOrder": 10,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "fixed_bills",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_potato",
+      "data": {
+        "nameBn": "আলু",
+        "nameEn": "Potato",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "alu",
+          "aloo"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "potato",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_onion",
+      "data": {
+        "nameBn": "পেঁয়াজ",
+        "nameEn": "Onion",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "peyaj",
+          "piyaj",
+          "পিয়াজ",
+          "পেয়াজ"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "onion",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_garlic",
+      "data": {
+        "nameBn": "রসুন",
+        "nameEn": "Garlic",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "roshun",
+          "rosun"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "garlic",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_ginger",
+      "data": {
+        "nameBn": "আদা",
+        "nameEn": "Ginger",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "ada"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "ginger",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_tomato",
+      "data": {
+        "nameBn": "টমেটো",
+        "nameEn": "Tomato",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "tometo"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "tomato",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_eggplant",
+      "data": {
+        "nameBn": "বেগুন",
+        "nameEn": "Eggplant",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "begun",
+          "brinjal"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "eggplant",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_cauliflower",
+      "data": {
+        "nameBn": "ফুলকপি",
+        "nameEn": "Cauliflower",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "piece",
+        "aliases": [
+          "fulkopi"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "cauliflower",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_cabbage",
+      "data": {
+        "nameBn": "বাঁধাকপি",
+        "nameEn": "Cabbage",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "piece",
+        "aliases": [
+          "badhakopi",
+          "bandhakopi"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "cabbage",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_cucumber",
+      "data": {
+        "nameBn": "শসা",
+        "nameEn": "Cucumber",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "shosha",
+          "sosha"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "cucumber",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_green_chili",
+      "data": {
+        "nameBn": "কাঁচা মরিচ",
+        "nameEn": "Green chili",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "morich",
+          "kacha morich",
+          "chili"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "green_chili",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_bottle_gourd",
+      "data": {
+        "nameBn": "লাউ",
+        "nameEn": "Bottle gourd",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "piece",
+        "aliases": [
+          "lau"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "bottle_gourd",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_pointed_gourd",
+      "data": {
+        "nameBn": "পটল",
+        "nameEn": "Pointed gourd",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "potol"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "pointed_gourd",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_spinach",
+      "data": {
+        "nameBn": "পালং শাক",
+        "nameEn": "Spinach",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "palong",
+          "shak"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "spinach",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_lemon",
+      "data": {
+        "nameBn": "লেবু",
+        "nameEn": "Lemon",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "piece",
+        "aliases": [
+          "lebu"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "lemon",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_carrot",
+      "data": {
+        "nameBn": "গাজর",
+        "nameEn": "Carrot",
+        "categoryId": "cat_vegetables",
+        "defaultUnit": "kg",
+        "aliases": [
+          "gajor"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "carrot",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_rui",
+      "data": {
+        "nameBn": "রুই",
+        "nameEn": "Rui",
+        "categoryId": "cat_fish",
+        "defaultUnit": "kg",
+        "aliases": [],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "rui",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_katla",
+      "data": {
+        "nameBn": "কাতলা",
+        "nameEn": "Katla",
+        "categoryId": "cat_fish",
+        "defaultUnit": "kg",
+        "aliases": [],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "katla",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_hilsa",
+      "data": {
+        "nameBn": "ইলিশ",
+        "nameEn": "Hilsa",
+        "categoryId": "cat_fish",
+        "defaultUnit": "kg",
+        "aliases": [
+          "ilish"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "hilsa",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_tilapia",
+      "data": {
+        "nameBn": "তেলাপিয়া",
+        "nameEn": "Tilapia",
+        "categoryId": "cat_fish",
+        "defaultUnit": "kg",
+        "aliases": [],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "tilapia",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_pangas",
+      "data": {
+        "nameBn": "পাঙ্গাস",
+        "nameEn": "Pangas",
+        "categoryId": "cat_fish",
+        "defaultUnit": "kg",
+        "aliases": [],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "pangas",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_dried_fish",
+      "data": {
+        "nameBn": "শুটকি",
+        "nameEn": "Dried fish",
+        "categoryId": "cat_fish",
+        "defaultUnit": "kg",
+        "aliases": [
+          "shutki"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "dried_fish",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_banana",
+      "data": {
+        "nameBn": "কলা",
+        "nameEn": "Banana",
+        "categoryId": "cat_fruits",
+        "defaultUnit": "dozen",
+        "aliases": [
+          "kola"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "banana",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_apple",
+      "data": {
+        "nameBn": "আপেল",
+        "nameEn": "Apple",
+        "categoryId": "cat_fruits",
+        "defaultUnit": "kg",
+        "aliases": [],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "apple",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_pineapple",
+      "data": {
+        "nameBn": "আনারস",
+        "nameEn": "Pineapple",
+        "categoryId": "cat_fruits",
+        "defaultUnit": "piece",
+        "aliases": [
+          "anarosh"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "pineapple",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_guava",
+      "data": {
+        "nameBn": "পেয়ারা",
+        "nameEn": "Guava",
+        "categoryId": "cat_fruits",
+        "defaultUnit": "kg",
+        "aliases": [
+          "peyara"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "guava",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_orange",
+      "data": {
+        "nameBn": "কমলা",
+        "nameEn": "Orange",
+        "categoryId": "cat_fruits",
+        "defaultUnit": "kg",
+        "aliases": [
+          "komola"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "orange",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_beef",
+      "data": {
+        "nameBn": "গরুর মাংস",
+        "nameEn": "Beef",
+        "categoryId": "cat_beef",
+        "defaultUnit": "kg",
+        "aliases": [
+          "goru",
+          "mangsho"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "beef",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_chicken",
+      "data": {
+        "nameBn": "মুরগি",
+        "nameEn": "Chicken",
+        "categoryId": "cat_chicken",
+        "defaultUnit": "kg",
+        "aliases": [
+          "murgi",
+          "broiler"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "chicken",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_egg",
+      "data": {
+        "nameBn": "ডিম",
+        "nameEn": "Eggs",
+        "categoryId": "cat_eggs",
+        "defaultUnit": "dozen",
+        "aliases": [
+          "dim",
+          "egg"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "egg",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_rice",
+      "data": {
+        "nameBn": "চাল",
+        "nameEn": "Rice",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "chal"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "rice",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_polao_rice",
+      "data": {
+        "nameBn": "পোলাও চাল",
+        "nameEn": "Polao rice",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "polao_rice",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_lentil",
+      "data": {
+        "nameBn": "মসুর ডাল",
+        "nameEn": "Red lentil",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "dal",
+          "masoor"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "lentil",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_soybean_oil",
+      "data": {
+        "nameBn": "সয়াবিন তেল",
+        "nameEn": "Soybean oil",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "litre",
+        "aliases": [
+          "tel",
+          "oil"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "soybean_oil",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_mustard_oil",
+      "data": {
+        "nameBn": "সরিষার তেল",
+        "nameEn": "Mustard oil",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "litre",
+        "aliases": [],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "mustard_oil",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_flour",
+      "data": {
+        "nameBn": "আটা",
+        "nameEn": "Flour",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "ata"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "flour",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_sugar",
+      "data": {
+        "nameBn": "চিনি",
+        "nameEn": "Sugar",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "chini"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "sugar",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_salt",
+      "data": {
+        "nameBn": "লবণ",
+        "nameEn": "Salt",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "lobon",
+          "লবন"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "salt",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_chili_powder",
+      "data": {
+        "nameBn": "মরিচের গুঁড়া",
+        "nameEn": "Chili powder",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "morich gura"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "chili_powder",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_turmeric_powder",
+      "data": {
+        "nameBn": "হলুদের গুঁড়া",
+        "nameEn": "Turmeric powder",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "holud"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "turmeric_powder",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_coriander_powder",
+      "data": {
+        "nameBn": "ধনিয়ার গুঁড়া",
+        "nameEn": "Coriander powder",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "dhonia"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "coriander_powder",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_cumin",
+      "data": {
+        "nameBn": "জিরা",
+        "nameEn": "Cumin",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "jira"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "cumin",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_garam_masala",
+      "data": {
+        "nameBn": "গরম মশলা",
+        "nameEn": "Garam masala",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "packet",
+        "aliases": [
+          "moshla"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "garam_masala",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_tea",
+      "data": {
+        "nameBn": "চা পাতা",
+        "nameEn": "Tea leaves",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "cha"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "tea",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_milk",
+      "data": {
+        "nameBn": "দুধ",
+        "nameEn": "Milk",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "litre",
+        "aliases": [
+          "dudh"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "milk",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_puffed_rice",
+      "data": {
+        "nameBn": "মুড়ি",
+        "nameEn": "Puffed rice",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "kg",
+        "aliases": [
+          "muri"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "puffed_rice",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_noodles",
+      "data": {
+        "nameBn": "নুডুলস",
+        "nameEn": "Noodles",
+        "categoryId": "cat_dry_groceries",
+        "defaultUnit": "packet",
+        "aliases": [],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "noodles",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_gas_cylinder",
+      "data": {
+        "nameBn": "গ্যাস সিলিন্ডার",
+        "nameEn": "Gas cylinder",
+        "categoryId": "cat_gas",
+        "defaultUnit": "cylinder",
+        "aliases": [
+          "gas"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "gas_cylinder",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_medicine",
+      "data": {
+        "nameBn": "ঔষধ",
+        "nameEn": "Medicine",
+        "categoryId": "cat_medicine",
+        "defaultUnit": "piece",
+        "aliases": [
+          "oshudh",
+          "medicine"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "medicine",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_flat_rent",
+      "data": {
+        "nameBn": "ফ্লাট ভাড়া",
+        "nameEn": "Flat rent",
+        "categoryId": "cat_fixed_bills",
+        "defaultUnit": "piece",
+        "aliases": [
+          "rent",
+          "bhara"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "flat_rent",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_electricity",
+      "data": {
+        "nameBn": "ইলেক্ট্রিসিটি বিল",
+        "nameEn": "Electricity bill",
+        "categoryId": "cat_fixed_bills",
+        "defaultUnit": "piece",
+        "aliases": [
+          "bidyut",
+          "current"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "electricity",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_internet",
+      "data": {
+        "nameBn": "ইন্টারনেট বিল",
+        "nameEn": "Internet bill",
+        "categoryId": "cat_fixed_bills",
+        "defaultUnit": "piece",
+        "aliases": [
+          "wifi"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "internet",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_garbage",
+      "data": {
+        "nameBn": "ময়লার বিল",
+        "nameEn": "Garbage bill",
+        "categoryId": "cat_fixed_bills",
+        "defaultUnit": "piece",
+        "aliases": [
+          "moyla"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "garbage",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_dish_bar",
+      "data": {
+        "nameBn": "ভিমবার",
+        "nameEn": "Dish-wash bar",
+        "categoryId": "cat_other",
+        "defaultUnit": "piece",
+        "aliases": [
+          "vim"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "dish_bar",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_hair_oil",
+      "data": {
+        "nameBn": "প্যারাসুট তেল",
+        "nameEn": "Hair oil",
+        "categoryId": "cat_other",
+        "defaultUnit": "piece",
+        "aliases": [
+          "parachute"
+        ],
+        "emoji": null,
+        "imageData": null,
+        "useCount": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "hair_oil",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev11",
+      "data": {
+        "type": "family.created",
+        "actorId": "fixAdmin",
+        "summary": "Family created",
+        "refType": "family",
+        "refId": "fixFam",
+        "params": {
+          "familyName": "Fix Family"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev11",
+      "data": {
+        "type": "family.created",
+        "actorId": "fixAdmin",
+        "summary": "Family created",
+        "refType": "family",
+        "refId": "fixFam",
+        "params": {
+          "familyName": "Fix Family"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

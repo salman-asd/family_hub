@@ -20,10 +20,7 @@ class ThemePrefs {
   final String themeId;
 
   /// Serialize to a flat map for SharedPreferences storage.
-  Map<String, String> toMap() => {
-        _kKeyMode: themeMode.name,
-        _kKeyId: themeId,
-      };
+  Map<String, String> toMap() => {_kKeyMode: themeMode.name, _kKeyId: themeId};
 
   /// Deserialize from a SharedPreferences-style map.
   /// Unknown values fall back to defaults — never throws.
@@ -33,16 +30,13 @@ class ThemePrefs {
       (m) => m.name == modeStr,
       orElse: () => ThemeMode.system,
     );
-    return ThemePrefs(
-      themeMode: mode,
-      themeId: map[_kKeyId] ?? _kDefaultId,
-    );
+    return ThemePrefs(themeMode: mode, themeId: map[_kKeyId] ?? _kDefaultId);
   }
 
   ThemePrefs copyWith({ThemeMode? themeMode, String? themeId}) => ThemePrefs(
-        themeMode: themeMode ?? this.themeMode,
-        themeId: themeId ?? this.themeId,
-      );
+    themeMode: themeMode ?? this.themeMode,
+    themeId: themeId ?? this.themeId,
+  );
 
   @override
   bool operator ==(Object other) =>

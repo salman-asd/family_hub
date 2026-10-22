@@ -1,0 +1,84 @@
+{
+  "scenario": "category",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarCategories/cat_fixStaples",
+      "data": {
+        "nameBn": "মুদি",
+        "nameEn": "Staples",
+        "colorIndex": 2,
+        "emoji": "🌾",
+        "imageData": null,
+        "sortOrder": 0,
+        "active": true,
+        "builtIn": true,
+        "seedKey": "staples",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev8",
+      "data": {
+        "type": "bazar.category_created",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "category",
+        "refId": "cat_fixStaples",
+        "params": {
+          "name": "মুদি"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev8",
+      "data": {
+        "type": "bazar.category_created",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "category",
+        "refId": "cat_fixStaples",
+        "params": {
+          "name": "মুদি"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

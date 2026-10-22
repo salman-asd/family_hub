@@ -1,6 +1,5 @@
 import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/core/audit/audit_event_type.dart';
-import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
@@ -14,12 +13,10 @@ import 'package:family_hub/features/family/domain/permission_access.dart';
 /// only.  The module switches are NOT part of this document.
 class UpdatePermissionSettings {
   const UpdatePermissionSettings({
-    required FamilyRepository families,
-    required Clock clock,
-    required IdGenerator newId,
-  })  : _families = families,
-        _clock = clock,
-        _newId = newId;
+    required this._families,
+    required this._clock,
+    required this._newId,
+  });
 
   final FamilyRepository _families;
   final Clock _clock;

@@ -43,7 +43,8 @@ void main() {
     expect(
       samples.map((s) => s.runtimeType.toString()).toSet(),
       declared,
-      reason: 'a failure type was added or removed: update `samples` and make '
+      reason:
+          'a failure type was added or removed: update `samples` and make '
           'sure authFailureCode and familyFailureMessage map it',
     );
   });

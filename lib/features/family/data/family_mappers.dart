@@ -17,53 +17,50 @@ abstract final class FamilyMappers {
   static Map<String, dynamic> memberToMap(
     Member m,
     BaseDocumentMetadata meta,
-  ) =>
-      <String, dynamic>{
-        'uid': m.uid,
-        'role': m.role.name,
-        'status': m.status.name,
-        'fullName': m.fullName,
-        'nickname': m.nickname,
-        'relationship': m.relationship,
-        'spouseId': m.spouseId,
-        'avatarKey': m.avatarKey,
-        'inviteCode': m.inviteCode,
-        'removedAt': BaseMapper.dateTimeToTimestamp(m.removedAt),
-        'leftAt': BaseMapper.dateTimeToTimestamp(m.leftAt),
-        ...BaseMapper.metadataToMap(meta),
-      };
+  ) => <String, dynamic>{
+    'uid': m.uid,
+    'role': m.role.name,
+    'status': m.status.name,
+    'fullName': m.fullName,
+    'nickname': m.nickname,
+    'relationship': m.relationship,
+    'spouseId': m.spouseId,
+    'avatarKey': m.avatarKey,
+    'inviteCode': m.inviteCode,
+    'removedAt': BaseMapper.dateTimeToTimestamp(m.removedAt),
+    'leftAt': BaseMapper.dateTimeToTimestamp(m.leftAt),
+    ...BaseMapper.metadataToMap(meta),
+  };
 
   /// Only the fields an admin action changes (merge-safe).
   static Map<String, dynamic> memberChangeMap(
     Member m, {
     required String actorUid,
     required DateTime now,
-  }) =>
-      <String, dynamic>{
-        'role': m.role.name,
-        'status': m.status.name,
-        'removedAt': BaseMapper.dateTimeToTimestamp(m.removedAt),
-        // Only written when set: older documents have no `leftAt`, and adding
-        // a null key would count as a changed field in the security rules.
-        if (m.leftAt != null)
-          'leftAt': BaseMapper.dateTimeToTimestamp(m.leftAt),
-        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
-        BaseMapper.keyUpdatedBy: actorUid,
-      };
+  }) => <String, dynamic>{
+    'role': m.role.name,
+    'status': m.status.name,
+    'removedAt': BaseMapper.dateTimeToTimestamp(m.removedAt),
+    // Only written when set: older documents have no `leftAt`, and adding
+    // a null key would count as a changed field in the security rules.
+    if (m.leftAt != null) 'leftAt': BaseMapper.dateTimeToTimestamp(m.leftAt),
+    BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
+    BaseMapper.keyUpdatedBy: actorUid,
+  };
 
   static Member memberFromMap(Map<String, dynamic> d) => Member(
-        uid: d['uid'] as String? ?? '',
-        role: MemberRole.parse(d['role'] as String?),
-        status: _status(d['status'] as String?),
-        fullName: d['fullName'] as String? ?? '',
-        relationship: d['relationship'] as String? ?? 'other',
-        nickname: d['nickname'] as String?,
-        spouseId: d['spouseId'] as String?,
-        avatarKey: d['avatarKey'] as String?,
-        inviteCode: d['inviteCode'] as String?,
-        removedAt: BaseMapper.timestampToDateTime(d['removedAt']),
-        leftAt: BaseMapper.timestampToDateTime(d['leftAt']),
-      );
+    uid: d['uid'] as String? ?? '',
+    role: MemberRole.parse(d['role'] as String?),
+    status: _status(d['status'] as String?),
+    fullName: d['fullName'] as String? ?? '',
+    relationship: d['relationship'] as String? ?? 'other',
+    nickname: d['nickname'] as String?,
+    spouseId: d['spouseId'] as String?,
+    avatarKey: d['avatarKey'] as String?,
+    inviteCode: d['inviteCode'] as String?,
+    removedAt: BaseMapper.timestampToDateTime(d['removedAt']),
+    leftAt: BaseMapper.timestampToDateTime(d['leftAt']),
+  );
 
   static MembershipStatus _status(String? v) {
     for (final s in MembershipStatus.values) {
@@ -96,23 +93,22 @@ abstract final class FamilyMappers {
       };
 
   static Invitation invitationFromMap(Map<String, dynamic> d) => Invitation(
-        code: d['code'] as String? ?? '',
-        familyId: d['familyId'] as String? ?? '',
-        role: MemberRole.parse(d['role'] as String?),
-        expiresAt: BaseMapper.timestampToDateTime(d['expiresAt']) ??
-            DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
-        createdBy: d['createdBy'] as String? ?? '',
-        createdAt: BaseMapper.timestampToDateTime(d['createdAt']) ??
-            DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
-        status: InvitationStatus.parse(d['status'] as String?),
-        usedBy: d['usedBy'] as String?,
-      );
+    code: d['code'] as String? ?? '',
+    familyId: d['familyId'] as String? ?? '',
+    role: MemberRole.parse(d['role'] as String?),
+    expiresAt:
+        BaseMapper.timestampToDateTime(d['expiresAt']) ??
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+    createdBy: d['createdBy'] as String? ?? '',
+    createdAt:
+        BaseMapper.timestampToDateTime(d['createdAt']) ??
+        DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+    status: InvitationStatus.parse(d['status'] as String?),
+    usedBy: d['usedBy'] as String?,
+  );
 
   /// Fields changed when an invitation is revoked.
-  static Map<String, dynamic> invitationRevokedMap(
-    String uid,
-    DateTime now,
-  ) =>
+  static Map<String, dynamic> invitationRevokedMap(String uid, DateTime now) =>
       <String, dynamic>{
         'status': InvitationStatus.revoked.name,
         BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
@@ -120,10 +116,7 @@ abstract final class FamilyMappers {
       };
 
   /// Fields changed when an invitation is consumed.
-  static Map<String, dynamic> invitationUsedMap(
-    String uid,
-    DateTime now,
-  ) =>
+  static Map<String, dynamic> invitationUsedMap(String uid, DateTime now) =>
       <String, dynamic>{
         'status': InvitationStatus.used.name,
         'usedBy': uid,
@@ -137,14 +130,13 @@ abstract final class FamilyMappers {
     Family f,
     BaseDocumentMetadata m, {
     List<String>? adminIds,
-  }) =>
-      <String, dynamic>{
-        'name': f.name,
-        // H6: the active admins, re-checked against the member documents by the
-        // rules.  A family is created with its creator as the only admin.
-        'adminIds': adminIds ?? <String>[m.createdBy],
-        ...BaseMapper.metadataToMap(m),
-      };
+  }) => <String, dynamic>{
+    'name': f.name,
+    // H6: the active admins, re-checked against the member documents by the
+    // rules.  A family is created with its creator as the only admin.
+    'adminIds': adminIds ?? <String>[m.createdBy],
+    ...BaseMapper.metadataToMap(m),
+  };
 
   /// Fields changed when the active-admin set changes (H6).
   ///
@@ -154,33 +146,30 @@ abstract final class FamilyMappers {
     List<String> adminIds, {
     required String actorUid,
     required DateTime now,
-  }) =>
-      <String, dynamic>{
-        'adminIds': adminIds,
-        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
-        BaseMapper.keyUpdatedBy: actorUid,
-      };
+  }) => <String, dynamic>{
+    'adminIds': adminIds,
+    BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
+    BaseMapper.keyUpdatedBy: actorUid,
+  };
 
   static Map<String, dynamic> generalSettingsMap(
     Family f,
     BaseDocumentMetadata m,
-  ) =>
-      <String, dynamic>{
-        'timezone': f.timezone,
-        'currency': f.currency,
-        ...BaseMapper.metadataToMap(m),
-      };
+  ) => <String, dynamic>{
+    'timezone': f.timezone,
+    'currency': f.currency,
+    ...BaseMapper.metadataToMap(m),
+  };
 
   static const List<String> moduleIds = ['chores', 'bazar'];
 
   static Map<String, dynamic> modulesMap(
     ModuleFlags flags,
     BaseDocumentMetadata m,
-  ) =>
-      <String, dynamic>{
-        'flags': {for (final id in moduleIds) id: flags.isEnabled(id)},
-        ...BaseMapper.metadataToMap(m),
-      };
+  ) => <String, dynamic>{
+    'flags': {for (final id in moduleIds) id: flags.isEnabled(id)},
+    ...BaseMapper.metadataToMap(m),
+  };
 
   static ModuleFlags modulesFromMap(Map<String, dynamic>? d) {
     final raw = d?['flags'];
@@ -199,37 +188,34 @@ abstract final class FamilyMappers {
     Map<String, dynamic>? family,
     Map<String, dynamic>? general,
     Map<String, dynamic>? modules,
-  }) =>
-      Family(
-        id: id,
-        name: family?['name'] as String? ?? '',
-        timezone: general?['timezone'] as String? ?? Family.defaultTimezone,
-        currency: general?['currency'] as String? ?? Family.defaultCurrency,
-        modules: modulesFromMap(modules),
-      );
+  }) => Family(
+    id: id,
+    name: family?['name'] as String? ?? '',
+    timezone: general?['timezone'] as String? ?? Family.defaultTimezone,
+    currency: general?['currency'] as String? ?? Family.defaultCurrency,
+    modules: modulesFromMap(modules),
+  );
 
   /// `settings/permissions` (H7): the five family switches.  The module
   /// switches live in `settings/modules`.
   static Map<String, dynamic> permissionsMap(
     PermissionSettings s,
     BaseDocumentMetadata m,
-  ) =>
-      <String, dynamic>{
-        ..._permissionFields(s),
-        ...BaseMapper.metadataToMap(m),
-      };
+  ) => <String, dynamic>{
+    ..._permissionFields(s),
+    ...BaseMapper.metadataToMap(m),
+  };
 
   /// Fields changed when an admin edits the permission switches.
   static Map<String, dynamic> permissionsChangeMap(
     PermissionSettings s, {
     required String actorUid,
     required DateTime now,
-  }) =>
-      <String, dynamic>{
-        ..._permissionFields(s),
-        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
-        BaseMapper.keyUpdatedBy: actorUid,
-      };
+  }) => <String, dynamic>{
+    ..._permissionFields(s),
+    BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
+    BaseMapper.keyUpdatedBy: actorUid,
+  };
 
   static Map<String, dynamic> _permissionFields(PermissionSettings s) =>
       <String, dynamic>{
@@ -249,17 +235,23 @@ abstract final class FamilyMappers {
 
     const base = PermissionSettings.defaults;
     return PermissionSettings(
-      moderatorManagesFinance:
-          flag('moderatorManagesFinance', base.moderatorManagesFinance),
-      membersViewFamilyReports:
-          flag('membersViewFamilyReports', base.membersViewFamilyReports),
+      moderatorManagesFinance: flag(
+        'moderatorManagesFinance',
+        base.moderatorManagesFinance,
+      ),
+      membersViewFamilyReports: flag(
+        'membersViewFamilyReports',
+        base.membersViewFamilyReports,
+      ),
       membersViewAllContributions: flag(
         'membersViewAllContributions',
         base.membersViewAllContributions,
       ),
       membersCanInvite: flag('membersCanInvite', base.membersCanInvite),
-      choreVerificationEnabled:
-          flag('choreVerificationEnabled', base.choreVerificationEnabled),
+      choreVerificationEnabled: flag(
+        'choreVerificationEnabled',
+        base.choreVerificationEnabled,
+      ),
     );
   }
 
@@ -270,13 +262,8 @@ abstract final class FamilyMappers {
         ...BaseMapper.metadataToMap(m),
       };
 
-  static Map<String, dynamic> notificationDefaultsMap(
-    BaseDocumentMetadata m,
-  ) =>
-      <String, dynamic>{
-        'enabled': true,
-        ...BaseMapper.metadataToMap(m),
-      };
+  static Map<String, dynamic> notificationDefaultsMap(BaseDocumentMetadata m) =>
+      <String, dynamic>{'enabled': true, ...BaseMapper.metadataToMap(m)};
 
   // ── Activity / audit ──────────────────────────────────────────────────────
 

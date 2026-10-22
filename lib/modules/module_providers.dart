@@ -6,8 +6,9 @@ import 'package:family_hub/modules/module_registry.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The module registry.  Override in tests to inject a custom set.
-final moduleRegistryProvider =
-    Provider<ModuleRegistry>((ref) => ModuleRegistry.standard());
+final moduleRegistryProvider = Provider<ModuleRegistry>(
+  (ref) => ModuleRegistry.standard(),
+);
 
 /// Overridden in `bootstrap.dart`.
 final moduleFlagsRepositoryProvider = Provider<ModuleFlagsRepository>(
@@ -29,8 +30,10 @@ final moduleFlagsProvider = Provider<ModuleFlags>((ref) {
   return flags.value ?? ModuleFlags.allOn;
 });
 
-final _moduleFlagsStreamProvider =
-    StreamProvider.family<ModuleFlags, String>((ref, familyId) {
+final _moduleFlagsStreamProvider = StreamProvider.family<ModuleFlags, String>((
+  ref,
+  familyId,
+) {
   return ref.watch(moduleFlagsRepositoryProvider).watchModuleFlags(familyId);
 });
 

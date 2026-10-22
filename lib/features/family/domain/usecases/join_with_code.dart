@@ -19,14 +19,11 @@ import 'package:family_hub/features/onboarding/domain/user_profile_repository.da
 /// active when an admin or moderator approves.
 class JoinWithCode {
   const JoinWithCode({
-    required FamilyRepository families,
-    required UserProfileRepository profiles,
-    required Clock clock,
-    required IdGenerator newId,
-  })  : _families = families,
-        _profiles = profiles,
-        _clock = clock,
-        _newId = newId;
+    required this._families,
+    required this._profiles,
+    required this._clock,
+    required this._newId,
+  });
 
   final FamilyRepository _families;
   final UserProfileRepository _profiles;

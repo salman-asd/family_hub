@@ -908,6 +908,21 @@ describe('activity and auditLogs', () => {
     );
   });
 
+  it('allows a bazar expense audit entry by an active member', async () => {
+    const db = as(CARA);
+    await assertSucceeds(
+      setDoc(
+        doc(db, `families/${FAM_A}/activity/evtBazar`),
+        eventDoc(CARA, {
+          type: 'bazar.expense_created',
+          refType: 'expense',
+          refId: 'exp1',
+          params: { item: 'Rice', amount: '12000', funding: 'fund' },
+        }),
+      ),
+    );
+  });
+
   it('denies appending an activity entry with a forged createdBy', async () => {
     const db = as(CARA);
     await assertFails(

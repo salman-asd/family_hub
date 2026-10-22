@@ -30,16 +30,16 @@ void main() {
   /// external package name (`dart:` imports are neither).
   ({String? file, String? package}) resolve(String from, String uri) {
     if (uri.startsWith('package:family_hub/')) {
-      return (file: 'lib/${uri.substring('package:family_hub/'.length)}', package: null);
+      return (
+        file: 'lib/${uri.substring('package:family_hub/'.length)}',
+        package: null,
+      );
     }
     if (uri.startsWith('package:')) {
       return (file: null, package: uri.substring(8).split('/').first);
     }
     if (uri.startsWith('dart:')) return (file: null, package: null);
-    final parts = <String>[
-      ...from.split('/')..removeLast(),
-      ...uri.split('/'),
-    ];
+    final parts = <String>[...from.split('/')..removeLast(), ...uri.split('/')];
     final out = <String>[];
     for (final p in parts) {
       if (p == '..') {
@@ -90,7 +90,9 @@ void main() {
             for (String? x = current; x != null; x = parent[x]) {
               chain.add(x);
             }
-            found.add('$root reaches package:$package via ${chain.reversed.join(' -> ')}');
+            found.add(
+              '$root reaches package:$package via ${chain.reversed.join(' -> ')}',
+            );
           }
         }
         for (final next in node.internal) {
@@ -111,16 +113,18 @@ void main() {
         f.startsWith('lib/core/audit/')) {
       return true;
     }
-    return f.startsWith('lib/core/utils/') && !f.endsWith('/clock_provider.dart');
+    return f.startsWith('lib/core/utils/') &&
+        !f.endsWith('/clock_provider.dart');
   }
 
   Map<String, List<String>> readLib() => {
-        for (final f in Directory('lib')
+    for (final f
+        in Directory('lib')
             .listSync(recursive: true)
             .whereType<File>()
             .where((f) => f.path.endsWith('.dart')))
-          f.path.replaceAll(r'\', '/'): f.readAsLinesSync(),
-      };
+      f.path.replaceAll(r'\', '/'): f.readAsLinesSync(),
+  };
 
   // ── Detector self-tests (a vacuous pass is worse than no test) ─────────────
 
@@ -142,16 +146,23 @@ void main() {
     test('sees a Flutter package reached through a helper', () {
       final bad = forbiddenReach(buildGraph(fake), isPure);
       expect(
-        bad.any((b) => b.startsWith('lib/features/x/domain/a.dart') && b.contains('flutter_riverpod')),
+        bad.any(
+          (b) =>
+              b.startsWith('lib/features/x/domain/a.dart') &&
+              b.contains('flutter_riverpod'),
+        ),
         isTrue,
         reason: bad.join('\n'),
       );
     });
 
-    test('clock_provider.dart is the one allowed Riverpod file in core/utils', () {
-      expect(isPure('lib/core/utils/clock_provider.dart'), isFalse);
-      expect(isPure('lib/core/utils/clock.dart'), isTrue);
-    });
+    test(
+      'clock_provider.dart is the one allowed Riverpod file in core/utils',
+      () {
+        expect(isPure('lib/core/utils/clock_provider.dart'), isFalse);
+        expect(isPure('lib/core/utils/clock.dart'), isTrue);
+      },
+    );
 
     test('resolves relative imports', () {
       expect(
@@ -163,7 +174,9 @@ void main() {
 
     test('a clean pure chain reports nothing', () {
       final clean = buildGraph({
-        'lib/features/x/domain/a.dart': ["import 'package:family_hub/core/utils/clock.dart';"],
+        'lib/features/x/domain/a.dart': [
+          "import 'package:family_hub/core/utils/clock.dart';",
+        ],
         'lib/core/utils/clock.dart': ["import 'dart:async';"],
       });
       expect(forbiddenReach(clean, isPure), isEmpty);
@@ -174,40 +187,53 @@ void main() {
 
   final graph = buildGraph(readLib());
 
-  test('a) the pure layers reach no Flutter, Riverpod, router or Firebase package', () {
-    expect(forbiddenReach(graph, isPure), isEmpty);
-  });
+  test(
+    'a) the pure layers reach no Flutter, Riverpod, router or Firebase package',
+    () {
+      expect(forbiddenReach(graph, isPure), isEmpty);
+    },
+  );
 
-  test('b) presentation/, shared/ and modules/ never touch Firebase or data/', () {
-    final bad = <String>[];
-    graph.forEach((file, node) {
-      final inScope = (file.startsWith('lib/features/') && file.contains('/presentation/')) ||
-          file.startsWith('lib/shared/') ||
-          file.startsWith('lib/modules/');
-      if (!inScope) return;
-      for (final p in node.packages) {
-        if (firebasePackage.hasMatch(p)) bad.add('$file imports package:$p');
-      }
-      for (final i in node.internal) {
-        if (dataFolder.hasMatch(i)) bad.add('$file imports $i');
-      }
-    });
-    expect(bad, isEmpty);
-  });
+  test(
+    'b) presentation/, shared/ and modules/ never touch Firebase or data/',
+    () {
+      final bad = <String>[];
+      graph.forEach((file, node) {
+        final inScope =
+            (file.startsWith('lib/features/') &&
+                file.contains('/presentation/')) ||
+            file.startsWith('lib/shared/') ||
+            file.startsWith('lib/modules/');
+        if (!inScope) return;
+        for (final p in node.packages) {
+          if (firebasePackage.hasMatch(p)) bad.add('$file imports package:$p');
+        }
+        for (final i in node.internal) {
+          if (dataFolder.hasMatch(i)) bad.add('$file imports $i');
+        }
+      });
+      expect(bad, isEmpty);
+    },
+  );
 
-  test('c) lib/app/ reaches data/ and Firebase only through bootstrap.dart', () {
-    final bad = <String>[];
-    graph.forEach((file, node) {
-      if (!file.startsWith('lib/app/') || file == 'lib/app/bootstrap.dart') return;
-      for (final p in node.packages) {
-        if (firebasePackage.hasMatch(p)) bad.add('$file imports package:$p');
-      }
-      for (final i in node.internal) {
-        if (dataFolder.hasMatch(i)) bad.add('$file imports $i');
-      }
-    });
-    expect(bad, isEmpty);
-  });
+  test(
+    'c) lib/app/ reaches data/ and Firebase only through bootstrap.dart',
+    () {
+      final bad = <String>[];
+      graph.forEach((file, node) {
+        if (!file.startsWith('lib/app/') || file == 'lib/app/bootstrap.dart') {
+          return;
+        }
+        for (final p in node.packages) {
+          if (firebasePackage.hasMatch(p)) bad.add('$file imports package:$p');
+        }
+        for (final i in node.internal) {
+          if (dataFolder.hasMatch(i)) bad.add('$file imports $i');
+        }
+      });
+      expect(bad, isEmpty);
+    },
+  );
 
   test('d) no feature domain imports a presentation/ or data/ folder', () {
     final bad = <String>[];

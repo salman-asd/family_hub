@@ -47,16 +47,17 @@ class _FamilySettingsScreenState extends ConsumerState<FamilySettingsScreen> {
     final uid = ref.read(currentUidProvider);
     final draft = _draft;
     if (uid == null || draft == null) return;
-    final saved = await ref.read(_settingsActionProvider.notifier).run(
+    final saved = await ref
+        .read(_settingsActionProvider.notifier)
+        .run(
           () => ref.read(updateFamilySettingsProvider)(
             actorUid: uid,
             family: draft.copyWith(name: _name.text),
           ),
         );
     if (saved != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.settingsSaved)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(context.l10n.settingsSaved)));
     }
   }
 
@@ -79,13 +80,13 @@ class _FamilySettingsScreenState extends ConsumerState<FamilySettingsScreen> {
       appBar: AppBar(title: Text(l10n.familySettingsTitle)),
       body: draft == null
           ? (family.hasError
-              ? EmptyState(
-                  icon: Icons.cloud_off_rounded,
-                  title: l10n.errorUnknown,
-                  actionLabel: l10n.actionRetry,
-                  onAction: () => ref.invalidate(familyProvider),
-                )
-              : const LoadingView())
+                ? EmptyState(
+                    icon: Icons.cloud_off_rounded,
+                    title: l10n.errorUnknown,
+                    actionLabel: l10n.actionRetry,
+                    onAction: () => ref.invalidate(familyProvider),
+                  )
+                : const LoadingView())
           : ListView(
               padding: const EdgeInsets.all(20),
               children: [
@@ -141,13 +142,11 @@ class _FamilySettingsScreenState extends ConsumerState<FamilySettingsScreen> {
   }
 
   Widget _title(String text, AppTokens t) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Text(
-          text,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: t.textSecondary),
-        ),
-      );
+    padding: const EdgeInsets.only(bottom: 8),
+    child: Text(
+      text,
+      style: Theme.of(context).textTheme.titleSmall
+          ?.copyWith(color: t.textSecondary),
+    ),
+  );
 }

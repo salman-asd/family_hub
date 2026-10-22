@@ -8,38 +8,35 @@ abstract final class RelationshipMappers {
   static Map<String, dynamic> relationshipsMap(
     RelationshipCatalog catalog,
     BaseDocumentMetadata m,
-  ) =>
-      <String, dynamic>{
-        'items': _relationshipItems(catalog),
-        ...BaseMapper.metadataToMap(m),
-      };
+  ) => <String, dynamic>{
+    'items': _relationshipItems(catalog),
+    ...BaseMapper.metadataToMap(m),
+  };
 
   /// Fields changed when an admin edits the relationship list.
   static Map<String, dynamic> relationshipsChangeMap(
     RelationshipCatalog catalog, {
     required String actorUid,
     required DateTime now,
-  }) =>
-      <String, dynamic>{
-        'items': _relationshipItems(catalog),
-        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
-        BaseMapper.keyUpdatedBy: actorUid,
-      };
+  }) => <String, dynamic>{
+    'items': _relationshipItems(catalog),
+    BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(now),
+    BaseMapper.keyUpdatedBy: actorUid,
+  };
 
   static List<Map<String, dynamic>> _relationshipItems(
     RelationshipCatalog catalog,
-  ) =>
-      <Map<String, dynamic>>[
-        for (final e in catalog.entries)
-          <String, dynamic>{
-            'id': e.id.value,
-            'labelBn': e.labelBn,
-            'labelEn': e.labelEn,
-            'spouseRelevant': e.spouseRelevant,
-            'builtIn': e.builtIn,
-            'active': e.active,
-          },
-      ];
+  ) => <Map<String, dynamic>>[
+    for (final e in catalog.entries)
+      <String, dynamic>{
+        'id': e.id.value,
+        'labelBn': e.labelBn,
+        'labelEn': e.labelEn,
+        'spouseRelevant': e.spouseRelevant,
+        'builtIn': e.builtIn,
+        'active': e.active,
+      },
+  ];
 
   /// A missing document or list means the built-in defaults.  Ill-formed items
   /// are skipped, duplicate ids keep the first one, and the ten built-ins are

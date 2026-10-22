@@ -98,8 +98,8 @@ void main() {
       final code = await newCode();
       // Code of famA used by a person who is active in another family.
       f.backend.userFamily['newcomer'] = 'fam2';
-      f.backend.members['fam2']!['newcomer'] =
-          f.backend.members['fam']!['kid']!.copyWith(fullName: 'x');
+      f.backend.members['fam2']!['newcomer'] = f.backend.members['fam']!['kid']!
+          .copyWith(fullName: 'x');
       final r = await join(actorUid: 'newcomer', rawCode: code.code);
       expect(r.failureOrNull, const Conflict(code: 'already_in_family'));
     });
@@ -111,32 +111,40 @@ void main() {
       expect(r.failureOrNull, const Conflict(code: 'already_in_family'));
     });
 
-    test('a member DISABLED by an admin cannot create or join elsewhere',
-        () async {
-      expect(
-        (await createFamily(actorUid: 'off', name: 'Mine')).failureOrNull,
-        const Conflict(code: 'already_in_family'),
-      );
-      // Joining the SAME family falls through to the existing-member rule.
-      final code = await newCode();
-      final other = await join(actorUid: 'off', rawCode: code.code);
-      expect(other.failureOrNull, const Conflict(code: 'already_member'));
-    });
+    test(
+      'a member DISABLED by an admin cannot create or join elsewhere',
+      () async {
+        expect(
+          (await createFamily(actorUid: 'off', name: 'Mine')).failureOrNull,
+          const Conflict(code: 'already_in_family'),
+        );
+        // Joining the SAME family falls through to the existing-member rule.
+        final code = await newCode();
+        final other = await join(actorUid: 'off', rawCode: code.code);
+        expect(other.failureOrNull, const Conflict(code: 'already_member'));
+      },
+    );
 
     test('an admin can re-enable a disabled member', () async {
-      final r = await approve(actorUid: 'admin', familyId: 'fam', targetUid: 'off');
+      final r = await approve(
+        actorUid: 'admin',
+        familyId: 'fam',
+        targetUid: 'off',
+      );
       expect(r.isSuccess, isTrue);
       expect((await pointer('off')).status, MembershipStatus.active);
     });
 
-    test('the pointer read failing (offline) fails fast and writes nothing',
-        () async {
-      f.backend.failNextPointerRead = const Network();
-      final writesBefore = f.backend.writes;
-      final r = await createFamily(actorUid: 'newcomer', name: 'Mine');
-      expect(r.failureOrNull, const Network());
-      expect(f.backend.writes, writesBefore);
-    });
+    test(
+      'the pointer read failing (offline) fails fast and writes nothing',
+      () async {
+        f.backend.failNextPointerRead = const Network();
+        final writesBefore = f.backend.writes;
+        final r = await createFamily(actorUid: 'newcomer', name: 'Mine');
+        expect(r.failureOrNull, const Network());
+        expect(f.backend.writes, writesBefore);
+      },
+    );
   });
 
   group('leave', () {
@@ -164,7 +172,10 @@ void main() {
         targetUid: 'mod',
       );
       expect(t.isSuccess, isTrue, reason: '${t.failureOrNull}');
-      expect((await leave(actorUid: 'admin', familyId: 'fam')).isSuccess, isTrue);
+      expect(
+        (await leave(actorUid: 'admin', familyId: 'fam')).isSuccess,
+        isTrue,
+      );
     });
 
     test('a pending or disabled member cannot use leave', () async {
@@ -193,15 +204,20 @@ void main() {
   });
 
   group('leave edge cases', () {
-    test('a plain member can leave even if the family has no active admin',
-        () async {
-      f = Fixture()
-        ..seedFamily({'kid': (MemberRole.member, MembershipStatus.active)});
-      leave =
-          LeaveFamily(families: f.backend, clock: f.clock, newId: f.ids.call);
-      final result = await leave(actorUid: 'kid', familyId: 'fam');
-      expect(result.isSuccess, isTrue);
-    });
+    test(
+      'a plain member can leave even if the family has no active admin',
+      () async {
+        f = Fixture()
+          ..seedFamily({'kid': (MemberRole.member, MembershipStatus.active)});
+        leave = LeaveFamily(
+          families: f.backend,
+          clock: f.clock,
+          newId: f.ids.call,
+        );
+        final result = await leave(actorUid: 'kid', familyId: 'fam');
+        expect(result.isSuccess, isTrue);
+      },
+    );
   });
 
   group('cancel a join request', () {
@@ -233,7 +249,10 @@ void main() {
       final code = await newCode();
       final r = await revoke(actorUid: 'mod', familyId: 'fam', code: code.code);
       expect(r.valueOrNull!.status, InvitationStatus.revoked);
-      expect(f.backend.invitations[code.code]!.status, InvitationStatus.revoked);
+      expect(
+        f.backend.invitations[code.code]!.status,
+        InvitationStatus.revoked,
+      );
 
       final j = await join(actorUid: 'newcomer', rawCode: code.code);
       expect(j.failureOrNull, const Conflict(code: 'code_revoked'));
@@ -249,47 +268,65 @@ void main() {
     test('a used code cannot be revoked', () async {
       final code = await newCode();
       await join(actorUid: 'newcomer', rawCode: code.code);
-      final r = await revoke(actorUid: 'admin', familyId: 'fam', code: code.code);
+      final r = await revoke(
+        actorUid: 'admin',
+        familyId: 'fam',
+        code: code.code,
+      );
       expect(r.failureOrNull, const Conflict(code: 'not_active'));
     });
 
     test('an expired code cannot be revoked', () async {
       final code = await newCode();
       f.clock.setTo(code.expiresAt);
-      final r = await revoke(actorUid: 'admin', familyId: 'fam', code: code.code);
+      final r = await revoke(
+        actorUid: 'admin',
+        familyId: 'fam',
+        code: code.code,
+      );
       expect(r.failureOrNull, const Conflict(code: 'not_active'));
     });
 
     test('a code of another family is NotFound', () async {
       final code = await newCode();
-      final r = await revoke(actorUid: 'admin', familyId: 'other', code: code.code);
+      final r = await revoke(
+        actorUid: 'admin',
+        familyId: 'other',
+        code: code.code,
+      );
       expect(r.isFailure, isTrue);
     });
   });
 
   group('idempotent retries', () {
-    test('a repeated join with the same code returns the same pending member',
-        () async {
-      final code = await newCode();
-      final first = await join(
-        actorUid: 'newcomer',
-        rawCode: code.code,
-        eventId: 'evt-j',
-      );
-      final second = await join(
-        actorUid: 'newcomer',
-        rawCode: code.code,
-        eventId: 'evt-j',
-      );
-      expect(second.valueOrNull, first.valueOrNull);
-      expect(f.backend.events.where((e) => e.id == 'evt-j').length, 1);
-    });
+    test(
+      'a repeated join with the same code returns the same pending member',
+      () async {
+        final code = await newCode();
+        final first = await join(
+          actorUid: 'newcomer',
+          rawCode: code.code,
+          eventId: 'evt-j',
+        );
+        final second = await join(
+          actorUid: 'newcomer',
+          rawCode: code.code,
+          eventId: 'evt-j',
+        );
+        expect(second.valueOrNull, first.valueOrNull);
+        expect(f.backend.events.where((e) => e.id == 'evt-j').length, 1);
+      },
+    );
   });
 
   group('state machine table (docs/membership_state_machine.md)', () {
     // from-state -> action -> allowed?
     test('disabled by admin stays blocked until re-enabled', () async {
-      final d = await disable(actorUid: 'admin', familyId: 'fam', targetUid: 'kid');
+      final d = await disable(
+        actorUid: 'admin',
+        familyId: 'fam',
+        targetUid: 'kid',
+      );
       expect(d.isSuccess, isTrue);
       expect(
         (await createFamily(actorUid: 'kid', name: 'x')).failureOrNull,
@@ -297,7 +334,10 @@ void main() {
       );
       await approve(actorUid: 'admin', familyId: 'fam', targetUid: 'kid');
       expect((await leave(actorUid: 'kid', familyId: 'fam')).isSuccess, isTrue);
-      expect((await createFamily(actorUid: 'kid', name: 'x')).isSuccess, isTrue);
+      expect(
+        (await createFamily(actorUid: 'kid', name: 'x')).isSuccess,
+        isTrue,
+      );
     });
   });
 }

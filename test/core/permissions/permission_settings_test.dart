@@ -8,13 +8,12 @@ void main() {
     Permission permission, {
     PermissionSettings settings = PermissionSettings.defaults,
     bool active = true,
-  }) =>
-      PermissionPolicy.can(
-        PermissionActor(uid: 'me', role: role, isActive: active),
-        permission,
-        ownerId: 'other',
-        settings: settings,
-      );
+  }) => PermissionPolicy.can(
+    PermissionActor(uid: 'me', role: role, isActive: active),
+    permission,
+    ownerId: 'other',
+    settings: settings,
+  );
 
   group('moderatorManagesFinance', () {
     const off = PermissionSettings(moderatorManagesFinance: false);
@@ -44,12 +43,18 @@ void main() {
     });
 
     test('off: a moderator may still add expenses and see everything', () {
-      expect(can(Role.moderator, Permission.addOwnExpense, settings: off),
-          isTrue);
-      expect(can(Role.moderator, Permission.editOthersExpense, settings: off),
-          isTrue);
-      expect(can(Role.moderator, Permission.viewAllContributions,
-          settings: off), isTrue);
+      expect(
+        can(Role.moderator, Permission.addOwnExpense, settings: off),
+        isTrue,
+      );
+      expect(
+        can(Role.moderator, Permission.editOthersExpense, settings: off),
+        isTrue,
+      );
+      expect(
+        can(Role.moderator, Permission.viewAllContributions, settings: off),
+        isTrue,
+      );
     });
   });
 
@@ -61,12 +66,18 @@ void main() {
     });
 
     test('off: a member loses reports, managers keep them', () {
-      expect(can(Role.member, Permission.viewFamilyReports, settings: off),
-          isFalse);
-      expect(can(Role.moderator, Permission.viewFamilyReports, settings: off),
-          isTrue);
-      expect(can(Role.admin, Permission.viewFamilyReports, settings: off),
-          isTrue);
+      expect(
+        can(Role.member, Permission.viewFamilyReports, settings: off),
+        isFalse,
+      );
+      expect(
+        can(Role.moderator, Permission.viewFamilyReports, settings: off),
+        isTrue,
+      );
+      expect(
+        can(Role.admin, Permission.viewFamilyReports, settings: off),
+        isTrue,
+      );
     });
   });
 
@@ -78,8 +89,10 @@ void main() {
     });
 
     test('on: a member sees every contribution', () {
-      expect(can(Role.member, Permission.viewAllContributions, settings: on),
-          isTrue);
+      expect(
+        can(Role.member, Permission.viewAllContributions, settings: on),
+        isTrue,
+      );
     });
 
     test('a switched-off bazar module still wins', () {
@@ -107,8 +120,10 @@ void main() {
     });
 
     test('on: approving requests stays a manager right', () {
-      expect(can(Role.member, Permission.approveMembers, settings: on),
-          isFalse);
+      expect(
+        can(Role.member, Permission.approveMembers, settings: on),
+        isFalse,
+      );
     });
   });
 
@@ -128,8 +143,10 @@ void main() {
       const base = PermissionSettings.defaults;
       expect(base.copyWith(), base);
       expect(base.copyWith(membersCanInvite: true), isNot(base));
-      expect(base.copyWith(membersCanInvite: true).hashCode,
-          isNot(base.hashCode));
+      expect(
+        base.copyWith(membersCanInvite: true).hashCode,
+        isNot(base.hashCode),
+      );
       for (final changed in <PermissionSettings>[
         base.copyWith(bazarEnabled: false),
         base.copyWith(choresEnabled: false),

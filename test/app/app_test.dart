@@ -21,16 +21,19 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   for (final flavor in Flavor.values) {
-    testWidgets('an active member sees the ${flavor.name} flavor on Home',
-        (tester) async {
+    testWidgets('an active member sees the ${flavor.name} flavor on Home', (
+      tester,
+    ) async {
       const user = AppUser(uid: 'u1', email: 'a@b.com', emailVerified: true);
       final prefs = await SharedPreferences.getInstance();
       final auth = FakeAuthRepository(signedInAs: user);
       final session = FakeSessionRepositories(
         profiles: {user.uid},
         memberships: {
-          user.uid:
-              const Membership(status: MembershipStatus.active, familyId: 'f'),
+          user.uid: const Membership(
+            status: MembershipStatus.active,
+            familyId: 'f',
+          ),
         },
       );
       addTearDown(auth.dispose);

@@ -26,7 +26,11 @@ void main() {
         from = i + 1;
       }
     }
-    expect(offenders, isEmpty, reason: 'Add .limit(...) to:\n${offenders.join('\n')}');
+    expect(
+      offenders,
+      isEmpty,
+      reason: 'Add .limit(...) to:\n${offenders.join('\n')}',
+    );
   });
 
   test('the detector sees an unbounded query', () {

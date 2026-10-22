@@ -22,7 +22,6 @@ final AppTokens modernLightTokens = AppTokens(
   accent: const Color(0xFF00574B), // teal 800
   accentSoft: const Color(0xFFB2DFDB), // teal 100
   accentStrong: const Color(0xFF00352B), // teal 950-ish
-
   // ── Status ───────────────────────────────────────────────────────────────
   // scheduled — blue family
   statusScheduled: const Color(0xFF1565C0),
@@ -97,40 +96,16 @@ final AppTokens modernLightTokens = AppTokens(
   radiusLg: 24,
   radiusPill: 999,
   elevation1: const [
-    BoxShadow(
-      color: Color(0x0F000000),
-      blurRadius: 4,
-      offset: Offset(0, 1),
-    ),
-    BoxShadow(
-      color: Color(0x0A000000),
-      blurRadius: 2,
-      offset: Offset(0, 1),
-    ),
+    BoxShadow(color: Color(0x0F000000), blurRadius: 4, offset: Offset(0, 1)),
+    BoxShadow(color: Color(0x0A000000), blurRadius: 2, offset: Offset(0, 1)),
   ],
   elevation2: const [
-    BoxShadow(
-      color: Color(0x14000000),
-      blurRadius: 8,
-      offset: Offset(0, 2),
-    ),
-    BoxShadow(
-      color: Color(0x0F000000),
-      blurRadius: 4,
-      offset: Offset(0, 2),
-    ),
+    BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2)),
+    BoxShadow(color: Color(0x0F000000), blurRadius: 4, offset: Offset(0, 2)),
   ],
   elevation3: const [
-    BoxShadow(
-      color: Color(0x1F000000),
-      blurRadius: 16,
-      offset: Offset(0, 4),
-    ),
-    BoxShadow(
-      color: Color(0x14000000),
-      blurRadius: 8,
-      offset: Offset(0, 4),
-    ),
+    BoxShadow(color: Color(0x1F000000), blurRadius: 16, offset: Offset(0, 4)),
+    BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 4)),
   ],
 
   // ── Motion ────────────────────────────────────────────────────────────────

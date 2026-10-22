@@ -27,9 +27,13 @@ import '../family_test_helpers.dart';
 
 const _me = AppUser(uid: 'me', email: 'me@example.com', emailVerified: true);
 
-String _path(WidgetTester tester) => ProviderScope.containerOf(
-      tester.element(find.byType(FamilyHubApp)),
-    ).read(routerProvider).routeInformationProvider.value.uri.path;
+String _path(WidgetTester tester) =>
+    ProviderScope.containerOf(tester.element(find.byType(FamilyHubApp)))
+        .read(routerProvider)
+        .routeInformationProvider
+        .value
+        .uri
+        .path;
 
 Future<void> _pumpApp(WidgetTester tester, Fixture f) async {
   tester.view
@@ -76,8 +80,9 @@ Future<void> _type(WidgetTester tester, String key, String text) async {
 }
 
 void main() {
-  testWidgets('new user: profile -> create family -> admin in the app',
-      (tester) async {
+  testWidgets('new user: profile -> create family -> admin in the app', (
+    tester,
+  ) async {
     final f = Fixture();
     addTearDown(f.backend.dispose);
     await _pumpApp(tester, f);
@@ -86,7 +91,14 @@ void main() {
     // Save stays disabled until a name is typed.
     final save = find.byKey(const Key('profile_save'));
     await tester.ensureVisible(save);
-    expect(tester.widget<FilledButton>(find.descendant(of: save, matching: find.byType(FilledButton))).onPressed, isNull);
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.descendant(of: save, matching: find.byType(FilledButton)),
+          )
+          .onPressed,
+      isNull,
+    );
 
     await _type(tester, 'profile_full_name', 'Karim Rahman');
     await _tap(tester, 'rel_father');
@@ -121,8 +133,9 @@ void main() {
     }
   });
 
-  testWidgets('invited user: join with a code -> pending -> approved -> home',
-      (tester) async {
+  testWidgets('invited user: join with a code -> pending -> approved -> home', (
+    tester,
+  ) async {
     final f = Fixture()
       ..seedFamily({'admin': (MemberRole.admin, MembershipStatus.active)})
       ..profile('me');
@@ -161,7 +174,9 @@ void main() {
     expect(_path(tester), '/home');
   });
 
-  testWidgets('a rejected request returns to the family choice', (tester) async {
+  testWidgets('a rejected request returns to the family choice', (
+    tester,
+  ) async {
     final f = Fixture()
       ..seedFamily({
         'admin': (MemberRole.admin, MembershipStatus.active),
@@ -172,8 +187,9 @@ void main() {
     await _pumpApp(tester, f);
     expect(_path(tester), '/pending');
 
-    f.backend.members['fam']!['me'] =
-        f.backend.members['fam']!['me']!.copyWith(removedAt: f.clock.nowUtc());
+    f.backend.members['fam']!['me'] = f.backend.members['fam']!['me']!.copyWith(
+      removedAt: f.clock.nowUtc(),
+    );
     f.backend.backendNotify();
     await tester.pumpAndSettle();
     expect(_path(tester), '/family-choice');

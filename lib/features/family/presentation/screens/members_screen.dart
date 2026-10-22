@@ -45,7 +45,7 @@ class MembersScreen extends ConsumerWidget {
       appBar: AppBar(title: Text(l10n.membersTitle)),
       body: members.when(
         loading: () => const LoadingView(lines: 5, showAvatar: true),
-        error: (_, __) => EmptyState(
+        error: (_, _) => EmptyState(
           icon: Icons.cloud_off_rounded,
           title: l10n.errorUnknown,
           actionLabel: l10n.actionRetry,
@@ -93,15 +93,13 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
-        child: Text(
-          text,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: context.tokens.textSecondary),
-        ),
-      );
+    padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+    child: Text(
+      text,
+      style: Theme.of(context).textTheme.titleSmall
+          ?.copyWith(color: context.tokens.textSecondary),
+    ),
+  );
 }
 
 class _MemberTile extends ConsumerWidget {
@@ -133,13 +131,15 @@ class _MemberTile extends ConsumerWidget {
             key: Key('approve_${member.uid}'),
             onPressed: busy
                 ? null
-                : () => ref.read(_memberActionProvider.notifier).run(
-                      () => ref.read(approveMemberProvider)(
-                        actorUid: uid!,
-                        familyId: familyId!,
-                        targetUid: member.uid,
+                : () => ref
+                      .read(_memberActionProvider.notifier)
+                      .run(
+                        () => ref.read(approveMemberProvider)(
+                          actorUid: uid!,
+                          familyId: familyId!,
+                          targetUid: member.uid,
+                        ),
                       ),
-                    ),
             child: Text(l10n.memberApprove),
           ),
         )
@@ -148,31 +148,33 @@ class _MemberTile extends ConsumerWidget {
             key: Key('reject_${member.uid}'),
             onPressed: busy
                 ? null
-                : () => ref.read(_memberActionProvider.notifier).run(
-                      () => ref.read(rejectMemberProvider)(
-                        actorUid: uid!,
-                        familyId: familyId!,
-                        targetUid: member.uid,
+                : () => ref
+                      .read(_memberActionProvider.notifier)
+                      .run(
+                        () => ref.read(rejectMemberProvider)(
+                          actorUid: uid!,
+                          familyId: familyId!,
+                          targetUid: member.uid,
+                        ),
                       ),
-                    ),
             child: Text(l10n.memberReject),
           ),
         );
-    } else if (member.status == MembershipStatus.active &&
-        canRemove &&
-        !isMe) {
+    } else if (member.status == MembershipStatus.active && canRemove && !isMe) {
       actions.add(
         OutlinedButton(
           key: Key('disable_${member.uid}'),
           onPressed: busy
               ? null
-              : () => ref.read(_memberActionProvider.notifier).run(
-                    () => ref.read(disableMemberProvider)(
-                      actorUid: uid!,
-                      familyId: familyId!,
-                      targetUid: member.uid,
+              : () => ref
+                    .read(_memberActionProvider.notifier)
+                    .run(
+                      () => ref.read(disableMemberProvider)(
+                        actorUid: uid!,
+                        familyId: familyId!,
+                        targetUid: member.uid,
+                      ),
                     ),
-                  ),
           child: Text(l10n.memberDisable),
         ),
       );
@@ -182,13 +184,15 @@ class _MemberTile extends ConsumerWidget {
           key: Key('enable_${member.uid}'),
           onPressed: busy
               ? null
-              : () => ref.read(_memberActionProvider.notifier).run(
-                    () => ref.read(approveMemberProvider)(
-                      actorUid: uid!,
-                      familyId: familyId!,
-                      targetUid: member.uid,
+              : () => ref
+                    .read(_memberActionProvider.notifier)
+                    .run(
+                      () => ref.read(approveMemberProvider)(
+                        actorUid: uid!,
+                        familyId: familyId!,
+                        targetUid: member.uid,
+                      ),
                     ),
-                  ),
           child: Text(l10n.memberReenable),
         ),
       );

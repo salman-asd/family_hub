@@ -34,7 +34,9 @@ class _JoinFamilyScreenState extends ConsumerState<JoinFamilyScreen> {
   Future<void> _submit() async {
     final uid = ref.read(currentUidProvider);
     if (uid == null) return;
-    await ref.read(_joinActionProvider.notifier).run(
+    await ref
+        .read(_joinActionProvider.notifier)
+        .run(
           () => ref.read(joinWithCodeProvider)(
             actorUid: uid,
             rawCode: _code.text,

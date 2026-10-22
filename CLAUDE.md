@@ -29,7 +29,7 @@ ARCHITECTURE: feature-first Clean Architecture. Each feature has data/, domain/,
 Naming: snake_case files; FooRepository (interface), FirestoreFooRepository (impl), FooController, FooScreen, FooMapper, AddFooUseCase. One class per use case file. Split widget files over ~300 lines.
 
 ## Folder structure
-lib/ main_dev.dart, main_prod.dart; app/ (app, router, bootstrap, flavor, theme/); core/ (errors, utils, firebase, localization, notifications, permissions, constants); shared/ (widgets, services); modules/; features/ auth, onboarding, family, dashboard, settings, notifications, bazar/{expenses, items_categories, budgets, contributions, advances, reports, import}, chores/{templates, duty_groups, occurrences, calendar, swaps, availability, comments, achievements} (each: data/ domain/ presentation/). test/ mirrors lib/. firebase/ holds firestore.rules, firestore.indexes.json, rules_test/.
+lib/ main_dev.dart, main_prod.dart; app/ (app, router, bootstrap, flavor, theme/); core/ (errors, utils, firebase, localization, notifications, permissions, constants); shared/ (widgets, services); modules/; features/ auth, onboarding, family, dashboard, settings, notifications, bazar/{expenses, items_categories, budgets, contributions, advances, reports, import, fund, settings}, chores/{templates, duty_groups, occurrences, calendar, swaps, availability, comments, achievements} (each: data/ domain/ presentation/). test/ mirrors lib/. firebase/ holds firestore.rules, firestore.indexes.json, rules_test/.
 
 ## WORKING METHOD
 Before coding, list the files you will create or change. Write tests together with the code. Afterwards run dart format, flutter analyze and flutter test and report the results. Do not add packages not named. When something depends on current Firebase pricing, quotas, or package versions, check official docs instead of guessing. If an instruction is ambiguous, state your assumption and continue; ask only when a wrong guess would be expensive. End every task with: files changed, how to verify, anything you assumed.
@@ -109,3 +109,14 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 - **Colours (H11):** foregrounds on placeholder colours come from `placeholderOnLight` / `placeholderOnDark`; `no_raw_color_test` forbids `Colors.*` (except `transparent`) and `Color.fromRGBO/ARGB` outside `lib/app/theme/`.
 - **File size (H11):** `file_size_test` caps lib files at 300 lines (documented allow-list).
 - **Phase 2 foundations (H12):** dates only through `FamilyDateKeys` (`familyDateKeysProvider`); starter data only through `FamilySeeder`s given to `CreateFamily`; one batch <= 500 writes (`kMaxBatchWrites`, enforced by the runners); collection reads need `.limit(` (`no_unbounded_queries_test`); follow `docs/new_collection_checklist.md` for every new collection.
+
+## Phase 2 rules (Bazar & finance)
+25. Money fields in Firestore are integer paisa named *Paisa; quantities are integer *Milli. Never double/num.
+26. Everyday writes (expense, trip, contribution, budget, custom item) are ONE batch, NO server probe, so they queue offline. Money-integrity writes (settle advance, close/reopen month, import, undo import, catalog backfill, settings) need the server (probe + transaction/batch).
+27. A use case builds a pure write plan; the repository stages it. domain/ never sees TxRunner or Firestore types.
+28. fundTransactions, settlements and expense revisions are append-only. Corrections are NEW compensating rows. The original expense/ledger row is never edited by a later settlement or correction.
+29. Fund balance is never stored as a mutable number; it is computed from the ledger window (ADR 0007).
+30. Reports/budgets/dashboards share ONE spend aggregation (MonthSpend/ReportEngine). Soft-deleted expenses are excluded everywhere.
+31. A closed month rejects every write dated in it (use case AND rules). Only ReopenMonth (Admin or Household Manager, with a note) changes that.
+32. Every new collection follows docs/new_collection_checklist.md in the same commit; new audit types/refTypes go in AuditEventType AND rules eventTypes()/refTypes().
+33. Screens read derived providers (bazar_providers.dart); only providers call use cases/repositories.

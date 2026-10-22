@@ -270,6 +270,108 @@
   "@moduleComingSoonTitle": {},
   "moduleComingSoonMessage": "এই অংশটি এখনো তৈরি হচ্ছে।",
   "@moduleComingSoonMessage": {},
+  "bazarHomeEmptyTitle": "বাজার এখনো খালি",
+  "@bazarHomeEmptyTitle": {},
+  "bazarHomeEmptyMessage": "খরচ, বাজার তালিকা ও হিসাবের অংশগুলো ধাপে ধাপে এখানে যোগ হবে।",
+  "@bazarHomeEmptyMessage": {},
+  "bazarCatalogSetupTitle": "স্টার্টার বাজার তালিকা সেট করুন",
+  "@bazarCatalogSetupTitle": {},
+  "bazarCatalogSetupMessage": "শুরু করার জন্য ১১টি ক্যাটাগরি ও ৫৪টি সাধারণ আইটেম যোগ করুন। পরে আপনি সেগুলো সম্পাদনা, যোগ বা লুকাতে পারবেন।",
+  "@bazarCatalogSetupMessage": {},
+  "bazarCatalogSetupAction": "তালিকা তৈরি করুন",
+  "@bazarCatalogSetupAction": {},
+  "bazarCatalogSetupBusy": "বাজার তালিকা তৈরি হচ্ছে…",
+  "@bazarCatalogSetupBusy": {},
+  "bazarCatalogAskAdminTitle": "বাজার তালিকা তৈরি হয়নি",
+  "@bazarCatalogAskAdminTitle": {},
+  "bazarCatalogAskAdminMessage": "বাজার তালিকা তৈরি করতে একজন অ্যাডমিনকে বলুন।",
+  "@bazarCatalogAskAdminMessage": {},
+  "bazarSettingsTitle": "বাজারের সেটিংস",
+  "@bazarSettingsTitle": {},
+  "unitKg": "কেজি",
+  "@unitKg": {},
+  "unitG": "গ্রাম",
+  "@unitG": {},
+  "unitLitre": "লিটার",
+  "@unitLitre": {},
+  "unitPiece": "পিস",
+  "@unitPiece": {},
+  "unitDozen": "ডজন",
+  "@unitDozen": {},
+  "unitPacket": "প্যাকেট",
+  "@unitPacket": {},
+  "unitCylinder": "সিলিন্ডার",
+  "@unitCylinder": {},
+  "bazarFundingFund": "পরিবারের তহবিল",
+  "@bazarFundingFund": {},
+  "bazarFundingMember": "সদস্য পরিশোধিত",
+  "@bazarFundingMember": {},
+  "bazarAdvancePending": "অপেক্ষমাণ",
+  "@bazarAdvancePending": {},
+  "bazarAdvancePartial": "আংশিক সমন্বিত",
+  "@bazarAdvancePartial": {},
+  "bazarAdvanceSettled": "সমন্বিত",
+  "@bazarAdvanceSettled": {},
+  "bazarAdvanceVoided": "বাতিল",
+  "@bazarAdvanceVoided": {},
+  "bazarErrRequired": "এই ঘরটি পূরণ করুন।",
+  "@bazarErrRequired": {},
+  "bazarErrTooLong": "লেখাটি অনেক বড় হয়ে গেছে।",
+  "@bazarErrTooLong": {},
+  "bazarErrInvalidAmount": "সঠিক অঙ্ক লিখুন।",
+  "@bazarErrInvalidAmount": {},
+  "bazarErrAmountNotPositive": "অঙ্কটি শূন্যের বেশি হতে হবে।",
+  "@bazarErrAmountNotPositive": {},
+  "bazarErrFutureDate": "তারিখ ভবিষ্যতের হতে পারে না।",
+  "@bazarErrFutureDate": {},
+  "bazarErrQtyUnitRequired": "পরিমাণ ও একক দুটোই দিন।",
+  "@bazarErrQtyUnitRequired": {},
+  "bazarErrMemberRequired": "সদস্যটি বেছে নিন।",
+  "@bazarErrMemberRequired": {},
+  "bazarErrCategoryRequired": "ক্যাটাগরি বেছে নিন।",
+  "@bazarErrCategoryRequired": {},
+  "bazarErrItemNameRequired": "আইটেমের নাম লিখুন।",
+  "@bazarErrItemNameRequired": {},
+  "bazarErrTooManyLines": "সারি অনেক বেশি; কিছু সরিয়ে দিন।",
+  "@bazarErrTooManyLines": {},
+  "bazarErrInvalidMonth": "সঠিক মাস বেছে নিন।",
+  "@bazarErrInvalidMonth": {},
+  "bazarErrInvalidRange": "শেষ তারিখ শুরুর তারিখের পরে হতে হবে।",
+  "@bazarErrInvalidRange": {},
+  "bazarErrNegative": "অঙ্ক ঋণাত্মক হতে পারে না।",
+  "@bazarErrNegative": {},
+  "bazarErrTooManyDecimals": "সর্বোচ্চ দুই দশমিক স্থান ব্যবহার করুন।",
+  "@bazarErrTooManyDecimals": {},
+  "bazarErrTooLarge": "অঙ্কটি অনেক বড়।",
+  "@bazarErrTooLarge": {},
+  "bazarErrMonthLocked": "এই মাস বন্ধ আছে। খুলতে অ্যাডমিনকে বলুন।",
+  "@bazarErrMonthLocked": {},
+  "bazarErrAdvanceSettled": "এই অগ্রিম আংশিক বা সম্পূর্ণ সমন্বয় হয়ে গেছে।",
+  "@bazarErrAdvanceSettled": {},
+  "bazarErrOverpayment": "বাকি থাকা অঙ্কের চেয়ে বেশি দেওয়া হয়েছে।",
+  "@bazarErrOverpayment": {},
+  "bazarErrAlreadyClosed": "এই মাস ইতিমধ্যে বন্ধ আছে।",
+  "@bazarErrAlreadyClosed": {},
+  "bazarErrNotClosed": "এই মাস বন্ধ নয়।",
+  "@bazarErrNotClosed": {},
+  "bazarErrReopenNoteRequired": "মাসটি কেন খুলছেন তা লিখুন।",
+  "@bazarErrReopenNoteRequired": {},
+  "bazarErrCatalogNotEmpty": "তালিকায় এখনো আইটেম আছে; আগে সেগুলো আর্কাইভ করুন।",
+  "@bazarErrCatalogNotEmpty": {},
+  "bazarErrDuplicateItem": "ঠিক এই ধরনের খরচ সবেমাত্র যোগ হয়েছে। আবার সংরক্ষণের আগে দেখে নিন।",
+  "@bazarErrDuplicateItem": {},
+  "bazarErrImportAlreadyUndone": "এই ইমপোর্ট আগেই বাতিল হয়েছে।",
+  "@bazarErrImportAlreadyUndone": {},
+  "bazarErrImportHasLockedMonth": "ফাইলে বন্ধ মাসের সারি আছে।",
+  "@bazarErrImportHasLockedMonth": {},
+  "bazarErrConcurrentEdit": "আপনার আগেই কেউ এটি বদলেছেন। রিফ্রেশ করে আবার চেষ্টা করুন।",
+  "@bazarErrConcurrentEdit": {},
+  "bazarErrNotFound": "রেকর্ডটি আর নেই। রিফ্রেশ করে আবার চেষ্টা করুন।",
+  "@bazarErrNotFound": {},
+  "bazarErrNotAllowed": "শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন এটি করতে পারেন।",
+  "@bazarErrNotAllowed": {},
+  "bazarErrUnknown": "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+  "@bazarErrUnknown": {},
   "profileSetupTitle": "আপনার প্রোফাইল তৈরি করুন",
   "@profileSetupTitle": {},
   "profileSetupMessage": "পরিবারকে জানান আপনি কে।",
@@ -376,7 +478,7 @@
   "@memberReenable": {},
   "roleAdmin": "অ্যাডমিন",
   "@roleAdmin": {},
-  "roleModerator": "মডারেটর",
+  "roleModerator": "সংসার ব্যবস্থাপক",
   "@roleModerator": {},
   "roleMember": "সদস্য",
   "@roleMember": {},
@@ -720,6 +822,371 @@
   "@activityInvitationRevoked": {
     "placeholders": {
       "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCatalogSeeded": "{categories}টি ক্যাটাগরি ও {items}টি আইটেম দিয়ে বাজারের তালিকা চালু হয়েছে",
+  "@activityBazarCatalogSeeded": {
+    "placeholders": {
+      "categories": {
+        "type": "String"
+      },
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryCreated": "ক্যাটাগরি “{name}” যোগ করা হয়েছে",
+  "@activityBazarCategoryCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryUpdated": "ক্যাটাগরি “{name}” হালনাগাদ হয়েছে",
+  "@activityBazarCategoryUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryDeactivated": "ক্যাটাগরি “{name}” আর্কাইভ করা হয়েছে",
+  "@activityBazarCategoryDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemCreated": "আইটেম “{name}” যোগ করা হয়েছে",
+  "@activityBazarItemCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemUpdated": "আইটেম “{name}” হালনাগাদ হয়েছে",
+  "@activityBazarItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemDeactivated": "আইটেম “{name}” আর্কাইভ করা হয়েছে",
+  "@activityBazarItemDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseCreated": "{item} কেনা হয়েছে {amount} দিয়ে ({funding})",
+  "@activityBazarExpenseCreated": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "funding": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseUpdated": "{item} সম্পাদনা করা হয়েছে ({fields})",
+  "@activityBazarExpenseUpdated": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseDeleted": "{item} মুছে ফেলা হয়েছে ({amount})",
+  "@activityBazarExpenseDeleted": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseRestored": "{item} ফিরিয়ে আনা হয়েছে ({amount})",
+  "@activityBazarExpenseRestored": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarTripCreated": "{lines}টি আইটেমের বাজার যাত্রা {amount} দিয়ে সংরক্ষণ হয়েছে",
+  "@activityBazarTripCreated": {
+    "placeholders": {
+      "lines": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarBudgetSaved": "{month}-এর বাজেট {amount} নির্ধারণ করা হয়েছে",
+  "@activityBazarBudgetSaved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarSettingsUpdated": "বাজারের সেটিংস হালনাগাদ হয়েছে",
+  "@activityBazarSettingsUpdated": {},
+  "activityBazarContributionPlanSet": "{month}-এ {member}-এর চাঁদা {amount} নির্ধারণ করা হয়েছে",
+  "@activityBazarContributionPlanSet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRecorded": "{month}-এ {member}-এর {amount} চাঁদা রেকর্ড করা হয়েছে",
+  "@activityBazarContributionRecorded": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionVoided": "{month}-এ {member}-এর {amount} চাঁদা বাতিল করা হয়েছে",
+  "@activityBazarContributionVoided": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequested": "{month}-এর জন্য {member} {amount} দিতে চেয়েছেন",
+  "@activityBazarContributionRequested": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequestEdited": "{month}-এর জন্য {member} {amount} দেওয়ার অনুরোধ সম্পাদনা করেছেন",
+  "@activityBazarContributionRequestEdited": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequestCancelled": "{month}-এর জন্য {member} {amount} দেওয়ার অনুরোধ প্রত্যাহার করেছেন",
+  "@activityBazarContributionRequestCancelled": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionApproved": "{month}-এ {member}-এর {amount} চাঁদা অনুমোদিত হয়েছে",
+  "@activityBazarContributionApproved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRejected": "{month}-এ {member}-এর {amount} চাঁদা গ্রহণ করা হয়নি ({reason})",
+  "@activityBazarContributionRejected": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeRequested": "{month}-এর জন্য {member} {old} থেকে {amount}-এ চাঁদা বদলাতে বলেছেন",
+  "@activityBazarContributionChangeRequested": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeApproved": "{month}-এ {member}-এর চাঁদা {old} থেকে {amount}-এ বদলের অনুমোদন হয়েছে",
+  "@activityBazarContributionChangeApproved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeRejected": "{month}-এ {member}-এর চাঁদা {old} থেকে {amount}-এ বদলের অনুমোদন হয়নি",
+  "@activityBazarContributionChangeRejected": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarOpeningBalanceSet": "{month}-এর প্রারম্ভিক ব্যালেন্স {amount}",
+  "@activityBazarOpeningBalanceSet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarAdvanceSettled": "{member}-এর অগ্রিম {amount} সমন্বয় হয়েছে ({status})",
+  "@activityBazarAdvanceSettled": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarMonthClosed": "{month} বন্ধ করা হয়েছে, ব্যালেন্স {balance}",
+  "@activityBazarMonthClosed": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarMonthReopened": "{month} আবার খোলা হয়েছে ({note})",
+  "@activityBazarMonthReopened": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarImportCompleted": "ইমপোর্ট শেষ: {rows}টি সারি, {amount}",
+  "@activityBazarImportCompleted": {
+    "placeholders": {
+      "rows": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarImportUndone": "ইমপোর্ট বাতিল: {rows}টি সারি, {amount}",
+  "@activityBazarImportUndone": {
+    "placeholders": {
+      "rows": {
+        "type": "String"
+      },
+      "amount": {
         "type": "String"
       }
     }

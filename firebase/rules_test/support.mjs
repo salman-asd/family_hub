@@ -162,6 +162,170 @@ export const permissionsDoc = (uid, extra = {}) =>
     ...extra,
   });
 
+/** `BazarSettingsMappers.toMap` shape (P2-07). */
+export const bazarSettingsDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    weekStartDay: 6,
+    defaultMonthlyContributionPaisa: 0,
+    contributionDueDay: 5,
+    alertThresholds: [80, 100],
+    fundStartMonth: '2026-01',
+    ...extra,
+  });
+
+/** `CatalogMappers.categoryToMap` shape (P2-05). */
+export const categoryDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    nameBn: 'মুদি',
+    nameEn: 'Staples',
+    colorIndex: 2,
+    emoji: '🌾',
+    imageData: null,
+    sortOrder: 0,
+    active: true,
+    builtIn: false,
+    seedKey: null,
+    ...extra,
+  });
+
+/** `CatalogMappers.itemToMap` shape; money is integer paisa (P2-05). */
+export const itemDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    nameBn: 'চাল',
+    nameEn: 'Rice',
+    categoryId: 'cat_fixStaples',
+    defaultUnit: 'kg',
+    aliases: ['rice'],
+    emoji: '🍚',
+    imageData: null,
+    useCount: 0,
+    lastPricePaisa: 12500,
+    lastUnitPricePaisa: 6500,
+    lastUsedAt: nowTs(),
+    active: true,
+    builtIn: false,
+    seedKey: null,
+    ...extra,
+  });
+
+/** `CatalogMappers.itemUsageMap` shape: only the six allowed fields. */
+export const itemUsage = (
+  uid,
+  { useCount, lastPricePaisa = 13000, lastUnitPricePaisa = 6500, ...extra },
+) => ({
+  useCount,
+  lastPricePaisa,
+  lastUnitPricePaisa,
+  lastUsedAt: nowTs(),
+  updatedAt: nowTs(),
+  updatedBy: uid,
+  ...extra,
+});
+
+/** `ExpenseMappers.expenseToMap` shape (P2-10). */
+export const expenseDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    dateKey: '2026-10-18',
+    monthKey: '2026-10',
+    occurredAt: nowTs(),
+    itemId: null,
+    itemName: 'Rice',
+    categoryId: 'cat_fixStaples',
+    qtyMilli: 1000,
+    unit: 'kg',
+    unitPricePaisa: 12000,
+    totalPaisa: 12000,
+    fundingSource: 'fund',
+    paidByMemberId: null,
+    reimbursable: false,
+    purchaserId: uid,
+    tripId: null,
+    shop: 'Bazar',
+    note: null,
+    source: 'manual',
+    importBatchId: null,
+    ...extra,
+  });
+
+/** `ExpenseMappers.revisionToMap` shape (P2-10). */
+export const revisionDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    before: { itemName: 'Rice' },
+    changedFields: ['itemName'],
+    reason: null,
+    ...extra,
+  });
+
+/** `ExpenseMappers.tripToMap` shape (P2-10). */
+export const tripDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    dateKey: '2026-10-18',
+    monthKey: '2026-10',
+    shop: 'Bazar',
+    fundingSource: 'fund',
+    paidByMemberId: null,
+    reimbursable: false,
+    lineCount: 2,
+    totalPaisa: 24000,
+    note: null,
+    ...extra,
+  });
+
+/** `FundMappers.fundTxToMap` shape (P2-10). */
+export const fundTxDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    type: 'expense',
+    amountPaisa: -12000,
+    dateKey: '2026-10-18',
+    monthKey: '2026-10',
+    refType: 'expense',
+    refId: 'exp_fix1',
+    note: null,
+    ...extra,
+  });
+
+/** `AdvanceMappers.advanceToMap` shape (P2-10). */
+export const advanceDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    expenseId: 'exp_adv1',
+    memberId: uid,
+    amountPaisa: 12000,
+    settledPaisa: 0,
+    status: 'pending',
+    dateKey: '2026-10-18',
+    monthKey: '2026-10',
+    ...extra,
+  });
+
+/** `AdvanceMappers.settlementToMap` shape (P2-10). */
+export const settlementDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    advanceId: 'exp_adv2',
+    memberId: 'fixMember',
+    amountPaisa: 3000,
+    dateKey: '2026-10-18',
+    monthKey: '2026-10',
+    method: 'cash',
+    note: null,
+    fundTxId: 'stl_fixS1',
+    ...extra,
+  });
+
+/** `MonthClosingMappers.closingToMap` shape (P2-10). */
+export const closingDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    monthKey: '2026-10',
+    status: 'closed',
+    closedAt: nowTs(),
+    closedBy: uid,
+    closingBalancePaisa: 5000,
+    reopenedAt: null,
+    reopenedBy: null,
+    reopenNote: null,
+    reopenCount: 0,
+    ...extra,
+  });
+
 /** Seeds the world the tests assume, with rules switched off. */
 export const seedWorld = (testEnv) =>
   testEnv.withSecurityRulesDisabled(async (ctx) => {

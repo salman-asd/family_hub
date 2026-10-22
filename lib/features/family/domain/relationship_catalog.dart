@@ -1,67 +1,11 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/features/family/domain/relationship_defaults.dart';
+import 'package:family_hub/features/family/domain/relationship_entry.dart';
 import 'package:family_hub/features/family/domain/relationship_id.dart';
 
+export 'package:family_hub/features/family/domain/relationship_entry.dart';
 export 'package:family_hub/features/family/domain/relationship_id.dart';
-
-/// One selectable relationship.
-class RelationshipEntry {
-  const RelationshipEntry({
-    required this.id,
-    required this.labelBn,
-    required this.labelEn,
-    this.spouseRelevant = false,
-    this.builtIn = false,
-    this.active = true,
-  });
-
-  final RelationshipId id;
-  final String labelBn;
-  final String labelEn;
-
-  /// Whether the spouse picker makes sense for this relationship.
-  final bool spouseRelevant;
-
-  /// Built-in entries can be neither renamed nor disabled nor removed.
-  final bool builtIn;
-  final bool active;
-
-  RelationshipEntry copyWith({
-    String? labelBn,
-    String? labelEn,
-    bool? spouseRelevant,
-    bool? active,
-  }) =>
-      RelationshipEntry(
-        id: id,
-        labelBn: labelBn ?? this.labelBn,
-        labelEn: labelEn ?? this.labelEn,
-        spouseRelevant: spouseRelevant ?? this.spouseRelevant,
-        builtIn: builtIn,
-        active: active ?? this.active,
-      );
-
-  /// Label in [languageCode] (`bn` or `en`), falling back to the other one.
-  String label(String languageCode) {
-    final preferred = languageCode == 'bn' ? labelBn : labelEn;
-    final fallback = languageCode == 'bn' ? labelEn : labelBn;
-    return preferred.trim().isNotEmpty ? preferred : fallback;
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      other is RelationshipEntry &&
-      other.id == id &&
-      other.labelBn == labelBn &&
-      other.labelEn == labelEn &&
-      other.spouseRelevant == spouseRelevant &&
-      other.builtIn == builtIn &&
-      other.active == active;
-
-  @override
-  int get hashCode =>
-      Object.hash(id, labelBn, labelEn, spouseRelevant, builtIn, active);
-}
 
 /// The family's editable list of relationships (`settings/relationships`).
 ///
@@ -75,87 +19,19 @@ class RelationshipCatalog {
   static const int maxEntries = 40;
   static const int maxLabelLength = 40;
 
-  /// The ten built-ins of roadmap 2.3, in display order.
+  /// The ten built-ins, in display order.
   static const RelationshipCatalog defaults = RelationshipCatalog(
-    <RelationshipEntry>[
-      RelationshipEntry(
-        id: RelationshipId.father,
-        labelBn: 'বাবা',
-        labelEn: 'Father',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.mother,
-        labelBn: 'মা',
-        labelEn: 'Mother',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.son,
-        labelBn: 'ছেলে',
-        labelEn: 'Son',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.daughter,
-        labelBn: 'মেয়ে',
-        labelEn: 'Daughter',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.husband,
-        labelBn: 'স্বামী',
-        labelEn: 'Husband',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.wife,
-        labelBn: 'স্ত্রী',
-        labelEn: 'Wife',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.housewife,
-        labelBn: 'গৃহিণী',
-        labelEn: 'Housewife',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.daughterInLaw,
-        labelBn: 'পুত্রবধূ',
-        labelEn: 'Daughter-in-law',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.sonInLaw,
-        labelBn: 'জামাই',
-        labelEn: 'Son-in-law',
-        spouseRelevant: true,
-        builtIn: true,
-      ),
-      RelationshipEntry(
-        id: RelationshipId.other,
-        labelBn: 'অন্যান্য',
-        labelEn: 'Other',
-        builtIn: true,
-      ),
-    ],
+    relationshipDefaults,
   );
 
   final List<RelationshipEntry> entries;
 
   /// Entries a member may pick today, in order.  A disabled entry stays in
   /// [entries] so existing members keep their label.
-  List<RelationshipEntry> get selectable =>
-      <RelationshipEntry>[for (final e in entries) if (e.active) e];
+  List<RelationshipEntry> get selectable => <RelationshipEntry>[
+    for (final e in entries)
+      if (e.active) e,
+  ];
 
   /// The entry for [id], or `null` when it is not in the catalog.
   RelationshipEntry? find(RelationshipId id) {
@@ -167,7 +43,10 @@ class RelationshipCatalog {
 
   /// Label for [id] in [languageCode]; an unknown id renders as "Other".
   String labelOf(RelationshipId id, String languageCode) =>
-      (find(id) ?? find(RelationshipId.other) ?? defaults.find(id) ?? defaults.entries.last)
+      (find(id) ??
+              find(RelationshipId.other) ??
+              defaults.find(id) ??
+              defaults.entries.last)
           .label(languageCode);
 
   /// Whether the spouse picker applies to [id].
@@ -230,7 +109,9 @@ class RelationshipCatalog {
   }) {
     final current = find(id);
     if (current == null) {
-      return const Failure<RelationshipCatalog>(NotFound(entity: 'relationship'));
+      return const Failure<RelationshipCatalog>(
+        NotFound(entity: 'relationship'),
+      );
     }
     if (current.builtIn) {
       return const Failure<RelationshipCatalog>(Conflict(code: 'built_in'));
@@ -253,10 +134,15 @@ class RelationshipCatalog {
   }
 
   /// Enables or disables a custom entry.  Built-ins stay enabled.
-  Result<RelationshipCatalog> setActive(RelationshipId id, {required bool active}) {
+  Result<RelationshipCatalog> setActive(
+    RelationshipId id, {
+    required bool active,
+  }) {
     final current = find(id);
     if (current == null) {
-      return const Failure<RelationshipCatalog>(NotFound(entity: 'relationship'));
+      return const Failure<RelationshipCatalog>(
+        NotFound(entity: 'relationship'),
+      );
     }
     if (current.builtIn) {
       return const Failure<RelationshipCatalog>(Conflict(code: 'built_in'));
@@ -267,10 +153,8 @@ class RelationshipCatalog {
   }
 
   RelationshipCatalog _replace(RelationshipEntry next) => RelationshipCatalog(
-        <RelationshipEntry>[
-          for (final e in entries) e.id == next.id ? next : e,
-        ],
-      );
+    <RelationshipEntry>[for (final e in entries) e.id == next.id ? next : e],
+  );
 
   static AppFailure? _checkLabels(String bn, String en) {
     if (bn.isEmpty && en.isEmpty) {
@@ -289,7 +173,10 @@ class RelationshipCatalog {
   @override
   int get hashCode => Object.hashAll(entries);
 
-  static bool _listEquals(List<RelationshipEntry> a, List<RelationshipEntry> b) {
+  static bool _listEquals(
+    List<RelationshipEntry> a,
+    List<RelationshipEntry> b,
+  ) {
     if (a.length != b.length) return false;
     for (var i = 0; i < a.length; i++) {
       if (a[i] != b[i]) return false;

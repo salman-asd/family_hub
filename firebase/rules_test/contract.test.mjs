@@ -21,22 +21,29 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { Timestamp, doc, serverTimestamp, setDoc, writeBatch } from 'firebase/firestore';
+import { Timestamp, doc, serverTimestamp, setDoc, writeBatch, increment } from 'firebase/firestore';
 import { after, before, describe, it } from 'mocha';
 
 import {
   EMULATOR,
   PROJECT_ID,
   asUser,
+  categoryDoc,
+  expenseDoc,
   familyDoc,
   inviteCodeDoc,
+  itemDoc,
   memberDoc,
+  nowTs,
 } from './support.mjs';
 
 const ADMIN = 'fixAdmin';
 const JOINER = 'fixJoiner';
+const MEMBER = 'fixMember';
 const FAMILY = 'fixFam';
 const CODE = 'ABCD2345';
+const CATEGORY = 'cat_fixStaples';
+const ITEM = 'item_fixRice';
 
 const [host, port] = EMULATOR.split(':');
 const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
@@ -47,6 +54,7 @@ const rehydrate = (value) => {
   if (value && typeof value === 'object') {
     if (value.__ts !== undefined) return Timestamp.fromDate(new Date(value.__ts));
     if (value.__serverTime === true) return serverTimestamp();
+    if (value.__increment !== undefined) return increment(value.__increment);
     const out = {};
     for (const [k, v] of Object.entries(value)) out[k] = rehydrate(v);
     return out;
@@ -57,6 +65,7 @@ const rehydrate = (value) => {
 /** Prerequisite world for each scenario, seeded with the rules switched off. */
 const seeders = {
   create_family: async () => {},
+  create_family_catalog: async () => {},
   profile: async () => {},
   join: async (db) => {
     await setDoc(doc(db, `families/${FAMILY}`), familyDoc(ADMIN));
@@ -103,6 +112,98 @@ const seeders = {
       inviteCodeDoc(ADMIN, FAMILY, CODE),
     );
   },
+  category: async (db) => {
+    await seedFamilyWithAdmin(db);
+  },
+  item: async (db) => {
+    await seedFamilyWithAdmin(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/bazarCategories/${CATEGORY}`),
+      categoryDoc(ADMIN, { builtIn: true, seedKey: 'staples' }),
+    );
+  },
+  settings_bazar: async (db) => {
+    await seedFamilyWithAdmin(db);
+  },
+  item_usage: async (db) => {
+    await seedFamilyWithAdmin(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/members/${MEMBER}`),
+      memberDoc(MEMBER, 'member', 'active'),
+    );
+    await setDoc(
+      doc(db, `families/${FAMILY}/bazarCategories/${CATEGORY}`),
+      categoryDoc(ADMIN, { builtIn: true, seedKey: 'staples' }),
+    );
+    await setDoc(
+      doc(db, `families/${FAMILY}/bazarItems/${ITEM}`),
+      itemDoc(ADMIN, { useCount: 2, builtIn: true, seedKey: 'rice' }),
+    );
+  },
+  expense_fund: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  expense_member_advance: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  expense_personal: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  expense_edit: async (db) => {
+    await seedFamilyWithMember(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/expenses/exp_fix4`),
+      expenseDoc(MEMBER, { totalPaisa: 12000 }),
+    );
+  },
+  expense_soft_delete: async (db) => {
+    await seedFamilyWithMember(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/expenses/exp_fix5`),
+      expenseDoc(MEMBER),
+    );
+  },
+  expense_restore: async (db) => {
+    await seedFamilyWithMember(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/expenses/exp_fix6`),
+      expenseDoc(MEMBER, { deletedAt: nowTs(), deletedBy: MEMBER }),
+    );
+  },
+  revision: async (db) => {
+    await seedFamilyWithMember(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/expenses/exp_fix7`),
+      expenseDoc(MEMBER),
+    );
+  },
+  trip: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  fundtx_expense: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  fundtx_contribution: async (db) => {
+    await seedFamilyWithAdmin(db);
+  },
+  fundtx_reimbursement: async (db) => {
+    await seedFamilyWithAdmin(db);
+  },
+  fundtx_opening: async (db) => {
+    await seedFamilyWithAdmin(db);
+  },
+  fundtx_adjustment: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  advance: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  settlement: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  month_closing: async (db) => {
+    await seedFamilyWithAdmin(db);
+  },
 };
 
 const seedFamilyWithAdmin = async (db) => {
@@ -110,6 +211,14 @@ const seedFamilyWithAdmin = async (db) => {
   await setDoc(
     doc(db, `families/${FAMILY}/members/${ADMIN}`),
     memberDoc(ADMIN, 'admin', 'active'),
+  );
+};
+
+const seedFamilyWithMember = async (db) => {
+  await seedFamilyWithAdmin(db);
+  await setDoc(
+    doc(db, `families/${FAMILY}/members/${MEMBER}`),
+    memberDoc(MEMBER, 'member', 'active'),
   );
 };
 

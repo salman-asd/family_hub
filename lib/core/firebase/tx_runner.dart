@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_hub/core/firebase/server_time.dart';
 import 'package:family_hub/core/firebase/sync_status.dart';
@@ -88,8 +89,8 @@ class FirestoreTxRunner implements TxRunner {
   FirestoreTxRunner({
     FirebaseFirestore? firestore,
     PendingWriteCounter? pendingWrites,
-  })  : _firestore = firestore ?? FirebaseFirestore.instance,
-        pendingWrites = pendingWrites ?? PendingWriteCounter();
+  }) : _firestore = firestore ?? FirebaseFirestore.instance,
+       pendingWrites = pendingWrites ?? PendingWriteCounter();
 
   final FirebaseFirestore _firestore;
 

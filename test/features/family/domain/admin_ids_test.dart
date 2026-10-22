@@ -25,11 +25,8 @@ void main() {
       });
   });
 
-  LeaveFamily leave() => LeaveFamily(
-        families: f.backend,
-        clock: f.clock,
-        newId: f.ids.call,
-      );
+  LeaveFamily leave() =>
+      LeaveFamily(families: f.backend, clock: f.clock, newId: f.ids.call);
 
   test('the seed mirrors the active admins', () {
     expect(f.backend.adminIds['fam'], ['a1', 'a2']);
@@ -49,8 +46,9 @@ void main() {
   });
 
   test('the only admin cannot leave and nothing is written', () async {
-    f.backend.members['fam']!['a2'] =
-        f.backend.members['fam']!['a2']!.copyWith(role: MemberRole.member);
+    f.backend.members['fam']!['a2'] = f.backend.members['fam']!['a2']!.copyWith(
+      role: MemberRole.member,
+    );
     final r = await leave()(actorUid: 'a1', familyId: 'fam');
     expect(r.failureOrNull, const Conflict(code: 'last_admin'));
     expect(f.backend.writes, 0);
@@ -77,21 +75,24 @@ void main() {
     expect(f.backend.adminIds['fam']!.toSet(), {'a2', 'kid'});
   });
 
-  test('a role change that keeps the admin set leaves adminIds alone', () async {
-    f.backend.adminIds['fam'] = ['sentinel'];
-    final r = await ChangeRole(f.runner)(
-      actorUid: 'a1',
-      familyId: 'fam',
-      targetUid: 'kid',
-      newRole: MemberRole.moderator,
-    );
-    expect(r.isSuccess, isTrue);
-    expect(f.backend.adminIds['fam'], ['sentinel']);
-  });
+  test(
+    'a role change that keeps the admin set leaves adminIds alone',
+    () async {
+      f.backend.adminIds['fam'] = ['sentinel'];
+      final r = await ChangeRole(f.runner)(
+        actorUid: 'a1',
+        familyId: 'fam',
+        targetUid: 'kid',
+        newRole: MemberRole.moderator,
+      );
+      expect(r.isSuccess, isTrue);
+      expect(f.backend.adminIds['fam'], ['sentinel']);
+    },
+  );
 
   test('a fourth admin is refused (decision D4)', () async {
-    f.backend.members['fam']!['mod'] =
-        f.backend.members['fam']!['mod']!.copyWith(role: MemberRole.admin);
+    f.backend.members['fam']!['mod'] = f.backend.members['fam']!['mod']!
+        .copyWith(role: MemberRole.admin);
     final r = await ChangeRole(f.runner)(
       actorUid: 'a1',
       familyId: 'fam',

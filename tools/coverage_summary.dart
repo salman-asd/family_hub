@@ -18,7 +18,9 @@ String _group(String path) {
   final i = parts.indexOf('lib');
   if (i < 0 || i + 1 >= parts.length) return 'other';
   final top = parts[i + 1];
-  if (top == 'features' && i + 2 < parts.length) return 'features/${parts[i + 2]}';
+  if (top == 'features' && i + 2 < parts.length) {
+    return 'features/${parts[i + 2]}';
+  }
   return top;
 }
 
@@ -32,7 +34,9 @@ bool _mustBeCovered(String path) {
 void main(List<String> args) {
   final file = File(args.isEmpty ? 'coverage/lcov.info' : args.first);
   if (!file.existsSync()) {
-    stderr.writeln('No coverage file at ${file.path}: run flutter test --coverage');
+    stderr.writeln(
+      'No coverage file at ${file.path}: run flutter test --coverage',
+    );
     exit(2);
   }
   final groups = <String, _Cov>{};
@@ -49,7 +53,9 @@ void main(List<String> args) {
     }
   }
   for (final e in files.entries) {
-    if (e.key.contains('/generated/') || e.key.contains(r'\generated\')) continue;
+    if (e.key.contains('/generated/') || e.key.contains(r'\generated\')) {
+      continue;
+    }
     final g = groups.putIfAbsent(_group(e.key), _Cov.new);
     g.found += e.value.found;
     g.hit += e.value.hit;
@@ -60,18 +66,21 @@ void main(List<String> args) {
     ..writeln('| --- | ---: | ---: | ---: |');
   for (final n in names) {
     final c = groups[n]!;
-    stdout.writeln('| $n | ${c.found} | ${c.hit} | ${c.percent.toStringAsFixed(1)} |');
+    stdout.writeln(
+      '| $n | ${c.found} | ${c.hit} | ${c.percent.toStringAsFixed(1)} |',
+    );
   }
   stdout
     ..writeln()
     ..writeln('Files under 70% in core/ or features/*/domain/:')
     ..writeln();
   var any = false;
-  final low = files.entries
-      .where((e) => _mustBeCovered(e.key) && !e.key.contains('generated'))
-      .where((e) => e.value.percent < 70)
-      .toList()
-    ..sort((a, b) => a.value.percent.compareTo(b.value.percent));
+  final low =
+      files.entries
+          .where((e) => _mustBeCovered(e.key) && !e.key.contains('generated'))
+          .where((e) => e.value.percent < 70)
+          .toList()
+        ..sort((a, b) => a.value.percent.compareTo(b.value.percent));
   for (final e in low) {
     any = true;
     stdout.writeln(

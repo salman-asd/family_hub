@@ -89,16 +89,16 @@ class _SyncImageProvider extends ImageProvider<_SyncImageProvider> {
   ImageStreamCompleter loadImage(
     _SyncImageProvider key,
     ImageDecoderCallback decode,
-  ) =>
-      OneFrameImageStreamCompleter(
-        SynchronousFuture<ImageInfo>(ImageInfo(image: image)),
-      );
+  ) => OneFrameImageStreamCompleter(
+    SynchronousFuture<ImageInfo>(ImageInfo(image: image)),
+  );
 }
 
 void main() {
   group('LoadingView', () {
-    testWidgets('is announced once, with the localized loading label',
-        (tester) async {
+    testWidgets('is announced once, with the localized loading label', (
+      tester,
+    ) async {
       final handle = tester.ensureSemantics();
       final l10n = await AppLocalizations.delegate.load(const Locale('bn'));
 
@@ -118,8 +118,9 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('draws one bar per line, plus an avatar when asked',
-        (tester) async {
+    testWidgets('draws one bar per line, plus an avatar when asked', (
+      tester,
+    ) async {
       await _pump(tester, const LoadingView(lines: 5), reduceMotion: true);
       expect(_skeletons(tester), 5);
 
@@ -131,8 +132,9 @@ void main() {
       expect(_skeletons(tester), 3);
     });
 
-    testWidgets('pulses when motion is allowed, and holds one frame when not',
-        (tester) async {
+    testWidgets('pulses when motion is allowed, and holds one frame when not', (
+      tester,
+    ) async {
       final opacity = find.descendant(
         of: find.byType(LoadingView),
         matching: find.byType(Opacity),
@@ -180,10 +182,7 @@ void main() {
 
     testWidgets('retry calls back exactly once', (tester) async {
       var taps = 0;
-      await _pump(
-        tester,
-        ErrorView(message: 'boom', onRetry: () => taps++),
-      );
+      await _pump(tester, ErrorView(message: 'boom', onRetry: () => taps++));
 
       await tester.tap(find.byType(FilledButton));
       await tester.pump();
@@ -246,16 +245,14 @@ void main() {
     });
 
     testWidgets('draws a centre child', (tester) async {
-      await _pump(
-        tester,
-        const ProgressRing(value: 0.5, center: Text('৫০')),
-      );
+      await _pump(tester, const ProgressRing(value: 0.5, center: Text('৫০')));
 
       expect(find.text('৫০'), findsOneWidget);
     });
 
-    testWidgets('a semantic label replaces the platform announcement',
-        (tester) async {
+    testWidgets('a semantic label replaces the platform announcement', (
+      tester,
+    ) async {
       final handle = tester.ensureSemantics();
 
       await _pump(
@@ -289,15 +286,17 @@ void main() {
       );
     });
 
-    testWidgets('shows the first grapheme cluster of a Bangla name',
-        (tester) async {
+    testWidgets('shows the first grapheme cluster of a Bangla name', (
+      tester,
+    ) async {
       await _pump(tester, const AppAvatar(id: 'usr_1', name: 'করিম'));
 
       expect(find.text('ক'), findsOneWidget);
     });
 
-    testWidgets('a failed image load keeps the initials and reports nothing',
-        (tester) async {
+    testWidgets('a failed image load keeps the initials and reports nothing', (
+      tester,
+    ) async {
       await _pump(
         tester,
         const AppAvatar(
@@ -334,8 +333,9 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('is announced with its label when one is given',
-        (tester) async {
+    testWidgets('is announced with its label when one is given', (
+      tester,
+    ) async {
       final handle = tester.ensureSemantics();
 
       await _pump(
@@ -349,8 +349,9 @@ void main() {
   });
 
   group('ItemThumb', () {
-    testWidgets('falls back to the item initial when no image loads',
-        (tester) async {
+    testWidgets('falls back to the item initial when no image loads', (
+      tester,
+    ) async {
       await _pump(
         tester,
         const ItemThumb(
@@ -449,10 +450,7 @@ void main() {
 
       await _pump(
         tester,
-        const MoneyText(
-          value: Money.paisa(125050),
-          semanticsLabel: 'Total',
-        ),
+        const MoneyText(value: Money.paisa(125050), semanticsLabel: 'Total'),
       );
 
       expect(find.bySemanticsLabel('Total'), findsOneWidget);

@@ -3,7 +3,6 @@ import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/features/family/domain/family_seeder.dart';
-import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
@@ -44,7 +43,10 @@ abstract interface class FamilyRepository {
 
   /// Marks the invitation revoked on BOTH `inviteCodes/{code}` and the family
   /// mirror, plus the event, in one batch.
-  Future<Result<void>> revokeInvitation(Invitation invitation, AuditEvent event);
+  Future<Result<void>> revokeInvitation(
+    Invitation invitation,
+    AuditEvent event,
+  );
 
   Future<Result<Member?>> getMember(String familyId, String uid);
 

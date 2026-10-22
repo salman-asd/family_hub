@@ -270,6 +270,108 @@
   "@moduleComingSoonTitle": {},
   "moduleComingSoonMessage": "This section is still being built.",
   "@moduleComingSoonMessage": {},
+  "bazarHomeEmptyTitle": "Bazar is empty",
+  "@bazarHomeEmptyTitle": {},
+  "bazarHomeEmptyMessage": "Expenses, shopping lists and accounts will be added here step by step.",
+  "@bazarHomeEmptyMessage": {},
+  "bazarCatalogSetupTitle": "Set up the starter catalog",
+  "@bazarCatalogSetupTitle": {},
+  "bazarCatalogSetupMessage": "Add 11 categories and 54 common items to get started. You can edit, add or hide them later.",
+  "@bazarCatalogSetupMessage": {},
+  "bazarCatalogSetupAction": "Set up catalog",
+  "@bazarCatalogSetupAction": {},
+  "bazarCatalogSetupBusy": "Setting up the catalog…",
+  "@bazarCatalogSetupBusy": {},
+  "bazarCatalogAskAdminTitle": "Catalog not set up",
+  "@bazarCatalogAskAdminTitle": {},
+  "bazarCatalogAskAdminMessage": "Ask an admin to set up the catalog.",
+  "@bazarCatalogAskAdminMessage": {},
+  "bazarSettingsTitle": "Bazar settings",
+  "@bazarSettingsTitle": {},
+  "unitKg": "kg",
+  "@unitKg": {},
+  "unitG": "g",
+  "@unitG": {},
+  "unitLitre": "litre",
+  "@unitLitre": {},
+  "unitPiece": "pcs",
+  "@unitPiece": {},
+  "unitDozen": "dozen",
+  "@unitDozen": {},
+  "unitPacket": "packet",
+  "@unitPacket": {},
+  "unitCylinder": "cylinder",
+  "@unitCylinder": {},
+  "bazarFundingFund": "family fund",
+  "@bazarFundingFund": {},
+  "bazarFundingMember": "member paid",
+  "@bazarFundingMember": {},
+  "bazarAdvancePending": "pending",
+  "@bazarAdvancePending": {},
+  "bazarAdvancePartial": "partly settled",
+  "@bazarAdvancePartial": {},
+  "bazarAdvanceSettled": "settled",
+  "@bazarAdvanceSettled": {},
+  "bazarAdvanceVoided": "voided",
+  "@bazarAdvanceVoided": {},
+  "bazarErrRequired": "Please fill in this field.",
+  "@bazarErrRequired": {},
+  "bazarErrTooLong": "This text is too long.",
+  "@bazarErrTooLong": {},
+  "bazarErrInvalidAmount": "Enter a valid amount.",
+  "@bazarErrInvalidAmount": {},
+  "bazarErrAmountNotPositive": "The amount must be more than zero.",
+  "@bazarErrAmountNotPositive": {},
+  "bazarErrFutureDate": "The date cannot be in the future.",
+  "@bazarErrFutureDate": {},
+  "bazarErrQtyUnitRequired": "Enter both a quantity and a unit.",
+  "@bazarErrQtyUnitRequired": {},
+  "bazarErrMemberRequired": "Choose the member this belongs to.",
+  "@bazarErrMemberRequired": {},
+  "bazarErrCategoryRequired": "Choose a category.",
+  "@bazarErrCategoryRequired": {},
+  "bazarErrItemNameRequired": "Enter the item name.",
+  "@bazarErrItemNameRequired": {},
+  "bazarErrTooManyLines": "There are too many lines; remove some.",
+  "@bazarErrTooManyLines": {},
+  "bazarErrInvalidMonth": "Choose a valid month.",
+  "@bazarErrInvalidMonth": {},
+  "bazarErrInvalidRange": "The end date must be after the start date.",
+  "@bazarErrInvalidRange": {},
+  "bazarErrNegative": "The amount cannot be below zero.",
+  "@bazarErrNegative": {},
+  "bazarErrTooManyDecimals": "Use at most two decimal places.",
+  "@bazarErrTooManyDecimals": {},
+  "bazarErrTooLarge": "That amount is too large.",
+  "@bazarErrTooLarge": {},
+  "bazarErrMonthLocked": "This month is closed. Ask an admin to reopen it.",
+  "@bazarErrMonthLocked": {},
+  "bazarErrAdvanceSettled": "This advance has already been partly or fully settled.",
+  "@bazarErrAdvanceSettled": {},
+  "bazarErrOverpayment": "The amount is more than what is still owed.",
+  "@bazarErrOverpayment": {},
+  "bazarErrAlreadyClosed": "This month is already closed.",
+  "@bazarErrAlreadyClosed": {},
+  "bazarErrNotClosed": "This month is not closed.",
+  "@bazarErrNotClosed": {},
+  "bazarErrReopenNoteRequired": "Write why the month is being reopened.",
+  "@bazarErrReopenNoteRequired": {},
+  "bazarErrCatalogNotEmpty": "The catalog still has items; archive them first.",
+  "@bazarErrCatalogNotEmpty": {},
+  "bazarErrDuplicateItem": "A similar expense was just added. Check it before saving again.",
+  "@bazarErrDuplicateItem": {},
+  "bazarErrImportAlreadyUndone": "This import has already been undone.",
+  "@bazarErrImportAlreadyUndone": {},
+  "bazarErrImportHasLockedMonth": "The file has rows in a closed month.",
+  "@bazarErrImportHasLockedMonth": {},
+  "bazarErrConcurrentEdit": "Somebody else changed this first. Reload and try again.",
+  "@bazarErrConcurrentEdit": {},
+  "bazarErrNotFound": "That record no longer exists. Refresh and try again.",
+  "@bazarErrNotFound": {},
+  "bazarErrNotAllowed": "Only the Household Manager or Admin can do this.",
+  "@bazarErrNotAllowed": {},
+  "bazarErrUnknown": "Something went wrong. Please try again.",
+  "@bazarErrUnknown": {},
   "profileSetupTitle": "Set up your profile",
   "@profileSetupTitle": {},
   "profileSetupMessage": "Tell your family who you are.",
@@ -376,7 +478,7 @@
   "@memberReenable": {},
   "roleAdmin": "Admin",
   "@roleAdmin": {},
-  "roleModerator": "Moderator",
+  "roleModerator": "Household Manager",
   "@roleModerator": {},
   "roleMember": "Member",
   "@roleMember": {},
@@ -720,6 +822,371 @@
   "@activityInvitationRevoked": {
     "placeholders": {
       "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCatalogSeeded": "Bazar catalog started with {categories} categories and {items} items",
+  "@activityBazarCatalogSeeded": {
+    "placeholders": {
+      "categories": {
+        "type": "String"
+      },
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryCreated": "Category “{name}” was added",
+  "@activityBazarCategoryCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryUpdated": "Category “{name}” was updated",
+  "@activityBazarCategoryUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryDeactivated": "Category “{name}” was archived",
+  "@activityBazarCategoryDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemCreated": "Item “{name}” was added",
+  "@activityBazarItemCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemUpdated": "Item “{name}” was updated",
+  "@activityBazarItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemDeactivated": "Item “{name}” was archived",
+  "@activityBazarItemDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseCreated": "Bought {item} for {amount} ({funding})",
+  "@activityBazarExpenseCreated": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "funding": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseUpdated": "{item} was edited ({fields})",
+  "@activityBazarExpenseUpdated": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseDeleted": "{item} was deleted ({amount})",
+  "@activityBazarExpenseDeleted": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseRestored": "{item} was restored ({amount})",
+  "@activityBazarExpenseRestored": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarTripCreated": "Bazar trip with {lines} items for {amount} was saved",
+  "@activityBazarTripCreated": {
+    "placeholders": {
+      "lines": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarBudgetSaved": "Budget for {month} set to {amount}",
+  "@activityBazarBudgetSaved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarSettingsUpdated": "Bazar settings were updated",
+  "@activityBazarSettingsUpdated": {},
+  "activityBazarContributionPlanSet": "{member}'s contribution for {month} set to {amount}",
+  "@activityBazarContributionPlanSet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRecorded": "{member}'s contribution of {amount} for {month} was recorded",
+  "@activityBazarContributionRecorded": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionVoided": "{member}'s contribution of {amount} for {month} was voided",
+  "@activityBazarContributionVoided": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequested": "{member} offered {amount} for {month}",
+  "@activityBazarContributionRequested": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequestEdited": "{member} edited the offer of {amount} for {month}",
+  "@activityBazarContributionRequestEdited": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequestCancelled": "{member} withdrew the offer of {amount} for {month}",
+  "@activityBazarContributionRequestCancelled": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionApproved": "{member}'s contribution of {amount} for {month} was approved",
+  "@activityBazarContributionApproved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRejected": "{member}'s contribution of {amount} for {month} was rejected ({reason})",
+  "@activityBazarContributionRejected": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeRequested": "{member} asked to change the contribution for {month} from {old} to {amount}",
+  "@activityBazarContributionChangeRequested": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeApproved": "{member}'s change for {month} from {old} to {amount} was approved",
+  "@activityBazarContributionChangeApproved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeRejected": "{member}'s change for {month} from {old} to {amount} was rejected",
+  "@activityBazarContributionChangeRejected": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarOpeningBalanceSet": "Opening balance for {month} is {amount}",
+  "@activityBazarOpeningBalanceSet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarAdvanceSettled": "{member}'s advance was settled by {amount} ({status})",
+  "@activityBazarAdvanceSettled": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarMonthClosed": "{month} was closed with a balance of {balance}",
+  "@activityBazarMonthClosed": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarMonthReopened": "{month} was reopened ({note})",
+  "@activityBazarMonthReopened": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarImportCompleted": "Import finished: {rows} rows for {amount}",
+  "@activityBazarImportCompleted": {
+    "placeholders": {
+      "rows": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarImportUndone": "Import undone: {rows} rows for {amount}",
+  "@activityBazarImportUndone": {
+    "placeholders": {
+      "rows": {
+        "type": "String"
+      },
+      "amount": {
         "type": "String"
       }
     }

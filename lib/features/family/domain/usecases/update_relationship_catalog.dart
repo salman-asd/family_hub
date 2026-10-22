@@ -15,12 +15,10 @@ import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 /// applies one change and writes it with an audit event in one batch.
 class UpdateRelationshipCatalog {
   const UpdateRelationshipCatalog({
-    required FamilyRepository families,
-    required Clock clock,
-    required IdGenerator newId,
-  })  : _families = families,
-        _clock = clock,
-        _newId = newId;
+    required this._families,
+    required this._clock,
+    required this._newId,
+  });
 
   final FamilyRepository _families;
   final Clock _clock;
@@ -30,7 +28,9 @@ class UpdateRelationshipCatalog {
   /// always matches the id pattern.
   String _customId() {
     final raw = _newId().replaceAll(RegExp('[^a-z0-9]'), '');
-    final padded = raw.length >= 12 ? raw.substring(0, 12) : raw.padRight(12, '0');
+    final padded = raw.length >= 12
+        ? raw.substring(0, 12)
+        : raw.padRight(12, '0');
     return 'c$padded';
   }
 
@@ -40,18 +40,17 @@ class UpdateRelationshipCatalog {
     required String labelBn,
     required String labelEn,
     bool spouseRelevant = false,
-  }) =>
-      _apply(
-        actorUid,
-        familyId,
-        'add',
-        (catalog) => catalog.add(
-          id: _customId(),
-          labelBn: labelBn,
-          labelEn: labelEn,
-          spouseRelevant: spouseRelevant,
-        ),
-      );
+  }) => _apply(
+    actorUid,
+    familyId,
+    'add',
+    (catalog) => catalog.add(
+      id: _customId(),
+      labelBn: labelBn,
+      labelEn: labelEn,
+      spouseRelevant: spouseRelevant,
+    ),
+  );
 
   Future<Result<RelationshipCatalog>> rename({
     required String actorUid,
@@ -60,31 +59,29 @@ class UpdateRelationshipCatalog {
     required String labelBn,
     required String labelEn,
     bool? spouseRelevant,
-  }) =>
-      _apply(
-        actorUid,
-        familyId,
-        'rename',
-        (catalog) => catalog.rename(
-          id,
-          labelBn: labelBn,
-          labelEn: labelEn,
-          spouseRelevant: spouseRelevant,
-        ),
-      );
+  }) => _apply(
+    actorUid,
+    familyId,
+    'rename',
+    (catalog) => catalog.rename(
+      id,
+      labelBn: labelBn,
+      labelEn: labelEn,
+      spouseRelevant: spouseRelevant,
+    ),
+  );
 
   Future<Result<RelationshipCatalog>> setActive({
     required String actorUid,
     required String familyId,
     required RelationshipId id,
     required bool active,
-  }) =>
-      _apply(
-        actorUid,
-        familyId,
-        active ? 'enable' : 'disable',
-        (catalog) => catalog.setActive(id, active: active),
-      );
+  }) => _apply(
+    actorUid,
+    familyId,
+    active ? 'enable' : 'disable',
+    (catalog) => catalog.setActive(id, active: active),
+  );
 
   Future<Result<RelationshipCatalog>> _apply(
     String actorUid,

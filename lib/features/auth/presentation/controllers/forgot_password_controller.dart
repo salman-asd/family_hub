@@ -53,5 +53,5 @@ class ForgotPasswordController extends AuthFormController<void> {
 
 final forgotPasswordControllerProvider =
     NotifierProvider<ForgotPasswordController, AuthFormState>(
-  ForgotPasswordController.new,
-);
+      ForgotPasswordController.new,
+    );

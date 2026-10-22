@@ -116,8 +116,9 @@ ThemeData buildThemeData(AppThemeSpec spec) {
     onSecondaryContainer: t.accentStrong,
     tertiary: t.info,
     onTertiary: t.textOnAccent,
-    tertiaryContainer:
-        isDark ? const Color(0xFF0D2A4A) : const Color(0xFFBBDEFB),
+    tertiaryContainer: isDark
+        ? const Color(0xFF0D2A4A)
+        : const Color(0xFFBBDEFB),
     onTertiaryContainer: t.info,
     error: t.danger,
     onError: t.textOnAccent,
@@ -273,8 +274,9 @@ ThemeData buildThemeData(AppThemeSpec spec) {
 
     // ── SnackBar ──────────────────────────────────────────────────────────
     snackBarTheme: SnackBarThemeData(
-      backgroundColor:
-          isDark ? const Color(0xFFF0EDE9) : const Color(0xFF1A1917),
+      backgroundColor: isDark
+          ? const Color(0xFFF0EDE9)
+          : const Color(0xFF1A1917),
       contentTextStyle: TextStyle(
         color: isDark ? const Color(0xFF1A1917) : const Color(0xFFF0EDE9),
       ),

@@ -6,6 +6,7 @@ void main() {
   test('money and quantity code never use the floating point type', () {
     const files = [
       'lib/core/utils/money.dart',
+      'lib/core/utils/money_math.dart',
       'lib/core/utils/quantity.dart',
       'lib/core/utils/scaled_decimal.dart',
     ];

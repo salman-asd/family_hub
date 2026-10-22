@@ -86,10 +86,10 @@ class FakeAuthRepository implements AuthRepository {
 
   /// A trailing user returned by [signUp] by default.
   AppUser _newUser(String email) => AppUser(
-        uid: 'uid-${email.hashCode.toUnsigned(32)}',
-        email: email,
-        emailVerified: false,
-      );
+    uid: 'uid-${email.hashCode.toUnsigned(32)}',
+    email: email,
+    emailVerified: false,
+  );
 
   final StreamController<AppUser?> _controller =
       StreamController<AppUser?>.broadcast();

@@ -41,7 +41,9 @@ void main() {
         features
             .listSync(recursive: true)
             .whereType<File>()
-            .where((f) => f.path.replaceAll(r'\', '/').contains('/presentation/')),
+            .where(
+              (f) => f.path.replaceAll(r'\', '/').contains('/presentation/'),
+            ),
       );
     }
     final shared = Directory('lib/shared');
@@ -56,7 +58,9 @@ void main() {
         final line = lines[i];
         if (line.trimLeft().startsWith('//')) continue;
         if (forbidden.hasMatch(line)) {
-          found.add('${file.path.replaceAll(r'\', '/')}:${i + 1}: ${line.trim()}');
+          found.add(
+            '${file.path.replaceAll(r'\', '/')}:${i + 1}: ${line.trim()}',
+          );
         }
       }
     }

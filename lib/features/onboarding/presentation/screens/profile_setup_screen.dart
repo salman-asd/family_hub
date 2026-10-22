@@ -8,7 +8,7 @@ import 'package:family_hub/features/family/presentation/widgets/failure_banner.d
 import 'package:family_hub/features/family/presentation/widgets/labels.dart';
 import 'package:family_hub/features/onboarding/domain/user_profile.dart';
 import 'package:family_hub/features/onboarding/presentation/profile_providers.dart';
-import 'package:family_hub/shared/widgets/app_avatar.dart';
+import 'package:family_hub/features/onboarding/presentation/screens/profile_setup_widgets.dart';
 import 'package:family_hub/shared/widgets/busy_button.dart';
 import 'package:family_hub/shared/widgets/choice_wrap.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +71,9 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
   Future<void> _save() async {
     final uid = ref.read(currentUidProvider);
     if (uid == null) return;
-    await ref.read(_profileActionProvider.notifier).run(
+    await ref
+        .read(_profileActionProvider.notifier)
+        .run(
           () => ref.read(saveProfileProvider)(
             actorUid: uid,
             familyId: widget.editing ? ref.read(currentFamilyIdProvider) : null,
@@ -82,7 +84,8 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
               relationship: _relationship,
               gender: _gender,
               avatarKey: _avatarKey,
-              spouseId: ref
+              spouseId:
+                  ref
                       .read(relationshipCatalogOrDefaultProvider)
                       .canHaveSpouse(_relationship)
                   ? _spouseId
@@ -110,8 +113,9 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
         catalog.find(_relationship)!,
     ];
     final uid = ref.watch(currentUidProvider) ?? '';
-    final spouseCandidates =
-        members.where((m) => m.uid != uid && m.isActive).toList();
+    final spouseCandidates = members
+        .where((m) => m.uid != uid && m.isActive)
+        .toList();
 
     ref.listen(_profileActionProvider, (prev, next) {
       final wasBusy = prev?.busy ?? false;
@@ -122,7 +126,9 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.editing ? l10n.memberEditProfile : l10n.profileSetupTitle),
+        title: Text(
+          widget.editing ? l10n.memberEditProfile : l10n.profileSetupTitle,
+        ),
       ),
       body: SafeArea(
         child: ListView(
@@ -135,13 +141,13 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
               ),
               const SizedBox(height: 20),
             ],
-            _Label(l10n.profileAvatar),
+            ProfileLabel(l10n.profileAvatar),
             Wrap(
               spacing: 8,
               runSpacing: 8,
               children: [
-                for (var i = 0; i < AppAvatar.presetCount; i++)
-                  _AvatarChoice(
+                for (var i = 0; i < ProfileAvatarChoice.presetCount; i++)
+                  ProfileAvatarChoice(
                     index: i,
                     name: _name.text,
                     selected: _avatarKey == 'p$i',
@@ -167,7 +173,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
               decoration: InputDecoration(labelText: l10n.profileNickname),
             ),
             const SizedBox(height: 20),
-            _Label(l10n.profileRelationship),
+            ProfileLabel(l10n.profileRelationship),
             ChoiceWrap<RelationshipId>(
               options: [
                 for (final e in relationshipOptions)
@@ -181,7 +187,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
               onChanged: (r) => setState(() => _relationship = r),
             ),
             const SizedBox(height: 20),
-            _Label(l10n.profileGender),
+            ProfileLabel(l10n.profileGender),
             ChoiceWrap<Gender?>(
               options: [
                 ChoiceOption<Gender?>(null, l10n.genderNone),
@@ -195,7 +201,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
                 catalog.canHaveSpouse(_relationship) &&
                 spouseCandidates.isNotEmpty) ...[
               const SizedBox(height: 20),
-              _Label(l10n.profileSpouse),
+              ProfileLabel(l10n.profileSpouse),
               ChoiceWrap<String?>(
                 options: [
                   ChoiceOption<String?>(null, l10n.profileSpouseNone),
@@ -218,71 +224,6 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
               onPressed: _name.text.trim().isEmpty ? null : _save,
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Label extends StatelessWidget {
-  const _Label(this.text);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Text(
-          text,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: context.tokens.textSecondary),
-        ),
-      );
-}
-
-class _AvatarChoice extends StatelessWidget {
-  const _AvatarChoice({
-    required this.index,
-    required this.name,
-    required this.selected,
-    required this.label,
-    required this.onTap,
-  });
-
-  final int index;
-  final String name;
-  final bool selected;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = context.tokens;
-    return Semantics(
-      button: true,
-      selected: selected,
-      label: label,
-      excludeSemantics: true,
-      child: InkResponse(
-        key: Key('avatar_$index'),
-        onTap: onTap,
-        radius: 28,
-        child: SizedBox(
-          width: 48,
-          height: 48,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              AppAvatar(id: 'p$index', name: name, avatarKey: 'p$index', size: 44),
-              if (selected)
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Icon(Icons.check_circle, size: 18, color: t.accentStrong),
-                ),
-            ],
-          ),
         ),
       ),
     );

@@ -68,15 +68,13 @@ final routerProvider = Provider<GoRouter>((ref) {
   final flavor = ref.watch(flavorProvider);
 
   // Rebuild only when the *set* of enabled modules changes.
-  ref.watch(
-    visibleModulesProvider.select((m) => m.map((e) => e.id).join(',')),
-  );
+  ref.watch(visibleModulesProvider.select((m) => m.map((e) => e.id).join(',')));
   final enabled = ref.read(visibleModulesProvider);
   final disabled = ref.read(hiddenModulesProvider);
 
   final memo = ref.read(_locationMemoProvider);
   final refresh = ValueNotifier<int>(0);
-  ref.listen<SessionPhase>(sessionPhaseProvider, (_, __) => refresh.value++);
+  ref.listen<SessionPhase>(sessionPhaseProvider, (_, _) => refresh.value++);
 
   final tabs = <_Tab>[
     _Tab(
@@ -252,9 +250,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           navigationShell: navigationShell,
           destinations: [for (final t in tabs) t.destination],
         ),
-        branches: [
-          for (final t in tabs) StatefulShellBranch(routes: t.routes),
-        ],
+        branches: [for (final t in tabs) StatefulShellBranch(routes: t.routes)],
       ),
     ],
   );
@@ -274,11 +270,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 });
 
 _Tab _moduleTab(FamilyModule module) => _Tab(
-      ShellDestination(
-        id: module.id,
-        icon: module.icon,
-        selectedIcon: module.selectedIcon,
-        label: (context) => module.label(context.l10n),
-      ),
-      module.routes,
-    );
+  ShellDestination(
+    id: module.id,
+    icon: module.icon,
+    selectedIcon: module.selectedIcon,
+    label: (context) => module.label(context.l10n),
+  ),
+  module.routes,
+);

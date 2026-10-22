@@ -37,12 +37,12 @@ class UserProfile {
 
   @override
   int get hashCode => Object.hash(
-        uid,
-        fullName,
-        relationship,
-        nickname,
-        gender,
-        spouseId,
-        avatarKey,
-      );
+    uid,
+    fullName,
+    relationship,
+    nickname,
+    gender,
+    spouseId,
+    avatarKey,
+  );
 }

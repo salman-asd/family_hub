@@ -23,9 +23,13 @@ import '../family_test_helpers.dart';
 
 const _me = AppUser(uid: 'me', email: 'me@example.com', emailVerified: true);
 
-String _path(WidgetTester tester) => ProviderScope.containerOf(
-      tester.element(find.byType(FamilyHubApp)),
-    ).read(routerProvider).routeInformationProvider.value.uri.path;
+String _path(WidgetTester tester) =>
+    ProviderScope.containerOf(tester.element(find.byType(FamilyHubApp)))
+        .read(routerProvider)
+        .routeInformationProvider
+        .value
+        .uri
+        .path;
 
 Future<void> _pumpApp(WidgetTester tester, Fixture f) async {
   tester.view
@@ -66,33 +70,35 @@ Future<void> _tap(WidgetTester tester, String key) async {
 }
 
 void main() {
-  testWidgets('pending person cancels the request and returns to family choice',
-      (tester) async {
-    final f = Fixture()
-      ..seedFamily({'admin': (MemberRole.admin, MembershipStatus.active)})
-      ..profile('me');
-    addTearDown(f.backend.dispose);
-    f.backend.invitations['ABCD2345'] = Invitation(
-      code: 'ABCD2345',
-      familyId: 'fam',
-      role: MemberRole.member,
-      expiresAt: f.clock.nowUtc().add(const Duration(days: 7)),
-      createdBy: 'admin',
-      createdAt: f.clock.nowUtc(),
-    );
-    await _pumpApp(tester, f);
-    await _tap(tester, 'choice_join');
-    await tester.enterText(find.byKey(const Key('join_code')), 'ABCD2345');
-    await tester.pumpAndSettle();
-    await _tap(tester, 'join_submit');
-    expect(_path(tester), '/pending');
+  testWidgets(
+    'pending person cancels the request and returns to family choice',
+    (tester) async {
+      final f = Fixture()
+        ..seedFamily({'admin': (MemberRole.admin, MembershipStatus.active)})
+        ..profile('me');
+      addTearDown(f.backend.dispose);
+      f.backend.invitations['ABCD2345'] = Invitation(
+        code: 'ABCD2345',
+        familyId: 'fam',
+        role: MemberRole.member,
+        expiresAt: f.clock.nowUtc().add(const Duration(days: 7)),
+        createdBy: 'admin',
+        createdAt: f.clock.nowUtc(),
+      );
+      await _pumpApp(tester, f);
+      await _tap(tester, 'choice_join');
+      await tester.enterText(find.byKey(const Key('join_code')), 'ABCD2345');
+      await tester.pumpAndSettle();
+      await _tap(tester, 'join_submit');
+      expect(_path(tester), '/pending');
 
-    await _tap(tester, 'pending_cancel');
+      await _tap(tester, 'pending_cancel');
 
-    expect(_path(tester), '/family-choice');
-    expect(f.backend.members['fam']!['me']!.removedAt, isNotNull);
-    expect(f.backend.events.last.type, 'member.cancelled');
-  });
+      expect(_path(tester), '/family-choice');
+      expect(f.backend.members['fam']!['me']!.removedAt, isNotNull);
+      expect(f.backend.events.last.type, 'member.cancelled');
+    },
+  );
 
   testWidgets('an active member leaves after confirming', (tester) async {
     final f = Fixture()
@@ -116,23 +122,28 @@ void main() {
     expect(f.backend.members['fam']!['me']!.leftAt, isNotNull);
   });
 
-  testWidgets('the only admin cannot leave: the action is blocked with a reason',
-      (tester) async {
-    final f = Fixture()
-      ..seedFamily({'me': (MemberRole.admin, MembershipStatus.active)})
-      ..profile('me');
-    addTearDown(f.backend.dispose);
-    await _pumpApp(tester, f);
+  testWidgets(
+    'the only admin cannot leave: the action is blocked with a reason',
+    (tester) async {
+      final f = Fixture()
+        ..seedFamily({'me': (MemberRole.admin, MembershipStatus.active)})
+        ..profile('me');
+      addTearDown(f.backend.dispose);
+      await _pumpApp(tester, f);
 
-    await tester.tap(find.byKey(const Key('tab_family')));
-    await tester.pumpAndSettle();
-    await tester.ensureVisible(find.byKey(const Key('family_leave')));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const Key('tab_family')));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const Key('family_leave')));
+      await tester.pumpAndSettle();
 
-    expect(find.textContaining('একমাত্র অ্যাডমিন'), findsWidgets);
-    await tester.tap(find.byKey(const Key('family_leave')), warnIfMissed: false);
-    await tester.pumpAndSettle();
-    expect(find.byKey(const Key('family_leave_confirm')), findsNothing);
-    expect(f.backend.members['fam']!['me']!.isActive, isTrue);
-  });
+      expect(find.textContaining('একমাত্র অ্যাডমিন'), findsWidgets);
+      await tester.tap(
+        find.byKey(const Key('family_leave')),
+        warnIfMissed: false,
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('family_leave_confirm')), findsNothing);
+      expect(f.backend.members['fam']!['me']!.isActive, isTrue);
+    },
+  );
 }

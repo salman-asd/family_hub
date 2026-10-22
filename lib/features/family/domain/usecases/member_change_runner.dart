@@ -64,8 +64,9 @@ class MemberChangeRunner {
     if (adminIds.length > maxActiveAdmins) {
       return const Failure<Member>(Conflict(code: 'too_many_admins'));
     }
-    final writeAdminIds =
-        sameAdminSet(activeAdminIds(all), adminIds) ? null : adminIds;
+    final writeAdminIds = sameAdminSet(activeAdminIds(all), adminIds)
+        ? null
+        : adminIds;
 
     final saved = await families.saveMembers(
       familyId,

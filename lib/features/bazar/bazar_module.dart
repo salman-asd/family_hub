@@ -1,11 +1,12 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
-import 'package:family_hub/features/bazar/presentation/bazar_placeholder_screen.dart';
+import 'package:family_hub/features/bazar/presentation/bazar_home_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// The Bazar module (stub: a placeholder screen until Phase 2).
+/// The Bazar module.  The module switch is the gate, so
+/// `requiredPermission` stays `null`.
 class BazarModule extends FamilyModule {
   const BazarModule();
 
@@ -32,9 +33,9 @@ class BazarModule extends FamilyModule {
 
   @override
   List<RouteBase> get routes => [
-        GoRoute(
-          path: AppRoutes.bazar,
-          builder: (context, state) => const BazarPlaceholderScreen(),
-        ),
-      ];
+    GoRoute(
+      path: AppRoutes.bazar,
+      builder: (context, state) => const BazarHomeScreen(),
+    ),
+  ];
 }

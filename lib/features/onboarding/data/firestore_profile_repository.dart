@@ -18,12 +18,10 @@ import 'package:family_hub/features/onboarding/domain/user_profile_repository.da
 class FirestoreProfileRepository
     implements UserProfileRepository, ProfileRepository {
   FirestoreProfileRepository({
-    required TxRunner tx,
-    required Clock clock,
+    required this._tx,
+    required this._clock,
     FirebaseFirestore? firestore,
-  })  : _tx = tx,
-        _clock = clock,
-        _db = firestore ?? FirebaseFirestore.instance;
+  }) : _db = firestore ?? FirebaseFirestore.instance;
 
   final TxRunner _tx;
   final Clock _clock;
@@ -44,14 +42,14 @@ class FirestoreProfileRepository
   }
 
   static Map<String, dynamic> profileToMap(UserProfile p) => <String, dynamic>{
-        'uid': p.uid,
-        'fullName': p.fullName,
-        'nickname': p.nickname,
-        'gender': p.gender?.name,
-        'relationship': p.relationship.value,
-        'spouseId': p.spouseId,
-        'avatarKey': p.avatarKey,
-      };
+    'uid': p.uid,
+    'fullName': p.fullName,
+    'nickname': p.nickname,
+    'gender': p.gender?.name,
+    'relationship': p.relationship.value,
+    'spouseId': p.spouseId,
+    'avatarKey': p.avatarKey,
+  };
 
   @override
   Stream<bool> watchHasProfile(String uid) =>
@@ -101,35 +99,34 @@ class FirestoreProfileRepository
   @override
   Future<Result<void>> saveProfile(UserProfile profile, {String? familyId}) =>
       // Not server-required: offline the save is queued and syncs later.
-      guardWrite(
-        () async {
-          Map<String, dynamic>? existing;
-          try {
-            existing = (await _db
-                    .doc(FirestorePaths.userDoc(profile.uid))
-                    .get()
-                    .timeout(const Duration(seconds: 4)))
-                .data();
-          } on Object {
-            // Unknown (offline, nothing cached): treat as a first save; the
-            // merge never lowers an existing creation stamp's meaning.
-            existing = null;
+      guardWrite(() async {
+        Map<String, dynamic>? existing;
+        try {
+          existing =
+              (await _db
+                      .doc(FirestorePaths.userDoc(profile.uid))
+                      .get()
+                      .timeout(const Duration(seconds: 4)))
+                  .data();
+        } on Object {
+          // Unknown (offline, nothing cached): treat as a first save; the
+          // merge never lowers an existing creation stamp's meaning.
+          existing = null;
+        }
+        final data = profileWriteMap(profile, existing, _clock.nowUtc());
+        await _tx.runBatch((b) {
+          b.set(FirestorePaths.userDoc(profile.uid), data, merge: true);
+          if (familyId != null) {
+            b.update(FirestorePaths.memberDoc(familyId, profile.uid), {
+              'fullName': profile.fullName,
+              'nickname': profile.nickname,
+              'relationship': profile.relationship.value,
+              'spouseId': profile.spouseId,
+              'avatarKey': profile.avatarKey,
+              BaseMapper.keyUpdatedAt: data[BaseMapper.keyUpdatedAt],
+              BaseMapper.keyUpdatedBy: profile.uid,
+            });
           }
-          final data = profileWriteMap(profile, existing, _clock.nowUtc());
-          await _tx.runBatch((b) {
-            b.set(FirestorePaths.userDoc(profile.uid), data, merge: true);
-            if (familyId != null) {
-              b.update(FirestorePaths.memberDoc(familyId, profile.uid), {
-                'fullName': profile.fullName,
-                'nickname': profile.nickname,
-                'relationship': profile.relationship.value,
-                'spouseId': profile.spouseId,
-                'avatarKey': profile.avatarKey,
-                BaseMapper.keyUpdatedAt: data[BaseMapper.keyUpdatedAt],
-                BaseMapper.keyUpdatedBy: profile.uid,
-              });
-            }
-          });
-        },
-      );
+        });
+      });
 }

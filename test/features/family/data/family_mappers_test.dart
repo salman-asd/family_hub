@@ -32,8 +32,10 @@ void main() {
   test('an unknown status never becomes active', () {
     final m = FamilyMappers.memberFromMap({'uid': 'u', 'status': 'weird'});
     expect(m.status, MembershipStatus.pending);
-    expect(FamilyMappers.memberFromMap({'uid': 'u', 'role': 'root'}).role,
-        MemberRole.member);
+    expect(
+      FamilyMappers.memberFromMap({'uid': 'u', 'role': 'root'}).role,
+      MemberRole.member,
+    );
   });
 
   test('membership: removed or missing members map to none', () {
@@ -46,7 +48,10 @@ void main() {
     );
     expect(FamilyMappers.membershipFromMember('f', null), Membership.none);
     expect(
-      FamilyMappers.membershipFromMember('f', live.copyWith(removedAt: DateTime.utc(2026))),
+      FamilyMappers.membershipFromMember(
+        'f',
+        live.copyWith(removedAt: DateTime.utc(2026)),
+      ),
       Membership.none,
     );
     expect(
@@ -68,9 +73,13 @@ void main() {
       createdBy: 'u1',
       createdAt: DateTime.utc(2026, 10, 18),
     );
-    expect(FamilyMappers.invitationFromMap(FamilyMappers.invitationToMap(inv)).code,
-        'ABCD2345');
-    final back = FamilyMappers.invitationFromMap(FamilyMappers.invitationToMap(inv));
+    expect(
+      FamilyMappers.invitationFromMap(FamilyMappers.invitationToMap(inv)).code,
+      'ABCD2345',
+    );
+    final back = FamilyMappers.invitationFromMap(
+      FamilyMappers.invitationToMap(inv),
+    );
     expect(back.expiresAt, inv.expiresAt);
     expect(back.status, InvitationStatus.active);
   });
@@ -95,7 +104,10 @@ void main() {
       removedAt: at,
       leftAt: at,
     );
-    expect(FamilyMappers.memberFromMap(FamilyMappers.memberToMap(m, _meta())), m);
+    expect(
+      FamilyMappers.memberFromMap(FamilyMappers.memberToMap(m, _meta())),
+      m,
+    );
     expect(m.hasLeft, isTrue);
     expect(m.isRemoved, isTrue);
     expect(FamilyMappers.membershipFromMember('f', m), Membership.none);
@@ -111,14 +123,20 @@ void main() {
       relationship: 'other',
     );
     expect(
-      FamilyMappers.memberChangeMap(base, actorUid: 'a', now: now)
-          .containsKey('leftAt'),
+      FamilyMappers.memberChangeMap(
+        base,
+        actorUid: 'a',
+        now: now,
+      ).containsKey('leftAt'),
       isFalse,
     );
     final left = base.copyWith(leftAt: now, removedAt: now);
     expect(
-      FamilyMappers.memberChangeMap(left, actorUid: 'u1', now: now)
-          .containsKey('leftAt'),
+      FamilyMappers.memberChangeMap(
+        left,
+        actorUid: 'u1',
+        now: now,
+      ).containsKey('leftAt'),
       isTrue,
     );
   });
@@ -132,6 +150,6 @@ void main() {
 }
 
 BaseDocumentMetadata _meta() => BaseMapper.createMetadata(
-      uid: 'u1',
-      clock: FakeClock(DateTime.utc(2026, 10, 18)),
-    );
+  uid: 'u1',
+  clock: FakeClock(DateTime.utc(2026, 10, 18)),
+);

@@ -1,0 +1,30 @@
+{
+  "scenario": "fundtx_opening",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/fundTransactions/open_2026-10",
+      "data": {
+        "type": "opening",
+        "amountPaisa": 50000,
+        "dateKey": "2026-10-01",
+        "monthKey": "2026-10",
+        "refType": "month",
+        "refId": "2026-10",
+        "note": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    }
+  ]
+}

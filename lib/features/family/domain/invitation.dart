@@ -38,24 +38,24 @@ class Invitation {
   bool isExpiredAt(DateTime now) => !now.isBefore(expiresAt);
 
   Invitation markUsed(String uid) => Invitation(
-        code: code,
-        familyId: familyId,
-        role: role,
-        expiresAt: expiresAt,
-        createdBy: createdBy,
-        createdAt: createdAt,
-        status: InvitationStatus.used,
-        usedBy: uid,
-      );
+    code: code,
+    familyId: familyId,
+    role: role,
+    expiresAt: expiresAt,
+    createdBy: createdBy,
+    createdAt: createdAt,
+    status: InvitationStatus.used,
+    usedBy: uid,
+  );
 
   Invitation markRevoked() => Invitation(
-        code: code,
-        familyId: familyId,
-        role: role,
-        expiresAt: expiresAt,
-        createdBy: createdBy,
-        createdAt: createdAt,
-        status: InvitationStatus.revoked,
-        usedBy: usedBy,
-      );
+    code: code,
+    familyId: familyId,
+    role: role,
+    expiresAt: expiresAt,
+    createdBy: createdBy,
+    createdAt: createdAt,
+    status: InvitationStatus.revoked,
+    usedBy: usedBy,
+  );
 }

@@ -47,19 +47,19 @@ class GallerySection {
 
 /// Every shared widget of Step 11, in every state.
 List<GallerySection> gallerySections() => <GallerySection>[
-      _avatar,
-      _itemThumb,
-      _statusChip,
-      _emptyState,
-      _loading,
-      _error,
-      _sectionHeader,
-      _card,
-      _money,
-      _progress,
-      _pillBar,
-      _syncBanner,
-    ];
+  _avatar,
+  _itemThumb,
+  _statusChip,
+  _emptyState,
+  _loading,
+  _error,
+  _sectionHeader,
+  _card,
+  _money,
+  _progress,
+  _pillBar,
+  _syncBanner,
+];
 
 // ── Sample values ─────────────────────────────────────────────────────────────
 

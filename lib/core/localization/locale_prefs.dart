@@ -33,9 +33,9 @@ class LocalePrefs {
 
   /// Serialize to a flat map for SharedPreferences storage.
   Map<String, Object> toMap() => {
-        _kKeyLanguage: languageCode,
-        _kKeyBanglaDigits: useBanglaDigits,
-      };
+    _kKeyLanguage: languageCode,
+    _kKeyBanglaDigits: useBanglaDigits,
+  };
 
   /// Deserialize from a SharedPreferences-style map.
   /// Unknown values fall back to defaults — never throws.
@@ -43,8 +43,8 @@ class LocalePrefs {
     final rawLanguage = map[_kKeyLanguage];
     final language =
         rawLanguage is String && supportedLanguageCodes.contains(rawLanguage)
-            ? rawLanguage
-            : defaultLanguageCode;
+        ? rawLanguage
+        : defaultLanguageCode;
     final rawDigits = map[_kKeyBanglaDigits];
     return LocalePrefs(
       languageCode: language,

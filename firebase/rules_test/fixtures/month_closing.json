@@ -1,0 +1,82 @@
+{
+  "scenario": "month_closing",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/monthClosings/2026-10",
+      "data": {
+        "monthKey": "2026-10",
+        "status": "closed",
+        "closedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "closedBy": "fixAdmin",
+        "closingBalancePaisa": 5000,
+        "reopenedAt": null,
+        "reopenedBy": null,
+        "reopenNote": null,
+        "reopenCount": 0,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev29",
+      "data": {
+        "type": "bazar.month_closed",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "month",
+        "refId": "2026-10",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev29",
+      "data": {
+        "type": "bazar.month_closed",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "month",
+        "refId": "2026-10",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

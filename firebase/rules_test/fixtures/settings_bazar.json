@@ -1,0 +1,80 @@
+{
+  "scenario": "settings_bazar",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "merge",
+      "path": "families/fixFam/settings/bazar",
+      "data": {
+        "weekStartDay": 1,
+        "defaultMonthlyContributionPaisa": 500000,
+        "contributionDueDay": 10,
+        "alertThresholds": [
+          70,
+          90,
+          100
+        ],
+        "fundStartMonth": "2026-01",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev12",
+      "data": {
+        "type": "bazar.settings_updated",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "family",
+        "refId": "fixFam",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev12",
+      "data": {
+        "type": "bazar.settings_updated",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "family",
+        "refId": "fixFam",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

@@ -7,44 +7,49 @@ import 'package:flutter_test/flutter_test.dart';
 /// role* can block the permission (active actor, modules on, the right owner).
 const List<(Permission, bool, bool, bool)> _matrix =
     <(Permission, bool, bool, bool)>[
-  // Family administration.
-  (Permission.inviteMembers, true, true, false),
-  (Permission.approveMembers, true, true, false),
-  (Permission.removeMembers, true, false, false),
-  (Permission.changeRoles, true, false, false),
-  (Permission.editFamilySettings, true, false, false),
-  (Permission.viewFamilyReports, true, true, true),
-  (Permission.exportData, true, false, false),
-  // Bazar and family finance.
-  (Permission.manageCatalogAndBudgets, true, true, false),
-  (Permission.addOwnExpense, true, true, true),
-  (Permission.editOthersExpense, true, true, false),
-  (Permission.recordContribution, true, true, false),
-  (Permission.viewAllContributions, true, true, false),
-  // Chores.
-  (Permission.manageChoreTemplates, true, true, false),
-  (Permission.reassignChore, true, true, false),
-  (Permission.requestSwap, true, true, true),
-  (Permission.completeOwnChore, true, true, true),
-  (Permission.commentOnChore, true, true, true),
-  (Permission.verifyChore, true, true, false),
-];
+      // Family administration.
+      (Permission.inviteMembers, true, true, false),
+      (Permission.approveMembers, true, true, false),
+      (Permission.removeMembers, true, false, false),
+      (Permission.changeRoles, true, false, false),
+      (Permission.editFamilySettings, true, false, false),
+      (Permission.viewFamilyReports, true, true, true),
+      (Permission.exportData, true, false, false),
+      // Bazar and family finance.
+      (Permission.manageCatalogAndBudgets, true, true, false),
+      (Permission.addOwnExpense, true, true, true),
+      (Permission.editOthersExpense, true, true, false),
+      (Permission.recordContribution, true, true, false),
+      (Permission.viewAllContributions, true, true, false),
+      (Permission.closeBazarMonth, true, true, false),
+      (Permission.importBazarData, true, true, false),
+      (Permission.requestContribution, true, true, true),
+      // Chores.
+      (Permission.manageChoreTemplates, true, true, false),
+      (Permission.reassignChore, true, true, false),
+      (Permission.requestSwap, true, true, true),
+      (Permission.completeOwnChore, true, true, true),
+      (Permission.commentOnChore, true, true, true),
+      (Permission.verifyChore, true, true, false),
+    ];
 
 /// A context where only the role can make the answer false.
 ({String? ownerId, PermissionSettings settings, PermissionTemplate? template})
-    _contextFor(Permission permission) {
+_contextFor(Permission permission) {
   const settings = PermissionSettings(choreVerificationEnabled: true);
   return switch (permission) {
     // "Own" permissions: the actor owns the record.
-    Permission.requestSwap ||
-    Permission.completeOwnChore =>
-      (ownerId: 'me', settings: settings, template: null),
+    Permission.requestSwap || Permission.completeOwnChore => (
+      ownerId: 'me',
+      settings: settings,
+      template: null,
+    ),
     // Verification: family and template both want it, and somebody else did it.
     Permission.verifyChore => (
-        ownerId: 'other',
-        settings: settings,
-        template: const PermissionTemplate(verificationEnabled: true),
-      ),
+      ownerId: 'other',
+      settings: settings,
+      template: const PermissionTemplate(verificationEnabled: true),
+    ),
     _ => (ownerId: 'other', settings: settings, template: null),
   };
 }
@@ -54,17 +59,17 @@ bool _can(
   Permission permission, {
   bool isActive = true,
   String? ownerId = 'other',
-  PermissionSettings settings =
-      const PermissionSettings(choreVerificationEnabled: true),
+  PermissionSettings settings = const PermissionSettings(
+    choreVerificationEnabled: true,
+  ),
   PermissionTemplate? template,
-}) =>
-    PermissionPolicy.can(
-      PermissionActor(uid: 'me', role: role, isActive: isActive),
-      permission,
-      ownerId: ownerId,
-      settings: settings,
-      template: template,
-    );
+}) => PermissionPolicy.can(
+  PermissionActor(uid: 'me', role: role, isActive: isActive),
+  permission,
+  ownerId: ownerId,
+  settings: settings,
+  template: template,
+);
 
 bool _canWithContext(Role role, Permission permission) {
   final ctx = _contextFor(permission);
@@ -89,12 +94,21 @@ void main() {
       test(
         '${permission.name}: admin=$admin moderator=$moderator member=$member',
         () {
-          expect(_canWithContext(Role.admin, permission), admin,
-              reason: 'admin');
-          expect(_canWithContext(Role.moderator, permission), moderator,
-              reason: 'moderator');
-          expect(_canWithContext(Role.member, permission), member,
-              reason: 'member');
+          expect(
+            _canWithContext(Role.admin, permission),
+            admin,
+            reason: 'admin',
+          );
+          expect(
+            _canWithContext(Role.moderator, permission),
+            moderator,
+            reason: 'moderator',
+          );
+          expect(
+            _canWithContext(Role.member, permission),
+            member,
+            reason: 'member',
+          );
         },
       );
     }
@@ -122,32 +136,37 @@ void main() {
   });
 
   group('module switches', () {
-    test('switching bazar off denies every bazar permission, even to an admin',
-        () {
-      const off = PermissionSettings(bazarEnabled: false);
-      final bazar =
-          Permission.values.where((p) => p.module == PermissionModule.bazar);
-      expect(bazar, isNotEmpty);
-      for (final permission in bazar) {
-        final ctx = _contextFor(permission);
-        expect(
-          _can(
-            Role.admin,
-            permission,
-            ownerId: ctx.ownerId,
-            settings: off,
-            template: ctx.template,
-          ),
-          isFalse,
-          reason: permission.name,
+    test(
+      'switching bazar off denies every bazar permission, even to an admin',
+      () {
+        const off = PermissionSettings(bazarEnabled: false);
+        final bazar = Permission.values.where(
+          (p) => p.module == PermissionModule.bazar,
         );
-      }
-    });
+        expect(bazar, isNotEmpty);
+        for (final permission in bazar) {
+          final ctx = _contextFor(permission);
+          expect(
+            _can(
+              Role.admin,
+              permission,
+              ownerId: ctx.ownerId,
+              settings: off,
+              template: ctx.template,
+            ),
+            isFalse,
+            reason: permission.name,
+          );
+        }
+      },
+    );
 
     test('switching bazar off leaves the other modules alone', () {
       const off = PermissionSettings(bazarEnabled: false);
-      expect(_can(Role.member, Permission.addOwnExpense, settings: off),
-          isFalse);
+      expect(
+        _can(Role.member, Permission.addOwnExpense, settings: off),
+        isFalse,
+      );
       expect(_can(Role.admin, Permission.inviteMembers, settings: off), isTrue);
       expect(
         _can(Role.admin, Permission.commentOnChore, settings: off),
@@ -155,45 +174,54 @@ void main() {
       );
     });
 
-    test('switching chores off denies every chore permission, even to an admin',
-        () {
-      const off = PermissionSettings(
-        choresEnabled: false,
-        choreVerificationEnabled: true,
-      );
-      final chores =
-          Permission.values.where((p) => p.module == PermissionModule.chores);
-      expect(chores, isNotEmpty);
-      for (final permission in chores) {
-        final ctx = _contextFor(permission);
-        expect(
-          _can(
-            Role.admin,
-            permission,
-            ownerId: ctx.ownerId,
-            settings: off,
-            template: ctx.template,
-          ),
-          isFalse,
-          reason: permission.name,
+    test(
+      'switching chores off denies every chore permission, even to an admin',
+      () {
+        const off = PermissionSettings(
+          choresEnabled: false,
+          choreVerificationEnabled: true,
         );
-      }
-    });
+        final chores = Permission.values.where(
+          (p) => p.module == PermissionModule.chores,
+        );
+        expect(chores, isNotEmpty);
+        for (final permission in chores) {
+          final ctx = _contextFor(permission);
+          expect(
+            _can(
+              Role.admin,
+              permission,
+              ownerId: ctx.ownerId,
+              settings: off,
+              template: ctx.template,
+            ),
+            isFalse,
+            reason: permission.name,
+          );
+        }
+      },
+    );
 
     test('family administration is never switchable', () {
       const off = PermissionSettings(bazarEnabled: false, choresEnabled: false);
-      expect(_can(Role.admin, Permission.editFamilySettings, settings: off),
-          isTrue);
+      expect(
+        _can(Role.admin, Permission.editFamilySettings, settings: off),
+        isTrue,
+      );
     });
   });
 
   group('own records', () {
     test('requestSwap needs the actor to be the assignee', () {
       expect(_can(Role.member, Permission.requestSwap, ownerId: 'me'), isTrue);
-      expect(_can(Role.member, Permission.requestSwap, ownerId: 'other'),
-          isFalse);
-      expect(_can(Role.admin, Permission.requestSwap, ownerId: 'other'),
-          isFalse);
+      expect(
+        _can(Role.member, Permission.requestSwap, ownerId: 'other'),
+        isFalse,
+      );
+      expect(
+        _can(Role.admin, Permission.requestSwap, ownerId: 'other'),
+        isFalse,
+      );
     });
 
     test('completeOwnChore needs the actor to be the assignee', () {
@@ -201,14 +229,63 @@ void main() {
         _can(Role.member, Permission.completeOwnChore, ownerId: 'me'),
         isTrue,
       );
-      expect(_can(Role.member, Permission.completeOwnChore, ownerId: 'other'),
-          isFalse);
+      expect(
+        _can(Role.member, Permission.completeOwnChore, ownerId: 'other'),
+        isFalse,
+      );
     });
 
     test('an unknown owner is never "own"', () {
-      expect(_can(Role.member, Permission.completeOwnChore, ownerId: null),
-          isFalse);
+      expect(
+        _can(Role.member, Permission.completeOwnChore, ownerId: null),
+        isFalse,
+      );
       expect(_can(Role.admin, Permission.requestSwap, ownerId: null), isFalse);
+    });
+  });
+
+  group('Phase 2 bazar permissions', () {
+    const financeOff = PermissionSettings(moderatorManagesFinance: false);
+
+    test(
+      'the Household Manager needs the finance switch to close or import',
+      () {
+        for (final permission in [
+          Permission.closeBazarMonth,
+          Permission.importBazarData,
+        ]) {
+          expect(
+            _can(Role.moderator, permission),
+            isTrue,
+            reason: '${permission.name} with the default switch',
+          );
+          expect(
+            _can(Role.moderator, permission, settings: financeOff),
+            isFalse,
+            reason: '${permission.name} with moderatorManagesFinance off',
+          );
+          expect(_can(Role.admin, permission, settings: financeOff), isTrue);
+          expect(_can(Role.member, permission), isFalse);
+        }
+      },
+    );
+
+    test('any active member may offer a contribution', () {
+      for (final role in Role.values) {
+        expect(_can(role, Permission.requestContribution), isTrue);
+      }
+      expect(
+        _can(
+          Role.member,
+          Permission.requestContribution,
+          settings: const PermissionSettings(bazarEnabled: false),
+        ),
+        isFalse,
+      );
+      expect(
+        _can(Role.member, Permission.requestContribution, isActive: false),
+        isFalse,
+      );
     });
   });
 
@@ -220,58 +297,97 @@ void main() {
 
     test('allowed for a manager when family, template and owner all agree', () {
       expect(
-        _can(Role.admin, Permission.verifyChore,
-            ownerId: 'other', settings: familyOn, template: templateOn),
+        _can(
+          Role.admin,
+          Permission.verifyChore,
+          ownerId: 'other',
+          settings: familyOn,
+          template: templateOn,
+        ),
         isTrue,
       );
       expect(
-        _can(Role.moderator, Permission.verifyChore,
-            ownerId: 'other', settings: familyOn, template: templateOn),
+        _can(
+          Role.moderator,
+          Permission.verifyChore,
+          ownerId: 'other',
+          settings: familyOn,
+          template: templateOn,
+        ),
         isTrue,
       );
     });
 
     test('never allowed for a plain member', () {
       expect(
-        _can(Role.member, Permission.verifyChore,
-            ownerId: 'other', settings: familyOn, template: templateOn),
+        _can(
+          Role.member,
+          Permission.verifyChore,
+          ownerId: 'other',
+          settings: familyOn,
+          template: templateOn,
+        ),
         isFalse,
       );
     });
 
     test('denied while the family has verification off', () {
       expect(
-        _can(Role.admin, Permission.verifyChore,
-            ownerId: 'other', settings: familyOff, template: templateOn),
+        _can(
+          Role.admin,
+          Permission.verifyChore,
+          ownerId: 'other',
+          settings: familyOff,
+          template: templateOn,
+        ),
         isFalse,
       );
     });
 
     test('denied when the template does not allow it', () {
       expect(
-        _can(Role.admin, Permission.verifyChore,
-            ownerId: 'other', settings: familyOn, template: templateOff),
+        _can(
+          Role.admin,
+          Permission.verifyChore,
+          ownerId: 'other',
+          settings: familyOn,
+          template: templateOff,
+        ),
         isFalse,
       );
       expect(
-        _can(Role.admin, Permission.verifyChore,
-            ownerId: 'other', settings: familyOn),
+        _can(
+          Role.admin,
+          Permission.verifyChore,
+          ownerId: 'other',
+          settings: familyOn,
+        ),
         isFalse,
       );
     });
 
     test('nobody verifies their own chore', () {
       expect(
-        _can(Role.admin, Permission.verifyChore,
-            ownerId: 'me', settings: familyOn, template: templateOn),
+        _can(
+          Role.admin,
+          Permission.verifyChore,
+          ownerId: 'me',
+          settings: familyOn,
+          template: templateOn,
+        ),
         isFalse,
       );
     });
 
     test('an unknown completer cannot be verified', () {
       expect(
-        _can(Role.admin, Permission.verifyChore,
-            ownerId: null, settings: familyOn, template: templateOn),
+        _can(
+          Role.admin,
+          Permission.verifyChore,
+          ownerId: null,
+          settings: familyOn,
+          template: templateOn,
+        ),
         isFalse,
       );
     });
@@ -280,10 +396,16 @@ void main() {
   group('PermissionActor', () {
     test('reports manager and admin for an active actor', () {
       const admin = PermissionActor(uid: 'a', role: Role.admin, isActive: true);
-      const moderator =
-          PermissionActor(uid: 'b', role: Role.moderator, isActive: true);
-      const member =
-          PermissionActor(uid: 'c', role: Role.member, isActive: true);
+      const moderator = PermissionActor(
+        uid: 'b',
+        role: Role.moderator,
+        isActive: true,
+      );
+      const member = PermissionActor(
+        uid: 'c',
+        role: Role.member,
+        isActive: true,
+      );
       expect(admin.isAdmin, isTrue);
       expect(admin.isManager, isTrue);
       expect(moderator.isAdmin, isFalse);
@@ -331,28 +453,29 @@ void main() {
     });
 
     test('the roadmap names are unchanged (they are the contract)', () {
-      expect(
-        Permission.values.map((p) => p.name).toSet(),
-        {
-          'inviteMembers',
-          'approveMembers',
-          'removeMembers',
-          'changeRoles',
-          'editFamilySettings',
-          'manageChoreTemplates',
-          'reassignChore',
-          'requestSwap',
-          'completeOwnChore',
-          'commentOnChore',
-          'verifyChore',
-          'addOwnExpense',
-          'editOthersExpense',
-          'manageCatalogAndBudgets',
-          'recordContribution',
-          'viewFamilyReports',
-          'exportData',
-        },
-      );
+      expect(Permission.values.map((p) => p.name).toSet(), {
+        'inviteMembers',
+        'approveMembers',
+        'removeMembers',
+        'changeRoles',
+        'editFamilySettings',
+        'manageChoreTemplates',
+        'reassignChore',
+        'requestSwap',
+        'completeOwnChore',
+        'commentOnChore',
+        'verifyChore',
+        'addOwnExpense',
+        'editOthersExpense',
+        'manageCatalogAndBudgets',
+        'recordContribution',
+        'viewAllContributions',
+        'closeBazarMonth',
+        'importBazarData',
+        'requestContribution',
+        'viewFamilyReports',
+        'exportData',
+      });
     });
   });
 }

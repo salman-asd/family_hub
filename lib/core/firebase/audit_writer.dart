@@ -22,18 +22,18 @@ abstract final class AuditWriter {
 
   /// The document shape, shared with the contract fixtures.
   static Map<String, dynamic> toMap(AuditEvent e) => <String, dynamic>{
-        'type': e.type,
-        'actorId': e.actorId,
-        'summary': e.summary,
-        'refType': e.refType,
-        'refId': e.refId,
-        'params': e.params,
-        // The server clock: the rules require recordedAt == request.time.
-        'recordedAt': ServerTime.instance,
-        BaseMapper.keyCreatedAt: BaseMapper.dateTimeToTimestamp(e.at),
-        BaseMapper.keyCreatedBy: e.actorId,
-        BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(e.at),
-        BaseMapper.keyUpdatedBy: e.actorId,
-        BaseMapper.keySchemaVersion: 1,
-      };
+    'type': e.type,
+    'actorId': e.actorId,
+    'summary': e.summary,
+    'refType': e.refType,
+    'refId': e.refId,
+    'params': e.params,
+    // The server clock: the rules require recordedAt == request.time.
+    'recordedAt': ServerTime.instance,
+    BaseMapper.keyCreatedAt: BaseMapper.dateTimeToTimestamp(e.at),
+    BaseMapper.keyCreatedBy: e.actorId,
+    BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(e.at),
+    BaseMapper.keyUpdatedBy: e.actorId,
+    BaseMapper.keySchemaVersion: 1,
+  };
 }

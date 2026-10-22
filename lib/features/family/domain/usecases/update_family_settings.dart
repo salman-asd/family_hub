@@ -12,12 +12,10 @@ import 'package:family_hub/features/family/domain/permission_access.dart';
 /// (`Permission.editFamilySettings`: admin only).
 class UpdateFamilySettings {
   const UpdateFamilySettings({
-    required FamilyRepository families,
-    required Clock clock,
-    required IdGenerator newId,
-  })  : _families = families,
-        _clock = clock,
-        _newId = newId;
+    required this._families,
+    required this._clock,
+    required this._newId,
+  });
 
   final FamilyRepository _families;
   final Clock _clock;

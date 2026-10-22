@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 // ── Section label ─────────────────────────────────────────────────────────────
 
 class SettingsSectionLabel extends StatelessWidget {
-  const SettingsSectionLabel({required this.label, required this.tokens});
+  const SettingsSectionLabel({
+    super.key,
+    required this.label,
+    required this.tokens,
+  });
   final String label;
   final AppTokens tokens;
 
@@ -28,6 +32,7 @@ class SettingsSectionLabel extends StatelessWidget {
 
 class FollowDeviceTile extends StatelessWidget {
   const FollowDeviceTile({
+    super.key,
     required this.value,
     required this.tokens,
     required this.title,
@@ -85,10 +90,13 @@ class FollowDeviceTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Switch(
-                value: value,
-                onChanged: onChanged,
-                activeThumbColor: tokens.accent,
+              Semantics(
+                label: title,
+                child: Switch(
+                  value: value,
+                  onChanged: onChanged,
+                  activeThumbColor: tokens.accent,
+                ),
               ),
             ],
           ),
@@ -102,6 +110,7 @@ class FollowDeviceTile extends StatelessWidget {
 
 class ThemeCard extends StatelessWidget {
   const ThemeCard({
+    super.key,
     required this.spec,
     required this.isSelected,
     required this.tokens,
@@ -117,7 +126,8 @@ class ThemeCard extends StatelessWidget {
     final borderColor = isSelected ? tokens.accent : tokens.divider;
     final borderWidth = isSelected ? 2.0 : 1.0;
     final l10n = context.l10n;
-    final label = spec.labelBn.isNotEmpty &&
+    final label =
+        spec.labelBn.isNotEmpty &&
             Localizations.localeOf(context).languageCode == 'bn'
         ? spec.labelBn
         : spec.labelEn;
@@ -187,7 +197,7 @@ class ThemeCard extends StatelessWidget {
 /// A miniature colour swatch preview of the theme's tokens.
 /// Rendered entirely from the spec's own tokens — no Theme.of context needed.
 class ThemeMiniPreview extends StatelessWidget {
-  const ThemeMiniPreview({required this.spec});
+  const ThemeMiniPreview({super.key, required this.spec});
   final AppThemeSpec spec;
 
   @override

@@ -29,16 +29,12 @@ import 'package:family_hub/features/settings/domain/account_repository.dart';
 /// family skips step 3 (the family stays dormant, its history intact).
 class DeleteAccount {
   const DeleteAccount({
-    required AuthRepository auth,
-    required AccountRepository accounts,
-    required FamilyRepository families,
-    required LeaveFamily leaveFamily,
-    required CancelJoinRequest cancelJoinRequest,
-  })  : _auth = auth,
-        _accounts = accounts,
-        _families = families,
-        _leaveFamily = leaveFamily,
-        _cancelJoinRequest = cancelJoinRequest;
+    required this._auth,
+    required this._accounts,
+    required this._families,
+    required this._leaveFamily,
+    required this._cancelJoinRequest,
+  });
 
   final AuthRepository _auth;
   final AccountRepository _accounts;
@@ -86,8 +82,10 @@ class DeleteAccount {
     if (me == null || me.isRemoved) return null;
 
     if (me.status == MembershipStatus.pending) {
-      final cancelled =
-          await _cancelJoinRequest(actorUid: uid, familyId: familyId);
+      final cancelled = await _cancelJoinRequest(
+        actorUid: uid,
+        familyId: familyId,
+      );
       return cancelled.failureOrNull;
     }
     if (!me.isActive) return null;

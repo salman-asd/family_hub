@@ -56,7 +56,8 @@ class ProgressRing extends StatelessWidget {
       child: CircularProgressIndicator(
         // Reduced motion (H11): an indeterminate ring would spin forever, so it
         // is drawn as a static quarter ring instead.
-        value: value?.clamp(0.0, 1.0) ??
+        value:
+            value?.clamp(0.0, 1.0) ??
             (MediaQuery.of(context).disableAnimations ? 0.25 : null),
         strokeWidth: strokeWidth,
         strokeCap: StrokeCap.round,
@@ -74,10 +75,7 @@ class ProgressRing extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             ring,
-            Padding(
-              padding: EdgeInsets.all(strokeWidth * 2),
-              child: child,
-            ),
+            Padding(padding: EdgeInsets.all(strokeWidth * 2), child: child),
           ],
         ),
       );

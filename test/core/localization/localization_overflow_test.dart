@@ -31,9 +31,8 @@ Widget _wrap({
     theme: buildThemeData(specs.light),
     home: Builder(
       builder: (context) => MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          textScaler: TextScaler.linear(textScale),
-        ),
+        data: MediaQuery.of(context)
+            .copyWith(textScaler: TextScaler.linear(textScale)),
         child: Scaffold(body: child),
       ),
     ),
@@ -47,20 +46,20 @@ Widget _wrap({
 /// overflow — the point of the test is that long Bangla text *wraps* instead of
 /// overflowing horizontally.
 Widget _copyCard(String title, String body) => SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(fontSize: 20)),
-          const SizedBox(height: 12),
-          // Constrained width so wrapping (not overflow) is the expected result.
-          SizedBox(
-            width: 240,
-            child: Text(body, style: const TextStyle(fontSize: 14)),
-          ),
-        ],
+  padding: const EdgeInsets.all(16),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(title, style: const TextStyle(fontSize: 20)),
+      const SizedBox(height: 12),
+      // Constrained width so wrapping (not overflow) is the expected result.
+      SizedBox(
+        width: 240,
+        child: Text(body, style: const TextStyle(fontSize: 14)),
       ),
-    );
+    ],
+  ),
+);
 
 void main() {
   group('Long Bangla strings do not overflow', () {

@@ -10,8 +10,7 @@ import 'package:family_hub/features/auth/domain/auth_repository.dart';
 /// to schedule a wipe of the on-disk Firestore cache, so a second person
 /// signing in on the same phone never finds the first person's family data.
 class SignOut {
-  const SignOut(this._repository, {Future<void> Function()? afterSignOut})
-      : _afterSignOut = afterSignOut;
+  const SignOut(this._repository, {this._afterSignOut});
 
   final AuthRepository _repository;
   final Future<void> Function()? _afterSignOut;

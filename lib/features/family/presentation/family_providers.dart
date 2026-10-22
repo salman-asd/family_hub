@@ -5,6 +5,7 @@ import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
+import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/invite_code_generator.dart';
 import 'package:family_hub/features/family/domain/member.dart';
@@ -37,8 +38,17 @@ final familyRepositoryProvider = Provider<FamilyRepository>(
 
 final idGeneratorProvider = Provider<IdGenerator>((ref) => randomId);
 
-final inviteCodeGeneratorProvider =
-    Provider<InviteCodeGenerator>((ref) => InviteCodeGenerator());
+final inviteCodeGeneratorProvider = Provider<InviteCodeGenerator>(
+  (ref) => InviteCodeGenerator(),
+);
+
+/// Starter data written with a new family in the same batch (H12).
+///
+/// `bootstrap.dart` installs `DefaultCatalogSeeder`; `presentation` only knows
+/// the pure-Dart `FamilySeeder` interface.
+final familySeedersProvider = Provider<List<FamilySeeder>>(
+  (ref) => const <FamilySeeder>[],
+);
 
 /// uid of the signed-in user, or `null`.
 final currentUidProvider = Provider<String?>(
@@ -71,7 +81,8 @@ final familyProvider = StreamProvider<Family?>((ref) {
 /// The family's IANA time zone (`settings/general.timezone`); Asia/Dhaka while
 /// the family is loading, offline or absent (H12).
 final familyTimezoneProvider = Provider<String>(
-  (ref) => ref.watch(familyProvider.select((f) => f.value?.timezone)) ??
+  (ref) =>
+      ref.watch(familyProvider.select((f) => f.value?.timezone)) ??
       defaultTimezone,
 );
 
@@ -116,6 +127,7 @@ final createFamilyProvider = Provider<CreateFamily>(
     profiles: ref.watch(userProfileRepositoryProvider),
     clock: ref.watch(clockProvider),
     newId: ref.watch(idGeneratorProvider),
+    seeders: ref.watch(familySeedersProvider),
   ),
 );
 
@@ -137,18 +149,21 @@ final createInvitationProvider = Provider<CreateInvitation>(
   ),
 );
 
-final approveMemberProvider =
-    Provider<ApproveMember>((ref) => ApproveMember(ref.watch(_runnerProvider)));
+final approveMemberProvider = Provider<ApproveMember>(
+  (ref) => ApproveMember(ref.watch(_runnerProvider)),
+);
 
 final rejectMemberProvider = Provider<RejectMember>(
   (ref) => RejectMember(ref.watch(_runnerProvider), ref.watch(clockProvider)),
 );
 
-final disableMemberProvider =
-    Provider<DisableMember>((ref) => DisableMember(ref.watch(_runnerProvider)));
+final disableMemberProvider = Provider<DisableMember>(
+  (ref) => DisableMember(ref.watch(_runnerProvider)),
+);
 
-final changeRoleProvider =
-    Provider<ChangeRole>((ref) => ChangeRole(ref.watch(_runnerProvider)));
+final changeRoleProvider = Provider<ChangeRole>(
+  (ref) => ChangeRole(ref.watch(_runnerProvider)),
+);
 
 final transferAdminProvider = Provider<TransferAdmin>(
   (ref) => TransferAdmin(

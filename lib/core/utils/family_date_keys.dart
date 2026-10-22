@@ -9,10 +9,7 @@ import 'package:family_hub/core/utils/time_zones.dart';
 /// travelling in London must agree which day an expense belongs to.  Pure Dart:
 /// the clock and the zone are injected.
 class FamilyDateKeys {
-  const FamilyDateKeys({
-    required Clock clock,
-    this.timezone = defaultTimezone,
-  }) : _clock = clock;
+  const FamilyDateKeys({required this._clock, this.timezone = defaultTimezone});
 
   final Clock _clock;
 

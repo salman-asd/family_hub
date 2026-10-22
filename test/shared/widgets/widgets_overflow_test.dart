@@ -50,8 +50,9 @@ void main() {
     const longBangla =
         'পরিবারের সব সদস্যের জন্য এই মাসের বাজারের সম্পূর্ণ তালিকা';
 
-    testWidgets('status chip wraps, section header and error message fit',
-        (tester) async {
+    testWidgets('status chip wraps, section header and error message fit', (
+      tester,
+    ) async {
       final l10n = await AppLocalizations.delegate.load(const Locale('bn'));
 
       await pumpSharedWidget(
@@ -59,10 +60,7 @@ void main() {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const StatusChip(
-              status: WidgetStatus.scheduled,
-              label: longBangla,
-            ),
+            const StatusChip(status: WidgetStatus.scheduled, label: longBangla),
             SectionHeader(
               title: longBangla,
               seeAllLabel: l10n.commonSeeAll,

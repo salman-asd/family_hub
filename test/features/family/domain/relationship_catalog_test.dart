@@ -32,44 +32,76 @@ void main() {
 
     test('add, rename, disable a custom entry', () {
       final added = base
-          .add(id: 'uncle', labelBn: 'চাচা', labelEn: 'Uncle', spouseRelevant: true)
+          .add(
+            id: 'uncle',
+            labelBn: 'চাচা',
+            labelEn: 'Uncle',
+            spouseRelevant: true,
+          )
           .valueOrNull!;
       expect(added.selectable.any((e) => e.id.value == 'uncle'), isTrue);
       final renamed = added
-          .rename(const RelationshipId('uncle'), labelBn: 'মামা', labelEn: 'Maternal uncle')
+          .rename(
+            const RelationshipId('uncle'),
+            labelBn: 'মামা',
+            labelEn: 'Maternal uncle',
+          )
           .valueOrNull!;
-      expect(renamed.labelOf(const RelationshipId('uncle'), 'en'), 'Maternal uncle');
-      final off = renamed.setActive(const RelationshipId('uncle'), active: false).valueOrNull!;
+      expect(
+        renamed.labelOf(const RelationshipId('uncle'), 'en'),
+        'Maternal uncle',
+      );
+      final off = renamed
+          .setActive(const RelationshipId('uncle'), active: false)
+          .valueOrNull!;
       expect(off.selectable.any((e) => e.id.value == 'uncle'), isFalse);
       expect(off.find(const RelationshipId('uncle')), isNotNull);
     });
 
     test('built-ins cannot be renamed or disabled', () {
       expect(
-        (base.rename(RelationshipId.father, labelBn: 'x', labelEn: 'x').failureOrNull!
+        (base
+                    .rename(RelationshipId.father, labelBn: 'x', labelEn: 'x')
+                    .failureOrNull!
                 as Conflict)
             .code,
         'built_in',
       );
-      expect(base.setActive(RelationshipId.other, active: false).failureOrNull,
-          isA<Conflict>());
+      expect(
+        base.setActive(RelationshipId.other, active: false).failureOrNull,
+        isA<Conflict>(),
+      );
     });
 
     test('validation: bad id, empty or long label, duplicate, full list', () {
-      expect(base.add(id: 'Bad', labelBn: 'a', labelEn: 'a').failureOrNull,
-          isA<Validation>());
-      expect(base.add(id: 'okid', labelBn: '', labelEn: ' ').failureOrNull,
-          isA<Validation>());
-      expect(base.add(id: 'okid', labelBn: 'x' * 41, labelEn: '').failureOrNull,
-          isA<Validation>());
-      expect(base.add(id: 'father', labelBn: 'a', labelEn: 'a').failureOrNull,
-          isA<Conflict>());
+      expect(
+        base.add(id: 'Bad', labelBn: 'a', labelEn: 'a').failureOrNull,
+        isA<Validation>(),
+      );
+      expect(
+        base.add(id: 'okid', labelBn: '', labelEn: ' ').failureOrNull,
+        isA<Validation>(),
+      );
+      expect(
+        base.add(id: 'okid', labelBn: 'x' * 41, labelEn: '').failureOrNull,
+        isA<Validation>(),
+      );
+      expect(
+        base.add(id: 'father', labelBn: 'a', labelEn: 'a').failureOrNull,
+        isA<Conflict>(),
+      );
       var full = base;
-      for (var i = 0; full.entries.length < RelationshipCatalog.maxEntries; i++) {
+      for (
+        var i = 0;
+        full.entries.length < RelationshipCatalog.maxEntries;
+        i++
+      ) {
         full = full.add(id: 'cx$i', labelBn: 'a', labelEn: 'a').valueOrNull!;
       }
-      expect(full.add(id: 'cmore', labelBn: 'a', labelEn: 'a').failureOrNull,
-          isA<Validation>());
+      expect(
+        full.add(id: 'cmore', labelBn: 'a', labelEn: 'a').failureOrNull,
+        isA<Validation>(),
+      );
     });
 
     test('an unknown id reads as Other', () {
@@ -82,7 +114,13 @@ void main() {
       final c = RelationshipCatalog.defaults
           .add(id: 'uncle', labelBn: 'চাচা', labelEn: 'Uncle')
           .valueOrNull!;
-      final map = {'items': RelationshipMappers.relationshipsChangeMap(c, actorUid: 'u', now: DateTime.utc(2026))['items']};
+      final map = {
+        'items': RelationshipMappers.relationshipsChangeMap(
+          c,
+          actorUid: 'u',
+          now: DateTime.utc(2026),
+        )['items'],
+      };
       expect(RelationshipMappers.relationshipsFromMap(map), c);
     });
 
@@ -98,7 +136,10 @@ void main() {
       expect(c.find(RelationshipId.other), isNotNull);
       expect(c.labelOf(RelationshipId.father, 'en'), 'Father');
       expect(c.find(const RelationshipId('uncle')), isNotNull);
-      expect(RelationshipMappers.relationshipsFromMap(null), RelationshipCatalog.defaults);
+      expect(
+        RelationshipMappers.relationshipsFromMap(null),
+        RelationshipCatalog.defaults,
+      );
     });
   });
 

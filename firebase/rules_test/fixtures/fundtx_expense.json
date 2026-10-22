@@ -1,0 +1,30 @@
+{
+  "scenario": "fundtx_expense",
+  "actor": "fixMember",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/fundTransactions/exp_exp_fix8",
+      "data": {
+        "type": "expense",
+        "amountPaisa": -5000,
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "refType": "expense",
+        "refId": "exp_fix8",
+        "note": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    }
+  ]
+}

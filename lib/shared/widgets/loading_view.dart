@@ -134,20 +134,17 @@ class _LoadingViewState extends State<LoadingView>
   }
 
   Widget _bar(AppTokens t, double width) => Container(
-        width: width,
-        height: LoadingView.barHeight,
-        decoration: BoxDecoration(
-          color: t.surfaceSunken,
-          borderRadius: BorderRadius.circular(t.radiusSm),
-        ),
-      );
+    width: width,
+    height: LoadingView.barHeight,
+    decoration: BoxDecoration(
+      color: t.surfaceSunken,
+      borderRadius: BorderRadius.circular(t.radiusSm),
+    ),
+  );
 
   Widget _avatar(AppTokens t) => Container(
-        width: LoadingView.avatarSize,
-        height: LoadingView.avatarSize,
-        decoration: BoxDecoration(
-          color: t.surfaceSunken,
-          shape: BoxShape.circle,
-        ),
-      );
+    width: LoadingView.avatarSize,
+    height: LoadingView.avatarSize,
+    decoration: BoxDecoration(color: t.surfaceSunken, shape: BoxShape.circle),
+  );
 }

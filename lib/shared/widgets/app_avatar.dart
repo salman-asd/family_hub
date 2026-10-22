@@ -71,8 +71,8 @@ class AppAvatar extends StatelessWidget {
   /// own `placeholderOnLight` / `placeholderOnDark` tokens (rule 22).
   static Color foregroundFor(Color background, AppTokens tokens) =>
       ThemeData.estimateBrightnessForColor(background) == Brightness.dark
-          ? tokens.placeholderOnDark
-          : tokens.placeholderOnLight;
+      ? tokens.placeholderOnDark
+      : tokens.placeholderOnLight;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class AppAvatar extends StatelessWidget {
                 fit: BoxFit.cover,
                 // No error widget and no spinner: on failure the initials
                 // underneath simply stay visible.
-                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                errorBuilder: (_, _, _) => const SizedBox.shrink(),
                 frameBuilder: (_, widget, frame, wasSynchronouslyLoaded) {
                   if (wasSynchronouslyLoaded) return widget;
                   return AnimatedOpacity(

@@ -93,20 +93,19 @@ final reloadUserProvider = Provider<Future<Result<AppUser?>> Function()>(
 /// this switch stops compiling until it is handled — no failure can silently
 /// fall through to a generic message.
 String authFailureCode(AppFailure failure) => switch (failure) {
-      PermissionDenied() => 'permission_denied',
-      NotFound() => 'not_found',
-      Conflict() => 'conflict',
-      Network() => 'network',
-      InvalidCredentials() => 'invalid_credentials',
-      UserNotFound() => 'user_not_found',
-      EmailAlreadyInUse() => 'email_already_in_use',
-      WeakPassword() => 'weak_password',
-      TooManyRequests() => 'too_many_requests',
-      UserDisabled() => 'user_disabled',
-      RequiresRecentLogin() => 'requires_recent_login',
-      InvalidEmail() => 'invalid_email',
-      NoCurrentUser() => 'no_current_user',
-      Validation(field: final field, code: final code) =>
-        'validation.$field.$code',
-      Unknown() => 'unknown',
-    };
+  PermissionDenied() => 'permission_denied',
+  NotFound() => 'not_found',
+  Conflict() => 'conflict',
+  Network() => 'network',
+  InvalidCredentials() => 'invalid_credentials',
+  UserNotFound() => 'user_not_found',
+  EmailAlreadyInUse() => 'email_already_in_use',
+  WeakPassword() => 'weak_password',
+  TooManyRequests() => 'too_many_requests',
+  UserDisabled() => 'user_disabled',
+  RequiresRecentLogin() => 'requires_recent_login',
+  InvalidEmail() => 'invalid_email',
+  NoCurrentUser() => 'no_current_user',
+  Validation(field: final field, code: final code) => 'validation.$field.$code',
+  Unknown() => 'unknown',
+};

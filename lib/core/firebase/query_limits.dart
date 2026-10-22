@@ -8,3 +8,7 @@ const int defaultPageSize = 30;
 
 /// Hard cap for one live listener (a month of expenses fits comfortably).
 const int kMaxListenerDocs = 500;
+
+/// Hard cap for one catalog listener (11 categories + 54 built-in items plus
+/// room for custom entries; the rules cap the same collections implicitly).
+const int kMaxCatalogDocs = 500;

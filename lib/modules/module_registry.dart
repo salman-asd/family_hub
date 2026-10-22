@@ -6,19 +6,14 @@ import 'package:family_hub/features/family/domain/module_flags.dart';
 /// The modules the app knows about, in navigation order.
 class ModuleRegistry {
   ModuleRegistry(List<FamilyModule> modules)
-      : modules = List.unmodifiable(modules) {
+    : modules = List.unmodifiable(modules) {
     final ids = modules.map((m) => m.id).toList();
-    assert(
-      ids.toSet().length == ids.length,
-      'Module ids must be unique: $ids',
-    );
+    assert(ids.toSet().length == ids.length, 'Module ids must be unique: $ids');
   }
 
   /// The production registry.  A new module = one more entry here.
-  factory ModuleRegistry.standard() => ModuleRegistry(const [
-        ChoresModule(),
-        BazarModule(),
-      ]);
+  factory ModuleRegistry.standard() =>
+      ModuleRegistry(const [ChoresModule(), BazarModule()]);
 
   final List<FamilyModule> modules;
 

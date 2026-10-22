@@ -159,15 +159,16 @@ class InMemoryBackend
 
   @override
   Stream<RelationshipCatalog> watchRelationshipCatalog(String familyId) =>
-      _live(() => relationshipCatalogs[familyId] ?? RelationshipCatalog.defaults);
+      _live(
+        () => relationshipCatalogs[familyId] ?? RelationshipCatalog.defaults,
+      );
 
   @override
   Future<Result<RelationshipCatalog>> getRelationshipCatalog(
     String familyId,
-  ) async =>
-      Success<RelationshipCatalog>(
-        relationshipCatalogs[familyId] ?? RelationshipCatalog.defaults,
-      );
+  ) async => Success<RelationshipCatalog>(
+    relationshipCatalogs[familyId] ?? RelationshipCatalog.defaults,
+  );
 
   @override
   Future<Result<void>> saveRelationshipCatalog(
@@ -253,9 +254,9 @@ class InMemoryBackend
       Success(members[familyId]?[uid]);
 
   List<Member> _live0(String familyId) => [
-        for (final m in (members[familyId] ?? const <String, Member>{}).values)
-          if (!m.isRemoved) m,
-      ];
+    for (final m in (members[familyId] ?? const <String, Member>{}).values)
+      if (!m.isRemoved) m,
+  ];
 
   @override
   Future<Result<List<Member>>> getMembers(String familyId) async =>
@@ -311,9 +312,8 @@ class InMemoryBackend
   }
 
   @override
-  Stream<PermissionSettings> watchPermissionSettings(String familyId) => _live(
-        () => permissionSettings[familyId] ?? PermissionSettings.defaults,
-      );
+  Stream<PermissionSettings> watchPermissionSettings(String familyId) =>
+      _live(() => permissionSettings[familyId] ?? PermissionSettings.defaults);
 
   @override
   Stream<List<Member>> watchMembers(String familyId) =>
@@ -321,11 +321,11 @@ class InMemoryBackend
 
   @override
   Stream<List<Invitation>> watchInvitations(String familyId) => _liveList(
-        () => [
-          for (final i in invitations.values)
-            if (i.familyId == familyId) i,
-        ],
-      );
+    () => [
+      for (final i in invitations.values)
+        if (i.familyId == familyId) i,
+    ],
+  );
 
   @override
   Stream<Family?> watchFamily(String familyId) =>
@@ -335,11 +335,11 @@ class InMemoryBackend
 
   @override
   Stream<Membership> watchMembership(String uid) => _live(() {
-        final fid = userFamily[uid];
-        final m = fid == null ? null : members[fid]?[uid];
-        if (fid == null || m == null || m.isRemoved) return Membership.none;
-        return Membership(status: m.status, familyId: fid, role: m.role);
-      });
+    final fid = userFamily[uid];
+    final m = fid == null ? null : members[fid]?[uid];
+    if (fid == null || m == null || m.isRemoved) return Membership.none;
+    return Membership(status: m.status, familyId: fid, role: m.role);
+  });
 
   @override
   Stream<ModuleFlags> watchModuleFlags(String familyId) =>

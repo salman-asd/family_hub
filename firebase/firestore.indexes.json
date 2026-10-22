@@ -25,6 +25,22 @@
       ]
     },
     {
+      "collectionGroup": "expenses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "itemId", "order": "ASCENDING" },
+        { "fieldPath": "dateKey", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "expenses",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "fundingSource", "order": "ASCENDING" },
+        { "fieldPath": "dateKey", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "choreOccurrences",
       "queryScope": "COLLECTION",
       "fields": [
@@ -53,6 +69,38 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "monthKey", "order": "ASCENDING" },
+        { "fieldPath": "dateKey", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "contributions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "memberId", "order": "ASCENDING" },
+        { "fieldPath": "monthKey", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "fundTransactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "monthKey", "order": "ASCENDING" },
+        { "fieldPath": "dateKey", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "memberAdvances",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "dateKey", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "settlements",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "advanceId", "order": "ASCENDING" },
         { "fieldPath": "dateKey", "order": "DESCENDING" }
       ]
     },

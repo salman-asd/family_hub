@@ -64,9 +64,9 @@ class AuthInfoBanner extends StatelessWidget {
       AuthInfoTone.neutral => (t.surfaceSunken, t.textPrimary),
       AuthInfoTone.success => (t.statusVerifiedContainer, t.statusVerifiedOn),
       AuthInfoTone.warning => (
-          t.statusInProgressContainer,
-          t.statusInProgressOn
-        ),
+        t.statusInProgressContainer,
+        t.statusInProgressOn,
+      ),
     };
 
     return Container(

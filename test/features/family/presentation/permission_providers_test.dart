@@ -78,13 +78,14 @@ void main() {
         ),
         familyRepositoryProvider.overrideWithValue(f.backend),
         moduleFlagsRepositoryProvider.overrideWithValue(f.backend),
-        if (registry != null) moduleRegistryProvider.overrideWithValue(registry),
+        if (registry != null)
+          moduleRegistryProvider.overrideWithValue(registry),
       ],
     );
     addTearDown(container.dispose);
     container
-      ..listen(membershipProvider, (_, __) {})
-      ..listen(permissionSettingsProvider, (_, __) {});
+      ..listen(membershipProvider, (_, _) {})
+      ..listen(permissionSettingsProvider, (_, _) {});
     await container.read(membershipProvider.future);
     await settle();
     return container;
@@ -136,8 +137,9 @@ void main() {
     final kid = await signedInAs('kid');
     expect(can(kid, Permission.inviteMembers), isFalse);
 
-    f.backend.permissionSettings['fam'] =
-        const PermissionSettings(membersCanInvite: true);
+    f.backend.permissionSettings['fam'] = const PermissionSettings(
+      membersCanInvite: true,
+    );
     f.backend.backendNotify();
     await settle();
     expect(can(kid, Permission.inviteMembers), isTrue);
@@ -157,10 +159,10 @@ void main() {
   group('visibleModulesProvider (the shell hook)', () {
     test('a module without a requirement is visible to a member', () async {
       final kid = await signedInAs('kid');
-      expect(
-        kid.read(visibleModulesProvider).map((m) => m.id),
-        ['chores', 'bazar'],
-      );
+      expect(kid.read(visibleModulesProvider).map((m) => m.id), [
+        'chores',
+        'bazar',
+      ]);
       expect(kid.read(hiddenModulesProvider), isEmpty);
     });
 

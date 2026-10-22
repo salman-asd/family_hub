@@ -36,7 +36,7 @@ class RelationshipsScreen extends ConsumerWidget {
       ),
       body: catalog.when(
         loading: () => const LoadingView(),
-        error: (_, __) => ErrorView(
+        error: (_, _) => ErrorView(
           message: l10n.errorUnknown,
           onRetry: () => ref.invalidate(relationshipCatalogProvider),
         ),
@@ -69,8 +69,12 @@ class RelationshipsScreen extends ConsumerWidget {
     final uid = ref.read(currentUidProvider);
     final familyId = ref.read(currentFamilyIdProvider);
     if (uid == null || familyId == null) return;
-    await ref.read(_relationshipsActionProvider.notifier).run(
-          () => ref.read(updateRelationshipCatalogProvider).setActive(
+    await ref
+        .read(_relationshipsActionProvider.notifier)
+        .run(
+          () => ref
+              .read(updateRelationshipCatalogProvider)
+              .setActive(
                 actorUid: uid,
                 familyId: familyId,
                 id: e.id,
@@ -101,13 +105,17 @@ class RelationshipsScreen extends ConsumerWidget {
                   key: const Key('relationship_label_bn'),
                   controller: bn,
                   maxLength: RelationshipCatalog.maxLabelLength,
-                  decoration: InputDecoration(labelText: l10n.relationshipsLabelBn),
+                  decoration: InputDecoration(
+                    labelText: l10n.relationshipsLabelBn,
+                  ),
                 ),
                 TextField(
                   key: const Key('relationship_label_en'),
                   controller: en,
                   maxLength: RelationshipCatalog.maxLabelLength,
-                  decoration: InputDecoration(labelText: l10n.relationshipsLabelEn),
+                  decoration: InputDecoration(
+                    labelText: l10n.relationshipsLabelEn,
+                  ),
                 ),
                 SwitchListTile(
                   key: const Key('relationship_spouse'),
@@ -143,7 +151,9 @@ class RelationshipsScreen extends ConsumerWidget {
     final familyId = ref.read(currentFamilyIdProvider);
     if (uid == null || familyId == null) return;
     final useCase = ref.read(updateRelationshipCatalogProvider);
-    await ref.read(_relationshipsActionProvider.notifier).run(
+    await ref
+        .read(_relationshipsActionProvider.notifier)
+        .run(
           () => entry == null
               ? useCase.add(
                   actorUid: uid,
@@ -183,7 +193,9 @@ class _EntryTile extends StatelessWidget {
     final t = context.tokens;
     final status = entry.builtIn
         ? l10n.relationshipsBuiltIn
-        : (entry.active ? l10n.relationshipsActive : l10n.relationshipsDisabled);
+        : (entry.active
+              ? l10n.relationshipsActive
+              : l10n.relationshipsDisabled);
     return Card(
       key: Key('relationship_${entry.id.value}'),
       child: ListTile(
@@ -192,8 +204,8 @@ class _EntryTile extends StatelessWidget {
           entry.builtIn
               ? Icons.lock_outline_rounded
               : (entry.active
-                  ? Icons.check_circle_outline_rounded
-                  : Icons.block_rounded),
+                    ? Icons.check_circle_outline_rounded
+                    : Icons.block_rounded),
           color: t.textSecondary,
         ),
         title: Text(label),
@@ -205,7 +217,10 @@ class _EntryTile extends StatelessWidget {
                 children: [
                   IconButton(
                     tooltip: l10n.actionEdit,
-                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                    constraints: const BoxConstraints(
+                      minWidth: 48,
+                      minHeight: 48,
+                    ),
                     icon: const Icon(Icons.edit_outlined),
                     onPressed: onEdit,
                   ),
@@ -213,7 +228,10 @@ class _EntryTile extends StatelessWidget {
                     tooltip: entry.active
                         ? l10n.relationshipsDisable
                         : l10n.relationshipsEnable,
-                    constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+                    constraints: const BoxConstraints(
+                      minWidth: 48,
+                      minHeight: 48,
+                    ),
                     icon: Icon(
                       entry.active
                           ? Icons.visibility_off_outlined

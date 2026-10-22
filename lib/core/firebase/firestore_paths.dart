@@ -42,6 +42,8 @@ abstract final class FirestorePaths {
   static const String activitySubcollection = 'activity';
   static const String auditLogsSubcollection = 'auditLogs';
   static const String memberStatsSubcollection = 'memberStats';
+  static const String monthClosingsSubcollection = 'monthClosings';
+  static const String importBatchesSubcollection = 'importBatches';
 
   // ── Collection Paths ───────────────────────────────────────────────────────
 
@@ -54,6 +56,10 @@ abstract final class FirestorePaths {
       '${familyDoc(familyId)}/$settingsSubcollection';
   static String settingsDoc(String familyId, String settingId) =>
       '${settings(familyId)}/$settingId';
+
+  /// The Bazar module's own settings document: `settings/bazar`.
+  static String bazarSettingsDoc(String familyId) =>
+      settingsDoc(familyId, 'bazar');
 
   static String invitations(String familyId) =>
       '${familyDoc(familyId)}/$invitationsSubcollection';
@@ -74,6 +80,15 @@ abstract final class FirestorePaths {
       '${familyDoc(familyId)}/$expensesSubcollection';
   static String expenseDoc(String familyId, String expenseId) =>
       '${expenses(familyId)}/$expenseId';
+
+  /// Revision history under one expense.
+  static String expenseRevisions(String familyId, String expenseId) =>
+      '${expenseDoc(familyId, expenseId)}/revisions';
+  static String expenseRevisionDoc(
+    String familyId,
+    String expenseId,
+    String revisionId,
+  ) => '${expenseRevisions(familyId, expenseId)}/$revisionId';
 
   static String bazarTrips(String familyId) =>
       '${familyDoc(familyId)}/$bazarTripsSubcollection';
@@ -112,6 +127,17 @@ abstract final class FirestorePaths {
   static String settlementDoc(String familyId, String settlementId) =>
       '${settlements(familyId)}/$settlementId';
 
+  /// Deterministic ID: `{yyyy-MM}`
+  static String monthClosings(String familyId) =>
+      '${familyDoc(familyId)}/$monthClosingsSubcollection';
+  static String monthClosingDoc(String familyId, String monthKey) =>
+      '${monthClosings(familyId)}/$monthKey';
+
+  static String importBatches(String familyId) =>
+      '${familyDoc(familyId)}/$importBatchesSubcollection';
+  static String importBatchDoc(String familyId, String importBatchId) =>
+      '${importBatches(familyId)}/$importBatchId';
+
   static String choreTemplates(String familyId) =>
       '${familyDoc(familyId)}/$choreTemplatesSubcollection';
   static String choreTemplateDoc(String familyId, String templateId) =>
@@ -135,8 +161,7 @@ abstract final class FirestorePaths {
     String familyId,
     String occurrenceId,
     String eventId,
-  ) =>
-      '${occurrenceEvents(familyId, occurrenceId)}/$eventId';
+  ) => '${occurrenceEvents(familyId, occurrenceId)}/$eventId';
 
   static String occurrenceComments(String familyId, String occurrenceId) =>
       '${choreOccurrenceDoc(familyId, occurrenceId)}/comments';
@@ -144,8 +169,7 @@ abstract final class FirestorePaths {
     String familyId,
     String occurrenceId,
     String commentId,
-  ) =>
-      '${occurrenceComments(familyId, occurrenceId)}/$commentId';
+  ) => '${occurrenceComments(familyId, occurrenceId)}/$commentId';
 
   static String memberAvailability(String familyId) =>
       '${familyDoc(familyId)}/$memberAvailabilitySubcollection';

@@ -6,7 +6,6 @@ import 'package:family_hub/features/family/presentation/screens/relationships_sc
 import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
 import 'package:family_hub/features/settings/presentation/security_screen.dart';
 import 'package:family_hub/features/settings/presentation/theme_settings_screen.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/screen_states.dart';
 
@@ -14,7 +13,10 @@ import '../../support/screen_states.dart';
 /// Firebase.  Add a screen here as soon as it reads a stream.
 void main() {
   screenStateTests('ThemeSettingsScreen', () => const ThemeSettingsScreen());
-  screenStateTests('LanguageSettingsScreen', () => const LanguageSettingsScreen());
+  screenStateTests(
+    'LanguageSettingsScreen',
+    () => const LanguageSettingsScreen(),
+  );
   screenStateTests('SecurityScreen', () => const SecurityScreen());
 
   screenStateTests(
@@ -33,10 +35,10 @@ void main() {
           ScreenState.error => Stream<RelationshipCatalog>.error('boom'),
           ScreenState.empty => Stream.value(RelationshipCatalog.defaults),
           ScreenState.data => Stream.value(
-              RelationshipCatalog.defaults
-                  .add(id: 'uncle', labelBn: 'চাচা', labelEn: 'Uncle')
-                  .valueOrNull!,
-            ),
+            RelationshipCatalog.defaults
+                .add(id: 'uncle', labelBn: 'চাচা', labelEn: 'Uncle')
+                .valueOrNull!,
+          ),
         },
       ),
     ],

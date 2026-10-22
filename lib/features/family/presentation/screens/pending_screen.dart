@@ -28,12 +28,13 @@ class PendingScreen extends ConsumerWidget {
             ? null
             : () {
                 final uid = ref.read(currentUidProvider);
-                final familyId =
-                    ref.read(membershipProvider).value?.familyId;
+                final familyId = ref.read(membershipProvider).value?.familyId;
                 if (uid == null || familyId == null) return;
                 // The member document gets `removedAt`; the router then moves
                 // to family choice by itself.
-                ref.read(_cancelActionProvider.notifier).run(
+                ref
+                    .read(_cancelActionProvider.notifier)
+                    .run(
                       () => ref.read(cancelJoinRequestProvider)(
                         actorUid: uid,
                         familyId: familyId,
@@ -54,10 +55,10 @@ class DisabledScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) => _GateScreen(
-        icon: Icons.block_rounded,
-        title: context.l10n.disabledTitle,
-        message: context.l10n.disabledMessage,
-      );
+    icon: Icons.block_rounded,
+    title: context.l10n.disabledTitle,
+    message: context.l10n.disabledMessage,
+  );
 }
 
 class _GateScreen extends ConsumerWidget {
@@ -90,7 +91,7 @@ class _GateScreen extends ConsumerWidget {
               FailureBanner(failure: failure!),
               const SizedBox(height: 8),
             ],
-            if (extra != null) extra!,
+            ?extra,
             TextButton(
               onPressed: () => ref.read(signOutProvider).call(),
               child: Text(l10n.authSignOut),

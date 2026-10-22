@@ -5,14 +5,15 @@ import 'package:family_hub/core/firebase/doc_state.dart';
 /// [DocUnknown] / [DocAbsent] / [DocPresent] (see [DocState]).
 Stream<DocState<Map<String, dynamic>>> watchDoc(
   DocumentReference<Map<String, dynamic>> ref,
-) =>
-    ref.snapshots(includeMetadataChanges: true).map(
-          (s) => docStateOf(
-            exists: s.exists,
-            isFromCache: s.metadata.isFromCache,
-            data: s.data(),
-          ),
-        );
+) => ref
+    .snapshots(includeMetadataChanges: true)
+    .map(
+      (s) => docStateOf(
+        exists: s.exists,
+        isFromCache: s.metadata.isFromCache,
+        data: s.data(),
+      ),
+    );
 
 /// Like [watchDoc] but silent while the state is [DocUnknown]: it emits the data
 /// when the document is present and `null` only when the server confirmed it is
@@ -20,8 +21,7 @@ Stream<DocState<Map<String, dynamic>>> watchDoc(
 /// nothing cached, instead of acting on a false "does not exist".
 Stream<Map<String, dynamic>?> watchKnownDoc(
   DocumentReference<Map<String, dynamic>> ref,
-) =>
-    knownOnly(watchDoc(ref));
+) => knownOnly(watchDoc(ref));
 
 /// Drops [DocUnknown] states and unwraps the rest.  Split out for unit tests.
 Stream<Map<String, dynamic>?> knownOnly(

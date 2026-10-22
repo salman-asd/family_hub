@@ -65,9 +65,7 @@ Future<PermissionSettings> _loadSettings(
 /// cannot be expressed there; it is enforced here and in the use cases that
 /// change a role, disable a member or remove one (Step 9/10).
 bool leavesNoActiveAdmin(List<Member> members, Member updated) {
-  final after = [
-    for (final m in members) m.uid == updated.uid ? updated : m,
-  ];
+  final after = [for (final m in members) m.uid == updated.uid ? updated : m];
   return !after.any((m) => m.isActiveAdmin);
 }
 
@@ -84,15 +82,15 @@ const int maxActiveAdmins = 3;
 /// This is exactly what `families/{f}.adminIds` must contain after a write
 /// (H6); the rules re-check every uid against its member document.
 List<String> activeAdminIds(Iterable<Member> members) => <String>[
-      for (final m in members)
-        if (m.isActiveAdmin) m.uid,
-    ];
+  for (final m in members)
+    if (m.isActiveAdmin) m.uid,
+];
 
 /// [members] with [updated] replacing the member of the same uid.
 List<Member> rosterWith(List<Member> members, Member updated) => <Member>[
-      for (final m in members)
-        if (m.uid == updated.uid) updated else m,
-    ];
+  for (final m in members)
+    if (m.uid == updated.uid) updated else m,
+];
 
 /// True when [a] and [b] contain the same uids (order-independent).
 bool sameAdminSet(List<String> a, List<String> b) =>

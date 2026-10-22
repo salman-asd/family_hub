@@ -11,8 +11,10 @@ void main() {
       2: StreamController<String>(),
     };
     final out = <String>[];
-    final sub = switchMap<int, String>(source.stream, (v) => inner[v]!.stream)
-        .listen(out.add);
+    final sub = switchMap<int, String>(
+      source.stream,
+      (v) => inner[v]!.stream,
+    ).listen(out.add);
 
     source.add(1);
     await pumpEventQueue();
@@ -36,24 +38,32 @@ void main() {
     await inner[2]!.close();
   });
 
-  test('completes when the source and the last inner stream are done', () async {
-    final source = StreamController<int>();
-    final done = Completer<void>();
-    final out = <int>[];
-    switchMap<int, int>(source.stream, (v) => Stream.value(v * 10))
-        .listen(out.add, onDone: done.complete);
-    source
-      ..add(1)
-      ..add(2);
-    await source.close();
-    await done.future;
-    expect(out.last, 20);
-  });
+  test(
+    'completes when the source and the last inner stream are done',
+    () async {
+      final source = StreamController<int>();
+      final done = Completer<void>();
+      final out = <int>[];
+      switchMap<int, int>(
+        source.stream,
+        (v) => Stream.value(v * 10),
+      ).listen(out.add, onDone: done.complete);
+      source
+        ..add(1)
+        ..add(2);
+      await source.close();
+      await done.future;
+      expect(out.last, 20);
+    },
+  );
 
   test('errors from the source are forwarded', () async {
     final source = StreamController<int>();
     final errors = <Object>[];
-    switchMap<int, int>(source.stream, Stream.value).listen((_) {}, onError: errors.add);
+    switchMap<int, int>(
+      source.stream,
+      Stream.value,
+    ).listen((_) {}, onError: errors.add);
     source.addError('boom');
     await pumpEventQueue();
     expect(errors, ['boom']);

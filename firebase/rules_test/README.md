@@ -28,8 +28,13 @@ emulator is a JVM program and firebase-tools 15 refuses older runtimes.
 `firestore.rules.test.mjs` has an allowed and a denied case for every rule:
 `users/{uid}`, `inviteCodes/{code}`, `families/{f}`, `members/{m}`,
 `invitations/{i}`, `settings/{s}`, `activity`, `auditLogs`, the deny-only guard
-on the not-yet-open financial and chore collections, unauthenticated access, and
-the Phase 1 acceptance scenario end to end.
+on the not-yet-open chore collections, unauthenticated access, and the Phase 1
+acceptance scenario end to end.
+
+Phase 2 adds one file per collection group: `catalog.test.mjs` (categories and
+items), `bazar_settings.test.mjs` (`settings/bazar`), `expenses.test.mjs`
+(expenses, their revisions and trips), `fund.test.mjs` (the signed ledger) and
+`advances.test.mjs` (advances, settlements and month closings).
 
 The four cases the roadmap names explicitly are marked `[roadmap]`:
 

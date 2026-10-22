@@ -5,15 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// The child every test gates: a button that records its taps.
-Widget _action(
-  VoidCallback onPressed, {
-  Key key = const Key('action'),
-}) =>
-    TextButton(
-      key: key,
-      onPressed: onPressed,
-      child: const Text('Complete'),
-    );
+Widget _action(VoidCallback onPressed, {Key key = const Key('action')}) =>
+    TextButton(key: key, onPressed: onPressed, child: const Text('Complete'));
 
 Future<void> _pump(
   WidgetTester tester, {
@@ -69,8 +62,9 @@ void main() {
     expect(find.byKey(const Key('action')), findsNothing);
   });
 
-  testWidgets('disable mode keeps a denied action visible but unusable',
-      (tester) async {
+  testWidgets('disable mode keeps a denied action visible but unusable', (
+    tester,
+  ) async {
     var taps = 0;
     await _pump(
       tester,
@@ -104,8 +98,9 @@ void main() {
     expect(opacity.opacity, PermissionGate.disabledOpacity);
   });
 
-  testWidgets('disable mode explains why, with an icon and a label',
-      (tester) async {
+  testWidgets('disable mode explains why, with an icon and a label', (
+    tester,
+  ) async {
     await _pump(
       tester,
       allowed: false,
@@ -119,8 +114,9 @@ void main() {
     expect(find.byIcon(Icons.lock_outline), findsOneWidget);
   });
 
-  testWidgets('disable mode shows no explanation when none is given',
-      (tester) async {
+  testWidgets('disable mode shows no explanation when none is given', (
+    tester,
+  ) async {
     await _pump(
       tester,
       allowed: false,

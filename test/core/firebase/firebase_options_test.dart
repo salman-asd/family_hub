@@ -42,13 +42,19 @@ void main() {
 
     test('throws for placeholders unless the emulator is used', () {
       expect(
-        () => assertFirebaseConfigured(Flavor.prod, placeholder,
-            useEmulator: false),
+        () => assertFirebaseConfigured(
+          Flavor.prod,
+          placeholder,
+          useEmulator: false,
+        ),
         throwsA(isA<FirebaseNotConfiguredException>()),
       );
       expect(
-        () => assertFirebaseConfigured(Flavor.prod, placeholder,
-            useEmulator: true),
+        () => assertFirebaseConfigured(
+          Flavor.prod,
+          placeholder,
+          useEmulator: true,
+        ),
         returnsNormally,
       );
       expect(

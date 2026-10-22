@@ -1,0 +1,118 @@
+{
+  "scenario": "expense_restore",
+  "actor": "fixMember",
+  "writes": [
+    {
+      "op": "update",
+      "path": "families/fixFam/expenses/exp_fix6",
+      "data": {
+        "deletedAt": null,
+        "deletedBy": null,
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember"
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/expenses/exp_fix6/revisions/ev25",
+      "data": {
+        "before": {
+          "deletedAt": {
+            "__ts": "2026-10-18T10:00:00.000Z"
+          },
+          "deletedBy": "fixMember"
+        },
+        "changedFields": [
+          "deletedAt",
+          "deletedBy"
+        ],
+        "reason": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/fundTransactions/adj_ev25_res",
+      "data": {
+        "type": "adjustment",
+        "amountPaisa": -12000,
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "refType": "expense",
+        "refId": "exp_fix6",
+        "note": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev25",
+      "data": {
+        "type": "bazar.expense_restored",
+        "actorId": "fixMember",
+        "summary": "",
+        "refType": "expense",
+        "refId": "exp_fix6",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev25",
+      "data": {
+        "type": "bazar.expense_restored",
+        "actorId": "fixMember",
+        "summary": "",
+        "refType": "expense",
+        "refId": "exp_fix6",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

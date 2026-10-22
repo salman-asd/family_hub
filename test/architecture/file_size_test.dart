@@ -27,6 +27,10 @@ void main() {
       final lines = entity.readAsLinesSync().length;
       if (lines > maxLines) tooLong.add('$path ($lines lines)');
     }
-    expect(tooLong, isEmpty, reason: 'Split these files:\n${tooLong.join('\n')}');
+    expect(
+      tooLong,
+      isEmpty,
+      reason: 'Split these files:\n${tooLong.join('\n')}',
+    );
   });
 }

@@ -207,6 +207,420 @@ Security review result: 11 checklist items pass by reading rules and tests; one 
 
 Create the tag only when 1-4 are green: `git tag phase-1-complete && git push --tags`.
 
+## Phase 2 - P2-01 Preflight gate, Bazar skeleton, seams
+
+Executed on this machine (Flutter 3.47.7 / Dart 3.13.5) on 2026-10-22. The base tree was red on
+arrival, so the P2-01 gate included the mechanical baseline fixes below; no Phase 2 feature work
+beyond the card was started.
+
+| Gate command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS (290 files, 0 changed) |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (827 tests) |
+| `node tools/check_indexes.mjs` | PASS (`firestore.indexes.json OK`) |
+| rules suite (`firebase emulators:exec ...`) | **NOT RUN**: `java -version` cannot spawn; Java is not installed/on PATH |
+| `flutter build apk --flavor dev -t lib/main_dev.dart` | **NOT RUN**: `flutter doctor` reports no Android SDK |
+| Manual device acceptance (sign up -> create family -> join -> approve) | **NOT RUN**: no device/emulator with Firebase config |
+
+### Baseline fixes required by the gate
+- Ran the Dart 3.13 formatter over the tree (large but mechanical diff).
+- Fixed all pre-existing analyzer issues (Riverpod `Override` import from `flutter_riverpod/misc.dart`,
+  `ActionController.run<void>` call sites, unused/duplicate imports, initializing formals, wildcards,
+  null-aware elements, widget keys).
+- Fixed pre-existing failing tests without weakening them: map identity in `doc_state_test`, the
+  TODO detector matching itself, two files over 300 lines split, the missed `viewAllContributions`
+  permission in the contract list, `expect` outside a test in `paths_match_rules_test`, the shell
+  test missing a `ProviderScope`, and a missing Cupertino delegate that produced the `bn` locale warning.
+- Added the missing semantic labels to the two settings switches.
+
+### P2-01 deliverables
+- `docs/PHASE2_BAZAR_ROADMAP.md` (copy) and ADRs 0006-0008.
+- `lib/features/bazar/bazar_entries.dart` + `presentation/bazar_home_screen.dart`; placeholder deleted.
+- `familySeedersProvider` wired into `createFamilyProvider`.
+- bn/en ARB keys for the empty state (`flutter gen-l10n` run).
+- CLAUDE.md folder layout (`bazar/fund`, `bazar/settings`) and Phase 2 rules 25-33.
+- Tests: provider-seeded family creation and the Bazar home (bn/en, light/dark, empty, permission hiding).
+
+### Assumptions / deviations
+- `BazarHomeScreen` takes an optional `entries` list for widget tests; production still reads the shared
+  `bazarEntries` list. This keeps the seam testable without a global mutation.
+- P2-01 adds no Firestore collection, so rules, indexes and contract fixtures are unchanged.
+- The rules suite and APK build remain unverified until Java, the Android SDK and real Firebase config
+  are available. H13's own blockers (goldens, manual matrix) are still open.
+
+## Phase 2 - P2-02 Pure helpers: money math, unit catalog, date ranges
+
+Pure Dart only; no Firestore, rules or UI changes.
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (867 tests; 40 new helper cases) |
+
+### Deliverables
+- `lib/core/utils/money_math.dart`: `basisPoints` (integer half-up, `null` for a non-positive whole),
+  `splitEqually` (remainder paisa to the first shares), `maxMoney`/`minMoney`, `tryLineTotal`.
+- `lib/core/utils/unit_catalog.dart`: `UnitInfo` (`isWeight`/`isVolume`/`isCount`) and Bangla/English
+  `parseUnit` aliases from the card.
+- `lib/core/utils/date_ranges.dart`: `RangePreset`, `resolveRange`, `startOfWeek`, `previousComparable`,
+  `lengthInDays`, `daysIn`, `monthsIn`.
+- Tests for every branch above, including the roadmap's Wednesday, leap-day, March->February and year
+  boundary cases; `no_floating_point_test` now also scans `money_math.dart`.
+
+### Assumptions
+- `basisPoints` uses half-up with ties away from zero for negative parts, matching `lineTotal`.
+- `isCount` covers piece, dozen, packet and cylinder; every unit belongs to exactly one kind (tested).
+- Custom ranges use assertions for programmer errors, the same convention as `Money`/`Quantity`.
+- `thisWeek` is Saturday..Friday by default, with `weekStartDay` overridable.
+
+## Phase 2 - P2-03 Vocabulary: audit types, paths, permissions, ARB base
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS (301 files, 0 changed) |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (892 tests) |
+| `node tools/check_indexes.mjs` | PASS (no index change) |
+| `flutter gen-l10n` twice | PASS (no diff on the second run) |
+| `UPDATE_PERMISSION_MATRIX=1 flutter test ...` | PASS; `docs/permission_matrix.md` regenerated, second run matches |
+| rules suite | **NOT RUN** - Java is not installed (`Could not spawn 'java -version'`) |
+
+### Deliverables
+- `lib/core/audit/audit_event_type.dart`: the 31 §3.9 `bazar.*` types appended to `all`.
+- `lib/core/audit/audit_ref_type.dart` (new): the 13 `refType` values, mirrored by a new test.
+- `firebase/firestore.rules`: both closed lists extended; header updated. One new emulator test
+  (`bazar.expense_created` allowed) sits beside the existing unknown-type denial.
+- `lib/core/localization/activity_text.dart`: a case for every new type; money params go through
+  `MoneyFormatter`; `funding`/advance `status`/`newRole` are localized with a fallback.
+- ARB bn/en: 31 `activityBazar*` keys, 7 unit labels, `bazarSettingsTitle`, funding/advance labels,
+  and one `bazarErr*` message for every §3.6 code.
+- `lib/core/localization/unit_labels.dart` (new): `UnitLabels.unitLabel`.
+- `lib/features/bazar/presentation/bazar_failure_messages.dart` (new): exhaustive
+  `bazarFailureMessage`, with generic fallbacks for unknown codes.
+- `lib/core/firebase/firestore_paths.dart`: `monthClosings`, `importBatches`, expense revisions and
+  `settings/bazar`; the two new collections are listed as pending in `paths_match_rules_test`.
+- `lib/core/permissions/`: `closeBazarMonth`, `importBazarData` (finance-manager rule) and
+  `requestContribution` (any active member), with matrix rows and focused tests.
+- The `moderator` **display label** is now "Household Manager" / "সংসার ব্যবস্থাপক"; the stored
+  value `moderator` is unchanged.
+
+### Assumptions / deviations
+- Unknown `Validation`/`Conflict` codes show `bazarErrUnknown`; `NotFound` shows `bazarErrNotFound`;
+  `Network` reuses `errorNetwork`. Raw codes never reach the screen (tested in bn and en).
+- `bazarErrNegative` says "below zero" so the natural English sentence does not contain the raw code
+  `negative`; the test enforces "no code substring".
+- The role label change may invalidate a golden that prints a role; goldens are generated on Linux CI
+  only and none was hand-edited. Regenerate with the *Update goldens* workflow if CI reports one.
+- The rules emulator test and the rules suite remain unverified on this machine.
+
+## Phase 2 - P2-04 Catalog domain + ItemSearch
+
+Pure Dart domain and use cases only; no Firestore, rules, indexes, ARB, providers or screens.
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS (324 files, 0 changed) |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (963 tests; 71 new P2-04 cases) |
+| `node tools/check_indexes.mjs` | PASS (no index change) |
+| rules suite | **NOT RUN** - no rules change in P2-04; Java is still unavailable |
+| `flutter gen-l10n` | **NOT RUN** - no user-visible text or ARB change in P2-04 |
+
+### Deliverables
+- `lib/features/bazar/items_categories/domain/category.dart` and `item.dart`: immutable hand-written
+  entities with `==`, `hashCode`, `copyWith` and `displayName({required bool bangla})` fallback.
+- `text_normalizer.dart`: trim/lower-case/collapse, ZWJ/ZWNJ removal, Bangla nukta composition and
+  Bangla-to-English digits.
+- `item_search.dart`: exact/prefix/word-prefix/contains tiers, frequency then built-in then name ranking,
+  inactive filtering, category filter, empty-query frequent + built-in seed order, limit.
+- `catalog_index.dart`: by-id maps, items-by-category, sorted active categories and the shared search.
+- `catalog_repository.dart`: the catalog port, including the server-read `isCatalogEmpty` and
+  `seedDefaultCatalog` contracts.
+- Seven use cases under `domain/usecases/`: `AddCategory`, `UpdateCategory`, `DeactivateCategory`,
+  `AddItem`, `AddCustomItem`, `UpdateItem`, `DeactivateItem`. Permission is checked first, then
+  validation, category/duplicate rules, the event and the write.
+- `catalog_validation.dart`: shared name/alias/colour/emoji/image validation, category and item lookup,
+  and duplicate normalized-name detection.
+- `test/support/in_memory_bazar_backend.dart` and `test/features/bazar/bazar_test_helpers.dart`:
+  a catalog-fake with live streams plus the standard `f1` family (alice admin, bob moderator, cara
+  member, dave pending).
+- 71 tests: normalizer, models, search table, index, every use case (permission denial for
+  member/pending, validation, duplicate, events) and `AddCustomItem`.
+
+### Assumptions / deviations
+- "Built-ins in seed order" for an empty query means the order supplied to `ItemSearch`; `Item` has no
+  seed-order field and P2-06 will supply the Appendix A order. The `CatalogIndex` preserves the
+  repository order.
+- Aliases are trimmed and blank ones dropped before validation; more than 10 or any alias longer than
+  40 code points fails. Name lengths use Unicode code points (`runes`), not UTF-16 units.
+- Both `AddItem` and `AddCustomItem` enforce the duplicate rule (active item with the same normalized
+  `nameBn` in the same category). `AddCustomItem` never creates a built-in item and always starts at
+  `useCount = 0`.
+- `UpdateCategory`/`UpdateItem` preserve `active`, `builtIn`, `seedKey`, and for items the usage fields
+  (`useCount`, last prices, `lastUsedAt`), regardless of the edit.
+- Deactivating an already inactive category/item returns success without a second write or event.
+- Existing use-case `copyWith` limits to non-null overrides; edits rebuild the entity directly so a
+  `nameEn`/emoji/image can be cleared.
+- P2-05 still owns the Firestore mapper/repository, rules, contract fixtures, providers and bootstrap
+  wiring; P2-04 adds no collection to the app.
+
+## Phase 2 - P2-05 Catalog data layer, rules and providers
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS (329 files, 0 changed after formatting 5) |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (979 tests; 16 new P2-05 cases) |
+| `node tools/check_indexes.mjs` | PASS (`firestore.indexes.json OK`; no composite index needed) |
+| rules suite (`firebase emulators:exec ...`) | **NOT RUN** - `Could not spawn 'java -version'`; Java is still unavailable |
+| `flutter gen-l10n` | **NOT RUN** - no user-visible text or ARB change in P2-05 |
+| APK build | **NOT RUN** - `flutter doctor` reports no Android SDK |
+
+### Deliverables
+- `lib/features/bazar/items_categories/data/catalog_mappers.dart`: category/item `toMap`/`fromMap`
+  (tolerant defaults, unknown unit -> `Unit.piece`, clamped palette index and counters), `changeMap`
+  for catalog edits and `itemUsageMap` for member purchase bumps.
+- `lib/features/bazar/items_categories/data/firestore_catalog_repository.dart`: bounded live streams
+  and reads (`kMaxCatalogDocs`), batch writes with `AuditWriter` in the same batch, server-probe
+  `seedDefaultCatalog`, server-only `isCatalogEmpty`.
+- `lib/features/bazar/items_categories/domain/item_usage_bump.dart`: the P2-09 value object P2-05
+  needs, with positive-increment assertion and value equality.
+- `lib/core/firebase/query_limits.dart`: `kMaxCatalogDocs = 500`.
+- `firebase/firestore.rules`: `financeManager`, `categoryKeys`, `itemKeys`, `categoryOk`, `itemOk`,
+  `bazarCategories` and `bazarItems` blocks; reads for active members, manager writes, member custom
+  items, 1..40 usage bumps, soft delete only.
+- `firebase/rules_test/catalog.test.mjs`: allowed/denied cases for reads, category creation (admin,
+  finance-on/off moderator, member), unknown fields, palette range, custom/built-in items, usage
+  bumps, hard delete and the 11-category + 54-item family-creation batch.
+- `firebase/rules_test/support.mjs`: shared `categoryDoc`, `itemDoc`, `itemUsage` fixtures.
+- Contract seam: generated `category.json`, `item.json`, `item_usage.json` from the real mappers;
+  `rules_key_sets_test` now checks `categoryKeys()`/`itemKeys()` and the usage subset; the path test
+  no longer lists the two catalog collections as pending.
+- `lib/features/bazar/items_categories/presentation/catalog_providers.dart`: repository, live
+  categories/items, synchronous `CatalogIndex`, and one provider per catalog use case.
+- `lib/app/bootstrap.dart`: constructs `FirestoreCatalogRepository` and overrides the provider.
+- 16 tests: mapper round-trip/tolerance/change/usage maps and repository batch paths, paisa ints,
+  immutable seed fields and atomic failure.
+
+### Assumptions / deviations
+- `ItemUsageBump` is defined now under `items_categories/domain/` because the P2-05 mapper needs it;
+  P2-09 can import it (or move it into `write_plans.dart`) without changing its shape.
+- `seedDefaultCatalog` currently stages the audit entry with the server probe; P2-06 adds the 11
+  categories and 54 items to that same batch. `isCatalogEmpty` is a server `limit(1)` read, so offline
+  is a failure rather than a false "empty".
+- Null `lastPricePaisa`/`lastUnitPricePaisa`/`lastUsedAt` are omitted from maps because
+  `isNonNegativeIntOrMissing` accepts a missing key but not an explicit null. A full document has all
+  of them.
+- `useCount` is written with `FieldValue.increment`, so the rules see the post-increment value and can
+  enforce the 1..40 delta; the contract encoder represents it as `{"__increment": n}`.
+- `itemChangeMap` deliberately excludes usage counters and last prices, so a catalog edit cannot
+  reset them; only `itemUsageMap` changes them.
+- `catalogIndexProvider` is a plain synchronous provider and yields an empty index while streams load
+  or outside a family; screens do not branch on a second loading state.
+- No UI or user-visible text, so no ARB/golden change. The rules suite, APK and device acceptance
+  remain unverified for the same environment reasons as P2-01..P2-04.
+
+## Phase 2 - P2-06 Default catalog seed and backfill
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS (337 files, 0 changed) |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (990 tests; 11 new P2-06 cases) |
+| `node tools/check_indexes.mjs` | PASS (`firestore.indexes.json OK`; no index change) |
+| `flutter gen-l10n` | PASS (new bn/en setup-card keys generated) |
+| contract fixture generator | PASS (`create_family_catalog.json`: 76 writes) |
+| rules suite (`firebase emulators:exec ...`) | **NOT RUN** - `java -version` cannot spawn; Java is still unavailable |
+| APK build | **NOT RUN** - `flutter doctor` reports no Android SDK |
+
+### Deliverables
+- `lib/features/bazar/items_categories/domain/default_catalog.dart`: pure `const` `SeedCategory` x11 and
+  `SeedItem` x54 exactly as Appendix A, with deterministic `cat_<key>` / `item_<key>` ids.
+- `lib/features/bazar/items_categories/data/default_catalog_writes.dart`: maps the seed through
+  `CatalogMappers` with `builtIn: true`, `seedKey` and shared create metadata.
+- `lib/features/bazar/items_categories/data/default_catalog_seeder.dart`: the `FamilySeeder` used by
+  `CreateFamily`, so a brand-new family gets all 65 catalog documents in its own batch.
+- `lib/app/bootstrap.dart`: installs `DefaultCatalogSeeder` in `familySeedersProvider`.
+- `lib/features/bazar/items_categories/domain/usecases/ensure_catalog_seeded.dart`: permission ->
+  server-only `isCatalogEmpty` -> `catalog_not_empty` conflict or `seedDefaultCatalog`, with a
+  `bazar.catalog_seeded` event (`categories: '11'`, `items: '54'`).
+- `firestore_catalog_repository.dart`: `seedDefaultCatalog` now writes the real 11 categories + 54 items
+  and the audit entry in one probed batch (67 writes, well below 500).
+- `bazar_home_screen.dart`: when categories are loaded and empty, a manager sees a "Set up the starter
+  catalog" card and button; everyone else sees "Ask an admin to set up the catalog". The button shows
+  busy and failure states and never seeds silently.
+- bn/en setup-card keys and `flutter gen-l10n`; `BusyButton` gained an optional `busyLabel`.
+- Tests: key/unit/name/alias/id/batch-limit checks for the seed, backfill-once + conflict + member denial
+  + offline-no-write, `CreateFamily` seed count, and the home-screen manager/member states.
+- Contract seam: `create_family_catalog.json` contains the real 9 family documents + 65 catalog
+  documents + 2 audit documents (76 writes) in one create-family batch.
+
+### Assumptions / deviations
+- The P2-06 card's `~56 docs` note is stale; Appendix A is 11 categories + 54 items = 65 documents.
+  The batch test asserts 76 with the nine family documents and two audit entries.
+- `SeedCategory` / `SeedItem` use positional constructors (as written in the card) so the single
+  `default_catalog.dart` stays under the 300-line file-size limit.
+- `seedDefaultCatalog` stamps the catalog documents with the event's `at` time, so the catalog and its
+  audit entry share one clock reading; the repository probe still makes the backfill server-only.
+- The home-screen setup card appears only after the categories stream has a value and it is empty. While
+  loading, erroring or offline, the home keeps its normal body; the tap itself reports `errorNetwork`.
+- No new collection, rules or index change; the new contract fixture exercises the existing catalog
+  rules with the real seed. Rules emulator, APK and device acceptance remain unverified because Java,
+  the Android SDK and a configured device/Firebase project are unavailable.
+
+## Phase 2 - P2-07 Bazar settings (domain, data, rules, providers)
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS (347 files, 0 changed) |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (1003 tests; 13 new P2-07 cases) |
+| `node tools/check_indexes.mjs` | PASS (`firestore.indexes.json OK`; no index change) |
+| contract fixture generator | PASS (`settings_bazar.json`: real merge + two audit writes) |
+| `flutter gen-l10n` | **NOT RUN** - no user-visible text or ARB change in P2-07 |
+| rules suite (`firebase emulators:exec ...`) | **NOT RUN** - `Could not spawn 'java -version'`; Java is still unavailable |
+| APK build | **NOT RUN** - `flutter doctor` reports no Android SDK |
+
+### Deliverables
+- `lib/features/bazar/settings/domain/bazar_settings.dart`: immutable settings with defaults
+  (`weekStartDay` 6, zero contribution, due day 5, thresholds `[80, 100]`, no fund start month),
+  `copyWith` including `clearFundStartMonth`, value equality and list-aware hashing.
+- `bazar_settings_repository.dart`: `watch` (absent document = defaults), `get`, and `save(familyId,
+  settings, event)`.
+- `usecases/update_bazar_settings.dart`: permission -> range validation -> one repository write; the
+  event is `bazar.settings_updated` with `family` ref.
+- `data/bazar_settings_mappers.dart`: integer-paisa and `yyyy-MM` maps, tolerant reads for old/damaged
+  documents, and the closed key set used by the contract tests.
+- `data/firestore_bazar_settings_repository.dart`: `watchKnownDoc` -> defaults, guarded `get`, and a
+  server-required `set(..., merge: true)` plus audit entry in one batch. It preserves an existing
+  document's `createdAt`/`createdBy` while updating `updatedAt`/`updatedBy`.
+- `presentation/bazar_settings_providers.dart`: `bazarSettingsRepositoryProvider`,
+  `bazarSettingsProvider` (synchronous value or defaults), and `updateBazarSettingsProvider`;
+  installed in `bootstrap.dart`.
+- `firebase/firestore.rules`: `settingsKeys()`/`settingsOk` now cover the five Bazar fields, and
+  `settings/bazar` is writable by an admin or a finance moderator (`s == 'bazar' && financeManager(f)`).
+- Tests: mapper round-trip/defaults/damaged data, use-case permission and every validation range,
+  provider defaults/then-stream update, `rules_key_sets_test`, and
+  `firebase/rules_test/bazar_settings.test.mjs`.
+- Contract seam: `settings_bazar.json` uses the real mapper merge and both audit-log writes.
+
+### Assumptions / deviations
+- The card does not spell out validation codes, so the use case uses `invalid` for the two day ranges,
+  `negative`, and `empty`/`too_many`/`out_of_range`/`duplicate`/`not_ascending` for thresholds.
+  An empty threshold list is rejected, because downstream budget status reads the first/last values.
+- The Bazar settings fields are optional in `settingsOk`, so the one shape function still validates the
+  other settings documents created at onboarding.
+- `save` reads the existing document after the server probe to preserve `createdAt`/`createdBy`; a first
+  save still creates it through `set(..., merge: true)`.
+- There is no screen in P2-07: the settings UI is P2-16. No collection, index or user-visible string was
+  added. Rules emulator and APK/device acceptance remain unverified (no Java/Android SDK/device).
+
+## Phase 2 - P2-08 Fund ledger and month-closing domain
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS (361 files, 0 changed) |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (1034 tests; 31 new P2-08 cases) |
+| `node tools/check_indexes.mjs` | PASS (`firestore.indexes.json OK`; no index change) |
+| `flutter gen-l10n` | **NOT NEEDED** - no user-visible text or ARB change |
+| rules suite (`firebase emulators:exec ...`) | **NOT RUN** - P2-08 adds no rules; Java is still unavailable for the earlier pending rules changes |
+| APK build | **NOT RUN** - `flutter doctor` reports no Android SDK |
+
+### Deliverables
+- `lib/features/bazar/fund/domain/fund_transaction.dart`: `FundTxType`, `FundRefType`, an immutable
+  `FundTransaction`, a sign-checking constructor for future mappers, and the five named factories
+  (`exp_`, `con_`, `stl_`, `open_`, `adj_` with an optional suffix). The factories derive `monthKey`
+  from `dateKey`, except `opening`, which uses the first day of its month.
+- `fund_balance_calculator.dart`: `FundBalanceCalculator.balance`, `summarize` (received, spent,
+  reimbursed, opening, adjustments, balance) and `ledgerFor(refId)`; `FundSummary` is a value object.
+- `ledger_integrity_check.dart`: `LedgerIssueKind` (`mismatch`, `orphan`) and the `LedgerIssue` value
+  class. `checkLedger` itself waits for P2-22, when `Expense` exists.
+- `month_closing.dart`: `MonthStatus`, `MonthClosing` and `MonthLocks.isLocked` /
+  `MonthLocks.fundWindowStart` (month after the latest closed month, else `fundStartMonth`, else null).
+- `fund_repository.dart`: the read-only ledger/closing port (`watchTransactionsFrom`,
+  `getMonthTransactions`, `getTransactionsForRef`, `watchClosings`, `getClosing`).
+- `lib/features/bazar/advances/domain/member_advance.dart`: `AdvanceStatus`, immutable
+  `MemberAdvance`, `remaining`, `statusFor`, and a `copyWith` that keeps the status/amount invariant.
+- `advances/domain/settlement.dart` and `advance_repository.dart`: the append-only settlement value
+  object and the advance read port.
+- 31 tests: every factory sign/id/ref, zero and wrong-sign rejection, month consistency, a
+  hand-computed summary, `ledgerFor`, booked/reopened/year-boundary windows, advance transitions,
+  `settled > amount`, and settlement invariants.
+
+### Assumptions / deviations
+- `spent` and `reimbursed` are positive display magnitudes; `opening` and `adjustments` keep their
+  signed ledger meaning, and `balance` is always the sum of the signed rows. This matches the fund
+  card's positive chips without storing a second balance.
+- `opening` and `adjustment` amounts must be non-zero, following the data-shape rule in §3.2. A zero
+  opening balance is simply skipped by `RecordOpeningBalance` (P2-21), so it never needs a row.
+- The public `FundTransaction` constructor validates sign and `monthKey == dateKey` so a future mapper
+  can rehydrate documents without bypassing the invariant; the named factories are still the only
+  intended write path.
+- `MemberAdvance` also rejects a non-voided status that disagrees with `amount`/`settled`; a voided
+  advance may keep any valid settled amount.
+- No collection, rules, index, permission, screen or user-visible string is added. All repository
+  writes (contributions, settlements, openings, closings) are deferred to the use-case steps.
+
+## Phase 2 - P2-09 Expense domain, use cases and in-memory backend
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | PASS (386 files, 0 changed) |
+| `flutter analyze` | PASS (`No issues found!`) |
+| `flutter test --exclude-tags golden` | PASS (1094 tests; 60 P2-09 cases in `test/features/bazar/expenses/`) |
+| `node tools/check_indexes.mjs` | PASS (`firestore.indexes.json OK`; no index change) |
+| `flutter gen-l10n` | **NOT NEEDED** - no user-visible text or ARB change |
+| rules suite (`firebase emulators:exec ...`) | **NOT RUN** - P2-09 adds no rules; Java is still unavailable for the earlier pending rules changes |
+| APK build | **NOT RUN** - `flutter doctor` reports no Android SDK |
+
+### Deliverables
+- `expenses/domain/funding.dart`, `expense.dart`, `expense_draft.dart`, `expense_totals.dart`,
+  `trip.dart`, `month_spend.dart`, `expense_filters.dart`, `expense_repository.dart`,
+  `expense_validation.dart`, `write_plans.dart` and `expense_compensation.dart`.
+- `Expense` is immutable, asserts `total > 0`, `member <=> payer`, `reimbursable` only for member
+  funding and `monthKey == dateKey`; its `copyWith` uses an `_unset` sentinel so `null` can clear an
+  optional field. `spenderId` is `purchaserId ?? paidByMemberId ?? createdBy`.
+- `computeTotal` is the single money rule: quantity x unit price wins, a lone quantity or price is
+  `qty_unit_required`, and the result must be positive. No `double` is used.
+- `MonthSpend` skips soft-deleted rows; `ExpenseFilters` implements the list filters, text
+  normalisation and day grouping helpers.
+- `ExpenseRepository`, `ExpenseRevision`, `defaultExpensePageSize = 30`, and the pure
+  add/trip/edit/delete/restore plan objects.
+- Use cases: `CheckDuplicate`, `AddExpense`, `AddBazarTrip`, `UpdateExpense`,
+  `SoftDeleteExpense` and `RestoreExpense`. Add/Trip create the fund row (fund), pending advance
+  (member + reimbursable), item usage or a remembered item. Edit writes append-only `adj_` rows,
+  keeps the original `exp_` row untouched, records revisions, and voids/updates advances. Delete
+  adds `+total` and voids a pending advance; restore adds `-total` and reopens the advance.
+- `test/support/in_memory_bazar_backend.dart` now also implements `ExpenseRepository`,
+  `FundRepository` and `AdvanceRepository` with expenses, trips, ledger, advances, settlements,
+  closings, revisions, live streams, idempotent event application and the shared `failNextWrite`
+  hook. `fundTx` is an alias for the ledger map.
+- `test/features/bazar/bazar_test_helpers.dart` gained the P2-09 use-case factories, a draft
+  builder and seeded expense/advance/fund/closing helpers.
+- 60 tests: totals, every funding combination, the compensation table, original-row immutability,
+  delete/restore, duplicate warning boundaries, permissions (including moderator edit), locked old
+  and destination months, 1/40/41-line trips, aggregated usage, retries, and a full
+  add/edit/delete/restore ledger invariant (`ledgerFor == -total` for live fund rows, `0` for
+  member/personal/deleted rows).
+
+### Assumptions / deviations
+- `defaultExpensePageSize` is kept as the repository's explicit page-size name (the card's
+  `defaultPageSize`); the data layer will continue to use the shared `defaultPageSize` constant.
+- Fund-funded drafts normalise away a stale payer/reimbursable flag; member-funded drafts require
+  a non-empty payer. The use cases reject future dates and apply the same validation order to add,
+  trip and edit.
+- `CheckDuplicate` accepts an optional `actorUid`; permission is checked only when the caller
+  supplies one. `ExpenseFilters.memberId` matches `Expense.spenderId`.
+- A member trip's remembered line item uses the deterministic id `item_$expenseId`; usage is
+  aggregated per item. A zero-line and a 41-line trip both return `too_many_lines`.
+- Delete/restore are batch operations without a probe, so the offline undo path works. An advance
+  with `settled > 0` blocks delete, restore and funding/amount/payer edits.
+- No collection, rules, index, permission, screen or user-visible string is added. The data layer
+  (P2-10) still has to implement these ports against Firestore.
+
 ## Status of every step
 
 "Written" = code and tests exist but were not compiled or run by the author. "Verified" is only claimed where a run produced evidence; today that is none, so every row needs the evidence run.
@@ -237,6 +651,15 @@ Create the tag only when 1-4 are green: `git tag phase-1-complete && git push --
 | H11 | UI conformance, accessibility | Written | `test/support/screen_states.dart` |
 | H12 | Phase 2 foundations | Written | `docs/new_collection_checklist.md` |
 | H13 | Sign-off tooling and review | Written; **not executed** | `docs/phase1_*.md` |
+| P2-01 | Preflight gate, Bazar skeleton, seams | Done; rules suite and APK unverified | `docs/PHASE2_BAZAR_ROADMAP.md`, `lib/features/bazar/` |
+| P2-02 | Pure helpers: money math, units, date ranges | Done | `lib/core/utils/money_math.dart`, `unit_catalog.dart`, `date_ranges.dart` |
+| P2-03 | Vocabulary: audit types, paths, permissions, ARB | Done; rules suite unverified | `lib/core/audit/`, `docs/permission_matrix.md`, `firebase/firestore.rules` |
+| P2-04 | Catalog domain + `ItemSearch` | Done | `lib/features/bazar/items_categories/domain/`, `test/features/bazar/` |
+| P2-05 | Catalog data layer, rules and providers | Done; rules suite unverified | `lib/features/bazar/items_categories/data/`, `presentation/catalog_providers.dart`, `firebase/firestore.rules`, `firebase/rules_test/catalog.test.mjs` |
+| P2-06 | Default catalog seed and backfill | Done; rules suite and APK unverified | `default_catalog.dart`, `default_catalog_writes.dart`, `default_catalog_seeder.dart`, `ensure_catalog_seeded.dart`, `bazar_home_screen.dart`, `firebase/rules_test/fixtures/create_family_catalog.json` |
+| P2-07 | Bazar settings domain/data/rules/providers | Done; rules suite and APK unverified | `lib/features/bazar/settings/`, `bazar_settings_providers.dart`, `firebase/firestore.rules`, `firebase/rules_test/bazar_settings.test.mjs`, `settings_bazar.json` |
+| P2-08 | Fund ledger and month-closing domain | Done | `lib/features/bazar/fund/domain/`, `lib/features/bazar/advances/domain/`, `test/features/bazar/fund/`, `test/features/bazar/advances/` |
+| P2-09 | Expense domain, use cases and in-memory backend | Done | `lib/features/bazar/expenses/domain/`, `test/features/bazar/expenses/`, `test/support/in_memory_bazar_backend.dart` |
 
 ## Known limitations (honest list)
 
@@ -248,4 +671,8 @@ Create the tag only when 1-4 are green: `git tag phase-1-complete && git push --
 - Custom relationship entries have per-item shape checks only in the app, not in the rules (rules bound the list to 40 items).
 - Screen-state harness covers 4 screens so far.
 - `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
-- Phase 2 features (Bazar, Chores, Dashboard) are not started; Step 12 onward builds on H12.
+- Phase 2 has its P2-01 skeleton (Bazar home + seams), P2-02 pure helpers, P2-03 vocabulary,
+  P2-04 catalog domain/search, P2-05 catalog data/rules/providers, P2-06 default seed/backfill,
+  P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain and P2-09 expense
+  domain/use cases; the Bazar/Chores/Dashboard features and UI are not implemented yet. The
+  P2-05/P2-06/P2-07 rules suite has not been run (no Java).

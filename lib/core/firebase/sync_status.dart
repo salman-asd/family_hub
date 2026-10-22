@@ -51,8 +51,9 @@ final pendingWriteCounterProvider = Provider<PendingWriteCounter>((ref) {
   return counter;
 });
 
-final syncStatusProvider =
-    NotifierProvider<SyncStatusNotifier, SyncStatus>(SyncStatusNotifier.new);
+final syncStatusProvider = NotifierProvider<SyncStatusNotifier, SyncStatus>(
+  SyncStatusNotifier.new,
+);
 
 /// Pending writes for longer than [grace] are reported as "offline": a healthy
 /// connection acknowledges a commit within a second or two.

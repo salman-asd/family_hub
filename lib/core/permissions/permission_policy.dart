@@ -7,7 +7,7 @@ import 'package:family_hub/core/permissions/permission_settings.dart';
 ///
 /// ## The matrix
 ///
-/// | Permission | admin | moderator | member |
+/// | Permission | admin | Household Manager | member |
 /// | --- | --- | --- | --- |
 /// | inviteMembers | yes | yes | no (setting: membersCanInvite) |
 /// | approveMembers | yes | yes | no |
@@ -21,6 +21,9 @@ import 'package:family_hub/core/permissions/permission_settings.dart';
 /// | editOthersExpense | yes | yes | no |
 /// | recordContribution | yes | yes (setting: moderatorManagesFinance) | no |
 /// | viewAllContributions | yes | yes | no (setting: membersViewAllContributions) |
+/// | closeBazarMonth | yes | yes (setting: moderatorManagesFinance) | no |
+/// | importBazarData | yes | yes (setting: moderatorManagesFinance) | no |
+/// | requestContribution | yes | yes | yes |
 /// | manageChoreTemplates | yes | yes | no |
 /// | reassignChore | yes | yes | no |
 /// | requestSwap | own | own | own |
@@ -77,6 +80,10 @@ abstract final class PermissionPolicy {
       Permission.recordContribution => _managesFinance(actor, settings),
       Permission.viewAllContributions =>
         actor.isManager || settings.membersViewAllContributions,
+      Permission.closeBazarMonth => _managesFinance(actor, settings),
+      Permission.importBazarData => _managesFinance(actor, settings),
+      // Any active member may offer a contribution for the manager to decide.
+      Permission.requestContribution => true,
 
       // ── Chores ─────────────────────────────────────────────────────────
       Permission.manageChoreTemplates => actor.isManager,
@@ -87,11 +94,12 @@ abstract final class PermissionPolicy {
 
       // Verification needs the family switch, the template switch and a
       // *different* person: self-verification is never allowed.
-      Permission.verifyChore => actor.isManager &&
-          settings.choreVerificationEnabled &&
-          (template?.verificationEnabled ?? false) &&
-          ownerId != null &&
-          ownerId != actor.uid,
+      Permission.verifyChore =>
+        actor.isManager &&
+            settings.choreVerificationEnabled &&
+            (template?.verificationEnabled ?? false) &&
+            ownerId != null &&
+            ownerId != actor.uid,
     };
   }
 
@@ -100,8 +108,7 @@ abstract final class PermissionPolicy {
   static bool _managesFinance(
     PermissionActor actor,
     PermissionSettings settings,
-  ) =>
-      actor.isAdmin || (actor.isModerator && settings.moderatorManagesFinance);
+  ) => actor.isAdmin || (actor.isModerator && settings.moderatorManagesFinance);
 
   /// The actor owns the record.  An unknown owner (`ownerId == null`) is never
   /// "own", so a caller that forgets the context is denied rather than trusted.

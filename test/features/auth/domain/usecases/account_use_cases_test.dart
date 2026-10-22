@@ -9,7 +9,11 @@ void main() {
   late FakeAuthRepository repo;
   setUp(() {
     repo = FakeAuthRepository(
-      signedInAs: const AppUser(uid: 'u1', email: 'a@b.com', emailVerified: true),
+      signedInAs: const AppUser(
+        uid: 'u1',
+        email: 'a@b.com',
+        emailVerified: true,
+      ),
     );
   });
   tearDown(() => repo.dispose());
@@ -39,7 +43,10 @@ void main() {
         currentPassword: 'samepassword',
         newPassword: 'samepassword',
       );
-      expect((r.failureOrNull! as Validation).code, ChangePassword.codeSameAsCurrent);
+      expect(
+        (r.failureOrNull! as Validation).code,
+        ChangePassword.codeSameAsCurrent,
+      );
       expect(repo.calls, isEmpty);
     });
 

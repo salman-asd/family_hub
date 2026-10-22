@@ -35,7 +35,9 @@ class _CreateFamilyScreenState extends ConsumerState<CreateFamilyScreen> {
   Future<void> _submit() async {
     final uid = ref.read(currentUidProvider);
     if (uid == null) return;
-    await ref.read(_createFamilyActionProvider.notifier).run(
+    await ref
+        .read(_createFamilyActionProvider.notifier)
+        .run(
           () => ref.read(createFamilyProvider)(
             actorUid: uid,
             name: _name.text,

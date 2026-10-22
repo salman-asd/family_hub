@@ -21,18 +21,17 @@ class RejectMember {
     required String actorUid,
     required String familyId,
     required String targetUid,
-  }) =>
-      _runner.run(
-        actorUid: actorUid,
-        familyId: familyId,
-        targetUid: targetUid,
-        permission: Permission.approveMembers,
-        eventType: 'member.rejected',
-        decide: (target, all) {
-          if (target.status != MembershipStatus.pending) {
-            return const Failure<Member>(Conflict(code: 'not_pending'));
-          }
-          return Success<Member>(target.copyWith(removedAt: _clock.nowUtc()));
-        },
-      );
+  }) => _runner.run(
+    actorUid: actorUid,
+    familyId: familyId,
+    targetUid: targetUid,
+    permission: Permission.approveMembers,
+    eventType: 'member.rejected',
+    decide: (target, all) {
+      if (target.status != MembershipStatus.pending) {
+        return const Failure<Member>(Conflict(code: 'not_pending'));
+      }
+      return Success<Member>(target.copyWith(removedAt: _clock.nowUtc()));
+    },
+  );
 }

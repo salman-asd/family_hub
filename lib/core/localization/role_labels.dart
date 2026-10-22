@@ -6,8 +6,8 @@ import 'package:family_hub/core/permissions/role.dart';
 /// (H7) and this extension only for words.
 extension RoleLabels on AppLocalizations {
   String roleLabel(Role r) => switch (r) {
-        Role.admin => roleAdmin,
-        Role.moderator => roleModerator,
-        Role.member => roleMember,
-      };
+    Role.admin => roleAdmin,
+    Role.moderator => roleModerator,
+    Role.member => roleMember,
+  };
 }

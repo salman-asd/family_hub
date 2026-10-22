@@ -18,22 +18,21 @@ class ChangeRole {
     required String familyId,
     required String targetUid,
     required MemberRole newRole,
-  }) =>
-      _runner.run(
-        actorUid: actorUid,
-        familyId: familyId,
-        targetUid: targetUid,
-        permission: Permission.changeRoles,
-        eventType: 'member.role_changed',
-        decide: (target, all) {
-          if (target.role == newRole) {
-            return const Failure<Member>(Conflict(code: 'same_role'));
-          }
-          final updated = target.copyWith(role: newRole);
-          if (leavesNoActiveAdmin(all, updated)) {
-            return const Failure<Member>(Conflict(code: 'last_admin'));
-          }
-          return Success<Member>(updated);
-        },
-      );
+  }) => _runner.run(
+    actorUid: actorUid,
+    familyId: familyId,
+    targetUid: targetUid,
+    permission: Permission.changeRoles,
+    eventType: 'member.role_changed',
+    decide: (target, all) {
+      if (target.role == newRole) {
+        return const Failure<Member>(Conflict(code: 'same_role'));
+      }
+      final updated = target.copyWith(role: newRole);
+      if (leavesNoActiveAdmin(all, updated)) {
+        return const Failure<Member>(Conflict(code: 'last_admin'));
+      }
+      return Success<Member>(updated);
+    },
+  );
 }

@@ -47,9 +47,9 @@ Future<void> loadBundledFonts() async {
   final loader = FontLoader(kAppFontFamily);
   for (final weight in ['Light', 'Regular', 'Medium', 'SemiBold', 'Bold']) {
     loader.addFont(
-      File('assets/fonts/HindSiliguri-$weight.ttf').readAsBytes().then(
-            (bytes) => ByteData.view(Uint8List.fromList(bytes).buffer),
-          ),
+      File('assets/fonts/HindSiliguri-$weight.ttf')
+          .readAsBytes()
+          .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer)),
     );
   }
   await loader.load();

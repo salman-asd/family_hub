@@ -132,9 +132,9 @@ class _PillItem extends StatelessWidget {
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: t.accentStrong,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: t.accentStrong,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

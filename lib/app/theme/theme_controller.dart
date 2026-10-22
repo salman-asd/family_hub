@@ -35,8 +35,9 @@ final themePreferenceSyncProvider = Provider<ThemePreferenceSync>(
 
 /// The main theme controller.  Reads [SharedPreferences] synchronously on
 /// build (already loaded in bootstrap) and writes back on every change.
-final themeControllerProvider =
-    NotifierProvider<ThemeController, ThemePrefs>(ThemeController.new);
+final themeControllerProvider = NotifierProvider<ThemeController, ThemePrefs>(
+  ThemeController.new,
+);
 
 // ── Keys ──────────────────────────────────────────────────────────────────────
 
@@ -91,9 +92,7 @@ class ThemeController extends Notifier<ThemePrefs> {
     await prefs.setString(_kModeKey, state.themeMode.name);
     await prefs.setString(_kIdKey, state.themeId);
     // Fire-and-forget remote sync (no-op until Step 9).
-    unawaited(
-      ref.read(themePreferenceSyncProvider).push(state),
-    );
+    unawaited(ref.read(themePreferenceSyncProvider).push(state));
   }
 }
 

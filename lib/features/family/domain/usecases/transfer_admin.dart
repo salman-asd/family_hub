@@ -14,12 +14,10 @@ import 'package:family_hub/features/family/domain/permission_access.dart';
 /// without an admin.  `Permission.changeRoles`: admins only.
 class TransferAdmin {
   const TransferAdmin({
-    required FamilyRepository families,
-    required Clock clock,
-    required IdGenerator newId,
-  })  : _families = families,
-        _clock = clock,
-        _newId = newId;
+    required this._families,
+    required this._clock,
+    required this._newId,
+  });
 
   final FamilyRepository _families;
   final Clock _clock;
@@ -62,13 +60,15 @@ class TransferAdmin {
 
     final newAdmin = next.copyWith(role: MemberRole.admin);
     final oldAdmin = actor.valueOrNull!.copyWith(role: MemberRole.member);
-    final adminIds =
-        activeAdminIds(rosterWith(rosterWith(all, newAdmin), oldAdmin));
+    final adminIds = activeAdminIds(
+      rosterWith(rosterWith(all, newAdmin), oldAdmin),
+    );
     if (adminIds.length > maxActiveAdmins) {
       return const Failure<Member>(Conflict(code: 'too_many_admins'));
     }
-    final writeAdminIds =
-        sameAdminSet(activeAdminIds(all), adminIds) ? null : adminIds;
+    final writeAdminIds = sameAdminSet(activeAdminIds(all), adminIds)
+        ? null
+        : adminIds;
 
     final saved = await _families.saveMembers(
       familyId,

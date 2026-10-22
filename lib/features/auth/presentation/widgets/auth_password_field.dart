@@ -57,12 +57,14 @@ class _AuthPasswordFieldState extends State<AuthPasswordField> {
       enabled: widget.enabled,
       obscureText: _obscured,
       keyboardType: TextInputType.visiblePassword,
-      textInputAction:
-          widget.isLastField ? TextInputAction.done : TextInputAction.next,
+      textInputAction: widget.isLastField
+          ? TextInputAction.done
+          : TextInputAction.next,
       autofillHints: widget.autofillHints,
       onChanged: widget.onChanged,
-      onSubmitted:
-          widget.onSubmitted == null ? null : (_) => widget.onSubmitted!(),
+      onSubmitted: widget.onSubmitted == null
+          ? null
+          : (_) => widget.onSubmitted!(),
       decoration: InputDecoration(
         labelText: widget.labelText ?? l10n.authPasswordLabel,
         hintText: l10n.authPasswordHint,
@@ -76,8 +78,9 @@ class _AuthPasswordFieldState extends State<AuthPasswordField> {
             _obscured
                 ? Icons.visibility_outlined
                 : Icons.visibility_off_outlined,
-            semanticLabel:
-                _obscured ? l10n.authShowPassword : l10n.authHidePassword,
+            semanticLabel: _obscured
+                ? l10n.authShowPassword
+                : l10n.authHidePassword,
           ),
         ),
         errorText: failure == null

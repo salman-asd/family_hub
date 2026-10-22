@@ -23,22 +23,22 @@ Future<SessionPhase> _phase({
   final container = ProviderContainer(
     overrides: [
       authStateProvider.overrideWith((ref) => auth),
-      hasProfileProvider
-          .overrideWith((ref) => hasProfile ?? Stream<bool>.value(false)),
+      hasProfileProvider.overrideWith(
+        (ref) => hasProfile ?? Stream<bool>.value(false),
+      ),
       membershipProvider.overrideWith(
         (ref) => membership ?? Stream<Membership>.value(Membership.none),
       ),
     ],
   );
   addTearDown(container.dispose);
-  container.listen(sessionPhaseProvider, (_, __) {});
+  container.listen(sessionPhaseProvider, (_, _) {});
   await pumpEventQueue();
   return container.read(sessionPhaseProvider);
 }
 
-Stream<Membership> _member(MembershipStatus status) => Stream.value(
-      Membership(status: status, familyId: 'fam-1'),
-    );
+Stream<Membership> _member(MembershipStatus status) =>
+    Stream.value(Membership(status: status, familyId: 'fam-1'));
 
 void main() {
   test('loading: the first auth event has not arrived', () async {
@@ -65,8 +65,7 @@ void main() {
     );
   });
 
-  test('needsVerification wins even when a profile and family exist',
-      () async {
+  test('needsVerification wins even when a profile and family exist', () async {
     expect(
       await _phase(
         auth: Stream.value(_unverified),
@@ -98,7 +97,10 @@ void main() {
 
   test('needsProfile: verified, no profile document', () async {
     expect(
-      await _phase(auth: Stream.value(_verified), hasProfile: Stream.value(false)),
+      await _phase(
+        auth: Stream.value(_verified),
+        hasProfile: Stream.value(false),
+      ),
       SessionPhase.needsProfile,
     );
   });
@@ -160,7 +162,7 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-    container.listen(sessionPhaseProvider, (_, __) {});
+    container.listen(sessionPhaseProvider, (_, _) {});
     await pumpEventQueue();
     expect(membershipListened, isFalse);
   });

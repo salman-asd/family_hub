@@ -7,8 +7,9 @@ import 'shared_widgets_test_support.dart';
 
 void main() {
   for (final locale in sharedWidgetLocales) {
-    testWidgets('syncing state shows count and icon (${locale.languageCode})',
-        (tester) async {
+    testWidgets('syncing state shows count and icon (${locale.languageCode})', (
+      tester,
+    ) async {
       await pumpSharedWidget(
         tester,
         child: const SyncBanner(pendingWrites: 3),
@@ -20,17 +21,19 @@ void main() {
       expect(find.textContaining('3'), findsOneWidget);
     });
 
-    testWidgets('offline state uses a different icon (${locale.languageCode})',
-        (tester) async {
-      await pumpSharedWidget(
-        tester,
-        child: const SyncBanner(pendingWrites: 5, offline: true),
-        spec: appThemes.first,
-        locale: locale,
-      );
-      expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
-      expect(find.byIcon(Icons.sync_rounded), findsNothing);
-    });
+    testWidgets(
+      'offline state uses a different icon (${locale.languageCode})',
+      (tester) async {
+        await pumpSharedWidget(
+          tester,
+          child: const SyncBanner(pendingWrites: 5, offline: true),
+          spec: appThemes.first,
+          locale: locale,
+        );
+        expect(find.byIcon(Icons.cloud_off_rounded), findsOneWidget);
+        expect(find.byIcon(Icons.sync_rounded), findsNothing);
+      },
+    );
   }
 
   testWidgets('renders nothing when there is nothing pending', (tester) async {

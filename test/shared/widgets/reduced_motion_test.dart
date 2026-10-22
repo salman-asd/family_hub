@@ -35,7 +35,8 @@ Future<void> _pump(
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, app) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(disableAnimations: reduceMotion),
+          data: MediaQuery.of(context)
+              .copyWith(disableAnimations: reduceMotion),
           child: app!,
         ),
         home: Scaffold(body: child),
@@ -58,8 +59,9 @@ void main() {
   });
 
   group('ProgressRing', () {
-    testWidgets('an indeterminate ring is static with reduced motion',
-        (tester) async {
+    testWidgets('an indeterminate ring is static with reduced motion', (
+      tester,
+    ) async {
       await _pump(tester, const ProgressRing(), reduceMotion: true);
       expect(tester.binding.transientCallbackCount, 0);
     });
@@ -74,8 +76,9 @@ void main() {
       PillNavItem(key: Key('a'), icon: Icons.home_outlined, label: 'Home'),
       PillNavItem(key: Key('b'), icon: Icons.groups_outlined, label: 'Family'),
     ];
-    testWidgets('switching tabs does not animate with reduced motion',
-        (tester) async {
+    testWidgets('switching tabs does not animate with reduced motion', (
+      tester,
+    ) async {
       var selected = 0;
       await _pump(
         tester,

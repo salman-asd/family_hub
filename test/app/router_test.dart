@@ -169,8 +169,9 @@ void main() {
       expect(find.byType(AppShell), findsOneWidget);
     });
 
-    testWidgets('being disabled while using the app leaves the shell',
-        (tester) async {
+    testWidgets('being disabled while using the app leaves the shell', (
+      tester,
+    ) async {
       final h = await _pumpApp(
         tester,
         user: _verified,
@@ -193,8 +194,9 @@ void main() {
       expect(h.path(tester), '/profile-setup');
     });
 
-    testWidgets('signing out from the Family tab returns to /welcome',
-        (tester) async {
+    testWidgets('signing out from the Family tab returns to /welcome', (
+      tester,
+    ) async {
       final h = await _pumpApp(
         tester,
         user: _verified,
@@ -284,8 +286,9 @@ void main() {
       expect(h.path(tester), '/home');
     });
 
-    testWidgets('a tab keeps its scroll position while another is open',
-        (tester) async {
+    testWidgets('a tab keeps its scroll position while another is open', (
+      tester,
+    ) async {
       await _pumpApp(
         tester,
         user: _verified,
@@ -308,10 +311,7 @@ void main() {
       await _openTab(tester, 'home');
       await _openTab(tester, 'family');
 
-      expect(
-        tester.state<ScrollableState>(scrollable).position.pixels,
-        before,
-      );
+      expect(tester.state<ScrollableState>(scrollable).position.pixels, before);
     });
 
     testWidgets('a branch keeps its own navigation stack', (tester) async {
@@ -340,11 +340,11 @@ void main() {
                 routes: [
                   GoRoute(
                     path: '/a',
-                    builder: (_, __) => const Text('A root'),
+                    builder: (_, _) => const Text('A root'),
                     routes: [
                       GoRoute(
                         path: 'detail',
-                        builder: (_, __) => const Text('A detail'),
+                        builder: (_, _) => const Text('A detail'),
                       ),
                     ],
                   ),
@@ -352,10 +352,7 @@ void main() {
               ),
               StatefulShellBranch(
                 routes: [
-                  GoRoute(
-                    path: '/b',
-                    builder: (_, __) => const Text('B root'),
-                  ),
+                  GoRoute(path: '/b', builder: (_, _) => const Text('B root')),
                 ],
               ),
             ],
@@ -365,9 +362,11 @@ void main() {
       addTearDown(router.dispose);
 
       await tester.pumpWidget(
-        MaterialApp.router(
-          theme: buildThemeData(appThemes.first),
-          routerConfig: router,
+        ProviderScope(
+          child: MaterialApp.router(
+            theme: buildThemeData(appThemes.first),
+            routerConfig: router,
+          ),
         ),
       );
       await tester.pumpAndSettle();
@@ -385,8 +384,9 @@ void main() {
   });
 
   group('module flags', () {
-    testWidgets('a disabled module loses its tab and its route',
-        (tester) async {
+    testWidgets('a disabled module loses its tab and its route', (
+      tester,
+    ) async {
       final h = await _pumpApp(
         tester,
         user: _verified,
@@ -408,8 +408,9 @@ void main() {
       expect(h.path(tester), '/home');
     });
 
-    testWidgets('switching the module back on restores the tab',
-        (tester) async {
+    testWidgets('switching the module back on restores the tab', (
+      tester,
+    ) async {
       final h = await _pumpApp(
         tester,
         user: _verified,
@@ -466,8 +467,9 @@ void main() {
       expect(find.byType(LanguageSettingsScreen), findsOneWidget);
     });
 
-    testWidgets('the developer tokens entry exists only in the dev flavor',
-        (tester) async {
+    testWidgets('the developer tokens entry exists only in the dev flavor', (
+      tester,
+    ) async {
       await _pumpApp(
         tester,
         user: _verified,

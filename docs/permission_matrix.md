@@ -4,7 +4,7 @@
 
 Cells show the answer with the DEFAULT family settings for an active member. `own` = only for the record's owner, `other` = only for somebody else's work (and only when verification is switched on for the family and the template). Every cell is `no` for a member who is not active or while the module is switched off.
 
-| Permission | Admin | Moderator | Member | Family setting that changes it | Project spec section 6 | Matches spec? |
+| Permission | Admin | Household Manager | Member | Family setting that changes it | Project spec section 6 | Matches spec? |
 | --- | --- | --- | --- | --- | --- | --- |
 | `inviteMembers` | yes | yes | no | `membersCanInvite` lets plain members invite | Manage family and invitations: admin Yes, moderator Limited, member No | DECIDE |
 | `approveMembers` | yes | yes | no | - | Manage family and invitations: admin Yes, moderator Limited, member No | DECIDE |
@@ -18,6 +18,9 @@ Cells show the answer with the DEFAULT family settings for an active member. `ow
 | `editOthersExpense` | yes | yes | no | - | Create/edit expenses: admin Yes, moderator Yes, member Yes | DECIDE |
 | `recordContribution` | yes | yes | no | `moderatorManagesFinance` (default on) | Manage budgets/contributions: admin Yes, moderator Configurable, member View/add | DECIDE |
 | `viewAllContributions` | yes | yes | no | `membersViewAllContributions` (default off) | Manage budgets/contributions: member View/add | DECIDE |
+| `closeBazarMonth` | yes | yes | no | `moderatorManagesFinance` (default on) | (not in spec section 6) | DECIDE |
+| `importBazarData` | yes | yes | no | `moderatorManagesFinance` (default on) | (not in spec section 6) | DECIDE |
+| `requestContribution` | yes | yes | yes | - | Manage budgets/contributions: member View/add | yes |
 | `manageChoreTemplates` | yes | yes | no | - | Manage chore templates: admin Yes, moderator Yes, member No | yes |
 | `reassignChore` | yes | yes | no | - | Reassign chores: admin Yes, moderator Yes, member Request/exchange | yes |
 | `requestSwap` | own | own | own | - | Reassign chores: member Request/exchange | yes |
@@ -27,13 +30,15 @@ Cells show the answer with the DEFAULT family settings for an active member. `ow
 
 ## Cells the owner must decide
 
-- `inviteMembers`: Moderator "Limited": is inviting enough, or should it be admin-only?
-- `approveMembers`: Moderator "Limited": approve and reject are allowed, roles are not. Confirm.
-- `editFamilySettings`: Moderator "Limited": code gives moderators nothing here. Which settings, if any?
+- `inviteMembers`: Household Manager "Limited": is inviting enough, or should it be admin-only?
+- `approveMembers`: Household Manager "Limited": approve and reject are allowed, roles are not. Confirm.
+- `editFamilySettings`: Household Manager "Limited": code gives Household Managers nothing here. Which settings, if any?
 - `viewFamilyReports`: Default for members is "on". Confirm or switch the default off.
 - `exportData`: Not in the spec: admin only. Confirm.
-- `manageCatalogAndBudgets`: Default for moderators is "on". Confirm or switch the default off.
+- `manageCatalogAndBudgets`: Default for Household Managers is "on". Confirm or switch the default off.
 - `editOthersExpense`: Spec lets members create/edit expenses; code lets a member edit only their own. Confirm.
 - `recordContribution`: Members "add" in the spec: should a member record their OWN contribution?
 - `viewAllContributions`: Project default is "members see only their own". Confirm.
+- `closeBazarMonth`: Admin only, or Household Manager while the family allows finance? Confirm.
+- `importBazarData`: Admin only, or Household Manager while the family allows finance? Confirm.
 - `verifyChore`: Not in the spec: verification is off by default and nobody verifies their own work. Confirm.

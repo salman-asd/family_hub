@@ -8,21 +8,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('PendingWriteCounter counts while running and also on failure', () async {
-    final counter = PendingWriteCounter();
-    final gate = Completer<void>();
-    final run = counter.track(() => gate.future);
-    expect(counter.value, 1);
-    gate.complete();
-    await run;
-    expect(counter.value, 0);
+  test(
+    'PendingWriteCounter counts while running and also on failure',
+    () async {
+      final counter = PendingWriteCounter();
+      final gate = Completer<void>();
+      final run = counter.track(() => gate.future);
+      expect(counter.value, 1);
+      gate.complete();
+      await run;
+      expect(counter.value, 0);
 
-    await expectLater(
-      counter.track<void>(() async => throw StateError('x')),
-      throwsStateError,
-    );
-    expect(counter.value, 0);
-  });
+      await expectLater(
+        counter.track<void>(() async => throw StateError('x')),
+        throwsStateError,
+      );
+      expect(counter.value, 0);
+    },
+  );
 
   test('FakeTxRunner exposes pending writes while a commit is held', () async {
     final tx = FakeTxRunner();
@@ -40,8 +43,9 @@ void main() {
     expect(tx.store['a/b'], {'v': 1});
   });
 
-  testWidgets('pending > 10 s is reported as offline; draining clears it',
-      (tester) async {
+  testWidgets('pending > 10 s is reported as offline; draining clears it', (
+    tester,
+  ) async {
     final counter = PendingWriteCounter();
     final clock = FakeClock(DateTime.utc(2026, 10, 18, 9));
     final container = ProviderContainer(
@@ -51,14 +55,18 @@ void main() {
       ],
     );
     addTearDown(container.dispose);
-    container.listen(syncStatusProvider, (_, __) {});
+    container.listen(syncStatusProvider, (_, _) {});
 
     expect(container.read(syncStatusProvider), const SyncStatus());
 
     counter.value = 2;
     var status = container.read(syncStatusProvider);
     expect(status.pendingWrites, 2);
-    expect(status.isOffline, isFalse, reason: 'normal short sync is not offline');
+    expect(
+      status.isOffline,
+      isFalse,
+      reason: 'normal short sync is not offline',
+    );
 
     await tester.pump(const Duration(seconds: 11));
     status = container.read(syncStatusProvider);
@@ -69,19 +77,21 @@ void main() {
     expect(container.read(syncStatusProvider), const SyncStatus());
   });
 
-  testWidgets('a write acknowledged within the grace period never shows offline',
-      (tester) async {
-    final counter = PendingWriteCounter();
-    final container = ProviderContainer(
-      overrides: [pendingWriteCounterProvider.overrideWithValue(counter)],
-    );
-    addTearDown(container.dispose);
-    container.listen(syncStatusProvider, (_, __) {});
+  testWidgets(
+    'a write acknowledged within the grace period never shows offline',
+    (tester) async {
+      final counter = PendingWriteCounter();
+      final container = ProviderContainer(
+        overrides: [pendingWriteCounterProvider.overrideWithValue(counter)],
+      );
+      addTearDown(container.dispose);
+      container.listen(syncStatusProvider, (_, _) {});
 
-    counter.value = 1;
-    await tester.pump(const Duration(seconds: 3));
-    counter.value = 0;
-    await tester.pump(const Duration(seconds: 20));
-    expect(container.read(syncStatusProvider), const SyncStatus());
-  });
+      counter.value = 1;
+      await tester.pump(const Duration(seconds: 3));
+      counter.value = 0;
+      await tester.pump(const Duration(seconds: 20));
+      expect(container.read(syncStatusProvider), const SyncStatus());
+    },
+  );
 }

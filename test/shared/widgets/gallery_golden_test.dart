@@ -63,7 +63,7 @@ void main() {
     skip: generated
         ? null
         : 'goldens not generated yet — run '
-            '`flutter test --update-goldens test/shared/widgets`',
+              '`flutter test --update-goldens test/shared/widgets`',
   );
 }
 

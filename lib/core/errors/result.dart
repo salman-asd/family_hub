@@ -21,16 +21,13 @@ sealed class Result<T> {
 
   /// Transforms the success value; failures pass through unchanged.
   Result<R> map<R>(R Function(T value) transform) => when<Result<R>>(
-        success: (v) => Success<R>(transform(v)),
-        failure: (f) => Failure<R>(f),
-      );
+    success: (v) => Success<R>(transform(v)),
+    failure: (f) => Failure<R>(f),
+  );
 
   /// Chains another fallible step; the first failure wins.
   Result<R> flatMap<R>(Result<R> Function(T value) transform) =>
-      when<Result<R>>(
-        success: transform,
-        failure: (f) => Failure<R>(f),
-      );
+      when<Result<R>>(success: transform, failure: (f) => Failure<R>(f));
 }
 
 final class Success<T> extends Result<T> {
@@ -42,8 +39,7 @@ final class Success<T> extends Result<T> {
   R when<R>({
     required R Function(T value) success,
     required R Function(AppFailure failure) failure,
-  }) =>
-      success(value);
+  }) => success(value);
 
   @override
   bool operator ==(Object other) => other is Success<T> && other.value == value;
@@ -64,8 +60,7 @@ final class Failure<T> extends Result<T> {
   R when<R>({
     required R Function(T value) success,
     required R Function(AppFailure failure) failure,
-  }) =>
-      failure(error);
+  }) => failure(error);
 
   @override
   bool operator ==(Object other) => other is Failure<T> && other.error == error;

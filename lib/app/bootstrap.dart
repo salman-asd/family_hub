@@ -8,12 +8,24 @@ import 'package:family_hub/core/firebase/cache_wipe.dart';
 import 'package:family_hub/core/firebase/firebase_bootstrap.dart';
 import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
+import 'package:family_hub/features/bazar/advances/data/firestore_advance_repository.dart';
+import 'package:family_hub/features/bazar/advances/presentation/advance_providers.dart';
+import 'package:family_hub/features/bazar/expenses/data/firestore_expense_repository.dart';
+import 'package:family_hub/features/bazar/expenses/presentation/expense_providers.dart';
+import 'package:family_hub/features/bazar/fund/data/firestore_fund_repository.dart';
+import 'package:family_hub/features/bazar/fund/presentation/fund_providers.dart';
+import 'package:family_hub/features/bazar/items_categories/data/default_catalog_seeder.dart';
+import 'package:family_hub/features/bazar/items_categories/data/firestore_catalog_repository.dart';
+import 'package:family_hub/features/bazar/items_categories/presentation/catalog_providers.dart';
+import 'package:family_hub/features/bazar/settings/data/firestore_bazar_settings_repository.dart';
+import 'package:family_hub/features/bazar/settings/presentation/bazar_settings_providers.dart';
 import 'package:family_hub/core/firebase/sync_status.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
 import 'package:family_hub/core/localization/locale_controller.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/features/family/data/firestore_family_repository.dart';
 import 'package:family_hub/features/family/data/firestore_membership_repository.dart';
+import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/features/onboarding/data/firestore_profile_repository.dart';
@@ -48,65 +60,81 @@ void _logError(Object error, StackTrace? stack) {
 /// persistence enabled. Passing `--dart-define=USE_EMULATOR=true` connects
 /// Auth and Firestore to local emulators.
 Future<void> bootstrap(Flavor flavor) async {
-  await runZonedGuarded<Future<void>>(
-    () async {
-      WidgetsFlutterBinding.ensureInitialized();
+  await runZonedGuarded<Future<void>>(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-      FlutterError.onError = (FlutterErrorDetails details) {
-        FlutterError.presentError(details);
-        _logError(details.exception, details.stack);
-      };
-      PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-        _logError(error, stack);
-        return true;
-      };
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
+      _logError(details.exception, details.stack);
+    };
+    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+      _logError(error, stack);
+      return true;
+    };
 
-      // Pre-load SharedPreferences so ThemeController.build() can read it
-      // synchronously — avoids a one-frame flash of the wrong theme.  It is
-      // loaded BEFORE Firebase so a pending cache wipe (H9) can run first.
-      final prefs = await SharedPreferences.getInstance();
+    // Pre-load SharedPreferences so ThemeController.build() can read it
+    // synchronously — avoids a one-frame flash of the wrong theme.  It is
+    // loaded BEFORE Firebase so a pending cache wipe (H9) can run first.
+    final prefs = await SharedPreferences.getInstance();
 
-      // Initialize Firebase and configure Firestore persistence + emulators;
-      // clears the previous user's cached data when a sign-out asked for it.
-      await initializeFirebase(flavor: flavor, prefs: prefs);
+    // Initialize Firebase and configure Firestore persistence + emulators;
+    // clears the previous user's cached data when a sign-out asked for it.
+    await initializeFirebase(flavor: flavor, prefs: prefs);
 
-      // Built once and shared: the repository is stateless apart from the
-      // FirebaseAuth handle, and one instance keeps the auth stream single.
-      final authRepository = FirebaseAuthRepository();
+    // Built once and shared: the repository is stateless apart from the
+    // FirebaseAuth handle, and one instance keeps the auth stream single.
+    final authRepository = FirebaseAuthRepository();
 
-      // Firestore-backed repositories (Step 9).
-      const clock = SystemClock();
-      final tx = FirestoreTxRunner();
-      final profiles = FirestoreProfileRepository(tx: tx, clock: clock);
-      final memberships = FirestoreMembershipRepository();
-      final families = FirestoreFamilyRepository(tx: tx, clock: clock);
+    // Firestore-backed repositories (Step 9).
+    const clock = SystemClock();
+    final tx = FirestoreTxRunner();
+    final profiles = FirestoreProfileRepository(tx: tx, clock: clock);
+    final memberships = FirestoreMembershipRepository();
+    final families = FirestoreFamilyRepository(tx: tx, clock: clock);
+    final catalog = FirestoreCatalogRepository(tx: tx, clock: clock);
+    final bazarSettings = FirestoreBazarSettingsRepository(
+      tx: tx,
+      clock: clock,
+    );
+    final expenses = FirestoreExpenseRepository(tx: tx, clock: clock);
+    final funds = FirestoreFundRepository();
+    final advances = FirestoreAdvanceRepository();
 
-      runApp(
-        ProviderScope(
-          overrides: [
-            flavorProvider.overrideWithValue(flavor),
-            pendingWriteCounterProvider.overrideWithValue(tx.pendingWrites),
-            sharedPreferencesProvider.overrideWithValue(prefs),
-            authRepositoryProvider.overrideWithValue(authRepository),
-            afterSignOutProvider
-                .overrideWithValue(() => CacheWipe.request(prefs)),
-            accountRepositoryProvider.overrideWithValue(
-              FirestoreAccountRepository(tx: tx, clock: clock),
-            ),
-            profileRepositoryProvider.overrideWithValue(profiles),
-            userProfileRepositoryProvider.overrideWithValue(profiles),
-            membershipRepositoryProvider.overrideWithValue(memberships),
-            moduleFlagsRepositoryProvider.overrideWithValue(memberships),
-            familyRepositoryProvider.overrideWithValue(families),
-            themePreferenceSyncProvider
-                .overrideWithValue(FirestoreThemePreferenceSync()),
-            localePreferenceSyncProvider
-                .overrideWithValue(FirestoreLocalePreferenceSync()),
-          ],
-          child: const FamilyHubApp(),
-        ),
-      );
-    },
-    _logError,
-  );
+    runApp(
+      ProviderScope(
+        overrides: [
+          flavorProvider.overrideWithValue(flavor),
+          pendingWriteCounterProvider.overrideWithValue(tx.pendingWrites),
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          authRepositoryProvider.overrideWithValue(authRepository),
+          afterSignOutProvider.overrideWithValue(
+            () => CacheWipe.request(prefs),
+          ),
+          accountRepositoryProvider.overrideWithValue(
+            FirestoreAccountRepository(tx: tx, clock: clock),
+          ),
+          profileRepositoryProvider.overrideWithValue(profiles),
+          userProfileRepositoryProvider.overrideWithValue(profiles),
+          membershipRepositoryProvider.overrideWithValue(memberships),
+          moduleFlagsRepositoryProvider.overrideWithValue(memberships),
+          familyRepositoryProvider.overrideWithValue(families),
+          familySeedersProvider.overrideWithValue(const <FamilySeeder>[
+            DefaultCatalogSeeder(),
+          ]),
+          catalogRepositoryProvider.overrideWithValue(catalog),
+          bazarSettingsRepositoryProvider.overrideWithValue(bazarSettings),
+          expenseRepositoryProvider.overrideWithValue(expenses),
+          fundRepositoryProvider.overrideWithValue(funds),
+          advanceRepositoryProvider.overrideWithValue(advances),
+          themePreferenceSyncProvider.overrideWithValue(
+            FirestoreThemePreferenceSync(),
+          ),
+          localePreferenceSyncProvider.overrideWithValue(
+            FirestoreLocalePreferenceSync(),
+          ),
+        ],
+        child: const FamilyHubApp(),
+      ),
+    );
+  }, _logError);
 }

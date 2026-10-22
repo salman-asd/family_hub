@@ -32,9 +32,9 @@ class ChoresModule extends FamilyModule {
 
   @override
   List<RouteBase> get routes => [
-        GoRoute(
-          path: AppRoutes.chores,
-          builder: (context, state) => const ChoresPlaceholderScreen(),
-        ),
-      ];
+    GoRoute(
+      path: AppRoutes.chores,
+      builder: (context, state) => const ChoresPlaceholderScreen(),
+    ),
+  ];
 }

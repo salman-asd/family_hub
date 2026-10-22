@@ -59,10 +59,10 @@ final currentActorProvider = Provider<PermissionActor?>((ref) {
 
 final _permissionDocProvider =
     StreamProvider.family<PermissionSettings, String>((ref, familyId) {
-  return ref
-      .watch(familyRepositoryProvider)
-      .watchPermissionSettings(familyId);
-});
+      return ref
+          .watch(familyRepositoryProvider)
+          .watchPermissionSettings(familyId);
+    });
 
 /// The family's switches: `settings/permissions` plus the module flags.
 ///
@@ -74,8 +74,8 @@ final permissionSettingsProvider = Provider<PermissionSettings>((ref) {
   final familyId = membership?.familyId;
   final fromDoc =
       familyId == null || membership?.status != MembershipStatus.active
-          ? null
-          : ref.watch(_permissionDocProvider(familyId)).value;
+      ? null
+      : ref.watch(_permissionDocProvider(familyId)).value;
   return (fromDoc ?? PermissionSettings.defaults).copyWith(
     bazarEnabled: flags.isEnabled('bazar'),
     choresEnabled: flags.isEnabled('chores'),
@@ -101,12 +101,11 @@ extension WidgetRefPermissions on WidgetRef {
     Permission permission, {
     String? ownerId,
     PermissionTemplate? template,
-  }) =>
-      watch(
-        canProvider(
-          PermissionQuery(permission, ownerId: ownerId, template: template),
-        ),
-      );
+  }) => watch(
+    canProvider(
+      PermissionQuery(permission, ownerId: ownerId, template: template),
+    ),
+  );
 }
 
 /// `ref.can(...)` inside another provider.
@@ -115,10 +114,9 @@ extension RefPermissions on Ref {
     Permission permission, {
     String? ownerId,
     PermissionTemplate? template,
-  }) =>
-      watch(
-        canProvider(
-          PermissionQuery(permission, ownerId: ownerId, template: template),
-        ),
-      );
+  }) => watch(
+    canProvider(
+      PermissionQuery(permission, ownerId: ownerId, template: template),
+    ),
+  );
 }

@@ -52,11 +52,8 @@ class Member {
   bool get isActiveAdmin => isActive && role == MemberRole.admin;
 
   /// This member as the permission policy sees them (Step 10).
-  PermissionActor get permissionActor => PermissionActor(
-        uid: uid,
-        role: role,
-        isActive: isActive,
-      );
+  PermissionActor get permissionActor =>
+      PermissionActor(uid: uid, role: role, isActive: isActive);
 
   /// Short name for lists.
   String get displayName =>
@@ -72,20 +69,19 @@ class Member {
     String? avatarKey,
     DateTime? removedAt,
     DateTime? leftAt,
-  }) =>
-      Member(
-        uid: uid,
-        role: role ?? this.role,
-        status: status ?? this.status,
-        fullName: fullName ?? this.fullName,
-        relationship: relationship ?? this.relationship,
-        nickname: nickname ?? this.nickname,
-        spouseId: spouseId ?? this.spouseId,
-        avatarKey: avatarKey ?? this.avatarKey,
-        inviteCode: inviteCode,
-        removedAt: removedAt ?? this.removedAt,
-        leftAt: leftAt ?? this.leftAt,
-      );
+  }) => Member(
+    uid: uid,
+    role: role ?? this.role,
+    status: status ?? this.status,
+    fullName: fullName ?? this.fullName,
+    relationship: relationship ?? this.relationship,
+    nickname: nickname ?? this.nickname,
+    spouseId: spouseId ?? this.spouseId,
+    avatarKey: avatarKey ?? this.avatarKey,
+    inviteCode: inviteCode,
+    removedAt: removedAt ?? this.removedAt,
+    leftAt: leftAt ?? this.leftAt,
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -103,8 +99,19 @@ class Member {
       other.leftAt == leftAt;
 
   @override
-  int get hashCode => Object.hash(uid, role, status, fullName, relationship,
-      nickname, spouseId, avatarKey, inviteCode, removedAt, leftAt);
+  int get hashCode => Object.hash(
+    uid,
+    role,
+    status,
+    fullName,
+    relationship,
+    nickname,
+    spouseId,
+    avatarKey,
+    inviteCode,
+    removedAt,
+    leftAt,
+  );
 
   @override
   String toString() => 'Member($uid, $role, $status)';

@@ -41,8 +41,9 @@ class ErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final retry = onRetry;
-    final label =
-        retry == null ? null : (retryLabel ?? context.l10n.actionRetry);
+    final label = retry == null
+        ? null
+        : (retryLabel ?? context.l10n.actionRetry);
 
     return EmptyState(
       icon: icon ?? Icons.error_outline_rounded,

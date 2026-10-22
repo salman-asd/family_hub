@@ -22,6 +22,35 @@ exist", and becomes "verified" only when `tools/phase1_evidence.sh` reports the 
 | 10 | Roles cannot be self-promoted; last admin cannot be removed | **Pass** | `memberKeys` + role/status checks `:566-672`; `adminSetChanges`/`adminIdsRewritten` `:341-349`. Tests: `H6 active-admin set`, "member cannot make themselves admin". |
 | 11 | Account deletion is a soft delete | **Pass** | `accountDeletionOk` `:458-464`, no hard delete `:487`. Tests: `H9 account soft-delete`. |
 
+## Phase 2 additions (P2-05)
+
+`bazarCategories` and `bazarItems` have closed key sets (`categoryKeys`, `itemKeys`)
+and field validation (`categoryOk`, `itemOk`), allow soft delete only
+(`allow delete: if false`), and gate manager writes through `financeManager`.
+Any active member may create a custom item, and may change only the six usage
+fields with a `useCount` delta of 1..40 per write. Tests:
+`families/{f}/bazarCategories`, `families/{f}/bazarItems` and
+`creating a family with the default catalog` in
+`firebase/rules_test/catalog.test.mjs`.
+
+## Phase 2 additions (P2-10)
+
+The expense, ledger and advance collections each have a closed key set and a
+shape guard (`expenseKeys`/`expenseOk`, `tripKeys`/`tripOk`,
+`fundTxKeys`/`fundTxOk`, `advanceKeys`/`advanceOk`,
+`settlementKeys`/`settlementOk`, `closingKeys`/`closingOk`,
+`revisionKeys`/`revisionOk`). They are append-only where the ADR 0006 ledger
+rule requires it (`fundTransactions`, `settlements` and the nested
+`expenses/{e}/revisions` allow no update or delete), `expenses` allows only a
+soft delete/restore or a content edit that keeps the provenance fields, and
+`monthClosings` is manager-written. `monthOpen` blocks new expenses, trips,
+ledger rows and settlements in a closed month. Tests planned in
+`firebase/rules_test/expenses.test.mjs`, `fund.test.mjs` and
+`advances.test.mjs`.
+
+Collections: `expenses` (with nested `revisions`), `bazarTrips`,
+`fundTransactions`, `memberAdvances`, `settlements`, `monthClosings`.
+
 ## Findings
 
 | Id | Severity | Finding | Recommended fix |

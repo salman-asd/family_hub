@@ -54,11 +54,7 @@ class StatusChip extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              _icon,
-              size: compact ? 12 : 14,
-              color: colors.foreground,
-            ),
+            Icon(_icon, size: compact ? 12 : 14, color: colors.foreground),
             SizedBox(width: compact ? 4 : 6),
             Flexible(
               child: Text(
@@ -77,43 +73,43 @@ class StatusChip extends StatelessWidget {
   }
 
   IconData get _icon => switch (status) {
-        WidgetStatus.scheduled => Icons.schedule_rounded,
-        WidgetStatus.inProgress => Icons.timelapse_rounded,
-        WidgetStatus.completed => Icons.check_circle_outline_rounded,
-        WidgetStatus.verified => Icons.verified_rounded,
-        WidgetStatus.overdue => Icons.warning_amber_rounded,
-      };
+    WidgetStatus.scheduled => Icons.schedule_rounded,
+    WidgetStatus.inProgress => Icons.timelapse_rounded,
+    WidgetStatus.completed => Icons.check_circle_outline_rounded,
+    WidgetStatus.verified => Icons.verified_rounded,
+    WidgetStatus.overdue => Icons.warning_amber_rounded,
+  };
 
   String _defaultLabel(AppLocalizations l10n) => switch (status) {
-        WidgetStatus.scheduled => l10n.statusScheduled,
-        WidgetStatus.inProgress => l10n.statusInProgress,
-        WidgetStatus.completed => l10n.statusCompleted,
-        WidgetStatus.verified => l10n.statusVerified,
-        WidgetStatus.overdue => l10n.statusOverdue,
-      };
+    WidgetStatus.scheduled => l10n.statusScheduled,
+    WidgetStatus.inProgress => l10n.statusInProgress,
+    WidgetStatus.completed => l10n.statusCompleted,
+    WidgetStatus.verified => l10n.statusVerified,
+    WidgetStatus.overdue => l10n.statusOverdue,
+  };
 
   _StatusColors _colors(AppTokens t) => switch (status) {
-        WidgetStatus.scheduled => _StatusColors(
-            t.statusScheduledContainer,
-            t.statusScheduledOn,
-          ),
-        WidgetStatus.inProgress => _StatusColors(
-            t.statusInProgressContainer,
-            t.statusInProgressOn,
-          ),
-        WidgetStatus.completed => _StatusColors(
-            t.statusCompletedContainer,
-            t.statusCompletedOn,
-          ),
-        WidgetStatus.verified => _StatusColors(
-            t.statusVerifiedContainer,
-            t.statusVerifiedOn,
-          ),
-        WidgetStatus.overdue => _StatusColors(
-            t.statusOverdueContainer,
-            t.statusOverdueOn,
-          ),
-      };
+    WidgetStatus.scheduled => _StatusColors(
+      t.statusScheduledContainer,
+      t.statusScheduledOn,
+    ),
+    WidgetStatus.inProgress => _StatusColors(
+      t.statusInProgressContainer,
+      t.statusInProgressOn,
+    ),
+    WidgetStatus.completed => _StatusColors(
+      t.statusCompletedContainer,
+      t.statusCompletedOn,
+    ),
+    WidgetStatus.verified => _StatusColors(
+      t.statusVerifiedContainer,
+      t.statusVerifiedOn,
+    ),
+    WidgetStatus.overdue => _StatusColors(
+      t.statusOverdueContainer,
+      t.statusOverdueOn,
+    ),
+  };
 }
 
 class _StatusColors {

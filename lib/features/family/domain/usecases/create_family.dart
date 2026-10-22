@@ -16,16 +16,12 @@ import 'package:family_hub/features/onboarding/domain/user_profile_repository.da
 /// (family, member, settings documents, user `familyId`, activity + audit).
 class CreateFamily {
   const CreateFamily({
-    required FamilyRepository families,
-    required UserProfileRepository profiles,
-    required Clock clock,
-    required IdGenerator newId,
-    List<FamilySeeder> seeders = const <FamilySeeder>[],
-  })  : _families = families,
-        _profiles = profiles,
-        _clock = clock,
-        _newId = newId,
-        _seeders = seeders;
+    required this._families,
+    required this._profiles,
+    required this._clock,
+    required this._newId,
+    this._seeders = const <FamilySeeder>[],
+  });
 
   final FamilyRepository _families;
   final UserProfileRepository _profiles;
@@ -103,9 +99,7 @@ class CreateFamily {
       family: family,
       owner: owner,
       event: event,
-      seedWrites: <SeedWrite>[
-        for (final s in _seeders) ...s.seed(context),
-      ],
+      seedWrites: <SeedWrite>[for (final s in _seeders) ...s.seed(context)],
     );
     final saveFailure = saved.failureOrNull;
     return saveFailure != null

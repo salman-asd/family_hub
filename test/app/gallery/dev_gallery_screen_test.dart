@@ -19,8 +19,9 @@ void main() {
     expect(AppRoutes.alwaysOpen, contains(AppRoutes.devGallery));
   });
 
-  testWidgets('renders every section of the gallery without errors',
-      (tester) async {
+  testWidgets('renders every section of the gallery without errors', (
+    tester,
+  ) async {
     // Tall viewport so the whole list is laid out (a ListView only builds what
     // fits) and every section heading is found.
     tester.view

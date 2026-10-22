@@ -20,20 +20,16 @@ void main() {
   });
 
   test('a document that only holds preferences still gets its first stamp', () {
-    final m = FirestoreProfileRepository.profileWriteMap(
-      profile,
-      {'preferences': {'language': 'bn'}},
-      now,
-    );
+    final m = FirestoreProfileRepository.profileWriteMap(profile, {
+      'preferences': {'language': 'bn'},
+    }, now);
     expect(m.containsKey(BaseMapper.keyCreatedAt), isTrue);
   });
 
   test('a later save never rewrites createdAt / createdBy', () {
-    final m = FirestoreProfileRepository.profileWriteMap(
-      profile,
-      {BaseMapper.keyCreatedAt: 'earlier'},
-      now,
-    );
+    final m = FirestoreProfileRepository.profileWriteMap(profile, {
+      BaseMapper.keyCreatedAt: 'earlier',
+    }, now);
     expect(m.containsKey(BaseMapper.keyCreatedAt), isFalse);
     expect(m.containsKey(BaseMapper.keyCreatedBy), isFalse);
     expect(m[BaseMapper.keyUpdatedAt], isNotNull);

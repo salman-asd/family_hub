@@ -1,0 +1,94 @@
+{
+  "scenario": "item",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarItems/item_fixRice",
+      "data": {
+        "nameBn": "চাল",
+        "nameEn": "Rice",
+        "categoryId": "cat_fixStaples",
+        "defaultUnit": "kg",
+        "aliases": [
+          "rice",
+          "chal"
+        ],
+        "emoji": "🍚",
+        "imageData": null,
+        "useCount": 2,
+        "lastPricePaisa": 12500,
+        "lastUnitPricePaisa": 6500,
+        "lastUsedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "active": true,
+        "builtIn": true,
+        "seedKey": "rice",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev9",
+      "data": {
+        "type": "bazar.item_created",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "item",
+        "refId": "item_fixRice",
+        "params": {
+          "name": "চাল"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev9",
+      "data": {
+        "type": "bazar.item_created",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "item",
+        "refId": "item_fixRice",
+        "params": {
+          "name": "চাল"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

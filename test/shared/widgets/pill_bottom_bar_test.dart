@@ -28,9 +28,8 @@ Future<void> _pump(
     MaterialApp(
       theme: buildThemeData(spec ?? appThemes.first),
       builder: (context, child) => MediaQuery(
-        data: MediaQuery.of(context).copyWith(
-          textScaler: TextScaler.linear(textScale),
-        ),
+        data: MediaQuery.of(context)
+            .copyWith(textScaler: TextScaler.linear(textScale)),
         child: child!,
       ),
       home: Scaffold(
@@ -83,24 +82,23 @@ void main() {
     final handle = tester.ensureSemantics();
     await _pump(tester, selected: 2);
     for (final item in _items) {
-      expect(
-        tester.getSemantics(find.byKey(item.key!)).label,
-        item.label,
-      );
+      expect(tester.getSemantics(find.byKey(item.key!)).label, item.label);
     }
     handle.dispose();
   });
 
-  testWidgets('renders in every registered theme without errors',
-      (tester) async {
+  testWidgets('renders in every registered theme without errors', (
+    tester,
+  ) async {
     for (final spec in appThemes.where((s) => s.available)) {
       await _pump(tester, selected: 0, spec: spec);
       expect(tester.takeException(), isNull, reason: spec.id);
     }
   });
 
-  testWidgets('a long Bangla label at 200% text scale does not overflow',
-      (tester) async {
+  testWidgets('a long Bangla label at 200% text scale does not overflow', (
+    tester,
+  ) async {
     const long = [
       PillNavItem(key: Key('a'), icon: Icons.home, label: 'হোম'),
       PillNavItem(

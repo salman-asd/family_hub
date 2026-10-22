@@ -41,11 +41,11 @@ final class PermissionSettings {
   final bool choreVerificationEnabled;
 
   bool isModuleEnabled(PermissionModule module) => switch (module) {
-        // Family administration is not a switchable module.
-        PermissionModule.family => true,
-        PermissionModule.bazar => bazarEnabled,
-        PermissionModule.chores => choresEnabled,
-      };
+    // Family administration is not a switchable module.
+    PermissionModule.family => true,
+    PermissionModule.bazar => bazarEnabled,
+    PermissionModule.chores => choresEnabled,
+  };
 
   PermissionSettings copyWith({
     bool? bazarEnabled,
@@ -55,20 +55,19 @@ final class PermissionSettings {
     bool? membersViewAllContributions,
     bool? membersCanInvite,
     bool? choreVerificationEnabled,
-  }) =>
-      PermissionSettings(
-        bazarEnabled: bazarEnabled ?? this.bazarEnabled,
-        choresEnabled: choresEnabled ?? this.choresEnabled,
-        moderatorManagesFinance:
-            moderatorManagesFinance ?? this.moderatorManagesFinance,
-        membersViewFamilyReports:
-            membersViewFamilyReports ?? this.membersViewFamilyReports,
-        membersViewAllContributions:
-            membersViewAllContributions ?? this.membersViewAllContributions,
-        membersCanInvite: membersCanInvite ?? this.membersCanInvite,
-        choreVerificationEnabled:
-            choreVerificationEnabled ?? this.choreVerificationEnabled,
-      );
+  }) => PermissionSettings(
+    bazarEnabled: bazarEnabled ?? this.bazarEnabled,
+    choresEnabled: choresEnabled ?? this.choresEnabled,
+    moderatorManagesFinance:
+        moderatorManagesFinance ?? this.moderatorManagesFinance,
+    membersViewFamilyReports:
+        membersViewFamilyReports ?? this.membersViewFamilyReports,
+    membersViewAllContributions:
+        membersViewAllContributions ?? this.membersViewAllContributions,
+    membersCanInvite: membersCanInvite ?? this.membersCanInvite,
+    choreVerificationEnabled:
+        choreVerificationEnabled ?? this.choreVerificationEnabled,
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -83,17 +82,18 @@ final class PermissionSettings {
 
   @override
   int get hashCode => Object.hash(
-        bazarEnabled,
-        choresEnabled,
-        moderatorManagesFinance,
-        membersViewFamilyReports,
-        membersViewAllContributions,
-        membersCanInvite,
-        choreVerificationEnabled,
-      );
+    bazarEnabled,
+    choresEnabled,
+    moderatorManagesFinance,
+    membersViewFamilyReports,
+    membersViewAllContributions,
+    membersCanInvite,
+    choreVerificationEnabled,
+  );
 
   @override
-  String toString() => 'PermissionSettings(bazar: $bazarEnabled, '
+  String toString() =>
+      'PermissionSettings(bazar: $bazarEnabled, '
       'chores: $choresEnabled, moderatorFinance: $moderatorManagesFinance, '
       'memberReports: $membersViewFamilyReports, '
       'memberAllContributions: $membersViewAllContributions, '

@@ -51,11 +51,7 @@ class MoneyText extends StatelessWidget {
   }
 
   Widget _text(BuildContext context, String text) {
-    final widget = Text(
-      text,
-      style: style,
-      textAlign: TextAlign.end,
-    );
+    final widget = Text(text, style: style, textAlign: TextAlign.end);
     final label = semanticsLabel;
     if (label == null) return widget;
     // excludeSemantics: the label is what a screen reader should say, not the
@@ -80,10 +76,9 @@ class _ConsumerMoneyText extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final text = ref.watch(appFormattersProvider).money(
-          value,
-          hideZeroFraction: hideZeroFraction,
-        );
+    final text = ref
+        .watch(appFormattersProvider)
+        .money(value, hideZeroFraction: hideZeroFraction);
     final widget = Text(text, style: style, textAlign: TextAlign.end);
     final label = semanticsLabel;
     if (label == null) return widget;

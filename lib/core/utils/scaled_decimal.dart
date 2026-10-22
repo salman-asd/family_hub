@@ -17,8 +17,9 @@ Result<int> parseScaledDecimal(
   required String field,
   bool allowNegative = true,
 }) {
-  final cleaned =
-      toEnglishDigits(raw).replaceAll(',', '').replaceAll(RegExp(r'\s'), '');
+  final cleaned = toEnglishDigits(raw)
+      .replaceAll(',', '')
+      .replaceAll(RegExp(r'\s'), '');
   if (cleaned.isEmpty) {
     return Failure<int>(Validation(field, 'empty'));
   }

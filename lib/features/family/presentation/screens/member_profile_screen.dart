@@ -41,11 +41,11 @@ class MemberProfileScreen extends ConsumerWidget {
                 onRetry: () => ref.invalidate(membersProvider),
               )
             : membersAsync.isLoading
-                ? const LoadingView(showAvatar: true)
-                : EmptyState(
-                    icon: Icons.person_off_outlined,
-                    title: l10n.notFoundTitle,
-                  ),
+            ? const LoadingView(showAvatar: true)
+            : EmptyState(
+                icon: Icons.person_off_outlined,
+                title: l10n.notFoundTitle,
+              ),
       );
     }
 
@@ -55,18 +55,18 @@ class MemberProfileScreen extends ConsumerWidget {
     }
 
     Widget row(String label, String value) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Text(label, style: TextStyle(color: t.textSecondary)),
-              ),
-              Expanded(flex: 3, child: Text(value)),
-            ],
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(label, style: TextStyle(color: t.textSecondary)),
           ),
-        );
+          Expanded(flex: 3, child: Text(value)),
+        ],
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.memberProfileTitle)),

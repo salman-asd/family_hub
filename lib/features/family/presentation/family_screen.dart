@@ -38,123 +38,121 @@ class FamilyScreen extends ConsumerWidget {
               onRetry: () => ref.invalidate(membershipProvider),
             )
           : ListView(
-        key: const PageStorageKey<String>('family_tab_list'),
-        padding: const EdgeInsets.all(16),
-        children: [
-          _SettingsTile(
-            key: const Key('family_members'),
-            icon: Icons.people_outline_rounded,
-            label: l10n.membersTitle,
-            onTap: () => context.push(AppRoutes.familyMembers),
-          ),
-          PermissionGate(
-            allowed: canInvite,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: _SettingsTile(
-                key: const Key('family_invitations'),
-                icon: Icons.mail_outline_rounded,
-                label: l10n.invitationsTitle,
-                onTap: () => context.push(AppRoutes.familyInvitations),
-              ),
+              key: const PageStorageKey<String>('family_tab_list'),
+              padding: const EdgeInsets.all(16),
+              children: [
+                _SettingsTile(
+                  key: const Key('family_members'),
+                  icon: Icons.people_outline_rounded,
+                  label: l10n.membersTitle,
+                  onTap: () => context.push(AppRoutes.familyMembers),
+                ),
+                PermissionGate(
+                  allowed: canInvite,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: _SettingsTile(
+                      key: const Key('family_invitations'),
+                      icon: Icons.mail_outline_rounded,
+                      label: l10n.invitationsTitle,
+                      onTap: () => context.push(AppRoutes.familyInvitations),
+                    ),
+                  ),
+                ),
+                PermissionGate(
+                  allowed: canChangeRoles,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: _SettingsTile(
+                      key: const Key('family_roles'),
+                      icon: Icons.admin_panel_settings_outlined,
+                      label: l10n.rolesTitle,
+                      onTap: () => context.push(AppRoutes.familyRoles),
+                    ),
+                  ),
+                ),
+                PermissionGate(
+                  allowed: canEditSettings,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: _SettingsTile(
+                      key: const Key('family_settings'),
+                      icon: Icons.tune_rounded,
+                      label: l10n.familySettingsTitle,
+                      onTap: () => context.push(AppRoutes.familySettings),
+                    ),
+                  ),
+                ),
+                PermissionGate(
+                  allowed: canEditSettings,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: _SettingsTile(
+                      key: const Key('family_relationships'),
+                      icon: Icons.diversity_3_rounded,
+                      label: l10n.relationshipsTitle,
+                      onTap: () => context.push(AppRoutes.familyRelationships),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
+                  child: Text(
+                    l10n.settingsTitle,
+                    style: Theme.of(context).textTheme.titleSmall
+                        ?.copyWith(color: t.textSecondary),
+                  ),
+                ),
+                _SettingsTile(
+                  key: const Key('family_settings_theme'),
+                  icon: Icons.palette_outlined,
+                  label: l10n.settingsThemeTitle,
+                  onTap: () => context.push(AppRoutes.settingsTheme),
+                ),
+                const SizedBox(height: 8),
+                _SettingsTile(
+                  key: const Key('family_settings_language'),
+                  icon: Icons.translate_rounded,
+                  label: l10n.settingsLanguageTitle,
+                  onTap: () => context.push(AppRoutes.settingsLanguage),
+                ),
+                const SizedBox(height: 8),
+                _SettingsTile(
+                  key: const Key('family_settings_security'),
+                  icon: Icons.lock_outline_rounded,
+                  label: l10n.securityTitle,
+                  onTap: () => context.push(AppRoutes.settingsSecurity),
+                ),
+                if (flavor == Flavor.dev) ...[
+                  const SizedBox(height: 8),
+                  _SettingsTile(
+                    key: const Key('family_dev_tokens'),
+                    icon: Icons.color_lens_outlined,
+                    label: l10n.homeViewThemeTokens,
+                    onTap: () => context.push(AppRoutes.devTokens),
+                  ),
+                  const SizedBox(height: 8),
+                  // The component gallery (Step 11).  A route alone is not reachable
+                  // on a phone, so the dev flavor gets an entry next to the tokens.
+                  _SettingsTile(
+                    key: const Key('family_dev_gallery'),
+                    icon: Icons.widgets_outlined,
+                    label: l10n.devGalleryTitle,
+                    onTap: () => context.push(AppRoutes.devGallery),
+                  ),
+                ],
+                const SizedBox(height: 24),
+                _LeaveFamilyTile(familyId: membership?.familyId),
+                const SizedBox(height: 8),
+                _SettingsTile(
+                  key: const Key('family_sign_out'),
+                  icon: Icons.logout_rounded,
+                  label: l10n.authSignOut,
+                  onTap: () => ref.read(signOutProvider).call(),
+                ),
+              ],
             ),
-          ),
-          PermissionGate(
-            allowed: canChangeRoles,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: _SettingsTile(
-                key: const Key('family_roles'),
-                icon: Icons.admin_panel_settings_outlined,
-                label: l10n.rolesTitle,
-                onTap: () => context.push(AppRoutes.familyRoles),
-              ),
-            ),
-          ),
-          PermissionGate(
-            allowed: canEditSettings,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: _SettingsTile(
-                key: const Key('family_settings'),
-                icon: Icons.tune_rounded,
-                label: l10n.familySettingsTitle,
-                onTap: () => context.push(AppRoutes.familySettings),
-              ),
-            ),
-          ),
-          PermissionGate(
-            allowed: canEditSettings,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: _SettingsTile(
-                key: const Key('family_relationships'),
-                icon: Icons.diversity_3_rounded,
-                label: l10n.relationshipsTitle,
-                onTap: () => context.push(AppRoutes.familyRelationships),
-              ),
-            ),
-          ),
-          const SizedBox(height: 24),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(4, 0, 4, 8),
-            child: Text(
-              l10n.settingsTitle,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
-                  ?.copyWith(color: t.textSecondary),
-            ),
-          ),
-          _SettingsTile(
-            key: const Key('family_settings_theme'),
-            icon: Icons.palette_outlined,
-            label: l10n.settingsThemeTitle,
-            onTap: () => context.push(AppRoutes.settingsTheme),
-          ),
-          const SizedBox(height: 8),
-          _SettingsTile(
-            key: const Key('family_settings_language'),
-            icon: Icons.translate_rounded,
-            label: l10n.settingsLanguageTitle,
-            onTap: () => context.push(AppRoutes.settingsLanguage),
-          ),
-          const SizedBox(height: 8),
-          _SettingsTile(
-            key: const Key('family_settings_security'),
-            icon: Icons.lock_outline_rounded,
-            label: l10n.securityTitle,
-            onTap: () => context.push(AppRoutes.settingsSecurity),
-          ),
-          if (flavor == Flavor.dev) ...[
-            const SizedBox(height: 8),
-            _SettingsTile(
-              key: const Key('family_dev_tokens'),
-              icon: Icons.color_lens_outlined,
-              label: l10n.homeViewThemeTokens,
-              onTap: () => context.push(AppRoutes.devTokens),
-            ),
-            const SizedBox(height: 8),
-            // The component gallery (Step 11).  A route alone is not reachable
-            // on a phone, so the dev flavor gets an entry next to the tokens.
-            _SettingsTile(
-              key: const Key('family_dev_gallery'),
-              icon: Icons.widgets_outlined,
-              label: l10n.devGalleryTitle,
-              onTap: () => context.push(AppRoutes.devGallery),
-            ),
-          ],
-          const SizedBox(height: 24),
-          _LeaveFamilyTile(familyId: membership?.familyId),
-          const SizedBox(height: 8),
-          _SettingsTile(
-            key: const Key('family_sign_out'),
-            icon: Icons.logout_rounded,
-            label: l10n.authSignOut,
-            onTap: () => ref.read(signOutProvider).call(),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -191,9 +189,7 @@ class _SettingsTile extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
+                    style: Theme.of(context).textTheme.bodyLarge
                         ?.copyWith(color: t.textPrimary),
                   ),
                 ),
@@ -259,7 +255,9 @@ class _LeaveFamilyTile extends ConsumerWidget {
       );
       if (confirmed != true) return;
       // On success the membership stream makes the router open family choice.
-      await ref.read(_leaveActionProvider.notifier).run(
+      await ref
+          .read(_leaveActionProvider.notifier)
+          .run(
             () => ref.read(leaveFamilyProvider)(actorUid: uid, familyId: fid),
           );
     }

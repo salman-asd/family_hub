@@ -375,6 +375,170 @@ class AppLocalizationsBn extends AppLocalizations {
   String get moduleComingSoonMessage => 'এই অংশটি এখনো তৈরি হচ্ছে।';
 
   @override
+  String get bazarHomeEmptyTitle => 'বাজার এখনো খালি';
+
+  @override
+  String get bazarHomeEmptyMessage =>
+      'খরচ, বাজার তালিকা ও হিসাবের অংশগুলো ধাপে ধাপে এখানে যোগ হবে।';
+
+  @override
+  String get bazarCatalogSetupTitle => 'স্টার্টার বাজার তালিকা সেট করুন';
+
+  @override
+  String get bazarCatalogSetupMessage =>
+      'শুরু করার জন্য ১১টি ক্যাটাগরি ও ৫৪টি সাধারণ আইটেম যোগ করুন। পরে আপনি সেগুলো সম্পাদনা, যোগ বা লুকাতে পারবেন।';
+
+  @override
+  String get bazarCatalogSetupAction => 'তালিকা তৈরি করুন';
+
+  @override
+  String get bazarCatalogSetupBusy => 'বাজার তালিকা তৈরি হচ্ছে…';
+
+  @override
+  String get bazarCatalogAskAdminTitle => 'বাজার তালিকা তৈরি হয়নি';
+
+  @override
+  String get bazarCatalogAskAdminMessage =>
+      'বাজার তালিকা তৈরি করতে একজন অ্যাডমিনকে বলুন।';
+
+  @override
+  String get bazarSettingsTitle => 'বাজারের সেটিংস';
+
+  @override
+  String get unitKg => 'কেজি';
+
+  @override
+  String get unitG => 'গ্রাম';
+
+  @override
+  String get unitLitre => 'লিটার';
+
+  @override
+  String get unitPiece => 'পিস';
+
+  @override
+  String get unitDozen => 'ডজন';
+
+  @override
+  String get unitPacket => 'প্যাকেট';
+
+  @override
+  String get unitCylinder => 'সিলিন্ডার';
+
+  @override
+  String get bazarFundingFund => 'পরিবারের তহবিল';
+
+  @override
+  String get bazarFundingMember => 'সদস্য পরিশোধিত';
+
+  @override
+  String get bazarAdvancePending => 'অপেক্ষমাণ';
+
+  @override
+  String get bazarAdvancePartial => 'আংশিক সমন্বিত';
+
+  @override
+  String get bazarAdvanceSettled => 'সমন্বিত';
+
+  @override
+  String get bazarAdvanceVoided => 'বাতিল';
+
+  @override
+  String get bazarErrRequired => 'এই ঘরটি পূরণ করুন।';
+
+  @override
+  String get bazarErrTooLong => 'লেখাটি অনেক বড় হয়ে গেছে।';
+
+  @override
+  String get bazarErrInvalidAmount => 'সঠিক অঙ্ক লিখুন।';
+
+  @override
+  String get bazarErrAmountNotPositive => 'অঙ্কটি শূন্যের বেশি হতে হবে।';
+
+  @override
+  String get bazarErrFutureDate => 'তারিখ ভবিষ্যতের হতে পারে না।';
+
+  @override
+  String get bazarErrQtyUnitRequired => 'পরিমাণ ও একক দুটোই দিন।';
+
+  @override
+  String get bazarErrMemberRequired => 'সদস্যটি বেছে নিন।';
+
+  @override
+  String get bazarErrCategoryRequired => 'ক্যাটাগরি বেছে নিন।';
+
+  @override
+  String get bazarErrItemNameRequired => 'আইটেমের নাম লিখুন।';
+
+  @override
+  String get bazarErrTooManyLines => 'সারি অনেক বেশি; কিছু সরিয়ে দিন।';
+
+  @override
+  String get bazarErrInvalidMonth => 'সঠিক মাস বেছে নিন।';
+
+  @override
+  String get bazarErrInvalidRange => 'শেষ তারিখ শুরুর তারিখের পরে হতে হবে।';
+
+  @override
+  String get bazarErrNegative => 'অঙ্ক ঋণাত্মক হতে পারে না।';
+
+  @override
+  String get bazarErrTooManyDecimals =>
+      'সর্বোচ্চ দুই দশমিক স্থান ব্যবহার করুন।';
+
+  @override
+  String get bazarErrTooLarge => 'অঙ্কটি অনেক বড়।';
+
+  @override
+  String get bazarErrMonthLocked => 'এই মাস বন্ধ আছে। খুলতে অ্যাডমিনকে বলুন।';
+
+  @override
+  String get bazarErrAdvanceSettled =>
+      'এই অগ্রিম আংশিক বা সম্পূর্ণ সমন্বয় হয়ে গেছে।';
+
+  @override
+  String get bazarErrOverpayment =>
+      'বাকি থাকা অঙ্কের চেয়ে বেশি দেওয়া হয়েছে।';
+
+  @override
+  String get bazarErrAlreadyClosed => 'এই মাস ইতিমধ্যে বন্ধ আছে।';
+
+  @override
+  String get bazarErrNotClosed => 'এই মাস বন্ধ নয়।';
+
+  @override
+  String get bazarErrReopenNoteRequired => 'মাসটি কেন খুলছেন তা লিখুন।';
+
+  @override
+  String get bazarErrCatalogNotEmpty =>
+      'তালিকায় এখনো আইটেম আছে; আগে সেগুলো আর্কাইভ করুন।';
+
+  @override
+  String get bazarErrDuplicateItem =>
+      'ঠিক এই ধরনের খরচ সবেমাত্র যোগ হয়েছে। আবার সংরক্ষণের আগে দেখে নিন।';
+
+  @override
+  String get bazarErrImportAlreadyUndone => 'এই ইমপোর্ট আগেই বাতিল হয়েছে।';
+
+  @override
+  String get bazarErrImportHasLockedMonth => 'ফাইলে বন্ধ মাসের সারি আছে।';
+
+  @override
+  String get bazarErrConcurrentEdit =>
+      'আপনার আগেই কেউ এটি বদলেছেন। রিফ্রেশ করে আবার চেষ্টা করুন।';
+
+  @override
+  String get bazarErrNotFound =>
+      'রেকর্ডটি আর নেই। রিফ্রেশ করে আবার চেষ্টা করুন।';
+
+  @override
+  String get bazarErrNotAllowed =>
+      'শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন এটি করতে পারেন।';
+
+  @override
+  String get bazarErrUnknown => 'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।';
+
+  @override
   String get profileSetupTitle => 'আপনার প্রোফাইল তৈরি করুন';
 
   @override
@@ -538,7 +702,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get roleAdmin => 'অ্যাডমিন';
 
   @override
-  String get roleModerator => 'মডারেটর';
+  String get roleModerator => 'সংসার ব্যবস্থাপক';
 
   @override
   String get roleMember => 'সদস্য';
@@ -807,10 +971,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get securityPasswordChanged => 'পাসওয়ার্ড পরিবর্তন হয়েছে।';
 
   @override
-  String get securityPasswordSame => 'নতুন পাসওয়ার্ড বর্তমানটির থেকে আলাদা হতে হবে।';
+  String get securityPasswordSame =>
+      'নতুন পাসওয়ার্ড বর্তমানটির থেকে আলাদা হতে হবে।';
 
   @override
-  String get securityCurrentPasswordRequired => 'আপনার বর্তমান পাসওয়ার্ড লিখুন।';
+  String get securityCurrentPasswordRequired =>
+      'আপনার বর্তমান পাসওয়ার্ড লিখুন।';
 
   @override
   String get securityCurrentPasswordWrong => 'বর্তমান পাসওয়ার্ডটি সঠিক নয়।';
@@ -819,10 +985,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get securityDeleteTitle => 'আমার অ্যাকাউন্ট মুছুন';
 
   @override
-  String get securityDeleteBody => 'আপনি পরিবার ছেড়ে যাবেন এবং আপনার সাইন-ইন মুছে যাবে। পরিবারের ইতিহাস ঠিক রাখতে পুরোনো রেকর্ডে আপনার নাম থাকবে।';
+  String get securityDeleteBody =>
+      'আপনি পরিবার ছেড়ে যাবেন এবং আপনার সাইন-ইন মুছে যাবে। পরিবারের ইতিহাস ঠিক রাখতে পুরোনো রেকর্ডে আপনার নাম থাকবে।';
 
   @override
-  String get securityDeletePending => 'মুছে ফেলা শেষ হয়নি। শেষ করতে পাসওয়ার্ড লিখুন।';
+  String get securityDeletePending =>
+      'মুছে ফেলা শেষ হয়নি। শেষ করতে পাসওয়ার্ড লিখুন।';
 
   @override
   String get securityDeleteAction => 'অ্যাকাউন্ট মুছুন';
@@ -837,13 +1005,15 @@ class AppLocalizationsBn extends AppLocalizations {
   String get securityDeleteConfirmBody => 'এটি আর ফেরানো যাবে না।';
 
   @override
-  String get accountDeleteLastAdminHasMembers => 'আপনি একমাত্র অ্যাডমিন এবং পরিবারে আরও সদস্য আছেন। আগে অ্যাডমিনের দায়িত্ব হস্তান্তর করুন।';
+  String get accountDeleteLastAdminHasMembers =>
+      'আপনি একমাত্র অ্যাডমিন এবং পরিবারে আরও সদস্য আছেন। আগে অ্যাডমিনের দায়িত্ব হস্তান্তর করুন।';
 
   @override
   String get relationshipsTitle => 'সম্পর্কের তালিকা';
 
   @override
-  String get relationshipsHint => 'তৈরি-করা সম্পর্কগুলো পরিবর্তন করা যায় না। নিজের সম্পর্ক যোগ, নাম পরিবর্তন বা বন্ধ করতে পারেন।';
+  String get relationshipsHint =>
+      'তৈরি-করা সম্পর্কগুলো পরিবর্তন করা যায় না। নিজের সম্পর্ক যোগ, নাম পরিবর্তন বা বন্ধ করতে পারেন।';
 
   @override
   String get relationshipsAdd => 'সম্পর্ক যোগ করুন';
@@ -879,7 +1049,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get relationshipsFailureTooMany => 'তালিকা পূর্ণ।';
 
   @override
-  String get relationshipsFailureBuiltIn => 'তৈরি-করা সম্পর্ক পরিবর্তন করা যায় না।';
+  String get relationshipsFailureBuiltIn =>
+      'তৈরি-করা সম্পর্ক পরিবর্তন করা যায় না।';
 
   @override
   String activityFamilyCreated(String familyName) {
@@ -937,6 +1108,215 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String activityInvitationRevoked(String code) {
     return 'আমন্ত্রণ $code বাতিল হয়েছে';
+  }
+
+  @override
+  String activityBazarCatalogSeeded(String categories, String items) {
+    return '$categoriesটি ক্যাটাগরি ও $itemsটি আইটেম দিয়ে বাজারের তালিকা চালু হয়েছে';
+  }
+
+  @override
+  String activityBazarCategoryCreated(String name) {
+    return 'ক্যাটাগরি “$name” যোগ করা হয়েছে';
+  }
+
+  @override
+  String activityBazarCategoryUpdated(String name) {
+    return 'ক্যাটাগরি “$name” হালনাগাদ হয়েছে';
+  }
+
+  @override
+  String activityBazarCategoryDeactivated(String name) {
+    return 'ক্যাটাগরি “$name” আর্কাইভ করা হয়েছে';
+  }
+
+  @override
+  String activityBazarItemCreated(String name) {
+    return 'আইটেম “$name” যোগ করা হয়েছে';
+  }
+
+  @override
+  String activityBazarItemUpdated(String name) {
+    return 'আইটেম “$name” হালনাগাদ হয়েছে';
+  }
+
+  @override
+  String activityBazarItemDeactivated(String name) {
+    return 'আইটেম “$name” আর্কাইভ করা হয়েছে';
+  }
+
+  @override
+  String activityBazarExpenseCreated(
+    String item,
+    String amount,
+    String funding,
+  ) {
+    return '$item কেনা হয়েছে $amount দিয়ে ($funding)';
+  }
+
+  @override
+  String activityBazarExpenseUpdated(String item, String fields) {
+    return '$item সম্পাদনা করা হয়েছে ($fields)';
+  }
+
+  @override
+  String activityBazarExpenseDeleted(String item, String amount) {
+    return '$item মুছে ফেলা হয়েছে ($amount)';
+  }
+
+  @override
+  String activityBazarExpenseRestored(String item, String amount) {
+    return '$item ফিরিয়ে আনা হয়েছে ($amount)';
+  }
+
+  @override
+  String activityBazarTripCreated(String lines, String amount) {
+    return '$linesটি আইটেমের বাজার যাত্রা $amount দিয়ে সংরক্ষণ হয়েছে';
+  }
+
+  @override
+  String activityBazarBudgetSaved(String month, String amount) {
+    return '$month-এর বাজেট $amount নির্ধারণ করা হয়েছে';
+  }
+
+  @override
+  String get activityBazarSettingsUpdated => 'বাজারের সেটিংস হালনাগাদ হয়েছে';
+
+  @override
+  String activityBazarContributionPlanSet(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$month-এ $member-এর চাঁদা $amount নির্ধারণ করা হয়েছে';
+  }
+
+  @override
+  String activityBazarContributionRecorded(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$month-এ $member-এর $amount চাঁদা রেকর্ড করা হয়েছে';
+  }
+
+  @override
+  String activityBazarContributionVoided(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$month-এ $member-এর $amount চাঁদা বাতিল করা হয়েছে';
+  }
+
+  @override
+  String activityBazarContributionRequested(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$month-এর জন্য $member $amount দিতে চেয়েছেন';
+  }
+
+  @override
+  String activityBazarContributionRequestEdited(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$month-এর জন্য $member $amount দেওয়ার অনুরোধ সম্পাদনা করেছেন';
+  }
+
+  @override
+  String activityBazarContributionRequestCancelled(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$month-এর জন্য $member $amount দেওয়ার অনুরোধ প্রত্যাহার করেছেন';
+  }
+
+  @override
+  String activityBazarContributionApproved(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$month-এ $member-এর $amount চাঁদা অনুমোদিত হয়েছে';
+  }
+
+  @override
+  String activityBazarContributionRejected(
+    String month,
+    String member,
+    String amount,
+    String reason,
+  ) {
+    return '$month-এ $member-এর $amount চাঁদা গ্রহণ করা হয়নি ($reason)';
+  }
+
+  @override
+  String activityBazarContributionChangeRequested(
+    String month,
+    String member,
+    String amount,
+    String old,
+  ) {
+    return '$month-এর জন্য $member $old থেকে $amount-এ চাঁদা বদলাতে বলেছেন';
+  }
+
+  @override
+  String activityBazarContributionChangeApproved(
+    String month,
+    String member,
+    String amount,
+    String old,
+  ) {
+    return '$month-এ $member-এর চাঁদা $old থেকে $amount-এ বদলের অনুমোদন হয়েছে';
+  }
+
+  @override
+  String activityBazarContributionChangeRejected(
+    String month,
+    String member,
+    String amount,
+    String old,
+  ) {
+    return '$month-এ $member-এর চাঁদা $old থেকে $amount-এ বদলের অনুমোদন হয়নি';
+  }
+
+  @override
+  String activityBazarOpeningBalanceSet(String month, String amount) {
+    return '$month-এর প্রারম্ভিক ব্যালেন্স $amount';
+  }
+
+  @override
+  String activityBazarAdvanceSettled(
+    String member,
+    String amount,
+    String status,
+  ) {
+    return '$member-এর অগ্রিম $amount সমন্বয় হয়েছে ($status)';
+  }
+
+  @override
+  String activityBazarMonthClosed(String month, String balance) {
+    return '$month বন্ধ করা হয়েছে, ব্যালেন্স $balance';
+  }
+
+  @override
+  String activityBazarMonthReopened(String month, String note) {
+    return '$month আবার খোলা হয়েছে ($note)';
+  }
+
+  @override
+  String activityBazarImportCompleted(String rows, String amount) {
+    return 'ইমপোর্ট শেষ: $rowsটি সারি, $amount';
+  }
+
+  @override
+  String activityBazarImportUndone(String rows, String amount) {
+    return 'ইমপোর্ট বাতিল: $rowsটি সারি, $amount';
   }
 
   @override

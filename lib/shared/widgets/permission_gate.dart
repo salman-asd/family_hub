@@ -55,18 +55,12 @@ class PermissionGate extends StatelessWidget {
     final tokens = context.tokens;
     final blocked = Opacity(
       opacity: disabledOpacity,
-      child: IgnorePointer(
-        child: ExcludeSemantics(child: child),
-      ),
+      child: IgnorePointer(child: ExcludeSemantics(child: child)),
     );
 
     final message = deniedMessage;
     if (message == null) {
-      return Semantics(
-        container: true,
-        enabled: false,
-        child: blocked,
-      );
+      return Semantics(container: true, enabled: false, child: blocked);
     }
 
     // excludeSemantics: the message is announced once, from this node.  The
@@ -91,9 +85,8 @@ class PermissionGate extends StatelessWidget {
                 Flexible(
                   child: Text(
                     message,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: tokens.textSecondary,
-                        ),
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: tokens.textSecondary),
                   ),
                 ),
               ],

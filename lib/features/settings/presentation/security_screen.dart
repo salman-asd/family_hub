@@ -57,20 +57,21 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
       return;
     }
     setState(() => _mismatch = null);
-    final done = await ref.read(_passwordActionProvider.notifier).run(
+    await ref
+        .read(_passwordActionProvider.notifier)
+        .run(
           () => ref.read(changePasswordProvider)(
             currentPassword: _current.text,
             newPassword: _new.text,
           ),
         );
     if (!mounted) return;
-    if (done == null && ref.read(_passwordActionProvider).failure == null) {
+    if (ref.read(_passwordActionProvider).failure == null) {
       _current.clear();
       _new.clear();
       _confirm.clear();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.securityPasswordChanged)),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(l10n.securityPasswordChanged)));
     }
   }
 
@@ -99,7 +100,9 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
     if (confirmed != true) return;
     final familyId = ref.read(currentFamilyIdProvider);
     final afterSignOut = ref.read(afterSignOutProvider);
-    final result = await ref.read(_deleteActionProvider.notifier).run(
+    await ref
+        .read(_deleteActionProvider.notifier)
+        .run(
           () => ref.read(deleteAccountProvider)(
             uid: uid,
             password: _deletePassword.text,
@@ -108,7 +111,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
         );
     // The Auth user is gone: the router moves to /welcome by itself; make the
     // next sign-in on this phone start with an empty Firestore cache.
-    if (result == null && ref.read(_deleteActionProvider).failure == null) {
+    if (ref.read(_deleteActionProvider).failure == null) {
       await afterSignOut();
     }
   }
@@ -121,40 +124,39 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
     final del = ref.watch(_deleteActionProvider);
     final pending = ref.watch(accountDeletionPendingProvider).value ?? false;
 
-    Widget field(String key, TextEditingController c, String label) =>
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: TextField(
-            key: Key(key),
-            controller: c,
-            obscureText: true,
-            autocorrect: false,
-            enableSuggestions: false,
-            autofillHints: const [AutofillHints.password],
-            decoration: InputDecoration(labelText: label),
-            onChanged: (_) => setState(() {}),
-          ),
-        );
+    Widget field(String key, TextEditingController c, String label) => Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextField(
+        key: Key(key),
+        controller: c,
+        obscureText: true,
+        autocorrect: false,
+        enableSuggestions: false,
+        autofillHints: const [AutofillHints.password],
+        decoration: InputDecoration(labelText: label),
+        onChanged: (_) => setState(() {}),
+      ),
+    );
 
     Widget error(AppFailure f) => Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Semantics(
-            liveRegion: true,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(Icons.error_outline_rounded, size: 18, color: t.danger),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    securityFailureMessage(l10n, f),
-                    style: TextStyle(color: t.danger, fontSize: 14),
-                  ),
-                ),
-              ],
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Semantics(
+        liveRegion: true,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.error_outline_rounded, size: 18, color: t.danger),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                securityFailureMessage(l10n, f),
+                style: TextStyle(color: t.danger, fontSize: 14),
+              ),
             ),
-          ),
-        );
+          ],
+        ),
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.securityTitle)),
@@ -180,7 +182,8 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               key: const Key('security_change_password'),
               label: l10n.securityChangePassword,
               busy: pw.busy,
-              onPressed: _current.text.isEmpty ||
+              onPressed:
+                  _current.text.isEmpty ||
                       _new.text.length < AuthCredentials.minPasswordLength
                   ? null
                   : _changePassword,
@@ -190,9 +193,7 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
             const SizedBox(height: 16),
             Text(
               l10n.securityDeleteTitle,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium
+              style: Theme.of(context).textTheme.titleMedium
                   ?.copyWith(color: t.danger),
             ),
             const SizedBox(height: 8),
@@ -201,8 +202,11 @@ class _SecurityScreenState extends ConsumerState<SecurityScreen> {
               style: TextStyle(color: t.textSecondary, fontSize: 14),
             ),
             const SizedBox(height: 12),
-            field('security_delete_password', _deletePassword,
-                l10n.securityCurrentPassword),
+            field(
+              'security_delete_password',
+              _deletePassword,
+              l10n.securityCurrentPassword,
+            ),
             if (del.failure != null) error(del.failure!),
             BusyButton(
               key: const Key('security_delete'),

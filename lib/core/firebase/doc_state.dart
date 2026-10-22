@@ -9,9 +9,9 @@ sealed class DocState<T> {
 
   /// The value when present, otherwise null.
   T? get valueOrNull => switch (this) {
-        DocPresent<T>(:final value) => value,
-        _ => null,
-      };
+    DocPresent<T>(:final value) => value,
+    _ => null,
+  };
 }
 
 /// Not in the cache and the server has not answered yet.
@@ -43,7 +43,8 @@ final class DocPresent<T> extends DocState<T> {
   final T value;
 
   @override
-  bool operator ==(Object other) => other is DocPresent<T> && other.value == value;
+  bool operator ==(Object other) =>
+      other is DocPresent<T> && other.value == value;
 
   @override
   int get hashCode => Object.hash(0x3, value);

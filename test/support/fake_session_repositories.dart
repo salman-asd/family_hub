@@ -14,8 +14,8 @@ class FakeSessionRepositories
   FakeSessionRepositories({
     Set<String> profiles = const {},
     Map<String, Membership> memberships = const {},
-  })  : _profiles = {...profiles},
-        _memberships = {...memberships};
+  }) : _profiles = {...profiles},
+       _memberships = {...memberships};
 
   final Set<String> _profiles;
   final Map<String, Membership> _memberships;

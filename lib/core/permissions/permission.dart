@@ -25,6 +25,9 @@ enum Permission {
   editOthersExpense(PermissionModule.bazar),
   recordContribution(PermissionModule.bazar),
   viewAllContributions(PermissionModule.bazar),
+  closeBazarMonth(PermissionModule.bazar),
+  importBazarData(PermissionModule.bazar),
+  requestContribution(PermissionModule.bazar),
 
   // Chores.
   manageChoreTemplates(PermissionModule.chores),

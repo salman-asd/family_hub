@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:family_hub/app/theme/theme_controller.dart' hide unawaited;
-import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/localization/locale_controller.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +40,8 @@ final preferenceSyncProvider = Provider<void>((ref) {
         );
       } else {
         unawaited(
-            ref.read(themeControllerProvider.notifier).applyRemote(remote));
+          ref.read(themeControllerProvider.notifier).applyRemote(remote),
+        );
       }
     });
 

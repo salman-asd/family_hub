@@ -21,12 +21,12 @@ Future<Result<T>> guardFirestore<T>(Future<T> Function() call) async {
 
 /// Firestore error code -> failure.
 AppFailure mapFirestoreCode(String code) => switch (code) {
-      'permission-denied' || 'unauthenticated' => const PermissionDenied(),
-      'not-found' => const NotFound(),
-      'already-exists' || 'aborted' => const Conflict(),
-      'unavailable' || 'deadline-exceeded' || 'cancelled' => const Network(),
-      _ => Unknown(code),
-    };
+  'permission-denied' || 'unauthenticated' => const PermissionDenied(),
+  'not-found' => const NotFound(),
+  'already-exists' || 'aborted' => const Conflict(),
+  'unavailable' || 'deadline-exceeded' || 'cancelled' => const Network(),
+  _ => Unknown(code),
+};
 
 /// Checks, with a cheap server-only read, that Firestore is reachable.
 typedef ServerProbe = Future<bool> Function();
@@ -37,22 +37,21 @@ ServerProbe serverProbeFor(
   FirebaseFirestore db,
   String uid, {
   Duration timeout = const Duration(seconds: 8),
-}) =>
-    () async {
-      try {
-        await db
-            .doc('users/$uid')
-            .get(const GetOptions(source: Source.server))
-            .timeout(timeout);
-        return true;
-      } on FirebaseException catch (e) {
-        return e.code == 'permission-denied' || e.code == 'not-found';
-      } on TimeoutException {
-        return false;
-      } on Object {
-        return false;
-      }
-    };
+}) => () async {
+  try {
+    await db
+        .doc('users/$uid')
+        .get(const GetOptions(source: Source.server))
+        .timeout(timeout);
+    return true;
+  } on FirebaseException catch (e) {
+    return e.code == 'permission-denied' || e.code == 'not-found';
+  } on TimeoutException {
+    return false;
+  } on Object {
+    return false;
+  }
+};
 
 /// Runs a Firestore WRITE (rule 15 / 16).
 ///

@@ -24,14 +24,13 @@ class Family {
     String? timezone,
     String? currency,
     ModuleFlags? modules,
-  }) =>
-      Family(
-        id: id,
-        name: name ?? this.name,
-        timezone: timezone ?? this.timezone,
-        currency: currency ?? this.currency,
-        modules: modules ?? this.modules,
-      );
+  }) => Family(
+    id: id,
+    name: name ?? this.name,
+    timezone: timezone ?? this.timezone,
+    currency: currency ?? this.currency,
+    modules: modules ?? this.modules,
+  );
 
   @override
   bool operator ==(Object other) =>

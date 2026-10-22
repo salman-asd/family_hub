@@ -16,7 +16,8 @@ Future<void> initializeFirebase({
   bool? useEmulator,
   SharedPreferences? prefs,
 }) async {
-  final shouldEmulate = useEmulator ??
+  final shouldEmulate =
+      useEmulator ??
       const bool.fromEnvironment('USE_EMULATOR', defaultValue: false);
 
   if (Firebase.apps.isEmpty) {

@@ -40,7 +40,7 @@ void main() {
   /// and draining the event loop is what the real app does implicitly when a
   /// widget watches the provider.
   Future<void> pumpAuthStream() async {
-    container.listen(authStateProvider, (_, __) {}, fireImmediately: true);
+    container.listen(authStateProvider, (_, _) {}, fireImmediately: true);
     // Two turns: one for the broadcast stream to deliver, one for the
     // StreamProvider to publish the value into its AsyncData.
     await Future<void>.delayed(Duration.zero);

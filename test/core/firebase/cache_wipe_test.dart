@@ -23,7 +23,10 @@ void main() {
     expect(await CacheWipe.wipeIfRequested(prefs, () async => wiped++), isTrue);
     expect(wiped, 1);
     expect(CacheWipe.isRequested(prefs), isFalse);
-    expect(await CacheWipe.wipeIfRequested(prefs, () async => wiped++), isFalse);
+    expect(
+      await CacheWipe.wipeIfRequested(prefs, () async => wiped++),
+      isFalse,
+    );
     expect(wiped, 1);
   });
 

@@ -14,16 +14,9 @@ void main() {
   // Collections whose rules arrive in Phase 2/3 (CLAUDE.md: the step that adds
   // a collection extends the rules in the same commit and removes it here).
   const pending = <String>{
-    FirestorePaths.bazarCategoriesSubcollection,
-    FirestorePaths.bazarItemsSubcollection,
-    FirestorePaths.expensesSubcollection,
-    FirestorePaths.bazarTripsSubcollection,
     FirestorePaths.budgetsSubcollection,
     FirestorePaths.contributionsSubcollection,
     FirestorePaths.contributionPlansSubcollection,
-    FirestorePaths.fundTransactionsSubcollection,
-    FirestorePaths.memberAdvancesSubcollection,
-    FirestorePaths.settlementsSubcollection,
     FirestorePaths.choreTemplatesSubcollection,
     FirestorePaths.dutyGroupsSubcollection,
     FirestorePaths.choreOccurrencesSubcollection,
@@ -31,12 +24,17 @@ void main() {
     FirestorePaths.swapRequestsSubcollection,
     FirestorePaths.notificationInboxSubcollection,
     FirestorePaths.memberStatsSubcollection,
+    FirestorePaths.importBatchesSubcollection,
   };
 
-  final matched = RegExp(r'match\s+/([A-Za-z]+)/\{')
-      .allMatches(rulesSource())
-      .map((m) => m.group(1)!)
-      .toSet();
+  late Set<String> matched;
+
+  setUpAll(() {
+    matched = RegExp(r'match\s+/([A-Za-z]+)/\{')
+        .allMatches(rulesSource())
+        .map((m) => m.group(1)!)
+        .toSet();
+  });
 
   test('every implemented collection has a match block', () {
     const implemented = <String>[
@@ -48,6 +46,14 @@ void main() {
       FirestorePaths.invitationsSubcollection,
       FirestorePaths.activitySubcollection,
       FirestorePaths.auditLogsSubcollection,
+      FirestorePaths.bazarCategoriesSubcollection,
+      FirestorePaths.bazarItemsSubcollection,
+      FirestorePaths.expensesSubcollection,
+      FirestorePaths.bazarTripsSubcollection,
+      FirestorePaths.fundTransactionsSubcollection,
+      FirestorePaths.memberAdvancesSubcollection,
+      FirestorePaths.settlementsSubcollection,
+      FirestorePaths.monthClosingsSubcollection,
     ];
     for (final name in implemented) {
       expect(matched, contains(name), reason: 'rules lack match /$name/');

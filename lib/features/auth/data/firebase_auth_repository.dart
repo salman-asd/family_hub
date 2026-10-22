@@ -41,43 +41,41 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<Result<AppUser?>> signUp({
     required String email,
     required String password,
-  }) =>
-      _guard(() async {
-        final credential = await _auth
-            .createUserWithEmailAndPassword(email: email, password: password)
-            .timeout(timeout);
-        final user = credential.user;
-        // Send the verification email straight away (Step 7) but never let a
-        // failure to send undo a successful sign-up: the account exists and
-        // the VerifyEmail screen can resend.
-        if (user != null && !user.emailVerified) {
-          try {
-            await user.sendEmailVerification().timeout(timeout);
-          } on FirebaseAuthException {
-            // Ignored on purpose: the account is created; resending is the
-            // user's next action.  Nothing is swallowed silently in the UI —
-            // VerifyEmail surfaces its own failures.
-          }
-        }
-        return toAppUser(user);
-      });
+  }) => _guard(() async {
+    final credential = await _auth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .timeout(timeout);
+    final user = credential.user;
+    // Send the verification email straight away (Step 7) but never let a
+    // failure to send undo a successful sign-up: the account exists and
+    // the VerifyEmail screen can resend.
+    if (user != null && !user.emailVerified) {
+      try {
+        await user.sendEmailVerification().timeout(timeout);
+      } on FirebaseAuthException {
+        // Ignored on purpose: the account is created; resending is the
+        // user's next action.  Nothing is swallowed silently in the UI —
+        // VerifyEmail surfaces its own failures.
+      }
+    }
+    return toAppUser(user);
+  });
 
   @override
   Future<Result<AppUser?>> signIn({
     required String email,
     required String password,
-  }) =>
-      _guard(() async {
-        final credential = await _auth
-            .signInWithEmailAndPassword(email: email, password: password)
-            .timeout(timeout);
-        return toAppUser(credential.user);
-      });
+  }) => _guard(() async {
+    final credential = await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .timeout(timeout);
+    return toAppUser(credential.user);
+  });
 
   @override
   Future<Result<void>> signOut() => _guard(() async {
-        await _auth.signOut().timeout(timeout);
-      });
+    await _auth.signOut().timeout(timeout);
+  });
 
   @override
   Future<Result<void>> sendPasswordReset({required String email}) =>
@@ -87,23 +85,23 @@ class FirebaseAuthRepository implements AuthRepository {
 
   @override
   Future<Result<void>> sendEmailVerification() => _guard(() async {
-        final user = _auth.currentUser;
-        if (user == null) throw const _MissingUser();
-        await user.sendEmailVerification().timeout(timeout);
-      });
+    final user = _auth.currentUser;
+    if (user == null) throw const _MissingUser();
+    await user.sendEmailVerification().timeout(timeout);
+  });
 
   @override
   Future<Result<AppUser?>> reloadUser() => _guard(() async {
-        final user = _auth.currentUser;
-        if (user == null) return null;
-        await user.reload().timeout(timeout);
-        // The `email_verified` claim does not change when the user verifies in
-        // the browser, so the Firestore rules would still see `false` until the
-        // token is refreshed.  Force it (H5).
-        await user.getIdToken(true).timeout(timeout);
-        // `reload()` mutates the cached record; `currentUser` re-reads it.
-        return toAppUser(_auth.currentUser);
-      });
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    await user.reload().timeout(timeout);
+    // The `email_verified` claim does not change when the user verifies in
+    // the browser, so the Firestore rules would still see `false` until the
+    // token is refreshed.  Force it (H5).
+    await user.getIdToken(true).timeout(timeout);
+    // `reload()` mutates the cached record; `currentUser` re-reads it.
+    return toAppUser(_auth.currentUser);
+  });
 
   @override
   Future<Result<void>> reauthenticate({required String password}) =>
@@ -128,10 +126,10 @@ class FirebaseAuthRepository implements AuthRepository {
 
   @override
   Future<Result<void>> deleteAuthUser() => _guard(() async {
-        final user = _auth.currentUser;
-        if (user == null) throw const _MissingUser();
-        await user.delete().timeout(timeout);
-      });
+    final user = _auth.currentUser;
+    if (user == null) throw const _MissingUser();
+    await user.delete().timeout(timeout);
+  });
 
   /// Runs [call], converting every backend failure into the matching
   /// [AppFailure].

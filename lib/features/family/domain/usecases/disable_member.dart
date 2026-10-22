@@ -17,19 +17,18 @@ class DisableMember {
     required String actorUid,
     required String familyId,
     required String targetUid,
-  }) =>
-      _runner.run(
-        actorUid: actorUid,
-        familyId: familyId,
-        targetUid: targetUid,
-        permission: Permission.removeMembers,
-        eventType: 'member.disabled',
-        decide: (target, all) {
-          final updated = target.copyWith(status: MembershipStatus.disabled);
-          if (leavesNoActiveAdmin(all, updated)) {
-            return const Failure<Member>(Conflict(code: 'last_admin'));
-          }
-          return Success<Member>(updated);
-        },
-      );
+  }) => _runner.run(
+    actorUid: actorUid,
+    familyId: familyId,
+    targetUid: targetUid,
+    permission: Permission.removeMembers,
+    eventType: 'member.disabled',
+    decide: (target, all) {
+      final updated = target.copyWith(status: MembershipStatus.disabled);
+      if (leavesNoActiveAdmin(all, updated)) {
+        return const Failure<Member>(Conflict(code: 'last_admin'));
+      }
+      return Success<Member>(updated);
+    },
+  );
 }

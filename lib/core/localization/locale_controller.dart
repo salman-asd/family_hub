@@ -38,7 +38,7 @@ class LocaleController extends Notifier<LocalePrefs> {
     final rawDigits = prefs.getBool(_kBanglaDigitsKey);
     return LocalePrefs.fromMap({
       _kLanguageKey: rawLanguage,
-      if (rawDigits != null) _kBanglaDigitsKey: rawDigits,
+      _kBanglaDigitsKey: ?rawDigits,
     });
   }
 

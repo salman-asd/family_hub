@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 // ── Section label ─────────────────────────────────────────────────────────────
 
 class LanguageSectionLabel extends StatelessWidget {
-  const LanguageSectionLabel({required this.label, required this.tokens});
+  const LanguageSectionLabel({
+    super.key,
+    required this.label,
+    required this.tokens,
+  });
   final String label;
   final AppTokens tokens;
 
@@ -28,6 +32,7 @@ class LanguageSectionLabel extends StatelessWidget {
 
 class LanguageOptionTile extends StatelessWidget {
   const LanguageOptionTile({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.selected,
@@ -60,10 +65,7 @@ class LanguageOptionTile extends StatelessWidget {
             constraints: const BoxConstraints(minHeight: 56),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              border: Border.all(
-                color: borderColor,
-                width: selected ? 2 : 1,
-              ),
+              border: Border.all(color: borderColor, width: selected ? 2 : 1),
               borderRadius: BorderRadius.circular(tokens.radiusMd),
             ),
             child: Row(
@@ -117,6 +119,7 @@ class LanguageOptionTile extends StatelessWidget {
 
 class DigitsSwitchTile extends StatelessWidget {
   const DigitsSwitchTile({
+    super.key,
     required this.value,
     required this.tokens,
     required this.title,
@@ -176,10 +179,13 @@ class DigitsSwitchTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Switch(
-                value: value,
-                onChanged: onChanged,
-                activeThumbColor: tokens.accent,
+              Semantics(
+                label: title,
+                child: Switch(
+                  value: value,
+                  onChanged: onChanged,
+                  activeThumbColor: tokens.accent,
+                ),
               ),
             ],
           ),
@@ -195,6 +201,7 @@ class DigitsSwitchTile extends StatelessWidget {
 /// Bangla-digits switch has a visible effect without leaving the screen.
 class LanguagePreviewCard extends StatelessWidget {
   const LanguagePreviewCard({
+    super.key,
     required this.languageCode,
     required this.useBanglaDigits,
     required this.tokens,
@@ -211,9 +218,7 @@ class LanguagePreviewCard extends StatelessWidget {
       useBanglaDigits: useBanglaDigits,
     );
     final now = DateTime(2026, 10, 14);
-    final sample = formatters.money(
-      const Money.paisa(1234567),
-    );
+    final sample = formatters.money(const Money.paisa(1234567));
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

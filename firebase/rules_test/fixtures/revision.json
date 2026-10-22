@@ -1,0 +1,30 @@
+{
+  "scenario": "revision",
+  "actor": "fixMember",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/expenses/exp_fix7/revisions/ev26",
+      "data": {
+        "before": {
+          "note": null
+        },
+        "changedFields": [
+          "note"
+        ],
+        "reason": "typo",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    }
+  ]
+}

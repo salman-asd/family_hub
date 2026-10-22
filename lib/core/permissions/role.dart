@@ -11,10 +11,8 @@ enum Role {
   moderator,
   member;
 
-  static Role parse(String? value) => Role.values.firstWhere(
-        (r) => r.name == value,
-        orElse: () => Role.member,
-      );
+  static Role parse(String? value) =>
+      Role.values.firstWhere((r) => r.name == value, orElse: () => Role.member);
 
   /// Admins and moderators.
   bool get canManageMembers => this != Role.member;

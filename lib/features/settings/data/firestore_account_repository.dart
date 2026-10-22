@@ -11,12 +11,10 @@ import 'package:family_hub/features/settings/domain/account_repository.dart';
 /// `users/{uid}` account lifecycle (H9).
 class FirestoreAccountRepository implements AccountRepository {
   FirestoreAccountRepository({
-    required TxRunner tx,
-    required Clock clock,
+    required this._tx,
+    required this._clock,
     FirebaseFirestore? firestore,
-  })  : _tx = tx,
-        _clock = clock,
-        _db = firestore ?? FirebaseFirestore.instance;
+  }) : _db = firestore ?? FirebaseFirestore.instance;
 
   final TxRunner _tx;
   final Clock _clock;
@@ -41,16 +39,16 @@ class FirestoreAccountRepository implements AccountRepository {
 
   @override
   Future<Result<void>> markDeleted(String uid) => guardWrite(
-        // The user is about to disappear: this must reach the server.
-        probe: serverProbeFor(_db, uid),
-        () => _tx.runBatch((b) {
-          b.set(
-            FirestorePaths.userDoc(uid),
-            deletedMap(uid, _clock.nowUtc()),
-            merge: true,
-          );
-        }),
+    // The user is about to disappear: this must reach the server.
+    probe: serverProbeFor(_db, uid),
+    () => _tx.runBatch((b) {
+      b.set(
+        FirestorePaths.userDoc(uid),
+        deletedMap(uid, _clock.nowUtc()),
+        merge: true,
       );
+    }),
+  );
 
   @override
   Stream<bool> watchMarkedDeleted(String uid) =>

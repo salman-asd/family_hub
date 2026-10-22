@@ -1,0 +1,204 @@
+{
+  "scenario": "trip",
+  "actor": "fixMember",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/bazarTrips/trip_fix1",
+      "data": {
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "shop": "Bazar",
+        "fundingSource": "fund",
+        "paidByMemberId": null,
+        "reimbursable": false,
+        "lineCount": 2,
+        "totalPaisa": 24000,
+        "note": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/expenses/exp_t1",
+      "data": {
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "occurredAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "itemId": "item_fixRice",
+        "itemName": "Rice",
+        "categoryId": "cat_fixStaples",
+        "qtyMilli": 1000,
+        "unit": "kg",
+        "unitPricePaisa": 12000,
+        "totalPaisa": 12000,
+        "fundingSource": "fund",
+        "paidByMemberId": null,
+        "reimbursable": false,
+        "purchaserId": "fixMember",
+        "tripId": "trip_fix1",
+        "shop": "Bazar",
+        "note": null,
+        "source": "manual",
+        "importBatchId": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/expenses/exp_t2",
+      "data": {
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "occurredAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "itemId": "item_fixRice",
+        "itemName": "Rice",
+        "categoryId": "cat_fixStaples",
+        "qtyMilli": 1000,
+        "unit": "kg",
+        "unitPricePaisa": 12000,
+        "totalPaisa": 12000,
+        "fundingSource": "fund",
+        "paidByMemberId": null,
+        "reimbursable": false,
+        "purchaserId": "fixMember",
+        "tripId": "trip_fix1",
+        "shop": "Bazar",
+        "note": null,
+        "source": "manual",
+        "importBatchId": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/fundTransactions/exp_exp_t1",
+      "data": {
+        "type": "expense",
+        "amountPaisa": -12000,
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "refType": "expense",
+        "refId": "exp_t1",
+        "note": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/fundTransactions/exp_exp_t2",
+      "data": {
+        "type": "expense",
+        "amountPaisa": -12000,
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "refType": "expense",
+        "refId": "exp_t2",
+        "note": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev27",
+      "data": {
+        "type": "bazar.trip_created",
+        "actorId": "fixMember",
+        "summary": "",
+        "refType": "trip",
+        "refId": "trip_fix1",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev27",
+      "data": {
+        "type": "bazar.trip_created",
+        "actorId": "fixMember",
+        "summary": "",
+        "refType": "trip",
+        "refId": "trip_fix1",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

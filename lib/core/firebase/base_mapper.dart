@@ -63,17 +63,18 @@ class BaseDocumentMetadata {
 
   @override
   int get hashCode => Object.hash(
-        createdAt,
-        createdBy,
-        updatedAt,
-        updatedBy,
-        schemaVersion,
-        deletedAt,
-        deletedBy,
-      );
+    createdAt,
+    createdBy,
+    updatedAt,
+    updatedBy,
+    schemaVersion,
+    deletedAt,
+    deletedBy,
+  );
 
   @override
-  String toString() => 'BaseDocumentMetadata('
+  String toString() =>
+      'BaseDocumentMetadata('
       'createdAt: $createdAt, createdBy: $createdBy, '
       'updatedAt: $updatedAt, updatedBy: $updatedBy, '
       'schemaVersion: $schemaVersion, '
@@ -94,10 +95,12 @@ abstract final class BaseMapper {
   /// Deserializes standard metadata from a Firestore document map.
   static BaseDocumentMetadata metadataFromMap(Map<String, dynamic> map) {
     return BaseDocumentMetadata(
-      createdAt: timestampToDateTime(map[keyCreatedAt]) ??
+      createdAt:
+          timestampToDateTime(map[keyCreatedAt]) ??
           DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
       createdBy: map[keyCreatedBy] as String? ?? '',
-      updatedAt: timestampToDateTime(map[keyUpdatedAt]) ??
+      updatedAt:
+          timestampToDateTime(map[keyUpdatedAt]) ??
           DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
       updatedBy: map[keyUpdatedBy] as String? ?? '',
       schemaVersion: (map[keySchemaVersion] as num?)?.toInt() ?? 1,
@@ -141,10 +144,7 @@ abstract final class BaseMapper {
     required String uid,
     required Clock clock,
   }) {
-    return current.copyWith(
-      updatedAt: clock.nowUtc(),
-      updatedBy: uid,
-    );
+    return current.copyWith(updatedAt: clock.nowUtc(), updatedBy: uid);
   }
 
   /// Soft deletes a document by recording [deletedAt] and [deletedBy].

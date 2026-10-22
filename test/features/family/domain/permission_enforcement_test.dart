@@ -27,11 +27,8 @@ void main() {
         'off': (MemberRole.member, MembershipStatus.disabled),
       });
     // A rejected member: the document survives with removedAt set.
-    f.backend.members['fam']!['gone'] =
-        f.backend.members['fam']!['wait']!.copyWith(
-      fullName: 'Person gone',
-      removedAt: f.clock.nowUtc(),
-    );
+    f.backend.members['fam']!['gone'] = f.backend.members['fam']!['wait']!
+        .copyWith(fullName: 'Person gone', removedAt: f.clock.nowUtc());
   });
 
   /// Runs [requirePermission] and asserts both the answer and that a denial
@@ -66,18 +63,10 @@ void main() {
     }
   }
 
-  Future<void> allow(
-    String actor,
-    Permission permission, {
-    String? ownerId,
-  }) =>
+  Future<void> allow(String actor, Permission permission, {String? ownerId}) =>
       check(actor, permission, allowed: true, ownerId: ownerId);
 
-  Future<void> deny(
-    String actor,
-    Permission permission, {
-    String? ownerId,
-  }) =>
+  Future<void> deny(String actor, Permission permission, {String? ownerId}) =>
       check(actor, permission, allowed: false, ownerId: ownerId);
 
   group('requirePermission', () {
@@ -105,10 +94,12 @@ void main() {
       await deny('kid', Permission.inviteMembers);
     });
 
-    test('denies a moderator changing a role (changeRoles is admin-only)',
-        () async {
-      await deny('mod', Permission.changeRoles);
-    });
+    test(
+      'denies a moderator changing a role (changeRoles is admin-only)',
+      () async {
+        await deny('mod', Permission.changeRoles);
+      },
+    );
 
     test('denies a pending member doing anything', () async {
       for (final permission in Permission.values) {

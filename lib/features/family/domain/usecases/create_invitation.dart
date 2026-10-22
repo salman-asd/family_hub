@@ -14,14 +14,11 @@ import 'package:family_hub/features/family/domain/permission_access.dart';
 /// role `member`.  `Permission.inviteMembers`: admins and moderators.
 class CreateInvitation {
   const CreateInvitation({
-    required FamilyRepository families,
-    required InviteCodeGenerator codes,
-    required Clock clock,
-    required IdGenerator newId,
-  })  : _families = families,
-        _codes = codes,
-        _clock = clock,
-        _newId = newId;
+    required this._families,
+    required this._codes,
+    required this._clock,
+    required this._newId,
+  });
 
   static const Duration validity = Duration(days: 7);
   static const int maxAttempts = 5;

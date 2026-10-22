@@ -13,6 +13,8 @@ rules_version = '2';
 //   families/{f}
 //   families/{f}/members/{m}
 //   families/{f}/invitations/{i}
+//   families/{f}/bazarCategories/{c}   (P2-05)
+//   families/{f}/bazarItems/{i}        (P2-05)
 //   families/{f}/settings/{s}   (general, modules, rotationPolicy,
 //                                notificationDefaults, permissions,
 //                                relationships)
@@ -32,6 +34,9 @@ rules_version = '2';
 //   * log integrity: an activity/audit `create` must be written by its own
 //     actor, with a known `type`/`refType`, bounded `refId`, a small `params`
 //     map and a SERVER `recordedAt` (the client `createdAt` is untouched);
+//     P2-03 extended the two closed lists with the Phase 2 bazar vocabulary
+//     (roadmap section 3.9), mirrored by `audit_event_type.dart` and
+//     `audit_ref_type.dart`;
 //   * an invite may only be burned in the SAME batch that creates the caller's
 //     pending member document;
 //   * `verified()`: a verified email is required for every mutating action
@@ -190,8 +195,70 @@ service cloud.firestore {
       return ['timezone', 'currency', 'flags', 'absencePolicy', 'enabled',
               'moderatorManagesFinance', 'membersViewFamilyReports',
               'membersViewAllContributions', 'membersCanInvite',
-              'choreVerificationEnabled', 'items', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'choreVerificationEnabled', 'items',
+              // P2-07: settings/bazar.
+              'weekStartDay', 'defaultMonthlyContributionPaisa',
+              'contributionDueDay', 'alertThresholds', 'fundStartMonth',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
               'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    // Phase 2 catalog (P2-05): the exact fields `CatalogMappers` writes.
+    function categoryKeys() {
+      return ['nameBn', 'nameEn', 'colorIndex', 'emoji', 'imageData',
+              'sortOrder', 'active', 'builtIn', 'seedKey', 'createdAt',
+              'createdBy', 'updatedAt', 'updatedBy', 'schemaVersion',
+              'deletedAt', 'deletedBy'];
+    }
+    function itemKeys() {
+      return ['nameBn', 'nameEn', 'categoryId', 'defaultUnit', 'aliases',
+              'emoji', 'imageData', 'useCount', 'lastPricePaisa',
+              'lastUnitPricePaisa', 'lastUsedAt', 'active', 'builtIn',
+              'seedKey', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    // Phase 2 expenses, trips, ledger and advances (P2-10).  These mirror
+    // ExpenseMappers / FundMappers / AdvanceMappers and MonthClosingMappers.
+    function expenseKeys() {
+      return ['dateKey', 'monthKey', 'occurredAt', 'itemId', 'itemName',
+              'categoryId', 'qtyMilli', 'unit', 'unitPricePaisa', 'totalPaisa',
+              'fundingSource', 'paidByMemberId', 'reimbursable', 'purchaserId',
+              'tripId', 'shop', 'note', 'source', 'importBatchId',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function tripKeys() {
+      return ['dateKey', 'monthKey', 'shop', 'fundingSource',
+              'paidByMemberId', 'reimbursable', 'lineCount', 'totalPaisa',
+              'note', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function revisionKeys() {
+      return ['before', 'changedFields', 'reason', 'createdAt', 'createdBy',
+              'updatedAt', 'updatedBy', 'schemaVersion', 'deletedAt',
+              'deletedBy'];
+    }
+    function fundTxKeys() {
+      return ['type', 'amountPaisa', 'dateKey', 'monthKey', 'refType',
+              'refId', 'note', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function advanceKeys() {
+      return ['expenseId', 'memberId', 'amountPaisa', 'settledPaisa',
+              'status', 'dateKey', 'monthKey', 'createdAt', 'createdBy',
+              'updatedAt', 'updatedBy', 'schemaVersion', 'deletedAt',
+              'deletedBy'];
+    }
+    function settlementKeys() {
+      return ['advanceId', 'memberId', 'amountPaisa', 'dateKey', 'monthKey',
+              'method', 'note', 'fundTxId', 'createdAt', 'createdBy',
+              'updatedAt', 'updatedBy', 'schemaVersion', 'deletedAt',
+              'deletedBy'];
+    }
+    function closingKeys() {
+      return ['monthKey', 'status', 'closedAt', 'closedBy',
+              'closingBalancePaisa', 'reopenedAt', 'reopenedBy', 'reopenNote',
+              'reopenCount', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
     }
     function eventKeys() {
       return ['type', 'actorId', 'summary', 'refType', 'refId', 'params',
@@ -217,20 +284,275 @@ service cloud.firestore {
         // H10: `settings/relationships.items` is a bounded list (the per-item
         // shape cannot be iterated in rules; the app tolerates ill-formed items).
         && (!('items' in d.keys())
-            || (d.items is list && d.items.size() <= 40));
+            || (d.items is list && d.items.size() <= 40))
+        // P2-07: settings/bazar.  The fields are optional so the same shape
+        // function can validate every settings document.
+        && isNonNegativeIntOrMissing(d, 'defaultMonthlyContributionPaisa')
+        && (!('weekStartDay' in d.keys())
+            || (d.weekStartDay is int
+                && d.weekStartDay >= 1 && d.weekStartDay <= 7))
+        && (!('contributionDueDay' in d.keys())
+            || (d.contributionDueDay is int
+                && d.contributionDueDay >= 1 && d.contributionDueDay <= 28))
+        && (!('alertThresholds' in d.keys())
+            || (d.alertThresholds is list && d.alertThresholds.size() <= 4))
+        && (!('fundStartMonth' in d.keys())
+            || d.fundStartMonth == null || monthKeyOk(d.fundStartMonth));
+    }
+    // The catalog document shapes (P2-05).  Limits mirror
+    // `catalog_validation.dart`: names 60, aliases 10, emoji 8, image 24000.
+    function categoryOk(d) {
+      return d.keys().hasOnly(categoryKeys())
+        && str(d.get('nameBn', ''), 1, 60)
+        && optStr(d, 'nameEn', 60)
+        && d.get('colorIndex', -1) is int
+        && d.get('colorIndex', -1) >= 0
+        && d.get('colorIndex', -1) <= 11
+        && optStr(d, 'emoji', 8)
+        && optStr(d, 'imageData', 24000)
+        && d.get('sortOrder', -1) is int
+        && d.get('active', false) is bool
+        && d.get('builtIn', false) is bool
+        && optStr(d, 'seedKey', 40);
+    }
+    function itemOk(d) {
+      return d.keys().hasOnly(itemKeys())
+        && str(d.get('nameBn', ''), 1, 60)
+        && optStr(d, 'nameEn', 60)
+        && str(d.get('categoryId', ''), 1, 64)
+        && d.get('defaultUnit', '') in ['kg', 'g', 'litre', 'piece',
+                                        'dozen', 'packet', 'cylinder']
+        && d.get('aliases', []) is list
+        && d.get('aliases', []).size() <= 10
+        && optStr(d, 'emoji', 8)
+        && optStr(d, 'imageData', 24000)
+        && d.get('useCount', -1) is int
+        && d.get('useCount', -1) >= 0
+        // Money is integer paisa; absent means "no last price yet".
+        && isNonNegativeIntOrMissing(d, 'lastPricePaisa')
+        && isNonNegativeIntOrMissing(d, 'lastUnitPricePaisa')
+        && (!('lastUsedAt' in d.keys())
+            || d.lastUsedAt == null
+            || d.lastUsedAt is timestamp)
+        && d.get('active', false) is bool
+        && d.get('builtIn', false) is bool
+        && optStr(d, 'seedKey', 40);
+    }
+
+    // ── Phase 2 expense / ledger shapes (P2-10) ────────────────────────────
+    function isNonNegativeIntOrNull(d, k) {
+      return !(k in d.keys()) || d[k] == null || isNonNegativeInt(d[k]);
+    }
+    function expensePath(f, e) {
+      return /databases/$(database)/documents/families/$(f)/expenses/$(e);
+    }
+    function closingPath(f, mk) {
+      return /databases/$(database)/documents/families/$(f)/monthClosings/$(mk);
+    }
+    // A closed month rejects new ledger/expense rows.  Missing closing = open.
+    function monthOpen(f, mk) {
+      return !exists(closingPath(f, mk))
+        || get(closingPath(f, mk)).data.get('status', 'open') != 'closed';
+    }
+    function expenseOwner(f, e) {
+      return exists(expensePath(f, e))
+        && get(expensePath(f, e)).data.get('createdBy', '') == request.auth.uid;
+    }
+    // D-P2-5: contributions are visible to every active member by default.
+    // The switch only exists for families that want to restrict the list.
+    function canViewAllContributions(f) {
+      return isActiveMember(f)
+        && (financeManager(f)
+            || !exists(permissionsPath(f))
+            || get(permissionsPath(f)).data
+                .get('membersViewAllContributions', true) == true);
+    }
+    function expenseOk(d) {
+      return d.keys().hasOnly(expenseKeys())
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && d.get('occurredAt', null) is timestamp
+        && optStr(d, 'itemId', 64)
+        && str(d.get('itemName', ''), 1, 80)
+        && str(d.get('categoryId', ''), 1, 64)
+        && isNonNegativeIntOrNull(d, 'qtyMilli')
+        && (!('unit' in d.keys())
+            || d.unit == null
+            || d.unit in ['kg', 'g', 'litre', 'piece', 'dozen', 'packet',
+                          'cylinder'])
+        && isNonNegativeIntOrNull(d, 'unitPricePaisa')
+        && moneyOk(d, 'totalPaisa')
+        && d.totalPaisa > 0
+        && d.get('fundingSource', '') in ['fund', 'member']
+        && d.get('reimbursable', false) is bool
+        // A fund row never names a payer; a member row always does.
+        && ((d.fundingSource == 'fund') == (d.get('paidByMemberId', null) == null))
+        && (d.fundingSource == 'member' || d.reimbursable == false)
+        && optStr(d, 'paidByMemberId', 64)
+        && optStr(d, 'purchaserId', 64)
+        && optStr(d, 'tripId', 64)
+        && optStr(d, 'shop', 60)
+        && optStr(d, 'note', 500)
+        && d.get('source', 'manual') in ['manual', 'import']
+        && optStr(d, 'importBatchId', 64);
+    }
+    function tripOk(d) {
+      return d.keys().hasOnly(tripKeys())
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && optStr(d, 'shop', 60)
+        && d.get('fundingSource', '') in ['fund', 'member']
+        && d.get('reimbursable', false) is bool
+        && ((d.fundingSource == 'fund') == (d.get('paidByMemberId', null) == null))
+        && (d.fundingSource == 'member' || d.reimbursable == false)
+        && optStr(d, 'paidByMemberId', 64)
+        && d.get('lineCount', 0) is int
+        && d.lineCount >= 1 && d.lineCount <= 40
+        && moneyOk(d, 'totalPaisa')
+        && d.totalPaisa > 0
+        && optStr(d, 'note', 500);
+    }
+    function revisionOk(d) {
+      return d.keys().hasOnly(revisionKeys())
+        && d.get('before', null) is map
+        && d.before.size() <= 20
+        && d.get('changedFields', null) is list
+        && d.changedFields.size() <= 20
+        && optStr(d, 'reason', 200)
+        && d.get('createdAt', null) is timestamp
+        && d.get('updatedAt', null) is timestamp;
+    }
+    function fundTxOk(f, d, t) {
+      return d.keys().hasOnly(fundTxKeys())
+        && d.get('type', '') in ['contribution', 'expense', 'reimbursement',
+                                'opening', 'adjustment']
+        && d.get('refType', '') in ['expense', 'contribution', 'settlement',
+                                   'month', 'manual']
+        && str(d.get('refId', ''), 1, 64)
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && d.get('amountPaisa', 0) is int
+        && d.amountPaisa != 0
+        && optStr(d, 'note', 300)
+        && (
+          (d.type == 'expense'
+            && isActiveMember(f)
+            && d.amountPaisa < 0
+            && d.refType == 'expense'
+            && t == 'exp_' + d.refId)
+          || (d.type == 'contribution'
+            && financeManager(f)
+            && d.amountPaisa > 0
+            && d.refType == 'contribution'
+            && t == 'con_' + d.refId)
+          || (d.type == 'reimbursement'
+            && financeManager(f)
+            && d.amountPaisa < 0
+            && d.refType == 'settlement'
+            && t == 'stl_' + d.refId)
+          || (d.type == 'opening'
+            && isAdmin(f)
+            && d.refType == 'month'
+            && d.refId == d.monthKey
+            && t == 'open_' + d.refId)
+          || (d.type == 'adjustment'
+            && t.matches('^adj_[A-Za-z0-9_-]+$')
+            && ((d.refType == 'expense' && isActiveMember(f))
+                || (d.refType != 'expense' && financeManager(f))))
+        );
+    }
+    function advanceOk(d) {
+      let amount = d.get('amountPaisa', -1);
+      let settled = d.get('settledPaisa', -1);
+      return d.keys().hasOnly(advanceKeys())
+        && str(d.get('expenseId', ''), 1, 64)
+        && str(d.get('memberId', ''), 1, 64)
+        && isNonNegativeInt(amount)
+        && isNonNegativeInt(settled)
+        && settled <= amount
+        && d.get('status', '') in ['pending', 'partial', 'settled', 'voided']
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && (
+          d.status == 'voided'
+          || (d.status == 'pending' && settled == 0)
+          || (d.status == 'partial' && settled > 0 && settled < amount)
+          || (d.status == 'settled' && amount > 0 && settled == amount)
+        );
+    }
+    function settlementOk(d, s) {
+      return d.keys().hasOnly(settlementKeys())
+        && str(d.get('advanceId', ''), 1, 64)
+        && str(d.get('memberId', ''), 1, 64)
+        && moneyOk(d, 'amountPaisa')
+        && d.amountPaisa > 0
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && optStr(d, 'method', 20)
+        && optStr(d, 'note', 300)
+        && d.get('fundTxId', '') == 'stl_' + s;
+    }
+    function closingOk(d, month) {
+      return d.keys().hasOnly(closingKeys())
+        && d.get('monthKey', '') == month
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('status', '') in ['open', 'closed']
+        && (!('closedAt' in d.keys())
+            || d.closedAt == null
+            || d.closedAt is timestamp)
+        && optStr(d, 'closedBy', 64)
+        && (!('closingBalancePaisa' in d.keys())
+            || d.closingBalancePaisa == null
+            || d.closingBalancePaisa is int)
+        && (!('reopenedAt' in d.keys())
+            || d.reopenedAt == null
+            || d.reopenedAt is timestamp)
+        && optStr(d, 'reopenedBy', 64)
+        && optStr(d, 'reopenNote', 300)
+        && d.get('reopenCount', 0) is int
+        && d.reopenCount >= 0;
     }
 
     // ── Log integrity (H5) ─────────────────────────────────────────────────
-    // The closed `type` list, mirrored by lib/core/audit/audit_event_type.dart
-    // (compared to this literal by test/core/audit/audit_event_type_test.dart).
+    // The closed `type`/`refType` lists, mirrored by
+    // lib/core/audit/audit_event_type.dart and audit_ref_type.dart (compared to
+    // these literals by test/core/audit/audit_event_type_test.dart).
     function eventTypes() {
       return ['family.created', 'member.requested', 'member.approved',
               'member.rejected', 'member.disabled', 'member.role_changed',
               'member.admin_transferred', 'member.left', 'member.cancelled',
-              'invitation.created', 'invitation.revoked', 'family.updated'];
+              'invitation.created', 'invitation.revoked', 'family.updated',
+              // Phase 2 bazar vocabulary (roadmap section 3.9).
+              'bazar.catalog_seeded', 'bazar.category_created',
+              'bazar.category_updated', 'bazar.category_deactivated',
+              'bazar.item_created', 'bazar.item_updated',
+              'bazar.item_deactivated', 'bazar.expense_created',
+              'bazar.expense_updated', 'bazar.expense_deleted',
+              'bazar.expense_restored', 'bazar.trip_created',
+              'bazar.budget_saved', 'bazar.settings_updated',
+              'bazar.contribution_plan_set', 'bazar.contribution_recorded',
+              'bazar.contribution_voided', 'bazar.contribution_requested',
+              'bazar.contribution_request_edited',
+              'bazar.contribution_request_cancelled',
+              'bazar.contribution_approved', 'bazar.contribution_rejected',
+              'bazar.contribution_change_requested',
+              'bazar.contribution_change_approved',
+              'bazar.contribution_change_rejected',
+              'bazar.opening_balance_set', 'bazar.advance_settled',
+              'bazar.month_closed', 'bazar.month_reopened',
+              'bazar.import_completed', 'bazar.import_undone'];
     }
     function refTypes() {
-      return ['family', 'member', 'invitation'];
+      return ['family', 'member', 'invitation',
+              // Phase 2 bazar vocabulary (roadmap section 3.9).
+              'category', 'item', 'expense', 'trip', 'budget',
+              'contribution', 'contributionPlan', 'settlement', 'month',
+              'importBatch'];
     }
     function paramsOk(d) {
       return !('params' in d.keys())
@@ -290,6 +612,17 @@ service cloud.firestore {
     // Admin or moderator: may invite and decide requests (Step 9 rule).
     function isManager(f) {
       return isAdmin(f) || isMod(f);
+    }
+    // The catalog and budgets are finance-managed: an admin always, a moderator
+    // only while `settings/permissions.moderatorManagesFinance` is true
+    // (missing document/key = true, the domain default).
+    function financeManager(f) {
+      return isAdmin(f)
+        || (isMod(f)
+            && (exists(permissionsPath(f))
+                ? get(permissionsPath(f)).data
+                    .get('moderatorManagesFinance', true) == true
+                : true));
     }
 
     // ── Member invitations (H7) ────────────────────────────────────────────
@@ -706,15 +1039,231 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      // ── bazarCategories/{c} — catalog managers (P2-05) ─────────────────
+      match /bazarCategories/{c} {
+        allow read: if canReadFamilyData(f);
+        allow create: if verified()
+          && (financeManager(f) || creatingFamily(f))
+          && createsAsSelf()
+          && categoryOk(request.resource.data);
+        // `createdAt`, `createdBy`, `builtIn` and `seedKey` are immutable.
+        allow update: if verified()
+          && financeManager(f)
+          && writesAsSelf()
+          && categoryOk(request.resource.data)
+          && request.resource.data.get('createdAt', null)
+               == resource.data.get('createdAt', null)
+          && request.resource.data.get('createdBy', '')
+               == resource.data.get('createdBy', '')
+          && request.resource.data.get('builtIn', false)
+               == resource.data.get('builtIn', false)
+          && request.resource.data.get('seedKey', null)
+               == resource.data.get('seedKey', null);
+        allow delete: if false;
+      }
+
+      // ── bazarItems/{i} — managers + everyday member usage (P2-05) ──────
+      match /bazarItems/{i} {
+        allow read: if canReadFamilyData(f);
+        // A member may add a custom item ("Remember this item"); a built-in
+        // item is seeded or manager-created only.
+        allow create: if verified()
+          && (financeManager(f)
+              || creatingFamily(f)
+              || (isActiveMember(f)
+                  && request.resource.data.get('builtIn', true) == false
+                  && request.resource.data.get('useCount', -1) == 0))
+          && createsAsSelf()
+          && itemOk(request.resource.data);
+        allow update: if verified()
+          && (
+            // Managers edit the catalog; usage and last prices are untouched
+            // by `itemChangeMap`, and the immutable fields cannot move.
+            (financeManager(f)
+              && writesAsSelf()
+              && itemOk(request.resource.data)
+              && request.resource.data.get('createdAt', null)
+                   == resource.data.get('createdAt', null)
+              && request.resource.data.get('createdBy', '')
+                   == resource.data.get('createdBy', '')
+              && request.resource.data.get('builtIn', false)
+                   == resource.data.get('builtIn', false)
+              && request.resource.data.get('seedKey', null)
+                   == resource.data.get('seedKey', null))
+            // Any active member records a purchase: only the usage fields may
+            // change, and one write may add 1..40 uses (D-P2-7).
+            || (isActiveMember(f)
+              && writesAsSelf()
+              && request.resource.data.diff(resource.data).affectedKeys()
+                   .hasOnly(['useCount', 'lastPricePaisa', 'lastUnitPricePaisa',
+                             'lastUsedAt', 'updatedAt', 'updatedBy'])
+              && request.resource.data.get('useCount', 0) is int
+              && request.resource.data.get('useCount', 0)
+                   - resource.data.get('useCount', 0) > 0
+              && request.resource.data.get('useCount', 0)
+                   - resource.data.get('useCount', 0) <= 40
+              && isNonNegativeIntOrMissing(request.resource.data,
+                                           'lastPricePaisa')
+              && isNonNegativeIntOrMissing(request.resource.data,
+                                           'lastUnitPricePaisa')
+              && (!('lastUsedAt' in request.resource.data.keys())
+                  || request.resource.data.lastUsedAt == null
+                  || request.resource.data.lastUsedAt is timestamp))
+          );
+        allow delete: if false;
+      }
+
+      // ── expenses/{e} — one row per purchase (P2-10) ─────────────────────
+      match /expenses/{e} {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && expenseOk(request.resource.data)
+          && monthOpen(f, request.resource.data.monthKey);
+        // Two update paths: the four soft-delete stamps, or a content edit.
+        // Both freeze the provenance fields and respect a closed month.
+        allow update: if verified()
+          && isActiveMember(f)
+          && writesAsSelf()
+          && (resource.data.get('createdBy', '') == request.auth.uid
+              || isManager(f))
+          && (
+            (softDeleteOnly()
+              && expenseOk(request.resource.data)
+              && monthOpen(f, resource.data.monthKey)
+              && (!('deletedAt' in request.resource.data.keys())
+                  || request.resource.data.deletedAt == null
+                  || request.resource.data.deletedAt is timestamp)
+              && (!('deletedBy' in request.resource.data.keys())
+                  || request.resource.data.deletedBy == null
+                  || request.resource.data.deletedBy == request.auth.uid))
+            || (expenseOk(request.resource.data)
+              && request.resource.data.get('createdAt', null)
+                   == resource.data.get('createdAt', null)
+              && request.resource.data.get('createdBy', '')
+                   == resource.data.get('createdBy', '')
+              && request.resource.data.get('source', 'manual')
+                   == resource.data.get('source', 'manual')
+              && request.resource.data.get('importBatchId', null)
+                   == resource.data.get('importBatchId', null)
+              && request.resource.data.get('tripId', null)
+                   == resource.data.get('tripId', null)
+              && monthOpen(f, resource.data.monthKey)
+              && monthOpen(f, request.resource.data.monthKey))
+          );
+        allow delete: if false;
+
+        // Append-only edit history.  Only the manager or the expense's creator
+        // may read it; every active member may append their own entry.
+        match /revisions/{r} {
+          allow read: if isActiveMember(f)
+            && (isManager(f) || expenseOwner(f, e));
+          allow create: if verified()
+            && isActiveMember(f)
+            && createsAsSelf()
+            && revisionOk(request.resource.data)
+            && (isManager(f) || expenseOwner(f, e));
+          allow update, delete: if false;
+        }
+      }
+
+      // ── bazarTrips/{t} — immutable trip header (P2-10) ──────────────────
+      match /bazarTrips/{t} {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && tripOk(request.resource.data)
+          && monthOpen(f, request.resource.data.monthKey);
+        allow update, delete: if false;
+      }
+
+      // ── fundTransactions/{t} — append-only signed ledger (P2-10) ────────
+      match /fundTransactions/{t} {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && createsAsSelf()
+          && fundTxOk(f, request.resource.data, t)
+          && monthOpen(f, request.resource.data.monthKey);
+        allow update, delete: if false;
+      }
+
+      // ── memberAdvances/{a} — one advance per member-funded expense ──────
+      match /memberAdvances/{a} {
+        allow read: if isManager(f)
+          || (isActiveMember(f)
+              && resource.data.get('memberId', '') == request.auth.uid);
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && advanceOk(request.resource.data)
+          && request.resource.data.get('expenseId', '') == a
+          && request.resource.data.get('status', '') == 'pending'
+          && request.resource.data.get('settledPaisa', -1) == 0
+          && monthOpen(f, request.resource.data.monthKey);
+        // SettleAdvance only moves the settlement progress; an edit/void is
+        // allowed only while the advance is still unpaid.
+        allow update: if verified()
+          && isActiveMember(f)
+          && writesAsSelf()
+          && advanceOk(request.resource.data)
+          && request.resource.data.get('expenseId', '') == a
+          && (
+            (financeManager(f)
+              && resource.data.get('status', '') in ['pending', 'partial']
+              && request.resource.data.get('status', '') in ['partial', 'settled']
+              && request.resource.data.get('amountPaisa', -1)
+                   == resource.data.get('amountPaisa', -2)
+              && request.resource.data.get('memberId', '')
+                   == resource.data.get('memberId', '')
+              && request.resource.data.get('dateKey', '')
+                   == resource.data.get('dateKey', '')
+              && request.resource.data.get('monthKey', '')
+                   == resource.data.get('monthKey', '')
+              && request.resource.data.get('settledPaisa', -1)
+                   > resource.data.get('settledPaisa', -2))
+            || ((isManager(f) || expenseOwner(f, resource.data.get('expenseId', '')))
+              && resource.data.get('settledPaisa', -1) == 0
+              && request.resource.data.get('settledPaisa', -2) == 0
+              && request.resource.data.get('status', '') in ['pending', 'voided'])
+          );
+        allow delete: if false;
+      }
+
+      // ── settlements/{s} — append-only advance reimbursements (P2-10) ────
+      match /settlements/{s} {
+        allow read: if isManager(f)
+          || (isActiveMember(f)
+              && resource.data.get('memberId', '') == request.auth.uid);
+        allow create: if verified()
+          && financeManager(f)
+          && createsAsSelf()
+          && settlementOk(request.resource.data, s)
+          && monthOpen(f, request.resource.data.monthKey);
+        allow update, delete: if false;
+      }
+
+      // ── monthClosings/{month} — close/reopen history (P2-10) ────────────
+      match /monthClosings/{month} {
+        allow read: if isActiveMember(f);
+        allow create, update: if verified()
+          && financeManager(f)
+          && writesAsSelf()
+          && closingOk(request.resource.data, month);
+        allow delete: if false;
+      }
+
       // ── settings/{s} — general, modules, rotationPolicy, notificationDefaults
       match /settings/{s} {
         allow read: if isActiveMember(f);
         allow create: if verified()
-          && (isAdmin(f) || creatingFamily(f))
+          && (isAdmin(f) || (s == 'bazar' && financeManager(f))
+              || creatingFamily(f))
           && createsAsSelf()
           && settingsOk(request.resource.data);
-        allow update: if isAdmin(f)
-          && verified()
+        allow update: if verified()
+          && (isAdmin(f) || (s == 'bazar' && financeManager(f)))
           && writesAsSelf()
           && settingsOk(request.resource.data);
         allow delete: if false;
@@ -743,10 +1292,10 @@ service cloud.firestore {
     // rule is in place first so that a forgotten collection can only ever
     // under-grant.  Each of those steps must still add its own read/write and
     // field-validation rules here.
-    //   bazarCategories, bazarItems, expenses, bazarTrips, budgets,
-    //   contributions, contributionPlans, fundTransactions, memberAdvances,
-    //   settlements, choreTemplates, dutyGroups, choreOccurrences,
-    //   memberAvailability, swapRequests, notificationInbox, memberStats
+    //   expenses, bazarTrips, budgets, contributions, contributionPlans,
+    //   fundTransactions, memberAdvances, settlements, choreTemplates,
+    //   dutyGroups, choreOccurrences, memberAvailability, swapRequests,
+    //   notificationInbox, memberStats
     // ══════════════════════════════════════════════════════════════════════
     match /families/{f}/{collection}/{doc} {
       allow read, write: if false;
