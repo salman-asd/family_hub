@@ -12,7 +12,6 @@ import 'package:family_hub/features/bazar/advances/domain/member_advance.dart';
 import 'package:family_hub/features/bazar/expenses/data/expense_mappers.dart';
 import 'package:family_hub/features/bazar/expenses/data/firestore_expense_repository.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
-import 'package:family_hub/features/bazar/expenses/domain/expense_repository.dart';
 import 'package:family_hub/features/bazar/expenses/domain/funding.dart';
 import 'package:family_hub/features/bazar/expenses/domain/trip.dart';
 import 'package:family_hub/features/bazar/expenses/domain/write_plans.dart';
@@ -134,7 +133,7 @@ void main() {
       dateKey: day,
       monthKey: day.monthKey,
     );
-    final newItem = Item(
+    final newItem = const Item(
       id: 'i_new',
       nameBn: 'ডাল',
       categoryId: 'c1',

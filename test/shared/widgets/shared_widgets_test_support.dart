@@ -68,6 +68,7 @@ Future<void> pumpSharedWidget(
   required Locale locale,
   double textScale = 1.0,
   double width = sharedWidgetWidth,
+  Map<String, Object> prefsValues = const <String, Object>{},
 }) async {
   tester.view
     ..physicalSize = Size(width, sharedWidgetViewHeight)
@@ -77,7 +78,7 @@ Future<void> pumpSharedWidget(
   // MoneyText and the progress ring read the active locale through Riverpod,
   // which reads the language preference from SharedPreferences.  In the app
   // bootstrap overrides that provider; here the test does.
-  SharedPreferences.setMockInitialValues({});
+  SharedPreferences.setMockInitialValues(prefsValues);
   final prefs = await SharedPreferences.getInstance();
 
   await tester.pumpWidget(

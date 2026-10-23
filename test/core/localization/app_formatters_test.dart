@@ -1,4 +1,5 @@
 import 'package:family_hub/core/localization/app_formatters.dart';
+import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/money.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -37,6 +38,21 @@ void main() {
       const f = AppFormatters(languageCode: 'bn', useBanglaDigits: true);
       expect(() => f.monthName(0), throwsRangeError);
       expect(() => f.monthName(13), throwsRangeError);
+    });
+  });
+
+  group('AppFormatters — month labels', () {
+    test('monthLabel renders the month name and year in Bangla', () {
+      const f = AppFormatters(languageCode: 'bn', useBanglaDigits: true);
+      expect(f.monthLabel(MonthKey(2026, 10)), 'অক্টোবর ২০২৬');
+      expect(f.monthLabel(MonthKey(2026, 9)), 'সেপ্টেম্বর ২০২৬');
+    });
+
+    test('monthLabel follows the digits switch', () {
+      const bnAscii = AppFormatters(languageCode: 'bn', useBanglaDigits: false);
+      const enBangla = AppFormatters(languageCode: 'en', useBanglaDigits: true);
+      expect(bnAscii.monthLabel(MonthKey(2026, 1)), 'জানুয়ারি 2026');
+      expect(enBangla.monthLabel(MonthKey(2026, 1)), 'January ২০২৬');
     });
   });
 

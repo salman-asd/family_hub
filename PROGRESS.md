@@ -660,6 +660,7 @@ Pure Dart domain and use cases only; no Firestore, rules, indexes, ARB, provider
 | P2-07 | Bazar settings domain/data/rules/providers | Done; rules suite and APK unverified | `lib/features/bazar/settings/`, `bazar_settings_providers.dart`, `firebase/firestore.rules`, `firebase/rules_test/bazar_settings.test.mjs`, `settings_bazar.json` |
 | P2-08 | Fund ledger and month-closing domain | Done | `lib/features/bazar/fund/domain/`, `lib/features/bazar/advances/domain/`, `test/features/bazar/fund/`, `test/features/bazar/advances/` |
 | P2-09 | Expense domain, use cases and in-memory backend | Done | `lib/features/bazar/expenses/domain/`, `test/features/bazar/expenses/`, `test/support/in_memory_bazar_backend.dart` |
+| P2-12 | Shared widgets + gallery entries | Done; goldens generated on Linux CI, rules suite not needed (no data change) | `lib/shared/widgets/` (`month_switcher.dart`, `amount_field.dart`, `total_display.dart`, `progress_bar_status.dart`, `day_section_header.dart`, `person_picker.dart`, `category_badge.dart`), `lib/app/gallery/gallery_sections.dart`, `test/shared/widgets/` |
 
 ## Known limitations (honest list)
 
@@ -673,6 +674,7 @@ Pure Dart domain and use cases only; no Firestore, rules, indexes, ARB, provider
 - `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
 - Phase 2 has its P2-01 skeleton (Bazar home + seams), P2-02 pure helpers, P2-03 vocabulary,
   P2-04 catalog domain/search, P2-05 catalog data/rules/providers, P2-06 default seed/backfill,
-  P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain and P2-09 expense
-  domain/use cases; the Bazar/Chores/Dashboard features and UI are not implemented yet. The
-  P2-05/P2-06/P2-07 rules suite has not been run (no Java).
+  P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain, P2-09 expense
+  domain/use cases and P2-12 shared widgets (in the gallery, with goldens and overflow coverage);
+  the Bazar/Chores/Dashboard screens beyond the Bazar home are not implemented yet. The
+  P2-05/P2-06/P2-07 rules suite has not been run (no Java 21+ runtime on the authoring machine).

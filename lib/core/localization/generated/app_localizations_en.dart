@@ -1326,4 +1326,79 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activityUnknown => 'Something changed';
+
+  @override
+  String get galleryMonthSwitcher => 'Month switcher';
+
+  @override
+  String get galleryAmountField => 'Amount field';
+
+  @override
+  String get galleryTotalDisplay => 'Total display';
+
+  @override
+  String get galleryProgressBarStatus => 'Progress bar';
+
+  @override
+  String get galleryDaySectionHeader => 'Day header';
+
+  @override
+  String get galleryPersonPicker => 'Person picker';
+
+  @override
+  String get galleryCategoryBadge => 'Category badge';
+
+  @override
+  String get gallerySampleAmountLabel => 'Amount';
+
+  @override
+  String get gallerySampleTotalLabel => 'Total';
+
+  @override
+  String get gallerySampleBudgetLabel => 'Monthly bazar budget';
+
+  @override
+  String get gallerySampleNoLimitLabel => 'No limit';
+
+  @override
+  String get gallerySampleCategoryName => 'Vegetables';
+
+  @override
+  String get gallerySampleLongCategoryName =>
+      'Dry spices and cooking ingredients';
+
+  @override
+  String get gallerySampleLongDate => 'Monday, 19 October 2026 — weekly bazar';
+
+  @override
+  String get galleryPersonPickerLabel => 'Who paid';
+
+  @override
+  String get monthSwitcherPrevious => 'Previous month';
+
+  @override
+  String get monthSwitcherNext => 'Next month';
+
+  @override
+  String get monthSwitcherSelectTitle => 'Select a month';
+
+  @override
+  String get monthSwitcherPreviousYear => 'Previous year';
+
+  @override
+  String get monthSwitcherNextYear => 'Next year';
+
+  @override
+  String get personPickerNone => 'None';
+
+  @override
+  String get totalCalculated => 'Calculated from quantity × price';
+
+  @override
+  String get totalEmpty => '—';
+
+  @override
+  String progressBarPercent(String percent) {
+    return '$percent%';
+  }
 }

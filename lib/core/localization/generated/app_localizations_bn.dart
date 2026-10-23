@@ -1321,4 +1321,79 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get activityUnknown => 'কিছু পরিবর্তন হয়েছে';
+
+  @override
+  String get galleryMonthSwitcher => 'মাস পরিবর্তন';
+
+  @override
+  String get galleryAmountField => 'টাকার ঘর';
+
+  @override
+  String get galleryTotalDisplay => 'মোটের প্রদর্শন';
+
+  @override
+  String get galleryProgressBarStatus => 'অগ্রগতির বার';
+
+  @override
+  String get galleryDaySectionHeader => 'দিনের শিরোনাম';
+
+  @override
+  String get galleryPersonPicker => 'ব্যক্তি নির্বাচন';
+
+  @override
+  String get galleryCategoryBadge => 'ক্যাটাগরি ব্যাজ';
+
+  @override
+  String get gallerySampleAmountLabel => 'পরিমাণ';
+
+  @override
+  String get gallerySampleTotalLabel => 'মোট';
+
+  @override
+  String get gallerySampleBudgetLabel => 'মাসিক বাজার বাজেট';
+
+  @override
+  String get gallerySampleNoLimitLabel => 'কোনো সীমা নেই';
+
+  @override
+  String get gallerySampleCategoryName => 'সবজি';
+
+  @override
+  String get gallerySampleLongCategoryName => 'শুকনো মসলা ও রান্নার উপকরণ';
+
+  @override
+  String get gallerySampleLongDate =>
+      'সোমবার, ১৯ অক্টোবর ২০২৬ — সপ্তাহের বাজার';
+
+  @override
+  String get galleryPersonPickerLabel => 'কে টাকা দিয়েছে';
+
+  @override
+  String get monthSwitcherPrevious => 'আগের মাস';
+
+  @override
+  String get monthSwitcherNext => 'পরের মাস';
+
+  @override
+  String get monthSwitcherSelectTitle => 'মাস নির্বাচন করুন';
+
+  @override
+  String get monthSwitcherPreviousYear => 'আগের বছর';
+
+  @override
+  String get monthSwitcherNextYear => 'পরের বছর';
+
+  @override
+  String get personPickerNone => 'কেউ না';
+
+  @override
+  String get totalCalculated => 'পরিমাণ × দর থেকে হিসাব করা হয়েছে';
+
+  @override
+  String get totalEmpty => '—';
+
+  @override
+  String progressBarPercent(String percent) {
+    return '$percent%';
+  }
 }

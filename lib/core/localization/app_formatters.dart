@@ -1,4 +1,5 @@
 import 'package:family_hub/core/utils/bangla_numerals.dart';
+import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/money.dart';
 
 /// Localized display formatting for dates, numbers and money.
@@ -62,6 +63,10 @@ class AppFormatters {
     _checkMonth(month);
     return _isBangla ? _monthsBn[month - 1] : _monthsEn[month - 1];
   }
+
+  /// 'অক্টোবর ২০২৬' (bn) / 'October 2026' (en), honouring the digits switch.
+  String monthLabel(MonthKey month) =>
+      '${monthName(month.month)} ${_applyDigits(month.year.toString())}';
 
   /// 'শুক্র' (bn short) / 'Fri' (en short).
   String weekdayShort(int weekday) {

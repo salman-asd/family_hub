@@ -23,9 +23,12 @@ void main() {
     tester,
   ) async {
     // Tall viewport so the whole list is laid out (a ListView only builds what
-    // fits) and every section heading is found.
+    // fits) and every section heading is found. The height scales with the
+    // number of sections, so adding a widget to the gallery can never push the
+    // last one outside the built area.
+    final sections = gallerySections();
     tester.view
-      ..physicalSize = const Size(400, 5000)
+      ..physicalSize = Size(400, 480.0 * sections.length)
       ..devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
@@ -54,7 +57,7 @@ void main() {
     // which never settles.
     await tester.pump(const Duration(milliseconds: 250));
 
-    for (final section in gallerySections()) {
+    for (final section in sections) {
       expect(
         find.text(section.label(l10n)),
         findsOneWidget,
