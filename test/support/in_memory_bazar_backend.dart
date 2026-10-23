@@ -97,21 +97,32 @@ class InMemoryBazarBackend extends InMemoryBackend
   /// Lets tests publish a direct expense/ledger mutation.
   void expenseNotify() => _expenseChanges.add(null);
 
-  @override
-  Stream<List<Category>> watchCategories(String familyId) async* {
-    yield categoriesOf(familyId);
-    await for (final _ in _catalogChanges.stream) {
-      yield categoriesOf(familyId);
-    }
-  }
+  /// True while any expense/ledger/advance listener is subscribed, so provider
+  /// tests can prove that a disposed provider really cancels its stream.
+  bool get hasExpenseListeners => _expenseChanges.hasListener;
+
+  /// `snapshot()` now and after every change.
+  ///
+  /// Not `async*` + `await for`: cancelling such a stream while it is suspended
+  /// in the loop hangs (the generator waits for the inner stream, the inner
+  /// stream for the generator), so a disposed provider would never release its
+  /// listener.  `Stream.multi` cancels the inner subscription explicitly.
+  Stream<T> _watch<T>(T Function() snapshot, StreamController<void> changes) =>
+      Stream<T>.multi((controller) {
+        controller.add(snapshot());
+        final subscription = changes.stream.listen((_) {
+          controller.add(snapshot());
+        });
+        controller.onCancel = subscription.cancel;
+      });
 
   @override
-  Stream<List<Item>> watchItems(String familyId) async* {
-    yield itemsOf(familyId);
-    await for (final _ in _catalogChanges.stream) {
-      yield itemsOf(familyId);
-    }
-  }
+  Stream<List<Category>> watchCategories(String familyId) =>
+      _watch(() => categoriesOf(familyId), _catalogChanges);
+
+  @override
+  Stream<List<Item>> watchItems(String familyId) =>
+      _watch(() => itemsOf(familyId), _catalogChanges);
 
   @override
   Future<Result<List<Category>>> getCategories(String familyId) async =>
@@ -345,12 +356,8 @@ class InMemoryBazarBackend extends InMemoryBackend
   }
 
   @override
-  Stream<List<Expense>> watchMonth(String familyId, MonthKey month) async* {
-    yield _monthExpenses(familyId, month);
-    await for (final _ in _expenseChanges.stream) {
-      yield _monthExpenses(familyId, month);
-    }
-  }
+  Stream<List<Expense>> watchMonth(String familyId, MonthKey month) =>
+      _watch(() => _monthExpenses(familyId, month), _expenseChanges);
 
   @override
   Future<Result<List<Expense>>> queryRange(
@@ -384,12 +391,7 @@ class InMemoryBazarBackend extends InMemoryBackend
   Stream<List<ExpenseRevision>> watchRevisions(
     String familyId,
     String expenseId,
-  ) async* {
-    yield _revisionList(familyId, expenseId);
-    await for (final _ in _expenseChanges.stream) {
-      yield _revisionList(familyId, expenseId);
-    }
-  }
+  ) => _watch(() => _revisionList(familyId, expenseId), _expenseChanges);
 
   List<Expense> _monthExpenses(String familyId, MonthKey month) {
     final rows = <Expense>[
@@ -478,12 +480,7 @@ class InMemoryBazarBackend extends InMemoryBackend
   Stream<List<FundTransaction>> watchTransactionsFrom(
     String familyId,
     MonthKey from,
-  ) async* {
-    yield _transactionsFrom(familyId, from);
-    await for (final _ in _expenseChanges.stream) {
-      yield _transactionsFrom(familyId, from);
-    }
-  }
+  ) => _watch(() => _transactionsFrom(familyId, from), _expenseChanges);
 
   @override
   Future<Result<List<FundTransaction>>> getMonthTransactions(
@@ -518,12 +515,8 @@ class InMemoryBazarBackend extends InMemoryBackend
   }
 
   @override
-  Stream<List<MonthClosing>> watchClosings(String familyId) async* {
-    yield _closingList(familyId);
-    await for (final _ in _expenseChanges.stream) {
-      yield _closingList(familyId);
-    }
-  }
+  Stream<List<MonthClosing>> watchClosings(String familyId) =>
+      _watch(() => _closingList(familyId), _expenseChanges);
 
   @override
   Future<Result<MonthClosing?>> getClosing(
@@ -554,12 +547,8 @@ class InMemoryBazarBackend extends InMemoryBackend
   // ── Advances ──────────────────────────────────────────────────────────────
 
   @override
-  Stream<List<MemberAdvance>> watchOpenAdvances(String familyId) async* {
-    yield _openAdvances(familyId);
-    await for (final _ in _expenseChanges.stream) {
-      yield _openAdvances(familyId);
-    }
-  }
+  Stream<List<MemberAdvance>> watchOpenAdvances(String familyId) =>
+      _watch(() => _openAdvances(familyId), _expenseChanges);
 
   @override
   Future<Result<MemberAdvance?>> getAdvance(
@@ -571,12 +560,7 @@ class InMemoryBazarBackend extends InMemoryBackend
   Stream<List<Settlement>> watchSettlements(
     String familyId, {
     String? advanceId,
-  }) async* {
-    yield _settlementList(familyId, advanceId);
-    await for (final _ in _expenseChanges.stream) {
-      yield _settlementList(familyId, advanceId);
-    }
-  }
+  }) => _watch(() => _settlementList(familyId, advanceId), _expenseChanges);
 
   List<MemberAdvance> _openAdvances(String familyId) {
     final rows =
