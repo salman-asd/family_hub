@@ -4,16 +4,17 @@ import 'package:family_hub/features/bazar/fund/presentation/fund_providers.dart'
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// The month every Bazar screen is looking at (roadmap §3.5).
-///
-/// `MonthSwitcher` writes it; the expense list, budgets, fund and reports read
-/// it, so one tap re-targets all of them together.  A screen with its own
-/// range (reports) keeps a local override instead of writing this provider.
+/// Today in the family's time zone (H12).  Never `DateTime.now()`.
+final currentDateKeyProvider = Provider<DateKey>(
+  (ref) => ref.watch(familyDateKeysProvider).today(),
+);
+
+/// The month every Bazar screen shows together (expense list, budget, fund,
+/// reports).  A screen may hold a local override, but it starts from this one.
 final selectedMonthProvider = NotifierProvider<SelectedMonth, MonthKey>(
   SelectedMonth.new,
 );
 
-/// `selectedMonthProvider`'s state: the current month by default.
 class SelectedMonth extends Notifier<MonthKey> {
   @override
   MonthKey build() => ref.read(familyDateKeysProvider).thisMonth();
@@ -24,21 +25,14 @@ class SelectedMonth extends Notifier<MonthKey> {
 
   void set(MonthKey month) => state = month;
 
-  /// Back to the family's current month (after a screen-local range, say).
+  /// Back to the current month ("Today" shortcut).
   void reset() => state = ref.read(familyDateKeysProvider).thisMonth();
 }
 
-/// "Today" in the family's time zone, for the Add Expense date default.
-final currentDateKeyProvider = Provider<DateKey>(
-  (ref) => ref.watch(familyDateKeysProvider).today(),
-);
-
-/// Whether [month] has a `closed` closing document.
-///
-/// Forms read it to disable themselves with a localized reason instead of
-/// failing after submit; the use case and the security rules enforce the same
-/// rule for a write that races the closing.
+/// `true` when [month] is closed.  Forms read this to disable themselves with a
+/// reason instead of failing after submit; the use cases and the rules still
+/// enforce it (CLAUDE.md rule 31).
 final monthLockedProvider = Provider.family<bool, MonthKey>(
   (ref, month) =>
-      MonthLocks.isLocked(month, ref.watch(monthClosingsByMonthProvider)),
+      MonthLocks.isLocked(month, ref.watch(monthClosingMapProvider)),
 );

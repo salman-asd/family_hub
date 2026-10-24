@@ -79,10 +79,10 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 - `test/architecture/no_step_todos_test.dart` fails on any `TODO(step-` in `lib/` or `test/`.
 
 ## Shared widgets and the gallery (from Step 11)
-- Every reusable widget lives in `lib/shared/widgets/` and is reachable from the debug-only component gallery at `/dev/gallery` (`lib/app/gallery/`, dev flavour only; entry point next to the theme-tokens tile in the Family tab). Widgets take plain values: no Firebase and no feature import may reach them. The Phase 2 set (P2-12) adds `MonthSwitcher`, `AmountField`, `TotalDisplay`, `ProgressBarStatus`, `DaySectionHeader`, `PersonPicker` and `CategoryBadge`.
+- Every reusable widget lives in `lib/shared/widgets/` and is reachable from the debug-only component gallery at `/dev/gallery` (`lib/app/gallery/`, dev flavour only; entry point next to the theme-tokens tile in the Family tab). Widgets take plain values: no Firebase and no feature import may reach them.
 - `lib/app/gallery/gallery_sections.dart` is the single source of truth. A widget is "in the gallery" only by being listed there, and `test/shared/widgets/gallery_golden_test.dart` and `widgets_overflow_test.dart` both iterate that list, so adding a widget (with all of its states) once gives it goldens and overflow coverage.
 - A widget that shows a status is announced **once** to assistive tech: `Semantics(label: ...)` with `excludeSemantics: true` (or `ExcludeSemantics` around the visual child), and never by colour alone (rule 13). `MoneyText` and `ProgressRing` replace the platform announcement with a localized label.
-- Golden images live in `test/shared/widgets/goldens/` (18 widgets x 2 themes x 2 languages = 72 PNGs). Regenerate after an intentional visual change with `flutter test --update-goldens test/shared/widgets`; the tests skip *with a reason* when the directory is missing, so a fresh clone is green.
+- Golden images live in `test/shared/widgets/goldens/` (11 widgets x 2 themes x 2 languages = 44 PNGs). Regenerate after an intentional visual change with `flutter test --update-goldens test/shared/widgets`; the tests skip *with a reason* when the directory is missing, so a fresh clone is green.
 - `widgets_overflow_test.dart` renders every section at text scale 2.0 in both themes and both languages (bn/en) and fails on any overflow: this is the mandatory long-Bangla-string check for new widgets.
 - Test harness: `test/shared/widgets/shared_widgets_test_support.dart` (`pumpSharedWidget`) - 320dp wide, both themes, `disableAnimations`, plus the `sharedPreferencesProvider` override that Riverpod-backed widgets (`MoneyText`, `ProgressRing`) need. `MoneyText` and `ProgressRing` read the active locale through `appFormattersProvider`, so any test that pumps them needs `SharedPreferences.setMockInitialValues({})` + `sharedPreferencesProvider.overrideWithValue(prefs)`.
 - Golden/overflow tests use `createTestImage` inside `tester.runAsync(...)`: it talks to the engine and never completes inside the fake-async zone.
@@ -120,3 +120,10 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 31. A closed month rejects every write dated in it (use case AND rules). Only ReopenMonth (Admin or Household Manager, with a note) changes that.
 32. Every new collection follows docs/new_collection_checklist.md in the same commit; new audit types/refTypes go in AuditEventType AND rules eventTypes()/refTypes().
 33. Screens read derived providers (bazar_providers.dart); only providers call use cases/repositories.
+
+## Phase 2 additions (P2-10 to P2-12)
+- Providers: screens read `selectedMonthProvider`, `monthExpensesProvider(month)`, `monthSpendProvider`, `filteredExpensesProvider`, `fundBalanceProvider`, `monthLockedProvider`, `openAdvancesProvider`, `catalogIndexProvider`, `bazarSettingsProvider`; only providers call use cases/repositories. Repository providers are overridden in `bootstrap.dart`.
+- A rules check is not a filter: any query a plain member runs over `memberAdvances`/`settlements` must be narrowed to their own uid (see `openAdvancesProvider`).
+- Paged range queries order by `(dateKey DESC, document id DESC)` and resume with `startAfter([dateKey, id])`.
+- New shared widgets (all in the gallery via `gallery_sections_p2.dart`): `MonthSwitcher`, `AmountField`, `TotalDisplay`, `ProgressBarStatus`, `DaySectionHeader`, `PersonPicker`, `CategoryBadge`. `AmountField` never parses; controllers use `Money.parse` / `Quantity.parse`.
+- ARB keys are added to `app_bn.arb`, `app_en.arb` AND the three generated files when no SDK is available; `flutter gen-l10n` must then show no diff.

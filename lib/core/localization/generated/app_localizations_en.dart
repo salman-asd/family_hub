@@ -1337,7 +1337,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get galleryTotalDisplay => 'Total display';
 
   @override
-  String get galleryProgressBarStatus => 'Progress bar';
+  String get galleryProgressBarStatus => 'Limit progress bar';
 
   @override
   String get galleryDaySectionHeader => 'Day header';
@@ -1349,56 +1349,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get galleryCategoryBadge => 'Category badge';
 
   @override
-  String get gallerySampleAmountLabel => 'Amount';
-
-  @override
-  String get gallerySampleTotalLabel => 'Total';
-
-  @override
-  String get gallerySampleBudgetLabel => 'Monthly bazar budget';
-
-  @override
-  String get gallerySampleNoLimitLabel => 'No limit';
-
-  @override
-  String get gallerySampleCategoryName => 'Vegetables';
-
-  @override
-  String get gallerySampleLongCategoryName =>
-      'Dry spices and cooking ingredients';
-
-  @override
-  String get gallerySampleLongDate => 'Monday, 19 October 2026 — weekly bazar';
-
-  @override
-  String get galleryPersonPickerLabel => 'Who paid';
-
-  @override
   String get monthSwitcherPrevious => 'Previous month';
 
   @override
   String get monthSwitcherNext => 'Next month';
 
   @override
-  String get monthSwitcherSelectTitle => 'Select a month';
+  String get monthSwitcherPick => 'Choose a month';
 
   @override
-  String get monthSwitcherPreviousYear => 'Previous year';
+  String get monthPickerPreviousYear => 'Previous year';
 
   @override
-  String get monthSwitcherNextYear => 'Next year';
+  String get monthPickerNextYear => 'Next year';
 
   @override
-  String get personPickerNone => 'None';
+  String get totalDisplayCalculated => 'Calculated from quantity × price';
 
   @override
-  String get totalCalculated => 'Calculated from quantity × price';
+  String get totalDisplayEmpty => 'No total yet';
 
   @override
-  String get totalEmpty => '—';
+  String get progressLevelOk => 'On track';
 
   @override
-  String progressBarPercent(String percent) {
-    return '$percent%';
+  String get progressLevelWarning => 'Nearing the limit';
+
+  @override
+  String get progressLevelExceeded => 'Over the limit';
+
+  @override
+  String get progressLevelNoLimit => 'No limit set';
+
+  @override
+  String progressBarSemantics(String label, String percent, String level) {
+    return '$label: $percent percent, $level';
   }
+
+  @override
+  String get personPickerNone => 'No one';
 }

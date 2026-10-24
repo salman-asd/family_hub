@@ -3,12 +3,8 @@ import 'package:family_hub/core/utils/money.dart';
 import 'package:family_hub/shared/widgets/money_text.dart';
 import 'package:flutter/material.dart';
 
-/// The sticky day heading of the expense list (P2-12).
-///
-/// A localized date label on the leading edge and that day's total on the
-/// trailing edge.  The label is plain data from the caller (already formatted
-/// for the active locale); a long Bangla label wraps instead of overflowing,
-/// and the amount always goes through [MoneyText].
+/// The header of one day in a list: the date on the left, the day's total on
+/// the right.  A long date wraps instead of pushing the total off screen.
 class DaySectionHeader extends StatelessWidget {
   const DaySectionHeader({
     required this.dateLabel,
@@ -16,33 +12,30 @@ class DaySectionHeader extends StatelessWidget {
     super.key,
   });
 
-  /// Localized date shown on the left, for example "১৮ অক্টোবর ২০২৬".
   final String dateLabel;
-
-  /// Sum of the visible expenses of that day.
   final Money total;
 
   @override
   Widget build(BuildContext context) {
     final t = context.tokens;
-    final textTheme = Theme.of(context).textTheme;
-
+    final theme = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 6),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Text(
               dateLabel,
-              style: textTheme.titleSmall?.copyWith(
-                color: t.textPrimary,
-                fontWeight: FontWeight.w700,
-              ),
+              style: theme.titleSmall?.copyWith(color: t.textSecondary),
             ),
           ),
           const SizedBox(width: 12),
-          MoneyText(value: total, style: textTheme.bodyMedium),
+          MoneyText(
+            value: total,
+            hideZeroFraction: true,
+            style: theme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+          ),
         ],
       ),
     );

@@ -1323,16 +1323,16 @@ class AppLocalizationsBn extends AppLocalizations {
   String get activityUnknown => 'কিছু পরিবর্তন হয়েছে';
 
   @override
-  String get galleryMonthSwitcher => 'মাস পরিবর্তন';
+  String get galleryMonthSwitcher => 'মাস পরিবর্তনকারী';
 
   @override
-  String get galleryAmountField => 'টাকার ঘর';
+  String get galleryAmountField => 'পরিমাণের ঘর';
 
   @override
-  String get galleryTotalDisplay => 'মোটের প্রদর্শন';
+  String get galleryTotalDisplay => 'মোট প্রদর্শন';
 
   @override
-  String get galleryProgressBarStatus => 'অগ্রগতির বার';
+  String get galleryProgressBarStatus => 'সীমার অগ্রগতি বার';
 
   @override
   String get galleryDaySectionHeader => 'দিনের শিরোনাম';
@@ -1341,32 +1341,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get galleryPersonPicker => 'ব্যক্তি নির্বাচন';
 
   @override
-  String get galleryCategoryBadge => 'ক্যাটাগরি ব্যাজ';
-
-  @override
-  String get gallerySampleAmountLabel => 'পরিমাণ';
-
-  @override
-  String get gallerySampleTotalLabel => 'মোট';
-
-  @override
-  String get gallerySampleBudgetLabel => 'মাসিক বাজার বাজেট';
-
-  @override
-  String get gallerySampleNoLimitLabel => 'কোনো সীমা নেই';
-
-  @override
-  String get gallerySampleCategoryName => 'সবজি';
-
-  @override
-  String get gallerySampleLongCategoryName => 'শুকনো মসলা ও রান্নার উপকরণ';
-
-  @override
-  String get gallerySampleLongDate =>
-      'সোমবার, ১৯ অক্টোবর ২০২৬ — সপ্তাহের বাজার';
-
-  @override
-  String get galleryPersonPickerLabel => 'কে টাকা দিয়েছে';
+  String get galleryCategoryBadge => 'ক্যাটেগরি ব্যাজ';
 
   @override
   String get monthSwitcherPrevious => 'আগের মাস';
@@ -1375,25 +1350,37 @@ class AppLocalizationsBn extends AppLocalizations {
   String get monthSwitcherNext => 'পরের মাস';
 
   @override
-  String get monthSwitcherSelectTitle => 'মাস নির্বাচন করুন';
+  String get monthSwitcherPick => 'মাস বেছে নিন';
 
   @override
-  String get monthSwitcherPreviousYear => 'আগের বছর';
+  String get monthPickerPreviousYear => 'আগের বছর';
 
   @override
-  String get monthSwitcherNextYear => 'পরের বছর';
+  String get monthPickerNextYear => 'পরের বছর';
 
   @override
-  String get personPickerNone => 'কেউ না';
+  String get totalDisplayCalculated => 'পরিমাণ × দর থেকে হিসাব করা';
 
   @override
-  String get totalCalculated => 'পরিমাণ × দর থেকে হিসাব করা হয়েছে';
+  String get totalDisplayEmpty => 'মোট এখনো নেই';
 
   @override
-  String get totalEmpty => '—';
+  String get progressLevelOk => 'ঠিক আছে';
 
   @override
-  String progressBarPercent(String percent) {
-    return '$percent%';
+  String get progressLevelWarning => 'সীমার কাছাকাছি';
+
+  @override
+  String get progressLevelExceeded => 'সীমা ছাড়িয়েছে';
+
+  @override
+  String get progressLevelNoLimit => 'সীমা নির্ধারিত নেই';
+
+  @override
+  String progressBarSemantics(String label, String percent, String level) {
+    return '$label: $percent শতাংশ, $level';
   }
+
+  @override
+  String get personPickerNone => 'কেউ নয়';
 }

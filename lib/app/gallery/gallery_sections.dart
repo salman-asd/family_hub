@@ -1,27 +1,20 @@
+import 'package:family_hub/app/gallery/gallery_sections_p2.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
-import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/money.dart';
-import 'package:family_hub/shared/widgets/amount_field.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:family_hub/shared/widgets/app_card.dart';
-import 'package:family_hub/shared/widgets/category_badge.dart';
-import 'package:family_hub/shared/widgets/day_section_header.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
 import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:family_hub/shared/widgets/item_thumb.dart';
 import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:family_hub/shared/widgets/money_text.dart';
-import 'package:family_hub/shared/widgets/month_switcher.dart';
-import 'package:family_hub/shared/widgets/person_picker.dart';
 import 'package:family_hub/shared/widgets/pill_bottom_bar.dart';
-import 'package:family_hub/shared/widgets/progress_bar_status.dart';
 import 'package:family_hub/shared/widgets/progress_ring.dart';
 import 'package:family_hub/shared/widgets/section_header.dart';
 import 'package:family_hub/shared/widgets/status_chip.dart';
 import 'package:family_hub/shared/widgets/sync_banner.dart';
-import 'package:family_hub/shared/widgets/total_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -67,13 +60,7 @@ List<GallerySection> gallerySections() => <GallerySection>[
   _progress,
   _pillBar,
   _syncBanner,
-  _monthSwitcher,
-  _amountField,
-  _totalDisplay,
-  _progressBarStatus,
-  _daySectionHeader,
-  _personPicker,
-  _categoryBadge,
+  ...phase2GallerySections(),
 ];
 
 // ── Sample values ─────────────────────────────────────────────────────────────
@@ -388,265 +375,3 @@ final GallerySection _syncBanner = GallerySection(
     ],
   ),
 );
-
-// ── Phase 2 (P2-12) ───────────────────────────────────────────────────────────
-
-final GallerySection _monthSwitcher = GallerySection(
-  id: 'month_switcher',
-  label: (l10n) => l10n.galleryMonthSwitcher,
-  build: (context) {
-    final month = MonthKey(2026, 10);
-    final later = MonthKey(2027, 3);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Normal: both arrows enabled.
-        MonthSwitcher(month: month, onChanged: (value) {}),
-        const SizedBox(height: 8),
-        // At the lower bound: the previous arrow is disabled.
-        MonthSwitcher(
-          month: month,
-          min: month,
-          max: later,
-          onChanged: (value) {},
-        ),
-        const SizedBox(height: 8),
-        // At the upper bound: the next arrow is disabled.
-        MonthSwitcher(
-          month: later,
-          min: month,
-          max: later,
-          onChanged: (value) {},
-        ),
-        const SizedBox(height: 8),
-        // Longest Bangla month name, at text scale 2 in the overflow test.
-        MonthSwitcher(month: MonthKey(2026, 9), onChanged: (value) {}),
-      ],
-    );
-  },
-);
-
-final GallerySection _amountField = GallerySection(
-  id: 'amount_field',
-  label: (l10n) => l10n.galleryAmountField,
-  build: (context) => const _GalleryAmountField(),
-);
-
-final GallerySection _totalDisplay = GallerySection(
-  id: 'total_display',
-  label: (l10n) => l10n.galleryTotalDisplay,
-  build: (context) {
-    final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TotalDisplay(label: l10n.gallerySampleTotalLabel),
-        const SizedBox(height: 16),
-        TotalDisplay(
-          label: l10n.gallerySampleTotalLabel,
-          total: const Money.paisa(125050),
-        ),
-        const SizedBox(height: 16),
-        TotalDisplay(
-          label: l10n.gallerySampleTotalLabel,
-          total: const Money.paisa(125050),
-          calculated: true,
-        ),
-      ],
-    );
-  },
-);
-
-final GallerySection _progressBarStatus = GallerySection(
-  id: 'progress_bar_status',
-  label: (l10n) => l10n.galleryProgressBarStatus,
-  build: (context) {
-    final l10n = context.l10n;
-    const samples = <({int? basisPoints, ProgressLevel level})>[
-      (basisPoints: 0, level: ProgressLevel.ok),
-      (basisPoints: 7900, level: ProgressLevel.ok),
-      (basisPoints: 8000, level: ProgressLevel.warning),
-      (basisPoints: 10000, level: ProgressLevel.exceeded),
-      (basisPoints: 14000, level: ProgressLevel.exceeded),
-      (basisPoints: null, level: ProgressLevel.ok),
-    ];
-    return Consumer(
-      builder: (context, ref, _) {
-        final formatters = ref.watch(appFormattersProvider);
-        return Column(
-          children: [
-            for (final sample in samples)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: ProgressBarStatus(
-                  level: sample.level,
-                  basisPoints: sample.basisPoints,
-                  label: sample.basisPoints == null
-                      ? l10n.gallerySampleNoLimitLabel
-                      : l10n.gallerySampleBudgetLabel,
-                  trailing: sample.basisPoints == null
-                      ? null
-                      : l10n.progressBarPercent(
-                          formatters.number(sample.basisPoints! ~/ 100),
-                        ),
-                ),
-              ),
-          ],
-        );
-      },
-    );
-  },
-);
-
-final GallerySection _daySectionHeader = GallerySection(
-  id: 'day_section_header',
-  label: (l10n) => l10n.galleryDaySectionHeader,
-  build: (context) {
-    final l10n = context.l10n;
-    return Consumer(
-      builder: (context, ref, _) {
-        final formatters = ref.watch(appFormattersProvider);
-        return Column(
-          children: [
-            DaySectionHeader(
-              dateLabel: formatters.fullDate(DateTime.utc(2026, 10, 18)),
-              total: const Money.paisa(125050),
-            ),
-            DaySectionHeader(
-              dateLabel: l10n.gallerySampleLongDate,
-              total: const Money.paisa(123456),
-            ),
-          ],
-        );
-      },
-    );
-  },
-);
-
-final GallerySection _personPicker = GallerySection(
-  id: 'person_picker',
-  label: (l10n) => l10n.galleryPersonPicker,
-  build: (context) {
-    final l10n = context.l10n;
-    return Consumer(
-      builder: (context, ref, _) {
-        final formatters = ref.watch(appFormattersProvider);
-        final options = [
-          for (var index = 0; index < 12; index++)
-            PersonOption(
-              id: 'usr_$index',
-              name:
-                  '${l10n.gallerySamplePersonName} '
-                  '${formatters.number(index + 1)}',
-            ),
-        ];
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // None selected, with the "none" target available.
-            PersonPicker(
-              label: l10n.galleryPersonPickerLabel,
-              options: options,
-              allowNone: true,
-              onChanged: (id) {},
-            ),
-            const SizedBox(height: 16),
-            // A single option, preselected.
-            PersonPicker(
-              label: l10n.galleryPersonPickerLabel,
-              options: options.take(1).toList(growable: false),
-              selectedId: options.first.id,
-              onChanged: (id) {},
-            ),
-            const SizedBox(height: 16),
-            // Twelve options, which must scroll sideways.
-            PersonPicker(
-              label: l10n.galleryPersonPickerLabel,
-              options: options,
-              selectedId: options[5].id,
-              onChanged: (id) {},
-            ),
-          ],
-        );
-      },
-    );
-  },
-);
-
-final GallerySection _categoryBadge = GallerySection(
-  id: 'category_badge',
-  label: (l10n) => l10n.galleryCategoryBadge,
-  build: (context) {
-    final l10n = context.l10n;
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        CategoryBadge(
-          name: l10n.gallerySampleCategoryName,
-          colorIndex: 3,
-          emoji: '🥬',
-        ),
-        CategoryBadge(name: l10n.gallerySampleCategoryName, colorIndex: 5),
-        CategoryBadge(
-          name: l10n.gallerySampleCategoryName,
-          colorIndex: 7,
-          emoji: '🧂',
-          compact: true,
-        ),
-        CategoryBadge(name: l10n.gallerySampleLongCategoryName, colorIndex: 9),
-      ],
-    );
-  },
-);
-
-/// Owns the five controllers the amount-field states need, so the gallery can
-/// show empty/filled/error/disabled/Bangla states without leaking controllers.
-class _GalleryAmountField extends StatefulWidget {
-  const _GalleryAmountField();
-
-  @override
-  State<_GalleryAmountField> createState() => _GalleryAmountFieldState();
-}
-
-class _GalleryAmountFieldState extends State<_GalleryAmountField> {
-  final _empty = TextEditingController();
-  final _filled = TextEditingController(text: '1250.50');
-  final _error = TextEditingController(text: '0');
-  final _disabled = TextEditingController(text: '500');
-  final _bangla = TextEditingController(text: '১২৩.৫০');
-
-  @override
-  void dispose() {
-    _empty.dispose();
-    _filled.dispose();
-    _error.dispose();
-    _disabled.dispose();
-    _bangla.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final label = l10n.gallerySampleAmountLabel;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        AmountField(controller: _empty, label: label),
-        const SizedBox(height: 12),
-        AmountField(controller: _filled, label: label),
-        const SizedBox(height: 12),
-        AmountField(
-          controller: _error,
-          label: label,
-          errorText: l10n.bazarErrAmountNotPositive,
-        ),
-        const SizedBox(height: 12),
-        AmountField(controller: _disabled, label: label, enabled: false),
-        const SizedBox(height: 12),
-        AmountField(controller: _bangla, label: label),
-      ],
-    );
-  }
-}

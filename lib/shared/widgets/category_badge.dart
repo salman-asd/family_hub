@@ -2,12 +2,12 @@ import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:flutter/material.dart';
 
-/// A coloured pill for a bazar category (P2-12).
+/// A category as a small coloured pill: optional emoji, then the name.
 ///
-/// The colour comes from `placeholderPalette[colorIndex]` — an index, never a
-/// hex value — and the text uses [AppAvatar.foregroundFor], which picks the
-/// contrast-safe token for that background.  An optional emoji is decorative;
-/// the category name is announced once to assistive technology.
+/// The colour is `placeholderPalette[colorIndex]` — an index stored on the
+/// category, never a hex — with its foreground chosen by
+/// [AppAvatar.foregroundFor], so contrast is the one already tested for avatars.
+/// The same category therefore looks the same on every screen and in both themes.
 class CategoryBadge extends StatelessWidget {
   const CategoryBadge({
     required this.name,
@@ -17,12 +17,10 @@ class CategoryBadge extends StatelessWidget {
     super.key,
   });
 
-  /// Localized category name.
   final String name;
 
-  /// Index into `placeholderPalette` (0–11 in the data model; guarded here).
+  /// 0–11, wraps if larger so a bad stored value can never crash a screen.
   final int colorIndex;
-
   final String? emoji;
 
   /// Dense variant for list rows.
@@ -32,18 +30,17 @@ class CategoryBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = context.tokens;
     final palette = t.placeholderPalette;
-    final index = colorIndex.abs() % palette.length;
-    final background = palette[index];
+    final background = palette[colorIndex.abs() % palette.length];
     final foreground = AppAvatar.foregroundFor(background, t);
-    final glyph = emoji;
+    final glyph = emoji != null && emoji!.isNotEmpty ? emoji : null;
 
     return Semantics(
       label: name,
       excludeSemantics: true,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: compact ? 8 : 10,
-          vertical: compact ? 2 : 4,
+          horizontal: compact ? 8 : 12,
+          vertical: compact ? 2 : 6,
         ),
         decoration: BoxDecoration(
           color: background,
@@ -52,22 +49,18 @@ class CategoryBadge extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (glyph != null && glyph.isNotEmpty) ...[
-              Text(
-                glyph,
-                style: TextStyle(
-                  fontSize: compact ? 11 : 13,
-                  color: foreground,
-                ),
-              ),
+            if (glyph != null) ...[
+              Text(glyph, style: TextStyle(fontSize: compact ? 12 : 16)),
               SizedBox(width: compact ? 4 : 6),
             ],
             Flexible(
               child: Text(
                 name,
+                maxLines: compact ? 1 : 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: foreground,
-                  fontSize: compact ? 11 : 12,
+                  fontSize: compact ? 11 : 13,
                   fontWeight: FontWeight.w600,
                 ),
               ),

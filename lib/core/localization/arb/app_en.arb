@@ -1199,7 +1199,7 @@
   "@galleryAmountField": {},
   "galleryTotalDisplay": "Total display",
   "@galleryTotalDisplay": {},
-  "galleryProgressBarStatus": "Progress bar",
+  "galleryProgressBarStatus": "Limit progress bar",
   "@galleryProgressBarStatus": {},
   "galleryDaySectionHeader": "Day header",
   "@galleryDaySectionHeader": {},
@@ -1207,44 +1207,42 @@
   "@galleryPersonPicker": {},
   "galleryCategoryBadge": "Category badge",
   "@galleryCategoryBadge": {},
-  "gallerySampleAmountLabel": "Amount",
-  "@gallerySampleAmountLabel": {},
-  "gallerySampleTotalLabel": "Total",
-  "@gallerySampleTotalLabel": {},
-  "gallerySampleBudgetLabel": "Monthly bazar budget",
-  "@gallerySampleBudgetLabel": {},
-  "gallerySampleNoLimitLabel": "No limit",
-  "@gallerySampleNoLimitLabel": {},
-  "gallerySampleCategoryName": "Vegetables",
-  "@gallerySampleCategoryName": {},
-  "gallerySampleLongCategoryName": "Dry spices and cooking ingredients",
-  "@gallerySampleLongCategoryName": {},
-  "gallerySampleLongDate": "Monday, 19 October 2026 — weekly bazar",
-  "@gallerySampleLongDate": {},
-  "galleryPersonPickerLabel": "Who paid",
-  "@galleryPersonPickerLabel": {},
   "monthSwitcherPrevious": "Previous month",
   "@monthSwitcherPrevious": {},
   "monthSwitcherNext": "Next month",
   "@monthSwitcherNext": {},
-  "monthSwitcherSelectTitle": "Select a month",
-  "@monthSwitcherSelectTitle": {},
-  "monthSwitcherPreviousYear": "Previous year",
-  "@monthSwitcherPreviousYear": {},
-  "monthSwitcherNextYear": "Next year",
-  "@monthSwitcherNextYear": {},
-  "personPickerNone": "None",
-  "@personPickerNone": {},
-  "totalCalculated": "Calculated from quantity × price",
-  "@totalCalculated": {},
-  "totalEmpty": "—",
-  "@totalEmpty": {},
-  "progressBarPercent": "{percent}%",
-  "@progressBarPercent": {
+  "monthSwitcherPick": "Choose a month",
+  "@monthSwitcherPick": {},
+  "monthPickerPreviousYear": "Previous year",
+  "@monthPickerPreviousYear": {},
+  "monthPickerNextYear": "Next year",
+  "@monthPickerNextYear": {},
+  "totalDisplayCalculated": "Calculated from quantity × price",
+  "@totalDisplayCalculated": {},
+  "totalDisplayEmpty": "No total yet",
+  "@totalDisplayEmpty": {},
+  "progressLevelOk": "On track",
+  "@progressLevelOk": {},
+  "progressLevelWarning": "Nearing the limit",
+  "@progressLevelWarning": {},
+  "progressLevelExceeded": "Over the limit",
+  "@progressLevelExceeded": {},
+  "progressLevelNoLimit": "No limit set",
+  "@progressLevelNoLimit": {},
+  "progressBarSemantics": "{label}: {percent} percent, {level}",
+  "@progressBarSemantics": {
     "placeholders": {
+      "label": {
+        "type": "String"
+      },
       "percent": {
+        "type": "String"
+      },
+      "level": {
         "type": "String"
       }
     }
-  }
+  },
+  "personPickerNone": "No one",
+  "@personPickerNone": {}
 }

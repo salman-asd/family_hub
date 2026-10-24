@@ -18,24 +18,28 @@ class FirestoreAdvanceRepository implements AdvanceRepository {
   FirebaseFirestore get _db => _firestore ?? FirebaseFirestore.instance;
 
   @override
-  Stream<List<MemberAdvance>> watchOpenAdvances(String familyId) => _db
-      .collection(FirestorePaths.memberAdvances(familyId))
-      .where(
-        'status',
-        whereIn: <String>[
-          AdvanceStatus.pending.name,
-          AdvanceStatus.partial.name,
-        ],
-      )
-      .orderBy('dateKey', descending: true)
-      .limit(100)
-      .snapshots()
-      .map(
-        (snapshot) => <MemberAdvance>[
-          for (final document in snapshot.docs)
-            AdvanceMappers.advanceFromMap(document.id, document.data()),
-        ],
-      );
+  Stream<List<MemberAdvance>> watchOpenAdvances(
+    String familyId, {
+    String? memberId,
+  }) {
+    var query = _db.collection(FirestorePaths.memberAdvances(familyId)).where(
+      'status',
+      whereIn: <String>[AdvanceStatus.pending.name, AdvanceStatus.partial.name],
+    );
+    if (memberId != null) {
+      query = query.where('memberId', isEqualTo: memberId);
+    }
+    return query
+        .orderBy('dateKey', descending: true)
+        .limit(100)
+        .snapshots()
+        .map(
+          (snapshot) => <MemberAdvance>[
+            for (final document in snapshot.docs)
+              AdvanceMappers.advanceFromMap(document.id, document.data()),
+          ],
+        );
+  }
 
   @override
   Future<Result<MemberAdvance?>> getAdvance(

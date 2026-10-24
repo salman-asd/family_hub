@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// A numeric text field for money or quantities (P2-12).
+/// A numeric text field for money (`scale` 2) and quantities (`scale` 3).
 ///
-/// It accepts English (`123`) and Bangla (`১২৩`) digits, one decimal separator
-/// and at most [scale] fraction digits.  Money (`scale == 2`) gets the `৳`
-/// prefix; a quantity (`scale == 3`) has no prefix.
+/// It accepts Bangla (০–৯) and English digits and one decimal separator, and
+/// refuses to type more than [scale] decimals.  It never parses: the screen's
+/// controller turns the text into `Money` / `Quantity` with the value objects'
+/// `parse` (which also normalises Bangla digits), so there is one parser.
 ///
-/// The widget does **not** parse: the owning controller parses the text with
-/// `Money.parse` / `Quantity.parse`, using the same scale.  That keeps the
-/// half-up/integer rules in `core/utils` as the only number parser.
+/// Money fields show a `৳` prefix (set [showCurrencyPrefix] to override).
 class AmountField extends StatelessWidget {
   const AmountField({
     required this.controller,
@@ -20,104 +19,85 @@ class AmountField extends StatelessWidget {
     this.autofocus = false,
     this.focusNode,
     this.enabled = true,
+    this.showCurrencyPrefix,
+    this.textInputAction,
+    this.onSubmitted,
     super.key,
   });
 
   final TextEditingController controller;
-
-  /// Localized field label (for example "Amount").
   final String label;
 
-  /// Localized validation message; drawn by [InputDecoration].
+  /// Localized error shown under the field (also announced by screen readers).
   final String? errorText;
 
-  /// 2 for money (paisa) or 3 for a quantity (milli-units).
+  /// Maximum decimals: 2 for money, 3 for quantities.
   final int scale;
 
-  /// Raw text callback; the caller parses it.
   final ValueChanged<String>? onChanged;
-
   final bool autofocus;
   final FocusNode? focusNode;
-
-  /// A disabled field still shows its value and keeps its label.
   final bool enabled;
 
-  /// Currency symbol for money fields, from the app's money formatter.
-  static const String moneyPrefix = '৳';
+  /// Defaults to `scale == 2` (money).
+  final bool? showCurrencyPrefix;
+
+  final TextInputAction? textInputAction;
+  final ValueChanged<String>? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
+    final prefix = showCurrencyPrefix ?? scale == 2;
     return TextField(
       controller: controller,
       focusNode: focusNode,
-      enabled: enabled,
       autofocus: autofocus,
-      keyboardType: TextInputType.numberWithOptions(decimal: scale > 0),
-      inputFormatters: [AmountInputFormatter(scale: scale)],
+      enabled: enabled,
       onChanged: onChanged,
+      onSubmitted: onSubmitted,
+      textInputAction: textInputAction,
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: <TextInputFormatter>[AmountInputFormatter(scale)],
+      textAlign: TextAlign.start,
       decoration: InputDecoration(
         labelText: label,
         errorText: errorText,
-        prefixText: scale == 2 ? moneyPrefix : null,
-        border: const OutlineInputBorder(),
+        errorMaxLines: 3,
+        prefixText: prefix ? '৳ ' : null,
       ),
     );
   }
 }
 
-/// Keeps only digits, one `.` and at most [scale] decimals.
-///
-/// Both digit scripts are kept exactly as typed, so a Bangla reader sees the
-/// digits they typed; `parseScaledDecimal` understands both.
+/// Keeps only digits (English or Bangla) and a single `.`, with at most
+/// [scale] digits after it.  A keystroke that would break the rule is dropped
+/// by returning the previous value, so the caret never jumps.
 class AmountInputFormatter extends TextInputFormatter {
-  const AmountInputFormatter({required this.scale}) : assert(scale >= 0);
+  const AmountInputFormatter(this.scale) : assert(scale >= 0);
 
   final int scale;
 
-  static final RegExp _digit = RegExp(r'[0-9\u09E6-\u09EF]');
+  static final RegExp _allowed = RegExp(r'^[0-9০-৯]*\.?[0-9০-৯]*$');
 
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    final buffer = StringBuffer();
-    var decimalSeen = false;
-    var fractionDigits = 0;
-    var dropped = false;
-
-    for (final rune in newValue.text.runes) {
-      final character = String.fromCharCode(rune);
-      if (_digit.hasMatch(character)) {
-        if (!decimalSeen) {
-          buffer.write(character);
-        } else if (fractionDigits < scale) {
-          buffer.write(character);
-          fractionDigits++;
-        } else {
-          dropped = true;
-        }
-      } else if (character == '.' && !decimalSeen && scale > 0) {
-        decimalSeen = true;
-        buffer.write(character);
-      } else {
-        dropped = true;
-      }
+    // A comma or the Bangla decimal mark typed as a separator becomes '.'.
+    final text = newValue.text.replaceAll(',', '.').replaceAll('٫', '.');
+    if (!_allowed.hasMatch(text)) return oldValue;
+    final dot = text.indexOf('.');
+    if (dot >= 0) {
+      if (scale == 0) return oldValue;
+      if (text.length - dot - 1 > scale) return oldValue;
     }
-
-    if (buffer.isEmpty && dropped) {
-      return const TextEditingValue();
-    }
-
-    // A leading separator is easier to read as '0.'.
-    final filtered = buffer.toString();
-    final text = filtered.startsWith('.') ? '0$filtered' : filtered;
-    if (!dropped && text == newValue.text) return newValue;
-
-    return TextEditingValue(
+    if (text == newValue.text) return newValue;
+    return newValue.copyWith(
       text: text,
-      selection: TextSelection.collapsed(offset: text.length),
+      selection: TextSelection.collapsed(
+        offset: newValue.selection.baseOffset.clamp(0, text.length),
+      ),
     );
   }
 }

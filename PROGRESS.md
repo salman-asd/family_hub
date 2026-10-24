@@ -621,6 +621,55 @@ Pure Dart domain and use cases only; no Firestore, rules, indexes, ARB, provider
 - No collection, rules, index, permission, screen or user-visible string is added. The data layer
   (P2-10) still has to implement these ports against Firestore.
 
+## Phase 2 - P2-10 Expense / fund / advance data layer, rules, indexes (audited and completed)
+
+Found already in the tree when audited (not previously recorded here): expense/fund/advance mappers,
+`ExpenseWriteStager`, `FirestoreExpenseRepository`, `FirestoreFundRepository`,
+`FirestoreAdvanceRepository`, the rules for `expenses` (+`revisions`), `bazarTrips`,
+`fundTransactions`, `memberAdvances`, `settlements`, `monthClosings`, the rules tests
+(`expenses/fund/advances.test.mjs`), contract fixtures and bootstrap wiring.
+
+Fixed in this audit:
+- `queryRange` paging used `startAfter([dateKey])`, which skipped the rest of the last day. It now
+  orders by `(dateKey DESC, __name__ DESC)` and resumes after `[dateKey, id]` (same composite indexes).
+- A plain member could not read open advances: the rules allow only their own, and a rules check is
+  not a filter, so the unfiltered query was denied. `AdvanceRepository.watchOpenAdvances` takes an
+  optional `memberId`; new index `memberAdvances (memberId, status, dateKey DESC)`.
+
+## Phase 2 - P2-11 Bazar providers (the sync layer)
+
+- `presentation/bazar_providers.dart`: `currentDateKeyProvider`, `selectedMonthProvider`
+  (`next/previous/set/reset`), `monthLockedProvider(month)`.
+- `expenses/presentation/expense_providers.dart`: `monthExpensesProvider` (one auto-dispose listener per
+  month; current month kept alive), `monthSpendProvider`, `expenseFiltersProvider`,
+  `filteredExpensesProvider` (rows, by-day groups, total that never counts deleted rows),
+  `expenseRevisionsProvider`, `canEditExpenseProvider`, and one provider per use case.
+- `fund/presentation/fund_providers.dart`: `monthClosingsProvider`, `monthClosingMapProvider`,
+  `fundWindowStartProvider`, `fundTransactionsProvider`, `fundSummaryProvider`, `fundBalanceProvider`,
+  `fundWindowOverflowProvider`.
+- `advances/presentation/advance_providers.dart` + `advances/domain/advance_summary.dart`:
+  `openAdvancesProvider` (narrowed to own uid without `recordContribution`), `advanceSummaryProvider`.
+- Test: `test/features/bazar/presentation/bazar_providers_test.dart` (month switching, deleted rows,
+  disposal, filters, lock, fund window moving after a close, advances visibility, edit permission).
+
+## Phase 2 - P2-12 Shared widgets and gallery entries
+
+- New in `lib/shared/widgets/`: `MonthSwitcher` (+ month picker sheet), `AmountField` (+
+  `AmountInputFormatter`: Bangla/English digits, one point, max `scale` decimals), `TotalDisplay`,
+  `ProgressBarStatus` (+ `ProgressLevel`), `DaySectionHeader`, `PersonPicker` (+ `PersonOption`),
+  `CategoryBadge`.
+- `AppFormatters.monthLabel(MonthKey)`.
+- Gallery: `lib/app/gallery/gallery_sections_p2.dart` (spread into `gallerySections()`), so goldens and
+  the 200 % overflow test cover all seven automatically.
+- 20 new ARB keys (bn + en) added by hand to the three generated files too.
+- Tests: `test/shared/widgets/p2_widgets_test.dart`, `monthLabel` cases in `app_formatters_test.dart`.
+
+### Status of this batch: written, NOT compiled or run
+No Flutter/Dart SDK, Java or emulator was available (downloads blocked). Run first:
+`flutter pub get`, `dart format .`, `flutter gen-l10n` (must give no diff vs the hand-edited files),
+`flutter analyze`, `flutter test --exclude-tags golden`, then the rules suite and
+`node tools/check_indexes.mjs` (already passes), then the *Update goldens* workflow (7 new sections).
+
 ## Status of every step
 
 "Written" = code and tests exist but were not compiled or run by the author. "Verified" is only claimed where a run produced evidence; today that is none, so every row needs the evidence run.
@@ -660,8 +709,9 @@ Pure Dart domain and use cases only; no Firestore, rules, indexes, ARB, provider
 | P2-07 | Bazar settings domain/data/rules/providers | Done; rules suite and APK unverified | `lib/features/bazar/settings/`, `bazar_settings_providers.dart`, `firebase/firestore.rules`, `firebase/rules_test/bazar_settings.test.mjs`, `settings_bazar.json` |
 | P2-08 | Fund ledger and month-closing domain | Done | `lib/features/bazar/fund/domain/`, `lib/features/bazar/advances/domain/`, `test/features/bazar/fund/`, `test/features/bazar/advances/` |
 | P2-09 | Expense domain, use cases and in-memory backend | Done | `lib/features/bazar/expenses/domain/`, `test/features/bazar/expenses/`, `test/support/in_memory_bazar_backend.dart` |
-| P2-12 | Shared widgets + gallery entries | Done; goldens generated on Linux CI, rules suite not needed (no data change) | `lib/shared/widgets/` (`month_switcher.dart`, `amount_field.dart`, `total_display.dart`, `progress_bar_status.dart`, `day_section_header.dart`, `person_picker.dart`, `category_badge.dart`), `lib/app/gallery/gallery_sections.dart`, `test/shared/widgets/` |
-| P2-11 | Bazar providers (the sync layer) | Done; rules suite not needed (no data change) | `presentation/bazar_providers.dart`, `expenses/presentation/expense_providers.dart`, `fund/presentation/fund_providers.dart`, `advances/presentation/advance_providers.dart`, `test/features/bazar/presentation/bazar_providers_test.dart` |
+| P2-10 | Expense/fund/advance data layer, rules, indexes | Done (audited; 2 fixes); rules suite unverified | `lib/features/bazar/*/data/`, `firebase/rules_test/{expenses,fund,advances}.test.mjs` |
+| P2-11 | Bazar providers (sync layer) | Written, not run | `lib/features/bazar/**/presentation/*_providers.dart`, `test/features/bazar/presentation/bazar_providers_test.dart` |
+| P2-12 | Shared widgets + gallery | Written, not run | `lib/shared/widgets/` (7 new), `lib/app/gallery/gallery_sections_p2.dart` |
 
 ## Known limitations (honest list)
 
@@ -673,10 +723,9 @@ Pure Dart domain and use cases only; no Firestore, rules, indexes, ARB, provider
 - Custom relationship entries have per-item shape checks only in the app, not in the rules (rules bound the list to 40 items).
 - Screen-state harness covers 4 screens so far.
 - `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
+- P2-01..P2-12 exist in code; P2-11/P2-12 and the audit fixes are unverified (no SDK). Next: P2-13 (Add Expense screen).
 - Phase 2 has its P2-01 skeleton (Bazar home + seams), P2-02 pure helpers, P2-03 vocabulary,
   P2-04 catalog domain/search, P2-05 catalog data/rules/providers, P2-06 default seed/backfill,
-  P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain, P2-09 expense
-  domain/use cases, P2-11 the Bazar provider graph (month, spend, locks, fund, advances) and
-  P2-12 shared widgets (in the gallery, with goldens and overflow coverage); the Bazar screens
-  beyond the Bazar home are not implemented yet. The P2-05/P2-06/P2-07 rules suite has not been
-  run (no Java 21+ runtime on the authoring machine).
+  P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain and P2-09 expense
+  domain/use cases; the Bazar/Chores/Dashboard features and UI are not implemented yet. The
+  P2-05/P2-06/P2-07 rules suite has not been run (no Java).

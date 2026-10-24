@@ -16,35 +16,29 @@ final fundRepositoryProvider = Provider<FundRepository>(
   ),
 );
 
-/// The newest 24 closing documents; empty outside a family and while loading.
+/// The newest month closings (at most 24), live.
 final monthClosingsProvider = StreamProvider<List<MonthClosing>>((ref) {
   final familyId = ref.watch(currentFamilyIdProvider);
   if (familyId == null) return Stream.value(const <MonthClosing>[]);
   return ref.watch(fundRepositoryProvider).watchClosings(familyId);
 });
 
-/// [monthClosingsProvider] keyed by month, for the pure lock/window rules.
-final monthClosingsByMonthProvider = Provider<Map<MonthKey, MonthClosing>>(
-  (ref) => <MonthKey, MonthClosing>{
-    for (final closing
-        in ref.watch(monthClosingsProvider).value ?? const <MonthClosing>[])
-      closing.monthKey: closing,
-  },
-);
+/// The closings keyed by month, the shape `MonthLocks` works on.
+final monthClosingMapProvider = Provider<Map<MonthKey, MonthClosing>>((ref) {
+  final rows = ref.watch(monthClosingsProvider).value ?? const <MonthClosing>[];
+  return <MonthKey, MonthClosing>{for (final row in rows) row.monthKey: row};
+});
 
-/// First month whose ledger rows count towards the current balance.
-///
-/// The month after the latest closed month, else `settings/bazar.fundStartMonth`
-/// (ADR 0007).  `null` means the fund is not set up yet, so there is no ledger
-/// to show instead of an unbounded read.
+/// First month whose ledger rows count towards the balance (ADR 0007), or
+/// `null` while no fund has been set up.
 final fundWindowStartProvider = Provider<MonthKey?>(
   (ref) => MonthLocks.fundWindowStart(
-    ref.watch(monthClosingsByMonthProvider),
-    ref.watch(bazarSettingsProvider).fundStartMonth,
+    ref.watch(monthClosingMapProvider),
+    ref.watch(bazarSettingsProvider.select((s) => s.fundStartMonth)),
   ),
 );
 
-/// The ledger from the fund window onwards, newest first.
+/// The ledger rows of the fund window, live.  Empty when no fund exists.
 final fundTransactionsProvider = StreamProvider<List<FundTransaction>>((ref) {
   final familyId = ref.watch(currentFamilyIdProvider);
   final from = ref.watch(fundWindowStartProvider);
@@ -56,22 +50,19 @@ final fundTransactionsProvider = StreamProvider<List<FundTransaction>>((ref) {
       .watchTransactionsFrom(familyId, from);
 });
 
-/// Received/spent/reimbursed components plus the exact ledger balance.
 final fundSummaryProvider = Provider<FundSummary>(
   (ref) => FundBalanceCalculator.summarize(
     ref.watch(fundTransactionsProvider).value ?? const <FundTransaction>[],
   ),
 );
 
-/// The one number the fund card shows; never stored separately (ADR 0007).
+/// The fund balance: computed from the ledger window, never stored.
 final fundBalanceProvider = Provider<Money>(
-  (ref) => ref.watch(fundSummaryProvider).balance,
+  (ref) => ref.watch(fundSummaryProvider.select((s) => s.balance)),
 );
 
-/// True when the listener is full, so older months are no longer in memory.
-///
-/// Managers then close (or archive) earlier months; the UI says why the
-/// balance may look incomplete instead of showing a quietly wrong number.
+/// `true` when the listener hit its document cap, so the balance may be
+/// incomplete.  The Fund screen then tells managers to close earlier months.
 final fundWindowOverflowProvider = Provider<bool>(
   (ref) =>
       (ref.watch(fundTransactionsProvider).value?.length ?? 0) >=

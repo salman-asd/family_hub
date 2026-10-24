@@ -2347,25 +2347,25 @@ abstract class AppLocalizations {
   /// No description provided for @galleryMonthSwitcher.
   ///
   /// In bn, this message translates to:
-  /// **'মাস পরিবর্তন'**
+  /// **'মাস পরিবর্তনকারী'**
   String get galleryMonthSwitcher;
 
   /// No description provided for @galleryAmountField.
   ///
   /// In bn, this message translates to:
-  /// **'টাকার ঘর'**
+  /// **'পরিমাণের ঘর'**
   String get galleryAmountField;
 
   /// No description provided for @galleryTotalDisplay.
   ///
   /// In bn, this message translates to:
-  /// **'মোটের প্রদর্শন'**
+  /// **'মোট প্রদর্শন'**
   String get galleryTotalDisplay;
 
   /// No description provided for @galleryProgressBarStatus.
   ///
   /// In bn, this message translates to:
-  /// **'অগ্রগতির বার'**
+  /// **'সীমার অগ্রগতি বার'**
   String get galleryProgressBarStatus;
 
   /// No description provided for @galleryDaySectionHeader.
@@ -2383,56 +2383,8 @@ abstract class AppLocalizations {
   /// No description provided for @galleryCategoryBadge.
   ///
   /// In bn, this message translates to:
-  /// **'ক্যাটাগরি ব্যাজ'**
+  /// **'ক্যাটেগরি ব্যাজ'**
   String get galleryCategoryBadge;
-
-  /// No description provided for @gallerySampleAmountLabel.
-  ///
-  /// In bn, this message translates to:
-  /// **'পরিমাণ'**
-  String get gallerySampleAmountLabel;
-
-  /// No description provided for @gallerySampleTotalLabel.
-  ///
-  /// In bn, this message translates to:
-  /// **'মোট'**
-  String get gallerySampleTotalLabel;
-
-  /// No description provided for @gallerySampleBudgetLabel.
-  ///
-  /// In bn, this message translates to:
-  /// **'মাসিক বাজার বাজেট'**
-  String get gallerySampleBudgetLabel;
-
-  /// No description provided for @gallerySampleNoLimitLabel.
-  ///
-  /// In bn, this message translates to:
-  /// **'কোনো সীমা নেই'**
-  String get gallerySampleNoLimitLabel;
-
-  /// No description provided for @gallerySampleCategoryName.
-  ///
-  /// In bn, this message translates to:
-  /// **'সবজি'**
-  String get gallerySampleCategoryName;
-
-  /// No description provided for @gallerySampleLongCategoryName.
-  ///
-  /// In bn, this message translates to:
-  /// **'শুকনো মসলা ও রান্নার উপকরণ'**
-  String get gallerySampleLongCategoryName;
-
-  /// No description provided for @gallerySampleLongDate.
-  ///
-  /// In bn, this message translates to:
-  /// **'সোমবার, ১৯ অক্টোবর ২০২৬ — সপ্তাহের বাজার'**
-  String get gallerySampleLongDate;
-
-  /// No description provided for @galleryPersonPickerLabel.
-  ///
-  /// In bn, this message translates to:
-  /// **'কে টাকা দিয়েছে'**
-  String get galleryPersonPickerLabel;
 
   /// No description provided for @monthSwitcherPrevious.
   ///
@@ -2446,47 +2398,71 @@ abstract class AppLocalizations {
   /// **'পরের মাস'**
   String get monthSwitcherNext;
 
-  /// No description provided for @monthSwitcherSelectTitle.
+  /// No description provided for @monthSwitcherPick.
   ///
   /// In bn, this message translates to:
-  /// **'মাস নির্বাচন করুন'**
-  String get monthSwitcherSelectTitle;
+  /// **'মাস বেছে নিন'**
+  String get monthSwitcherPick;
 
-  /// No description provided for @monthSwitcherPreviousYear.
+  /// No description provided for @monthPickerPreviousYear.
   ///
   /// In bn, this message translates to:
   /// **'আগের বছর'**
-  String get monthSwitcherPreviousYear;
+  String get monthPickerPreviousYear;
 
-  /// No description provided for @monthSwitcherNextYear.
+  /// No description provided for @monthPickerNextYear.
   ///
   /// In bn, this message translates to:
   /// **'পরের বছর'**
-  String get monthSwitcherNextYear;
+  String get monthPickerNextYear;
+
+  /// No description provided for @totalDisplayCalculated.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিমাণ × দর থেকে হিসাব করা'**
+  String get totalDisplayCalculated;
+
+  /// No description provided for @totalDisplayEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট এখনো নেই'**
+  String get totalDisplayEmpty;
+
+  /// No description provided for @progressLevelOk.
+  ///
+  /// In bn, this message translates to:
+  /// **'ঠিক আছে'**
+  String get progressLevelOk;
+
+  /// No description provided for @progressLevelWarning.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমার কাছাকাছি'**
+  String get progressLevelWarning;
+
+  /// No description provided for @progressLevelExceeded.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমা ছাড়িয়েছে'**
+  String get progressLevelExceeded;
+
+  /// No description provided for @progressLevelNoLimit.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমা নির্ধারিত নেই'**
+  String get progressLevelNoLimit;
+
+  /// No description provided for @progressBarSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'{label}: {percent} শতাংশ, {level}'**
+  String progressBarSemantics(String label, String percent, String level);
 
   /// No description provided for @personPickerNone.
   ///
   /// In bn, this message translates to:
-  /// **'কেউ না'**
+  /// **'কেউ নয়'**
   String get personPickerNone;
-
-  /// No description provided for @totalCalculated.
-  ///
-  /// In bn, this message translates to:
-  /// **'পরিমাণ × দর থেকে হিসাব করা হয়েছে'**
-  String get totalCalculated;
-
-  /// No description provided for @totalEmpty.
-  ///
-  /// In bn, this message translates to:
-  /// **'—'**
-  String get totalEmpty;
-
-  /// No description provided for @progressBarPercent.
-  ///
-  /// In bn, this message translates to:
-  /// **'{percent}%'**
-  String progressBarPercent(String percent);
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,7 @@
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/core/utils/date_key.dart';
+import 'package:family_hub/core/utils/money.dart';
 import 'package:family_hub/features/bazar/advances/presentation/advance_providers.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense_filters.dart';
@@ -26,52 +27,84 @@ final expenseRepositoryProvider = Provider<ExpenseRepository>(
   ),
 );
 
-/// One month of expenses, newest first, capped by `kMaxListenerDocs`.
-///
-/// Auto-disposed with the screen that watches it; the current month is kept
-/// warm so switching tabs (list → fund → back) does not re-read the same month.
+/// One live listener per month, bounded by `kMaxListenerDocs`.  The current
+/// month stays alive so switching tabs never re-reads it; other months are
+/// released when their last screen leaves.
 final monthExpensesProvider = StreamProvider.autoDispose
     .family<List<Expense>, MonthKey>((ref, month) {
       final familyId = ref.watch(currentFamilyIdProvider);
       if (familyId == null) return Stream.value(const <Expense>[]);
-      if (month == ref.watch(familyDateKeysProvider).thisMonth()) {
+      if (month == ref.read(familyDateKeysProvider).thisMonth()) {
         ref.keepAlive();
       }
       return ref.watch(expenseRepositoryProvider).watchMonth(familyId, month);
     });
 
-/// Totals for one month (soft-deleted rows already excluded by [MonthSpend]).
+/// The single spend aggregation (CLAUDE.md rule 30).  Budgets, reports and the
+/// dashboard all read this, so they can never disagree.
 final monthSpendProvider = Provider.autoDispose.family<MonthSpend, MonthKey>(
   (ref, month) => MonthSpend.of(
     ref.watch(monthExpensesProvider(month)).value ?? const <Expense>[],
   ),
 );
 
-/// The list filters; a screen sets them, every list/derived view reads them.
+/// The expense list's filters.  The month comes from `selectedMonthProvider`;
+/// these only narrow the rows already loaded for it.
 final expenseFiltersProvider =
     NotifierProvider<ExpenseFiltersController, ExpenseFilters>(
       ExpenseFiltersController.new,
     );
 
-/// [expenseFiltersProvider]'s state, reset to "everything" on `clear()`.
 class ExpenseFiltersController extends Notifier<ExpenseFilters> {
   @override
   ExpenseFilters build() => const ExpenseFilters();
 
   void set(ExpenseFilters filters) => state = filters;
 
-  void clear() => state = const ExpenseFilters();
+  void reset() => state = const ExpenseFilters();
 }
 
-/// The selected month's rows after the client-side filters, in query order.
-final filteredExpensesProvider = Provider.autoDispose<List<Expense>>((ref) {
+/// The filtered rows of the selected month, grouped by day, with their total.
+final class FilteredExpenses {
+  const FilteredExpenses({
+    required this.rows,
+    required this.byDay,
+    required this.total,
+  });
+
+  static const FilteredExpenses empty = FilteredExpenses(
+    rows: <Expense>[],
+    byDay: <DateKey, List<Expense>>{},
+    total: Money.zero,
+  );
+
+  final List<Expense> rows;
+  final Map<DateKey, List<Expense>> byDay;
+
+  /// Sum of the visible rows; deleted rows (shown only on request) are not
+  /// money spent and never count.
+  final Money total;
+}
+
+final filteredExpensesProvider = Provider.autoDispose<FilteredExpenses>((ref) {
   final month = ref.watch(selectedMonthProvider);
-  final expenses =
-      ref.watch(monthExpensesProvider(month)).value ?? const <Expense>[];
-  return ref.watch(expenseFiltersProvider).apply(expenses);
+  final filters = ref.watch(expenseFiltersProvider);
+  final all = ref.watch(monthExpensesProvider(month)).value;
+  if (all == null) return FilteredExpenses.empty;
+  final rows = applyFilters(all, filters);
+  var total = Money.zero;
+  for (final row in rows) {
+    if (!row.isDeleted) total += row.total;
+  }
+  return FilteredExpenses(
+    rows: rows,
+    byDay: groupExpensesByDay(rows),
+    total: total,
+  );
 });
 
-/// One expense's append-only edit history (newest 20), for the detail screen.
+/// The edit history of one expense (newest first, at most 20).  Only its
+/// creator and managers may read it; others get a permission error.
 final expenseRevisionsProvider = StreamProvider.autoDispose
     .family<List<ExpenseRevision>, String>((ref, expenseId) {
       final familyId = ref.watch(currentFamilyIdProvider);
@@ -81,10 +114,11 @@ final expenseRevisionsProvider = StreamProvider.autoDispose
           .watchRevisions(familyId, expenseId);
     });
 
-/// Whether the signed-in user may edit [expense]: own rows need
-/// `addOwnExpense`, somebody else's need `editOthersExpense`.  Never a role test.
+/// May the signed-in user edit or delete [expense]?  "Own" is a data check
+/// (`createdBy`), never a role test.
 final canEditExpenseProvider = Provider.family<bool, Expense>((ref, expense) {
-  final own = expense.createdBy == ref.watch(currentUidProvider);
+  final uid = ref.watch(currentUidProvider);
+  final own = uid != null && expense.createdBy == uid;
   return ref.can(
     own ? Permission.addOwnExpense : Permission.editOthersExpense,
     ownerId: expense.createdBy,

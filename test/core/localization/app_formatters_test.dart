@@ -41,21 +41,6 @@ void main() {
     });
   });
 
-  group('AppFormatters — month labels', () {
-    test('monthLabel renders the month name and year in Bangla', () {
-      const f = AppFormatters(languageCode: 'bn', useBanglaDigits: true);
-      expect(f.monthLabel(MonthKey(2026, 10)), 'অক্টোবর ২০২৬');
-      expect(f.monthLabel(MonthKey(2026, 9)), 'সেপ্টেম্বর ২০২৬');
-    });
-
-    test('monthLabel follows the digits switch', () {
-      const bnAscii = AppFormatters(languageCode: 'bn', useBanglaDigits: false);
-      const enBangla = AppFormatters(languageCode: 'en', useBanglaDigits: true);
-      expect(bnAscii.monthLabel(MonthKey(2026, 1)), 'জানুয়ারি 2026');
-      expect(enBangla.monthLabel(MonthKey(2026, 1)), 'January ২০২৬');
-    });
-  });
-
   group('AppFormatters — weekdays', () {
     test('weekdayName maps DateTime.weekday correctly', () {
       const bn = AppFormatters(languageCode: 'bn', useBanglaDigits: true);
@@ -133,6 +118,28 @@ void main() {
     test('hideZeroFraction drops the .00 tail', () {
       const f = AppFormatters(languageCode: 'en', useBanglaDigits: false);
       expect(f.money(const Money.paisa(20000), hideZeroFraction: true), '৳200');
+    });
+  });
+
+  group('AppFormatters — monthLabel', () {
+    test('Bangla month and digits', () {
+      const f = AppFormatters(languageCode: 'bn', useBanglaDigits: true);
+      expect(f.monthLabel(MonthKey(2026, 10)), 'অক্টোবর ২০২৬');
+    });
+
+    test('English month and ASCII digits', () {
+      const f = AppFormatters(languageCode: 'en', useBanglaDigits: false);
+      expect(f.monthLabel(MonthKey(2026, 10)), 'October 2026');
+    });
+
+    test('Bangla month with ASCII digits when the switch is off', () {
+      const f = AppFormatters(languageCode: 'bn', useBanglaDigits: false);
+      expect(f.monthLabel(MonthKey(2027, 1)), 'জানুয়ারি 2027');
+    });
+
+    test('the year is never grouped', () {
+      const f = AppFormatters(languageCode: 'en', useBanglaDigits: false);
+      expect(f.monthLabel(MonthKey(2026, 12)), isNot(contains(',')));
     });
   });
 }

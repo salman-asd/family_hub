@@ -1,19 +1,15 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
-import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Month header for the bazar screens: "‹ October 2026 ›".
+/// "‹ October 2026 ›": steps through months with two 48dp arrows; tapping the
+/// label opens a month picker.
 ///
-/// The two arrows keep a 48dp touch target and are disabled at [min] / [max],
-/// so a caller can bound the range without the widget ever going outside it.
-/// Tapping the label opens a month picker sheet, which is bounded the same way.
-///
-/// The label is formatted by [AppFormatters.monthLabel], so it follows the
-/// active language and the "Use Bangla digits" switch.  The widget takes plain
-/// values only: no Firebase, no feature import.
+/// [min] and [max] bound the selectable months (inclusive); an arrow that would
+/// leave the range is disabled, not hidden, so the layout never jumps.  The
+/// widget holds no state: the caller owns [month] and reacts to [onChanged].
 class MonthSwitcher extends ConsumerWidget {
   const MonthSwitcher({
     required this.month,
@@ -23,87 +19,75 @@ class MonthSwitcher extends ConsumerWidget {
     super.key,
   });
 
-  /// The month currently shown.
   final MonthKey month;
-
-  /// Called with the previous/next month, or the month picked from the sheet.
   final ValueChanged<MonthKey> onChanged;
-
-  /// Earliest selectable month (inclusive); `null` = no lower bound.
   final MonthKey? min;
-
-  /// Latest selectable month (inclusive); `null` = no upper bound.
   final MonthKey? max;
 
-  bool get _canGoPrevious {
-    final lower = min;
-    return lower == null || month.compareTo(lower) > 0;
-  }
+  bool get _canGoBack => min == null || month.compareTo(min!) > 0;
 
-  bool get _canGoNext {
-    final upper = max;
-    return upper == null || month.compareTo(upper) < 0;
-  }
+  bool get _canGoForward => max == null || month.compareTo(max!) < 0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final tokens = context.tokens;
+    final t = context.tokens;
     final label = ref.watch(appFormattersProvider).monthLabel(month);
 
     return Row(
       children: [
         IconButton(
-          onPressed: _canGoPrevious
-              ? () => onChanged(month.addMonths(-1))
-              : null,
           tooltip: l10n.monthSwitcherPrevious,
-          icon: const Icon(Icons.chevron_left_rounded),
           constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          onPressed: _canGoBack ? () => onChanged(month.addMonths(-1)) : null,
+          icon: const Icon(Icons.chevron_left_rounded),
         ),
         Expanded(
-          child: TextButton(
-            onPressed: () => _openPicker(context),
-            style: TextButton.styleFrom(
-              minimumSize: const Size(48, 48),
-              foregroundColor: tokens.textPrimary,
-            ),
-            child: Text(
-              label,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: tokens.textPrimary,
-                fontWeight: FontWeight.w600,
+          child: Semantics(
+            button: true,
+            label: '${l10n.monthSwitcherPick}: $label',
+            excludeSemantics: true,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(t.radiusSm),
+              onTap: () => _pick(context),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 48),
+                child: Center(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
               ),
             ),
           ),
         ),
         IconButton(
-          onPressed: _canGoNext ? () => onChanged(month.addMonths(1)) : null,
           tooltip: l10n.monthSwitcherNext,
-          icon: const Icon(Icons.chevron_right_rounded),
           constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          onPressed: _canGoForward ? () => onChanged(month.addMonths(1)) : null,
+          icon: const Icon(Icons.chevron_right_rounded),
         ),
       ],
     );
   }
 
-  Future<void> _openPicker(BuildContext context) async {
+  Future<void> _pick(BuildContext context) async {
     final picked = await showModalBottomSheet<MonthKey>(
       context: context,
       showDragHandle: true,
-      builder: (context) =>
-          _MonthPickerSheet(initial: month, min: min, max: max),
+      isScrollControlled: true,
+      builder: (_) => _MonthPickerSheet(month: month, min: min, max: max),
     );
-    if (picked != null) onChanged(picked);
+    if (picked != null && picked != month) onChanged(picked);
   }
 }
 
-/// The bottom sheet opened by tapping the month label.
 class _MonthPickerSheet extends ConsumerStatefulWidget {
-  const _MonthPickerSheet({required this.initial, this.min, this.max});
+  const _MonthPickerSheet({required this.month, this.min, this.max});
 
-  final MonthKey initial;
+  final MonthKey month;
   final MonthKey? min;
   final MonthKey? max;
 
@@ -112,97 +96,79 @@ class _MonthPickerSheet extends ConsumerStatefulWidget {
 }
 
 class _MonthPickerSheetState extends ConsumerState<_MonthPickerSheet> {
-  late int _year = widget.initial.year;
+  late int _year = widget.month.year;
 
-  bool _allowed(MonthKey month) {
-    final lower = widget.min;
-    final upper = widget.max;
-    return (lower == null || month.compareTo(lower) >= 0) &&
-        (upper == null || month.compareTo(upper) <= 0);
-  }
+  bool _selectable(MonthKey m) =>
+      (widget.min == null || m.compareTo(widget.min!) >= 0) &&
+      (widget.max == null || m.compareTo(widget.max!) <= 0);
 
-  bool get _canGoPreviousYear {
-    final lower = widget.min;
-    return lower == null || _year > lower.year;
-  }
+  bool get _canPreviousYear =>
+      widget.min == null || _year > widget.min!.year;
 
-  bool get _canGoNextYear {
-    final upper = widget.max;
-    return upper == null || _year < upper.year;
-  }
+  bool get _canNextYear => widget.max == null || _year < widget.max!.year;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final formatters = ref.watch(appFormattersProvider);
-    final tokens = context.tokens;
-
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              l10n.monthSwitcherSelectTitle,
-              style: Theme.of(context).textTheme.titleMedium
-                  ?.copyWith(color: tokens.textPrimary),
-            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: _canGoPreviousYear
+                  tooltip: l10n.monthPickerPreviousYear,
+                  constraints: const BoxConstraints(
+                    minWidth: 48,
+                    minHeight: 48,
+                  ),
+                  onPressed: _canPreviousYear
                       ? () => setState(() => _year--)
                       : null,
-                  tooltip: l10n.monthSwitcherPreviousYear,
                   icon: const Icon(Icons.chevron_left_rounded),
-                  constraints: const BoxConstraints(
-                    minWidth: 48,
-                    minHeight: 48,
-                  ),
                 ),
-                Text(
-                  formatters.number(_year),
-                  style: Theme.of(context).textTheme.titleMedium
-                      ?.copyWith(color: tokens.textPrimary),
+                Expanded(
+                  child: Text(
+                    formatters.number(_year).replaceAll(',', ''),
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
                 IconButton(
-                  onPressed: _canGoNextYear
-                      ? () => setState(() => _year++)
-                      : null,
-                  tooltip: l10n.monthSwitcherNextYear,
-                  icon: const Icon(Icons.chevron_right_rounded),
+                  tooltip: l10n.monthPickerNextYear,
                   constraints: const BoxConstraints(
                     minWidth: 48,
                     minHeight: 48,
                   ),
+                  onPressed: _canNextYear
+                      ? () => setState(() => _year++)
+                      : null,
+                  icon: const Icon(Icons.chevron_right_rounded),
                 ),
               ],
             ),
+            const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              alignment: WrapAlignment.center,
               children: [
-                for (var month = 1; month <= 12; month++)
-                  _monthChip(MonthKey(_year, month), formatters),
+                for (var m = 1; m <= 12; m++)
+                  ChoiceChip(
+                    label: Text(formatters.monthName(m)),
+                    selected:
+                        widget.month.year == _year && widget.month.month == m,
+                    onSelected: _selectable(MonthKey(_year, m))
+                        ? (_) => Navigator.of(context).pop(MonthKey(_year, m))
+                        : null,
+                  ),
               ],
             ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _monthChip(MonthKey month, AppFormatters formatters) {
-    final enabled = _allowed(month);
-    return ChoiceChip(
-      label: Text(formatters.monthName(month.month)),
-      selected:
-          month.year == widget.initial.year &&
-          month.month == widget.initial.month,
-      onSelected: enabled ? (_) => Navigator.pop(context, month) : null,
     );
   }
 }

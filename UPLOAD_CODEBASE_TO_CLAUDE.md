@@ -12,14 +12,14 @@ Upload ONE zip with the source only. Claude does not need build output, caches o
 | --- | --- |
 | `lib/` (all, including `lib/core/localization/generated/`) | App code. The generated l10n files are edited by hand in this project, so they are needed. |
 | `test/` | Unit, widget and contract tests. Goldens (`test/**/goldens/*.png`) are optional. |
-| `firebase/` (`firestore.rules`, `firestore.indexes.json`, `rules_test/`, `firebase.json`) | Security rules and rules tests. Leave out `rules_test/node_modules`. |
+| `firebase/` (`firestore.rules`, `firestore.indexes.json`, `rules_test/` including `fixtures/`, `firebase.json`) | Security rules and rules tests. Leave out `rules_test/node_modules`. |
 | `android/app/src/` and `android/app/build.gradle*`, `android/build.gradle*`, `android/settings.gradle*`, `android/gradle.properties` | Flavors and manifest. |
 | `pubspec.yaml`, `pubspec.lock` | Dependencies and exact versions. |
 | `analysis_options.yaml`, `l10n.yaml`, `dart_test.yaml` | Lints and tooling. |
 | `tools/` | Helper scripts (for example `check_indexes.mjs`). |
 | `docs/` | Decisions, permission matrix, checklists. |
 | `.github/` | CI workflows. |
-| `CLAUDE.md`, `PROGRESS.md`, `README.md`, `PHASE1_HARDENING_ROADMAP.md`, `ROADMAP.md` (and any other `*.md` in the root) | Project rules and status. Claude reads these first. |
+| `CLAUDE.md`, `AGENTS.md`, `PROGRESS.md`, `README.md`, `PHASE1_HARDENING_ROADMAP.md`, `PHASE2_BAZAR_ROADMAP.md`, `ROADMAP.md` (and any other `*.md` in the root) | Project rules and status. Claude reads these first. |
 | `.gitignore`, `.gitattributes` | Repo conventions. |
 
 ### Never upload (secrets and noise)
@@ -74,7 +74,7 @@ foreach ($f in $folders) {
 # Root files.
 $rootFiles = @('pubspec.yaml','pubspec.lock','analysis_options.yaml','l10n.yaml','dart_test.yaml',
                '.gitignore','.gitattributes','CLAUDE.md','PROGRESS.md','README.md','ROADMAP.md',
-               'PHASE1_HARDENING_ROADMAP.md','firebase.json','.firebaserc')
+               'PHASE1_HARDENING_ROADMAP.md','PHASE2_BAZAR_ROADMAP.md','AGENTS.md','firebase.json','.firebaserc')
 foreach ($f in $rootFiles) {
   $p = Join-Path $root $f
   if (Test-Path $p) { Copy-Item $p (Join-Path $staging $f) -Force }
@@ -117,13 +117,46 @@ Paste this with the zip:
 
 ```text
 This is the current Family Hub codebase (changed outside Claude with Copilot/other tools).
-Read CLAUDE.md and PROGRESS.md first. Do not assume the code matches your earlier
-changes; inspect the files. Task: <describe the task>.
-Assume it is not compiled on your side: I will run flutter analyze / flutter test.
+Read CLAUDE.md, PROGRESS.md and PHASE2_BAZAR_ROADMAP.md (sections 1-3 and the card for the
+step) first. Do not assume the code matches your earlier changes; inspect the files and verify
+the steps marked Done in PROGRESS.md before building on them.
+Task: <describe the task, e.g. "implement P2-13">.
+Assume it is not compiled on your side: I will run dart format / flutter analyze / flutter test.
+Give me the changed files only as a zip with the same folder structure, and update
+PROGRESS.md, CLAUDE.md and this file when they are affected.
 ```
+
+## 3b. Phase 2 (Bazar) hints
+
+- Roadmap: `PHASE2_BAZAR_ROADMAP.md` (also `docs/`). Say which step to do, e.g. "implement P2-13".
+- In `PROGRESS.md` each step says Done / Written (not run). Steps marked "not run" were written without a Flutter SDK, so run `dart format .`, `flutter gen-l10n`, `flutter analyze`, `flutter test --exclude-tags golden` and the rules suite first and paste any errors back.
+- Bazar code: `lib/features/bazar/**`, `lib/shared/widgets/`, `lib/app/gallery/`, tests under `test/features/bazar/` and `test/support/in_memory_bazar_backend.dart`. Include `firebase/rules_test/fixtures` (small JSON) so contract tests can be checked.
+- `Bazar.xlsx` and the chores PDF are not code; attach them separately only for the import/seed steps (P2-26+).
+
+## 3c. Applying the changed-files zip Claude sends back
+
+Claude returns only the files it created or changed, with the same folder structure.
+
+```powershell
+# From the project root. Commit or stash first so `git diff` shows exactly what changed.
+git status
+tar -xf "$HOME\\Downloads\\<claude_changes>.zip" -C .
+git diff --stat
+dart format .
+flutter pub get
+flutter gen-l10n          # must produce no diff in lib/core/localization/generated/
+flutter analyze
+flutter test --exclude-tags golden
+node tools/check_indexes.mjs
+```
+
+If a rules file changed, also run the emulator suite (CLAUDE.md "Rules extension"). Generated l10n
+files are edited by hand by Claude when it has no SDK: if `flutter gen-l10n` changes them, keep
+the generated version and commit it. Paste any failure back to Claude together with the file name.
 
 ## 4. Tips
 
 - Upload a fresh zip each session: Claude does not see your disk, and its earlier copy is out of date after you edit elsewhere.
 - Put what changed outside Claude into `PROGRESS.md` (one line each); it saves Claude from guessing.
 - To get Claude's changes back, ask for "changed files only as a zip, same folder structure", then extract over your project root and review with `git diff`.
+- Extract the zip over the project root, then run `flutter pub get` and the checks in section 3c. Files Claude deleted are listed in the reply (a zip cannot delete).

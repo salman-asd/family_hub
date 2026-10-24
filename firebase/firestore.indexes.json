@@ -4,112 +4,214 @@
       "collectionGroup": "expenses",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "monthKey", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "monthKey",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "expenses",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "categoryId", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "categoryId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "expenses",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "purchaserId", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "purchaserId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "expenses",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "itemId", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "itemId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "expenses",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "fundingSource", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "fundingSource",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "choreOccurrences",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "dateKey", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" }
+        {
+          "fieldPath": "dateKey",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "choreOccurrences",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "assigneeId", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "ASCENDING" }
+        {
+          "fieldPath": "assigneeId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "choreOccurrences",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "monthKey", "order": "ASCENDING" },
-        { "fieldPath": "status", "order": "ASCENDING" }
+        {
+          "fieldPath": "monthKey",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "contributions",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "monthKey", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "monthKey",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "contributions",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "memberId", "order": "ASCENDING" },
-        { "fieldPath": "monthKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "memberId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "monthKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "fundTransactions",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "monthKey", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "monthKey",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "memberAdvances",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "status", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "settlements",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "advanceId", "order": "ASCENDING" },
-        { "fieldPath": "dateKey", "order": "DESCENDING" }
+        {
+          "fieldPath": "advanceId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "fundTransactions",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "dateKey", "order": "DESCENDING" },
-        { "fieldPath": "createdAt", "order": "DESCENDING" }
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "memberAdvances",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "memberId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "dateKey",
+          "order": "DESCENDING"
+        }
       ]
     }
   ],

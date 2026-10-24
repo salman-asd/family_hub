@@ -167,9 +167,17 @@ class FirestoreExpenseRepository implements ExpenseRepository {
     if (funding != null) {
       query = query.where('fundingSource', isEqualTo: funding.name);
     }
-    query = query.orderBy('dateKey', descending: true);
+    // dateKey alone is not unique: the document id breaks ties, so a page that
+    // ends in the middle of a day resumes at the next row, not the next day.
+    // (dateKey DESC, __name__ DESC) is covered by the same composite indexes.
+    query = query
+        .orderBy('dateKey', descending: true)
+        .orderBy(FieldPath.documentId, descending: true);
     if (startAfter != null) {
-      query = query.startAfter(<Object>[startAfter.dateKey.toString()]);
+      query = query.startAfter(<Object>[
+        startAfter.dateKey.toString(),
+        startAfter.id,
+      ]);
     }
     final snapshot = await query.get();
     return _toExpenses(snapshot);
