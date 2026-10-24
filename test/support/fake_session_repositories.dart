@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/membership_repository.dart';
 import 'package:family_hub/features/onboarding/domain/profile_repository.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 
 /// In-memory profile + membership + module-flag data for routing tests.
 ///
@@ -14,8 +14,8 @@ class FakeSessionRepositories
   FakeSessionRepositories({
     Set<String> profiles = const {},
     Map<String, Membership> memberships = const {},
-  })  : _profiles = {...profiles},
-        _memberships = {...memberships};
+  }) : _profiles = {...profiles},
+       _memberships = {...memberships};
 
   final Set<String> _profiles;
   final Map<String, Membership> _memberships;

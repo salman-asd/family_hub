@@ -1,4 +1,5 @@
 import 'package:family_hub/app/flavor.dart';
+import 'package:family_hub/app/gallery/dev_gallery_screen.dart';
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/routing/not_found_screen.dart';
 import 'package:family_hub/app/routing/redirect_rules.dart';
@@ -23,12 +24,14 @@ import 'package:family_hub/features/family/presentation/screens/join_family_scre
 import 'package:family_hub/features/family/presentation/screens/member_profile_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/members_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/pending_screen.dart';
+import 'package:family_hub/features/family/presentation/screens/relationships_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/roles_screen.dart';
 import 'package:family_hub/features/onboarding/presentation/screens/profile_setup_screen.dart';
 import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
+import 'package:family_hub/features/settings/presentation/security_screen.dart';
 import 'package:family_hub/features/settings/presentation/theme_settings_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
-import 'package:family_hub/modules/module_providers.dart';
+import 'package:family_hub/modules/module_visibility_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -56,7 +59,7 @@ final _locationMemoProvider = Provider<_LocationMemo>((ref) => _LocationMemo());
 ///   every phase change, so signing in, verifying e-mail, being approved or
 ///   disabled moves the user immediately, with no screen-level navigation.
 /// * **Shell** — a `StatefulShellRoute.indexedStack`: Home, then one branch per
-///   *enabled* module, then Family.  Disabled modules have no branch, no tab and
+///   *visible* module, then Family.  Disabled modules have no branch, no tab and
 ///   their paths redirect to `/home`.
 /// * **Structure vs. state** — the provider rebuilds the router only when the
 ///   set of enabled modules changes (a rare settings action), not on every auth
@@ -65,15 +68,13 @@ final routerProvider = Provider<GoRouter>((ref) {
   final flavor = ref.watch(flavorProvider);
 
   // Rebuild only when the *set* of enabled modules changes.
-  ref.watch(
-    enabledModulesProvider.select((m) => m.map((e) => e.id).join(',')),
-  );
-  final enabled = ref.read(enabledModulesProvider);
-  final disabled = ref.read(disabledModulesProvider);
+  ref.watch(visibleModulesProvider.select((m) => m.map((e) => e.id).join(',')));
+  final enabled = ref.read(visibleModulesProvider);
+  final disabled = ref.read(hiddenModulesProvider);
 
   final memo = ref.read(_locationMemoProvider);
   final refresh = ValueNotifier<int>(0);
-  ref.listen<SessionPhase>(sessionPhaseProvider, (_, __) => refresh.value++);
+  ref.listen<SessionPhase>(sessionPhaseProvider, (_, _) => refresh.value++);
 
   final tabs = <_Tab>[
     _Tab(
@@ -126,6 +127,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             GoRoute(
               path: 'settings',
               builder: (context, state) => const FamilySettingsScreen(),
+            ),
+            GoRoute(
+              path: 'relationships',
+              builder: (context, state) => const RelationshipsScreen(),
             ),
             GoRoute(
               path: 'profile',
@@ -224,10 +229,19 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.settingsLanguage,
         builder: (context, state) => const LanguageSettingsScreen(),
       ),
+      GoRoute(
+        path: AppRoutes.settingsSecurity,
+        builder: (context, state) => const SecurityScreen(),
+      ),
       if (flavor == Flavor.dev)
         GoRoute(
           path: AppRoutes.devTokens,
           builder: (context, state) => const DevTokensScreen(),
+        ),
+      if (flavor == Flavor.dev)
+        GoRoute(
+          path: AppRoutes.devGallery,
+          builder: (context, state) => const DevGalleryScreen(),
         ),
 
       // ── The shell ───────────────────────────────────────────────────────
@@ -236,9 +250,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           navigationShell: navigationShell,
           destinations: [for (final t in tabs) t.destination],
         ),
-        branches: [
-          for (final t in tabs) StatefulShellBranch(routes: t.routes),
-        ],
+        branches: [for (final t in tabs) StatefulShellBranch(routes: t.routes)],
       ),
     ],
   );
@@ -258,11 +270,11 @@ final routerProvider = Provider<GoRouter>((ref) {
 });
 
 _Tab _moduleTab(FamilyModule module) => _Tab(
-      ShellDestination(
-        id: module.id,
-        icon: module.icon,
-        selectedIcon: module.selectedIcon,
-        label: (context) => module.label(context.l10n),
-      ),
-      module.routes,
-    );
+  ShellDestination(
+    id: module.id,
+    icon: module.icon,
+    selectedIcon: module.selectedIcon,
+    label: (context) => module.label(context.l10n),
+  ),
+  module.routes,
+);

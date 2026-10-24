@@ -270,6 +270,108 @@
   "@moduleComingSoonTitle": {},
   "moduleComingSoonMessage": "This section is still being built.",
   "@moduleComingSoonMessage": {},
+  "bazarHomeEmptyTitle": "Bazar is empty",
+  "@bazarHomeEmptyTitle": {},
+  "bazarHomeEmptyMessage": "Expenses, shopping lists and accounts will be added here step by step.",
+  "@bazarHomeEmptyMessage": {},
+  "bazarCatalogSetupTitle": "Set up the starter catalog",
+  "@bazarCatalogSetupTitle": {},
+  "bazarCatalogSetupMessage": "Add 11 categories and 54 common items to get started. You can edit, add or hide them later.",
+  "@bazarCatalogSetupMessage": {},
+  "bazarCatalogSetupAction": "Set up catalog",
+  "@bazarCatalogSetupAction": {},
+  "bazarCatalogSetupBusy": "Setting up the catalog…",
+  "@bazarCatalogSetupBusy": {},
+  "bazarCatalogAskAdminTitle": "Catalog not set up",
+  "@bazarCatalogAskAdminTitle": {},
+  "bazarCatalogAskAdminMessage": "Ask an admin to set up the catalog.",
+  "@bazarCatalogAskAdminMessage": {},
+  "bazarSettingsTitle": "Bazar settings",
+  "@bazarSettingsTitle": {},
+  "unitKg": "kg",
+  "@unitKg": {},
+  "unitG": "g",
+  "@unitG": {},
+  "unitLitre": "litre",
+  "@unitLitre": {},
+  "unitPiece": "pcs",
+  "@unitPiece": {},
+  "unitDozen": "dozen",
+  "@unitDozen": {},
+  "unitPacket": "packet",
+  "@unitPacket": {},
+  "unitCylinder": "cylinder",
+  "@unitCylinder": {},
+  "bazarFundingFund": "family fund",
+  "@bazarFundingFund": {},
+  "bazarFundingMember": "member paid",
+  "@bazarFundingMember": {},
+  "bazarAdvancePending": "pending",
+  "@bazarAdvancePending": {},
+  "bazarAdvancePartial": "partly settled",
+  "@bazarAdvancePartial": {},
+  "bazarAdvanceSettled": "settled",
+  "@bazarAdvanceSettled": {},
+  "bazarAdvanceVoided": "voided",
+  "@bazarAdvanceVoided": {},
+  "bazarErrRequired": "Please fill in this field.",
+  "@bazarErrRequired": {},
+  "bazarErrTooLong": "This text is too long.",
+  "@bazarErrTooLong": {},
+  "bazarErrInvalidAmount": "Enter a valid amount.",
+  "@bazarErrInvalidAmount": {},
+  "bazarErrAmountNotPositive": "The amount must be more than zero.",
+  "@bazarErrAmountNotPositive": {},
+  "bazarErrFutureDate": "The date cannot be in the future.",
+  "@bazarErrFutureDate": {},
+  "bazarErrQtyUnitRequired": "Enter both a quantity and a unit.",
+  "@bazarErrQtyUnitRequired": {},
+  "bazarErrMemberRequired": "Choose the member this belongs to.",
+  "@bazarErrMemberRequired": {},
+  "bazarErrCategoryRequired": "Choose a category.",
+  "@bazarErrCategoryRequired": {},
+  "bazarErrItemNameRequired": "Enter the item name.",
+  "@bazarErrItemNameRequired": {},
+  "bazarErrTooManyLines": "There are too many lines; remove some.",
+  "@bazarErrTooManyLines": {},
+  "bazarErrInvalidMonth": "Choose a valid month.",
+  "@bazarErrInvalidMonth": {},
+  "bazarErrInvalidRange": "The end date must be after the start date.",
+  "@bazarErrInvalidRange": {},
+  "bazarErrNegative": "The amount cannot be below zero.",
+  "@bazarErrNegative": {},
+  "bazarErrTooManyDecimals": "Use at most two decimal places.",
+  "@bazarErrTooManyDecimals": {},
+  "bazarErrTooLarge": "That amount is too large.",
+  "@bazarErrTooLarge": {},
+  "bazarErrMonthLocked": "This month is closed. Ask an admin to reopen it.",
+  "@bazarErrMonthLocked": {},
+  "bazarErrAdvanceSettled": "This advance has already been partly or fully settled.",
+  "@bazarErrAdvanceSettled": {},
+  "bazarErrOverpayment": "The amount is more than what is still owed.",
+  "@bazarErrOverpayment": {},
+  "bazarErrAlreadyClosed": "This month is already closed.",
+  "@bazarErrAlreadyClosed": {},
+  "bazarErrNotClosed": "This month is not closed.",
+  "@bazarErrNotClosed": {},
+  "bazarErrReopenNoteRequired": "Write why the month is being reopened.",
+  "@bazarErrReopenNoteRequired": {},
+  "bazarErrCatalogNotEmpty": "The catalog still has items; archive them first.",
+  "@bazarErrCatalogNotEmpty": {},
+  "bazarErrDuplicateItem": "A similar expense was just added. Check it before saving again.",
+  "@bazarErrDuplicateItem": {},
+  "bazarErrImportAlreadyUndone": "This import has already been undone.",
+  "@bazarErrImportAlreadyUndone": {},
+  "bazarErrImportHasLockedMonth": "The file has rows in a closed month.",
+  "@bazarErrImportHasLockedMonth": {},
+  "bazarErrConcurrentEdit": "Somebody else changed this first. Reload and try again.",
+  "@bazarErrConcurrentEdit": {},
+  "bazarErrNotFound": "That record no longer exists. Refresh and try again.",
+  "@bazarErrNotFound": {},
+  "bazarErrNotAllowed": "Only the Household Manager or Admin can do this.",
+  "@bazarErrNotAllowed": {},
+  "bazarErrUnknown": "Something went wrong. Please try again.",
+  "@bazarErrUnknown": {},
   "profileSetupTitle": "Set up your profile",
   "@profileSetupTitle": {},
   "profileSetupMessage": "Tell your family who you are.",
@@ -376,7 +478,7 @@
   "@memberReenable": {},
   "roleAdmin": "Admin",
   "@roleAdmin": {},
-  "roleModerator": "Moderator",
+  "roleModerator": "Household Manager",
   "@roleModerator": {},
   "roleMember": "Member",
   "@roleMember": {},
@@ -444,6 +546,8 @@
   "@famFailureAlreadyMember": {},
   "famFailureLastAdmin": "A family needs at least one admin. Make someone else admin first.",
   "@famFailureLastAdmin": {},
+  "famFailureTooManyAdmins": "A family can have at most three admins.",
+  "@famFailureTooManyAdmins": {},
   "famFailureNotAllowed": "You do not have permission to do that.",
   "@famFailureNotAllowed": {},
   "famFailureProfileRequired": "Complete your profile first.",
@@ -455,5 +559,1050 @@
         "type": "String"
       }
     }
-  }
+  },
+  "statusScheduled": "Scheduled",
+  "@statusScheduled": {
+    "description": "Status label for a chore occurrence that is scheduled."
+  },
+  "statusInProgress": "In progress",
+  "@statusInProgress": {},
+  "statusCompleted": "Completed",
+  "@statusCompleted": {},
+  "statusVerified": "Verified",
+  "@statusVerified": {},
+  "statusOverdue": "Overdue",
+  "@statusOverdue": {},
+  "commonSeeAll": "See all",
+  "@commonSeeAll": {
+    "description": "'See all' link on a section header."
+  },
+  "errorViewTitle": "Something went wrong",
+  "@errorViewTitle": {},
+  "loadingSemantics": "Loading",
+  "@loadingSemantics": {
+    "description": "Screen-reader label for a loading skeleton."
+  },
+  "progressSemantics": "{label}, {percent} percent complete",
+  "@progressSemantics": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "thumbSemantics": "Image of {name}",
+  "@thumbSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "galleryAvatar": "Avatar",
+  "@galleryAvatar": {},
+  "galleryItemThumb": "Item thumbnail",
+  "@galleryItemThumb": {},
+  "galleryStatusChip": "Status chip",
+  "@galleryStatusChip": {},
+  "gallerySectionHeader": "Section header",
+  "@gallerySectionHeader": {},
+  "galleryAppCard": "Card",
+  "@galleryAppCard": {},
+  "galleryMoneyText": "Money text",
+  "@galleryMoneyText": {},
+  "galleryProgressRing": "Progress ring",
+  "@galleryProgressRing": {},
+  "galleryEmptyState": "Empty state",
+  "@galleryEmptyState": {},
+  "galleryLoadingView": "Loading view",
+  "@galleryLoadingView": {},
+  "galleryErrorView": "Error view",
+  "@galleryErrorView": {},
+  "galleryPillBottomBar": "Pill navigation bar",
+  "@galleryPillBottomBar": {},
+  "gallerySampleTitle": "Sample title",
+  "@gallerySampleTitle": {},
+  "gallerySampleMessage": "This is a sample message used to check for overflow.",
+  "@gallerySampleMessage": {},
+  "gallerySampleItemName": "Potato",
+  "@gallerySampleItemName": {},
+  "gallerySamplePersonName": "Karim Uddin",
+  "@gallerySamplePersonName": {},
+  "syncWaitingTitle": "Waiting for connection…",
+  "@syncWaitingTitle": {},
+  "syncWaitingMessage": "Check your internet connection and try again. Your data is safe.",
+  "@syncWaitingMessage": {},
+  "syncSavedOffline": "Saved on this device – will sync when online",
+  "@syncSavedOffline": {},
+  "syncBannerSyncing": "Syncing {count} change(s)",
+  "@syncBannerSyncing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncBannerOffline": "Offline – {count} change(s) waiting",
+  "@syncBannerOffline": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gallerySyncBanner": "Sync banner",
+  "@gallerySyncBanner": {},
+  "famFailureAlreadyInFamily": "You already belong to a family. Leave it first.",
+  "@famFailureAlreadyInFamily": {},
+  "familyLeave": "Leave family",
+  "@familyLeave": {},
+  "familyLeaveConfirmTitle": "Leave this family?",
+  "@familyLeaveConfirmTitle": {},
+  "familyLeaveConfirmBody": "Your past activity stays in the family's history. Afterwards you can create or join a family again.",
+  "@familyLeaveConfirmBody": {},
+  "familyLeaveLastAdminReason": "You are the only admin. Make someone else an admin before leaving.",
+  "@familyLeaveLastAdminReason": {},
+  "pendingCancelRequest": "Cancel request",
+  "@pendingCancelRequest": {},
+  "invitationRevoke": "Revoke code",
+  "@invitationRevoke": {},
+  "invitationRevokeConfirmTitle": "Revoke this code?",
+  "@invitationRevokeConfirmTitle": {},
+  "invitationRevokeConfirmBody": "Nobody will be able to join with this code any more.",
+  "@invitationRevokeConfirmBody": {},
+  "securityTitle": "Security",
+  "@securityTitle": {},
+  "securityChangePassword": "Change password",
+  "@securityChangePassword": {},
+  "securityCurrentPassword": "Current password",
+  "@securityCurrentPassword": {},
+  "securityNewPassword": "New password",
+  "@securityNewPassword": {},
+  "securityPasswordChanged": "Password changed.",
+  "@securityPasswordChanged": {},
+  "securityPasswordSame": "The new password must differ from the current one.",
+  "@securityPasswordSame": {},
+  "securityCurrentPasswordRequired": "Enter your current password.",
+  "@securityCurrentPasswordRequired": {},
+  "securityCurrentPasswordWrong": "The current password is not correct.",
+  "@securityCurrentPasswordWrong": {},
+  "securityDeleteTitle": "Delete my account",
+  "@securityDeleteTitle": {},
+  "securityDeleteBody": "You leave your family and your sign-in is removed. Your name stays on past records so the family history stays complete.",
+  "@securityDeleteBody": {},
+  "securityDeletePending": "Deleting was not finished. Enter your password to finish.",
+  "@securityDeletePending": {},
+  "securityDeleteAction": "Delete account",
+  "@securityDeleteAction": {},
+  "securityDeleteFinish": "Finish deleting",
+  "@securityDeleteFinish": {},
+  "securityDeleteConfirmTitle": "Delete your account?",
+  "@securityDeleteConfirmTitle": {},
+  "securityDeleteConfirmBody": "This cannot be undone.",
+  "@securityDeleteConfirmBody": {},
+  "accountDeleteLastAdminHasMembers": "You are the only admin and others are still in the family. Transfer the admin role first.",
+  "@accountDeleteLastAdminHasMembers": {},
+  "relationshipsTitle": "Relationships",
+  "@relationshipsTitle": {},
+  "relationshipsHint": "Built-in entries are locked. You can add, rename and disable your own.",
+  "@relationshipsHint": {},
+  "relationshipsAdd": "Add relationship",
+  "@relationshipsAdd": {},
+  "relationshipsLabelBn": "Name in Bangla",
+  "@relationshipsLabelBn": {},
+  "relationshipsLabelEn": "Name in English",
+  "@relationshipsLabelEn": {},
+  "relationshipsSpouseRelevant": "Offer the spouse picker",
+  "@relationshipsSpouseRelevant": {},
+  "relationshipsBuiltIn": "Built in",
+  "@relationshipsBuiltIn": {},
+  "relationshipsActive": "In use",
+  "@relationshipsActive": {},
+  "relationshipsDisabled": "Disabled",
+  "@relationshipsDisabled": {},
+  "relationshipsEnable": "Enable",
+  "@relationshipsEnable": {},
+  "relationshipsDisable": "Disable",
+  "@relationshipsDisable": {},
+  "relationshipsFailureLabel": "Enter a name (at most 40 characters).",
+  "@relationshipsFailureLabel": {},
+  "relationshipsFailureTooMany": "The list is full.",
+  "@relationshipsFailureTooMany": {},
+  "relationshipsFailureBuiltIn": "Built-in entries cannot be changed.",
+  "@relationshipsFailureBuiltIn": {},
+  "activityFamilyCreated": "Family “{familyName}” was created",
+  "@activityFamilyCreated": {
+    "placeholders": {
+      "familyName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityFamilyUpdated": "Family settings were updated",
+  "@activityFamilyUpdated": {},
+  "activityMemberRequested": "{memberName} asked to join",
+  "@activityMemberRequested": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberApproved": "{memberName} was approved",
+  "@activityMemberApproved": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberRejected": "{memberName} was not accepted",
+  "@activityMemberRejected": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberDisabled": "{memberName} was disabled",
+  "@activityMemberDisabled": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberRoleChanged": "{memberName} is now {newRole}",
+  "@activityMemberRoleChanged": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      },
+      "newRole": {
+        "type": "String"
+      }
+    }
+  },
+  "activityAdminTransferred": "Admin role moved to {memberName}",
+  "@activityAdminTransferred": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberLeft": "{memberName} left the family",
+  "@activityMemberLeft": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberCancelled": "{memberName} withdrew the request",
+  "@activityMemberCancelled": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityInvitationCreated": "Invitation {code} was created",
+  "@activityInvitationCreated": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityInvitationRevoked": "Invitation {code} was revoked",
+  "@activityInvitationRevoked": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCatalogSeeded": "Bazar catalog started with {categories} categories and {items} items",
+  "@activityBazarCatalogSeeded": {
+    "placeholders": {
+      "categories": {
+        "type": "String"
+      },
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryCreated": "Category “{name}” was added",
+  "@activityBazarCategoryCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryUpdated": "Category “{name}” was updated",
+  "@activityBazarCategoryUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryDeactivated": "Category “{name}” was archived",
+  "@activityBazarCategoryDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemCreated": "Item “{name}” was added",
+  "@activityBazarItemCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemUpdated": "Item “{name}” was updated",
+  "@activityBazarItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemDeactivated": "Item “{name}” was archived",
+  "@activityBazarItemDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseCreated": "Bought {item} for {amount} ({funding})",
+  "@activityBazarExpenseCreated": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "funding": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseUpdated": "{item} was edited ({fields})",
+  "@activityBazarExpenseUpdated": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseDeleted": "{item} was deleted ({amount})",
+  "@activityBazarExpenseDeleted": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseRestored": "{item} was restored ({amount})",
+  "@activityBazarExpenseRestored": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarTripCreated": "Bazar trip with {lines} items for {amount} was saved",
+  "@activityBazarTripCreated": {
+    "placeholders": {
+      "lines": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarBudgetSaved": "Budget for {month} set to {amount}",
+  "@activityBazarBudgetSaved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarSettingsUpdated": "Bazar settings were updated",
+  "@activityBazarSettingsUpdated": {},
+  "activityBazarContributionPlanSet": "{member}'s contribution for {month} set to {amount}",
+  "@activityBazarContributionPlanSet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRecorded": "{member}'s contribution of {amount} for {month} was recorded",
+  "@activityBazarContributionRecorded": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionVoided": "{member}'s contribution of {amount} for {month} was voided",
+  "@activityBazarContributionVoided": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequested": "{member} offered {amount} for {month}",
+  "@activityBazarContributionRequested": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequestEdited": "{member} edited the offer of {amount} for {month}",
+  "@activityBazarContributionRequestEdited": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequestCancelled": "{member} withdrew the offer of {amount} for {month}",
+  "@activityBazarContributionRequestCancelled": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionApproved": "{member}'s contribution of {amount} for {month} was approved",
+  "@activityBazarContributionApproved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRejected": "{member}'s contribution of {amount} for {month} was rejected ({reason})",
+  "@activityBazarContributionRejected": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeRequested": "{member} asked to change the contribution for {month} from {old} to {amount}",
+  "@activityBazarContributionChangeRequested": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeApproved": "{member}'s change for {month} from {old} to {amount} was approved",
+  "@activityBazarContributionChangeApproved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeRejected": "{member}'s change for {month} from {old} to {amount} was rejected",
+  "@activityBazarContributionChangeRejected": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarOpeningBalanceSet": "Opening balance for {month} is {amount}",
+  "@activityBazarOpeningBalanceSet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarAdvanceSettled": "{member}'s advance was settled by {amount} ({status})",
+  "@activityBazarAdvanceSettled": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarMonthClosed": "{month} was closed with a balance of {balance}",
+  "@activityBazarMonthClosed": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarMonthReopened": "{month} was reopened ({note})",
+  "@activityBazarMonthReopened": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarImportCompleted": "Import finished: {rows} rows for {amount}",
+  "@activityBazarImportCompleted": {
+    "placeholders": {
+      "rows": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarImportUndone": "Import undone: {rows} rows for {amount}",
+  "@activityBazarImportUndone": {
+    "placeholders": {
+      "rows": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityUnknown": "Something changed",
+  "@activityUnknown": {},
+  "galleryMonthSwitcher": "Month switcher",
+  "@galleryMonthSwitcher": {},
+  "galleryAmountField": "Amount field",
+  "@galleryAmountField": {},
+  "galleryTotalDisplay": "Total display",
+  "@galleryTotalDisplay": {},
+  "galleryProgressBarStatus": "Limit progress bar",
+  "@galleryProgressBarStatus": {},
+  "galleryDaySectionHeader": "Day header",
+  "@galleryDaySectionHeader": {},
+  "galleryPersonPicker": "Person picker",
+  "@galleryPersonPicker": {},
+  "galleryCategoryBadge": "Category badge",
+  "@galleryCategoryBadge": {},
+  "monthSwitcherPrevious": "Previous month",
+  "@monthSwitcherPrevious": {},
+  "monthSwitcherNext": "Next month",
+  "@monthSwitcherNext": {},
+  "monthSwitcherPick": "Choose a month",
+  "@monthSwitcherPick": {},
+  "monthPickerPreviousYear": "Previous year",
+  "@monthPickerPreviousYear": {},
+  "monthPickerNextYear": "Next year",
+  "@monthPickerNextYear": {},
+  "totalDisplayCalculated": "Calculated from quantity × price",
+  "@totalDisplayCalculated": {},
+  "totalDisplayEmpty": "No total yet",
+  "@totalDisplayEmpty": {},
+  "progressLevelOk": "On track",
+  "@progressLevelOk": {},
+  "progressLevelWarning": "Nearing the limit",
+  "@progressLevelWarning": {},
+  "progressLevelExceeded": "Over the limit",
+  "@progressLevelExceeded": {},
+  "progressLevelNoLimit": "No limit set",
+  "@progressLevelNoLimit": {},
+  "progressBarSemantics": "{label}: {percent} percent, {level}",
+  "@progressBarSemantics": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "personPickerNone": "No one",
+  "@personPickerNone": {},
+  "actionUndo": "Undo",
+  "@actionUndo": {},
+  "bazarErrExpenseDeleted": "This expense was deleted. Restore it first.",
+  "@bazarErrExpenseDeleted": {},
+  "expenseAddTitle": "Add expense",
+  "@expenseAddTitle": {},
+  "expenseEditTitle": "Edit expense",
+  "@expenseEditTitle": {},
+  "expenseMenuTrip": "Bazar trip (many items)",
+  "@expenseMenuTrip": {},
+  "expenseDateLabel": "Date",
+  "@expenseDateLabel": {},
+  "expenseItemLabel": "Item",
+  "@expenseItemLabel": {},
+  "expenseItemHint": "Type the item name",
+  "@expenseItemHint": {},
+  "expenseAddNewItem": "Add {name} as a new item",
+  "@expenseAddNewItem": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseCategoryLabel": "Category",
+  "@expenseCategoryLabel": {},
+  "expenseRememberItem": "Remember this item",
+  "@expenseRememberItem": {},
+  "expenseTotalField": "Total amount",
+  "@expenseTotalField": {},
+  "expenseTotalLabel": "Total",
+  "@expenseTotalLabel": {},
+  "expenseQtyPriceSection": "Or enter quantity and price per unit",
+  "@expenseQtyPriceSection": {},
+  "expenseQtyField": "Quantity",
+  "@expenseQtyField": {},
+  "expenseUnitLabel": "Unit",
+  "@expenseUnitLabel": {},
+  "expenseUnitPriceField": "Price per unit",
+  "@expenseUnitPriceField": {},
+  "expenseUnitPriceHint": "Last price: {price}",
+  "@expenseUnitPriceHint": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseFundingLabel": "Who paid?",
+  "@expenseFundingLabel": {},
+  "expenseFundingFund": "From family fund",
+  "@expenseFundingFund": {},
+  "expenseFundingReimbursable": "Paid by a member, to be reimbursed",
+  "@expenseFundingReimbursable": {},
+  "expenseFundingPersonal": "Paid by a member, personal",
+  "@expenseFundingPersonal": {},
+  "expensePaidByLabel": "Paid by",
+  "@expensePaidByLabel": {},
+  "expenseMoreSection": "More details",
+  "@expenseMoreSection": {},
+  "expenseShopField": "Shop",
+  "@expenseShopField": {},
+  "expenseNoteField": "Note",
+  "@expenseNoteField": {},
+  "expensePurchaserLabel": "Bought by",
+  "@expensePurchaserLabel": {},
+  "expenseSaveAddAnother": "Save and add another",
+  "@expenseSaveAddAnother": {},
+  "expenseSaved": "Expense saved",
+  "@expenseSaved": {},
+  "expenseUpdated": "Expense updated",
+  "@expenseUpdated": {},
+  "expenseUnknownMember": "A member",
+  "@expenseUnknownMember": {},
+  "expenseDuplicateTitle": "Looks like a duplicate",
+  "@expenseDuplicateTitle": {},
+  "expenseDuplicateMessage": "{item} with the same amount was added a few minutes ago.",
+  "@expenseDuplicateMessage": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDuplicateSaveAnyway": "Save anyway",
+  "@expenseDuplicateSaveAnyway": {},
+  "tripTitle": "Bazar trip",
+  "@tripTitle": {},
+  "tripAddLine": "Add item",
+  "@tripAddLine": {},
+  "tripLineSheetTitle": "Add item to the trip",
+  "@tripLineSheetTitle": {},
+  "tripLineSheetSave": "Add to trip",
+  "@tripLineSheetSave": {},
+  "tripLinesCount": "Items: {count}",
+  "@tripLinesCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "tripEmpty": "No items yet. Add the first item.",
+  "@tripEmpty": {},
+  "tripTotalLabel": "Trip total",
+  "@tripTotalLabel": {},
+  "tripSaveAll": "Save all",
+  "@tripSaveAll": {},
+  "tripSaved": "Trip saved",
+  "@tripSaved": {},
+  "tripLineRemoved": "Item removed",
+  "@tripLineRemoved": {},
+  "tripLimitReached": "A trip can have at most 40 items.",
+  "@tripLimitReached": {},
+  "expenseListTitle": "Expenses",
+  "@expenseListTitle": {},
+  "expenseListFilteredTotal": "Total for this view",
+  "@expenseListFilteredTotal": {},
+  "expenseListEmptyTitle": "No expenses this month",
+  "@expenseListEmptyTitle": {},
+  "expenseListEmptyMessage": "Add the first expense to see it here.",
+  "@expenseListEmptyMessage": {},
+  "expenseListFilteredEmptyTitle": "Nothing matches the filters",
+  "@expenseListFilteredEmptyTitle": {},
+  "expenseListFilteredEmptyMessage": "Clear the filters to see every expense.",
+  "@expenseListFilteredEmptyMessage": {},
+  "expenseListLocked": "This month is closed. Entries are read-only.",
+  "@expenseListLocked": {},
+  "expenseListRefresh": "Refresh",
+  "@expenseListRefresh": {},
+  "expenseShowMore": "Show more",
+  "@expenseShowMore": {},
+  "expenseRowDeleted": "Deleted",
+  "@expenseRowDeleted": {},
+  "expenseRowTrip": "Trip",
+  "@expenseRowTrip": {},
+  "expenseFilterTitle": "Filter",
+  "@expenseFilterTitle": {},
+  "expenseFilterRange": "Date range",
+  "@expenseFilterRange": {},
+  "expenseFilterRangeActive": "{start} to {end}",
+  "@expenseFilterRangeActive": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseRangeAll": "Whole month",
+  "@expenseRangeAll": {},
+  "expenseRangeToday": "Today",
+  "@expenseRangeToday": {},
+  "expenseRangeYesterday": "Yesterday",
+  "@expenseRangeYesterday": {},
+  "expenseRangeLast7": "Last 7 days",
+  "@expenseRangeLast7": {},
+  "expenseRangeThisWeek": "This week",
+  "@expenseRangeThisWeek": {},
+  "expenseRangeThisMonth": "This month",
+  "@expenseRangeThisMonth": {},
+  "expenseRangeLastMonth": "Last month",
+  "@expenseRangeLastMonth": {},
+  "expenseRangeThisYear": "This year",
+  "@expenseRangeThisYear": {},
+  "expenseRangeCustom": "Choose dates",
+  "@expenseRangeCustom": {},
+  "expenseFilterCategory": "Category",
+  "@expenseFilterCategory": {},
+  "expenseFilterItem": "Item",
+  "@expenseFilterItem": {},
+  "expenseFilterMember": "Member",
+  "@expenseFilterMember": {},
+  "expenseFilterFunding": "Funding",
+  "@expenseFilterFunding": {},
+  "expenseFilterAny": "Any",
+  "@expenseFilterAny": {},
+  "expenseFilterShowDeleted": "Show deleted",
+  "@expenseFilterShowDeleted": {},
+  "expenseFilterReset": "Clear filters",
+  "@expenseFilterReset": {},
+  "expenseDetailTitle": "Expense",
+  "@expenseDetailTitle": {},
+  "expenseDetailAddedBy": "Added by",
+  "@expenseDetailAddedBy": {},
+  "expenseDetailPayment": "Payment",
+  "@expenseDetailPayment": {},
+  "expenseNotYoursMessage": "You can change only your own expenses.",
+  "@expenseNotYoursMessage": {},
+  "expenseLedgerFund": "Paid from the family fund",
+  "@expenseLedgerFund": {},
+  "expenseLedgerPersonal": "Paid by {name} from their own money, no reimbursement",
+  "@expenseLedgerPersonal": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerPending": "Paid by {name}. {amount} is waiting to be reimbursed.",
+  "@expenseLedgerPending": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerPartial": "Paid by {name}. {settled} of {total} has been reimbursed.",
+  "@expenseLedgerPartial": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "settled": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerSettled": "Paid by {name}. Fully reimbursed.",
+  "@expenseLedgerSettled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerVoided": "The reimbursement was cancelled with the expense.",
+  "@expenseLedgerVoided": {},
+  "expenseDeleteTitle": "Delete this expense?",
+  "@expenseDeleteTitle": {},
+  "expenseDeleteMessage": "{name} will be removed from the totals. You can undo it right away.",
+  "@expenseDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDeleted": "Expense deleted",
+  "@expenseDeleted": {},
+  "expenseRestore": "Restore",
+  "@expenseRestore": {},
+  "expenseRestored": "Expense restored",
+  "@expenseRestored": {},
+  "expenseHistoryTitle": "Edit history",
+  "@expenseHistoryTitle": {},
+  "expenseHistoryEmpty": "No changes yet.",
+  "@expenseHistoryEmpty": {},
+  "expenseHistoryEntry": "{who} changed this on {date}",
+  "@expenseHistoryEntry": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseHistoryWas": "{field} was: {value}",
+  "@expenseHistoryWas": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogTitle": "Catalog",
+  "@catalogTitle": {},
+  "catalogTabCategories": "Categories",
+  "@catalogTabCategories": {},
+  "catalogTabItems": "Items",
+  "@catalogTabItems": {},
+  "catalogAdd": "Add",
+  "@catalogAdd": {},
+  "catalogAddCategory": "Add category",
+  "@catalogAddCategory": {},
+  "catalogEditCategory": "Edit category",
+  "@catalogEditCategory": {},
+  "catalogAddItem": "Add item",
+  "@catalogAddItem": {},
+  "catalogEditItem": "Edit item",
+  "@catalogEditItem": {},
+  "catalogCategoryName": "Category name",
+  "@catalogCategoryName": {},
+  "catalogNameBn": "Name in Bangla",
+  "@catalogNameBn": {},
+  "catalogNameEn": "Name in English (optional)",
+  "@catalogNameEn": {},
+  "catalogEmoji": "Emoji (optional)",
+  "@catalogEmoji": {},
+  "catalogColour": "Colour",
+  "@catalogColour": {},
+  "catalogColourSemantics": "Colour {number}",
+  "@catalogColourSemantics": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogActive": "Shown in lists",
+  "@catalogActive": {},
+  "catalogActiveHint": "Turn off to hide it without deleting.",
+  "@catalogActiveHint": {},
+  "catalogHidden": "Hidden",
+  "@catalogHidden": {},
+  "catalogReorder": "Drag to reorder",
+  "@catalogReorder": {},
+  "catalogReadOnly": "You can look at this, but only the Household Manager or Admin can change it.",
+  "@catalogReadOnly": {},
+  "catalogCategoriesEmpty": "No categories yet",
+  "@catalogCategoriesEmpty": {},
+  "catalogItemsEmpty": "No items found",
+  "@catalogItemsEmpty": {},
+  "catalogSearch": "Search items",
+  "@catalogSearch": {},
+  "catalogAllCategories": "All",
+  "@catalogAllCategories": {},
+  "catalogDefaultUnit": "Default unit",
+  "@catalogDefaultUnit": {},
+  "catalogAliases": "Other spellings (for search)",
+  "@catalogAliases": {},
+  "catalogAliasField": "Add a spelling",
+  "@catalogAliasField": {},
+  "catalogAliasAdd": "Add spelling",
+  "@catalogAliasAdd": {},
+  "catalogAliasLimit": "At most 10 spellings.",
+  "@catalogAliasLimit": {},
+  "bazarSettingsWeekStart": "Week starts on",
+  "@bazarSettingsWeekStart": {},
+  "bazarSettingsTarget": "Monthly family contribution target",
+  "@bazarSettingsTarget": {},
+  "bazarSettingsDueDay": "Contribution due day of the month",
+  "@bazarSettingsDueDay": {},
+  "bazarSettingsAlerts": "Budget alerts (percent of the budget)",
+  "@bazarSettingsAlerts": {},
+  "bazarSettingsWarnAt": "Warn at",
+  "@bazarSettingsWarnAt": {},
+  "bazarSettingsExceededAt": "Exceeded at",
+  "@bazarSettingsExceededAt": {},
+  "bazarSettingsThresholdRange": "Enter whole numbers from 1 to 200.",
+  "@bazarSettingsThresholdRange": {},
+  "bazarSettingsThresholdOrder": "The warning level must be lower than the exceeded level.",
+  "@bazarSettingsThresholdOrder": {},
+  "bazarSettingsFundStart": "Fund start month",
+  "@bazarSettingsFundStart": {},
+  "bazarSettingsFundStartUnset": "Set automatically when you record the opening balance.",
+  "@bazarSettingsFundStartUnset": {}
 }

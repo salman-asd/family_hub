@@ -10,5 +10,17 @@ key.properties
 android/local.properties
 .env
 
+# Node tooling for the Firestore rules tests (firebase/rules_test)
+node_modules/
+firebase/rules_test/.firebase/
+firestore-debug.log
+
 # Golden-test failure artefacts (generated on a failed comparison)
 **/failures/
+
+# Logs and tool noise (never commit)
+*.log
+android/.kotlin/
+android/.gradle/
+.fvm/
+coverage/

@@ -9,6 +9,7 @@ class FamilyEvent {
     required this.refType,
     required this.refId,
     required this.at,
+    this.params = const <String, String>{},
   });
 
   final String id;
@@ -22,4 +23,9 @@ class FamilyEvent {
   final String refType;
   final String refId;
   final DateTime at;
+
+  /// Small machine payload (at most 8 keys, enforced by the rules) a screen
+  /// localizes: e.g. `{familyName}` or `{memberName, newRole}`.  Never display
+  /// text (CLAUDE.md rule 18).
+  final Map<String, String> params;
 }

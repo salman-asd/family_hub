@@ -11,6 +11,10 @@ analyzer:
     - build/**
     - android/**
     - ios/**
+    # Vendored JS packages (the Firestore rules test toolchain) ship Dart
+    # templates that are not part of this project; analysing them fails.
+    - node_modules/**
+    - firebase/rules_test/node_modules/**
 
 linter:
   rules:

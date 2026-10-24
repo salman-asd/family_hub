@@ -1,136 +1,1310 @@
 rules_version = '2';
 
-// INTERIM RULES for Step 9 (profile, family, invitations, approval).
-// Step 10 replaces this with the full permission matrix + emulator tests.
-// Everything not matched below stays denied (default deny).
+// ============================================================================
+// Family Hub — Firestore Security Rules v2.1 (Step 10 + hardening H4-H7)
+//
+// One permission matrix, twice: `lib/core/permissions/permission_policy.dart`
+// for the app, and this file for the backend.  CLAUDE.md hard rule 12: every
+// permission is enforced here as well as in the UI.
+//
+// Collections covered today (roadmap Steps 6-9, hardening H4-H7):
+//   users/{uid}
+//   inviteCodes/{code}
+//   families/{f}
+//   families/{f}/members/{m}
+//   families/{f}/invitations/{i}
+//   families/{f}/bazarCategories/{c}   (P2-05)
+//   families/{f}/bazarItems/{i}        (P2-05)
+//   families/{f}/settings/{s}   (general, modules, rotationPolicy,
+//                                notificationDefaults, permissions,
+//                                relationships)
+//   families/{f}/activity/{a}
+//   families/{f}/auditLogs/{a}
+//
+// Everything else is denied (default deny at the bottom).  From Step 10 onward
+// CLAUDE.md requires every step that adds a collection to extend this file AND
+// `firebase/rules_test/` in the same commit.
+//
+// H5 additions:
+//   * field validation helpers (`str`, `optStr`, `memberProfileOk`) on every
+//     member write and on `users/{uid}.fullName`/`nickname`;
+//   * closed key sets (`keys().hasOnly(...)`) for members, families, invites,
+//     settings and logs — the lists live in ONE place here as `*Keys()`
+//     functions and are mirrored by `test/contract/rules_key_sets_test.dart`;
+//   * log integrity: an activity/audit `create` must be written by its own
+//     actor, with a known `type`/`refType`, bounded `refId`, a small `params`
+//     map and a SERVER `recordedAt` (the client `createdAt` is untouched);
+//     P2-03 extended the two closed lists with the Phase 2 bazar vocabulary
+//     (roadmap section 3.9), mirrored by `audit_event_type.dart` and
+//     `audit_ref_type.dart`;
+//   * an invite may only be burned in the SAME batch that creates the caller's
+//     pending member document;
+//   * `verified()`: a verified email is required for every mutating action
+//     except the owner's own `users/{uid}` profile/preferences.
+//
+// H7 additions:
+//   * `families/{f}/settings/permissions` (booleans: moderatorManagesFinance,
+//     membersViewFamilyReports, membersViewAllContributions, membersCanInvite,
+//     choreVerificationEnabled) rides the generic `settings/{s}` rule: every
+//     active member reads it, only an admin writes it.  `membersCanInvite`
+//     lets a plain member create invitations and revoke their own
+//     (`canInvite`, `membersMayInvite`);
+//   * the Dart matrix (`PermissionPolicy`) reads the same document, and
+//     docs/permission_matrix.md is generated from it.
+//
+// H6 additions (decision D4: at most three admins):
+//   * `families/{f}.adminIds` lists 1..3 uids of ACTIVE admins.  A family
+//     create writes the creator alone; a family update re-checks every listed
+//     uid against its member document (`adminIdsOk`), so the list can never
+//     name a non-admin, an inactive member or an empty set;
+//   * a member update that changes the active-admin set (demote, disable,
+//     remove, leave or promote) MUST rewrite the family document in the SAME
+//     batch (`adminIdsRewritten`), so the check above always runs and the last
+//     admin cannot leave, be demoted or be disabled — the invariant the rules
+//     could not express before.  `leavesNoActiveAdmin` in permission_access.dart
+//     stays as the client-side guard with a localized message; the rules are
+//     the real enforcement.
+// ============================================================================
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    function signedIn() { return request.auth != null; }
-    function isSelf(uid) { return signedIn() && request.auth.uid == uid; }
+    // ── Primitives ─────────────────────────────────────────────────────────
+    function signedIn() {
+      return request.auth != null;
+    }
+    // H5: an address-verified account is required for every mutating action
+    // outside the owner's own profile.  The claim is refreshed by
+    // FirebaseAuthRepository.reloadUser() (`getIdToken(true)`).
+    function verified() {
+      return signedIn() && request.auth.token.email_verified == true;
+    }
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+    function writesAsSelf() {
+      return request.resource.data.get('updatedBy', '') == request.auth.uid;
+    }
+    function createsAsSelf() {
+      return request.resource.data.get('createdBy', '') == request.auth.uid;
+    }
+    function inList(value, allowed) {
+      return value in allowed;
+    }
+    // H5 field validation.
+    function str(v, lo, hi) {
+      return v is string && v.size() >= lo && v.size() <= hi;
+    }
+    function optStr(d, k, hi) {
+      return !(k in d.keys()) || d[k] == null || str(d[k], 0, hi);
+    }
+    // H10: relationships are an editable list (`settings/relationships`), so the
+    // stored value is an ID checked by pattern, not a closed enum.  Mirrors
+    // `RelationshipId.isValid`.
+    function relationshipOk(data) {
+      return data.get('relationship', 'other') is string
+        && data.get('relationship', 'other').matches('^[a-z][a-zA-Z0-9_]{1,30}$');
+    }
+    // Enums are validated against the closed sets of the domain models, so a
+    // forged document fails here rather than at the next read.
+    function genderOk(data) {
+      return !('gender' in data.keys())
+        || data.gender == null
+        || data.gender in ['male', 'female', 'other'];
+    }
+    // users/{uid}.preferences {themeId, themeMode, language, banglaDigits}.
+    function preferencesOk(data) {
+      return !('preferences' in data.keys())
+        || (
+          data.preferences is map
+          && data.preferences.get('themeId', '') is string
+          && data.preferences.get('themeMode', 'system') in ['system', 'light', 'dark']
+          && data.preferences.get('language', 'bn') in ['bn', 'en']
+          && data.preferences.get('banglaDigits', false) is bool
+        );
+    }
+    // Money is integer paisa (CLAUDE.md rule 1).  Applied to the money
+    // collections from Step 13 (`expenses`) onwards; no money field exists yet,
+    // so this helper is the guard those steps must use rather than a new one.
+    function isNonNegativeInt(value) {
+      return value is int && value >= 0;
+    }
+    function isNonNegativeIntOrMissing(data, key) {
+      return !(key in data.keys()) || isNonNegativeInt(data[key]);
+    }
+    // ── Phase 2 scaffold (H12) ─────────────────────────────────────────────
+    // Reusable guards for the collections Steps 12+ add.  Nothing uses them
+    // yet; a new collection composes these instead of inventing its own.
+    // See docs/new_collection_checklist.md.
+    function canReadFamilyData(f) {
+      return isActiveMember(f);
+    }
+    // A record the caller creates for themselves in their own family.
+    function canWriteOwnRecord(f) {
+      return verified() && isActiveMember(f) && createsAsSelf();
+    }
+    // Integer paisa that is present and non-negative.
+    function moneyOk(data, key) {
+      return key in data.keys() && isNonNegativeInt(data[key]);
+    }
+    // `yyyy-MM-dd` / `yyyy-MM` keys in the family time zone.
+    function dateKeyOk(s) {
+      return s is string && s.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$');
+    }
+    function monthKeyOk(s) {
+      return s is string && s.matches('^[0-9]{4}-(0[1-9]|1[0-2])$');
+    }
+    // CLAUDE.md rule 5: an update may only set the soft-delete and update stamps.
+    function softDeleteOnly() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(['deletedAt', 'deletedBy', 'updatedAt', 'updatedBy']);
+    }
+    // H5: the denormalised member profile.  Applied to every member create and
+    // to the admin/self updates (the field set is the same).
+    function memberProfileOk(d) {
+      return str(d.get('fullName', ''), 1, 80)
+        && optStr(d, 'nickname', 40)
+        && relationshipOk(d)
+        && optStr(d, 'spouseId', 40)
+        && optStr(d, 'avatarKey', 40)
+        && optStr(d, 'inviteCode', 16);
+    }
 
+    // ── Closed key sets (H5) ───────────────────────────────────────────────
+    // The exact fields each mapper writes.  A document with an unknown field is
+    // denied.  Mirrored in test/contract/rules_key_sets_test.dart so a mapper
+    // change that is not reflected here fails the build.
+    function memberKeys() {
+      return ['uid', 'role', 'status', 'fullName', 'nickname', 'relationship',
+              'spouseId', 'avatarKey', 'inviteCode', 'removedAt', 'leftAt',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function familyKeys() {
+      return ['name', 'adminIds', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    // inviteCodes/{code} and families/{f}/invitations/{i} share one shape.
+    function invitationKeys() {
+      return ['code', 'familyId', 'role', 'status', 'expiresAt', 'usedBy',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion'];
+    }
+    // The union of the four settings documents created with the family.
+    function settingsKeys() {
+      return ['timezone', 'currency', 'flags', 'absencePolicy', 'enabled',
+              'moderatorManagesFinance', 'membersViewFamilyReports',
+              'membersViewAllContributions', 'membersCanInvite',
+              'choreVerificationEnabled', 'items',
+              // P2-07: settings/bazar.
+              'weekStartDay', 'defaultMonthlyContributionPaisa',
+              'contributionDueDay', 'alertThresholds', 'fundStartMonth',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    // Phase 2 catalog (P2-05): the exact fields `CatalogMappers` writes.
+    function categoryKeys() {
+      return ['nameBn', 'nameEn', 'colorIndex', 'emoji', 'imageData',
+              'sortOrder', 'active', 'builtIn', 'seedKey', 'createdAt',
+              'createdBy', 'updatedAt', 'updatedBy', 'schemaVersion',
+              'deletedAt', 'deletedBy'];
+    }
+    function itemKeys() {
+      return ['nameBn', 'nameEn', 'categoryId', 'defaultUnit', 'aliases',
+              'emoji', 'imageData', 'useCount', 'lastPricePaisa',
+              'lastUnitPricePaisa', 'lastUsedAt', 'active', 'builtIn',
+              'seedKey', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    // Phase 2 expenses, trips, ledger and advances (P2-10).  These mirror
+    // ExpenseMappers / FundMappers / AdvanceMappers and MonthClosingMappers.
+    function expenseKeys() {
+      return ['dateKey', 'monthKey', 'occurredAt', 'itemId', 'itemName',
+              'categoryId', 'qtyMilli', 'unit', 'unitPricePaisa', 'totalPaisa',
+              'fundingSource', 'paidByMemberId', 'reimbursable', 'purchaserId',
+              'tripId', 'shop', 'note', 'source', 'importBatchId',
+              'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function tripKeys() {
+      return ['dateKey', 'monthKey', 'shop', 'fundingSource',
+              'paidByMemberId', 'reimbursable', 'lineCount', 'totalPaisa',
+              'note', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function revisionKeys() {
+      return ['before', 'changedFields', 'reason', 'createdAt', 'createdBy',
+              'updatedAt', 'updatedBy', 'schemaVersion', 'deletedAt',
+              'deletedBy'];
+    }
+    function fundTxKeys() {
+      return ['type', 'amountPaisa', 'dateKey', 'monthKey', 'refType',
+              'refId', 'note', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function advanceKeys() {
+      return ['expenseId', 'memberId', 'amountPaisa', 'settledPaisa',
+              'status', 'dateKey', 'monthKey', 'createdAt', 'createdBy',
+              'updatedAt', 'updatedBy', 'schemaVersion', 'deletedAt',
+              'deletedBy'];
+    }
+    function settlementKeys() {
+      return ['advanceId', 'memberId', 'amountPaisa', 'dateKey', 'monthKey',
+              'method', 'note', 'fundTxId', 'createdAt', 'createdBy',
+              'updatedAt', 'updatedBy', 'schemaVersion', 'deletedAt',
+              'deletedBy'];
+    }
+    function closingKeys() {
+      return ['monthKey', 'status', 'closedAt', 'closedBy',
+              'closingBalancePaisa', 'reopenedAt', 'reopenedBy', 'reopenNote',
+              'reopenCount', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function eventKeys() {
+      return ['type', 'actorId', 'summary', 'refType', 'refId', 'params',
+              'recordedAt', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion'];
+    }
+    // H7: the `settings/permissions` switches are booleans or absent.
+    function boolOk(d, k) {
+      return !(k in d.keys()) || d[k] is bool;
+    }
+    function settingsOk(d) {
+      return d.keys().hasOnly(settingsKeys())
+        && boolOk(d, 'moderatorManagesFinance')
+        && boolOk(d, 'membersViewFamilyReports')
+        && boolOk(d, 'membersViewAllContributions')
+        && boolOk(d, 'membersCanInvite')
+        && boolOk(d, 'choreVerificationEnabled')
+        && optStr(d, 'timezone', 64)
+        && optStr(d, 'currency', 8)
+        && (!('flags' in d.keys())
+            || (d.flags is map && d.flags.size() <= 8))
+        && optStr(d, 'absencePolicy', 32)
+        // H10: `settings/relationships.items` is a bounded list (the per-item
+        // shape cannot be iterated in rules; the app tolerates ill-formed items).
+        && (!('items' in d.keys())
+            || (d.items is list && d.items.size() <= 40))
+        // P2-07: settings/bazar.  The fields are optional so the same shape
+        // function can validate every settings document.
+        && isNonNegativeIntOrMissing(d, 'defaultMonthlyContributionPaisa')
+        && (!('weekStartDay' in d.keys())
+            || (d.weekStartDay is int
+                && d.weekStartDay >= 1 && d.weekStartDay <= 7))
+        && (!('contributionDueDay' in d.keys())
+            || (d.contributionDueDay is int
+                && d.contributionDueDay >= 1 && d.contributionDueDay <= 28))
+        && (!('alertThresholds' in d.keys())
+            || (d.alertThresholds is list && d.alertThresholds.size() <= 4))
+        && (!('fundStartMonth' in d.keys())
+            || d.fundStartMonth == null || monthKeyOk(d.fundStartMonth));
+    }
+    // The catalog document shapes (P2-05).  Limits mirror
+    // `catalog_validation.dart`: names 60, aliases 10, emoji 8, image 24000.
+    function categoryOk(d) {
+      return d.keys().hasOnly(categoryKeys())
+        && str(d.get('nameBn', ''), 1, 60)
+        && optStr(d, 'nameEn', 60)
+        && d.get('colorIndex', -1) is int
+        && d.get('colorIndex', -1) >= 0
+        && d.get('colorIndex', -1) <= 11
+        && optStr(d, 'emoji', 8)
+        && optStr(d, 'imageData', 24000)
+        && d.get('sortOrder', -1) is int
+        && d.get('active', false) is bool
+        && d.get('builtIn', false) is bool
+        && optStr(d, 'seedKey', 40);
+    }
+    function itemOk(d) {
+      return d.keys().hasOnly(itemKeys())
+        && str(d.get('nameBn', ''), 1, 60)
+        && optStr(d, 'nameEn', 60)
+        && str(d.get('categoryId', ''), 1, 64)
+        && d.get('defaultUnit', '') in ['kg', 'g', 'litre', 'piece',
+                                        'dozen', 'packet', 'cylinder']
+        && d.get('aliases', []) is list
+        && d.get('aliases', []).size() <= 10
+        && optStr(d, 'emoji', 8)
+        && optStr(d, 'imageData', 24000)
+        && d.get('useCount', -1) is int
+        && d.get('useCount', -1) >= 0
+        // Money is integer paisa; absent means "no last price yet".
+        && isNonNegativeIntOrMissing(d, 'lastPricePaisa')
+        && isNonNegativeIntOrMissing(d, 'lastUnitPricePaisa')
+        && (!('lastUsedAt' in d.keys())
+            || d.lastUsedAt == null
+            || d.lastUsedAt is timestamp)
+        && d.get('active', false) is bool
+        && d.get('builtIn', false) is bool
+        && optStr(d, 'seedKey', 40);
+    }
+
+    // ── Phase 2 expense / ledger shapes (P2-10) ────────────────────────────
+    function isNonNegativeIntOrNull(d, k) {
+      return !(k in d.keys()) || d[k] == null || isNonNegativeInt(d[k]);
+    }
+    function expensePath(f, e) {
+      return /databases/$(database)/documents/families/$(f)/expenses/$(e);
+    }
+    function closingPath(f, mk) {
+      return /databases/$(database)/documents/families/$(f)/monthClosings/$(mk);
+    }
+    // A closed month rejects new ledger/expense rows.  Missing closing = open.
+    function monthOpen(f, mk) {
+      return !exists(closingPath(f, mk))
+        || get(closingPath(f, mk)).data.get('status', 'open') != 'closed';
+    }
+    function expenseOwner(f, e) {
+      return exists(expensePath(f, e))
+        && get(expensePath(f, e)).data.get('createdBy', '') == request.auth.uid;
+    }
+    // D-P2-5: contributions are visible to every active member by default.
+    // The switch only exists for families that want to restrict the list.
+    function canViewAllContributions(f) {
+      return isActiveMember(f)
+        && (financeManager(f)
+            || !exists(permissionsPath(f))
+            || get(permissionsPath(f)).data
+                .get('membersViewAllContributions', true) == true);
+    }
+    function expenseOk(d) {
+      return d.keys().hasOnly(expenseKeys())
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && d.get('occurredAt', null) is timestamp
+        && optStr(d, 'itemId', 64)
+        && str(d.get('itemName', ''), 1, 80)
+        && str(d.get('categoryId', ''), 1, 64)
+        && isNonNegativeIntOrNull(d, 'qtyMilli')
+        && (!('unit' in d.keys())
+            || d.unit == null
+            || d.unit in ['kg', 'g', 'litre', 'piece', 'dozen', 'packet',
+                          'cylinder'])
+        && isNonNegativeIntOrNull(d, 'unitPricePaisa')
+        && moneyOk(d, 'totalPaisa')
+        && d.totalPaisa > 0
+        && d.get('fundingSource', '') in ['fund', 'member']
+        && d.get('reimbursable', false) is bool
+        // A fund row never names a payer; a member row always does.
+        && ((d.fundingSource == 'fund') == (d.get('paidByMemberId', null) == null))
+        && (d.fundingSource == 'member' || d.reimbursable == false)
+        && optStr(d, 'paidByMemberId', 64)
+        && optStr(d, 'purchaserId', 64)
+        && optStr(d, 'tripId', 64)
+        && optStr(d, 'shop', 60)
+        && optStr(d, 'note', 500)
+        && d.get('source', 'manual') in ['manual', 'import']
+        && optStr(d, 'importBatchId', 64);
+    }
+    function tripOk(d) {
+      return d.keys().hasOnly(tripKeys())
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && optStr(d, 'shop', 60)
+        && d.get('fundingSource', '') in ['fund', 'member']
+        && d.get('reimbursable', false) is bool
+        && ((d.fundingSource == 'fund') == (d.get('paidByMemberId', null) == null))
+        && (d.fundingSource == 'member' || d.reimbursable == false)
+        && optStr(d, 'paidByMemberId', 64)
+        && d.get('lineCount', 0) is int
+        && d.lineCount >= 1 && d.lineCount <= 40
+        && moneyOk(d, 'totalPaisa')
+        && d.totalPaisa > 0
+        && optStr(d, 'note', 500);
+    }
+    function revisionOk(d) {
+      return d.keys().hasOnly(revisionKeys())
+        && d.get('before', null) is map
+        && d.before.size() <= 20
+        && d.get('changedFields', null) is list
+        && d.changedFields.size() <= 20
+        && optStr(d, 'reason', 200)
+        && d.get('createdAt', null) is timestamp
+        && d.get('updatedAt', null) is timestamp;
+    }
+    function fundTxOk(f, d, t) {
+      return d.keys().hasOnly(fundTxKeys())
+        && d.get('type', '') in ['contribution', 'expense', 'reimbursement',
+                                'opening', 'adjustment']
+        && d.get('refType', '') in ['expense', 'contribution', 'settlement',
+                                   'month', 'manual']
+        && str(d.get('refId', ''), 1, 64)
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && d.get('amountPaisa', 0) is int
+        && d.amountPaisa != 0
+        && optStr(d, 'note', 300)
+        && (
+          (d.type == 'expense'
+            && isActiveMember(f)
+            && d.amountPaisa < 0
+            && d.refType == 'expense'
+            && t == 'exp_' + d.refId)
+          || (d.type == 'contribution'
+            && financeManager(f)
+            && d.amountPaisa > 0
+            && d.refType == 'contribution'
+            && t == 'con_' + d.refId)
+          || (d.type == 'reimbursement'
+            && financeManager(f)
+            && d.amountPaisa < 0
+            && d.refType == 'settlement'
+            && t == 'stl_' + d.refId)
+          || (d.type == 'opening'
+            && isAdmin(f)
+            && d.refType == 'month'
+            && d.refId == d.monthKey
+            && t == 'open_' + d.refId)
+          || (d.type == 'adjustment'
+            && t.matches('^adj_[A-Za-z0-9_-]+$')
+            && ((d.refType == 'expense' && isActiveMember(f))
+                || (d.refType != 'expense' && financeManager(f))))
+        );
+    }
+    function advanceOk(d) {
+      let amount = d.get('amountPaisa', -1);
+      let settled = d.get('settledPaisa', -1);
+      return d.keys().hasOnly(advanceKeys())
+        && str(d.get('expenseId', ''), 1, 64)
+        && str(d.get('memberId', ''), 1, 64)
+        && isNonNegativeInt(amount)
+        && isNonNegativeInt(settled)
+        && settled <= amount
+        && d.get('status', '') in ['pending', 'partial', 'settled', 'voided']
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && (
+          d.status == 'voided'
+          || (d.status == 'pending' && settled == 0)
+          || (d.status == 'partial' && settled > 0 && settled < amount)
+          || (d.status == 'settled' && amount > 0 && settled == amount)
+        );
+    }
+    function settlementOk(d, s) {
+      return d.keys().hasOnly(settlementKeys())
+        && str(d.get('advanceId', ''), 1, 64)
+        && str(d.get('memberId', ''), 1, 64)
+        && moneyOk(d, 'amountPaisa')
+        && d.amountPaisa > 0
+        && dateKeyOk(d.get('dateKey', ''))
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && optStr(d, 'method', 20)
+        && optStr(d, 'note', 300)
+        && d.get('fundTxId', '') == 'stl_' + s;
+    }
+    function closingOk(d, month) {
+      return d.keys().hasOnly(closingKeys())
+        && d.get('monthKey', '') == month
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('status', '') in ['open', 'closed']
+        && (!('closedAt' in d.keys())
+            || d.closedAt == null
+            || d.closedAt is timestamp)
+        && optStr(d, 'closedBy', 64)
+        && (!('closingBalancePaisa' in d.keys())
+            || d.closingBalancePaisa == null
+            || d.closingBalancePaisa is int)
+        && (!('reopenedAt' in d.keys())
+            || d.reopenedAt == null
+            || d.reopenedAt is timestamp)
+        && optStr(d, 'reopenedBy', 64)
+        && optStr(d, 'reopenNote', 300)
+        && d.get('reopenCount', 0) is int
+        && d.reopenCount >= 0;
+    }
+
+    // ── Log integrity (H5) ─────────────────────────────────────────────────
+    // The closed `type`/`refType` lists, mirrored by
+    // lib/core/audit/audit_event_type.dart and audit_ref_type.dart (compared to
+    // these literals by test/core/audit/audit_event_type_test.dart).
+    function eventTypes() {
+      return ['family.created', 'member.requested', 'member.approved',
+              'member.rejected', 'member.disabled', 'member.role_changed',
+              'member.admin_transferred', 'member.left', 'member.cancelled',
+              'invitation.created', 'invitation.revoked', 'family.updated',
+              // Phase 2 bazar vocabulary (roadmap section 3.9).
+              'bazar.catalog_seeded', 'bazar.category_created',
+              'bazar.category_updated', 'bazar.category_deactivated',
+              'bazar.item_created', 'bazar.item_updated',
+              'bazar.item_deactivated', 'bazar.expense_created',
+              'bazar.expense_updated', 'bazar.expense_deleted',
+              'bazar.expense_restored', 'bazar.trip_created',
+              'bazar.budget_saved', 'bazar.settings_updated',
+              'bazar.contribution_plan_set', 'bazar.contribution_recorded',
+              'bazar.contribution_voided', 'bazar.contribution_requested',
+              'bazar.contribution_request_edited',
+              'bazar.contribution_request_cancelled',
+              'bazar.contribution_approved', 'bazar.contribution_rejected',
+              'bazar.contribution_change_requested',
+              'bazar.contribution_change_approved',
+              'bazar.contribution_change_rejected',
+              'bazar.opening_balance_set', 'bazar.advance_settled',
+              'bazar.month_closed', 'bazar.month_reopened',
+              'bazar.import_completed', 'bazar.import_undone'];
+    }
+    function refTypes() {
+      return ['family', 'member', 'invitation',
+              // Phase 2 bazar vocabulary (roadmap section 3.9).
+              'category', 'item', 'expense', 'trip', 'budget',
+              'contribution', 'contributionPlan', 'settlement', 'month',
+              'importBatch'];
+    }
+    function paramsOk(d) {
+      return !('params' in d.keys())
+        || (d.params is map && d.params.size() <= 8);
+    }
+    // An append-only log entry: written by its own actor, with a known shape and
+    // a SERVER timestamp.  `createdAt` is the device clock and is deliberately
+    // NOT compared with request.time (a queued offline write would be refused).
+    function eventOk(d) {
+      return createsAsSelf()
+        && d.get('actorId', '') == request.auth.uid
+        && d.get('type', '') in eventTypes()
+        && d.get('refType', '') in refTypes()
+        && str(d.get('refId', ''), 0, 64)
+        && optStr(d, 'summary', 200)
+        && paramsOk(d)
+        && d.get('recordedAt', null) == request.time
+        && d.keys().hasOnly(eventKeys());
+    }
+
+    // ── Family membership helpers (roadmap Section 13 names) ───────────────
+    function familyPath(f) {
+      return /databases/$(database)/documents/families/$(f);
+    }
     function memberPath(f, uid) {
       return /databases/$(database)/documents/families/$(f)/members/$(uid);
     }
-    function me(f) { return get(memberPath(f, request.auth.uid)).data; }
-    function hasMe(f) { return signedIn() && exists(memberPath(f, request.auth.uid)); }
-    function isActive(f) {
-      return hasMe(f) && me(f).status == 'active' && me(f).get('removedAt', null) == null;
+    // The caller's member document, or an empty map when there is none.
+    //
+    // The empty-map fallback matters: in rules an *error* in an operand makes
+    // the whole condition an error, and `get(...).data` on a missing document
+    // is exactly such an error.  With `{}` every helper below is a clean false
+    // instead, so a denial is reported for the right reason.
+    function me(f) {
+      return exists(memberPath(f, request.auth.uid))
+        ? get(memberPath(f, request.auth.uid)).data
+        : {};
     }
-    function isAdmin(f) { return isActive(f) && me(f).role == 'admin'; }
-    function isMod(f) { return isActive(f) && me(f).role == 'moderator'; }
-    function isManager(f) { return isAdmin(f) || isMod(f); }
-
-    // True only inside the batch that creates the family: the family document
-    // does not exist yet and is being written by the caller.
-    function creatingFamily(f) {
+    function isMember(f) {
+      return signedIn() && exists(memberPath(f, request.auth.uid));
+    }
+    function role(f) {
+      return me(f).get('role', '');
+    }
+    // Active = approved, and not rejected (soft delete) or disabled.
+    function isActiveMember(f) {
       return signedIn()
+        && me(f).get('status', 'pending') == 'active'
+        && me(f).get('removedAt', null) == null;
+    }
+    function isAdmin(f) {
+      return isActiveMember(f) && role(f) == 'admin';
+    }
+    function isMod(f) {
+      return isActiveMember(f) && role(f) == 'moderator';
+    }
+    // Admin or moderator: may invite and decide requests (Step 9 rule).
+    function isManager(f) {
+      return isAdmin(f) || isMod(f);
+    }
+    // The catalog and budgets are finance-managed: an admin always, a moderator
+    // only while `settings/permissions.moderatorManagesFinance` is true
+    // (missing document/key = true, the domain default).
+    function financeManager(f) {
+      return isAdmin(f)
+        || (isMod(f)
+            && (exists(permissionsPath(f))
+                ? get(permissionsPath(f)).data
+                    .get('moderatorManagesFinance', true) == true
+                : true));
+    }
+
+    // ── Member invitations (H7) ────────────────────────────────────────────
+    // `settings/permissions.membersCanInvite` lets plain members create (and
+    // revoke their own) invitations.  Absent document or key = false.
+    function permissionsPath(f) {
+      return /databases/$(database)/documents/families/$(f)/settings/permissions;
+    }
+    function membersMayInvite(f) {
+      return isActiveMember(f)
+        && exists(permissionsPath(f))
+        && get(permissionsPath(f)).data.get('membersCanInvite', false) == true;
+    }
+    function canInvite(f) {
+      return isManager(f) || membersMayInvite(f);
+    }
+
+    // ── Active-admin set (H6) ──────────────────────────────────────────────
+    // `families/{f}.adminIds` is the denormalised list of ACTIVE admins.  The
+    // rules re-check it against the member documents, so a forged list is
+    // rejected and the family can never be left without an admin.
+    function isActiveAdminData(d) {
+      return d.get('role', '') == 'admin'
+        && d.get('status', '') == 'active'
+        && d.get('removedAt', null) == null
+        && d.get('leftAt', null) == null;
+    }
+    // Index [i] of `ids` names an active admin after the batch.  The size guard
+    // keeps the list index in range (evaluated first, `||` short-circuits).
+    function adminAfterOk(f, ids, i) {
+      return i >= ids.size()
+        || isActiveAdminData(getAfter(memberPath(f, ids[i])).data);
+    }
+    // The family document after a write: 1..3 uids, each an active admin.
+    function adminIdsOk(f) {
+      let ids = request.resource.data.get('adminIds', []);
+      return ids.size() >= 1
+        && ids.size() <= 3
+        && adminAfterOk(f, ids, 0)
+        && adminAfterOk(f, ids, 1)
+        && adminAfterOk(f, ids, 2);
+    }
+    // A newly created family has exactly its creator as its only admin.
+    function creatorIsAdmin() {
+      let ids = request.resource.data.get('adminIds', []);
+      return ids.size() == 1 && ids[0] == request.auth.uid;
+    }
+    // Did this member write change whether the member is an active admin?
+    function adminSetChanges() {
+      return isActiveAdminData(resource.data)
+        != isActiveAdminData(request.resource.data);
+    }
+    // The family document must be part of THIS batch and its `adminIds` must
+    // change (a no-op family write does not satisfy the requirement).
+    function adminIdsRewritten(f) {
+      return getAfter(familyPath(f)).data.diff(get(familyPath(f)).data)
+        .affectedKeys().hasAny(['adminIds']);
+    }
+
+    // ── Enrollment helpers ────────────────────────────────────────────────
+    // True only inside the ONE batch that creates a family: the family document
+    // does not exist yet and the caller is its creator.
+    function creatingFamily(f) {
+      return verified()
         && !exists(/databases/$(database)/documents/families/$(f))
-        && getAfter(/databases/$(database)/documents/families/$(f)).data.createdBy == request.auth.uid;
+        && getAfter(/databases/$(database)/documents/families/$(f)).data.createdBy
+             == request.auth.uid;
     }
-
     function codeDoc(code) {
-      return get(/databases/$(database)/documents/inviteCodes/$(code)).data;
+      return exists(/databases/$(database)/documents/inviteCodes/$(code))
+        ? get(/databases/$(database)/documents/inviteCodes/$(code)).data
+        : {};
     }
-    // A joining member document: pending, plain member, from a live code.
+    function liveCode(code) {
+      return codeDoc(code).get('status', '') == 'active'
+        // A missing timestamp defaults to "now", which is never > now.
+        && codeDoc(code).get('expiresAt', request.time) > request.time;
+    }
+    // A joining member document: pending, plain member, created by the joiner,
+    // backed by a live code for this family.
     function validJoin(f) {
-      return request.resource.data.status == 'pending'
-        && request.resource.data.role == 'member'
-        && request.resource.data.createdBy == request.auth.uid
-        && codeDoc(request.resource.data.inviteCode).familyId == f
-        && codeDoc(request.resource.data.inviteCode).status == 'active'
-        && codeDoc(request.resource.data.inviteCode).expiresAt > request.time;
+      return verified()
+        && request.resource.data.get('status', '') == 'pending'
+        && request.resource.data.get('role', '') == 'member'
+        && request.resource.data.get('uid', '') == request.auth.uid
+        && createsAsSelf()
+        && memberProfileOk(request.resource.data)
+        && request.resource.data.keys().hasOnly(memberKeys())
+        && request.resource.data.get('inviteCode', null) is string
+        && liveCode(request.resource.data.inviteCode)
+        && codeDoc(request.resource.data.inviteCode).get('familyId', '') == f;
     }
+    // A self-write may never change who it is...
+    function identityStable() {
+      return request.resource.data.uid == resource.data.uid;
+    }
+    // ...nor promote itself...
+    function roleUnchanged() {
+      return request.resource.data.role == resource.data.role;
+    }
+    // ...nor approve itself.
+    function statusUnchanged() {
+      return request.resource.data.status == resource.data.status;
+    }
+    // What a decision on a pending request may produce: approve, reject
+    // (back to pending, with removedAt) or decline a pending request.
+    function validDecision() {
+      return (request.resource.data.status == 'active'
+              && request.resource.data.get('removedAt', null) == null)
+        || request.resource.data.status == 'disabled'
+        || (request.resource.data.status == 'pending'
+            && request.resource.data.get('removedAt', null) != null);
+    }
+    // True inside the ONE batch that creates the caller's pending member
+    // document.  The activity and audit entries of that batch are written by
+    // the same user, so they use this instead of `validJoin` (their own
+    // document has no `status` or `role` field to inspect).
     function joiningNow(f) {
-      return signedIn() && existsAfter(memberPath(f, request.auth.uid));
+      return verified()
+        && existsAfter(memberPath(f, request.auth.uid))
+        && getAfter(memberPath(f, request.auth.uid)).data.get('status', '') == 'pending'
+        && getAfter(memberPath(f, request.auth.uid)).data.get('role', '') == 'member';
+    }
+    // The member document the caller is creating in THIS batch is a pending
+    // plain member backed by [code] (H5).  Used to require that burning an
+    // invite and joining happen atomically.
+    function pendingJoinAfter(f, code) {
+      return existsAfter(memberPath(f, request.auth.uid))
+        && getAfter(memberPath(f, request.auth.uid)).data.get('status', '') == 'pending'
+        && getAfter(memberPath(f, request.auth.uid)).data.get('inviteCode', null) == code;
+    }
+    function memberDocIsValid() {
+      return inList(request.resource.data.get('role', 'member'),
+                    ['admin', 'moderator', 'member'])
+        && inList(request.resource.data.get('status', 'pending'),
+                  ['pending', 'active', 'disabled'])
+        && request.resource.data.get('uid', '') is string
+        && memberProfileOk(request.resource.data)
+        && request.resource.data.keys().hasOnly(memberKeys());
     }
 
-    // ── users/{uid}: the owner only ──────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════════
+    // users/{uid} — the owner only.  Holds the profile, `familyId` and
+    // `preferences {themeId, themeMode, language, banglaDigits}`.
+    //
+    // The owner may write this WITHOUT a verified email (the verification
+    // screen and the preference sync run before verification).
+    // ══════════════════════════════════════════════════════════════════════
     match /users/{uid} {
-      allow read, write: if isSelf(uid);
+      // The document may exist before the profile does (preference sync merges
+      // `preferences` into it), so every profile field is optional — but the
+      // ones that are present must be well formed, and the owner may never
+      // claim to be somebody else.
+      function userDocOk() {
+        return request.resource.data.get('uid', uid) == uid
+          && (!('familyId' in request.resource.data.keys())
+              || request.resource.data.get('familyId', null) is string)
+          && request.resource.data.get('updatedBy', uid) == uid
+          && optStr(request.resource.data, 'fullName', 80)
+          && optStr(request.resource.data, 'nickname', 40)
+          && accountDeletionOk()
+          && preferencesOk(request.resource.data)
+          && relationshipOk(request.resource.data)
+          && genderOk(request.resource.data);
+      }
+
+      // H9: an owner may soft-delete their own account: `deletedAt` is a
+      // timestamp, `deletedBy` is the owner, and a deletion can never be undone
+      // (once set, `deletedAt` stays set).
+      function accountDeletionOk() {
+        let d = request.resource.data;
+        return (!('deletedAt' in d.keys()) || d.deletedAt == null || d.deletedAt is timestamp)
+          && (!('deletedBy' in d.keys()) || d.deletedBy == null || d.deletedBy == uid)
+          && (!('deletedAt' in d.keys()) || d.deletedAt != null || !(resource != null && resource.data.get('deletedAt', null) != null));
+      }
+
+      // One family per user (CLAUDE.md rule 17): `familyId` may be set when
+      // absent, kept as it is, or moved once the OLD membership is gone (the
+      // member document is missing, rejected, cancelled or left).  Pending,
+      // active and admin-disabled members cannot be pointed elsewhere.
+      function familyPointerChangeOk() {
+        let before = resource.data.get('familyId', null);
+        let after = request.resource.data.get('familyId', null);
+        return before == null
+          || before == after
+          || !exists(memberPath(before, uid))
+          || get(memberPath(before, uid)).data.get('removedAt', null) != null;
+      }
+
+      allow get, list: if isSelf(uid);
+      allow create: if isSelf(uid) && userDocOk();
+      allow update: if isSelf(uid) && userDocOk() && familyPointerChangeOk();
+      // H9: an account is closed by a SOFT delete (`deletedAt`, `deletedBy`);
+      // the document itself is never removed, so history stays attributable.
+      allow delete: if false;
     }
 
-    // ── inviteCodes/{code}: exact-id get only, never list ────────────────
+    // ══════════════════════════════════════════════════════════════════════
+    // inviteCodes/{code} — the discovery index for joining.
+    //
+    // Exact-id `get` only, never `list`: a signed-in, VERIFIED user with a code
+    // may learn the family it belongs to, nobody may enumerate codes or
+    // families.
+    // ══════════════════════════════════════════════════════════════════════
     match /inviteCodes/{code} {
-      allow get: if signedIn();
+      allow get: if verified();
       allow list: if false;
-      allow create: if signedIn()
-        && (isManager(request.resource.data.familyId))
-        && request.resource.data.createdBy == request.auth.uid
+
+      allow create: if verified()
+        && request.resource.data.familyId is string
+        && request.resource.data.familyId.size() > 0
+        && canInvite(request.resource.data.familyId)
+        && createsAsSelf()
         && request.resource.data.status == 'active'
-        && request.resource.data.role == 'member';
-      // A joiner marks the code used; nothing else may change.
-      allow update: if signedIn()
+        && request.resource.data.role == 'member'
+        && request.resource.data.expiresAt is timestamp
+        && request.resource.data.keys().hasOnly(invitationKeys());
+
+      // A joiner marks their code used IN THE SAME BATCH that creates their
+      // pending member document (H5); nothing else may change, ever.
+      allow update: if verified()
         && resource.data.status == 'active'
+        && resource.data.expiresAt > request.time
         && request.resource.data.status == 'used'
         && request.resource.data.usedBy == request.auth.uid
         && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy']);
+             .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy'])
+        && request.resource.data.keys().hasOnly(invitationKeys())
+        && pendingJoinAfter(resource.data.familyId, code);
+
+      // A manager of the code's family (or the member who created it, while
+      // members may invite) revokes a still-active code; nothing else may
+      // change.
+      allow update: if verified()
+        && resource.data.status == 'active'
+        && request.resource.data.status == 'revoked'
+        && (isManager(resource.data.familyId)
+            || (membersMayInvite(resource.data.familyId)
+                && resource.data.createdBy == request.auth.uid))
+        && writesAsSelf()
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'updatedAt', 'updatedBy'])
+        && request.resource.data.keys().hasOnly(invitationKeys());
+
+      // An expired or revoked code is a tombstone, not a deleted document.
       allow delete: if false;
     }
 
+    // ══════════════════════════════════════════════════════════════════════
+    // families/{f}
+    // ══════════════════════════════════════════════════════════════════════
     match /families/{f} {
-      allow create: if signedIn()
-        && request.resource.data.createdBy == request.auth.uid;
-      allow read: if isActive(f);
-      allow update: if isAdmin(f);
+      allow create: if verified()
+        && createsAsSelf()
+        && str(request.resource.data.get('name', ''), 1, 80)
+        && creatorIsAdmin()
+        && request.resource.data.keys().hasOnly(familyKeys());
+
+      // Active members only: a pending or rejected user reads nothing here,
+      // and a member of another family reads nothing.
+      allow read: if isActiveMember(f);
+
+      // Family administration.  `editFamilySettings` is admin-only, so a
+      // moderator cannot rename the family or flip a module.
+      allow update: if isAdmin(f)
+        && writesAsSelf()
+        && str(request.resource.data.get('name', ''), 1, 80)
+        && adminIdsOk(f)
+        && request.resource.data.keys().hasOnly(familyKeys());
+
       allow delete: if false;
 
+      // ── members/{m} ────────────────────────────────────────────────────
       match /members/{m} {
-        allow read: if isActive(f) || isSelf(m);
+        // A member sees the family roster; everyone may read their own
+        // document so the pending screen can listen to it.
+        allow read: if isActiveMember(f) || isSelf(m);
 
-        // Creating the family: first member, active admin.
-        allow create: if isSelf(m) && creatingFamily(f)
-          && request.resource.data.role == 'admin'
-          && request.resource.data.status == 'active'
-          && request.resource.data.createdBy == request.auth.uid;
+        // 1. Creating the family: the first member is an active admin.
+        allow create: if isSelf(m)
+          && verified()
+          && creatingFamily(f)
+          && createsAsSelf()
+          && request.resource.data.get('role', '') == 'admin'
+          && request.resource.data.get('status', '') == 'active'
+          && memberProfileOk(request.resource.data)
+          && request.resource.data.keys().hasOnly(memberKeys());
 
-        // Joining: pending member, role from a valid, unused, unexpired code.
+        // 2. Joining with a live code: pending, plain member.
         allow create: if isSelf(m) && validJoin(f);
 
-        // Admin: any change.  Moderator: approve or reject pending only.
-        // Owner: own profile fields only (never role or status).
-        // A rejected person (removedAt set) may ask again with a fresh code.
+        // 3. Admin: any change (role, status, removal) — the last-admin guard
+        //    lives in the domain, see the header.  A REMOVED member (rejected,
+        //    cancelled or left) can never be revived by a write: they may belong
+        //    to another family by now (rule 17); they must join again (rule 5).
         allow update: if isAdmin(f)
-          || (isSelf(m) && resource.data.get('removedAt', null) != null && validJoin(f))
-          || (isMod(f) && resource.data.status == 'pending'
-              && request.resource.data.diff(resource.data).affectedKeys()
-                   .hasOnly(['status', 'removedAt', 'updatedAt', 'updatedBy']))
-          || (isSelf(m)
-              && request.resource.data.diff(resource.data).affectedKeys()
-                   .hasOnly(['fullName', 'nickname', 'relationship', 'spouseId',
-                             'avatarKey', 'updatedAt', 'updatedBy']));
-        allow delete: if false;   // soft delete only (removedAt)
-      }
+          && verified()
+          && resource.data.get('removedAt', null) == null
+          && resource.data.get('leftAt', null) == null
+          && writesAsSelf()
+          && memberDocIsValid()
+          && request.resource.data.get('uid', '') == m
+          // H6: a change to the active-admin set must rewrite the family doc.
+          && (!adminSetChanges() || adminIdsRewritten(f));
 
-      match /invitations/{i} {
-        allow read: if isManager(f);
-        allow create: if isManager(f) || creatingFamily(f);
-        allow update: if signedIn()
+        // 4. Moderator: decide a PENDING request only — approve, reject or
+        //    decline.  Never a role, never an active member (roadmap Step 10,
+        //    "moderator approve-only").
+        allow update: if isMod(f)
+          && verified()
+          && writesAsSelf()
+          && resource.data.get('status', 'pending') == 'pending'
+          && resource.data.get('removedAt', null) == null
+          && resource.data.get('leftAt', null) == null
+          && identityStable()
+          && roleUnchanged()
+          && validDecision()
+          && request.resource.data.keys().hasOnly(memberKeys())
           && request.resource.data.diff(resource.data).affectedKeys()
-               .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy']);
+               .hasOnly(['status', 'removedAt', 'updatedAt', 'updatedBy'])
+          // H6: approving a pending admin still changes the active-admin set.
+          && (!adminSetChanges() || adminIdsRewritten(f));
+
+        // 5. A rejected person may ask again with a fresh code.
+        allow update: if isSelf(m)
+          && resource.data.get('removedAt', null) != null
+          && validJoin(f);
+
+        // 6. A member edits their own profile fields — never role or status,
+        //    and never anyone else's document.
+        allow update: if isSelf(m)
+          && verified()
+          && isActiveMember(f)
+          && writesAsSelf()
+          && identityStable()
+          && roleUnchanged()
+          && statusUnchanged()
+          && memberProfileOk(request.resource.data)
+          && request.resource.data.keys().hasOnly(memberKeys())
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['fullName', 'nickname', 'relationship', 'spouseId',
+                         'avatarKey', 'inviteCode', 'updatedAt', 'updatedBy']);
+
+        // 7. LEAVE: an active member leaves on their own.  The document is kept
+        //    (history): status becomes `disabled` and `leftAt` / `removedAt`
+        //    carry the same timestamp.  Role never changes.
+        allow update: if isSelf(m)
+          && verified()
+          && isActiveMember(f)
+          && writesAsSelf()
+          && identityStable()
+          && roleUnchanged()
+          && request.resource.data.status == 'disabled'
+          && request.resource.data.get('leftAt', null) is timestamp
+          && request.resource.data.get('removedAt', null)
+               == request.resource.data.get('leftAt', null)
+          && request.resource.data.keys().hasOnly(memberKeys())
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'leftAt', 'removedAt', 'updatedAt',
+                         'updatedBy'])
+          // H6: an admin leaving changes the active-admin set.
+          && (!adminSetChanges() || adminIdsRewritten(f));
+
+        // 8. CANCEL: a pending person withdraws their own request.  Only
+        //    `removedAt` (the same soft delete a rejection uses) changes.
+        allow update: if isSelf(m)
+          && verified()
+          && resource.data.get('status', '') == 'pending'
+          && resource.data.get('removedAt', null) == null
+          && writesAsSelf()
+          && identityStable()
+          && roleUnchanged()
+          && statusUnchanged()
+          && request.resource.data.get('removedAt', null) is timestamp
+          && request.resource.data.keys().hasOnly(memberKeys())
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['removedAt', 'updatedAt', 'updatedBy']);
+
+        // Leaving and removal are soft (removedAt / status), never hard.
         allow delete: if false;
       }
 
+      // ── invitations/{i} — the family-side mirror of inviteCodes ────────
+      match /invitations/{i} {
+        allow read: if isManager(f) || membersMayInvite(f);
+        allow create: if verified()
+          && (canInvite(f) || creatingFamily(f))
+          && createsAsSelf()
+          && request.resource.data.familyId == f
+          && request.resource.data.keys().hasOnly(invitationKeys());
+        // A joiner marks the mirror used IN THE SAME BATCH that creates their
+        // pending member document (H5); a manager revokes a still-active code.
+        allow update: if verified()
+          && resource.data.get('status', '') == 'active'
+          && request.resource.data.get('status', '') in ['used', 'revoked']
+          && request.resource.data.keys().hasOnly(invitationKeys())
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'usedBy', 'updatedAt', 'updatedBy'])
+          && (
+            (
+              request.resource.data.status == 'revoked'
+              && (isManager(f)
+                  || (membersMayInvite(f)
+                      && resource.data.get('createdBy', '')
+                           == request.auth.uid))
+              && writesAsSelf()
+            )
+            || (
+              request.resource.data.status == 'used'
+              && request.resource.data.get('usedBy', '') == request.auth.uid
+              && pendingJoinAfter(f, i)
+            )
+          );
+        allow delete: if false;
+      }
+
+      // ── bazarCategories/{c} — catalog managers (P2-05) ─────────────────
+      match /bazarCategories/{c} {
+        allow read: if canReadFamilyData(f);
+        allow create: if verified()
+          && (financeManager(f) || creatingFamily(f))
+          && createsAsSelf()
+          && categoryOk(request.resource.data);
+        // `createdAt`, `createdBy`, `builtIn` and `seedKey` are immutable.
+        allow update: if verified()
+          && financeManager(f)
+          && writesAsSelf()
+          && categoryOk(request.resource.data)
+          && request.resource.data.get('createdAt', null)
+               == resource.data.get('createdAt', null)
+          && request.resource.data.get('createdBy', '')
+               == resource.data.get('createdBy', '')
+          && request.resource.data.get('builtIn', false)
+               == resource.data.get('builtIn', false)
+          && request.resource.data.get('seedKey', null)
+               == resource.data.get('seedKey', null);
+        allow delete: if false;
+      }
+
+      // ── bazarItems/{i} — managers + everyday member usage (P2-05) ──────
+      match /bazarItems/{i} {
+        allow read: if canReadFamilyData(f);
+        // A member may add a custom item ("Remember this item"); a built-in
+        // item is seeded or manager-created only.
+        allow create: if verified()
+          && (financeManager(f)
+              || creatingFamily(f)
+              || (isActiveMember(f)
+                  && request.resource.data.get('builtIn', true) == false
+                  && request.resource.data.get('useCount', -1) == 0))
+          && createsAsSelf()
+          && itemOk(request.resource.data);
+        allow update: if verified()
+          && (
+            // Managers edit the catalog; usage and last prices are untouched
+            // by `itemChangeMap`, and the immutable fields cannot move.
+            (financeManager(f)
+              && writesAsSelf()
+              && itemOk(request.resource.data)
+              && request.resource.data.get('createdAt', null)
+                   == resource.data.get('createdAt', null)
+              && request.resource.data.get('createdBy', '')
+                   == resource.data.get('createdBy', '')
+              && request.resource.data.get('builtIn', false)
+                   == resource.data.get('builtIn', false)
+              && request.resource.data.get('seedKey', null)
+                   == resource.data.get('seedKey', null))
+            // Any active member records a purchase: only the usage fields may
+            // change, and one write may add 1..40 uses (D-P2-7).
+            || (isActiveMember(f)
+              && writesAsSelf()
+              && request.resource.data.diff(resource.data).affectedKeys()
+                   .hasOnly(['useCount', 'lastPricePaisa', 'lastUnitPricePaisa',
+                             'lastUsedAt', 'updatedAt', 'updatedBy'])
+              && request.resource.data.get('useCount', 0) is int
+              && request.resource.data.get('useCount', 0)
+                   - resource.data.get('useCount', 0) > 0
+              && request.resource.data.get('useCount', 0)
+                   - resource.data.get('useCount', 0) <= 40
+              && isNonNegativeIntOrMissing(request.resource.data,
+                                           'lastPricePaisa')
+              && isNonNegativeIntOrMissing(request.resource.data,
+                                           'lastUnitPricePaisa')
+              && (!('lastUsedAt' in request.resource.data.keys())
+                  || request.resource.data.lastUsedAt == null
+                  || request.resource.data.lastUsedAt is timestamp))
+          );
+        allow delete: if false;
+      }
+
+      // ── expenses/{e} — one row per purchase (P2-10) ─────────────────────
+      match /expenses/{e} {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && expenseOk(request.resource.data)
+          && monthOpen(f, request.resource.data.monthKey);
+        // Two update paths: the four soft-delete stamps, or a content edit.
+        // Both freeze the provenance fields and respect a closed month.
+        allow update: if verified()
+          && isActiveMember(f)
+          && writesAsSelf()
+          && (resource.data.get('createdBy', '') == request.auth.uid
+              || isManager(f))
+          && (
+            (softDeleteOnly()
+              && expenseOk(request.resource.data)
+              && monthOpen(f, resource.data.monthKey)
+              && (!('deletedAt' in request.resource.data.keys())
+                  || request.resource.data.deletedAt == null
+                  || request.resource.data.deletedAt is timestamp)
+              && (!('deletedBy' in request.resource.data.keys())
+                  || request.resource.data.deletedBy == null
+                  || request.resource.data.deletedBy == request.auth.uid))
+            || (expenseOk(request.resource.data)
+              && request.resource.data.get('createdAt', null)
+                   == resource.data.get('createdAt', null)
+              && request.resource.data.get('createdBy', '')
+                   == resource.data.get('createdBy', '')
+              && request.resource.data.get('source', 'manual')
+                   == resource.data.get('source', 'manual')
+              && request.resource.data.get('importBatchId', null)
+                   == resource.data.get('importBatchId', null)
+              && request.resource.data.get('tripId', null)
+                   == resource.data.get('tripId', null)
+              && monthOpen(f, resource.data.monthKey)
+              && monthOpen(f, request.resource.data.monthKey))
+          );
+        allow delete: if false;
+
+        // Append-only edit history.  Only the manager or the expense's creator
+        // may read it; every active member may append their own entry.
+        match /revisions/{r} {
+          allow read: if isActiveMember(f)
+            && (isManager(f) || expenseOwner(f, e));
+          allow create: if verified()
+            && isActiveMember(f)
+            && createsAsSelf()
+            && revisionOk(request.resource.data)
+            && (isManager(f) || expenseOwner(f, e));
+          allow update, delete: if false;
+        }
+      }
+
+      // ── bazarTrips/{t} — immutable trip header (P2-10) ──────────────────
+      match /bazarTrips/{t} {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && tripOk(request.resource.data)
+          && monthOpen(f, request.resource.data.monthKey);
+        allow update, delete: if false;
+      }
+
+      // ── fundTransactions/{t} — append-only signed ledger (P2-10) ────────
+      match /fundTransactions/{t} {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && createsAsSelf()
+          && fundTxOk(f, request.resource.data, t)
+          && monthOpen(f, request.resource.data.monthKey);
+        allow update, delete: if false;
+      }
+
+      // ── memberAdvances/{a} — one advance per member-funded expense ──────
+      match /memberAdvances/{a} {
+        allow read: if isManager(f)
+          || (isActiveMember(f)
+              && resource.data.get('memberId', '') == request.auth.uid);
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && advanceOk(request.resource.data)
+          && request.resource.data.get('expenseId', '') == a
+          && request.resource.data.get('status', '') == 'pending'
+          && request.resource.data.get('settledPaisa', -1) == 0
+          && monthOpen(f, request.resource.data.monthKey);
+        // SettleAdvance only moves the settlement progress; an edit/void is
+        // allowed only while the advance is still unpaid.
+        allow update: if verified()
+          && isActiveMember(f)
+          && writesAsSelf()
+          && advanceOk(request.resource.data)
+          && request.resource.data.get('expenseId', '') == a
+          && (
+            (financeManager(f)
+              && resource.data.get('status', '') in ['pending', 'partial']
+              && request.resource.data.get('status', '') in ['partial', 'settled']
+              && request.resource.data.get('amountPaisa', -1)
+                   == resource.data.get('amountPaisa', -2)
+              && request.resource.data.get('memberId', '')
+                   == resource.data.get('memberId', '')
+              && request.resource.data.get('dateKey', '')
+                   == resource.data.get('dateKey', '')
+              && request.resource.data.get('monthKey', '')
+                   == resource.data.get('monthKey', '')
+              && request.resource.data.get('settledPaisa', -1)
+                   > resource.data.get('settledPaisa', -2))
+            || ((isManager(f) || expenseOwner(f, resource.data.get('expenseId', '')))
+              && resource.data.get('settledPaisa', -1) == 0
+              && request.resource.data.get('settledPaisa', -2) == 0
+              && request.resource.data.get('status', '') in ['pending', 'voided'])
+          );
+        allow delete: if false;
+      }
+
+      // ── settlements/{s} — append-only advance reimbursements (P2-10) ────
+      match /settlements/{s} {
+        allow read: if isManager(f)
+          || (isActiveMember(f)
+              && resource.data.get('memberId', '') == request.auth.uid);
+        allow create: if verified()
+          && financeManager(f)
+          && createsAsSelf()
+          && settlementOk(request.resource.data, s)
+          && monthOpen(f, request.resource.data.monthKey);
+        allow update, delete: if false;
+      }
+
+      // ── monthClosings/{month} — close/reopen history (P2-10) ────────────
+      match /monthClosings/{month} {
+        allow read: if isActiveMember(f);
+        allow create, update: if verified()
+          && financeManager(f)
+          && writesAsSelf()
+          && closingOk(request.resource.data, month);
+        allow delete: if false;
+      }
+
+      // ── settings/{s} — general, modules, rotationPolicy, notificationDefaults
       match /settings/{s} {
-        allow read: if isActive(f);
-        allow create: if isAdmin(f) || creatingFamily(f);
-        allow update: if isAdmin(f);
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && (isAdmin(f) || (s == 'bazar' && financeManager(f))
+              || creatingFamily(f))
+          && createsAsSelf()
+          && settingsOk(request.resource.data);
+        allow update: if verified()
+          && (isAdmin(f) || (s == 'bazar' && financeManager(f)))
+          && writesAsSelf()
+          && settingsOk(request.resource.data);
         allow delete: if false;
       }
 
-      // Append-only logs.
+      // ── Append-only logs ───────────────────────────────────────────────
       match /activity/{a} {
-        allow read: if isActive(f);
-        allow create: if isActive(f) || creatingFamily(f) || joiningNow(f);
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && (isActiveMember(f) || creatingFamily(f) || joiningNow(f))
+          && eventOk(request.resource.data);
         allow update, delete: if false;
       }
       match /auditLogs/{a} {
         allow read: if isAdmin(f);
-        allow create: if isActive(f) || creatingFamily(f) || joiningNow(f);
+        allow create: if verified()
+          && (isActiveMember(f) || creatingFamily(f) || joiningNow(f))
+          && eventOk(request.resource.data);
         allow update, delete: if false;
       }
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // Financial and chore data: never hard-deleted (CLAUDE.md rule 5, soft
+    // delete only).  The collections arrive in Steps 12-31; this deny-only
+    // rule is in place first so that a forgotten collection can only ever
+    // under-grant.  Each of those steps must still add its own read/write and
+    // field-validation rules here.
+    //   expenses, bazarTrips, budgets, contributions, contributionPlans,
+    //   fundTransactions, memberAdvances, settlements, choreTemplates,
+    //   dutyGroups, choreOccurrences, memberAvailability, swapRequests,
+    //   notificationInbox, memberStats
+    // ══════════════════════════════════════════════════════════════════════
+    match /families/{f}/{collection}/{doc} {
+      allow read, write: if false;
+      allow delete: if false;
+    }
+
+    // Default deny for everything not matched above.
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

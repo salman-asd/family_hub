@@ -8,7 +8,7 @@ String _pad(int value, int width) => value.toString().padLeft(width, '0');
 /// A calendar day in the family timezone, written 'yyyy-MM-dd'.
 final class DateKey implements Comparable<DateKey> {
   DateKey(this.year, this.month, this.day)
-      : assert(_isValid(year, month, day), 'Invalid date $year-$month-$day');
+    : assert(_isValid(year, month, day), 'Invalid date $year-$month-$day');
 
   /// The calendar day of [instant] in [timezone] (IANA name).
   /// An unknown timezone name is a programmer error and throws.
@@ -102,16 +102,15 @@ final class DateKey implements Comparable<DateKey> {
 /// A calendar month in the family timezone, written 'yyyy-MM'.
 final class MonthKey implements Comparable<MonthKey> {
   MonthKey(this.year, this.month)
-      : assert(
-          year >= 1 && year <= 9999 && month >= 1 && month <= 12,
-          'Invalid month $year-$month',
-        );
+    : assert(
+        year >= 1 && year <= 9999 && month >= 1 && month <= 12,
+        'Invalid month $year-$month',
+      );
 
   factory MonthKey.fromInstant(
     DateTime instant, {
     String timezone = defaultTimezone,
-  }) =>
-      DateKey.fromInstant(instant, timezone: timezone).monthKey;
+  }) => DateKey.fromInstant(instant, timezone: timezone).monthKey;
 
   static final RegExp _pattern = RegExp(r'^(\d{4})-(\d{2})$');
 

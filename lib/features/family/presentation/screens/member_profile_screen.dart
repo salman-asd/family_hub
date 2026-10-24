@@ -1,12 +1,15 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/localization/role_labels.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/relationship.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/widgets/labels.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/error_view.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -21,7 +24,8 @@ class MemberProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final t = context.tokens;
-    final members = ref.watch(membersProvider).value ?? const <Member>[];
+    final membersAsync = ref.watch(membersProvider);
+    final members = membersAsync.value ?? const <Member>[];
     final me = ref.watch(currentUidProvider);
 
     Member? member;
@@ -31,10 +35,17 @@ class MemberProfileScreen extends ConsumerWidget {
     if (member == null) {
       return Scaffold(
         appBar: AppBar(title: Text(l10n.memberProfileTitle)),
-        body: EmptyState(
-          icon: Icons.person_off_outlined,
-          title: l10n.notFoundTitle,
-        ),
+        body: membersAsync.hasError
+            ? ErrorView(
+                message: l10n.errorUnknown,
+                onRetry: () => ref.invalidate(membersProvider),
+              )
+            : membersAsync.isLoading
+            ? const LoadingView(showAvatar: true)
+            : EmptyState(
+                icon: Icons.person_off_outlined,
+                title: l10n.notFoundTitle,
+              ),
       );
     }
 
@@ -44,18 +55,18 @@ class MemberProfileScreen extends ConsumerWidget {
     }
 
     Widget row(String label, String value) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 2,
-                child: Text(label, style: TextStyle(color: t.textSecondary)),
-              ),
-              Expanded(flex: 3, child: Text(value)),
-            ],
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Text(label, style: TextStyle(color: t.textSecondary)),
           ),
-        );
+          Expanded(flex: 3, child: Text(value)),
+        ],
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.memberProfileTitle)),
@@ -79,8 +90,13 @@ class MemberProfileScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 16),
-          row(l10n.profileRelationship,
-              l10n.relationshipLabel(Relationship.parse(member.relationship))),
+          row(
+            l10n.profileRelationship,
+            l10n.relationshipIdLabel(
+              ref.watch(relationshipCatalogOrDefaultProvider),
+              RelationshipId.parse(member.relationship),
+            ),
+          ),
           row(l10n.memberRoleLabel, l10n.roleLabel(member.role)),
           row(l10n.memberStatusLabel, l10n.statusLabel(member.status)),
           if (spouseName != null) row(l10n.profileSpouse, spouseName),

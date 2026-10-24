@@ -1,5 +1,6 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
+
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -375,6 +376,174 @@ class AppLocalizationsEn extends AppLocalizations {
   String get moduleComingSoonMessage => 'This section is still being built.';
 
   @override
+  String get bazarHomeEmptyTitle => 'Bazar is empty';
+
+  @override
+  String get bazarHomeEmptyMessage =>
+      'Expenses, shopping lists and accounts will be added here step by step.';
+
+  @override
+  String get bazarCatalogSetupTitle => 'Set up the starter catalog';
+
+  @override
+  String get bazarCatalogSetupMessage =>
+      'Add 11 categories and 54 common items to get started. You can edit, add or hide them later.';
+
+  @override
+  String get bazarCatalogSetupAction => 'Set up catalog';
+
+  @override
+  String get bazarCatalogSetupBusy => 'Setting up the catalog…';
+
+  @override
+  String get bazarCatalogAskAdminTitle => 'Catalog not set up';
+
+  @override
+  String get bazarCatalogAskAdminMessage =>
+      'Ask an admin to set up the catalog.';
+
+  @override
+  String get bazarSettingsTitle => 'Bazar settings';
+
+  @override
+  String get unitKg => 'kg';
+
+  @override
+  String get unitG => 'g';
+
+  @override
+  String get unitLitre => 'litre';
+
+  @override
+  String get unitPiece => 'pcs';
+
+  @override
+  String get unitDozen => 'dozen';
+
+  @override
+  String get unitPacket => 'packet';
+
+  @override
+  String get unitCylinder => 'cylinder';
+
+  @override
+  String get bazarFundingFund => 'family fund';
+
+  @override
+  String get bazarFundingMember => 'member paid';
+
+  @override
+  String get bazarAdvancePending => 'pending';
+
+  @override
+  String get bazarAdvancePartial => 'partly settled';
+
+  @override
+  String get bazarAdvanceSettled => 'settled';
+
+  @override
+  String get bazarAdvanceVoided => 'voided';
+
+  @override
+  String get bazarErrRequired => 'Please fill in this field.';
+
+  @override
+  String get bazarErrTooLong => 'This text is too long.';
+
+  @override
+  String get bazarErrInvalidAmount => 'Enter a valid amount.';
+
+  @override
+  String get bazarErrAmountNotPositive => 'The amount must be more than zero.';
+
+  @override
+  String get bazarErrFutureDate => 'The date cannot be in the future.';
+
+  @override
+  String get bazarErrQtyUnitRequired => 'Enter both a quantity and a unit.';
+
+  @override
+  String get bazarErrMemberRequired => 'Choose the member this belongs to.';
+
+  @override
+  String get bazarErrCategoryRequired => 'Choose a category.';
+
+  @override
+  String get bazarErrItemNameRequired => 'Enter the item name.';
+
+  @override
+  String get bazarErrTooManyLines => 'There are too many lines; remove some.';
+
+  @override
+  String get bazarErrInvalidMonth => 'Choose a valid month.';
+
+  @override
+  String get bazarErrInvalidRange =>
+      'The end date must be after the start date.';
+
+  @override
+  String get bazarErrNegative => 'The amount cannot be below zero.';
+
+  @override
+  String get bazarErrTooManyDecimals => 'Use at most two decimal places.';
+
+  @override
+  String get bazarErrTooLarge => 'That amount is too large.';
+
+  @override
+  String get bazarErrMonthLocked =>
+      'This month is closed. Ask an admin to reopen it.';
+
+  @override
+  String get bazarErrAdvanceSettled =>
+      'This advance has already been partly or fully settled.';
+
+  @override
+  String get bazarErrOverpayment =>
+      'The amount is more than what is still owed.';
+
+  @override
+  String get bazarErrAlreadyClosed => 'This month is already closed.';
+
+  @override
+  String get bazarErrNotClosed => 'This month is not closed.';
+
+  @override
+  String get bazarErrReopenNoteRequired =>
+      'Write why the month is being reopened.';
+
+  @override
+  String get bazarErrCatalogNotEmpty =>
+      'The catalog still has items; archive them first.';
+
+  @override
+  String get bazarErrDuplicateItem =>
+      'A similar expense was just added. Check it before saving again.';
+
+  @override
+  String get bazarErrImportAlreadyUndone =>
+      'This import has already been undone.';
+
+  @override
+  String get bazarErrImportHasLockedMonth =>
+      'The file has rows in a closed month.';
+
+  @override
+  String get bazarErrConcurrentEdit =>
+      'Somebody else changed this first. Reload and try again.';
+
+  @override
+  String get bazarErrNotFound =>
+      'That record no longer exists. Refresh and try again.';
+
+  @override
+  String get bazarErrNotAllowed =>
+      'Only the Household Manager or Admin can do this.';
+
+  @override
+  String get bazarErrUnknown => 'Something went wrong. Please try again.';
+
+  @override
   String get profileSetupTitle => 'Set up your profile';
 
   @override
@@ -384,19 +553,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get familyChoiceTitle => 'Join or create a family';
 
   @override
-  String get familyChoiceMessage => 'Create a new family, or join one with an invitation code.';
+  String get familyChoiceMessage =>
+      'Create a new family, or join one with an invitation code.';
 
   @override
   String get pendingTitle => 'Waiting for approval';
 
   @override
-  String get pendingMessage => 'A family admin needs to approve your request before you can continue.';
+  String get pendingMessage =>
+      'A family admin needs to approve your request before you can continue.';
 
   @override
   String get disabledTitle => 'Access turned off';
 
   @override
-  String get disabledMessage => 'Your access to this family has been turned off. Please contact a family admin.';
+  String get disabledMessage =>
+      'Your access to this family has been turned off. Please contact a family admin.';
 
   @override
   String get placeholderContinueProfile => 'Continue (temporary)';
@@ -534,7 +706,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get roleAdmin => 'Admin';
 
   @override
-  String get roleModerator => 'Moderator';
+  String get roleModerator => 'Household Manager';
 
   @override
   String get roleMember => 'Member';
@@ -615,7 +787,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get famFailureNameRequired => 'Please enter a name.';
 
   @override
-  String get famFailureCodeInvalid => 'That code does not look right. Codes have 8 letters and digits.';
+  String get famFailureCodeInvalid =>
+      'That code does not look right. Codes have 8 letters and digits.';
 
   @override
   String get famFailureCodeNotFound => 'No invitation found for that code.';
@@ -624,7 +797,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get famFailureCodeUsed => 'That code was already used.';
 
   @override
-  String get famFailureCodeExpired => 'That code has expired. Ask for a new one.';
+  String get famFailureCodeExpired =>
+      'That code has expired. Ask for a new one.';
 
   @override
   String get famFailureCodeRevoked => 'That code was cancelled.';
@@ -633,7 +807,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get famFailureAlreadyMember => 'You already belong to this family.';
 
   @override
-  String get famFailureLastAdmin => 'A family needs at least one admin. Make someone else admin first.';
+  String get famFailureLastAdmin =>
+      'A family needs at least one admin. Make someone else admin first.';
+
+  @override
+  String get famFailureTooManyAdmins =>
+      'A family can have at most three admins.';
 
   @override
   String get famFailureNotAllowed => 'You do not have permission to do that.';
@@ -645,4 +824,990 @@ class AppLocalizationsEn extends AppLocalizations {
   String avatarOption(String number) {
     return 'Avatar $number';
   }
+
+  @override
+  String get statusScheduled => 'Scheduled';
+
+  @override
+  String get statusInProgress => 'In progress';
+
+  @override
+  String get statusCompleted => 'Completed';
+
+  @override
+  String get statusVerified => 'Verified';
+
+  @override
+  String get statusOverdue => 'Overdue';
+
+  @override
+  String get commonSeeAll => 'See all';
+
+  @override
+  String get errorViewTitle => 'Something went wrong';
+
+  @override
+  String get loadingSemantics => 'Loading';
+
+  @override
+  String progressSemantics(String label, String percent) {
+    return '$label, $percent percent complete';
+  }
+
+  @override
+  String thumbSemantics(String name) {
+    return 'Image of $name';
+  }
+
+  @override
+  String get galleryAvatar => 'Avatar';
+
+  @override
+  String get galleryItemThumb => 'Item thumbnail';
+
+  @override
+  String get galleryStatusChip => 'Status chip';
+
+  @override
+  String get gallerySectionHeader => 'Section header';
+
+  @override
+  String get galleryAppCard => 'Card';
+
+  @override
+  String get galleryMoneyText => 'Money text';
+
+  @override
+  String get galleryProgressRing => 'Progress ring';
+
+  @override
+  String get galleryEmptyState => 'Empty state';
+
+  @override
+  String get galleryLoadingView => 'Loading view';
+
+  @override
+  String get galleryErrorView => 'Error view';
+
+  @override
+  String get galleryPillBottomBar => 'Pill navigation bar';
+
+  @override
+  String get gallerySampleTitle => 'Sample title';
+
+  @override
+  String get gallerySampleMessage =>
+      'This is a sample message used to check for overflow.';
+
+  @override
+  String get gallerySampleItemName => 'Potato';
+
+  @override
+  String get gallerySamplePersonName => 'Karim Uddin';
+
+  @override
+  String get syncWaitingTitle => 'Waiting for connection…';
+
+  @override
+  String get syncWaitingMessage =>
+      'Check your internet connection and try again. Your data is safe.';
+
+  @override
+  String get syncSavedOffline => 'Saved on this device – will sync when online';
+
+  @override
+  String syncBannerSyncing(int count) {
+    return 'Syncing $count change(s)';
+  }
+
+  @override
+  String syncBannerOffline(int count) {
+    return 'Offline – $count change(s) waiting';
+  }
+
+  @override
+  String get gallerySyncBanner => 'Sync banner';
+
+  @override
+  String get famFailureAlreadyInFamily =>
+      'You already belong to a family. Leave it first.';
+
+  @override
+  String get familyLeave => 'Leave family';
+
+  @override
+  String get familyLeaveConfirmTitle => 'Leave this family?';
+
+  @override
+  String get familyLeaveConfirmBody =>
+      'Your past activity stays in the family\'s history. Afterwards you can create or join a family again.';
+
+  @override
+  String get familyLeaveLastAdminReason =>
+      'You are the only admin. Make someone else an admin before leaving.';
+
+  @override
+  String get pendingCancelRequest => 'Cancel request';
+
+  @override
+  String get invitationRevoke => 'Revoke code';
+
+  @override
+  String get invitationRevokeConfirmTitle => 'Revoke this code?';
+
+  @override
+  String get invitationRevokeConfirmBody =>
+      'Nobody will be able to join with this code any more.';
+
+  @override
+  String get securityTitle => 'Security';
+
+  @override
+  String get securityChangePassword => 'Change password';
+
+  @override
+  String get securityCurrentPassword => 'Current password';
+
+  @override
+  String get securityNewPassword => 'New password';
+
+  @override
+  String get securityPasswordChanged => 'Password changed.';
+
+  @override
+  String get securityPasswordSame =>
+      'The new password must differ from the current one.';
+
+  @override
+  String get securityCurrentPasswordRequired => 'Enter your current password.';
+
+  @override
+  String get securityCurrentPasswordWrong =>
+      'The current password is not correct.';
+
+  @override
+  String get securityDeleteTitle => 'Delete my account';
+
+  @override
+  String get securityDeleteBody =>
+      'You leave your family and your sign-in is removed. Your name stays on past records so the family history stays complete.';
+
+  @override
+  String get securityDeletePending =>
+      'Deleting was not finished. Enter your password to finish.';
+
+  @override
+  String get securityDeleteAction => 'Delete account';
+
+  @override
+  String get securityDeleteFinish => 'Finish deleting';
+
+  @override
+  String get securityDeleteConfirmTitle => 'Delete your account?';
+
+  @override
+  String get securityDeleteConfirmBody => 'This cannot be undone.';
+
+  @override
+  String get accountDeleteLastAdminHasMembers =>
+      'You are the only admin and others are still in the family. Transfer the admin role first.';
+
+  @override
+  String get relationshipsTitle => 'Relationships';
+
+  @override
+  String get relationshipsHint =>
+      'Built-in entries are locked. You can add, rename and disable your own.';
+
+  @override
+  String get relationshipsAdd => 'Add relationship';
+
+  @override
+  String get relationshipsLabelBn => 'Name in Bangla';
+
+  @override
+  String get relationshipsLabelEn => 'Name in English';
+
+  @override
+  String get relationshipsSpouseRelevant => 'Offer the spouse picker';
+
+  @override
+  String get relationshipsBuiltIn => 'Built in';
+
+  @override
+  String get relationshipsActive => 'In use';
+
+  @override
+  String get relationshipsDisabled => 'Disabled';
+
+  @override
+  String get relationshipsEnable => 'Enable';
+
+  @override
+  String get relationshipsDisable => 'Disable';
+
+  @override
+  String get relationshipsFailureLabel =>
+      'Enter a name (at most 40 characters).';
+
+  @override
+  String get relationshipsFailureTooMany => 'The list is full.';
+
+  @override
+  String get relationshipsFailureBuiltIn =>
+      'Built-in entries cannot be changed.';
+
+  @override
+  String activityFamilyCreated(String familyName) {
+    return 'Family “$familyName” was created';
+  }
+
+  @override
+  String get activityFamilyUpdated => 'Family settings were updated';
+
+  @override
+  String activityMemberRequested(String memberName) {
+    return '$memberName asked to join';
+  }
+
+  @override
+  String activityMemberApproved(String memberName) {
+    return '$memberName was approved';
+  }
+
+  @override
+  String activityMemberRejected(String memberName) {
+    return '$memberName was not accepted';
+  }
+
+  @override
+  String activityMemberDisabled(String memberName) {
+    return '$memberName was disabled';
+  }
+
+  @override
+  String activityMemberRoleChanged(String memberName, String newRole) {
+    return '$memberName is now $newRole';
+  }
+
+  @override
+  String activityAdminTransferred(String memberName) {
+    return 'Admin role moved to $memberName';
+  }
+
+  @override
+  String activityMemberLeft(String memberName) {
+    return '$memberName left the family';
+  }
+
+  @override
+  String activityMemberCancelled(String memberName) {
+    return '$memberName withdrew the request';
+  }
+
+  @override
+  String activityInvitationCreated(String code) {
+    return 'Invitation $code was created';
+  }
+
+  @override
+  String activityInvitationRevoked(String code) {
+    return 'Invitation $code was revoked';
+  }
+
+  @override
+  String activityBazarCatalogSeeded(String categories, String items) {
+    return 'Bazar catalog started with $categories categories and $items items';
+  }
+
+  @override
+  String activityBazarCategoryCreated(String name) {
+    return 'Category “$name” was added';
+  }
+
+  @override
+  String activityBazarCategoryUpdated(String name) {
+    return 'Category “$name” was updated';
+  }
+
+  @override
+  String activityBazarCategoryDeactivated(String name) {
+    return 'Category “$name” was archived';
+  }
+
+  @override
+  String activityBazarItemCreated(String name) {
+    return 'Item “$name” was added';
+  }
+
+  @override
+  String activityBazarItemUpdated(String name) {
+    return 'Item “$name” was updated';
+  }
+
+  @override
+  String activityBazarItemDeactivated(String name) {
+    return 'Item “$name” was archived';
+  }
+
+  @override
+  String activityBazarExpenseCreated(
+    String item,
+    String amount,
+    String funding,
+  ) {
+    return 'Bought $item for $amount ($funding)';
+  }
+
+  @override
+  String activityBazarExpenseUpdated(String item, String fields) {
+    return '$item was edited ($fields)';
+  }
+
+  @override
+  String activityBazarExpenseDeleted(String item, String amount) {
+    return '$item was deleted ($amount)';
+  }
+
+  @override
+  String activityBazarExpenseRestored(String item, String amount) {
+    return '$item was restored ($amount)';
+  }
+
+  @override
+  String activityBazarTripCreated(String lines, String amount) {
+    return 'Bazar trip with $lines items for $amount was saved';
+  }
+
+  @override
+  String activityBazarBudgetSaved(String month, String amount) {
+    return 'Budget for $month set to $amount';
+  }
+
+  @override
+  String get activityBazarSettingsUpdated => 'Bazar settings were updated';
+
+  @override
+  String activityBazarContributionPlanSet(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$member\'s contribution for $month set to $amount';
+  }
+
+  @override
+  String activityBazarContributionRecorded(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$member\'s contribution of $amount for $month was recorded';
+  }
+
+  @override
+  String activityBazarContributionVoided(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$member\'s contribution of $amount for $month was voided';
+  }
+
+  @override
+  String activityBazarContributionRequested(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$member offered $amount for $month';
+  }
+
+  @override
+  String activityBazarContributionRequestEdited(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$member edited the offer of $amount for $month';
+  }
+
+  @override
+  String activityBazarContributionRequestCancelled(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$member withdrew the offer of $amount for $month';
+  }
+
+  @override
+  String activityBazarContributionApproved(
+    String month,
+    String member,
+    String amount,
+  ) {
+    return '$member\'s contribution of $amount for $month was approved';
+  }
+
+  @override
+  String activityBazarContributionRejected(
+    String month,
+    String member,
+    String amount,
+    String reason,
+  ) {
+    return '$member\'s contribution of $amount for $month was rejected ($reason)';
+  }
+
+  @override
+  String activityBazarContributionChangeRequested(
+    String month,
+    String member,
+    String amount,
+    String old,
+  ) {
+    return '$member asked to change the contribution for $month from $old to $amount';
+  }
+
+  @override
+  String activityBazarContributionChangeApproved(
+    String month,
+    String member,
+    String amount,
+    String old,
+  ) {
+    return '$member\'s change for $month from $old to $amount was approved';
+  }
+
+  @override
+  String activityBazarContributionChangeRejected(
+    String month,
+    String member,
+    String amount,
+    String old,
+  ) {
+    return '$member\'s change for $month from $old to $amount was rejected';
+  }
+
+  @override
+  String activityBazarOpeningBalanceSet(String month, String amount) {
+    return 'Opening balance for $month is $amount';
+  }
+
+  @override
+  String activityBazarAdvanceSettled(
+    String member,
+    String amount,
+    String status,
+  ) {
+    return '$member\'s advance was settled by $amount ($status)';
+  }
+
+  @override
+  String activityBazarMonthClosed(String month, String balance) {
+    return '$month was closed with a balance of $balance';
+  }
+
+  @override
+  String activityBazarMonthReopened(String month, String note) {
+    return '$month was reopened ($note)';
+  }
+
+  @override
+  String activityBazarImportCompleted(String rows, String amount) {
+    return 'Import finished: $rows rows for $amount';
+  }
+
+  @override
+  String activityBazarImportUndone(String rows, String amount) {
+    return 'Import undone: $rows rows for $amount';
+  }
+
+  @override
+  String get activityUnknown => 'Something changed';
+
+  @override
+  String get galleryMonthSwitcher => 'Month switcher';
+
+  @override
+  String get galleryAmountField => 'Amount field';
+
+  @override
+  String get galleryTotalDisplay => 'Total display';
+
+  @override
+  String get galleryProgressBarStatus => 'Limit progress bar';
+
+  @override
+  String get galleryDaySectionHeader => 'Day header';
+
+  @override
+  String get galleryPersonPicker => 'Person picker';
+
+  @override
+  String get galleryCategoryBadge => 'Category badge';
+
+  @override
+  String get monthSwitcherPrevious => 'Previous month';
+
+  @override
+  String get monthSwitcherNext => 'Next month';
+
+  @override
+  String get monthSwitcherPick => 'Choose a month';
+
+  @override
+  String get monthPickerPreviousYear => 'Previous year';
+
+  @override
+  String get monthPickerNextYear => 'Next year';
+
+  @override
+  String get totalDisplayCalculated => 'Calculated from quantity × price';
+
+  @override
+  String get totalDisplayEmpty => 'No total yet';
+
+  @override
+  String get progressLevelOk => 'On track';
+
+  @override
+  String get progressLevelWarning => 'Nearing the limit';
+
+  @override
+  String get progressLevelExceeded => 'Over the limit';
+
+  @override
+  String get progressLevelNoLimit => 'No limit set';
+
+  @override
+  String progressBarSemantics(String label, String percent, String level) {
+    return '$label: $percent percent, $level';
+  }
+
+  @override
+  String get personPickerNone => 'No one';
+
+  @override
+  String get actionUndo => 'Undo';
+
+  @override
+  String get bazarErrExpenseDeleted => 'This expense was deleted. Restore it first.';
+
+  @override
+  String get expenseAddTitle => 'Add expense';
+
+  @override
+  String get expenseEditTitle => 'Edit expense';
+
+  @override
+  String get expenseMenuTrip => 'Bazar trip (many items)';
+
+  @override
+  String get expenseDateLabel => 'Date';
+
+  @override
+  String get expenseItemLabel => 'Item';
+
+  @override
+  String get expenseItemHint => 'Type the item name';
+
+  @override
+  String expenseAddNewItem(String name) {
+    return 'Add $name as a new item';
+  }
+
+  @override
+  String get expenseCategoryLabel => 'Category';
+
+  @override
+  String get expenseRememberItem => 'Remember this item';
+
+  @override
+  String get expenseTotalField => 'Total amount';
+
+  @override
+  String get expenseTotalLabel => 'Total';
+
+  @override
+  String get expenseQtyPriceSection => 'Or enter quantity and price per unit';
+
+  @override
+  String get expenseQtyField => 'Quantity';
+
+  @override
+  String get expenseUnitLabel => 'Unit';
+
+  @override
+  String get expenseUnitPriceField => 'Price per unit';
+
+  @override
+  String expenseUnitPriceHint(String price) {
+    return 'Last price: $price';
+  }
+
+  @override
+  String get expenseFundingLabel => 'Who paid?';
+
+  @override
+  String get expenseFundingFund => 'From family fund';
+
+  @override
+  String get expenseFundingReimbursable => 'Paid by a member, to be reimbursed';
+
+  @override
+  String get expenseFundingPersonal => 'Paid by a member, personal';
+
+  @override
+  String get expensePaidByLabel => 'Paid by';
+
+  @override
+  String get expenseMoreSection => 'More details';
+
+  @override
+  String get expenseShopField => 'Shop';
+
+  @override
+  String get expenseNoteField => 'Note';
+
+  @override
+  String get expensePurchaserLabel => 'Bought by';
+
+  @override
+  String get expenseSaveAddAnother => 'Save and add another';
+
+  @override
+  String get expenseSaved => 'Expense saved';
+
+  @override
+  String get expenseUpdated => 'Expense updated';
+
+  @override
+  String get expenseUnknownMember => 'A member';
+
+  @override
+  String get expenseDuplicateTitle => 'Looks like a duplicate';
+
+  @override
+  String expenseDuplicateMessage(String item) {
+    return '$item with the same amount was added a few minutes ago.';
+  }
+
+  @override
+  String get expenseDuplicateSaveAnyway => 'Save anyway';
+
+  @override
+  String get tripTitle => 'Bazar trip';
+
+  @override
+  String get tripAddLine => 'Add item';
+
+  @override
+  String get tripLineSheetTitle => 'Add item to the trip';
+
+  @override
+  String get tripLineSheetSave => 'Add to trip';
+
+  @override
+  String tripLinesCount(String count) {
+    return 'Items: $count';
+  }
+
+  @override
+  String get tripEmpty => 'No items yet. Add the first item.';
+
+  @override
+  String get tripTotalLabel => 'Trip total';
+
+  @override
+  String get tripSaveAll => 'Save all';
+
+  @override
+  String get tripSaved => 'Trip saved';
+
+  @override
+  String get tripLineRemoved => 'Item removed';
+
+  @override
+  String get tripLimitReached => 'A trip can have at most 40 items.';
+
+  @override
+  String get expenseListTitle => 'Expenses';
+
+  @override
+  String get expenseListFilteredTotal => 'Total for this view';
+
+  @override
+  String get expenseListEmptyTitle => 'No expenses this month';
+
+  @override
+  String get expenseListEmptyMessage => 'Add the first expense to see it here.';
+
+  @override
+  String get expenseListFilteredEmptyTitle => 'Nothing matches the filters';
+
+  @override
+  String get expenseListFilteredEmptyMessage => 'Clear the filters to see every expense.';
+
+  @override
+  String get expenseListLocked => 'This month is closed. Entries are read-only.';
+
+  @override
+  String get expenseListRefresh => 'Refresh';
+
+  @override
+  String get expenseShowMore => 'Show more';
+
+  @override
+  String get expenseRowDeleted => 'Deleted';
+
+  @override
+  String get expenseRowTrip => 'Trip';
+
+  @override
+  String get expenseFilterTitle => 'Filter';
+
+  @override
+  String get expenseFilterRange => 'Date range';
+
+  @override
+  String expenseFilterRangeActive(String start, String end) {
+    return '$start to $end';
+  }
+
+  @override
+  String get expenseRangeAll => 'Whole month';
+
+  @override
+  String get expenseRangeToday => 'Today';
+
+  @override
+  String get expenseRangeYesterday => 'Yesterday';
+
+  @override
+  String get expenseRangeLast7 => 'Last 7 days';
+
+  @override
+  String get expenseRangeThisWeek => 'This week';
+
+  @override
+  String get expenseRangeThisMonth => 'This month';
+
+  @override
+  String get expenseRangeLastMonth => 'Last month';
+
+  @override
+  String get expenseRangeThisYear => 'This year';
+
+  @override
+  String get expenseRangeCustom => 'Choose dates';
+
+  @override
+  String get expenseFilterCategory => 'Category';
+
+  @override
+  String get expenseFilterItem => 'Item';
+
+  @override
+  String get expenseFilterMember => 'Member';
+
+  @override
+  String get expenseFilterFunding => 'Funding';
+
+  @override
+  String get expenseFilterAny => 'Any';
+
+  @override
+  String get expenseFilterShowDeleted => 'Show deleted';
+
+  @override
+  String get expenseFilterReset => 'Clear filters';
+
+  @override
+  String get expenseDetailTitle => 'Expense';
+
+  @override
+  String get expenseDetailAddedBy => 'Added by';
+
+  @override
+  String get expenseDetailPayment => 'Payment';
+
+  @override
+  String get expenseNotYoursMessage => 'You can change only your own expenses.';
+
+  @override
+  String get expenseLedgerFund => 'Paid from the family fund';
+
+  @override
+  String expenseLedgerPersonal(String name) {
+    return 'Paid by $name from their own money, no reimbursement';
+  }
+
+  @override
+  String expenseLedgerPending(String name, String amount) {
+    return 'Paid by $name. $amount is waiting to be reimbursed.';
+  }
+
+  @override
+  String expenseLedgerPartial(String name, String settled, String total) {
+    return 'Paid by $name. $settled of $total has been reimbursed.';
+  }
+
+  @override
+  String expenseLedgerSettled(String name) {
+    return 'Paid by $name. Fully reimbursed.';
+  }
+
+  @override
+  String get expenseLedgerVoided => 'The reimbursement was cancelled with the expense.';
+
+  @override
+  String get expenseDeleteTitle => 'Delete this expense?';
+
+  @override
+  String expenseDeleteMessage(String name) {
+    return '$name will be removed from the totals. You can undo it right away.';
+  }
+
+  @override
+  String get expenseDeleted => 'Expense deleted';
+
+  @override
+  String get expenseRestore => 'Restore';
+
+  @override
+  String get expenseRestored => 'Expense restored';
+
+  @override
+  String get expenseHistoryTitle => 'Edit history';
+
+  @override
+  String get expenseHistoryEmpty => 'No changes yet.';
+
+  @override
+  String expenseHistoryEntry(String who, String date) {
+    return '$who changed this on $date';
+  }
+
+  @override
+  String expenseHistoryWas(String field, String value) {
+    return '$field was: $value';
+  }
+
+  @override
+  String get catalogTitle => 'Catalog';
+
+  @override
+  String get catalogTabCategories => 'Categories';
+
+  @override
+  String get catalogTabItems => 'Items';
+
+  @override
+  String get catalogAdd => 'Add';
+
+  @override
+  String get catalogAddCategory => 'Add category';
+
+  @override
+  String get catalogEditCategory => 'Edit category';
+
+  @override
+  String get catalogAddItem => 'Add item';
+
+  @override
+  String get catalogEditItem => 'Edit item';
+
+  @override
+  String get catalogCategoryName => 'Category name';
+
+  @override
+  String get catalogNameBn => 'Name in Bangla';
+
+  @override
+  String get catalogNameEn => 'Name in English (optional)';
+
+  @override
+  String get catalogEmoji => 'Emoji (optional)';
+
+  @override
+  String get catalogColour => 'Colour';
+
+  @override
+  String catalogColourSemantics(int number) {
+    return 'Colour $number';
+  }
+
+  @override
+  String get catalogActive => 'Shown in lists';
+
+  @override
+  String get catalogActiveHint => 'Turn off to hide it without deleting.';
+
+  @override
+  String get catalogHidden => 'Hidden';
+
+  @override
+  String get catalogReorder => 'Drag to reorder';
+
+  @override
+  String get catalogReadOnly => 'You can look at this, but only the Household Manager or Admin can change it.';
+
+  @override
+  String get catalogCategoriesEmpty => 'No categories yet';
+
+  @override
+  String get catalogItemsEmpty => 'No items found';
+
+  @override
+  String get catalogSearch => 'Search items';
+
+  @override
+  String get catalogAllCategories => 'All';
+
+  @override
+  String get catalogDefaultUnit => 'Default unit';
+
+  @override
+  String get catalogAliases => 'Other spellings (for search)';
+
+  @override
+  String get catalogAliasField => 'Add a spelling';
+
+  @override
+  String get catalogAliasAdd => 'Add spelling';
+
+  @override
+  String get catalogAliasLimit => 'At most 10 spellings.';
+
+  @override
+  String get bazarSettingsWeekStart => 'Week starts on';
+
+  @override
+  String get bazarSettingsTarget => 'Monthly family contribution target';
+
+  @override
+  String get bazarSettingsDueDay => 'Contribution due day of the month';
+
+  @override
+  String get bazarSettingsAlerts => 'Budget alerts (percent of the budget)';
+
+  @override
+  String get bazarSettingsWarnAt => 'Warn at';
+
+  @override
+  String get bazarSettingsExceededAt => 'Exceeded at';
+
+  @override
+  String get bazarSettingsThresholdRange => 'Enter whole numbers from 1 to 200.';
+
+  @override
+  String get bazarSettingsThresholdOrder => 'The warning level must be lower than the exceeded level.';
+
+  @override
+  String get bazarSettingsFundStart => 'Fund start month';
+
+  @override
+  String get bazarSettingsFundStartUnset => 'Set automatically when you record the opening balance.';
 }

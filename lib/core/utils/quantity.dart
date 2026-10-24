@@ -16,11 +16,11 @@ final class Quantity implements Comparable<Quantity> {
   /// Parses '2.5', '২.৫', '1,000'. At most 3 decimal places; negative values
   /// are rejected with code `negative`.
   static Result<Quantity> parse(String input) => parseScaledDecimal(
-        input,
-        scale: 3,
-        field: 'quantity',
-        allowNegative: false,
-      ).map(Quantity.milli);
+    input,
+    scale: 3,
+    field: 'quantity',
+    allowNegative: false,
+  ).map(Quantity.milli);
 
   bool get isZero => milli == 0;
 

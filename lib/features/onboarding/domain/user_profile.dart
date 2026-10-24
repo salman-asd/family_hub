@@ -14,7 +14,7 @@ class UserProfile {
 
   final String uid;
   final String fullName;
-  final Relationship relationship;
+  final RelationshipId relationship;
   final String? nickname;
   final Gender? gender;
 
@@ -37,12 +37,12 @@ class UserProfile {
 
   @override
   int get hashCode => Object.hash(
-        uid,
-        fullName,
-        relationship,
-        nickname,
-        gender,
-        spouseId,
-        avatarKey,
-      );
+    uid,
+    fullName,
+    relationship,
+    nickname,
+    gender,
+    spouseId,
+    avatarKey,
+  );
 }

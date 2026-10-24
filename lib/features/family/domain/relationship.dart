@@ -1,6 +1,12 @@
-/// Relationship of a member to the family (roadmap 2.3).
+import 'package:family_hub/features/family/domain/relationship_catalog.dart';
+
+export 'package:family_hub/features/family/domain/relationship_catalog.dart';
+
+/// The ten built-in relationships of roadmap 2.3.
 ///
-/// The list is a constant for now; making it admin-editable is a later change.
+/// Since H10 the family's list is editable (`RelationshipCatalog`), and a
+/// profile stores a [RelationshipId], not this enum.  The enum remains the typed
+/// view of the built-ins (labels, defaults).
 enum Relationship {
   father(canHaveSpouse: true),
   mother(canHaveSpouse: true),
@@ -18,10 +24,21 @@ enum Relationship {
   /// Whether the spouse picker makes sense for this relationship.
   final bool canHaveSpouse;
 
+  /// The stored id of this built-in.
+  RelationshipId get id => RelationshipId(name);
+
   static Relationship parse(String? value) => Relationship.values.firstWhere(
-        (r) => r.name == value,
-        orElse: () => Relationship.other,
-      );
+    (r) => r.name == value,
+    orElse: () => Relationship.other,
+  );
+
+  /// The built-in with [id], or `null` for a custom id.
+  static Relationship? tryFromId(RelationshipId id) {
+    for (final r in Relationship.values) {
+      if (r.name == id.value) return r;
+    }
+    return null;
+  }
 }
 
 /// Optional gender (never required).

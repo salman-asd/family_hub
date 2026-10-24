@@ -22,10 +22,10 @@ class AppUser {
   final bool emailVerified;
 
   AppUser copyWith({String? email, bool? emailVerified}) => AppUser(
-        uid: uid,
-        email: email ?? this.email,
-        emailVerified: emailVerified ?? this.emailVerified,
-      );
+    uid: uid,
+    email: email ?? this.email,
+    emailVerified: emailVerified ?? this.emailVerified,
+  );
 
   @override
   bool operator ==(Object other) =>

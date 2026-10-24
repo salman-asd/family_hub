@@ -30,9 +30,7 @@ void main() {
       expect(meta.isDeleted, isFalse);
     });
 
-    test(
-        'updateMetadata updates updatedAt and updatedBy while preserving createdAt',
-        () {
+    test('updateMetadata updates updatedAt and updatedBy while preserving createdAt', () {
       final initial = BaseMapper.createMetadata(uid: uid, clock: clock);
       clock.advance(const Duration(minutes: 15));
       const updaterUid = 'user_updater_456';
@@ -50,9 +48,7 @@ void main() {
       expect(updated.isDeleted, isFalse);
     });
 
-    test(
-        'softDeleteMetadata marks document as deleted with deletedAt and deletedBy',
-        () {
+    test('softDeleteMetadata marks document as deleted with deletedAt and deletedBy', () {
       final initial = BaseMapper.createMetadata(uid: uid, clock: clock);
       clock.advance(const Duration(hours: 1));
       const deleterUid = 'user_admin';
@@ -94,20 +90,22 @@ void main() {
       expect(deserialized, equals(meta));
     });
 
-    test('timestampToDateTime handles null, Timestamp, DateTime, and String',
-        () {
-      expect(BaseMapper.timestampToDateTime(null), isNull);
+    test(
+      'timestampToDateTime handles null, Timestamp, DateTime, and String',
+      () {
+        expect(BaseMapper.timestampToDateTime(null), isNull);
 
-      final ts = Timestamp.fromDate(fixedInstant);
-      expect(BaseMapper.timestampToDateTime(ts), fixedInstant);
+        final ts = Timestamp.fromDate(fixedInstant);
+        expect(BaseMapper.timestampToDateTime(ts), fixedInstant);
 
-      expect(BaseMapper.timestampToDateTime(fixedInstant), fixedInstant);
+        expect(BaseMapper.timestampToDateTime(fixedInstant), fixedInstant);
 
-      expect(
-        BaseMapper.timestampToDateTime('2026-10-17T12:00:00Z'),
-        fixedInstant,
-      );
-      expect(BaseMapper.timestampToDateTime('not_a_date'), isNull);
-    });
+        expect(
+          BaseMapper.timestampToDateTime('2026-10-17T12:00:00Z'),
+          fixedInstant,
+        );
+        expect(BaseMapper.timestampToDateTime('not_a_date'), isNull);
+      },
+    );
   });
 }

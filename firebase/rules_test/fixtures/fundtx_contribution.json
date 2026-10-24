@@ -1,0 +1,30 @@
+{
+  "scenario": "fundtx_contribution",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/fundTransactions/con_fixC1",
+      "data": {
+        "type": "contribution",
+        "amountPaisa": 10000,
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "refType": "contribution",
+        "refId": "fixC1",
+        "note": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    }
+  ]
+}

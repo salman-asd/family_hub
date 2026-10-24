@@ -1,4 +1,5 @@
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,8 +40,8 @@ abstract class FamilyModule {
   /// Ids of report views the module contributes (Step 18).
   List<String> get reports => const [];
 
-  /// Permission needed to see the module, by name; `null` = every member.
-  ///
-  /// TODO(step-10): becomes a `Permission` once the permission policy exists.
-  String? get requiredPermission => null;
+  /// Permission needed to see the module's tab; `null` = every member.  The
+  /// shell hides the tab (and redirects its paths) while the signed-in member
+  /// lacks it (`visibleModulesProvider`).
+  Permission? get requiredPermission => null;
 }

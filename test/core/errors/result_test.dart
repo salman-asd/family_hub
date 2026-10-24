@@ -17,10 +17,7 @@ void main() {
         (v) => const Failure<int>(Conflict(code: 'locked')),
       );
       expect(chained.failureOrNull, const Conflict(code: 'locked'));
-      expect(
-        ok.flatMap<String>((v) => Success<String>('$v')).valueOrNull,
-        '2',
-      );
+      expect(ok.flatMap<String>((v) => Success<String>('$v')).valueOrNull, '2');
     });
 
     test('when folds both cases', () {
@@ -43,22 +40,22 @@ void main() {
 
     test('AppFailure is exhaustively switchable', () {
       String name(AppFailure f) => switch (f) {
-            PermissionDenied() => 'permission',
-            NotFound() => 'notFound',
-            Validation() => 'validation',
-            Conflict() => 'conflict',
-            Network() => 'network',
-            InvalidCredentials() => 'invalidCredentials',
-            UserNotFound() => 'userNotFound',
-            EmailAlreadyInUse() => 'emailAlreadyInUse',
-            WeakPassword() => 'weakPassword',
-            TooManyRequests() => 'tooManyRequests',
-            UserDisabled() => 'userDisabled',
-            RequiresRecentLogin() => 'requiresRecentLogin',
-            InvalidEmail() => 'invalidEmail',
-            NoCurrentUser() => 'noCurrentUser',
-            Unknown() => 'unknown',
-          };
+        PermissionDenied() => 'permission',
+        NotFound() => 'notFound',
+        Validation() => 'validation',
+        Conflict() => 'conflict',
+        Network() => 'network',
+        InvalidCredentials() => 'invalidCredentials',
+        UserNotFound() => 'userNotFound',
+        EmailAlreadyInUse() => 'emailAlreadyInUse',
+        WeakPassword() => 'weakPassword',
+        TooManyRequests() => 'tooManyRequests',
+        UserDisabled() => 'userDisabled',
+        RequiresRecentLogin() => 'requiresRecentLogin',
+        InvalidEmail() => 'invalidEmail',
+        NoCurrentUser() => 'noCurrentUser',
+        Unknown() => 'unknown',
+      };
       expect(name(const Validation('x', 'y')), 'validation');
       expect(name(const InvalidCredentials()), 'invalidCredentials');
       expect(name(const Unknown('boom')), 'unknown');

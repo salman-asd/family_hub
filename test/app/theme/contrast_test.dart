@@ -14,12 +14,7 @@ double _contrast(Color fg, Color bg) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-void _assertContrast(
-  String label,
-  Color fg,
-  Color bg,
-  double minRatio,
-) {
+void _assertContrast(String label, Color fg, Color bg, double minRatio) {
   final ratio = _contrast(fg, bg);
   if (ratio < minRatio) {
     fail(
@@ -50,12 +45,7 @@ void main() {
         });
 
         test('textPrimary on surface >= 4.5', () {
-          _assertContrast(
-            'textPrimary/surface',
-            t.textPrimary,
-            t.surface,
-            4.5,
-          );
+          _assertContrast('textPrimary/surface', t.textPrimary, t.surface, 4.5);
         });
 
         test('textPrimary on surfaceRaised >= 4.5', () {
@@ -97,12 +87,7 @@ void main() {
         // ── textOnAccent on accent ────────────────────────────────────────
 
         test('textOnAccent on accent >= 4.5', () {
-          _assertContrast(
-            'textOnAccent/accent',
-            t.textOnAccent,
-            t.accent,
-            4.5,
-          );
+          _assertContrast('textOnAccent/accent', t.textOnAccent, t.accent, 4.5);
         });
 
         // ── Status onColor on container ───────────────────────────────────
@@ -199,13 +184,22 @@ void main() {
           );
         });
 
+        // ── Placeholder initials (H11) ─────────────────────────────────────
+        // Mirrors AppAvatar.foregroundFor: dark ink on light backgrounds,
+        // light ink on dark ones.  EVERY palette entry must reach 4.5:1.
+        test('placeholder foreground on every palette entry >= 4.5', () {
+          for (var i = 0; i < t.placeholderPalette.length; i++) {
+            final bg = t.placeholderPalette[i];
+            final fg =
+                ThemeData.estimateBrightnessForColor(bg) == Brightness.dark
+                ? t.placeholderOnDark
+                : t.placeholderOnLight;
+            _assertContrast('placeholder[$i]', fg, bg, 4.5);
+          }
+        });
+
         test('accent on surface >= 3', () {
-          _assertContrast(
-            'accent/surface',
-            t.accent,
-            t.surface,
-            3,
-          );
+          _assertContrast('accent/surface', t.accent, t.surface, 3);
         });
       });
     }

@@ -1,3 +1,4 @@
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 
@@ -17,6 +18,7 @@ class Member {
     this.avatarKey,
     this.inviteCode,
     this.removedAt,
+    this.leftAt,
   });
 
   final String uid;
@@ -33,12 +35,25 @@ class Member {
   /// Code used to join; checked by the security rules.
   final String? inviteCode;
 
-  /// Set when an admin rejected the request (soft delete).
+  /// Set when the request was rejected, cancelled by the person, or the person
+  /// left the family (soft delete).  The person is then free to create or join
+  /// a family again.
   final DateTime? removedAt;
 
-  bool get isRemoved => removedAt != null;
+  /// Set (together with [removedAt]) when the member left on their own.  Kept
+  /// only to tell "left" apart from "rejected" in the history.
+  final DateTime? leftAt;
+
+  bool get hasLeft => leftAt != null;
+
+  /// Rejected, cancelled or left: the member counts as gone everywhere.
+  bool get isRemoved => removedAt != null || leftAt != null;
   bool get isActive => status == MembershipStatus.active && !isRemoved;
   bool get isActiveAdmin => isActive && role == MemberRole.admin;
+
+  /// This member as the permission policy sees them (Step 10).
+  PermissionActor get permissionActor =>
+      PermissionActor(uid: uid, role: role, isActive: isActive);
 
   /// Short name for lists.
   String get displayName =>
@@ -53,19 +68,20 @@ class Member {
     String? spouseId,
     String? avatarKey,
     DateTime? removedAt,
-  }) =>
-      Member(
-        uid: uid,
-        role: role ?? this.role,
-        status: status ?? this.status,
-        fullName: fullName ?? this.fullName,
-        relationship: relationship ?? this.relationship,
-        nickname: nickname ?? this.nickname,
-        spouseId: spouseId ?? this.spouseId,
-        avatarKey: avatarKey ?? this.avatarKey,
-        inviteCode: inviteCode,
-        removedAt: removedAt ?? this.removedAt,
-      );
+    DateTime? leftAt,
+  }) => Member(
+    uid: uid,
+    role: role ?? this.role,
+    status: status ?? this.status,
+    fullName: fullName ?? this.fullName,
+    relationship: relationship ?? this.relationship,
+    nickname: nickname ?? this.nickname,
+    spouseId: spouseId ?? this.spouseId,
+    avatarKey: avatarKey ?? this.avatarKey,
+    inviteCode: inviteCode,
+    removedAt: removedAt ?? this.removedAt,
+    leftAt: leftAt ?? this.leftAt,
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -79,11 +95,23 @@ class Member {
       other.spouseId == spouseId &&
       other.avatarKey == avatarKey &&
       other.inviteCode == inviteCode &&
-      other.removedAt == removedAt;
+      other.removedAt == removedAt &&
+      other.leftAt == leftAt;
 
   @override
-  int get hashCode => Object.hash(uid, role, status, fullName, relationship,
-      nickname, spouseId, avatarKey, inviteCode, removedAt);
+  int get hashCode => Object.hash(
+    uid,
+    role,
+    status,
+    fullName,
+    relationship,
+    nickname,
+    spouseId,
+    avatarKey,
+    inviteCode,
+    removedAt,
+    leftAt,
+  );
 
   @override
   String toString() => 'Member($uid, $role, $status)';

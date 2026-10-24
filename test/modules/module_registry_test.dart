@@ -1,6 +1,6 @@
 import 'package:family_hub/features/bazar/bazar_module.dart';
 import 'package:family_hub/features/chores/chores_module.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:family_hub/modules/module_registry.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -36,19 +36,23 @@ void main() {
     test('enabled / disabled follow the flags and keep registry order', () {
       final registry = ModuleRegistry.standard();
       const off = ModuleFlags({'chores': false});
-      expect(registry.enabled(ModuleFlags.allOn).map((m) => m.id),
-          ['chores', 'bazar']);
+      expect(registry.enabled(ModuleFlags.allOn).map((m) => m.id), [
+        'chores',
+        'bazar',
+      ]);
       expect(registry.enabled(off).map((m) => m.id), ['bazar']);
       expect(registry.disabled(off).map((m) => m.id), ['chores']);
     });
   });
 
   group('ModuleFlags', () {
-    test('default is everything on, including modules it has never heard of',
-        () {
-      expect(ModuleFlags.allOn.isEnabled('chores'), isTrue);
-      expect(ModuleFlags.allOn.isEnabled('events'), isTrue);
-    });
+    test(
+      'default is everything on, including modules it has never heard of',
+      () {
+        expect(ModuleFlags.allOn.isEnabled('chores'), isTrue);
+        expect(ModuleFlags.allOn.isEnabled('events'), isTrue);
+      },
+    );
 
     test('withFlag switches one module and leaves the others', () {
       final flags = ModuleFlags.allOn.withFlag('bazar', enabled: false);

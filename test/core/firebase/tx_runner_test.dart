@@ -1,28 +1,57 @@
+import 'package:family_hub/core/firebase/server_time.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
+import 'package:family_hub/core/utils/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('FakeTxRunner', () {
-    test('runBatch applies set, update, delete atomically on completion',
-        () async {
-      final runner = FakeTxRunner({
-        'families/f1/expenses/e1': {'amount': 100, 'note': 'initial'},
-        'families/f1/expenses/e2': {'amount': 200},
-      });
+    test('resolves a ServerTime marker with the injected clock', () async {
+      final clock = FakeClock(DateTime.utc(2026, 10, 18, 10));
+      final runner = FakeTxRunner(<String, Map<String, dynamic>>{
+        'families/f1/members/u1': <String, dynamic>{'role': 'member'},
+      }, clock);
 
       await runner.runBatch((batch) {
-        batch.set('families/f1/expenses/e3', {'amount': 300});
-        batch.update('families/f1/expenses/e1', {'note': 'updated'});
-        batch.delete('families/f1/expenses/e2');
+        batch.set('families/f1/activity/e1', <String, dynamic>{
+          'type': 'family.created',
+          'recordedAt': ServerTime.instance,
+        });
+        batch.update('families/f1/members/u1', <String, dynamic>{
+          'updatedAt': ServerTime.instance,
+        });
       });
 
-      expect(runner.store['families/f1/expenses/e3'], {'amount': 300});
-      expect(runner.store['families/f1/expenses/e1'], {
-        'amount': 100,
-        'note': 'updated',
-      });
-      expect(runner.store.containsKey('families/f1/expenses/e2'), isFalse);
+      expect(
+        runner.store['families/f1/activity/e1']?['recordedAt'],
+        clock.nowUtc(),
+      );
+      expect(
+        runner.store['families/f1/members/u1']?['updatedAt'],
+        clock.nowUtc(),
+      );
     });
+    test(
+      'runBatch applies set, update, delete atomically on completion',
+      () async {
+        final runner = FakeTxRunner({
+          'families/f1/expenses/e1': {'amount': 100, 'note': 'initial'},
+          'families/f1/expenses/e2': {'amount': 200},
+        });
+
+        await runner.runBatch((batch) {
+          batch.set('families/f1/expenses/e3', {'amount': 300});
+          batch.update('families/f1/expenses/e1', {'note': 'updated'});
+          batch.delete('families/f1/expenses/e2');
+        });
+
+        expect(runner.store['families/f1/expenses/e3'], {'amount': 300});
+        expect(runner.store['families/f1/expenses/e1'], {
+          'amount': 100,
+          'note': 'updated',
+        });
+        expect(runner.store.containsKey('families/f1/expenses/e2'), isFalse);
+      },
+    );
 
     test('runBatch with merge combines fields', () async {
       final runner = FakeTxRunner({
@@ -33,11 +62,9 @@ void main() {
       });
 
       await runner.runBatch((batch) {
-        batch.set(
-          'families/f1/settings/general',
-          {'currency': 'USD'},
-          merge: true,
-        );
+        batch.set('families/f1/settings/general', {
+          'currency': 'USD',
+        }, merge: true);
       });
 
       expect(runner.store['families/f1/settings/general'], {

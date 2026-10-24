@@ -1,15 +1,16 @@
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/modules/family_module.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:family_hub/modules/module_registry.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The module registry.  Override in tests to inject a custom set.
-final moduleRegistryProvider =
-    Provider<ModuleRegistry>((ref) => ModuleRegistry.standard());
+final moduleRegistryProvider = Provider<ModuleRegistry>(
+  (ref) => ModuleRegistry.standard(),
+);
 
-/// Overridden in `bootstrap.dart` (TODO(step-9): Firestore implementation).
+/// Overridden in `bootstrap.dart`.
 final moduleFlagsRepositoryProvider = Provider<ModuleFlagsRepository>(
   (ref) => throw UnimplementedError(
     'moduleFlagsRepositoryProvider must be overridden (bootstrap.dart / tests).',
@@ -29,8 +30,10 @@ final moduleFlagsProvider = Provider<ModuleFlags>((ref) {
   return flags.value ?? ModuleFlags.allOn;
 });
 
-final _moduleFlagsStreamProvider =
-    StreamProvider.family<ModuleFlags, String>((ref, familyId) {
+final _moduleFlagsStreamProvider = StreamProvider.family<ModuleFlags, String>((
+  ref,
+  familyId,
+) {
   return ref.watch(moduleFlagsRepositoryProvider).watchModuleFlags(familyId);
 });
 

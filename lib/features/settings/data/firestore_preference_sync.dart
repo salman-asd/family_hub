@@ -10,8 +10,8 @@ import 'package:flutter/material.dart' show ThemeMode;
 /// Reads/writes `users/{uid}.preferences` for the signed-in user.
 class _PreferencesDoc {
   _PreferencesDoc({FirebaseAuth? auth, FirebaseFirestore? firestore})
-      : _auth = auth ?? FirebaseAuth.instance,
-        _db = firestore ?? FirebaseFirestore.instance;
+    : _auth = auth ?? FirebaseAuth.instance,
+      _db = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _db;
@@ -40,49 +40,51 @@ class _PreferencesDoc {
 
 /// Theme preferences: `preferences.themeId` and `preferences.themeMode`.
 class FirestoreThemePreferenceSync implements ThemePreferenceSync {
-  FirestoreThemePreferenceSync({FirebaseAuth? auth, FirebaseFirestore? firestore})
-      : _doc = _PreferencesDoc(auth: auth, firestore: firestore);
+  FirestoreThemePreferenceSync({
+    FirebaseAuth? auth,
+    FirebaseFirestore? firestore,
+  }) : _doc = _PreferencesDoc(auth: auth, firestore: firestore);
 
   final _PreferencesDoc _doc;
 
   @override
-  Future<void> push(ThemePrefs prefs) => _doc.merge({
-        'themeId': prefs.themeId,
-        'themeMode': prefs.themeMode.name,
-      });
+  Future<void> push(ThemePrefs prefs) =>
+      _doc.merge({'themeId': prefs.themeId, 'themeMode': prefs.themeMode.name});
 
   @override
   Stream<ThemePrefs?> watch() => _doc.watch().map((p) {
-        if (p == null || p['themeId'] is! String) return null;
-        return ThemePrefs(
-          themeId: p['themeId'] as String,
-          themeMode: ThemeMode.values.firstWhere(
-            (m) => m.name == p['themeMode'],
-            orElse: () => ThemeMode.system,
-          ),
-        );
-      });
+    if (p == null || p['themeId'] is! String) return null;
+    return ThemePrefs(
+      themeId: p['themeId'] as String,
+      themeMode: ThemeMode.values.firstWhere(
+        (m) => m.name == p['themeMode'],
+        orElse: () => ThemeMode.system,
+      ),
+    );
+  });
 }
 
 /// Language preferences: `preferences.language` and `preferences.banglaDigits`.
 class FirestoreLocalePreferenceSync implements LocalePreferenceSync {
-  FirestoreLocalePreferenceSync({FirebaseAuth? auth, FirebaseFirestore? firestore})
-      : _doc = _PreferencesDoc(auth: auth, firestore: firestore);
+  FirestoreLocalePreferenceSync({
+    FirebaseAuth? auth,
+    FirebaseFirestore? firestore,
+  }) : _doc = _PreferencesDoc(auth: auth, firestore: firestore);
 
   final _PreferencesDoc _doc;
 
   @override
   Future<void> push(LocalePrefs prefs) => _doc.merge({
-        'language': prefs.languageCode,
-        'banglaDigits': prefs.useBanglaDigits,
-      });
+    'language': prefs.languageCode,
+    'banglaDigits': prefs.useBanglaDigits,
+  });
 
   @override
   Stream<LocalePrefs?> watch() => _doc.watch().map((p) {
-        if (p == null || p['language'] is! String) return null;
-        return LocalePrefs.fromMap({
-          'language_code': p['language'],
-          if (p['banglaDigits'] is bool) 'use_bangla_digits': p['banglaDigits'],
-        });
-      });
+    if (p == null || p['language'] is! String) return null;
+    return LocalePrefs.fromMap({
+      'language_code': p['language'],
+      if (p['banglaDigits'] is bool) 'use_bangla_digits': p['banglaDigits'],
+    });
+  });
 }

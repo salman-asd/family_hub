@@ -56,8 +56,10 @@ void main() {
 
   group('CreateInvitation', () {
     test('admin creates a member code that expires in 7 days', () async {
-      final inv =
-          (await create(actorUid: 'admin', familyId: 'fam')).valueOrNull!;
+      final inv = (await create(
+        actorUid: 'admin',
+        familyId: 'fam',
+      )).valueOrNull!;
       expect(inv.role, MemberRole.member);
       expect(inv.status, InvitationStatus.active);
       expect(inv.expiresAt, f.clock.nowUtc().add(const Duration(days: 7)));
@@ -66,7 +68,10 @@ void main() {
     });
 
     test('a moderator may invite', () async {
-      expect((await create(actorUid: 'mod', familyId: 'fam')).isSuccess, isTrue);
+      expect(
+        (await create(actorUid: 'mod', familyId: 'fam')).isSuccess,
+        isTrue,
+      );
     });
 
     test('a plain member may not', () async {
@@ -85,21 +90,29 @@ void main() {
     Future<Invitation> invite() async =>
         (await create(actorUid: 'admin', familyId: 'fam')).valueOrNull!;
 
-    test('a valid code creates a PENDING member, never an active one', () async {
-      final inv = await invite();
-      final member =
-          (await join(actorUid: 'newcomer', rawCode: inv.code)).valueOrNull!;
-      expect(member.status, MembershipStatus.pending);
-      expect(member.role, MemberRole.member);
-      expect(member.inviteCode, inv.code);
-      expect(f.backend.members['fam']!['newcomer'], member);
-      expect(f.backend.userFamily['newcomer'], 'fam');
-    });
+    test(
+      'a valid code creates a PENDING member, never an active one',
+      () async {
+        final inv = await invite();
+        final member = (await join(
+          actorUid: 'newcomer',
+          rawCode: inv.code,
+        )).valueOrNull!;
+        expect(member.status, MembershipStatus.pending);
+        expect(member.role, MemberRole.member);
+        expect(member.inviteCode, inv.code);
+        expect(f.backend.members['fam']!['newcomer'], member);
+        expect(f.backend.userFamily['newcomer'], 'fam');
+      },
+    );
 
     test('lower case and dashes are accepted', () async {
       final inv = await invite();
       final typed = inv.code.toLowerCase().replaceRange(4, 4, '-');
-      expect((await join(actorUid: 'newcomer', rawCode: typed)).isSuccess, isTrue);
+      expect(
+        (await join(actorUid: 'newcomer', rawCode: typed)).isSuccess,
+        isTrue,
+      );
     });
 
     test('a malformed code is rejected before any lookup', () async {
@@ -115,7 +128,10 @@ void main() {
     test('a code can be used only once', () async {
       final inv = await invite();
       f.profile('second');
-      expect((await join(actorUid: 'newcomer', rawCode: inv.code)).isSuccess, isTrue);
+      expect(
+        (await join(actorUid: 'newcomer', rawCode: inv.code)).isSuccess,
+        isTrue,
+      );
       final again = await join(actorUid: 'second', rawCode: inv.code);
       expect(again.failureOrNull, const Conflict(code: 'code_used'));
       expect(f.backend.members['fam']!.containsKey('second'), isFalse);
@@ -131,7 +147,10 @@ void main() {
     test('still valid one second before expiry', () async {
       final inv = await invite();
       f.clock.setTo(inv.expiresAt.subtract(const Duration(seconds: 1)));
-      expect((await join(actorUid: 'newcomer', rawCode: inv.code)).isSuccess, isTrue);
+      expect(
+        (await join(actorUid: 'newcomer', rawCode: inv.code)).isSuccess,
+        isTrue,
+      );
     });
 
     test('a revoked code is rejected', () async {
@@ -172,11 +191,15 @@ void main() {
     test('a rejected person may join again with a fresh code', () async {
       var inv = await invite();
       await join(actorUid: 'newcomer', rawCode: inv.code);
-      final rejected =
-          f.backend.members['fam']!['newcomer']!.copyWith(removedAt: f.clock.nowUtc());
+      final rejected = f.backend.members['fam']!['newcomer']!.copyWith(
+        removedAt: f.clock.nowUtc(),
+      );
       f.backend.members['fam']!['newcomer'] = rejected;
       inv = await invite();
-      expect((await join(actorUid: 'newcomer', rawCode: inv.code)).isSuccess, isTrue);
+      expect(
+        (await join(actorUid: 'newcomer', rawCode: inv.code)).isSuccess,
+        isTrue,
+      );
     });
   });
 }

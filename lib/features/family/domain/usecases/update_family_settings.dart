@@ -1,23 +1,21 @@
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/family/domain/family.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/member_access.dart';
-import 'package:family_hub/features/family/domain/member_role.dart';
+import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Saves family settings: name, timezone, currency and module switches
-/// (admin only).
+/// (`Permission.editFamilySettings`: admin only).
 class UpdateFamilySettings {
   const UpdateFamilySettings({
-    required FamilyRepository families,
-    required Clock clock,
-    required IdGenerator newId,
-  })  : _families = families,
-        _clock = clock,
-        _newId = newId;
+    required this._families,
+    required this._clock,
+    required this._newId,
+  });
 
   final FamilyRepository _families;
   final Clock _clock;
@@ -27,11 +25,11 @@ class UpdateFamilySettings {
     required String actorUid,
     required Family family,
   }) async {
-    final actor = await requireActor(
+    final actor = await requirePermission(
       _families,
       familyId: family.id,
       actorUid: actorUid,
-      allowed: {MemberRole.admin},
+      permission: Permission.editFamilySettings,
     );
     final denied = actor.failureOrNull;
     if (denied != null) return Failure<Family>(denied);
@@ -43,19 +41,16 @@ class UpdateFamilySettings {
     }
     final saved = await _families.updateFamily(
       family,
-      FamilyEvent(
+      AuditEvent(
         id: _newId(),
-        type: 'family.settings_updated',
+        type: 'family.updated',
         actorId: actorUid,
-        summary: 'Family settings updated',
         refType: 'family',
         refId: family.id,
         at: _clock.nowUtc(),
       ),
     );
     final failure = saved.failureOrNull;
-    return failure != null
-        ? Failure<Family>(failure)
-        : Success<Family>(family);
+    return failure != null ? Failure<Family>(failure) : Success<Family>(family);
   }
 }

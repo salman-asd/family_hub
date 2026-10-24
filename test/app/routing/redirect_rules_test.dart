@@ -91,10 +91,7 @@ void main() {
 
   for (final (phase, location, expected) in rows) {
     test('${phase.name}: $location -> ${expected ?? 'stays'}', () {
-      expect(
-        resolveRedirect(phase: phase, location: location),
-        expected,
-      );
+      expect(resolveRedirect(phase: phase, location: location), expected);
     });
   }
 

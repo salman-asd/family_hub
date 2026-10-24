@@ -5,7 +5,7 @@ import 'package:family_hub/features/onboarding/domain/user_profile.dart';
 import 'package:family_hub/features/onboarding/domain/user_profile_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Overridden in `bootstrap.dart` (TODO(step-9): Firestore implementation) and
+/// Overridden in `bootstrap.dart` and
 /// in tests.
 final profileRepositoryProvider = Provider<ProfileRepository>(
   (ref) => throw UnimplementedError(

@@ -1,0 +1,80 @@
+{
+  "scenario": "item_usage",
+  "actor": "fixMember",
+  "writes": [
+    {
+      "op": "update",
+      "path": "families/fixFam/bazarItems/item_fixRice",
+      "data": {
+        "useCount": {
+          "__increment": 1
+        },
+        "lastPricePaisa": 13000,
+        "lastUnitPricePaisa": 6500,
+        "lastUsedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember"
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev10",
+      "data": {
+        "type": "bazar.expense_created",
+        "actorId": "fixMember",
+        "summary": "",
+        "refType": "expense",
+        "refId": "exp1",
+        "params": {
+          "item": "চাল",
+          "amount": "13000",
+          "funding": "fund"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev10",
+      "data": {
+        "type": "bazar.expense_created",
+        "actorId": "fixMember",
+        "summary": "",
+        "refType": "expense",
+        "refId": "exp1",
+        "params": {
+          "item": "চাল",
+          "amount": "13000",
+          "funding": "fund"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

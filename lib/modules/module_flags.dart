@@ -26,9 +26,8 @@ class ModuleFlags {
 
   @override
   int get hashCode => Object.hashAll(
-        (_flags.entries.where((e) => !e.value).map((e) => e.key).toList()
-          ..sort()),
-      );
+    (_flags.entries.where((e) => !e.value).map((e) => e.key).toList()..sort()),
+  );
 
   @override
   String toString() => 'ModuleFlags($_flags)';

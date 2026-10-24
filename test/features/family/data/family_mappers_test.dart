@@ -5,7 +5,7 @@ import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -32,8 +32,10 @@ void main() {
   test('an unknown status never becomes active', () {
     final m = FamilyMappers.memberFromMap({'uid': 'u', 'status': 'weird'});
     expect(m.status, MembershipStatus.pending);
-    expect(FamilyMappers.memberFromMap({'uid': 'u', 'role': 'root'}).role,
-        MemberRole.member);
+    expect(
+      FamilyMappers.memberFromMap({'uid': 'u', 'role': 'root'}).role,
+      MemberRole.member,
+    );
   });
 
   test('membership: removed or missing members map to none', () {
@@ -46,7 +48,10 @@ void main() {
     );
     expect(FamilyMappers.membershipFromMember('f', null), Membership.none);
     expect(
-      FamilyMappers.membershipFromMember('f', live.copyWith(removedAt: DateTime.utc(2026))),
+      FamilyMappers.membershipFromMember(
+        'f',
+        live.copyWith(removedAt: DateTime.utc(2026)),
+      ),
       Membership.none,
     );
     expect(
@@ -68,9 +73,13 @@ void main() {
       createdBy: 'u1',
       createdAt: DateTime.utc(2026, 10, 18),
     );
-    expect(FamilyMappers.invitationFromMap(FamilyMappers.invitationToMap(inv)).code,
-        'ABCD2345');
-    final back = FamilyMappers.invitationFromMap(FamilyMappers.invitationToMap(inv));
+    expect(
+      FamilyMappers.invitationFromMap(FamilyMappers.invitationToMap(inv)).code,
+      'ABCD2345',
+    );
+    final back = FamilyMappers.invitationFromMap(
+      FamilyMappers.invitationToMap(inv),
+    );
     expect(back.expiresAt, inv.expiresAt);
     expect(back.status, InvitationStatus.active);
   });
@@ -84,6 +93,54 @@ void main() {
     expect(flags.isEnabled('bazar'), isTrue);
   });
 
+  test('a member who LEFT round-trips and routes as none', () {
+    final at = DateTime.utc(2026, 10, 2, 8);
+    final m = Member(
+      uid: 'u1',
+      role: MemberRole.member,
+      status: MembershipStatus.disabled,
+      fullName: 'Karim',
+      relationship: 'other',
+      removedAt: at,
+      leftAt: at,
+    );
+    expect(
+      FamilyMappers.memberFromMap(FamilyMappers.memberToMap(m, _meta())),
+      m,
+    );
+    expect(m.hasLeft, isTrue);
+    expect(m.isRemoved, isTrue);
+    expect(FamilyMappers.membershipFromMember('f', m), Membership.none);
+  });
+
+  test('memberChangeMap writes leftAt only when it is set', () {
+    final now = DateTime.utc(2026, 10, 2, 8);
+    const base = Member(
+      uid: 'u1',
+      role: MemberRole.member,
+      status: MembershipStatus.active,
+      fullName: 'Karim',
+      relationship: 'other',
+    );
+    expect(
+      FamilyMappers.memberChangeMap(
+        base,
+        actorUid: 'a',
+        now: now,
+      ).containsKey('leftAt'),
+      isFalse,
+    );
+    final left = base.copyWith(leftAt: now, removedAt: now);
+    expect(
+      FamilyMappers.memberChangeMap(
+        left,
+        actorUid: 'u1',
+        now: now,
+      ).containsKey('leftAt'),
+      isTrue,
+    );
+  });
+
   test('family default settings are Asia/Dhaka and BDT', () {
     final f = FamilyMappers.familyFromDocs('f', family: {'name': 'N'});
     expect(f.timezone, 'Asia/Dhaka');
@@ -93,6 +150,6 @@ void main() {
 }
 
 BaseDocumentMetadata _meta() => BaseMapper.createMetadata(
-      uid: 'u1',
-      clock: FakeClock(DateTime.utc(2026, 10, 18)),
-    );
+  uid: 'u1',
+  clock: FakeClock(DateTime.utc(2026, 10, 18)),
+);

@@ -1,5 +1,8 @@
+import 'package:family_hub/core/firebase/sync_status.dart';
 import 'package:family_hub/shared/widgets/pill_bottom_bar.dart';
+import 'package:family_hub/shared/widgets/sync_banner.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// One tab of the shell: the data the bottom bar needs.
@@ -39,22 +42,37 @@ class AppShell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: PillBottomBar(
-        selectedIndex: navigationShell.currentIndex,
-        items: [
-          for (final d in destinations)
-            PillNavItem(
-              key: Key('tab_${d.id}'),
-              icon: d.icon,
-              selectedIcon: d.selectedIcon,
-              label: d.label(context),
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Shown only while changes wait for the server (H3 / rule 15).
+          Consumer(
+            builder: (context, ref, _) {
+              final status = ref.watch(syncStatusProvider);
+              return SyncBanner(
+                pendingWrites: status.pendingWrites,
+                offline: status.isOffline,
+              );
+            },
+          ),
+          PillBottomBar(
+            selectedIndex: navigationShell.currentIndex,
+            items: [
+              for (final d in destinations)
+                PillNavItem(
+                  key: Key('tab_${d.id}'),
+                  icon: d.icon,
+                  selectedIcon: d.selectedIcon,
+                  label: d.label(context),
+                ),
+            ],
+            onSelected: (index) => navigationShell.goBranch(
+              index,
+              // Tapping the active tab again returns to the tab's first screen.
+              initialLocation: index == navigationShell.currentIndex,
             ),
+          ),
         ],
-        onSelected: (index) => navigationShell.goBranch(
-          index,
-          // Tapping the active tab again returns to the tab's first screen.
-          initialLocation: index == navigationShell.currentIndex,
-        ),
       ),
     );
   }

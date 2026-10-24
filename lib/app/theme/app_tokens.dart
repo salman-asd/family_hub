@@ -53,6 +53,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     required this.chartGrid,
     // ── Placeholder palette ─────────────────────────────────────────────────
     required this.placeholderPalette,
+    required this.placeholderOnLight,
+    required this.placeholderOnDark,
     // ── Shape ───────────────────────────────────────────────────────────────
     required this.radiusSm,
     required this.radiusMd,
@@ -68,11 +70,11 @@ class AppTokens extends ThemeExtension<AppTokens> {
     required this.curveStandard,
     // ── Optional ────────────────────────────────────────────────────────────
     this.backgroundGradient,
-  })  : assert(chart.length == 10, 'chart must have exactly 10 colors'),
-        assert(
-          placeholderPalette.length == 12,
-          'placeholderPalette must have exactly 12 colors',
-        );
+  }) : assert(chart.length == 10, 'chart must have exactly 10 colors'),
+       assert(
+         placeholderPalette.length == 12,
+         'placeholderPalette must have exactly 12 colors',
+       );
 
   // ── Surfaces ──────────────────────────────────────────────────────────────
   final Color background;
@@ -126,6 +128,12 @@ class AppTokens extends ThemeExtension<AppTokens> {
 
   // ── Placeholder palette ───────────────────────────────────────────────────
   final List<Color> placeholderPalette; // exactly 12
+
+  /// Initial/foreground on a LIGHT placeholder background (dark ink), and on a
+  /// DARK one (light ink).  Both reach >= 4.5:1 on every palette entry of the
+  /// theme that defines them (contrast_test.dart).
+  final Color placeholderOnLight;
+  final Color placeholderOnDark;
 
   // ── Shape ─────────────────────────────────────────────────────────────────
   final double radiusSm; // 8
@@ -186,6 +194,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
     List<Color>? chart,
     Color? chartGrid,
     List<Color>? placeholderPalette,
+    Color? placeholderOnLight,
+    Color? placeholderOnDark,
     double? radiusSm,
     double? radiusMd,
     double? radiusLg,
@@ -242,6 +252,8 @@ class AppTokens extends ThemeExtension<AppTokens> {
       chart: chart ?? this.chart,
       chartGrid: chartGrid ?? this.chartGrid,
       placeholderPalette: placeholderPalette ?? this.placeholderPalette,
+      placeholderOnLight: placeholderOnLight ?? this.placeholderOnLight,
+      placeholderOnDark: placeholderOnDark ?? this.placeholderOnDark,
       radiusSm: radiusSm ?? this.radiusSm,
       radiusMd: radiusMd ?? this.radiusMd,
       radiusLg: radiusLg ?? this.radiusLg,
@@ -279,33 +291,48 @@ class AppTokens extends ThemeExtension<AppTokens> {
         other.statusScheduledContainer,
         t,
       )!,
-      statusScheduledOn:
-          Color.lerp(statusScheduledOn, other.statusScheduledOn, t)!,
-      statusInProgress:
-          Color.lerp(statusInProgress, other.statusInProgress, t)!,
+      statusScheduledOn: Color.lerp(
+        statusScheduledOn,
+        other.statusScheduledOn,
+        t,
+      )!,
+      statusInProgress: Color.lerp(
+        statusInProgress,
+        other.statusInProgress,
+        t,
+      )!,
       statusInProgressContainer: Color.lerp(
         statusInProgressContainer,
         other.statusInProgressContainer,
         t,
       )!,
-      statusInProgressOn:
-          Color.lerp(statusInProgressOn, other.statusInProgressOn, t)!,
+      statusInProgressOn: Color.lerp(
+        statusInProgressOn,
+        other.statusInProgressOn,
+        t,
+      )!,
       statusCompleted: Color.lerp(statusCompleted, other.statusCompleted, t)!,
       statusCompletedContainer: Color.lerp(
         statusCompletedContainer,
         other.statusCompletedContainer,
         t,
       )!,
-      statusCompletedOn:
-          Color.lerp(statusCompletedOn, other.statusCompletedOn, t)!,
+      statusCompletedOn: Color.lerp(
+        statusCompletedOn,
+        other.statusCompletedOn,
+        t,
+      )!,
       statusVerified: Color.lerp(statusVerified, other.statusVerified, t)!,
       statusVerifiedContainer: Color.lerp(
         statusVerifiedContainer,
         other.statusVerifiedContainer,
         t,
       )!,
-      statusVerifiedOn:
-          Color.lerp(statusVerifiedOn, other.statusVerifiedOn, t)!,
+      statusVerifiedOn: Color.lerp(
+        statusVerifiedOn,
+        other.statusVerifiedOn,
+        t,
+      )!,
       statusOverdue: Color.lerp(statusOverdue, other.statusOverdue, t)!,
       statusOverdueContainer: Color.lerp(
         statusOverdueContainer,
@@ -330,6 +357,16 @@ class AppTokens extends ThemeExtension<AppTokens> {
         (i) =>
             Color.lerp(placeholderPalette[i], other.placeholderPalette[i], t)!,
       ),
+      placeholderOnLight: Color.lerp(
+        placeholderOnLight,
+        other.placeholderOnLight,
+        t,
+      )!,
+      placeholderOnDark: Color.lerp(
+        placeholderOnDark,
+        other.placeholderOnDark,
+        t,
+      )!,
       radiusSm: lerpDouble(radiusSm, other.radiusSm, t),
       radiusMd: lerpDouble(radiusMd, other.radiusMd, t),
       radiusLg: lerpDouble(radiusLg, other.radiusLg, t),
@@ -341,8 +378,9 @@ class AppTokens extends ThemeExtension<AppTokens> {
       durationMedium: t < 0.5 ? durationMedium : other.durationMedium,
       durationSlow: t < 0.5 ? durationSlow : other.durationSlow,
       curveStandard: t < 0.5 ? curveStandard : other.curveStandard,
-      backgroundGradient:
-          t < 0.5 ? backgroundGradient : other.backgroundGradient,
+      backgroundGradient: t < 0.5
+          ? backgroundGradient
+          : other.backgroundGradient,
     );
   }
 

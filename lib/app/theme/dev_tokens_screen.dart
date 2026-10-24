@@ -33,10 +33,7 @@ class DevTokensScreen extends StatelessWidget {
       ]),
       _Section('Status — Scheduled', [
         _Swatch('statusScheduled', t.statusScheduled),
-        _Swatch(
-          'statusScheduledContainer',
-          t.statusScheduledContainer,
-        ),
+        _Swatch('statusScheduledContainer', t.statusScheduledContainer),
         _Swatch(
           'statusScheduledOn',
           t.statusScheduledOn,
@@ -45,10 +42,7 @@ class DevTokensScreen extends StatelessWidget {
       ]),
       _Section('Status — In Progress', [
         _Swatch('statusInProgress', t.statusInProgress),
-        _Swatch(
-          'statusInProgressContainer',
-          t.statusInProgressContainer,
-        ),
+        _Swatch('statusInProgressContainer', t.statusInProgressContainer),
         _Swatch(
           'statusInProgressOn',
           t.statusInProgressOn,
@@ -57,10 +51,7 @@ class DevTokensScreen extends StatelessWidget {
       ]),
       _Section('Status — Completed', [
         _Swatch('statusCompleted', t.statusCompleted),
-        _Swatch(
-          'statusCompletedContainer',
-          t.statusCompletedContainer,
-        ),
+        _Swatch('statusCompletedContainer', t.statusCompletedContainer),
         _Swatch(
           'statusCompletedOn',
           t.statusCompletedOn,
@@ -98,10 +89,8 @@ class DevTokensScreen extends StatelessWidget {
       ]),
       _Section(
         'Data Viz (chart[0..9])',
-        List.generate(
-          10,
-          (i) => _Swatch('chart[$i]', t.chart[i]),
-        )..add(_Swatch('chartGrid', t.chartGrid)),
+        List.generate(10, (i) => _Swatch('chart[$i]', t.chart[i]))
+          ..add(_Swatch('chartGrid', t.chartGrid)),
       ),
       _Section(
         'Placeholder Palette [0..11]',

@@ -270,6 +270,108 @@
   "@moduleComingSoonTitle": {},
   "moduleComingSoonMessage": "এই অংশটি এখনো তৈরি হচ্ছে।",
   "@moduleComingSoonMessage": {},
+  "bazarHomeEmptyTitle": "বাজার এখনো খালি",
+  "@bazarHomeEmptyTitle": {},
+  "bazarHomeEmptyMessage": "খরচ, বাজার তালিকা ও হিসাবের অংশগুলো ধাপে ধাপে এখানে যোগ হবে।",
+  "@bazarHomeEmptyMessage": {},
+  "bazarCatalogSetupTitle": "স্টার্টার বাজার তালিকা সেট করুন",
+  "@bazarCatalogSetupTitle": {},
+  "bazarCatalogSetupMessage": "শুরু করার জন্য ১১টি ক্যাটাগরি ও ৫৪টি সাধারণ আইটেম যোগ করুন। পরে আপনি সেগুলো সম্পাদনা, যোগ বা লুকাতে পারবেন।",
+  "@bazarCatalogSetupMessage": {},
+  "bazarCatalogSetupAction": "তালিকা তৈরি করুন",
+  "@bazarCatalogSetupAction": {},
+  "bazarCatalogSetupBusy": "বাজার তালিকা তৈরি হচ্ছে…",
+  "@bazarCatalogSetupBusy": {},
+  "bazarCatalogAskAdminTitle": "বাজার তালিকা তৈরি হয়নি",
+  "@bazarCatalogAskAdminTitle": {},
+  "bazarCatalogAskAdminMessage": "বাজার তালিকা তৈরি করতে একজন অ্যাডমিনকে বলুন।",
+  "@bazarCatalogAskAdminMessage": {},
+  "bazarSettingsTitle": "বাজারের সেটিংস",
+  "@bazarSettingsTitle": {},
+  "unitKg": "কেজি",
+  "@unitKg": {},
+  "unitG": "গ্রাম",
+  "@unitG": {},
+  "unitLitre": "লিটার",
+  "@unitLitre": {},
+  "unitPiece": "পিস",
+  "@unitPiece": {},
+  "unitDozen": "ডজন",
+  "@unitDozen": {},
+  "unitPacket": "প্যাকেট",
+  "@unitPacket": {},
+  "unitCylinder": "সিলিন্ডার",
+  "@unitCylinder": {},
+  "bazarFundingFund": "পরিবারের তহবিল",
+  "@bazarFundingFund": {},
+  "bazarFundingMember": "সদস্য পরিশোধিত",
+  "@bazarFundingMember": {},
+  "bazarAdvancePending": "অপেক্ষমাণ",
+  "@bazarAdvancePending": {},
+  "bazarAdvancePartial": "আংশিক সমন্বিত",
+  "@bazarAdvancePartial": {},
+  "bazarAdvanceSettled": "সমন্বিত",
+  "@bazarAdvanceSettled": {},
+  "bazarAdvanceVoided": "বাতিল",
+  "@bazarAdvanceVoided": {},
+  "bazarErrRequired": "এই ঘরটি পূরণ করুন।",
+  "@bazarErrRequired": {},
+  "bazarErrTooLong": "লেখাটি অনেক বড় হয়ে গেছে।",
+  "@bazarErrTooLong": {},
+  "bazarErrInvalidAmount": "সঠিক অঙ্ক লিখুন।",
+  "@bazarErrInvalidAmount": {},
+  "bazarErrAmountNotPositive": "অঙ্কটি শূন্যের বেশি হতে হবে।",
+  "@bazarErrAmountNotPositive": {},
+  "bazarErrFutureDate": "তারিখ ভবিষ্যতের হতে পারে না।",
+  "@bazarErrFutureDate": {},
+  "bazarErrQtyUnitRequired": "পরিমাণ ও একক দুটোই দিন।",
+  "@bazarErrQtyUnitRequired": {},
+  "bazarErrMemberRequired": "সদস্যটি বেছে নিন।",
+  "@bazarErrMemberRequired": {},
+  "bazarErrCategoryRequired": "ক্যাটাগরি বেছে নিন।",
+  "@bazarErrCategoryRequired": {},
+  "bazarErrItemNameRequired": "আইটেমের নাম লিখুন।",
+  "@bazarErrItemNameRequired": {},
+  "bazarErrTooManyLines": "সারি অনেক বেশি; কিছু সরিয়ে দিন।",
+  "@bazarErrTooManyLines": {},
+  "bazarErrInvalidMonth": "সঠিক মাস বেছে নিন।",
+  "@bazarErrInvalidMonth": {},
+  "bazarErrInvalidRange": "শেষ তারিখ শুরুর তারিখের পরে হতে হবে।",
+  "@bazarErrInvalidRange": {},
+  "bazarErrNegative": "অঙ্ক ঋণাত্মক হতে পারে না।",
+  "@bazarErrNegative": {},
+  "bazarErrTooManyDecimals": "সর্বোচ্চ দুই দশমিক স্থান ব্যবহার করুন।",
+  "@bazarErrTooManyDecimals": {},
+  "bazarErrTooLarge": "অঙ্কটি অনেক বড়।",
+  "@bazarErrTooLarge": {},
+  "bazarErrMonthLocked": "এই মাস বন্ধ আছে। খুলতে অ্যাডমিনকে বলুন।",
+  "@bazarErrMonthLocked": {},
+  "bazarErrAdvanceSettled": "এই অগ্রিম আংশিক বা সম্পূর্ণ সমন্বয় হয়ে গেছে।",
+  "@bazarErrAdvanceSettled": {},
+  "bazarErrOverpayment": "বাকি থাকা অঙ্কের চেয়ে বেশি দেওয়া হয়েছে।",
+  "@bazarErrOverpayment": {},
+  "bazarErrAlreadyClosed": "এই মাস ইতিমধ্যে বন্ধ আছে।",
+  "@bazarErrAlreadyClosed": {},
+  "bazarErrNotClosed": "এই মাস বন্ধ নয়।",
+  "@bazarErrNotClosed": {},
+  "bazarErrReopenNoteRequired": "মাসটি কেন খুলছেন তা লিখুন।",
+  "@bazarErrReopenNoteRequired": {},
+  "bazarErrCatalogNotEmpty": "তালিকায় এখনো আইটেম আছে; আগে সেগুলো আর্কাইভ করুন।",
+  "@bazarErrCatalogNotEmpty": {},
+  "bazarErrDuplicateItem": "ঠিক এই ধরনের খরচ সবেমাত্র যোগ হয়েছে। আবার সংরক্ষণের আগে দেখে নিন।",
+  "@bazarErrDuplicateItem": {},
+  "bazarErrImportAlreadyUndone": "এই ইমপোর্ট আগেই বাতিল হয়েছে।",
+  "@bazarErrImportAlreadyUndone": {},
+  "bazarErrImportHasLockedMonth": "ফাইলে বন্ধ মাসের সারি আছে।",
+  "@bazarErrImportHasLockedMonth": {},
+  "bazarErrConcurrentEdit": "আপনার আগেই কেউ এটি বদলেছেন। রিফ্রেশ করে আবার চেষ্টা করুন।",
+  "@bazarErrConcurrentEdit": {},
+  "bazarErrNotFound": "রেকর্ডটি আর নেই। রিফ্রেশ করে আবার চেষ্টা করুন।",
+  "@bazarErrNotFound": {},
+  "bazarErrNotAllowed": "শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন এটি করতে পারেন।",
+  "@bazarErrNotAllowed": {},
+  "bazarErrUnknown": "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।",
+  "@bazarErrUnknown": {},
   "profileSetupTitle": "আপনার প্রোফাইল তৈরি করুন",
   "@profileSetupTitle": {},
   "profileSetupMessage": "পরিবারকে জানান আপনি কে।",
@@ -376,7 +478,7 @@
   "@memberReenable": {},
   "roleAdmin": "অ্যাডমিন",
   "@roleAdmin": {},
-  "roleModerator": "মডারেটর",
+  "roleModerator": "সংসার ব্যবস্থাপক",
   "@roleModerator": {},
   "roleMember": "সদস্য",
   "@roleMember": {},
@@ -444,6 +546,8 @@
   "@famFailureAlreadyMember": {},
   "famFailureLastAdmin": "পরিবারে অন্তত একজন অ্যাডমিন থাকতে হবে। আগে অন্য কাউকে অ্যাডমিন বানান।",
   "@famFailureLastAdmin": {},
+  "famFailureTooManyAdmins": "একটি পরিবারে সর্বোচ্চ তিনজন অ্যাডমিন থাকতে পারে।",
+  "@famFailureTooManyAdmins": {},
   "famFailureNotAllowed": "এটি করার অনুমতি আপনার নেই।",
   "@famFailureNotAllowed": {},
   "famFailureProfileRequired": "আগে আপনার প্রোফাইল সম্পূর্ণ করুন।",
@@ -455,5 +559,1050 @@
         "type": "String"
       }
     }
-  }
+  },
+  "statusScheduled": "সময় নির্ধারিত",
+  "@statusScheduled": {
+    "description": "Status label for a chore occurrence that is scheduled."
+  },
+  "statusInProgress": "চলছে",
+  "@statusInProgress": {},
+  "statusCompleted": "সম্পন্ন",
+  "@statusCompleted": {},
+  "statusVerified": "যাচাইকৃত",
+  "@statusVerified": {},
+  "statusOverdue": "সময় পার হয়েছে",
+  "@statusOverdue": {},
+  "commonSeeAll": "সব দেখুন",
+  "@commonSeeAll": {
+    "description": "'See all' link on a section header."
+  },
+  "errorViewTitle": "কিছু ভুল হয়েছে",
+  "@errorViewTitle": {},
+  "loadingSemantics": "লোড হচ্ছে",
+  "@loadingSemantics": {
+    "description": "Screen-reader label for a loading skeleton."
+  },
+  "progressSemantics": "{label}, {percent} শতাংশ সম্পন্ন",
+  "@progressSemantics": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "thumbSemantics": "{name} ছবি",
+  "@thumbSemantics": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "galleryAvatar": "অ্যাভাটার",
+  "@galleryAvatar": {},
+  "galleryItemThumb": "জিনিসের ছবি",
+  "@galleryItemThumb": {},
+  "galleryStatusChip": "অবস্থার চিপ",
+  "@galleryStatusChip": {},
+  "gallerySectionHeader": "সেকশন হেডার",
+  "@gallerySectionHeader": {},
+  "galleryAppCard": "কার্ড",
+  "@galleryAppCard": {},
+  "galleryMoneyText": "টাকার লেখা",
+  "@galleryMoneyText": {},
+  "galleryProgressRing": "প্রগ্রেস রিং",
+  "@galleryProgressRing": {},
+  "galleryEmptyState": "খালি অবস্থা",
+  "@galleryEmptyState": {},
+  "galleryLoadingView": "লোডিং দৃশ্য",
+  "@galleryLoadingView": {},
+  "galleryErrorView": "ত্রুটির দৃশ্য",
+  "@galleryErrorView": {},
+  "galleryPillBottomBar": "পিল নেভিগেশন বার",
+  "@galleryPillBottomBar": {},
+  "gallerySampleTitle": "নমুনা শিরোনাম",
+  "@gallerySampleTitle": {},
+  "gallerySampleMessage": "এটি একটি নমুনা বার্তা যা ওভারফ্লো যাচাই করে।",
+  "@gallerySampleMessage": {},
+  "gallerySampleItemName": "আলু",
+  "@gallerySampleItemName": {},
+  "gallerySamplePersonName": "করিম উদ্দিন",
+  "@gallerySamplePersonName": {},
+  "syncWaitingTitle": "সংযোগের অপেক্ষায়…",
+  "@syncWaitingTitle": {},
+  "syncWaitingMessage": "ইন্টারনেট সংযোগ আছে কিনা দেখুন, তারপর আবার চেষ্টা করুন। আপনার তথ্য নিরাপদ আছে।",
+  "@syncWaitingMessage": {},
+  "syncSavedOffline": "এই ডিভাইসে সংরক্ষিত হয়েছে — অনলাইনে এলে সিঙ্ক হবে",
+  "@syncSavedOffline": {},
+  "syncBannerSyncing": "{count}টি পরিবর্তন সিঙ্ক হচ্ছে",
+  "@syncBannerSyncing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "syncBannerOffline": "অফলাইন — {count}টি পরিবর্তন অপেক্ষায়",
+  "@syncBannerOffline": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "gallerySyncBanner": "সিঙ্ক ব্যানার",
+  "@gallerySyncBanner": {},
+  "famFailureAlreadyInFamily": "আপনি ইতিমধ্যে একটি পরিবারে আছেন। আগে সেটি ছেড়ে দিন।",
+  "@famFailureAlreadyInFamily": {},
+  "familyLeave": "পরিবার ছেড়ে যান",
+  "@familyLeave": {},
+  "familyLeaveConfirmTitle": "পরিবার ছেড়ে যাবেন?",
+  "@familyLeaveConfirmTitle": {},
+  "familyLeaveConfirmBody": "আপনার আগের কাজ ও হিসাবের ইতিহাস পরিবারে থেকে যাবে। পরে আপনি নতুন পরিবার খুলতে বা অন্য পরিবারে যোগ দিতে পারবেন।",
+  "@familyLeaveConfirmBody": {},
+  "familyLeaveLastAdminReason": "আপনিই একমাত্র অ্যাডমিন। ছেড়ে যাওয়ার আগে আরেকজনকে অ্যাডমিন করুন।",
+  "@familyLeaveLastAdminReason": {},
+  "pendingCancelRequest": "অনুরোধ বাতিল করুন",
+  "@pendingCancelRequest": {},
+  "invitationRevoke": "কোড বাতিল করুন",
+  "@invitationRevoke": {},
+  "invitationRevokeConfirmTitle": "কোডটি বাতিল করবেন?",
+  "@invitationRevokeConfirmTitle": {},
+  "invitationRevokeConfirmBody": "এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।",
+  "@invitationRevokeConfirmBody": {},
+  "securityTitle": "নিরাপত্তা",
+  "@securityTitle": {},
+  "securityChangePassword": "পাসওয়ার্ড পরিবর্তন",
+  "@securityChangePassword": {},
+  "securityCurrentPassword": "বর্তমান পাসওয়ার্ড",
+  "@securityCurrentPassword": {},
+  "securityNewPassword": "নতুন পাসওয়ার্ড",
+  "@securityNewPassword": {},
+  "securityPasswordChanged": "পাসওয়ার্ড পরিবর্তন হয়েছে।",
+  "@securityPasswordChanged": {},
+  "securityPasswordSame": "নতুন পাসওয়ার্ড বর্তমানটির থেকে আলাদা হতে হবে।",
+  "@securityPasswordSame": {},
+  "securityCurrentPasswordRequired": "আপনার বর্তমান পাসওয়ার্ড লিখুন।",
+  "@securityCurrentPasswordRequired": {},
+  "securityCurrentPasswordWrong": "বর্তমান পাসওয়ার্ডটি সঠিক নয়।",
+  "@securityCurrentPasswordWrong": {},
+  "securityDeleteTitle": "আমার অ্যাকাউন্ট মুছুন",
+  "@securityDeleteTitle": {},
+  "securityDeleteBody": "আপনি পরিবার ছেড়ে যাবেন এবং আপনার সাইন-ইন মুছে যাবে। পরিবারের ইতিহাস ঠিক রাখতে পুরোনো রেকর্ডে আপনার নাম থাকবে।",
+  "@securityDeleteBody": {},
+  "securityDeletePending": "মুছে ফেলা শেষ হয়নি। শেষ করতে পাসওয়ার্ড লিখুন।",
+  "@securityDeletePending": {},
+  "securityDeleteAction": "অ্যাকাউন্ট মুছুন",
+  "@securityDeleteAction": {},
+  "securityDeleteFinish": "মুছে ফেলা শেষ করুন",
+  "@securityDeleteFinish": {},
+  "securityDeleteConfirmTitle": "আপনার অ্যাকাউন্ট মুছবেন?",
+  "@securityDeleteConfirmTitle": {},
+  "securityDeleteConfirmBody": "এটি আর ফেরানো যাবে না।",
+  "@securityDeleteConfirmBody": {},
+  "accountDeleteLastAdminHasMembers": "আপনি একমাত্র অ্যাডমিন এবং পরিবারে আরও সদস্য আছেন। আগে অ্যাডমিনের দায়িত্ব হস্তান্তর করুন।",
+  "@accountDeleteLastAdminHasMembers": {},
+  "relationshipsTitle": "সম্পর্কের তালিকা",
+  "@relationshipsTitle": {},
+  "relationshipsHint": "তৈরি-করা সম্পর্কগুলো পরিবর্তন করা যায় না। নিজের সম্পর্ক যোগ, নাম পরিবর্তন বা বন্ধ করতে পারেন।",
+  "@relationshipsHint": {},
+  "relationshipsAdd": "সম্পর্ক যোগ করুন",
+  "@relationshipsAdd": {},
+  "relationshipsLabelBn": "বাংলায় নাম",
+  "@relationshipsLabelBn": {},
+  "relationshipsLabelEn": "ইংরেজিতে নাম",
+  "@relationshipsLabelEn": {},
+  "relationshipsSpouseRelevant": "স্বামী/স্ত্রী বাছাই দেখান",
+  "@relationshipsSpouseRelevant": {},
+  "relationshipsBuiltIn": "তৈরি-করা",
+  "@relationshipsBuiltIn": {},
+  "relationshipsActive": "চালু",
+  "@relationshipsActive": {},
+  "relationshipsDisabled": "বন্ধ",
+  "@relationshipsDisabled": {},
+  "relationshipsEnable": "চালু করুন",
+  "@relationshipsEnable": {},
+  "relationshipsDisable": "বন্ধ করুন",
+  "@relationshipsDisable": {},
+  "relationshipsFailureLabel": "একটি নাম লিখুন (সর্বোচ্চ ৪০ অক্ষর)।",
+  "@relationshipsFailureLabel": {},
+  "relationshipsFailureTooMany": "তালিকা পূর্ণ।",
+  "@relationshipsFailureTooMany": {},
+  "relationshipsFailureBuiltIn": "তৈরি-করা সম্পর্ক পরিবর্তন করা যায় না।",
+  "@relationshipsFailureBuiltIn": {},
+  "activityFamilyCreated": "পরিবার “{familyName}” তৈরি হয়েছে",
+  "@activityFamilyCreated": {
+    "placeholders": {
+      "familyName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityFamilyUpdated": "পরিবারের সেটিংস হালনাগাদ হয়েছে",
+  "@activityFamilyUpdated": {},
+  "activityMemberRequested": "{memberName} যোগ দিতে অনুরোধ করেছেন",
+  "@activityMemberRequested": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberApproved": "{memberName}-কে অনুমোদন দেওয়া হয়েছে",
+  "@activityMemberApproved": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberRejected": "{memberName}-কে গ্রহণ করা হয়নি",
+  "@activityMemberRejected": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberDisabled": "{memberName}-কে বন্ধ করা হয়েছে",
+  "@activityMemberDisabled": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberRoleChanged": "{memberName} এখন {newRole}",
+  "@activityMemberRoleChanged": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      },
+      "newRole": {
+        "type": "String"
+      }
+    }
+  },
+  "activityAdminTransferred": "অ্যাডমিনের দায়িত্ব {memberName}-কে দেওয়া হয়েছে",
+  "@activityAdminTransferred": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberLeft": "{memberName} পরিবার ছেড়ে গেছেন",
+  "@activityMemberLeft": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityMemberCancelled": "{memberName} অনুরোধ প্রত্যাহার করেছেন",
+  "@activityMemberCancelled": {
+    "placeholders": {
+      "memberName": {
+        "type": "String"
+      }
+    }
+  },
+  "activityInvitationCreated": "আমন্ত্রণ {code} তৈরি হয়েছে",
+  "@activityInvitationCreated": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityInvitationRevoked": "আমন্ত্রণ {code} বাতিল হয়েছে",
+  "@activityInvitationRevoked": {
+    "placeholders": {
+      "code": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCatalogSeeded": "{categories}টি ক্যাটাগরি ও {items}টি আইটেম দিয়ে বাজারের তালিকা চালু হয়েছে",
+  "@activityBazarCatalogSeeded": {
+    "placeholders": {
+      "categories": {
+        "type": "String"
+      },
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryCreated": "ক্যাটাগরি “{name}” যোগ করা হয়েছে",
+  "@activityBazarCategoryCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryUpdated": "ক্যাটাগরি “{name}” হালনাগাদ হয়েছে",
+  "@activityBazarCategoryUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarCategoryDeactivated": "ক্যাটাগরি “{name}” আর্কাইভ করা হয়েছে",
+  "@activityBazarCategoryDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemCreated": "আইটেম “{name}” যোগ করা হয়েছে",
+  "@activityBazarItemCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemUpdated": "আইটেম “{name}” হালনাগাদ হয়েছে",
+  "@activityBazarItemUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarItemDeactivated": "আইটেম “{name}” আর্কাইভ করা হয়েছে",
+  "@activityBazarItemDeactivated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseCreated": "{item} কেনা হয়েছে {amount} দিয়ে ({funding})",
+  "@activityBazarExpenseCreated": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "funding": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseUpdated": "{item} সম্পাদনা করা হয়েছে ({fields})",
+  "@activityBazarExpenseUpdated": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "fields": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseDeleted": "{item} মুছে ফেলা হয়েছে ({amount})",
+  "@activityBazarExpenseDeleted": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarExpenseRestored": "{item} ফিরিয়ে আনা হয়েছে ({amount})",
+  "@activityBazarExpenseRestored": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarTripCreated": "{lines}টি আইটেমের বাজার যাত্রা {amount} দিয়ে সংরক্ষণ হয়েছে",
+  "@activityBazarTripCreated": {
+    "placeholders": {
+      "lines": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarBudgetSaved": "{month}-এর বাজেট {amount} নির্ধারণ করা হয়েছে",
+  "@activityBazarBudgetSaved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarSettingsUpdated": "বাজারের সেটিংস হালনাগাদ হয়েছে",
+  "@activityBazarSettingsUpdated": {},
+  "activityBazarContributionPlanSet": "{month}-এ {member}-এর চাঁদা {amount} নির্ধারণ করা হয়েছে",
+  "@activityBazarContributionPlanSet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRecorded": "{month}-এ {member}-এর {amount} চাঁদা রেকর্ড করা হয়েছে",
+  "@activityBazarContributionRecorded": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionVoided": "{month}-এ {member}-এর {amount} চাঁদা বাতিল করা হয়েছে",
+  "@activityBazarContributionVoided": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequested": "{month}-এর জন্য {member} {amount} দিতে চেয়েছেন",
+  "@activityBazarContributionRequested": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequestEdited": "{month}-এর জন্য {member} {amount} দেওয়ার অনুরোধ সম্পাদনা করেছেন",
+  "@activityBazarContributionRequestEdited": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRequestCancelled": "{month}-এর জন্য {member} {amount} দেওয়ার অনুরোধ প্রত্যাহার করেছেন",
+  "@activityBazarContributionRequestCancelled": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionApproved": "{month}-এ {member}-এর {amount} চাঁদা অনুমোদিত হয়েছে",
+  "@activityBazarContributionApproved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionRejected": "{month}-এ {member}-এর {amount} চাঁদা গ্রহণ করা হয়নি ({reason})",
+  "@activityBazarContributionRejected": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeRequested": "{month}-এর জন্য {member} {old} থেকে {amount}-এ চাঁদা বদলাতে বলেছেন",
+  "@activityBazarContributionChangeRequested": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeApproved": "{month}-এ {member}-এর চাঁদা {old} থেকে {amount}-এ বদলের অনুমোদন হয়েছে",
+  "@activityBazarContributionChangeApproved": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarContributionChangeRejected": "{month}-এ {member}-এর চাঁদা {old} থেকে {amount}-এ বদলের অনুমোদন হয়নি",
+  "@activityBazarContributionChangeRejected": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "old": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarOpeningBalanceSet": "{month}-এর প্রারম্ভিক ব্যালেন্স {amount}",
+  "@activityBazarOpeningBalanceSet": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarAdvanceSettled": "{member}-এর অগ্রিম {amount} সমন্বয় হয়েছে ({status})",
+  "@activityBazarAdvanceSettled": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarMonthClosed": "{month} বন্ধ করা হয়েছে, ব্যালেন্স {balance}",
+  "@activityBazarMonthClosed": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarMonthReopened": "{month} আবার খোলা হয়েছে ({note})",
+  "@activityBazarMonthReopened": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "note": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarImportCompleted": "ইমপোর্ট শেষ: {rows}টি সারি, {amount}",
+  "@activityBazarImportCompleted": {
+    "placeholders": {
+      "rows": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityBazarImportUndone": "ইমপোর্ট বাতিল: {rows}টি সারি, {amount}",
+  "@activityBazarImportUndone": {
+    "placeholders": {
+      "rows": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "activityUnknown": "কিছু পরিবর্তন হয়েছে",
+  "@activityUnknown": {},
+  "galleryMonthSwitcher": "মাস পরিবর্তনকারী",
+  "@galleryMonthSwitcher": {},
+  "galleryAmountField": "পরিমাণের ঘর",
+  "@galleryAmountField": {},
+  "galleryTotalDisplay": "মোট প্রদর্শন",
+  "@galleryTotalDisplay": {},
+  "galleryProgressBarStatus": "সীমার অগ্রগতি বার",
+  "@galleryProgressBarStatus": {},
+  "galleryDaySectionHeader": "দিনের শিরোনাম",
+  "@galleryDaySectionHeader": {},
+  "galleryPersonPicker": "ব্যক্তি নির্বাচন",
+  "@galleryPersonPicker": {},
+  "galleryCategoryBadge": "ক্যাটেগরি ব্যাজ",
+  "@galleryCategoryBadge": {},
+  "monthSwitcherPrevious": "আগের মাস",
+  "@monthSwitcherPrevious": {},
+  "monthSwitcherNext": "পরের মাস",
+  "@monthSwitcherNext": {},
+  "monthSwitcherPick": "মাস বেছে নিন",
+  "@monthSwitcherPick": {},
+  "monthPickerPreviousYear": "আগের বছর",
+  "@monthPickerPreviousYear": {},
+  "monthPickerNextYear": "পরের বছর",
+  "@monthPickerNextYear": {},
+  "totalDisplayCalculated": "পরিমাণ × দর থেকে হিসাব করা",
+  "@totalDisplayCalculated": {},
+  "totalDisplayEmpty": "মোট এখনো নেই",
+  "@totalDisplayEmpty": {},
+  "progressLevelOk": "ঠিক আছে",
+  "@progressLevelOk": {},
+  "progressLevelWarning": "সীমার কাছাকাছি",
+  "@progressLevelWarning": {},
+  "progressLevelExceeded": "সীমা ছাড়িয়েছে",
+  "@progressLevelExceeded": {},
+  "progressLevelNoLimit": "সীমা নির্ধারিত নেই",
+  "@progressLevelNoLimit": {},
+  "progressBarSemantics": "{label}: {percent} শতাংশ, {level}",
+  "@progressBarSemantics": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      },
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "personPickerNone": "কেউ নয়",
+  "@personPickerNone": {},
+  "actionUndo": "পূর্বাবস্থায় ফেরান",
+  "@actionUndo": {},
+  "bazarErrExpenseDeleted": "এই খরচটি মুছে ফেলা হয়েছে। আগে ফিরিয়ে আনুন।",
+  "@bazarErrExpenseDeleted": {},
+  "expenseAddTitle": "খরচ যোগ করুন",
+  "@expenseAddTitle": {},
+  "expenseEditTitle": "খরচ সম্পাদনা",
+  "@expenseEditTitle": {},
+  "expenseMenuTrip": "বাজার ট্রিপ (অনেক পণ্য)",
+  "@expenseMenuTrip": {},
+  "expenseDateLabel": "তারিখ",
+  "@expenseDateLabel": {},
+  "expenseItemLabel": "পণ্য",
+  "@expenseItemLabel": {},
+  "expenseItemHint": "পণ্যের নাম লিখুন",
+  "@expenseItemHint": {},
+  "expenseAddNewItem": "{name} নতুন পণ্য হিসেবে যোগ করুন",
+  "@expenseAddNewItem": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseCategoryLabel": "ক্যাটেগরি",
+  "@expenseCategoryLabel": {},
+  "expenseRememberItem": "পণ্যটি মনে রাখুন",
+  "@expenseRememberItem": {},
+  "expenseTotalField": "মোট টাকা",
+  "@expenseTotalField": {},
+  "expenseTotalLabel": "মোট",
+  "@expenseTotalLabel": {},
+  "expenseQtyPriceSection": "অথবা পরিমাণ ও প্রতি এককের দাম লিখুন",
+  "@expenseQtyPriceSection": {},
+  "expenseQtyField": "পরিমাণ",
+  "@expenseQtyField": {},
+  "expenseUnitLabel": "একক",
+  "@expenseUnitLabel": {},
+  "expenseUnitPriceField": "প্রতি এককের দাম",
+  "@expenseUnitPriceField": {},
+  "expenseUnitPriceHint": "সর্বশেষ দাম: {price}",
+  "@expenseUnitPriceHint": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseFundingLabel": "কে টাকা দিয়েছে?",
+  "@expenseFundingLabel": {},
+  "expenseFundingFund": "পরিবারের তহবিল থেকে",
+  "@expenseFundingFund": {},
+  "expenseFundingReimbursable": "সদস্য দিয়েছে, ফেরত পাবে",
+  "@expenseFundingReimbursable": {},
+  "expenseFundingPersonal": "সদস্য নিজের টাকায় দিয়েছে, ফেরত নয়",
+  "@expenseFundingPersonal": {},
+  "expensePaidByLabel": "যিনি দিয়েছেন",
+  "@expensePaidByLabel": {},
+  "expenseMoreSection": "আরও তথ্য",
+  "@expenseMoreSection": {},
+  "expenseShopField": "দোকান",
+  "@expenseShopField": {},
+  "expenseNoteField": "নোট",
+  "@expenseNoteField": {},
+  "expensePurchaserLabel": "যিনি কিনেছেন",
+  "@expensePurchaserLabel": {},
+  "expenseSaveAddAnother": "সংরক্ষণ করে আরেকটি যোগ করুন",
+  "@expenseSaveAddAnother": {},
+  "expenseSaved": "খরচ সংরক্ষণ হয়েছে",
+  "@expenseSaved": {},
+  "expenseUpdated": "খরচ হালনাগাদ হয়েছে",
+  "@expenseUpdated": {},
+  "expenseUnknownMember": "একজন সদস্য",
+  "@expenseUnknownMember": {},
+  "expenseDuplicateTitle": "মনে হচ্ছে একই খরচ আগেই যোগ হয়েছে",
+  "@expenseDuplicateTitle": {},
+  "expenseDuplicateMessage": "{item} একই টাকায় কয়েক মিনিট আগে যোগ করা হয়েছে।",
+  "@expenseDuplicateMessage": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDuplicateSaveAnyway": "তবুও সংরক্ষণ করুন",
+  "@expenseDuplicateSaveAnyway": {},
+  "tripTitle": "বাজার ট্রিপ",
+  "@tripTitle": {},
+  "tripAddLine": "পণ্য যোগ করুন",
+  "@tripAddLine": {},
+  "tripLineSheetTitle": "ট্রিপে পণ্য যোগ করুন",
+  "@tripLineSheetTitle": {},
+  "tripLineSheetSave": "ট্রিপে যোগ করুন",
+  "@tripLineSheetSave": {},
+  "tripLinesCount": "পণ্য: {count}",
+  "@tripLinesCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "tripEmpty": "এখনো কোনো পণ্য নেই। প্রথম পণ্যটি যোগ করুন।",
+  "@tripEmpty": {},
+  "tripTotalLabel": "ট্রিপের মোট",
+  "@tripTotalLabel": {},
+  "tripSaveAll": "সব সংরক্ষণ করুন",
+  "@tripSaveAll": {},
+  "tripSaved": "ট্রিপ সংরক্ষণ হয়েছে",
+  "@tripSaved": {},
+  "tripLineRemoved": "পণ্য সরানো হয়েছে",
+  "@tripLineRemoved": {},
+  "tripLimitReached": "একটি ট্রিপে সর্বোচ্চ ৪০টি পণ্য থাকতে পারে।",
+  "@tripLimitReached": {},
+  "expenseListTitle": "খরচের তালিকা",
+  "@expenseListTitle": {},
+  "expenseListFilteredTotal": "এই তালিকার মোট",
+  "@expenseListFilteredTotal": {},
+  "expenseListEmptyTitle": "এই মাসে কোনো খরচ নেই",
+  "@expenseListEmptyTitle": {},
+  "expenseListEmptyMessage": "প্রথম খরচ যোগ করলে এখানে দেখা যাবে।",
+  "@expenseListEmptyMessage": {},
+  "expenseListFilteredEmptyTitle": "ফিল্টারের সাথে মেলে এমন কিছু নেই",
+  "@expenseListFilteredEmptyTitle": {},
+  "expenseListFilteredEmptyMessage": "সব খরচ দেখতে ফিল্টার মুছে ফেলুন।",
+  "@expenseListFilteredEmptyMessage": {},
+  "expenseListLocked": "এই মাস বন্ধ। এন্ট্রি শুধু দেখা যাবে।",
+  "@expenseListLocked": {},
+  "expenseListRefresh": "রিফ্রেশ",
+  "@expenseListRefresh": {},
+  "expenseShowMore": "আরও দেখান",
+  "@expenseShowMore": {},
+  "expenseRowDeleted": "মুছে ফেলা",
+  "@expenseRowDeleted": {},
+  "expenseRowTrip": "ট্রিপ",
+  "@expenseRowTrip": {},
+  "expenseFilterTitle": "ফিল্টার",
+  "@expenseFilterTitle": {},
+  "expenseFilterRange": "তারিখের সীমা",
+  "@expenseFilterRange": {},
+  "expenseFilterRangeActive": "{start} থেকে {end}",
+  "@expenseFilterRangeActive": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseRangeAll": "পুরো মাস",
+  "@expenseRangeAll": {},
+  "expenseRangeToday": "আজ",
+  "@expenseRangeToday": {},
+  "expenseRangeYesterday": "গতকাল",
+  "@expenseRangeYesterday": {},
+  "expenseRangeLast7": "গত ৭ দিন",
+  "@expenseRangeLast7": {},
+  "expenseRangeThisWeek": "এই সপ্তাহ",
+  "@expenseRangeThisWeek": {},
+  "expenseRangeThisMonth": "এই মাস",
+  "@expenseRangeThisMonth": {},
+  "expenseRangeLastMonth": "গত মাস",
+  "@expenseRangeLastMonth": {},
+  "expenseRangeThisYear": "এই বছর",
+  "@expenseRangeThisYear": {},
+  "expenseRangeCustom": "তারিখ বেছে নিন",
+  "@expenseRangeCustom": {},
+  "expenseFilterCategory": "ক্যাটেগরি",
+  "@expenseFilterCategory": {},
+  "expenseFilterItem": "পণ্য",
+  "@expenseFilterItem": {},
+  "expenseFilterMember": "সদস্য",
+  "@expenseFilterMember": {},
+  "expenseFilterFunding": "টাকার উৎস",
+  "@expenseFilterFunding": {},
+  "expenseFilterAny": "যেকোনো",
+  "@expenseFilterAny": {},
+  "expenseFilterShowDeleted": "মুছে ফেলা দেখান",
+  "@expenseFilterShowDeleted": {},
+  "expenseFilterReset": "ফিল্টার মুছুন",
+  "@expenseFilterReset": {},
+  "expenseDetailTitle": "খরচ",
+  "@expenseDetailTitle": {},
+  "expenseDetailAddedBy": "যোগ করেছেন",
+  "@expenseDetailAddedBy": {},
+  "expenseDetailPayment": "টাকার উৎস ও হিসাব",
+  "@expenseDetailPayment": {},
+  "expenseNotYoursMessage": "আপনি শুধু নিজের খরচ পরিবর্তন করতে পারবেন।",
+  "@expenseNotYoursMessage": {},
+  "expenseLedgerFund": "পরিবারের তহবিল থেকে দেওয়া হয়েছে",
+  "@expenseLedgerFund": {},
+  "expenseLedgerPersonal": "{name} নিজের টাকায় দিয়েছেন, ফেরত নেই",
+  "@expenseLedgerPersonal": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerPending": "{name} দিয়েছেন। {amount} ফেরত দেওয়া বাকি।",
+  "@expenseLedgerPending": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerPartial": "{name} দিয়েছেন। {total} এর মধ্যে {settled} ফেরত দেওয়া হয়েছে।",
+  "@expenseLedgerPartial": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "settled": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerSettled": "{name} দিয়েছেন। পুরোটা ফেরত দেওয়া হয়েছে।",
+  "@expenseLedgerSettled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerVoided": "খরচের সাথে ফেরতও বাতিল হয়েছে।",
+  "@expenseLedgerVoided": {},
+  "expenseDeleteTitle": "এই খরচ মুছে ফেলবেন?",
+  "@expenseDeleteTitle": {},
+  "expenseDeleteMessage": "{name} মোট থেকে বাদ যাবে। সাথে সাথে পূর্বাবস্থায় ফেরাতে পারবেন।",
+  "@expenseDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDeleted": "খরচ মুছে ফেলা হয়েছে",
+  "@expenseDeleted": {},
+  "expenseRestore": "ফিরিয়ে আনুন",
+  "@expenseRestore": {},
+  "expenseRestored": "খরচ ফিরিয়ে আনা হয়েছে",
+  "@expenseRestored": {},
+  "expenseHistoryTitle": "পরিবর্তনের ইতিহাস",
+  "@expenseHistoryTitle": {},
+  "expenseHistoryEmpty": "এখনো কোনো পরিবর্তন নেই।",
+  "@expenseHistoryEmpty": {},
+  "expenseHistoryEntry": "{who} {date} তারিখে পরিবর্তন করেছেন",
+  "@expenseHistoryEntry": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseHistoryWas": "{field} আগে ছিল: {value}",
+  "@expenseHistoryWas": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogTitle": "পণ্য ও ক্যাটেগরি",
+  "@catalogTitle": {},
+  "catalogTabCategories": "ক্যাটেগরি",
+  "@catalogTabCategories": {},
+  "catalogTabItems": "পণ্য",
+  "@catalogTabItems": {},
+  "catalogAdd": "যোগ করুন",
+  "@catalogAdd": {},
+  "catalogAddCategory": "ক্যাটেগরি যোগ করুন",
+  "@catalogAddCategory": {},
+  "catalogEditCategory": "ক্যাটেগরি সম্পাদনা",
+  "@catalogEditCategory": {},
+  "catalogAddItem": "পণ্য যোগ করুন",
+  "@catalogAddItem": {},
+  "catalogEditItem": "পণ্য সম্পাদনা",
+  "@catalogEditItem": {},
+  "catalogCategoryName": "ক্যাটেগরির নাম",
+  "@catalogCategoryName": {},
+  "catalogNameBn": "বাংলা নাম",
+  "@catalogNameBn": {},
+  "catalogNameEn": "ইংরেজি নাম (ঐচ্ছিক)",
+  "@catalogNameEn": {},
+  "catalogEmoji": "ইমোজি (ঐচ্ছিক)",
+  "@catalogEmoji": {},
+  "catalogColour": "রং",
+  "@catalogColour": {},
+  "catalogColourSemantics": "রং {number}",
+  "@catalogColourSemantics": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogActive": "তালিকায় দেখানো হবে",
+  "@catalogActive": {},
+  "catalogActiveHint": "মুছে না ফেলে লুকাতে বন্ধ করুন।",
+  "@catalogActiveHint": {},
+  "catalogHidden": "লুকানো",
+  "@catalogHidden": {},
+  "catalogReorder": "সাজাতে টেনে আনুন",
+  "@catalogReorder": {},
+  "catalogReadOnly": "আপনি এটি দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন পরিবর্তন করতে পারবেন।",
+  "@catalogReadOnly": {},
+  "catalogCategoriesEmpty": "এখনো কোনো ক্যাটেগরি নেই",
+  "@catalogCategoriesEmpty": {},
+  "catalogItemsEmpty": "কোনো পণ্য পাওয়া যায়নি",
+  "@catalogItemsEmpty": {},
+  "catalogSearch": "পণ্য খুঁজুন",
+  "@catalogSearch": {},
+  "catalogAllCategories": "সব",
+  "@catalogAllCategories": {},
+  "catalogDefaultUnit": "সাধারণ একক",
+  "@catalogDefaultUnit": {},
+  "catalogAliases": "অন্য বানান (খোঁজার জন্য)",
+  "@catalogAliases": {},
+  "catalogAliasField": "একটি বানান যোগ করুন",
+  "@catalogAliasField": {},
+  "catalogAliasAdd": "বানান যোগ করুন",
+  "@catalogAliasAdd": {},
+  "catalogAliasLimit": "সর্বোচ্চ ১০টি বানান দেওয়া যাবে।",
+  "@catalogAliasLimit": {},
+  "bazarSettingsWeekStart": "সপ্তাহ শুরু",
+  "@bazarSettingsWeekStart": {},
+  "bazarSettingsTarget": "মাসিক পারিবারিক চাঁদার লক্ষ্য",
+  "@bazarSettingsTarget": {},
+  "bazarSettingsDueDay": "চাঁদা দেওয়ার তারিখ (প্রতি মাসে)",
+  "@bazarSettingsDueDay": {},
+  "bazarSettingsAlerts": "বাজেট সতর্কতা (বাজেটের শতাংশ)",
+  "@bazarSettingsAlerts": {},
+  "bazarSettingsWarnAt": "সতর্ক করুন",
+  "@bazarSettingsWarnAt": {},
+  "bazarSettingsExceededAt": "সীমা ছাড়ালে",
+  "@bazarSettingsExceededAt": {},
+  "bazarSettingsThresholdRange": "১ থেকে ২০০ এর মধ্যে পূর্ণ সংখ্যা দিন।",
+  "@bazarSettingsThresholdRange": {},
+  "bazarSettingsThresholdOrder": "সতর্কতার শতাংশ সীমা ছাড়ানোর শতাংশের চেয়ে কম হতে হবে।",
+  "@bazarSettingsThresholdOrder": {},
+  "bazarSettingsFundStart": "তহবিল শুরুর মাস",
+  "@bazarSettingsFundStart": {},
+  "bazarSettingsFundStartUnset": "শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।",
+  "@bazarSettingsFundStartUnset": {}
 }

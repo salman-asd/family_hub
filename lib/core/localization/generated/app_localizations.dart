@@ -63,7 +63,7 @@ import 'app_localizations_en.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -86,16 +86,16 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('bn'),
-    Locale('en')
+    Locale('en'),
   ];
 
   /// The application name shown in the app bar and store listing.
@@ -752,6 +752,312 @@ abstract class AppLocalizations {
   /// **'এই অংশটি এখনো তৈরি হচ্ছে।'**
   String get moduleComingSoonMessage;
 
+  /// No description provided for @bazarHomeEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার এখনো খালি'**
+  String get bazarHomeEmptyTitle;
+
+  /// No description provided for @bazarHomeEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ, বাজার তালিকা ও হিসাবের অংশগুলো ধাপে ধাপে এখানে যোগ হবে।'**
+  String get bazarHomeEmptyMessage;
+
+  /// No description provided for @bazarCatalogSetupTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্টার্টার বাজার তালিকা সেট করুন'**
+  String get bazarCatalogSetupTitle;
+
+  /// No description provided for @bazarCatalogSetupMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুরু করার জন্য ১১টি ক্যাটাগরি ও ৫৪টি সাধারণ আইটেম যোগ করুন। পরে আপনি সেগুলো সম্পাদনা, যোগ বা লুকাতে পারবেন।'**
+  String get bazarCatalogSetupMessage;
+
+  /// No description provided for @bazarCatalogSetupAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকা তৈরি করুন'**
+  String get bazarCatalogSetupAction;
+
+  /// No description provided for @bazarCatalogSetupBusy.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার তালিকা তৈরি হচ্ছে…'**
+  String get bazarCatalogSetupBusy;
+
+  /// No description provided for @bazarCatalogAskAdminTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার তালিকা তৈরি হয়নি'**
+  String get bazarCatalogAskAdminTitle;
+
+  /// No description provided for @bazarCatalogAskAdminMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার তালিকা তৈরি করতে একজন অ্যাডমিনকে বলুন।'**
+  String get bazarCatalogAskAdminMessage;
+
+  /// No description provided for @bazarSettingsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজারের সেটিংস'**
+  String get bazarSettingsTitle;
+
+  /// No description provided for @unitKg.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেজি'**
+  String get unitKg;
+
+  /// No description provided for @unitG.
+  ///
+  /// In bn, this message translates to:
+  /// **'গ্রাম'**
+  String get unitG;
+
+  /// No description provided for @unitLitre.
+  ///
+  /// In bn, this message translates to:
+  /// **'লিটার'**
+  String get unitLitre;
+
+  /// No description provided for @unitPiece.
+  ///
+  /// In bn, this message translates to:
+  /// **'পিস'**
+  String get unitPiece;
+
+  /// No description provided for @unitDozen.
+  ///
+  /// In bn, this message translates to:
+  /// **'ডজন'**
+  String get unitDozen;
+
+  /// No description provided for @unitPacket.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্যাকেট'**
+  String get unitPacket;
+
+  /// No description provided for @unitCylinder.
+  ///
+  /// In bn, this message translates to:
+  /// **'সিলিন্ডার'**
+  String get unitCylinder;
+
+  /// No description provided for @bazarFundingFund.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের তহবিল'**
+  String get bazarFundingFund;
+
+  /// No description provided for @bazarFundingMember.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য পরিশোধিত'**
+  String get bazarFundingMember;
+
+  /// No description provided for @bazarAdvancePending.
+  ///
+  /// In bn, this message translates to:
+  /// **'অপেক্ষমাণ'**
+  String get bazarAdvancePending;
+
+  /// No description provided for @bazarAdvancePartial.
+  ///
+  /// In bn, this message translates to:
+  /// **'আংশিক সমন্বিত'**
+  String get bazarAdvancePartial;
+
+  /// No description provided for @bazarAdvanceSettled.
+  ///
+  /// In bn, this message translates to:
+  /// **'সমন্বিত'**
+  String get bazarAdvanceSettled;
+
+  /// No description provided for @bazarAdvanceVoided.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল'**
+  String get bazarAdvanceVoided;
+
+  /// No description provided for @bazarErrRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ঘরটি পূরণ করুন।'**
+  String get bazarErrRequired;
+
+  /// No description provided for @bazarErrTooLong.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেখাটি অনেক বড় হয়ে গেছে।'**
+  String get bazarErrTooLong;
+
+  /// No description provided for @bazarErrInvalidAmount.
+  ///
+  /// In bn, this message translates to:
+  /// **'সঠিক অঙ্ক লিখুন।'**
+  String get bazarErrInvalidAmount;
+
+  /// No description provided for @bazarErrAmountNotPositive.
+  ///
+  /// In bn, this message translates to:
+  /// **'অঙ্কটি শূন্যের বেশি হতে হবে।'**
+  String get bazarErrAmountNotPositive;
+
+  /// No description provided for @bazarErrFutureDate.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখ ভবিষ্যতের হতে পারে না।'**
+  String get bazarErrFutureDate;
+
+  /// No description provided for @bazarErrQtyUnitRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিমাণ ও একক দুটোই দিন।'**
+  String get bazarErrQtyUnitRequired;
+
+  /// No description provided for @bazarErrMemberRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্যটি বেছে নিন।'**
+  String get bazarErrMemberRequired;
+
+  /// No description provided for @bazarErrCategoryRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটাগরি বেছে নিন।'**
+  String get bazarErrCategoryRequired;
+
+  /// No description provided for @bazarErrItemNameRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেমের নাম লিখুন।'**
+  String get bazarErrItemNameRequired;
+
+  /// No description provided for @bazarErrTooManyLines.
+  ///
+  /// In bn, this message translates to:
+  /// **'সারি অনেক বেশি; কিছু সরিয়ে দিন।'**
+  String get bazarErrTooManyLines;
+
+  /// No description provided for @bazarErrInvalidMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'সঠিক মাস বেছে নিন।'**
+  String get bazarErrInvalidMonth;
+
+  /// No description provided for @bazarErrInvalidRange.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ তারিখ শুরুর তারিখের পরে হতে হবে।'**
+  String get bazarErrInvalidRange;
+
+  /// No description provided for @bazarErrNegative.
+  ///
+  /// In bn, this message translates to:
+  /// **'অঙ্ক ঋণাত্মক হতে পারে না।'**
+  String get bazarErrNegative;
+
+  /// No description provided for @bazarErrTooManyDecimals.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বোচ্চ দুই দশমিক স্থান ব্যবহার করুন।'**
+  String get bazarErrTooManyDecimals;
+
+  /// No description provided for @bazarErrTooLarge.
+  ///
+  /// In bn, this message translates to:
+  /// **'অঙ্কটি অনেক বড়।'**
+  String get bazarErrTooLarge;
+
+  /// No description provided for @bazarErrMonthLocked.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস বন্ধ আছে। খুলতে অ্যাডমিনকে বলুন।'**
+  String get bazarErrMonthLocked;
+
+  /// No description provided for @bazarErrAdvanceSettled.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই অগ্রিম আংশিক বা সম্পূর্ণ সমন্বয় হয়ে গেছে।'**
+  String get bazarErrAdvanceSettled;
+
+  /// No description provided for @bazarErrOverpayment.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাকি থাকা অঙ্কের চেয়ে বেশি দেওয়া হয়েছে।'**
+  String get bazarErrOverpayment;
+
+  /// No description provided for @bazarErrAlreadyClosed.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস ইতিমধ্যে বন্ধ আছে।'**
+  String get bazarErrAlreadyClosed;
+
+  /// No description provided for @bazarErrNotClosed.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস বন্ধ নয়।'**
+  String get bazarErrNotClosed;
+
+  /// No description provided for @bazarErrReopenNoteRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসটি কেন খুলছেন তা লিখুন।'**
+  String get bazarErrReopenNoteRequired;
+
+  /// No description provided for @bazarErrCatalogNotEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকায় এখনো আইটেম আছে; আগে সেগুলো আর্কাইভ করুন।'**
+  String get bazarErrCatalogNotEmpty;
+
+  /// No description provided for @bazarErrDuplicateItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'ঠিক এই ধরনের খরচ সবেমাত্র যোগ হয়েছে। আবার সংরক্ষণের আগে দেখে নিন।'**
+  String get bazarErrDuplicateItem;
+
+  /// No description provided for @bazarErrImportAlreadyUndone.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ইমপোর্ট আগেই বাতিল হয়েছে।'**
+  String get bazarErrImportAlreadyUndone;
+
+  /// No description provided for @bazarErrImportHasLockedMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফাইলে বন্ধ মাসের সারি আছে।'**
+  String get bazarErrImportHasLockedMonth;
+
+  /// No description provided for @bazarErrConcurrentEdit.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার আগেই কেউ এটি বদলেছেন। রিফ্রেশ করে আবার চেষ্টা করুন।'**
+  String get bazarErrConcurrentEdit;
+
+  /// No description provided for @bazarErrNotFound.
+  ///
+  /// In bn, this message translates to:
+  /// **'রেকর্ডটি আর নেই। রিফ্রেশ করে আবার চেষ্টা করুন।'**
+  String get bazarErrNotFound;
+
+  /// No description provided for @bazarErrNotAllowed.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন এটি করতে পারেন।'**
+  String get bazarErrNotAllowed;
+
+  /// No description provided for @bazarErrUnknown.
+  ///
+  /// In bn, this message translates to:
+  /// **'কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।'**
+  String get bazarErrUnknown;
+
   /// No description provided for @profileSetupTitle.
   ///
   /// In bn, this message translates to:
@@ -761,7 +1067,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileSetupMessage.
   ///
   /// In bn, this message translates to:
-  /// **'পরিবারকে জানান আপনি কে। প্রোফাইল সেটআপ শীঘ্রই আসছে।'**
+  /// **'পরিবারকে জানান আপনি কে।'**
   String get profileSetupMessage;
 
   /// No description provided for @familyChoiceTitle.
@@ -773,7 +1079,7 @@ abstract class AppLocalizations {
   /// No description provided for @familyChoiceMessage.
   ///
   /// In bn, this message translates to:
-  /// **'নতুন পরিবার তৈরি করুন অথবা কোড দিয়ে যোগ দিন। এটি শীঘ্রই আসছে।'**
+  /// **'নতুন পরিবার তৈরি করুন, অথবা আমন্ত্রণ কোড দিয়ে যোগ দিন।'**
   String get familyChoiceMessage;
 
   /// No description provided for @pendingTitle.
@@ -1073,7 +1379,7 @@ abstract class AppLocalizations {
   /// No description provided for @roleModerator.
   ///
   /// In bn, this message translates to:
-  /// **'মডারেটর'**
+  /// **'সংসার ব্যবস্থাপক'**
   String get roleModerator;
 
   /// No description provided for @roleMember.
@@ -1274,6 +1580,12 @@ abstract class AppLocalizations {
   /// **'পরিবারে অন্তত একজন অ্যাডমিন থাকতে হবে। আগে অন্য কাউকে অ্যাডমিন বানান।'**
   String get famFailureLastAdmin;
 
+  /// No description provided for @famFailureTooManyAdmins.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি পরিবারে সর্বোচ্চ তিনজন অ্যাডমিন থাকতে পারে।'**
+  String get famFailureTooManyAdmins;
+
   /// No description provided for @famFailureNotAllowed.
   ///
   /// In bn, this message translates to:
@@ -1291,6 +1603,1658 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'অ্যাভাটার {number}'**
   String avatarOption(String number);
+
+  /// Status label for a chore occurrence that is scheduled.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় নির্ধারিত'**
+  String get statusScheduled;
+
+  /// No description provided for @statusInProgress.
+  ///
+  /// In bn, this message translates to:
+  /// **'চলছে'**
+  String get statusInProgress;
+
+  /// No description provided for @statusCompleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পন্ন'**
+  String get statusCompleted;
+
+  /// No description provided for @statusVerified.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাইকৃত'**
+  String get statusVerified;
+
+  /// No description provided for @statusOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় পার হয়েছে'**
+  String get statusOverdue;
+
+  /// 'See all' link on a section header.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব দেখুন'**
+  String get commonSeeAll;
+
+  /// No description provided for @errorViewTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কিছু ভুল হয়েছে'**
+  String get errorViewTitle;
+
+  /// Screen-reader label for a loading skeleton.
+  ///
+  /// In bn, this message translates to:
+  /// **'লোড হচ্ছে'**
+  String get loadingSemantics;
+
+  /// No description provided for @progressSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'{label}, {percent} শতাংশ সম্পন্ন'**
+  String progressSemantics(String label, String percent);
+
+  /// No description provided for @thumbSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} ছবি'**
+  String thumbSemantics(String name);
+
+  /// No description provided for @galleryAvatar.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাভাটার'**
+  String get galleryAvatar;
+
+  /// No description provided for @galleryItemThumb.
+  ///
+  /// In bn, this message translates to:
+  /// **'জিনিসের ছবি'**
+  String get galleryItemThumb;
+
+  /// No description provided for @galleryStatusChip.
+  ///
+  /// In bn, this message translates to:
+  /// **'অবস্থার চিপ'**
+  String get galleryStatusChip;
+
+  /// No description provided for @gallerySectionHeader.
+  ///
+  /// In bn, this message translates to:
+  /// **'সেকশন হেডার'**
+  String get gallerySectionHeader;
+
+  /// No description provided for @galleryAppCard.
+  ///
+  /// In bn, this message translates to:
+  /// **'কার্ড'**
+  String get galleryAppCard;
+
+  /// No description provided for @galleryMoneyText.
+  ///
+  /// In bn, this message translates to:
+  /// **'টাকার লেখা'**
+  String get galleryMoneyText;
+
+  /// No description provided for @galleryProgressRing.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রগ্রেস রিং'**
+  String get galleryProgressRing;
+
+  /// No description provided for @galleryEmptyState.
+  ///
+  /// In bn, this message translates to:
+  /// **'খালি অবস্থা'**
+  String get galleryEmptyState;
+
+  /// No description provided for @galleryLoadingView.
+  ///
+  /// In bn, this message translates to:
+  /// **'লোডিং দৃশ্য'**
+  String get galleryLoadingView;
+
+  /// No description provided for @galleryErrorView.
+  ///
+  /// In bn, this message translates to:
+  /// **'ত্রুটির দৃশ্য'**
+  String get galleryErrorView;
+
+  /// No description provided for @galleryPillBottomBar.
+  ///
+  /// In bn, this message translates to:
+  /// **'পিল নেভিগেশন বার'**
+  String get galleryPillBottomBar;
+
+  /// No description provided for @gallerySampleTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নমুনা শিরোনাম'**
+  String get gallerySampleTitle;
+
+  /// No description provided for @gallerySampleMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি একটি নমুনা বার্তা যা ওভারফ্লো যাচাই করে।'**
+  String get gallerySampleMessage;
+
+  /// No description provided for @gallerySampleItemName.
+  ///
+  /// In bn, this message translates to:
+  /// **'আলু'**
+  String get gallerySampleItemName;
+
+  /// No description provided for @gallerySamplePersonName.
+  ///
+  /// In bn, this message translates to:
+  /// **'করিম উদ্দিন'**
+  String get gallerySamplePersonName;
+
+  /// No description provided for @syncWaitingTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংযোগের অপেক্ষায়…'**
+  String get syncWaitingTitle;
+
+  /// No description provided for @syncWaitingMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইন্টারনেট সংযোগ আছে কিনা দেখুন, তারপর আবার চেষ্টা করুন। আপনার তথ্য নিরাপদ আছে।'**
+  String get syncWaitingMessage;
+
+  /// No description provided for @syncSavedOffline.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ডিভাইসে সংরক্ষিত হয়েছে — অনলাইনে এলে সিঙ্ক হবে'**
+  String get syncSavedOffline;
+
+  /// No description provided for @syncBannerSyncing.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি পরিবর্তন সিঙ্ক হচ্ছে'**
+  String syncBannerSyncing(int count);
+
+  /// No description provided for @syncBannerOffline.
+  ///
+  /// In bn, this message translates to:
+  /// **'অফলাইন — {count}টি পরিবর্তন অপেক্ষায়'**
+  String syncBannerOffline(int count);
+
+  /// No description provided for @gallerySyncBanner.
+  ///
+  /// In bn, this message translates to:
+  /// **'সিঙ্ক ব্যানার'**
+  String get gallerySyncBanner;
+
+  /// No description provided for @famFailureAlreadyInFamily.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি ইতিমধ্যে একটি পরিবারে আছেন। আগে সেটি ছেড়ে দিন।'**
+  String get famFailureAlreadyInFamily;
+
+  /// No description provided for @familyLeave.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার ছেড়ে যান'**
+  String get familyLeave;
+
+  /// No description provided for @familyLeaveConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার ছেড়ে যাবেন?'**
+  String get familyLeaveConfirmTitle;
+
+  /// No description provided for @familyLeaveConfirmBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার আগের কাজ ও হিসাবের ইতিহাস পরিবারে থেকে যাবে। পরে আপনি নতুন পরিবার খুলতে বা অন্য পরিবারে যোগ দিতে পারবেন।'**
+  String get familyLeaveConfirmBody;
+
+  /// No description provided for @familyLeaveLastAdminReason.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনিই একমাত্র অ্যাডমিন। ছেড়ে যাওয়ার আগে আরেকজনকে অ্যাডমিন করুন।'**
+  String get familyLeaveLastAdminReason;
+
+  /// No description provided for @pendingCancelRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধ বাতিল করুন'**
+  String get pendingCancelRequest;
+
+  /// No description provided for @invitationRevoke.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোড বাতিল করুন'**
+  String get invitationRevoke;
+
+  /// No description provided for @invitationRevokeConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোডটি বাতিল করবেন?'**
+  String get invitationRevokeConfirmTitle;
+
+  /// No description provided for @invitationRevokeConfirmBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কোড দিয়ে আর কেউ যোগ দিতে পারবে না।'**
+  String get invitationRevokeConfirmBody;
+
+  /// No description provided for @securityTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিরাপত্তা'**
+  String get securityTitle;
+
+  /// No description provided for @securityChangePassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড পরিবর্তন'**
+  String get securityChangePassword;
+
+  /// No description provided for @securityCurrentPassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'বর্তমান পাসওয়ার্ড'**
+  String get securityCurrentPassword;
+
+  /// No description provided for @securityNewPassword.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন পাসওয়ার্ড'**
+  String get securityNewPassword;
+
+  /// No description provided for @securityPasswordChanged.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাসওয়ার্ড পরিবর্তন হয়েছে।'**
+  String get securityPasswordChanged;
+
+  /// No description provided for @securityPasswordSame.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন পাসওয়ার্ড বর্তমানটির থেকে আলাদা হতে হবে।'**
+  String get securityPasswordSame;
+
+  /// No description provided for @securityCurrentPasswordRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার বর্তমান পাসওয়ার্ড লিখুন।'**
+  String get securityCurrentPasswordRequired;
+
+  /// No description provided for @securityCurrentPasswordWrong.
+  ///
+  /// In bn, this message translates to:
+  /// **'বর্তমান পাসওয়ার্ডটি সঠিক নয়।'**
+  String get securityCurrentPasswordWrong;
+
+  /// No description provided for @securityDeleteTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমার অ্যাকাউন্ট মুছুন'**
+  String get securityDeleteTitle;
+
+  /// No description provided for @securityDeleteBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি পরিবার ছেড়ে যাবেন এবং আপনার সাইন-ইন মুছে যাবে। পরিবারের ইতিহাস ঠিক রাখতে পুরোনো রেকর্ডে আপনার নাম থাকবে।'**
+  String get securityDeleteBody;
+
+  /// No description provided for @securityDeletePending.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে ফেলা শেষ হয়নি। শেষ করতে পাসওয়ার্ড লিখুন।'**
+  String get securityDeletePending;
+
+  /// No description provided for @securityDeleteAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাকাউন্ট মুছুন'**
+  String get securityDeleteAction;
+
+  /// No description provided for @securityDeleteFinish.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে ফেলা শেষ করুন'**
+  String get securityDeleteFinish;
+
+  /// No description provided for @securityDeleteConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার অ্যাকাউন্ট মুছবেন?'**
+  String get securityDeleteConfirmTitle;
+
+  /// No description provided for @securityDeleteConfirmBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি আর ফেরানো যাবে না।'**
+  String get securityDeleteConfirmBody;
+
+  /// No description provided for @accountDeleteLastAdminHasMembers.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি একমাত্র অ্যাডমিন এবং পরিবারে আরও সদস্য আছেন। আগে অ্যাডমিনের দায়িত্ব হস্তান্তর করুন।'**
+  String get accountDeleteLastAdminHasMembers;
+
+  /// No description provided for @relationshipsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পর্কের তালিকা'**
+  String get relationshipsTitle;
+
+  /// No description provided for @relationshipsHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'তৈরি-করা সম্পর্কগুলো পরিবর্তন করা যায় না। নিজের সম্পর্ক যোগ, নাম পরিবর্তন বা বন্ধ করতে পারেন।'**
+  String get relationshipsHint;
+
+  /// No description provided for @relationshipsAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পর্ক যোগ করুন'**
+  String get relationshipsAdd;
+
+  /// No description provided for @relationshipsLabelBn.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাংলায় নাম'**
+  String get relationshipsLabelBn;
+
+  /// No description provided for @relationshipsLabelEn.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইংরেজিতে নাম'**
+  String get relationshipsLabelEn;
+
+  /// No description provided for @relationshipsSpouseRelevant.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্বামী/স্ত্রী বাছাই দেখান'**
+  String get relationshipsSpouseRelevant;
+
+  /// No description provided for @relationshipsBuiltIn.
+  ///
+  /// In bn, this message translates to:
+  /// **'তৈরি-করা'**
+  String get relationshipsBuiltIn;
+
+  /// No description provided for @relationshipsActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'চালু'**
+  String get relationshipsActive;
+
+  /// No description provided for @relationshipsDisabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'বন্ধ'**
+  String get relationshipsDisabled;
+
+  /// No description provided for @relationshipsEnable.
+  ///
+  /// In bn, this message translates to:
+  /// **'চালু করুন'**
+  String get relationshipsEnable;
+
+  /// No description provided for @relationshipsDisable.
+  ///
+  /// In bn, this message translates to:
+  /// **'বন্ধ করুন'**
+  String get relationshipsDisable;
+
+  /// No description provided for @relationshipsFailureLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি নাম লিখুন (সর্বোচ্চ ৪০ অক্ষর)।'**
+  String get relationshipsFailureLabel;
+
+  /// No description provided for @relationshipsFailureTooMany.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকা পূর্ণ।'**
+  String get relationshipsFailureTooMany;
+
+  /// No description provided for @relationshipsFailureBuiltIn.
+  ///
+  /// In bn, this message translates to:
+  /// **'তৈরি-করা সম্পর্ক পরিবর্তন করা যায় না।'**
+  String get relationshipsFailureBuiltIn;
+
+  /// No description provided for @activityFamilyCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার “{familyName}” তৈরি হয়েছে'**
+  String activityFamilyCreated(String familyName);
+
+  /// No description provided for @activityFamilyUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের সেটিংস হালনাগাদ হয়েছে'**
+  String get activityFamilyUpdated;
+
+  /// No description provided for @activityMemberRequested.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName} যোগ দিতে অনুরোধ করেছেন'**
+  String activityMemberRequested(String memberName);
+
+  /// No description provided for @activityMemberApproved.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName}-কে অনুমোদন দেওয়া হয়েছে'**
+  String activityMemberApproved(String memberName);
+
+  /// No description provided for @activityMemberRejected.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName}-কে গ্রহণ করা হয়নি'**
+  String activityMemberRejected(String memberName);
+
+  /// No description provided for @activityMemberDisabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName}-কে বন্ধ করা হয়েছে'**
+  String activityMemberDisabled(String memberName);
+
+  /// No description provided for @activityMemberRoleChanged.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName} এখন {newRole}'**
+  String activityMemberRoleChanged(String memberName, String newRole);
+
+  /// No description provided for @activityAdminTransferred.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাডমিনের দায়িত্ব {memberName}-কে দেওয়া হয়েছে'**
+  String activityAdminTransferred(String memberName);
+
+  /// No description provided for @activityMemberLeft.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName} পরিবার ছেড়ে গেছেন'**
+  String activityMemberLeft(String memberName);
+
+  /// No description provided for @activityMemberCancelled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{memberName} অনুরোধ প্রত্যাহার করেছেন'**
+  String activityMemberCancelled(String memberName);
+
+  /// No description provided for @activityInvitationCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমন্ত্রণ {code} তৈরি হয়েছে'**
+  String activityInvitationCreated(String code);
+
+  /// No description provided for @activityInvitationRevoked.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমন্ত্রণ {code} বাতিল হয়েছে'**
+  String activityInvitationRevoked(String code);
+
+  /// No description provided for @activityBazarCatalogSeeded.
+  ///
+  /// In bn, this message translates to:
+  /// **'{categories}টি ক্যাটাগরি ও {items}টি আইটেম দিয়ে বাজারের তালিকা চালু হয়েছে'**
+  String activityBazarCatalogSeeded(String categories, String items);
+
+  /// No description provided for @activityBazarCategoryCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটাগরি “{name}” যোগ করা হয়েছে'**
+  String activityBazarCategoryCreated(String name);
+
+  /// No description provided for @activityBazarCategoryUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটাগরি “{name}” হালনাগাদ হয়েছে'**
+  String activityBazarCategoryUpdated(String name);
+
+  /// No description provided for @activityBazarCategoryDeactivated.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটাগরি “{name}” আর্কাইভ করা হয়েছে'**
+  String activityBazarCategoryDeactivated(String name);
+
+  /// No description provided for @activityBazarItemCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেম “{name}” যোগ করা হয়েছে'**
+  String activityBazarItemCreated(String name);
+
+  /// No description provided for @activityBazarItemUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেম “{name}” হালনাগাদ হয়েছে'**
+  String activityBazarItemUpdated(String name);
+
+  /// No description provided for @activityBazarItemDeactivated.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেম “{name}” আর্কাইভ করা হয়েছে'**
+  String activityBazarItemDeactivated(String name);
+
+  /// No description provided for @activityBazarExpenseCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{item} কেনা হয়েছে {amount} দিয়ে ({funding})'**
+  String activityBazarExpenseCreated(
+    String item,
+    String amount,
+    String funding,
+  );
+
+  /// No description provided for @activityBazarExpenseUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{item} সম্পাদনা করা হয়েছে ({fields})'**
+  String activityBazarExpenseUpdated(String item, String fields);
+
+  /// No description provided for @activityBazarExpenseDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'{item} মুছে ফেলা হয়েছে ({amount})'**
+  String activityBazarExpenseDeleted(String item, String amount);
+
+  /// No description provided for @activityBazarExpenseRestored.
+  ///
+  /// In bn, this message translates to:
+  /// **'{item} ফিরিয়ে আনা হয়েছে ({amount})'**
+  String activityBazarExpenseRestored(String item, String amount);
+
+  /// No description provided for @activityBazarTripCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{lines}টি আইটেমের বাজার যাত্রা {amount} দিয়ে সংরক্ষণ হয়েছে'**
+  String activityBazarTripCreated(String lines, String amount);
+
+  /// No description provided for @activityBazarBudgetSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এর বাজেট {amount} নির্ধারণ করা হয়েছে'**
+  String activityBazarBudgetSaved(String month, String amount);
+
+  /// No description provided for @activityBazarSettingsUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজারের সেটিংস হালনাগাদ হয়েছে'**
+  String get activityBazarSettingsUpdated;
+
+  /// No description provided for @activityBazarContributionPlanSet.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এ {member}-এর চাঁদা {amount} নির্ধারণ করা হয়েছে'**
+  String activityBazarContributionPlanSet(
+    String month,
+    String member,
+    String amount,
+  );
+
+  /// No description provided for @activityBazarContributionRecorded.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এ {member}-এর {amount} চাঁদা রেকর্ড করা হয়েছে'**
+  String activityBazarContributionRecorded(
+    String month,
+    String member,
+    String amount,
+  );
+
+  /// No description provided for @activityBazarContributionVoided.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এ {member}-এর {amount} চাঁদা বাতিল করা হয়েছে'**
+  String activityBazarContributionVoided(
+    String month,
+    String member,
+    String amount,
+  );
+
+  /// No description provided for @activityBazarContributionRequested.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এর জন্য {member} {amount} দিতে চেয়েছেন'**
+  String activityBazarContributionRequested(
+    String month,
+    String member,
+    String amount,
+  );
+
+  /// No description provided for @activityBazarContributionRequestEdited.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এর জন্য {member} {amount} দেওয়ার অনুরোধ সম্পাদনা করেছেন'**
+  String activityBazarContributionRequestEdited(
+    String month,
+    String member,
+    String amount,
+  );
+
+  /// No description provided for @activityBazarContributionRequestCancelled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এর জন্য {member} {amount} দেওয়ার অনুরোধ প্রত্যাহার করেছেন'**
+  String activityBazarContributionRequestCancelled(
+    String month,
+    String member,
+    String amount,
+  );
+
+  /// No description provided for @activityBazarContributionApproved.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এ {member}-এর {amount} চাঁদা অনুমোদিত হয়েছে'**
+  String activityBazarContributionApproved(
+    String month,
+    String member,
+    String amount,
+  );
+
+  /// No description provided for @activityBazarContributionRejected.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এ {member}-এর {amount} চাঁদা গ্রহণ করা হয়নি ({reason})'**
+  String activityBazarContributionRejected(
+    String month,
+    String member,
+    String amount,
+    String reason,
+  );
+
+  /// No description provided for @activityBazarContributionChangeRequested.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এর জন্য {member} {old} থেকে {amount}-এ চাঁদা বদলাতে বলেছেন'**
+  String activityBazarContributionChangeRequested(
+    String month,
+    String member,
+    String amount,
+    String old,
+  );
+
+  /// No description provided for @activityBazarContributionChangeApproved.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এ {member}-এর চাঁদা {old} থেকে {amount}-এ বদলের অনুমোদন হয়েছে'**
+  String activityBazarContributionChangeApproved(
+    String month,
+    String member,
+    String amount,
+    String old,
+  );
+
+  /// No description provided for @activityBazarContributionChangeRejected.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এ {member}-এর চাঁদা {old} থেকে {amount}-এ বদলের অনুমোদন হয়নি'**
+  String activityBazarContributionChangeRejected(
+    String month,
+    String member,
+    String amount,
+    String old,
+  );
+
+  /// No description provided for @activityBazarOpeningBalanceSet.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month}-এর প্রারম্ভিক ব্যালেন্স {amount}'**
+  String activityBazarOpeningBalanceSet(String month, String amount);
+
+  /// No description provided for @activityBazarAdvanceSettled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member}-এর অগ্রিম {amount} সমন্বয় হয়েছে ({status})'**
+  String activityBazarAdvanceSettled(
+    String member,
+    String amount,
+    String status,
+  );
+
+  /// No description provided for @activityBazarMonthClosed.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month} বন্ধ করা হয়েছে, ব্যালেন্স {balance}'**
+  String activityBazarMonthClosed(String month, String balance);
+
+  /// No description provided for @activityBazarMonthReopened.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month} আবার খোলা হয়েছে ({note})'**
+  String activityBazarMonthReopened(String month, String note);
+
+  /// No description provided for @activityBazarImportCompleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমপোর্ট শেষ: {rows}টি সারি, {amount}'**
+  String activityBazarImportCompleted(String rows, String amount);
+
+  /// No description provided for @activityBazarImportUndone.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমপোর্ট বাতিল: {rows}টি সারি, {amount}'**
+  String activityBazarImportUndone(String rows, String amount);
+
+  /// No description provided for @activityUnknown.
+  ///
+  /// In bn, this message translates to:
+  /// **'কিছু পরিবর্তন হয়েছে'**
+  String get activityUnknown;
+
+  /// No description provided for @galleryMonthSwitcher.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস পরিবর্তনকারী'**
+  String get galleryMonthSwitcher;
+
+  /// No description provided for @galleryAmountField.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিমাণের ঘর'**
+  String get galleryAmountField;
+
+  /// No description provided for @galleryTotalDisplay.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট প্রদর্শন'**
+  String get galleryTotalDisplay;
+
+  /// No description provided for @galleryProgressBarStatus.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমার অগ্রগতি বার'**
+  String get galleryProgressBarStatus;
+
+  /// No description provided for @galleryDaySectionHeader.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিনের শিরোনাম'**
+  String get galleryDaySectionHeader;
+
+  /// No description provided for @galleryPersonPicker.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যক্তি নির্বাচন'**
+  String get galleryPersonPicker;
+
+  /// No description provided for @galleryCategoryBadge.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি ব্যাজ'**
+  String get galleryCategoryBadge;
+
+  /// No description provided for @monthSwitcherPrevious.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের মাস'**
+  String get monthSwitcherPrevious;
+
+  /// No description provided for @monthSwitcherNext.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের মাস'**
+  String get monthSwitcherNext;
+
+  /// No description provided for @monthSwitcherPick.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস বেছে নিন'**
+  String get monthSwitcherPick;
+
+  /// No description provided for @monthPickerPreviousYear.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের বছর'**
+  String get monthPickerPreviousYear;
+
+  /// No description provided for @monthPickerNextYear.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের বছর'**
+  String get monthPickerNextYear;
+
+  /// No description provided for @totalDisplayCalculated.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিমাণ × দর থেকে হিসাব করা'**
+  String get totalDisplayCalculated;
+
+  /// No description provided for @totalDisplayEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট এখনো নেই'**
+  String get totalDisplayEmpty;
+
+  /// No description provided for @progressLevelOk.
+  ///
+  /// In bn, this message translates to:
+  /// **'ঠিক আছে'**
+  String get progressLevelOk;
+
+  /// No description provided for @progressLevelWarning.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমার কাছাকাছি'**
+  String get progressLevelWarning;
+
+  /// No description provided for @progressLevelExceeded.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমা ছাড়িয়েছে'**
+  String get progressLevelExceeded;
+
+  /// No description provided for @progressLevelNoLimit.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমা নির্ধারিত নেই'**
+  String get progressLevelNoLimit;
+
+  /// No description provided for @progressBarSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'{label}: {percent} শতাংশ, {level}'**
+  String progressBarSemantics(String label, String percent, String level);
+
+  /// No description provided for @personPickerNone.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেউ নয়'**
+  String get personPickerNone;
+
+  /// No description provided for @actionUndo.
+  ///
+  /// In bn, this message translates to:
+  /// **'পূর্বাবস্থায় ফেরান'**
+  String get actionUndo;
+
+  /// No description provided for @bazarErrExpenseDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই খরচটি মুছে ফেলা হয়েছে। আগে ফিরিয়ে আনুন।'**
+  String get bazarErrExpenseDeleted;
+
+  /// No description provided for @expenseAddTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ যোগ করুন'**
+  String get expenseAddTitle;
+
+  /// No description provided for @expenseEditTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ সম্পাদনা'**
+  String get expenseEditTitle;
+
+  /// No description provided for @expenseMenuTrip.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ট্রিপ (অনেক পণ্য)'**
+  String get expenseMenuTrip;
+
+  /// No description provided for @expenseDateLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখ'**
+  String get expenseDateLabel;
+
+  /// No description provided for @expenseItemLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য'**
+  String get expenseItemLabel;
+
+  /// No description provided for @expenseItemHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্যের নাম লিখুন'**
+  String get expenseItemHint;
+
+  /// No description provided for @expenseAddNewItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} নতুন পণ্য হিসেবে যোগ করুন'**
+  String expenseAddNewItem(String name);
+
+  /// No description provided for @expenseCategoryLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি'**
+  String get expenseCategoryLabel;
+
+  /// No description provided for @expenseRememberItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্যটি মনে রাখুন'**
+  String get expenseRememberItem;
+
+  /// No description provided for @expenseTotalField.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট টাকা'**
+  String get expenseTotalField;
+
+  /// No description provided for @expenseTotalLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট'**
+  String get expenseTotalLabel;
+
+  /// No description provided for @expenseQtyPriceSection.
+  ///
+  /// In bn, this message translates to:
+  /// **'অথবা পরিমাণ ও প্রতি এককের দাম লিখুন'**
+  String get expenseQtyPriceSection;
+
+  /// No description provided for @expenseQtyField.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিমাণ'**
+  String get expenseQtyField;
+
+  /// No description provided for @expenseUnitLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'একক'**
+  String get expenseUnitLabel;
+
+  /// No description provided for @expenseUnitPriceField.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতি এককের দাম'**
+  String get expenseUnitPriceField;
+
+  /// No description provided for @expenseUnitPriceHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বশেষ দাম: {price}'**
+  String expenseUnitPriceHint(String price);
+
+  /// No description provided for @expenseFundingLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'কে টাকা দিয়েছে?'**
+  String get expenseFundingLabel;
+
+  /// No description provided for @expenseFundingFund.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের তহবিল থেকে'**
+  String get expenseFundingFund;
+
+  /// No description provided for @expenseFundingReimbursable.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য দিয়েছে, ফেরত পাবে'**
+  String get expenseFundingReimbursable;
+
+  /// No description provided for @expenseFundingPersonal.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য নিজের টাকায় দিয়েছে, ফেরত নয়'**
+  String get expenseFundingPersonal;
+
+  /// No description provided for @expensePaidByLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'যিনি দিয়েছেন'**
+  String get expensePaidByLabel;
+
+  /// No description provided for @expenseMoreSection.
+  ///
+  /// In bn, this message translates to:
+  /// **'আরও তথ্য'**
+  String get expenseMoreSection;
+
+  /// No description provided for @expenseShopField.
+  ///
+  /// In bn, this message translates to:
+  /// **'দোকান'**
+  String get expenseShopField;
+
+  /// No description provided for @expenseNoteField.
+  ///
+  /// In bn, this message translates to:
+  /// **'নোট'**
+  String get expenseNoteField;
+
+  /// No description provided for @expensePurchaserLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'যিনি কিনেছেন'**
+  String get expensePurchaserLabel;
+
+  /// No description provided for @expenseSaveAddAnother.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষণ করে আরেকটি যোগ করুন'**
+  String get expenseSaveAddAnother;
+
+  /// No description provided for @expenseSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ সংরক্ষণ হয়েছে'**
+  String get expenseSaved;
+
+  /// No description provided for @expenseUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ হালনাগাদ হয়েছে'**
+  String get expenseUpdated;
+
+  /// No description provided for @expenseUnknownMember.
+  ///
+  /// In bn, this message translates to:
+  /// **'একজন সদস্য'**
+  String get expenseUnknownMember;
+
+  /// No description provided for @expenseDuplicateTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'মনে হচ্ছে একই খরচ আগেই যোগ হয়েছে'**
+  String get expenseDuplicateTitle;
+
+  /// No description provided for @expenseDuplicateMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'{item} একই টাকায় কয়েক মিনিট আগে যোগ করা হয়েছে।'**
+  String expenseDuplicateMessage(String item);
+
+  /// No description provided for @expenseDuplicateSaveAnyway.
+  ///
+  /// In bn, this message translates to:
+  /// **'তবুও সংরক্ষণ করুন'**
+  String get expenseDuplicateSaveAnyway;
+
+  /// No description provided for @tripTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ট্রিপ'**
+  String get tripTitle;
+
+  /// No description provided for @tripAddLine.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য যোগ করুন'**
+  String get tripAddLine;
+
+  /// No description provided for @tripLineSheetTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপে পণ্য যোগ করুন'**
+  String get tripLineSheetTitle;
+
+  /// No description provided for @tripLineSheetSave.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপে যোগ করুন'**
+  String get tripLineSheetSave;
+
+  /// No description provided for @tripLinesCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য: {count}'**
+  String tripLinesCount(String count);
+
+  /// No description provided for @tripEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো পণ্য নেই। প্রথম পণ্যটি যোগ করুন।'**
+  String get tripEmpty;
+
+  /// No description provided for @tripTotalLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপের মোট'**
+  String get tripTotalLabel;
+
+  /// No description provided for @tripSaveAll.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব সংরক্ষণ করুন'**
+  String get tripSaveAll;
+
+  /// No description provided for @tripSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপ সংরক্ষণ হয়েছে'**
+  String get tripSaved;
+
+  /// No description provided for @tripLineRemoved.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য সরানো হয়েছে'**
+  String get tripLineRemoved;
+
+  /// No description provided for @tripLimitReached.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি ট্রিপে সর্বোচ্চ ৪০টি পণ্য থাকতে পারে।'**
+  String get tripLimitReached;
+
+  /// No description provided for @expenseListTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচের তালিকা'**
+  String get expenseListTitle;
+
+  /// No description provided for @expenseListFilteredTotal.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই তালিকার মোট'**
+  String get expenseListFilteredTotal;
+
+  /// No description provided for @expenseListEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসে কোনো খরচ নেই'**
+  String get expenseListEmptyTitle;
+
+  /// No description provided for @expenseListEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রথম খরচ যোগ করলে এখানে দেখা যাবে।'**
+  String get expenseListEmptyMessage;
+
+  /// No description provided for @expenseListFilteredEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টারের সাথে মেলে এমন কিছু নেই'**
+  String get expenseListFilteredEmptyTitle;
+
+  /// No description provided for @expenseListFilteredEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব খরচ দেখতে ফিল্টার মুছে ফেলুন।'**
+  String get expenseListFilteredEmptyMessage;
+
+  /// No description provided for @expenseListLocked.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস বন্ধ। এন্ট্রি শুধু দেখা যাবে।'**
+  String get expenseListLocked;
+
+  /// No description provided for @expenseListRefresh.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিফ্রেশ'**
+  String get expenseListRefresh;
+
+  /// No description provided for @expenseShowMore.
+  ///
+  /// In bn, this message translates to:
+  /// **'আরও দেখান'**
+  String get expenseShowMore;
+
+  /// No description provided for @expenseRowDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে ফেলা'**
+  String get expenseRowDeleted;
+
+  /// No description provided for @expenseRowTrip.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপ'**
+  String get expenseRowTrip;
+
+  /// No description provided for @expenseFilterTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টার'**
+  String get expenseFilterTitle;
+
+  /// No description provided for @expenseFilterRange.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখের সীমা'**
+  String get expenseFilterRange;
+
+  /// No description provided for @expenseFilterRangeActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'{start} থেকে {end}'**
+  String expenseFilterRangeActive(String start, String end);
+
+  /// No description provided for @expenseRangeAll.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুরো মাস'**
+  String get expenseRangeAll;
+
+  /// No description provided for @expenseRangeToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজ'**
+  String get expenseRangeToday;
+
+  /// No description provided for @expenseRangeYesterday.
+  ///
+  /// In bn, this message translates to:
+  /// **'গতকাল'**
+  String get expenseRangeYesterday;
+
+  /// No description provided for @expenseRangeLast7.
+  ///
+  /// In bn, this message translates to:
+  /// **'গত ৭ দিন'**
+  String get expenseRangeLast7;
+
+  /// No description provided for @expenseRangeThisWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সপ্তাহ'**
+  String get expenseRangeThisWeek;
+
+  /// No description provided for @expenseRangeThisMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস'**
+  String get expenseRangeThisMonth;
+
+  /// No description provided for @expenseRangeLastMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'গত মাস'**
+  String get expenseRangeLastMonth;
+
+  /// No description provided for @expenseRangeThisYear.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই বছর'**
+  String get expenseRangeThisYear;
+
+  /// No description provided for @expenseRangeCustom.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখ বেছে নিন'**
+  String get expenseRangeCustom;
+
+  /// No description provided for @expenseFilterCategory.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি'**
+  String get expenseFilterCategory;
+
+  /// No description provided for @expenseFilterItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য'**
+  String get expenseFilterItem;
+
+  /// No description provided for @expenseFilterMember.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য'**
+  String get expenseFilterMember;
+
+  /// No description provided for @expenseFilterFunding.
+  ///
+  /// In bn, this message translates to:
+  /// **'টাকার উৎস'**
+  String get expenseFilterFunding;
+
+  /// No description provided for @expenseFilterAny.
+  ///
+  /// In bn, this message translates to:
+  /// **'যেকোনো'**
+  String get expenseFilterAny;
+
+  /// No description provided for @expenseFilterShowDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে ফেলা দেখান'**
+  String get expenseFilterShowDeleted;
+
+  /// No description provided for @expenseFilterReset.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টার মুছুন'**
+  String get expenseFilterReset;
+
+  /// No description provided for @expenseDetailTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ'**
+  String get expenseDetailTitle;
+
+  /// No description provided for @expenseDetailAddedBy.
+  ///
+  /// In bn, this message translates to:
+  /// **'যোগ করেছেন'**
+  String get expenseDetailAddedBy;
+
+  /// No description provided for @expenseDetailPayment.
+  ///
+  /// In bn, this message translates to:
+  /// **'টাকার উৎস ও হিসাব'**
+  String get expenseDetailPayment;
+
+  /// No description provided for @expenseNotYoursMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি শুধু নিজের খরচ পরিবর্তন করতে পারবেন।'**
+  String get expenseNotYoursMessage;
+
+  /// No description provided for @expenseLedgerFund.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের তহবিল থেকে দেওয়া হয়েছে'**
+  String get expenseLedgerFund;
+
+  /// No description provided for @expenseLedgerPersonal.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} নিজের টাকায় দিয়েছেন, ফেরত নেই'**
+  String expenseLedgerPersonal(String name);
+
+  /// No description provided for @expenseLedgerPending.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} দিয়েছেন। {amount} ফেরত দেওয়া বাকি।'**
+  String expenseLedgerPending(String name, String amount);
+
+  /// No description provided for @expenseLedgerPartial.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} দিয়েছেন। {total} এর মধ্যে {settled} ফেরত দেওয়া হয়েছে।'**
+  String expenseLedgerPartial(String name, String settled, String total);
+
+  /// No description provided for @expenseLedgerSettled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} দিয়েছেন। পুরোটা ফেরত দেওয়া হয়েছে।'**
+  String expenseLedgerSettled(String name);
+
+  /// No description provided for @expenseLedgerVoided.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচের সাথে ফেরতও বাতিল হয়েছে।'**
+  String get expenseLedgerVoided;
+
+  /// No description provided for @expenseDeleteTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই খরচ মুছে ফেলবেন?'**
+  String get expenseDeleteTitle;
+
+  /// No description provided for @expenseDeleteMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} মোট থেকে বাদ যাবে। সাথে সাথে পূর্বাবস্থায় ফেরাতে পারবেন।'**
+  String expenseDeleteMessage(String name);
+
+  /// No description provided for @expenseDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ মুছে ফেলা হয়েছে'**
+  String get expenseDeleted;
+
+  /// No description provided for @expenseRestore.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিরিয়ে আনুন'**
+  String get expenseRestore;
+
+  /// No description provided for @expenseRestored.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ ফিরিয়ে আনা হয়েছে'**
+  String get expenseRestored;
+
+  /// No description provided for @expenseHistoryTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবর্তনের ইতিহাস'**
+  String get expenseHistoryTitle;
+
+  /// No description provided for @expenseHistoryEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো পরিবর্তন নেই।'**
+  String get expenseHistoryEmpty;
+
+  /// No description provided for @expenseHistoryEntry.
+  ///
+  /// In bn, this message translates to:
+  /// **'{who} {date} তারিখে পরিবর্তন করেছেন'**
+  String expenseHistoryEntry(String who, String date);
+
+  /// No description provided for @expenseHistoryWas.
+  ///
+  /// In bn, this message translates to:
+  /// **'{field} আগে ছিল: {value}'**
+  String expenseHistoryWas(String field, String value);
+
+  /// No description provided for @catalogTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য ও ক্যাটেগরি'**
+  String get catalogTitle;
+
+  /// No description provided for @catalogTabCategories.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি'**
+  String get catalogTabCategories;
+
+  /// No description provided for @catalogTabItems.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য'**
+  String get catalogTabItems;
+
+  /// No description provided for @catalogAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'যোগ করুন'**
+  String get catalogAdd;
+
+  /// No description provided for @catalogAddCategory.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি যোগ করুন'**
+  String get catalogAddCategory;
+
+  /// No description provided for @catalogEditCategory.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি সম্পাদনা'**
+  String get catalogEditCategory;
+
+  /// No description provided for @catalogAddItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য যোগ করুন'**
+  String get catalogAddItem;
+
+  /// No description provided for @catalogEditItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য সম্পাদনা'**
+  String get catalogEditItem;
+
+  /// No description provided for @catalogCategoryName.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরির নাম'**
+  String get catalogCategoryName;
+
+  /// No description provided for @catalogNameBn.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাংলা নাম'**
+  String get catalogNameBn;
+
+  /// No description provided for @catalogNameEn.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইংরেজি নাম (ঐচ্ছিক)'**
+  String get catalogNameEn;
+
+  /// No description provided for @catalogEmoji.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমোজি (ঐচ্ছিক)'**
+  String get catalogEmoji;
+
+  /// No description provided for @catalogColour.
+  ///
+  /// In bn, this message translates to:
+  /// **'রং'**
+  String get catalogColour;
+
+  /// No description provided for @catalogColourSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'রং {number}'**
+  String catalogColourSemantics(int number);
+
+  /// No description provided for @catalogActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকায় দেখানো হবে'**
+  String get catalogActive;
+
+  /// No description provided for @catalogActiveHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে না ফেলে লুকাতে বন্ধ করুন।'**
+  String get catalogActiveHint;
+
+  /// No description provided for @catalogHidden.
+  ///
+  /// In bn, this message translates to:
+  /// **'লুকানো'**
+  String get catalogHidden;
+
+  /// No description provided for @catalogReorder.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাজাতে টেনে আনুন'**
+  String get catalogReorder;
+
+  /// No description provided for @catalogReadOnly.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি এটি দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন পরিবর্তন করতে পারবেন।'**
+  String get catalogReadOnly;
+
+  /// No description provided for @catalogCategoriesEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো ক্যাটেগরি নেই'**
+  String get catalogCategoriesEmpty;
+
+  /// No description provided for @catalogItemsEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো পণ্য পাওয়া যায়নি'**
+  String get catalogItemsEmpty;
+
+  /// No description provided for @catalogSearch.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য খুঁজুন'**
+  String get catalogSearch;
+
+  /// No description provided for @catalogAllCategories.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব'**
+  String get catalogAllCategories;
+
+  /// No description provided for @catalogDefaultUnit.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাধারণ একক'**
+  String get catalogDefaultUnit;
+
+  /// No description provided for @catalogAliases.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্য বানান (খোঁজার জন্য)'**
+  String get catalogAliases;
+
+  /// No description provided for @catalogAliasField.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি বানান যোগ করুন'**
+  String get catalogAliasField;
+
+  /// No description provided for @catalogAliasAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'বানান যোগ করুন'**
+  String get catalogAliasAdd;
+
+  /// No description provided for @catalogAliasLimit.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বোচ্চ ১০টি বানান দেওয়া যাবে।'**
+  String get catalogAliasLimit;
+
+  /// No description provided for @bazarSettingsWeekStart.
+  ///
+  /// In bn, this message translates to:
+  /// **'সপ্তাহ শুরু'**
+  String get bazarSettingsWeekStart;
+
+  /// No description provided for @bazarSettingsTarget.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসিক পারিবারিক চাঁদার লক্ষ্য'**
+  String get bazarSettingsTarget;
+
+  /// No description provided for @bazarSettingsDueDay.
+  ///
+  /// In bn, this message translates to:
+  /// **'চাঁদা দেওয়ার তারিখ (প্রতি মাসে)'**
+  String get bazarSettingsDueDay;
+
+  /// No description provided for @bazarSettingsAlerts.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট সতর্কতা (বাজেটের শতাংশ)'**
+  String get bazarSettingsAlerts;
+
+  /// No description provided for @bazarSettingsWarnAt.
+  ///
+  /// In bn, this message translates to:
+  /// **'সতর্ক করুন'**
+  String get bazarSettingsWarnAt;
+
+  /// No description provided for @bazarSettingsExceededAt.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমা ছাড়ালে'**
+  String get bazarSettingsExceededAt;
+
+  /// No description provided for @bazarSettingsThresholdRange.
+  ///
+  /// In bn, this message translates to:
+  /// **'১ থেকে ২০০ এর মধ্যে পূর্ণ সংখ্যা দিন।'**
+  String get bazarSettingsThresholdRange;
+
+  /// No description provided for @bazarSettingsThresholdOrder.
+  ///
+  /// In bn, this message translates to:
+  /// **'সতর্কতার শতাংশ সীমা ছাড়ানোর শতাংশের চেয়ে কম হতে হবে।'**
+  String get bazarSettingsThresholdOrder;
+
+  /// No description provided for @bazarSettingsFundStart.
+  ///
+  /// In bn, this message translates to:
+  /// **'তহবিল শুরুর মাস'**
+  String get bazarSettingsFundStart;
+
+  /// No description provided for @bazarSettingsFundStartUnset.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।'**
+  String get bazarSettingsFundStartUnset;
 }
 
 class _AppLocalizationsDelegate
@@ -1320,8 +3284,9 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }

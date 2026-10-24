@@ -19,8 +19,8 @@ class ActionState {
 
 /// Runs a use case once at a time and exposes busy / failure.
 ///
-/// Each screen owns its own provider instance of this class, so one screen's
-/// error never shows on another.
+/// Each screen owns its own (auto-disposed) provider instance of this class, so
+/// one screen's error never shows on another and never survives the screen.
 class ActionController extends Notifier<ActionState> {
   @override
   ActionState build() => const ActionState();
@@ -47,5 +47,11 @@ class ActionController extends Notifier<ActionState> {
 typedef ActionProvider = NotifierProvider<ActionController, ActionState>;
 
 /// A fresh provider per screen.
+///
+/// `autoDispose` (H10): the state is dropped as soon as the screen leaves the
+/// tree, so a failure or the busy flag can never leak into the next visit and
+/// no screen needs a `Future.microtask(...reset())` workaround.
 ActionProvider newActionProvider() =>
-    NotifierProvider<ActionController, ActionState>(ActionController.new);
+    NotifierProvider.autoDispose<ActionController, ActionState>(
+      ActionController.new,
+    );

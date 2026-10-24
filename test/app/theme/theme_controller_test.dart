@@ -96,10 +96,7 @@ void main() {
           .read(themeControllerProvider.notifier)
           .setThemeMode(ThemeMode.dark);
 
-      expect(
-        container.read(themeControllerProvider).themeMode,
-        ThemeMode.dark,
-      );
+      expect(container.read(themeControllerProvider).themeMode, ThemeMode.dark);
       expect(prefs.getString('theme_mode'), 'dark');
     });
 
@@ -116,37 +113,36 @@ void main() {
           .read(themeControllerProvider.notifier)
           .setThemeId('does_not_exist');
 
-      expect(
-        container.read(themeControllerProvider).themeId,
-        kModernLightId,
-      );
+      expect(container.read(themeControllerProvider).themeId, kModernLightId);
     });
 
-    test('persistence round-trip — new container reads previous write',
-        () async {
-      SharedPreferences.setMockInitialValues({});
-      final prefs = await SharedPreferences.getInstance();
+    test(
+      'persistence round-trip — new container reads previous write',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
 
-      final container1 = ProviderContainer(
-        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
-      );
-      await container1
-          .read(themeControllerProvider.notifier)
-          .setThemeId('modern_dark');
-      await container1
-          .read(themeControllerProvider.notifier)
-          .setThemeMode(ThemeMode.dark);
-      container1.dispose();
+        final container1 = ProviderContainer(
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        );
+        await container1
+            .read(themeControllerProvider.notifier)
+            .setThemeId('modern_dark');
+        await container1
+            .read(themeControllerProvider.notifier)
+            .setThemeMode(ThemeMode.dark);
+        container1.dispose();
 
-      // New container, same prefs instance (simulates app restart).
-      final container2 = ProviderContainer(
-        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
-      );
-      addTearDown(container2.dispose);
-      final restored = container2.read(themeControllerProvider);
-      expect(restored.themeId, 'modern_dark');
-      expect(restored.themeMode, ThemeMode.dark);
-    });
+        // New container, same prefs instance (simulates app restart).
+        final container2 = ProviderContainer(
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        );
+        addTearDown(container2.dispose);
+        final restored = container2.read(themeControllerProvider);
+        expect(restored.themeId, 'modern_dark');
+        expect(restored.themeMode, ThemeMode.dark);
+      },
+    );
   });
 
   group('resolveThemeSpecs', () {

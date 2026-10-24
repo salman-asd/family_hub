@@ -11,11 +11,11 @@ class InviteCodeGenerator {
   final Random _random;
 
   String next() => String.fromCharCodes(
-        List<int>.generate(
-          Invitation.codeLength,
-          (_) => alphabet.codeUnitAt(_random.nextInt(alphabet.length)),
-        ),
-      );
+    List<int>.generate(
+      Invitation.codeLength,
+      (_) => alphabet.codeUnitAt(_random.nextInt(alphabet.length)),
+    ),
+  );
 
   /// Upper-cases and strips spaces/dashes from user input.
   static String normalize(String raw) =>

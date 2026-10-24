@@ -1,14 +1,18 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/localization/role_labels.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/presentation/action_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
-import 'package:family_hub/features/family/presentation/membership_providers.dart';
+import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/features/family/presentation/widgets/labels.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
+import 'package:family_hub/shared/widgets/permission_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -24,8 +28,9 @@ class MembersScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final members = ref.watch(membersProvider);
-    final me = ref.watch(membershipProvider).value;
     final uid = ref.watch(currentUidProvider);
+    final canApprove = ref.can(Permission.approveMembers);
+    final canRemove = ref.can(Permission.removeMembers);
 
     ref.listen(_memberActionProvider, (_, next) {
       final f = next.failure;
@@ -39,8 +44,8 @@ class MembersScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.membersTitle)),
       body: members.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => EmptyState(
+        loading: () => const LoadingView(lines: 5, showAvatar: true),
+        error: (_, _) => EmptyState(
           icon: Icons.cloud_off_rounded,
           title: l10n.errorUnknown,
           actionLabel: l10n.actionRetry,
@@ -69,8 +74,8 @@ class MembersScreen extends ConsumerWidget {
                     _MemberTile(
                       member: m,
                       isMe: m.uid == uid,
-                      canApprove: me?.canManageMembers ?? false,
-                      canAdmin: me?.isAdmin ?? false,
+                      canApprove: canApprove,
+                      canRemove: canRemove,
                     ),
                   const SizedBox(height: 12),
                 ],
@@ -88,15 +93,13 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
-        child: Text(
-          text,
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall
-              ?.copyWith(color: context.tokens.textSecondary),
-        ),
-      );
+    padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+    child: Text(
+      text,
+      style: Theme.of(context).textTheme.titleSmall
+          ?.copyWith(color: context.tokens.textSecondary),
+    ),
+  );
 }
 
 class _MemberTile extends ConsumerWidget {
@@ -104,13 +107,13 @@ class _MemberTile extends ConsumerWidget {
     required this.member,
     required this.isMe,
     required this.canApprove,
-    required this.canAdmin,
+    required this.canRemove,
   });
 
   final Member member;
   final bool isMe;
   final bool canApprove;
-  final bool canAdmin;
+  final bool canRemove;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -128,13 +131,15 @@ class _MemberTile extends ConsumerWidget {
             key: Key('approve_${member.uid}'),
             onPressed: busy
                 ? null
-                : () => ref.read(_memberActionProvider.notifier).run(
-                      () => ref.read(approveMemberProvider)(
-                        actorUid: uid!,
-                        familyId: familyId!,
-                        targetUid: member.uid,
+                : () => ref
+                      .read(_memberActionProvider.notifier)
+                      .run(
+                        () => ref.read(approveMemberProvider)(
+                          actorUid: uid!,
+                          familyId: familyId!,
+                          targetUid: member.uid,
+                        ),
                       ),
-                    ),
             child: Text(l10n.memberApprove),
           ),
         )
@@ -143,47 +148,51 @@ class _MemberTile extends ConsumerWidget {
             key: Key('reject_${member.uid}'),
             onPressed: busy
                 ? null
-                : () => ref.read(_memberActionProvider.notifier).run(
-                      () => ref.read(rejectMemberProvider)(
-                        actorUid: uid!,
-                        familyId: familyId!,
-                        targetUid: member.uid,
+                : () => ref
+                      .read(_memberActionProvider.notifier)
+                      .run(
+                        () => ref.read(rejectMemberProvider)(
+                          actorUid: uid!,
+                          familyId: familyId!,
+                          targetUid: member.uid,
+                        ),
                       ),
-                    ),
             child: Text(l10n.memberReject),
           ),
         );
-    } else if (member.status == MembershipStatus.active &&
-        canAdmin &&
-        !isMe) {
+    } else if (member.status == MembershipStatus.active && canRemove && !isMe) {
       actions.add(
         OutlinedButton(
           key: Key('disable_${member.uid}'),
           onPressed: busy
               ? null
-              : () => ref.read(_memberActionProvider.notifier).run(
-                    () => ref.read(disableMemberProvider)(
-                      actorUid: uid!,
-                      familyId: familyId!,
-                      targetUid: member.uid,
+              : () => ref
+                    .read(_memberActionProvider.notifier)
+                    .run(
+                      () => ref.read(disableMemberProvider)(
+                        actorUid: uid!,
+                        familyId: familyId!,
+                        targetUid: member.uid,
+                      ),
                     ),
-                  ),
           child: Text(l10n.memberDisable),
         ),
       );
-    } else if (member.status == MembershipStatus.disabled && canAdmin) {
+    } else if (member.status == MembershipStatus.disabled && canRemove) {
       actions.add(
         OutlinedButton(
           key: Key('enable_${member.uid}'),
           onPressed: busy
               ? null
-              : () => ref.read(_memberActionProvider.notifier).run(
-                    () => ref.read(approveMemberProvider)(
-                      actorUid: uid!,
-                      familyId: familyId!,
-                      targetUid: member.uid,
+              : () => ref
+                    .read(_memberActionProvider.notifier)
+                    .run(
+                      () => ref.read(approveMemberProvider)(
+                        actorUid: uid!,
+                        familyId: familyId!,
+                        targetUid: member.uid,
+                      ),
                     ),
-                  ),
           child: Text(l10n.memberReenable),
         ),
       );
@@ -228,7 +237,10 @@ class _MemberTile extends ConsumerWidget {
               ),
               if (actions.isNotEmpty) ...[
                 const SizedBox(height: 8),
-                Wrap(spacing: 8, runSpacing: 8, children: actions),
+                PermissionGate(
+                  allowed: canApprove || canRemove,
+                  child: Wrap(spacing: 8, runSpacing: 8, children: actions),
+                ),
               ],
             ],
           ),

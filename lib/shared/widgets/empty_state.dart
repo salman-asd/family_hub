@@ -34,7 +34,8 @@ class EmptyState extends StatelessWidget {
     final t = context.tokens;
     final textTheme = Theme.of(context).textTheme;
 
-    final art = illustration ??
+    final art =
+        illustration ??
         (icon == null
             ? null
             : Container(
@@ -55,8 +56,8 @@ class EmptyState extends StatelessWidget {
             constraints: BoxConstraints(
               minHeight: constraints.maxHeight.isFinite
                   ? (constraints.maxHeight - 48)
-                      .clamp(0.0, double.infinity)
-                      .toDouble()
+                        .clamp(0.0, double.infinity)
+                        .toDouble()
                   : 0.0,
             ),
             child: Center(
@@ -72,16 +73,18 @@ class EmptyState extends StatelessWidget {
                     Text(
                       title,
                       textAlign: TextAlign.center,
-                      style: textTheme.titleLarge
-                          ?.copyWith(color: t.textPrimary),
+                      style: textTheme.titleLarge?.copyWith(
+                        color: t.textPrimary,
+                      ),
                     ),
                     if (message != null) ...[
                       const SizedBox(height: 8),
                       Text(
                         message!,
                         textAlign: TextAlign.center,
-                        style: textTheme.bodyMedium
-                            ?.copyWith(color: t.textSecondary),
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: t.textSecondary,
+                        ),
                       ),
                     ],
                     if (actionLabel != null && onAction != null) ...[

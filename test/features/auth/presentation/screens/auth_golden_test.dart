@@ -1,3 +1,6 @@
+@Tags(['golden'])
+library;
+
 import 'dart:io';
 
 import 'package:family_hub/app/theme/theme_builder.dart';
@@ -36,9 +39,9 @@ Future<void> loadBundledFonts() async {
   final loader = FontLoader(kAppFontFamily);
   for (final weight in ['Light', 'Regular', 'Medium', 'SemiBold', 'Bold']) {
     loader.addFont(
-      File('assets/fonts/HindSiliguri-$weight.ttf').readAsBytes().then(
-            (bytes) => ByteData.view(Uint8List.fromList(bytes).buffer),
-          ),
+      File('assets/fonts/HindSiliguri-$weight.ttf')
+          .readAsBytes()
+          .then((bytes) => ByteData.view(Uint8List.fromList(bytes).buffer)),
     );
   }
   await loader.load();
@@ -87,24 +90,18 @@ void main() {
   /// One golden per theme x locale, named `login_<themeId>_<locale>.png`.
   for (final spec in appThemes) {
     for (final locale in const [Locale('bn'), Locale('en')]) {
-      testWidgets(
-        'login golden — ${spec.id} / ${locale.languageCode}',
-        (tester) async {
-          await pump(
-            tester,
-            const LoginScreen(),
-            spec: spec,
-            locale: locale,
-          );
+      testWidgets('login golden — ${spec.id} / ${locale.languageCode}', (
+        tester,
+      ) async {
+        await pump(tester, const LoginScreen(), spec: spec, locale: locale);
 
-          await expectLater(
-            find.byType(MaterialApp),
-            matchesGoldenFile(
-              'goldens/login_${spec.id}_${locale.languageCode}.png',
-            ),
-          );
-        },
-      );
+        await expectLater(
+          find.byType(MaterialApp),
+          matchesGoldenFile(
+            'goldens/login_${spec.id}_${locale.languageCode}.png',
+          ),
+        );
+      });
     }
   }
 

@@ -46,8 +46,26 @@ final signInProvider = Provider<SignIn>(
   (ref) => SignIn(ref.watch(authRepositoryProvider)),
 );
 
+/// Runs after every successful sign-out (H9): the app schedules the wipe of the
+/// on-disk Firestore cache here.  No-op by default so tests need no override;
+/// `bootstrap.dart` installs the real one.
+final afterSignOutProvider = Provider<Future<void> Function()>(
+  (ref) => () async {},
+);
+
 final signOutProvider = Provider<SignOut>(
-  (ref) => SignOut(ref.watch(authRepositoryProvider)),
+  (ref) => SignOut(
+    ref.watch(authRepositoryProvider),
+    afterSignOut: ref.watch(afterSignOutProvider),
+  ),
+);
+
+final reauthenticateWithPasswordProvider = Provider<ReauthenticateWithPassword>(
+  (ref) => ReauthenticateWithPassword(ref.watch(authRepositoryProvider)),
+);
+
+final changePasswordProvider = Provider<ChangePassword>(
+  (ref) => ChangePassword(ref.watch(authRepositoryProvider)),
 );
 
 final sendPasswordResetProvider = Provider<SendPasswordReset>(
@@ -75,20 +93,19 @@ final reloadUserProvider = Provider<Future<Result<AppUser?>> Function()>(
 /// this switch stops compiling until it is handled — no failure can silently
 /// fall through to a generic message.
 String authFailureCode(AppFailure failure) => switch (failure) {
-      PermissionDenied() => 'permission_denied',
-      NotFound() => 'not_found',
-      Conflict() => 'conflict',
-      Network() => 'network',
-      InvalidCredentials() => 'invalid_credentials',
-      UserNotFound() => 'user_not_found',
-      EmailAlreadyInUse() => 'email_already_in_use',
-      WeakPassword() => 'weak_password',
-      TooManyRequests() => 'too_many_requests',
-      UserDisabled() => 'user_disabled',
-      RequiresRecentLogin() => 'requires_recent_login',
-      InvalidEmail() => 'invalid_email',
-      NoCurrentUser() => 'no_current_user',
-      Validation(field: final field, code: final code) =>
-        'validation.$field.$code',
-      Unknown() => 'unknown',
-    };
+  PermissionDenied() => 'permission_denied',
+  NotFound() => 'not_found',
+  Conflict() => 'conflict',
+  Network() => 'network',
+  InvalidCredentials() => 'invalid_credentials',
+  UserNotFound() => 'user_not_found',
+  EmailAlreadyInUse() => 'email_already_in_use',
+  WeakPassword() => 'weak_password',
+  TooManyRequests() => 'too_many_requests',
+  UserDisabled() => 'user_disabled',
+  RequiresRecentLogin() => 'requires_recent_login',
+  InvalidEmail() => 'invalid_email',
+  NoCurrentUser() => 'no_current_user',
+  Validation(field: final field, code: final code) => 'validation.$field.$code',
+  Unknown() => 'unknown',
+};

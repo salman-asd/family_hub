@@ -83,6 +83,26 @@ void main() {
         FirestorePaths.settlements(familyId),
         'families/fam_123/settlements',
       );
+      expect(
+        FirestorePaths.expenseRevisions(familyId, 'exp_1'),
+        'families/fam_123/expenses/exp_1/revisions',
+      );
+      expect(
+        FirestorePaths.expenseRevisionDoc(familyId, 'exp_1', 'rev_1'),
+        'families/fam_123/expenses/exp_1/revisions/rev_1',
+      );
+      expect(
+        FirestorePaths.monthClosingDoc(familyId, '2026-10'),
+        'families/fam_123/monthClosings/2026-10',
+      );
+      expect(
+        FirestorePaths.importBatchDoc(familyId, 'imp_1'),
+        'families/fam_123/importBatches/imp_1',
+      );
+      expect(
+        FirestorePaths.bazarSettingsDoc(familyId),
+        'families/fam_123/settings/bazar',
+      );
     });
 
     test('chores subcollections and deterministic occurrences', () {

@@ -12,32 +12,38 @@ void main() {
   tearDown(() => repository.dispose());
 
   group('SignUp', () {
-    test('validates locally and never calls the backend for a bad email',
-        () async {
-      final result =
-          await SignUp(repository)(email: 'nope', password: 'longenough');
+    test(
+      'validates locally and never calls the backend for a bad email',
+      () async {
+        final result = await SignUp(repository)(
+          email: 'nope',
+          password: 'longenough',
+        );
 
-      expect(result.failureOrNull, isA<Validation>());
-      expect(
-        repository.calls,
-        isEmpty,
-        reason: 'a bad form must not cost a round trip (Step 7)',
-      );
-    });
+        expect(result.failureOrNull, isA<Validation>());
+        expect(
+          repository.calls,
+          isEmpty,
+          reason: 'a bad form must not cost a round trip (Step 7)',
+        );
+      },
+    );
 
-    test('validates locally and never calls the backend for a short password',
-        () async {
-      final result = await SignUp(repository)(
-        email: 'a@b.co',
-        password: 'short',
-      );
+    test(
+      'validates locally and never calls the backend for a short password',
+      () async {
+        final result = await SignUp(repository)(
+          email: 'a@b.co',
+          password: 'short',
+        );
 
-      expect(
-        result.failureOrNull,
-        const Validation('password', 'password_too_short'),
-      );
-      expect(repository.calls, isEmpty);
-    });
+        expect(
+          result.failureOrNull,
+          const Validation('password', 'password_too_short'),
+        );
+        expect(repository.calls, isEmpty);
+      },
+    );
 
     test('trims the email it sends to the backend', () async {
       await SignUp(repository)(email: '  a@b.co  ', password: 'longenough');
@@ -196,6 +202,22 @@ void main() {
 
       final after = await repository.reloadUser();
       expect(after.valueOrNull?.emailVerified, isTrue);
+    });
+
+    test('forces an ID-token refresh on every reload (H5)', () async {
+      repository.signInAs(
+        const AppUser(uid: 'u1', email: 'a@b.co', emailVerified: false),
+      );
+
+      await repository.reloadUser();
+      await repository.reloadUser();
+
+      expect(repository.tokenRefreshes, 2);
+    });
+
+    test('does not refresh a token when nobody is signed in', () async {
+      await repository.reloadUser();
+      expect(repository.tokenRefreshes, 0);
     });
   });
 }

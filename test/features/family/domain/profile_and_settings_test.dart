@@ -25,24 +25,34 @@ void main() {
     late SaveProfile save;
     setUp(() => save = SaveProfile(f.backend));
 
-    UserProfile p(String uid, {String name = 'Karim', String? nick, String? spouse}) =>
-        UserProfile(
-          uid: uid,
-          fullName: name,
-          relationship: Relationship.father,
-          nickname: nick,
-          spouseId: spouse,
-        );
+    UserProfile p(
+      String uid, {
+      String name = 'Karim',
+      String? nick,
+      String? spouse,
+    }) => UserProfile(
+      uid: uid,
+      fullName: name,
+      relationship: RelationshipId.father,
+      nickname: nick,
+      spouseId: spouse,
+    );
 
     test('trims the name and drops an empty nickname', () async {
-      await save(actorUid: 'u1', profile: p('u1', name: '  Karim  ', nick: '  '));
+      await save(
+        actorUid: 'u1',
+        profile: p('u1', name: '  Karim  ', nick: '  '),
+      );
       final saved = f.backend.profiles['u1']!;
       expect(saved.fullName, 'Karim');
       expect(saved.nickname, isNull);
     });
 
     test('an empty name is a validation failure', () async {
-      final r = await save(actorUid: 'u1', profile: p('u1', name: ' '));
+      final r = await save(
+        actorUid: 'u1',
+        profile: p('u1', name: ' '),
+      );
       expect(r.failureOrNull, const Validation('fullName', 'required'));
       expect(f.backend.profiles, isEmpty);
     });
@@ -53,14 +63,21 @@ void main() {
     });
 
     test('you cannot be your own spouse; an empty spouse is fine', () async {
-      final bad = await save(actorUid: 'u1', profile: p('u1', spouse: 'u1'));
+      final bad = await save(
+        actorUid: 'u1',
+        profile: p('u1', spouse: 'u1'),
+      );
       expect(bad.failureOrNull, const Validation('spouseId', 'invalid'));
       final ok = await save(actorUid: 'u1', profile: p('u1'));
       expect(ok.isSuccess, isTrue);
     });
 
     test('editing inside a family updates the member document too', () async {
-      await save(actorUid: 'kid', familyId: 'fam', profile: p('kid', name: 'New Name'));
+      await save(
+        actorUid: 'kid',
+        familyId: 'fam',
+        profile: p('kid', name: 'New Name'),
+      );
       expect(f.backend.members['fam']!['kid']!.fullName, 'New Name');
       expect(f.backend.members['fam']!['kid']!.role, MemberRole.member);
     });
@@ -90,7 +107,10 @@ void main() {
     });
 
     test('a member may not', () async {
-      final r = await update(actorUid: 'kid', family: f.backend.families['fam']!);
+      final r = await update(
+        actorUid: 'kid',
+        family: f.backend.families['fam']!,
+      );
       expect(r.failureOrNull, const PermissionDenied());
     });
 

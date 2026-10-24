@@ -57,12 +57,11 @@ extension AuthFailureMessages on AppLocalizations {
         };
         return switch (parts[2]) {
           'required' => switch (parts[1]) {
-              // The confirmation field is not a backend concept, so it has its
-              // own copy rather than reusing the generic "fill in X" message.
-              'password_confirm' =>
-                authFailureValidationPasswordConfirmRequired,
-              _ => authFailureValidationRequired(field),
-            },
+            // The confirmation field is not a backend concept, so it has its
+            // own copy rather than reusing the generic "fill in X" message.
+            'password_confirm' => authFailureValidationPasswordConfirmRequired,
+            _ => authFailureValidationRequired(field),
+          },
           'invalid_email' => authFailureValidationInvalidEmail,
           'password_too_short' => authFailureValidationPasswordTooShort,
           'password_mismatch' => authFailureValidationPasswordMismatch,
@@ -98,17 +97,37 @@ extension AuthFailureMessages on AppLocalizations {
 /// back to the generic message; a raw code is never shown.
 extension FamilyFailureMessages on AppLocalizations {
   String familyFailureMessage(AppFailure failure) => switch (failure) {
-        Validation(field: 'code') => famFailureCodeInvalid,
-        Validation(field: 'profile') => famFailureProfileRequired,
-        Validation(field: 'name' || 'fullName') => famFailureNameRequired,
-        NotFound(entity: 'invitation') => famFailureCodeNotFound,
-        Conflict(code: 'code_used') => famFailureCodeUsed,
-        Conflict(code: 'code_expired') => famFailureCodeExpired,
-        Conflict(code: 'code_revoked') => famFailureCodeRevoked,
-        Conflict(code: 'already_member') => famFailureAlreadyMember,
-        Conflict(code: 'last_admin') => famFailureLastAdmin,
-        PermissionDenied() => famFailureNotAllowed,
-        Network() => errorNetwork,
-        _ => errorUnknown,
-      };
+    Validation(field: 'code') => famFailureCodeInvalid,
+    Validation(field: 'profile') => famFailureProfileRequired,
+    Validation(field: 'name' || 'fullName') => famFailureNameRequired,
+    Validation(field: 'label') => relationshipsFailureLabel,
+    Validation(field: 'entries') => relationshipsFailureTooMany,
+    Conflict(code: 'built_in') => relationshipsFailureBuiltIn,
+    NotFound(entity: 'invitation') => famFailureCodeNotFound,
+    Conflict(code: 'code_used') => famFailureCodeUsed,
+    Conflict(code: 'code_expired') => famFailureCodeExpired,
+    Conflict(code: 'code_revoked') => famFailureCodeRevoked,
+    Conflict(code: 'already_member') => famFailureAlreadyMember,
+    Conflict(code: 'already_in_family') => famFailureAlreadyInFamily,
+    Conflict(code: 'last_admin') => famFailureLastAdmin,
+    Conflict(code: 'last_admin_has_members') =>
+      accountDeleteLastAdminHasMembers,
+    PermissionDenied() => famFailureNotAllowed,
+    Network() => errorNetwork,
+    // Exhaustive on purpose (H8): a new AppFailure subtype is a compile
+    // error here until it is given a message, never a silent fallback.
+    Validation() ||
+    NotFound() ||
+    Conflict() ||
+    Unknown() ||
+    InvalidCredentials() ||
+    UserNotFound() ||
+    EmailAlreadyInUse() ||
+    WeakPassword() ||
+    TooManyRequests() ||
+    UserDisabled() ||
+    RequiresRecentLogin() ||
+    InvalidEmail() ||
+    NoCurrentUser() => errorUnknown,
+  };
 }

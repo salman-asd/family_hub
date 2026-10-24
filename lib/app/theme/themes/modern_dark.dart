@@ -19,12 +19,10 @@ final AppTokens modernDarkTokens = AppTokens(
   textDisabled: const Color(0xFF6B6866),
   // Teal 300 is light, so we use dark text on accent buttons in dark mode.
   textOnAccent: const Color(0xFF00201C), // very dark teal — ~11:1 on #4DB6AC
-
   // ── Brand (slightly desaturated teal) ─────────────────────────────────────
   accent: const Color(0xFF4DB6AC), // teal 300 — desaturated for dark
   accentSoft: const Color(0xFF1A3330), // very dark teal tint
   accentStrong: const Color(0xFF80CBC4), // teal 200
-
   // ── Status ───────────────────────────────────────────────────────────────
   // scheduled — blue, dark-adapted
   statusScheduled: const Color(0xFF90CAF9),
@@ -89,31 +87,22 @@ final AppTokens modernDarkTokens = AppTokens(
     Color(0xFF2E1F00),
   ],
 
+  placeholderOnLight: const Color(0xFF1A1A1A),
+  placeholderOnDark: const Color(0xFFF5F5F5),
+
   // ── Shape ─────────────────────────────────────────────────────────────────
   radiusSm: 8,
   radiusMd: 16,
   radiusLg: 24,
   radiusPill: 999,
   elevation1: const [
-    BoxShadow(
-      color: Color(0x28000000),
-      blurRadius: 4,
-      offset: Offset(0, 1),
-    ),
+    BoxShadow(color: Color(0x28000000), blurRadius: 4, offset: Offset(0, 1)),
   ],
   elevation2: const [
-    BoxShadow(
-      color: Color(0x33000000),
-      blurRadius: 8,
-      offset: Offset(0, 2),
-    ),
+    BoxShadow(color: Color(0x33000000), blurRadius: 8, offset: Offset(0, 2)),
   ],
   elevation3: const [
-    BoxShadow(
-      color: Color(0x40000000),
-      blurRadius: 16,
-      offset: Offset(0, 4),
-    ),
+    BoxShadow(color: Color(0x40000000), blurRadius: 16, offset: Offset(0, 4)),
   ],
 
   // ── Motion ────────────────────────────────────────────────────────────────

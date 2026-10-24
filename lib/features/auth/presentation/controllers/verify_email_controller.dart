@@ -70,19 +70,18 @@ class VerifyEmailState {
     bool? stillUnverified,
     bool? verified,
     int? revision,
-  }) =>
-      VerifyEmailState(
-        isSubmitting: isSubmitting ?? this.isSubmitting,
-        failure: clearFailure ? null : (failure ?? this.failure),
-        action: action ?? this.action,
-        resendSucceeded: resendSucceeded ?? this.resendSucceeded,
-        stillUnverified: stillUnverified ?? this.stillUnverified,
-        verified: verified ?? this.verified,
-        // Every copyWith is a deliberate change, so the revision always moves.
-        // Without it, tapping "I have verified" twice in a row would publish an
-        // equal state and the screen would not rebuild for the second tap.
-        revision: revision ?? this.revision + 1,
-      );
+  }) => VerifyEmailState(
+    isSubmitting: isSubmitting ?? this.isSubmitting,
+    failure: clearFailure ? null : (failure ?? this.failure),
+    action: action ?? this.action,
+    resendSucceeded: resendSucceeded ?? this.resendSucceeded,
+    stillUnverified: stillUnverified ?? this.stillUnverified,
+    verified: verified ?? this.verified,
+    // Every copyWith is a deliberate change, so the revision always moves.
+    // Without it, tapping "I have verified" twice in a row would publish an
+    // equal state and the screen would not rebuild for the second tap.
+    revision: revision ?? this.revision + 1,
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -97,14 +96,14 @@ class VerifyEmailState {
 
   @override
   int get hashCode => Object.hash(
-        isSubmitting,
-        failure,
-        action,
-        resendSucceeded,
-        stillUnverified,
-        verified,
-        revision,
-      );
+    isSubmitting,
+    failure,
+    action,
+    resendSucceeded,
+    stillUnverified,
+    verified,
+    revision,
+  );
 
   @override
   String toString() =>
@@ -209,5 +208,5 @@ class VerifyEmailController extends Notifier<VerifyEmailState> {
 
 final verifyEmailControllerProvider =
     NotifierProvider<VerifyEmailController, VerifyEmailState>(
-  VerifyEmailController.new,
-);
+      VerifyEmailController.new,
+    );

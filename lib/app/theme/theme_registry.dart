@@ -49,27 +49,21 @@ final AppThemeSpec modernDarkSpec = AppThemeSpec(
 );
 
 /// The ordered list of all registered themes.
-final List<AppThemeSpec> appThemes = [
-  modernLightSpec,
-  modernDarkSpec,
-];
+final List<AppThemeSpec> appThemes = [modernLightSpec, modernDarkSpec];
 
 /// Look up a spec by [id].  Falls back to [modernLightSpec] for unknown ids.
 AppThemeSpec themeById(String id) {
-  return appThemes.firstWhere(
-    (s) => s.id == id,
-    orElse: () => modernLightSpec,
-  );
+  return appThemes.firstWhere((s) => s.id == id, orElse: () => modernLightSpec);
 }
 
 /// First available light spec — used by "Follow device" mode.
 AppThemeSpec get defaultLightSpec => appThemes.firstWhere(
-      (s) => s.available && s.brightness == Brightness.light,
-      orElse: () => modernLightSpec,
-    );
+  (s) => s.available && s.brightness == Brightness.light,
+  orElse: () => modernLightSpec,
+);
 
 /// First available dark spec — used by "Follow device" mode.
 AppThemeSpec get defaultDarkSpec => appThemes.firstWhere(
-      (s) => s.available && s.brightness == Brightness.dark,
-      orElse: () => modernDarkSpec,
-    );
+  (s) => s.available && s.brightness == Brightness.dark,
+  orElse: () => modernDarkSpec,
+);

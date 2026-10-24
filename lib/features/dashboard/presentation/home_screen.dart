@@ -31,9 +31,7 @@ class HomeScreen extends ConsumerWidget {
             child: Text(
               flavor.name,
               key: const Key('flavor_name'),
-              style: Theme.of(context)
-                  .textTheme
-                  .labelMedium
+              style: Theme.of(context).textTheme.labelMedium
                   ?.copyWith(color: t.textSecondary),
             ),
           ),

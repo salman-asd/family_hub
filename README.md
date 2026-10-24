@@ -1,45 +1,53 @@
 # Family Hub
 
 Bangla-first household app: bazar / family finance + family chores.
-Flutter, Riverpod, Firebase (Spark plan). See `CLAUDE.md` for architecture rules.
+Flutter, Riverpod, Firebase (Spark plan). Architecture rules: `CLAUDE.md`.
+Build plan: `ROADMAP.md`; Phase 1 hardening plan: `PHASE1_HARDENING_ROADMAP.md`; status: `PROGRESS.md`.
 
-## First-time setup
-```bash
-./tools/setup.sh          # creates android/ios, adds packages, formats, analyzes, tests
-# then follow docs/ANDROID_FLAVORS.md
-```
+## Prerequisites
+| Tool | Version |
+| --- | --- |
+| Flutter / Dart | Flutter 3.47.7 (Dart 3.13.x) - the version CI uses (`FLUTTER_VERSION` in `.github/workflows/ci.yml`) |
+| JDK for Android builds | 17 |
+| JDK for the Firestore emulator | 21 or newer |
+| Node (rules tests, index check) | 24 |
+| Firebase CLI | `npm i -g firebase-tools` |
 
 ## Commands
 | Task | Command |
 | --- | --- |
+| Install packages | `flutter pub get` |
 | Run dev | `flutter run --flavor dev -t lib/main_dev.dart` |
-| Run dev (with emulators) | `flutter run --flavor dev -t lib/main_dev.dart --dart-define=USE_EMULATOR=true` |
+| Run dev against emulators | `flutter run --flavor dev -t lib/main_dev.dart --dart-define=USE_EMULATOR=true` |
 | Run prod | `flutter run --flavor prod -t lib/main_prod.dart` |
-| Code generation | `dart run build_runner build --delete-conflicting-outputs` |
-| Tests | `flutter test` |
+| Unit + widget tests (no goldens) | `flutter test --exclude-tags golden` |
 | Format / analyze | `dart format .` and `flutter analyze` |
+| Rules tests | `npm ci --prefix firebase/rules_test && npm run test:emulator --prefix firebase/rules_test` |
+| Index file check | `node tools/check_indexes.mjs` |
 | Build APK (dev) | `flutter build apk --flavor dev -t lib/main_dev.dart` |
-| Build APK (prod) | `flutter build apk --flavor prod -t lib/main_prod.dart` |
+| Build APK (prod, release) | `flutter build apk --release --flavor prod -t lib/main_prod.dart` (needs `android/key.properties`, see `docs/RELEASE.md`) |
 
-## Firebase Emulators
+There is no code generation step: models are hand-written immutable classes and
+localizations are checked in (`flutter gen-l10n` regenerates them after an ARB change).
 
-The app is pre-configured with local Firebase Emulators for Auth (port `9099`), Firestore (port `8080`), and the Emulator UI (port `4000`).
+## Golden (image) tests
+Goldens are **only** generated on Linux, by the `Update goldens` GitHub workflow
+(Actions -> Update goldens -> Run workflow). Download the `linux-goldens` artifact, unzip it
+at the repo root and commit the PNGs. Never commit goldens rendered on Windows or macOS.
+Locally, skip them: `flutter test --exclude-tags golden`.
 
-### 1. Start the emulators
-Ensure Java is available on your PATH (or `JAVA_HOME` set to JDK/JBR), then run:
-```bash
-firebase emulators:start
-```
-Or start only Auth and Firestore:
+## Firebase
+Two projects: `familyhub-dev` and `familyhub-prod` (aliases in `.firebaserc`).
+First-time wiring (`flutterfire configure`, `google-services.json`, deploying rules and
+indexes) is in `firebase/README.md`. Until `flutterfire configure` has been run, the
+app refuses to start against real Firebase (placeholder guard); it still runs against
+the emulators.
+
+### Emulators
+Auth (9099), Firestore (8080), UI (4000):
 ```bash
 firebase emulators:start --only auth,firestore
-```
-
-### 2. Run the app against the emulators
-Pass `--dart-define=USE_EMULATOR=true` to route all Auth and Firestore calls to the local emulator:
-```bash
 flutter run --flavor dev -t lib/main_dev.dart --dart-define=USE_EMULATOR=true
 ```
-- On an **Android emulator**, the app automatically connects to `10.0.2.2`.
-- On **Desktop/iOS/Web**, the app connects to `127.0.0.1`.
-- View documents and test auth users in the Emulator UI at [http://localhost:4000](http://localhost:4000).
+On an Android emulator the app connects to `10.0.2.2`, elsewhere to `127.0.0.1`.
+The Emulator UI is at http://localhost:4000.

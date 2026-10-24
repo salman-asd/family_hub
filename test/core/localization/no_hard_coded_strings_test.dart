@@ -56,7 +56,8 @@ void main() {
     expect(
       offenders,
       isEmpty,
-      reason: 'Hard-coded strings in Text( widgets found. Move them to the ARB '
+      reason:
+          'Hard-coded strings in Text( widgets found. Move them to the ARB '
           'files and read them with context.l10n:\n${offenders.join('\n')}',
     );
   });

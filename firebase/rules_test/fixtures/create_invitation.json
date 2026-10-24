@@ -1,0 +1,100 @@
+{
+  "scenario": "create_invitation",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "inviteCodes/NEWCODE1",
+      "data": {
+        "code": "NEWCODE1",
+        "familyId": "fixFam",
+        "role": "member",
+        "status": "active",
+        "expiresAt": {
+          "__ts": "2026-10-25T10:00:00.000Z"
+        },
+        "usedBy": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/invitations/NEWCODE1",
+      "data": {
+        "code": "NEWCODE1",
+        "familyId": "fixFam",
+        "role": "member",
+        "status": "active",
+        "expiresAt": {
+          "__ts": "2026-10-25T10:00:00.000Z"
+        },
+        "usedBy": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev5",
+      "data": {
+        "type": "invitation.created",
+        "actorId": "fixAdmin",
+        "summary": "Invitation created",
+        "refType": "invitation",
+        "refId": "NEWCODE1",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev5",
+      "data": {
+        "type": "invitation.created",
+        "actorId": "fixAdmin",
+        "summary": "Invitation created",
+        "refType": "invitation",
+        "refId": "NEWCODE1",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

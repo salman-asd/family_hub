@@ -1,4 +1,4 @@
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 
 /// A family and its general settings.
 class Family {
@@ -24,14 +24,13 @@ class Family {
     String? timezone,
     String? currency,
     ModuleFlags? modules,
-  }) =>
-      Family(
-        id: id,
-        name: name ?? this.name,
-        timezone: timezone ?? this.timezone,
-        currency: currency ?? this.currency,
-        modules: modules ?? this.modules,
-      );
+  }) => Family(
+    id: id,
+    name: name ?? this.name,
+    timezone: timezone ?? this.timezone,
+    currency: currency ?? this.currency,
+    modules: modules ?? this.modules,
+  );
 
   @override
   bool operator ==(Object other) =>

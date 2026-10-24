@@ -1,9 +1,11 @@
+import 'package:family_hub/features/family/presentation/screens/join_family_screen.dart';
+import 'package:family_hub/features/family/presentation/screens/create_family_screen.dart';
 import 'package:family_hub/app/app.dart';
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/router.dart';
 import 'package:family_hub/app/theme/theme_controller.dart'
     show sharedPreferencesProvider;
-import 'package:family_hub/core/utils/clock.dart';
+import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/features/auth/domain/app_user.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
@@ -25,9 +27,13 @@ import '../family_test_helpers.dart';
 
 const _me = AppUser(uid: 'me', email: 'me@example.com', emailVerified: true);
 
-String _path(WidgetTester tester) => ProviderScope.containerOf(
-      tester.element(find.byType(FamilyHubApp)),
-    ).read(routerProvider).routeInformationProvider.value.uri.path;
+String _path(WidgetTester tester) =>
+    ProviderScope.containerOf(tester.element(find.byType(FamilyHubApp)))
+        .read(routerProvider)
+        .routeInformationProvider
+        .value
+        .uri
+        .path;
 
 Future<void> _pumpApp(WidgetTester tester, Fixture f) async {
   tester.view
@@ -74,8 +80,9 @@ Future<void> _type(WidgetTester tester, String key, String text) async {
 }
 
 void main() {
-  testWidgets('new user: profile -> create family -> admin in the app',
-      (tester) async {
+  testWidgets('new user: profile -> create family -> admin in the app', (
+    tester,
+  ) async {
     final f = Fixture();
     addTearDown(f.backend.dispose);
     await _pumpApp(tester, f);
@@ -84,17 +91,26 @@ void main() {
     // Save stays disabled until a name is typed.
     final save = find.byKey(const Key('profile_save'));
     await tester.ensureVisible(save);
-    expect(tester.widget<FilledButton>(find.descendant(of: save, matching: find.byType(FilledButton))).onPressed, isNull);
+    expect(
+      tester
+          .widget<FilledButton>(
+            find.descendant(of: save, matching: find.byType(FilledButton)),
+          )
+          .onPressed,
+      isNull,
+    );
 
     await _type(tester, 'profile_full_name', 'Karim Rahman');
     await _tap(tester, 'rel_father');
     await _tap(tester, 'profile_save');
     expect(f.backend.profiles['me']!.fullName, 'Karim Rahman');
-    expect(f.backend.profiles['me']!.relationship.name, 'father');
+    expect(f.backend.profiles['me']!.relationship.value, 'father');
     expect(_path(tester), '/family-choice');
 
     await _tap(tester, 'choice_create');
-    expect(_path(tester), '/family-choice/create');
+    // A pushed route does not change go_router's reported URI, so assert the
+    // screen that is actually shown.
+    expect(find.byType(CreateFamilyScreen), findsOneWidget);
     await _type(tester, 'family_name', 'Rahman family');
     await _tap(tester, 'family_create_submit');
 
@@ -117,8 +133,9 @@ void main() {
     }
   });
 
-  testWidgets('invited user: join with a code -> pending -> approved -> home',
-      (tester) async {
+  testWidgets('invited user: join with a code -> pending -> approved -> home', (
+    tester,
+  ) async {
     final f = Fixture()
       ..seedFamily({'admin': (MemberRole.admin, MembershipStatus.active)})
       ..profile('me');
@@ -135,12 +152,12 @@ void main() {
     expect(_path(tester), '/family-choice');
 
     await _tap(tester, 'choice_join');
-    expect(_path(tester), '/family-choice/join');
+    expect(find.byType(JoinFamilyScreen), findsOneWidget);
 
     // A wrong code shows a message and stays on the screen.
     await _type(tester, 'join_code', 'ZZZZ9999');
     await _tap(tester, 'join_submit');
-    expect(_path(tester), '/family-choice/join');
+    expect(find.byType(JoinFamilyScreen), findsOneWidget);
     expect(find.byIcon(Icons.error_outline_rounded), findsOneWidget);
 
     // The right code (typed in lower case) leaves the person pending.
@@ -157,7 +174,9 @@ void main() {
     expect(_path(tester), '/home');
   });
 
-  testWidgets('a rejected request returns to the family choice', (tester) async {
+  testWidgets('a rejected request returns to the family choice', (
+    tester,
+  ) async {
     final f = Fixture()
       ..seedFamily({
         'admin': (MemberRole.admin, MembershipStatus.active),
@@ -168,8 +187,9 @@ void main() {
     await _pumpApp(tester, f);
     expect(_path(tester), '/pending');
 
-    f.backend.members['fam']!['me'] =
-        f.backend.members['fam']!['me']!.copyWith(removedAt: f.clock.nowUtc());
+    f.backend.members['fam']!['me'] = f.backend.members['fam']!['me']!.copyWith(
+      removedAt: f.clock.nowUtc(),
+    );
     f.backend.backendNotify();
     await tester.pumpAndSettle();
     expect(_path(tester), '/family-choice');

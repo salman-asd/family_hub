@@ -1,0 +1,113 @@
+{
+  "scenario": "join",
+  "actor": "fixJoiner",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/members/fixJoiner",
+      "data": {
+        "uid": "fixJoiner",
+        "role": "member",
+        "status": "pending",
+        "fullName": "Fix Joiner",
+        "nickname": null,
+        "relationship": "other",
+        "spouseId": null,
+        "avatarKey": null,
+        "inviteCode": "ABCD2345",
+        "removedAt": null,
+        "leftAt": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixJoiner",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixJoiner",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev2",
+      "data": {
+        "type": "member.requested",
+        "actorId": "fixJoiner",
+        "summary": "Requested to join",
+        "refType": "member",
+        "refId": "fixJoiner",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixJoiner",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixJoiner",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev2",
+      "data": {
+        "type": "member.requested",
+        "actorId": "fixJoiner",
+        "summary": "Requested to join",
+        "refType": "member",
+        "refId": "fixJoiner",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixJoiner",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixJoiner",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "update",
+      "path": "inviteCodes/ABCD2345",
+      "data": {
+        "status": "used",
+        "usedBy": "fixJoiner",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixJoiner"
+      }
+    },
+    {
+      "op": "update",
+      "path": "families/fixFam/invitations/ABCD2345",
+      "data": {
+        "status": "used",
+        "usedBy": "fixJoiner",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixJoiner"
+      }
+    },
+    {
+      "op": "merge",
+      "path": "users/fixJoiner",
+      "data": {
+        "familyId": "fixFam"
+      }
+    }
+  ]
+}

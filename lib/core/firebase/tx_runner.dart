@@ -1,5 +1,45 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:family_hub/core/firebase/server_time.dart';
+import 'package:family_hub/core/firebase/sync_status.dart';
+
+export 'package:family_hub/core/firebase/fake_tx_runner.dart';
+
+/// Replaces every top-level [ServerTime] value with `FieldValue.serverTimestamp()`.
+///
+/// Only the top level is scanned: [ServerTime] is a document-field marker, and
+/// every writer puts `recordedAt` at the top level.
+Map<String, dynamic> _withServerTimestamps(Map<String, dynamic> data) {
+  if (!data.values.any((v) => v is ServerTime)) return data;
+  return <String, dynamic>{
+    for (final entry in data.entries)
+      entry.key: entry.value is ServerTime
+          ? FieldValue.serverTimestamp()
+          : entry.value,
+  };
+}
+
+/// Firestore allows at most 500 writes in one batch (H12).  Staging more throws
+/// a [StateError] at once, in tests and in production, instead of failing at
+/// commit time with a vague backend error.
+const int kMaxBatchWrites = 500;
+
+/// Counts staged operations and enforces [kMaxBatchWrites].
+class BatchBudget {
+  int _used = 0;
+
+  /// How many operations were staged so far.
+  int get used => _used;
+
+  void spend() {
+    if (++_used > kMaxBatchWrites) {
+      throw StateError(
+        'A batch may hold at most $kMaxBatchWrites writes; split the work.',
+      );
+    }
+  }
+}
 
 /// Context for staging atomic batch writes.
 abstract class BatchContext {
@@ -46,10 +86,16 @@ abstract class TxRunner {
 
 /// Production implementation of [TxRunner] backed by Cloud Firestore.
 class FirestoreTxRunner implements TxRunner {
-  FirestoreTxRunner({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  FirestoreTxRunner({
+    FirebaseFirestore? firestore,
+    PendingWriteCounter? pendingWrites,
+  }) : _firestore = firestore ?? FirebaseFirestore.instance,
+       pendingWrites = pendingWrites ?? PendingWriteCounter();
 
   final FirebaseFirestore _firestore;
+
+  /// Commits sent but not yet acknowledged by the server (drives the banner).
+  final PendingWriteCounter pendingWrites;
 
   @override
   Future<void> runBatch(
@@ -58,7 +104,7 @@ class FirestoreTxRunner implements TxRunner {
     final writeBatch = _firestore.batch();
     final context = _FirestoreBatchContext(_firestore, writeBatch);
     await action(context);
-    await writeBatch.commit();
+    await pendingWrites.track(writeBatch.commit);
   }
 
   @override
@@ -83,19 +129,27 @@ class _FirestoreBatchContext implements BatchContext {
 
   final FirebaseFirestore _firestore;
   final WriteBatch _batch;
+  final BatchBudget _budget = BatchBudget();
 
   @override
   void set(String path, Map<String, dynamic> data, {bool merge = false}) {
-    _batch.set(_firestore.doc(path), data, SetOptions(merge: merge));
+    _budget.spend();
+    _batch.set(
+      _firestore.doc(path),
+      _withServerTimestamps(data),
+      SetOptions(merge: merge),
+    );
   }
 
   @override
   void update(String path, Map<String, dynamic> data) {
-    _batch.update(_firestore.doc(path), data);
+    _budget.spend();
+    _batch.update(_firestore.doc(path), _withServerTimestamps(data));
   }
 
   @override
   void delete(String path) {
+    _budget.spend();
     _batch.delete(_firestore.doc(path));
   }
 }
@@ -115,173 +169,20 @@ class _FirestoreTransactionContext implements TransactionContext {
 
   @override
   void set(String path, Map<String, dynamic> data, {bool merge = false}) {
-    _transaction.set(_firestore.doc(path), data, SetOptions(merge: merge));
+    _transaction.set(
+      _firestore.doc(path),
+      _withServerTimestamps(data),
+      SetOptions(merge: merge),
+    );
   }
 
   @override
   void update(String path, Map<String, dynamic> data) {
-    _transaction.update(_firestore.doc(path), data);
+    _transaction.update(_firestore.doc(path), _withServerTimestamps(data));
   }
 
   @override
   void delete(String path) {
     _transaction.delete(_firestore.doc(path));
-  }
-}
-
-/// In-memory fake implementation of [TxRunner] for fast unit and use-case tests.
-class FakeTxRunner implements TxRunner {
-  FakeTxRunner([Map<String, Map<String, dynamic>>? initialStore])
-      : store = initialStore != null
-            ? Map<String, Map<String, dynamic>>.from(
-                initialStore
-                    .map((k, v) => MapEntry(k, Map<String, dynamic>.from(v))),
-              )
-            : <String, Map<String, dynamic>>{};
-
-  /// In-memory document storage: path -> fields map.
-  final Map<String, Map<String, dynamic>> store;
-
-  @override
-  Future<void> runBatch(
-    FutureOr<void> Function(BatchContext batch) action,
-  ) async {
-    final pendingOps = <_PendingOp>[];
-    final context = _FakeBatchContext(pendingOps);
-    await action(context);
-
-    // Atomically commit staged operations
-    for (final op in pendingOps) {
-      op.apply(store);
-    }
-  }
-
-  @override
-  Future<T> runTransaction<T>(
-    FutureOr<T> Function(TransactionContext tx) action, {
-    Duration timeout = const Duration(seconds: 30),
-    int maxAttempts = 5,
-  }) async {
-    final pendingOps = <_PendingOp>[];
-    final context = _FakeTransactionContext(store, pendingOps);
-    final result = await action(context);
-
-    // Atomically commit staged operations
-    for (final op in pendingOps) {
-      op.apply(store);
-    }
-    return result;
-  }
-}
-
-abstract class _PendingOp {
-  void apply(Map<String, Map<String, dynamic>> store);
-}
-
-class _SetOp implements _PendingOp {
-  _SetOp(this.path, this.data, this.merge);
-
-  final String path;
-  final Map<String, dynamic> data;
-  final bool merge;
-
-  @override
-  void apply(Map<String, Map<String, dynamic>> store) {
-    if (merge && store.containsKey(path)) {
-      store[path] = <String, dynamic>{
-        ...store[path]!,
-        ...data,
-      };
-    } else {
-      store[path] = Map<String, dynamic>.from(data);
-    }
-  }
-}
-
-class _UpdateOp implements _PendingOp {
-  _UpdateOp(this.path, this.data);
-
-  final String path;
-  final Map<String, dynamic> data;
-
-  @override
-  void apply(Map<String, Map<String, dynamic>> store) {
-    if (!store.containsKey(path)) {
-      throw StateError('Cannot update non-existent document at $path');
-    }
-    store[path] = <String, dynamic>{
-      ...store[path]!,
-      ...data,
-    };
-  }
-}
-
-class _DeleteOp implements _PendingOp {
-  _DeleteOp(this.path);
-
-  final String path;
-
-  @override
-  void apply(Map<String, Map<String, dynamic>> store) {
-    store.remove(path);
-  }
-}
-
-class _FakeBatchContext implements BatchContext {
-  _FakeBatchContext(this._pendingOps);
-
-  final List<_PendingOp> _pendingOps;
-
-  @override
-  void set(String path, Map<String, dynamic> data, {bool merge = false}) {
-    _pendingOps.add(_SetOp(path, data, merge));
-  }
-
-  @override
-  void update(String path, Map<String, dynamic> data) {
-    _pendingOps.add(_UpdateOp(path, data));
-  }
-
-  @override
-  void delete(String path) {
-    _pendingOps.add(_DeleteOp(path));
-  }
-}
-
-class _FakeTransactionContext implements TransactionContext {
-  _FakeTransactionContext(this._store, this._pendingOps);
-
-  final Map<String, Map<String, dynamic>> _store;
-  final List<_PendingOp> _pendingOps;
-
-  @override
-  Future<Map<String, dynamic>?> get(String path) async {
-    // Check locally staged ops first (read-your-own-writes)
-    for (final op in _pendingOps.reversed) {
-      if (op is _SetOp && op.path == path) {
-        return Map<String, dynamic>.from(op.data);
-      }
-      if (op is _DeleteOp && op.path == path) {
-        return null;
-      }
-    }
-    final existing = _store[path];
-    if (existing == null) return null;
-    return Map<String, dynamic>.from(existing);
-  }
-
-  @override
-  void set(String path, Map<String, dynamic> data, {bool merge = false}) {
-    _pendingOps.add(_SetOp(path, data, merge));
-  }
-
-  @override
-  void update(String path, Map<String, dynamic> data) {
-    _pendingOps.add(_UpdateOp(path, data));
-  }
-
-  @override
-  void delete(String path) {
-    _pendingOps.add(_DeleteOp(path));
   }
 }

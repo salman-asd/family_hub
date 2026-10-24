@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:family_hub/app/routing/session_phase.dart';
 import 'package:family_hub/app/routing/session_providers.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
@@ -8,25 +10,63 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// `/splash`: shown while the first auth / profile / membership event is in
 /// flight, or with a Retry when one of those reads failed.
-class SplashScreen extends ConsumerWidget {
-  const SplashScreen({super.key});
+///
+/// When the session is still loading after [waitHint] (typically offline with
+/// nothing cached yet) it explains that it is waiting for a connection and
+/// offers Retry; the user is never signed out or sent to onboarding (rule 14).
+class SplashScreen extends ConsumerStatefulWidget {
+  const SplashScreen({super.key, this.waitHint = const Duration(seconds: 8)});
+
+  final Duration waitHint;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends ConsumerState<SplashScreen> {
+  Timer? _timer;
+  bool _slow = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(widget.waitHint, () {
+      if (mounted) setState(() => _slow = true);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _retry() {
+    setState(() => _slow = false);
+    _timer?.cancel();
+    _timer = Timer(widget.waitHint, () {
+      if (mounted) setState(() => _slow = true);
+    });
+    retrySession(ref);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final l10n = context.l10n;
     final failed = ref.watch(sessionPhaseProvider) == SessionPhase.failed;
 
     return Scaffold(
       body: SafeArea(
-        child: failed
+        child: (failed || _slow)
             ? Column(
                 children: [
                   Expanded(
                     child: EmptyState(
                       icon: Icons.cloud_off_rounded,
-                      title: l10n.errorUnknown,
+                      title: failed ? l10n.errorUnknown : l10n.syncWaitingTitle,
+                      message: failed ? null : l10n.syncWaitingMessage,
                       actionLabel: l10n.actionRetry,
-                      onAction: () => retrySession(ref),
+                      onAction: _retry,
                     ),
                   ),
                   TextButton(

@@ -14,10 +14,10 @@ final class Money implements Comparable<Money> {
   /// floating point type. More than 2 decimal places is a Validation failure
   /// with code `too_many_decimals`.
   static Result<Money> parse(String input) => parseScaledDecimal(
-        input.replaceAll('৳', ''),
-        scale: 2,
-        field: 'money',
-      ).map(Money.paisa);
+    input.replaceAll('৳', ''),
+    scale: 2,
+    field: 'money',
+  ).map(Money.paisa);
 
   /// Sum of [items]; [zero] for an empty collection.
   static Money sum(Iterable<Money> items) =>
@@ -85,8 +85,9 @@ final class MoneyFormatter {
         ? ''
         : '.${fraction.toString().padLeft(2, '0')}';
     final text = '৳$grouped$decimals';
-    final localized =
-        (useBanglaDigits ?? _isBangla) ? toBanglaDigits(text) : text;
+    final localized = (useBanglaDigits ?? _isBangla)
+        ? toBanglaDigits(text)
+        : text;
     return negative ? '-$localized' : localized;
   }
 

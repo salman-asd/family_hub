@@ -1,11 +1,29 @@
 import 'package:family_hub/core/errors/app_failure.dart';
+import 'package:family_hub/core/utils/clock_provider.dart';
+import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/relationship.dart';
 import 'package:family_hub/features/family/domain/usecases/create_family.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:family_hub/features/onboarding/presentation/profile_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../family_test_helpers.dart';
+
+/// A seeder supplied through [familySeedersProvider] (P2-01 seam).
+class _CatalogSeeder implements FamilySeeder {
+  const _CatalogSeeder();
+
+  @override
+  List<SeedWrite> seed(SeedContext context) => <SeedWrite>[
+    SeedWrite(
+      'families/${context.familyId}/bazarCategories/cat_vegetables',
+      const <String, dynamic>{'nameEn': 'Vegetables'},
+    ),
+  ];
+}
 
 void main() {
   late Fixture f;
@@ -21,23 +39,30 @@ void main() {
     );
   });
 
-  test('creates the family with the caller as active admin in ONE write', () async {
-    f.profile('u1', relationship: Relationship.father);
-    final result = await useCase(actorUid: 'u1', name: '  Rahman family ');
+  test(
+    'creates the family with the caller as active admin in ONE write',
+    () async {
+      f.profile('u1', relationship: RelationshipId.father);
+      final result = await useCase(actorUid: 'u1', name: '  Rahman family ');
 
-    final family = result.valueOrNull!;
-    expect(family.name, 'Rahman family');
-    expect(family.timezone, 'Asia/Dhaka');
-    expect(family.currency, 'BDT');
-    expect(family.modules.isEnabled('chores'), isTrue);
+      final family = result.valueOrNull!;
+      expect(family.name, 'Rahman family');
+      expect(family.timezone, 'Asia/Dhaka');
+      expect(family.currency, 'BDT');
+      expect(family.modules.isEnabled('chores'), isTrue);
 
-    final owner = f.backend.members[family.id]!['u1']!;
-    expect(owner.role, MemberRole.admin);
-    expect(owner.status, MembershipStatus.active);
-    expect(owner.relationship, 'father');
-    expect(f.backend.userFamily['u1'], family.id);
-    expect(f.backend.writes, 1, reason: 'family + member + event = one batch');
-  });
+      final owner = f.backend.members[family.id]!['u1']!;
+      expect(owner.role, MemberRole.admin);
+      expect(owner.status, MembershipStatus.active);
+      expect(owner.relationship, 'father');
+      expect(f.backend.userFamily['u1'], family.id);
+      expect(
+        f.backend.writes,
+        1,
+        reason: 'family + member + event = one batch',
+      );
+    },
+  );
 
   test('writes one family.created activity event', () async {
     f.profile('u1');
@@ -58,4 +83,77 @@ void main() {
     expect(result.failureOrNull, const Validation('profile', 'required'));
     expect(f.backend.families, isEmpty);
   });
+
+  test(
+    'retry with the same ids after a Network failure creates ONE family',
+    () async {
+      f.profile('u1');
+      f.backend.failNextWrite = const Network();
+
+      final first = await useCase(
+        actorUid: 'u1',
+        name: 'Home',
+        familyId: 'fam-x',
+        eventId: 'evt-x',
+      );
+      expect(first.failureOrNull, const Network());
+      expect(f.backend.families, isEmpty);
+
+      final second = await useCase(
+        actorUid: 'u1',
+        name: 'Home',
+        familyId: 'fam-x',
+        eventId: 'evt-x',
+      );
+      expect(second.isSuccess, isTrue);
+      expect(f.backend.families.keys, ['fam-x']);
+      expect(f.backend.events.map((e) => e.id), ['evt-x']);
+    },
+  );
+
+  test('a seeder from familySeedersProvider reaches the repository', () async {
+    f.profile('u1');
+    final container = ProviderContainer(
+      overrides: [
+        familyRepositoryProvider.overrideWithValue(f.backend),
+        userProfileRepositoryProvider.overrideWithValue(f.backend),
+        clockProvider.overrideWithValue(f.clock),
+        idGeneratorProvider.overrideWithValue(f.ids.call),
+        familySeedersProvider.overrideWithValue(const [_CatalogSeeder()]),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    final result = await container.read(createFamilyProvider)(
+      actorUid: 'u1',
+      name: 'Home',
+      familyId: 'fam-seeded',
+    );
+
+    expect(result.isSuccess, isTrue);
+    expect(
+      f.backend.seeded.keys,
+      contains('families/fam-seeded/bazarCategories/cat_vegetables'),
+    );
+  });
+
+  test(
+    'repeating a write that was only queued does not duplicate the family',
+    () async {
+      f.profile('u1');
+      await useCase(
+        actorUid: 'u1',
+        name: 'Home',
+        familyId: 'fam-x',
+        eventId: 'e',
+      );
+      await useCase(
+        actorUid: 'u1',
+        name: 'Home',
+        familyId: 'fam-x',
+        eventId: 'e',
+      );
+      expect(f.backend.families.length, 1);
+    },
+  );
 }

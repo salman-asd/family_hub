@@ -22,9 +22,7 @@ Future<ProviderContainer> _makeContainer({
 Future<ProviderContainer> _openContainer() async {
   final prefs = await SharedPreferences.getInstance();
   return ProviderContainer(
-    overrides: [
-      sharedPreferencesProvider.overrideWithValue(prefs),
-    ],
+    overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
   );
 }
 
@@ -65,10 +63,7 @@ void main() {
   group('LocaleController persistence', () {
     test('build reads persisted language and digits', () async {
       final container = await _makeContainer(
-        initialData: const {
-          'language_code': 'en',
-          'use_bangla_digits': false,
-        },
+        initialData: const {'language_code': 'en', 'use_bangla_digits': false},
       );
       addTearDown(container.dispose);
       final prefs = container.read(localeControllerProvider);

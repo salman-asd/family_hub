@@ -74,14 +74,13 @@ class AuthFormState {
     bool clearFailure = false,
     bool? succeeded,
     int? revision,
-  }) =>
-      AuthFormState(
-        isSubmitting: isSubmitting ?? this.isSubmitting,
-        failure: clearFailure ? null : (failure ?? this.failure),
-        succeeded: succeeded ?? this.succeeded,
-        // Every copyWith is a deliberate change, so the revision always moves.
-        revision: revision ?? this.revision + 1,
-      );
+  }) => AuthFormState(
+    isSubmitting: isSubmitting ?? this.isSubmitting,
+    failure: clearFailure ? null : (failure ?? this.failure),
+    succeeded: succeeded ?? this.succeeded,
+    // Every copyWith is a deliberate change, so the revision always moves.
+    revision: revision ?? this.revision + 1,
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -159,10 +158,7 @@ abstract class AuthFormController<T> extends Notifier<AuthFormState> {
     } on Object catch (error) {
       // Nothing thrown in the layers below should reach the UI, but if a bug
       // does, the button must not stay disabled forever.
-      state = state.copyWith(
-        isSubmitting: false,
-        failure: Unknown(error),
-      );
+      state = state.copyWith(isSubmitting: false, failure: Unknown(error));
       return null;
     }
   }

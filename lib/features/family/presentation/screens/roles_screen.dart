@@ -1,14 +1,15 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/localization/role_labels.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/presentation/action_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
-import 'package:family_hub/features/family/presentation/widgets/labels.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:family_hub/shared/widgets/choice_wrap.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,7 +39,9 @@ class RolesScreen extends ConsumerWidget {
 
     Future<void> setRole(Member m, MemberRole role) async {
       if (me == null || familyId == null) return;
-      await ref.read(_roleActionProvider.notifier).run(
+      await ref
+          .read(_roleActionProvider.notifier)
+          .run(
             () => ref.read(changeRoleProvider)(
               actorUid: me,
               familyId: familyId,
@@ -69,7 +72,9 @@ class RolesScreen extends ConsumerWidget {
         ),
       );
       if (ok != true) return;
-      await ref.read(_roleActionProvider.notifier).run(
+      await ref
+          .read(_roleActionProvider.notifier)
+          .run(
             () => ref.read(transferAdminProvider)(
               actorUid: me,
               familyId: familyId,
@@ -81,16 +86,17 @@ class RolesScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.rolesTitle)),
       body: members.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, __) => EmptyState(
+        loading: () => const LoadingView(lines: 5, showAvatar: true),
+        error: (_, _) => EmptyState(
           icon: Icons.cloud_off_rounded,
           title: l10n.errorUnknown,
           actionLabel: l10n.actionRetry,
           onAction: () => ref.invalidate(membersProvider),
         ),
         data: (list) {
-          final active =
-              list.where((m) => m.status == MembershipStatus.active).toList();
+          final active = list
+              .where((m) => m.status == MembershipStatus.active)
+              .toList();
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
@@ -116,24 +122,20 @@ class RolesScreen extends ConsumerWidget {
                                 style: Theme.of(context).textTheme.titleMedium,
                               ),
                             ),
-                            if (m.role == MemberRole.admin)
-                              Chip(label: Text(l10n.roleAdmin)),
+                            if (m.isActiveAdmin)
+                              Chip(label: Text(l10n.roleLabel(m.role))),
                           ],
                         ),
-                        if (m.uid != me && m.role != MemberRole.admin) ...[
+                        if (m.uid != me && !m.isActiveAdmin) ...[
                           const SizedBox(height: 8),
                           ChoiceWrap<MemberRole>(
                             options: [
-                              ChoiceOption(
-                                MemberRole.moderator,
-                                l10n.roleModerator,
-                                key: Key('role_mod_${m.uid}'),
-                              ),
-                              ChoiceOption(
-                                MemberRole.member,
-                                l10n.roleMember,
-                                key: Key('role_member_${m.uid}'),
-                              ),
+                              for (final r in assignableRoles)
+                                ChoiceOption(
+                                  r,
+                                  l10n.roleLabel(r),
+                                  key: Key('role_${r.name}_${m.uid}'),
+                                ),
                             ],
                             selected: m.role,
                             onChanged: busy ? (_) {} : (r) => setRole(m, r),

@@ -1,0 +1,55 @@
+{
+  "scenario": "settlement",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/settlements/fixS1",
+      "data": {
+        "advanceId": "exp_adv2",
+        "memberId": "fixMember",
+        "amountPaisa": 3000,
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "method": "cash",
+        "note": null,
+        "fundTxId": "stl_fixS1",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/fundTransactions/stl_fixS1",
+      "data": {
+        "type": "reimbursement",
+        "amountPaisa": -3000,
+        "dateKey": "2026-10-18",
+        "monthKey": "2026-10",
+        "refType": "settlement",
+        "refId": "fixS1",
+        "note": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    }
+  ]
+}

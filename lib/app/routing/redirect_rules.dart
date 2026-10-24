@@ -3,15 +3,15 @@ import 'package:family_hub/app/routing/session_phase.dart';
 
 /// The route a user in [phase] belongs on.
 String homeRouteFor(SessionPhase phase) => switch (phase) {
-      SessionPhase.loading || SessionPhase.failed => AppRoutes.splash,
-      SessionPhase.signedOut => AppRoutes.welcome,
-      SessionPhase.needsVerification => AppRoutes.verifyEmail,
-      SessionPhase.needsProfile => AppRoutes.profileSetup,
-      SessionPhase.needsFamily => AppRoutes.familyChoice,
-      SessionPhase.pending => AppRoutes.pending,
-      SessionPhase.disabled => AppRoutes.disabled,
-      SessionPhase.active => AppRoutes.home,
-    };
+  SessionPhase.loading || SessionPhase.failed => AppRoutes.splash,
+  SessionPhase.signedOut => AppRoutes.welcome,
+  SessionPhase.needsVerification => AppRoutes.verifyEmail,
+  SessionPhase.needsProfile => AppRoutes.profileSetup,
+  SessionPhase.needsFamily => AppRoutes.familyChoice,
+  SessionPhase.pending => AppRoutes.pending,
+  SessionPhase.disabled => AppRoutes.disabled,
+  SessionPhase.active => AppRoutes.home,
+};
 
 /// Pure redirect decision: no Flutter, no Riverpod, no I/O.
 ///

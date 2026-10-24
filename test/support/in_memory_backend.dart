@@ -1,17 +1,21 @@
 import 'dart:async';
 
+import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/family/domain/family.dart';
-import 'package:family_hub/features/family/domain/family_event.dart';
+import 'package:family_hub/features/family/domain/family_seeder.dart';
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/membership_repository.dart';
+import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 import 'package:family_hub/features/onboarding/domain/profile_repository.dart';
 import 'package:family_hub/features/onboarding/domain/user_profile.dart';
 import 'package:family_hub/features/onboarding/domain/user_profile_repository.dart';
-import 'package:family_hub/modules/module_flags.dart';
+import 'package:family_hub/features/family/domain/module_flags.dart';
 
 /// One in-memory "Firestore" implementing every repository port of Steps 8-9,
 /// with live streams, for use-case and widget tests.
@@ -27,10 +31,36 @@ class InMemoryBackend
   final Map<String, Map<String, Member>> members = {};
   final Map<String, Invitation> invitations = {};
   final Map<String, String> userFamily = {};
-  final List<FamilyEvent> events = [];
+
+  /// H6: the active-admin uids per family, mirroring `families/{f}.adminIds`.
+  final Map<String, List<String>> adminIds = {};
+
+  /// H7: `families/{f}/settings/permissions`; a missing entry means defaults.
+  final Map<String, PermissionSettings> permissionSettings = {};
+
+  /// H10: `families/{f}/settings/relationships`; a missing entry means the
+  /// built-in defaults.
+  final Map<String, RelationshipCatalog> relationshipCatalogs = {};
+  final List<AuditEvent> events = [];
+
+  /// H12: documents written by `FamilySeeder`s, by path.
+  final Map<String, Map<String, dynamic>> seeded = {};
 
   /// Number of write batches that were applied (one per mutating call).
   int writes = 0;
+
+  /// Tests: the next server pointer read fails with this (offline).
+  AppFailure? failNextPointerRead;
+
+  /// Tests: the next mutating call fails with this and writes nothing.
+  AppFailure? failNextWrite;
+
+  Result<void>? _consumeFailure() {
+    final f = failNextWrite;
+    if (f == null) return null;
+    failNextWrite = null;
+    return Failure<void>(f);
+  }
 
   final StreamController<void> _changes = StreamController<void>.broadcast();
 
@@ -86,12 +116,13 @@ class InMemoryBackend
           role: m.role,
           status: m.status,
           fullName: profile.fullName,
-          relationship: profile.relationship.name,
+          relationship: profile.relationship.value,
           nickname: profile.nickname,
           spouseId: profile.spouseId,
           avatarKey: profile.avatarKey,
           inviteCode: m.inviteCode,
           removedAt: m.removedAt,
+          leftAt: m.leftAt,
         );
       }
     }
@@ -106,11 +137,48 @@ class InMemoryBackend
   Future<Result<void>> createFamily({
     required Family family,
     required Member owner,
-    required FamilyEvent event,
+    required AuditEvent event,
+    List<SeedWrite> seedWrites = const <SeedWrite>[],
   }) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
+    seeded.addAll(<String, Map<String, dynamic>>{
+      for (final w in seedWrites) w.path: w.data,
+    });
     families[family.id] = family;
     members[family.id] = {owner.uid: owner};
+    adminIds[family.id] = <String>[owner.uid];
+    permissionSettings[family.id] = PermissionSettings.defaults;
+    relationshipCatalogs[family.id] = RelationshipCatalog.defaults;
     userFamily[owner.uid] = family.id;
+    events.add(event);
+    writes++;
+    _notify();
+    return const Success<void>(null);
+  }
+
+  @override
+  Stream<RelationshipCatalog> watchRelationshipCatalog(String familyId) =>
+      _live(
+        () => relationshipCatalogs[familyId] ?? RelationshipCatalog.defaults,
+      );
+
+  @override
+  Future<Result<RelationshipCatalog>> getRelationshipCatalog(
+    String familyId,
+  ) async => Success<RelationshipCatalog>(
+    relationshipCatalogs[familyId] ?? RelationshipCatalog.defaults,
+  );
+
+  @override
+  Future<Result<void>> saveRelationshipCatalog(
+    String familyId,
+    RelationshipCatalog catalog,
+    AuditEvent event,
+  ) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
+    relationshipCatalogs[familyId] = catalog;
     events.add(event);
     writes++;
     _notify();
@@ -124,7 +192,7 @@ class InMemoryBackend
   @override
   Future<Result<void>> saveInvitation(
     Invitation invitation,
-    FamilyEvent event,
+    AuditEvent event,
   ) async {
     invitations[invitation.code] = invitation;
     events.add(event);
@@ -137,11 +205,44 @@ class InMemoryBackend
   Future<Result<void>> requestToJoin({
     required Invitation invitation,
     required Member member,
-    required FamilyEvent event,
+    required AuditEvent event,
   }) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
     members.putIfAbsent(invitation.familyId, () => {})[member.uid] = member;
     userFamily[member.uid] = invitation.familyId;
     invitations[invitation.code] = invitation.markUsed(member.uid);
+    events.add(event);
+    writes++;
+    _notify();
+    return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<Membership>> getUserFamilyPointer(String uid) async {
+    final failure = failNextPointerRead;
+    if (failure != null) {
+      failNextPointerRead = null;
+      return Failure<Membership>(failure);
+    }
+    final fid = userFamily[uid];
+    final m = fid == null ? null : members[fid]?[uid];
+    if (fid == null || m == null || m.isRemoved) {
+      return const Success<Membership>(Membership.none);
+    }
+    return Success<Membership>(
+      Membership(status: m.status, familyId: fid, role: m.role),
+    );
+  }
+
+  @override
+  Future<Result<void>> revokeInvitation(
+    Invitation invitation,
+    AuditEvent event,
+  ) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
+    invitations[invitation.code] = invitation.markRevoked();
     events.add(event);
     writes++;
     _notify();
@@ -153,9 +254,9 @@ class InMemoryBackend
       Success(members[familyId]?[uid]);
 
   List<Member> _live0(String familyId) => [
-        for (final m in (members[familyId] ?? const <String, Member>{}).values)
-          if (!m.isRemoved) m,
-      ];
+    for (final m in (members[familyId] ?? const <String, Member>{}).values)
+      if (!m.isRemoved) m,
+  ];
 
   @override
   Future<Result<List<Member>>> getMembers(String familyId) async =>
@@ -165,11 +266,15 @@ class InMemoryBackend
   Future<Result<void>> saveMembers(
     String familyId,
     List<Member> updated,
-    FamilyEvent event,
-  ) async {
+    AuditEvent event, {
+    List<String>? adminIds,
+  }) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
     for (final m in updated) {
       members[familyId]![m.uid] = m;
     }
+    if (adminIds != null) this.adminIds[familyId] = List<String>.of(adminIds);
     events.add(event);
     writes++;
     _notify();
@@ -177,7 +282,7 @@ class InMemoryBackend
   }
 
   @override
-  Future<Result<void>> updateFamily(Family family, FamilyEvent event) async {
+  Future<Result<void>> updateFamily(Family family, AuditEvent event) async {
     families[family.id] = family;
     events.add(event);
     writes++;
@@ -186,16 +291,41 @@ class InMemoryBackend
   }
 
   @override
+  Future<Result<PermissionSettings>> getPermissionSettings(
+    String familyId,
+  ) async =>
+      Success(permissionSettings[familyId] ?? PermissionSettings.defaults);
+
+  @override
+  Future<Result<void>> updatePermissionSettings(
+    String familyId,
+    PermissionSettings settings,
+    AuditEvent event,
+  ) async {
+    final failed = _consumeFailure();
+    if (failed != null) return failed;
+    permissionSettings[familyId] = settings;
+    events.add(event);
+    writes++;
+    _notify();
+    return const Success<void>(null);
+  }
+
+  @override
+  Stream<PermissionSettings> watchPermissionSettings(String familyId) =>
+      _live(() => permissionSettings[familyId] ?? PermissionSettings.defaults);
+
+  @override
   Stream<List<Member>> watchMembers(String familyId) =>
       _liveList(() => _live0(familyId));
 
   @override
   Stream<List<Invitation>> watchInvitations(String familyId) => _liveList(
-        () => [
-          for (final i in invitations.values)
-            if (i.familyId == familyId) i,
-        ],
-      );
+    () => [
+      for (final i in invitations.values)
+        if (i.familyId == familyId) i,
+    ],
+  );
 
   @override
   Stream<Family?> watchFamily(String familyId) =>
@@ -205,11 +335,11 @@ class InMemoryBackend
 
   @override
   Stream<Membership> watchMembership(String uid) => _live(() {
-        final fid = userFamily[uid];
-        final m = fid == null ? null : members[fid]?[uid];
-        if (fid == null || m == null || m.isRemoved) return Membership.none;
-        return Membership(status: m.status, familyId: fid, role: m.role);
-      });
+    final fid = userFamily[uid];
+    final m = fid == null ? null : members[fid]?[uid];
+    if (fid == null || m == null || m.isRemoved) return Membership.none;
+    return Membership(status: m.status, familyId: fid, role: m.role);
+  });
 
   @override
   Stream<ModuleFlags> watchModuleFlags(String familyId) =>

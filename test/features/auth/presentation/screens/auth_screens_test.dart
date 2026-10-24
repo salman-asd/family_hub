@@ -95,24 +95,20 @@ void main() {
   });
 
   group('Login', () {
-    testWidgets('a successful sign-in reports it and clears the button',
-        (tester) async {
+    testWidgets('a successful sign-in reports it and clears the button', (
+      tester,
+    ) async {
       final l10n = await l10nFor(const Locale('bn'));
       var signedIn = false;
-      await pumpScreen(
-        tester,
-        LoginScreen(onSignedIn: () => signedIn = true),
-      );
+      await pumpScreen(tester, LoginScreen(onSignedIn: () => signedIn = true));
 
-      await tester.enterText(
-        find.byType(TextField).first,
-        'a@b.co',
-      );
+      await tester.enterText(find.byType(TextField).first, 'a@b.co');
       await tester.enterText(find.byType(TextField).last, 'longenough');
       await tester.pump();
 
-      await tester
-          .tap(find.widgetWithText(FilledButton, l10n.authSignInAction));
+      await tester.tap(
+        find.widgetWithText(FilledButton, l10n.authSignInAction),
+      );
       await tester.pumpAndSettle();
 
       expect(signedIn, isTrue);
@@ -120,8 +116,9 @@ void main() {
       expect(repository.lastEmail, 'a@b.co');
     });
 
-    testWidgets('a wrong password shows the localized Bangla message',
-        (tester) async {
+    testWidgets('a wrong password shows the localized Bangla message', (
+      tester,
+    ) async {
       final l10n = await l10nFor(const Locale('bn'));
       repository.signInFailure = const InvalidCredentials();
 
@@ -130,8 +127,9 @@ void main() {
       await tester.enterText(find.byType(TextField).first, 'a@b.co');
       await tester.enterText(find.byType(TextField).last, 'longenough');
       await tester.pump();
-      await tester
-          .tap(find.widgetWithText(FilledButton, l10n.authSignInAction));
+      await tester.tap(
+        find.widgetWithText(FilledButton, l10n.authSignInAction),
+      );
       await tester.pumpAndSettle();
 
       // The copy comes from the ARB file, verified through the same mapping the
@@ -142,8 +140,9 @@ void main() {
       );
     });
 
-    testWidgets('an invalid email is reported inline and never sent',
-        (tester) async {
+    testWidgets('an invalid email is reported inline and never sent', (
+      tester,
+    ) async {
       final l10n = await l10nFor(const Locale('bn'));
       await pumpScreen(tester, const LoginScreen());
 
@@ -166,14 +165,12 @@ void main() {
       await tester.enterText(find.byType(TextField).first, 'a@b.co');
       await tester.enterText(find.byType(TextField).last, 'longenough');
       await tester.pump();
-      await tester
-          .tap(find.widgetWithText(FilledButton, l10n.authSignInAction));
+      await tester.tap(
+        find.widgetWithText(FilledButton, l10n.authSignInAction),
+      );
       await tester.pumpAndSettle();
 
-      expect(
-        find.text(l10n.authFailureMessage('network')),
-        findsOneWidget,
-      );
+      expect(find.text(l10n.authFailureMessage('network')), findsOneWidget);
     });
 
     testWidgets('the submit button is disabled while empty', (tester) async {
@@ -186,8 +183,9 @@ void main() {
       expect(button.onPressed, isNull);
     });
 
-    testWidgets('the password is obscured and the toggle relabels itself',
-        (tester) async {
+    testWidgets('the password is obscured and the toggle relabels itself', (
+      tester,
+    ) async {
       final l10n = await l10nFor(const Locale('bn'));
       await pumpScreen(tester, const LoginScreen());
 
@@ -209,8 +207,9 @@ void main() {
   });
 
   group('SignUp', () {
-    testWidgets('mismatched passwords are caught before any request',
-        (tester) async {
+    testWidgets('mismatched passwords are caught before any request', (
+      tester,
+    ) async {
       final l10n = await l10nFor(const Locale('bn'));
       await pumpScreen(tester, const SignUpScreen());
 
@@ -239,10 +238,7 @@ void main() {
     testWidgets('a matching form creates the account', (tester) async {
       final l10n = await l10nFor(const Locale('bn'));
       var signedUp = false;
-      await pumpScreen(
-        tester,
-        SignUpScreen(onSignedUp: () => signedUp = true),
-      );
+      await pumpScreen(tester, SignUpScreen(onSignedUp: () => signedUp = true));
 
       final fields = find.byType(TextField);
       await tester.enterText(fields.at(0), 'a@b.co');
@@ -302,8 +298,9 @@ void main() {
       );
     });
 
-    testWidgets('a malformed address never reaches the backend',
-        (tester) async {
+    testWidgets('a malformed address never reaches the backend', (
+      tester,
+    ) async {
       final l10n = await l10nFor(const Locale('bn'));
       await pumpScreen(tester, const ForgotPasswordScreen());
 
@@ -319,8 +316,9 @@ void main() {
   });
 
   group('VerifyEmail', () {
-    testWidgets('explains the still-unverified case informationally',
-        (tester) async {
+    testWidgets('explains the still-unverified case informationally', (
+      tester,
+    ) async {
       final l10n = await l10nFor(const Locale('bn'));
       repository.signInAs(
         const AppUser(uid: 'u1', email: 'a@b.co', emailVerified: false),
@@ -329,10 +327,7 @@ void main() {
       await pumpScreen(tester, const VerifyEmailScreen());
 
       await tester.tap(
-        find.widgetWithText(
-          FilledButton,
-          l10n.authVerifyEmailIHaveVerified,
-        ),
+        find.widgetWithText(FilledButton, l10n.authVerifyEmailIHaveVerified),
       );
       await tester.pumpAndSettle();
 
@@ -372,10 +367,7 @@ void main() {
       );
 
       await tester.tap(
-        find.widgetWithText(
-          FilledButton,
-          l10n.authVerifyEmailIHaveVerified,
-        ),
+        find.widgetWithText(FilledButton, l10n.authVerifyEmailIHaveVerified),
       );
       await tester.pumpAndSettle();
 
@@ -405,8 +397,9 @@ void main() {
   });
 
   group('accessibility', () {
-    testWidgets('login survives a 200% text scale without overflow',
-        (tester) async {
+    testWidgets('login survives a 200% text scale without overflow', (
+      tester,
+    ) async {
       final l10n = await l10nFor(const Locale('bn'));
       await pumpScreen(
         tester,
@@ -432,8 +425,9 @@ void main() {
       await tester.enterText(find.byType(TextField).last, 'longenough');
       await tester.pump();
 
-      await tester
-          .tap(find.widgetWithText(FilledButton, l10n.authSignInAction));
+      await tester.tap(
+        find.widgetWithText(FilledButton, l10n.authSignInAction),
+      );
       await tester.pump();
 
       // The progress indicator carries the localized loading label, so the
