@@ -1244,5 +1244,365 @@
     }
   },
   "personPickerNone": "No one",
-  "@personPickerNone": {}
+  "@personPickerNone": {},
+  "actionUndo": "Undo",
+  "@actionUndo": {},
+  "bazarErrExpenseDeleted": "This expense was deleted. Restore it first.",
+  "@bazarErrExpenseDeleted": {},
+  "expenseAddTitle": "Add expense",
+  "@expenseAddTitle": {},
+  "expenseEditTitle": "Edit expense",
+  "@expenseEditTitle": {},
+  "expenseMenuTrip": "Bazar trip (many items)",
+  "@expenseMenuTrip": {},
+  "expenseDateLabel": "Date",
+  "@expenseDateLabel": {},
+  "expenseItemLabel": "Item",
+  "@expenseItemLabel": {},
+  "expenseItemHint": "Type the item name",
+  "@expenseItemHint": {},
+  "expenseAddNewItem": "Add {name} as a new item",
+  "@expenseAddNewItem": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseCategoryLabel": "Category",
+  "@expenseCategoryLabel": {},
+  "expenseRememberItem": "Remember this item",
+  "@expenseRememberItem": {},
+  "expenseTotalField": "Total amount",
+  "@expenseTotalField": {},
+  "expenseTotalLabel": "Total",
+  "@expenseTotalLabel": {},
+  "expenseQtyPriceSection": "Or enter quantity and price per unit",
+  "@expenseQtyPriceSection": {},
+  "expenseQtyField": "Quantity",
+  "@expenseQtyField": {},
+  "expenseUnitLabel": "Unit",
+  "@expenseUnitLabel": {},
+  "expenseUnitPriceField": "Price per unit",
+  "@expenseUnitPriceField": {},
+  "expenseUnitPriceHint": "Last price: {price}",
+  "@expenseUnitPriceHint": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseFundingLabel": "Who paid?",
+  "@expenseFundingLabel": {},
+  "expenseFundingFund": "From family fund",
+  "@expenseFundingFund": {},
+  "expenseFundingReimbursable": "Paid by a member, to be reimbursed",
+  "@expenseFundingReimbursable": {},
+  "expenseFundingPersonal": "Paid by a member, personal",
+  "@expenseFundingPersonal": {},
+  "expensePaidByLabel": "Paid by",
+  "@expensePaidByLabel": {},
+  "expenseMoreSection": "More details",
+  "@expenseMoreSection": {},
+  "expenseShopField": "Shop",
+  "@expenseShopField": {},
+  "expenseNoteField": "Note",
+  "@expenseNoteField": {},
+  "expensePurchaserLabel": "Bought by",
+  "@expensePurchaserLabel": {},
+  "expenseSaveAddAnother": "Save and add another",
+  "@expenseSaveAddAnother": {},
+  "expenseSaved": "Expense saved",
+  "@expenseSaved": {},
+  "expenseUpdated": "Expense updated",
+  "@expenseUpdated": {},
+  "expenseUnknownMember": "A member",
+  "@expenseUnknownMember": {},
+  "expenseDuplicateTitle": "Looks like a duplicate",
+  "@expenseDuplicateTitle": {},
+  "expenseDuplicateMessage": "{item} with the same amount was added a few minutes ago.",
+  "@expenseDuplicateMessage": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDuplicateSaveAnyway": "Save anyway",
+  "@expenseDuplicateSaveAnyway": {},
+  "tripTitle": "Bazar trip",
+  "@tripTitle": {},
+  "tripAddLine": "Add item",
+  "@tripAddLine": {},
+  "tripLineSheetTitle": "Add item to the trip",
+  "@tripLineSheetTitle": {},
+  "tripLineSheetSave": "Add to trip",
+  "@tripLineSheetSave": {},
+  "tripLinesCount": "Items: {count}",
+  "@tripLinesCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "tripEmpty": "No items yet. Add the first item.",
+  "@tripEmpty": {},
+  "tripTotalLabel": "Trip total",
+  "@tripTotalLabel": {},
+  "tripSaveAll": "Save all",
+  "@tripSaveAll": {},
+  "tripSaved": "Trip saved",
+  "@tripSaved": {},
+  "tripLineRemoved": "Item removed",
+  "@tripLineRemoved": {},
+  "tripLimitReached": "A trip can have at most 40 items.",
+  "@tripLimitReached": {},
+  "expenseListTitle": "Expenses",
+  "@expenseListTitle": {},
+  "expenseListFilteredTotal": "Total for this view",
+  "@expenseListFilteredTotal": {},
+  "expenseListEmptyTitle": "No expenses this month",
+  "@expenseListEmptyTitle": {},
+  "expenseListEmptyMessage": "Add the first expense to see it here.",
+  "@expenseListEmptyMessage": {},
+  "expenseListFilteredEmptyTitle": "Nothing matches the filters",
+  "@expenseListFilteredEmptyTitle": {},
+  "expenseListFilteredEmptyMessage": "Clear the filters to see every expense.",
+  "@expenseListFilteredEmptyMessage": {},
+  "expenseListLocked": "This month is closed. Entries are read-only.",
+  "@expenseListLocked": {},
+  "expenseListRefresh": "Refresh",
+  "@expenseListRefresh": {},
+  "expenseShowMore": "Show more",
+  "@expenseShowMore": {},
+  "expenseRowDeleted": "Deleted",
+  "@expenseRowDeleted": {},
+  "expenseRowTrip": "Trip",
+  "@expenseRowTrip": {},
+  "expenseFilterTitle": "Filter",
+  "@expenseFilterTitle": {},
+  "expenseFilterRange": "Date range",
+  "@expenseFilterRange": {},
+  "expenseFilterRangeActive": "{start} to {end}",
+  "@expenseFilterRangeActive": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseRangeAll": "Whole month",
+  "@expenseRangeAll": {},
+  "expenseRangeToday": "Today",
+  "@expenseRangeToday": {},
+  "expenseRangeYesterday": "Yesterday",
+  "@expenseRangeYesterday": {},
+  "expenseRangeLast7": "Last 7 days",
+  "@expenseRangeLast7": {},
+  "expenseRangeThisWeek": "This week",
+  "@expenseRangeThisWeek": {},
+  "expenseRangeThisMonth": "This month",
+  "@expenseRangeThisMonth": {},
+  "expenseRangeLastMonth": "Last month",
+  "@expenseRangeLastMonth": {},
+  "expenseRangeThisYear": "This year",
+  "@expenseRangeThisYear": {},
+  "expenseRangeCustom": "Choose dates",
+  "@expenseRangeCustom": {},
+  "expenseFilterCategory": "Category",
+  "@expenseFilterCategory": {},
+  "expenseFilterItem": "Item",
+  "@expenseFilterItem": {},
+  "expenseFilterMember": "Member",
+  "@expenseFilterMember": {},
+  "expenseFilterFunding": "Funding",
+  "@expenseFilterFunding": {},
+  "expenseFilterAny": "Any",
+  "@expenseFilterAny": {},
+  "expenseFilterShowDeleted": "Show deleted",
+  "@expenseFilterShowDeleted": {},
+  "expenseFilterReset": "Clear filters",
+  "@expenseFilterReset": {},
+  "expenseDetailTitle": "Expense",
+  "@expenseDetailTitle": {},
+  "expenseDetailAddedBy": "Added by",
+  "@expenseDetailAddedBy": {},
+  "expenseDetailPayment": "Payment",
+  "@expenseDetailPayment": {},
+  "expenseNotYoursMessage": "You can change only your own expenses.",
+  "@expenseNotYoursMessage": {},
+  "expenseLedgerFund": "Paid from the family fund",
+  "@expenseLedgerFund": {},
+  "expenseLedgerPersonal": "Paid by {name} from their own money, no reimbursement",
+  "@expenseLedgerPersonal": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerPending": "Paid by {name}. {amount} is waiting to be reimbursed.",
+  "@expenseLedgerPending": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerPartial": "Paid by {name}. {settled} of {total} has been reimbursed.",
+  "@expenseLedgerPartial": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "settled": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerSettled": "Paid by {name}. Fully reimbursed.",
+  "@expenseLedgerSettled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerVoided": "The reimbursement was cancelled with the expense.",
+  "@expenseLedgerVoided": {},
+  "expenseDeleteTitle": "Delete this expense?",
+  "@expenseDeleteTitle": {},
+  "expenseDeleteMessage": "{name} will be removed from the totals. You can undo it right away.",
+  "@expenseDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDeleted": "Expense deleted",
+  "@expenseDeleted": {},
+  "expenseRestore": "Restore",
+  "@expenseRestore": {},
+  "expenseRestored": "Expense restored",
+  "@expenseRestored": {},
+  "expenseHistoryTitle": "Edit history",
+  "@expenseHistoryTitle": {},
+  "expenseHistoryEmpty": "No changes yet.",
+  "@expenseHistoryEmpty": {},
+  "expenseHistoryEntry": "{who} changed this on {date}",
+  "@expenseHistoryEntry": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseHistoryWas": "{field} was: {value}",
+  "@expenseHistoryWas": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogTitle": "Catalog",
+  "@catalogTitle": {},
+  "catalogTabCategories": "Categories",
+  "@catalogTabCategories": {},
+  "catalogTabItems": "Items",
+  "@catalogTabItems": {},
+  "catalogAdd": "Add",
+  "@catalogAdd": {},
+  "catalogAddCategory": "Add category",
+  "@catalogAddCategory": {},
+  "catalogEditCategory": "Edit category",
+  "@catalogEditCategory": {},
+  "catalogAddItem": "Add item",
+  "@catalogAddItem": {},
+  "catalogEditItem": "Edit item",
+  "@catalogEditItem": {},
+  "catalogCategoryName": "Category name",
+  "@catalogCategoryName": {},
+  "catalogNameBn": "Name in Bangla",
+  "@catalogNameBn": {},
+  "catalogNameEn": "Name in English (optional)",
+  "@catalogNameEn": {},
+  "catalogEmoji": "Emoji (optional)",
+  "@catalogEmoji": {},
+  "catalogColour": "Colour",
+  "@catalogColour": {},
+  "catalogColourSemantics": "Colour {number}",
+  "@catalogColourSemantics": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogActive": "Shown in lists",
+  "@catalogActive": {},
+  "catalogActiveHint": "Turn off to hide it without deleting.",
+  "@catalogActiveHint": {},
+  "catalogHidden": "Hidden",
+  "@catalogHidden": {},
+  "catalogReorder": "Drag to reorder",
+  "@catalogReorder": {},
+  "catalogReadOnly": "You can look at this, but only the Household Manager or Admin can change it.",
+  "@catalogReadOnly": {},
+  "catalogCategoriesEmpty": "No categories yet",
+  "@catalogCategoriesEmpty": {},
+  "catalogItemsEmpty": "No items found",
+  "@catalogItemsEmpty": {},
+  "catalogSearch": "Search items",
+  "@catalogSearch": {},
+  "catalogAllCategories": "All",
+  "@catalogAllCategories": {},
+  "catalogDefaultUnit": "Default unit",
+  "@catalogDefaultUnit": {},
+  "catalogAliases": "Other spellings (for search)",
+  "@catalogAliases": {},
+  "catalogAliasField": "Add a spelling",
+  "@catalogAliasField": {},
+  "catalogAliasAdd": "Add spelling",
+  "@catalogAliasAdd": {},
+  "catalogAliasLimit": "At most 10 spellings.",
+  "@catalogAliasLimit": {},
+  "bazarSettingsWeekStart": "Week starts on",
+  "@bazarSettingsWeekStart": {},
+  "bazarSettingsTarget": "Monthly family contribution target",
+  "@bazarSettingsTarget": {},
+  "bazarSettingsDueDay": "Contribution due day of the month",
+  "@bazarSettingsDueDay": {},
+  "bazarSettingsAlerts": "Budget alerts (percent of the budget)",
+  "@bazarSettingsAlerts": {},
+  "bazarSettingsWarnAt": "Warn at",
+  "@bazarSettingsWarnAt": {},
+  "bazarSettingsExceededAt": "Exceeded at",
+  "@bazarSettingsExceededAt": {},
+  "bazarSettingsThresholdRange": "Enter whole numbers from 1 to 200.",
+  "@bazarSettingsThresholdRange": {},
+  "bazarSettingsThresholdOrder": "The warning level must be lower than the exceeded level.",
+  "@bazarSettingsThresholdOrder": {},
+  "bazarSettingsFundStart": "Fund start month",
+  "@bazarSettingsFundStart": {},
+  "bazarSettingsFundStartUnset": "Set automatically when you record the opening balance.",
+  "@bazarSettingsFundStartUnset": {}
 }

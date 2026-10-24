@@ -9,6 +9,9 @@ import 'package:family_hub/features/bazar/items_categories/domain/usecases/add_i
 import 'package:family_hub/features/bazar/items_categories/domain/usecases/deactivate_category.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/usecases/deactivate_item.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/usecases/ensure_catalog_seeded.dart';
+import 'package:family_hub/features/bazar/items_categories/domain/usecases/reactivate_category.dart';
+import 'package:family_hub/features/bazar/items_categories/domain/usecases/reactivate_item.dart';
+import 'package:family_hub/features/bazar/items_categories/domain/usecases/reorder_categories.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/usecases/update_category.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/usecases/update_item.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
@@ -114,6 +117,33 @@ final deactivateItemProvider = Provider<DeactivateItem>(
 
 final ensureCatalogSeededProvider = Provider<EnsureCatalogSeeded>(
   (ref) => EnsureCatalogSeeded(
+    catalog: ref.watch(catalogRepositoryProvider),
+    families: ref.watch(familyRepositoryProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
+
+final reactivateCategoryProvider = Provider<ReactivateCategory>(
+  (ref) => ReactivateCategory(
+    catalog: ref.watch(catalogRepositoryProvider),
+    families: ref.watch(familyRepositoryProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
+
+final reactivateItemProvider = Provider<ReactivateItem>(
+  (ref) => ReactivateItem(
+    catalog: ref.watch(catalogRepositoryProvider),
+    families: ref.watch(familyRepositoryProvider),
+    clock: ref.watch(clockProvider),
+    newId: ref.watch(idGeneratorProvider),
+  ),
+);
+
+final reorderCategoriesProvider = Provider<ReorderCategories>(
+  (ref) => ReorderCategories(
     catalog: ref.watch(catalogRepositoryProvider),
     families: ref.watch(familyRepositoryProvider),
     clock: ref.watch(clockProvider),

@@ -1,3 +1,4 @@
+import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
@@ -36,6 +37,14 @@ class BazarHomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navBazar)),
+      floatingActionButton: !needsSetup && ref.can(Permission.addOwnExpense)
+          ? FloatingActionButton(
+              key: const ValueKey('bazar-add-expense'),
+              tooltip: l10n.expenseAddTitle,
+              onPressed: () => context.go(AppRoutes.bazarExpenseNew),
+              child: const Icon(Icons.add),
+            )
+          : null,
       body: needsSetup
           ? const _CatalogSetupView()
           : visible.isEmpty
@@ -45,7 +54,7 @@ class BazarHomeScreen extends ConsumerWidget {
               message: l10n.bazarHomeEmptyMessage,
             )
           : ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
               itemCount: visible.length,
               itemBuilder: (context, index) =>
                   _BazarEntryCard(entry: visible[index]),

@@ -1388,4 +1388,426 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get personPickerNone => 'No one';
+
+  @override
+  String get actionUndo => 'Undo';
+
+  @override
+  String get bazarErrExpenseDeleted => 'This expense was deleted. Restore it first.';
+
+  @override
+  String get expenseAddTitle => 'Add expense';
+
+  @override
+  String get expenseEditTitle => 'Edit expense';
+
+  @override
+  String get expenseMenuTrip => 'Bazar trip (many items)';
+
+  @override
+  String get expenseDateLabel => 'Date';
+
+  @override
+  String get expenseItemLabel => 'Item';
+
+  @override
+  String get expenseItemHint => 'Type the item name';
+
+  @override
+  String expenseAddNewItem(String name) {
+    return 'Add $name as a new item';
+  }
+
+  @override
+  String get expenseCategoryLabel => 'Category';
+
+  @override
+  String get expenseRememberItem => 'Remember this item';
+
+  @override
+  String get expenseTotalField => 'Total amount';
+
+  @override
+  String get expenseTotalLabel => 'Total';
+
+  @override
+  String get expenseQtyPriceSection => 'Or enter quantity and price per unit';
+
+  @override
+  String get expenseQtyField => 'Quantity';
+
+  @override
+  String get expenseUnitLabel => 'Unit';
+
+  @override
+  String get expenseUnitPriceField => 'Price per unit';
+
+  @override
+  String expenseUnitPriceHint(String price) {
+    return 'Last price: $price';
+  }
+
+  @override
+  String get expenseFundingLabel => 'Who paid?';
+
+  @override
+  String get expenseFundingFund => 'From family fund';
+
+  @override
+  String get expenseFundingReimbursable => 'Paid by a member, to be reimbursed';
+
+  @override
+  String get expenseFundingPersonal => 'Paid by a member, personal';
+
+  @override
+  String get expensePaidByLabel => 'Paid by';
+
+  @override
+  String get expenseMoreSection => 'More details';
+
+  @override
+  String get expenseShopField => 'Shop';
+
+  @override
+  String get expenseNoteField => 'Note';
+
+  @override
+  String get expensePurchaserLabel => 'Bought by';
+
+  @override
+  String get expenseSaveAddAnother => 'Save and add another';
+
+  @override
+  String get expenseSaved => 'Expense saved';
+
+  @override
+  String get expenseUpdated => 'Expense updated';
+
+  @override
+  String get expenseUnknownMember => 'A member';
+
+  @override
+  String get expenseDuplicateTitle => 'Looks like a duplicate';
+
+  @override
+  String expenseDuplicateMessage(String item) {
+    return '$item with the same amount was added a few minutes ago.';
+  }
+
+  @override
+  String get expenseDuplicateSaveAnyway => 'Save anyway';
+
+  @override
+  String get tripTitle => 'Bazar trip';
+
+  @override
+  String get tripAddLine => 'Add item';
+
+  @override
+  String get tripLineSheetTitle => 'Add item to the trip';
+
+  @override
+  String get tripLineSheetSave => 'Add to trip';
+
+  @override
+  String tripLinesCount(String count) {
+    return 'Items: $count';
+  }
+
+  @override
+  String get tripEmpty => 'No items yet. Add the first item.';
+
+  @override
+  String get tripTotalLabel => 'Trip total';
+
+  @override
+  String get tripSaveAll => 'Save all';
+
+  @override
+  String get tripSaved => 'Trip saved';
+
+  @override
+  String get tripLineRemoved => 'Item removed';
+
+  @override
+  String get tripLimitReached => 'A trip can have at most 40 items.';
+
+  @override
+  String get expenseListTitle => 'Expenses';
+
+  @override
+  String get expenseListFilteredTotal => 'Total for this view';
+
+  @override
+  String get expenseListEmptyTitle => 'No expenses this month';
+
+  @override
+  String get expenseListEmptyMessage => 'Add the first expense to see it here.';
+
+  @override
+  String get expenseListFilteredEmptyTitle => 'Nothing matches the filters';
+
+  @override
+  String get expenseListFilteredEmptyMessage => 'Clear the filters to see every expense.';
+
+  @override
+  String get expenseListLocked => 'This month is closed. Entries are read-only.';
+
+  @override
+  String get expenseListRefresh => 'Refresh';
+
+  @override
+  String get expenseShowMore => 'Show more';
+
+  @override
+  String get expenseRowDeleted => 'Deleted';
+
+  @override
+  String get expenseRowTrip => 'Trip';
+
+  @override
+  String get expenseFilterTitle => 'Filter';
+
+  @override
+  String get expenseFilterRange => 'Date range';
+
+  @override
+  String expenseFilterRangeActive(String start, String end) {
+    return '$start to $end';
+  }
+
+  @override
+  String get expenseRangeAll => 'Whole month';
+
+  @override
+  String get expenseRangeToday => 'Today';
+
+  @override
+  String get expenseRangeYesterday => 'Yesterday';
+
+  @override
+  String get expenseRangeLast7 => 'Last 7 days';
+
+  @override
+  String get expenseRangeThisWeek => 'This week';
+
+  @override
+  String get expenseRangeThisMonth => 'This month';
+
+  @override
+  String get expenseRangeLastMonth => 'Last month';
+
+  @override
+  String get expenseRangeThisYear => 'This year';
+
+  @override
+  String get expenseRangeCustom => 'Choose dates';
+
+  @override
+  String get expenseFilterCategory => 'Category';
+
+  @override
+  String get expenseFilterItem => 'Item';
+
+  @override
+  String get expenseFilterMember => 'Member';
+
+  @override
+  String get expenseFilterFunding => 'Funding';
+
+  @override
+  String get expenseFilterAny => 'Any';
+
+  @override
+  String get expenseFilterShowDeleted => 'Show deleted';
+
+  @override
+  String get expenseFilterReset => 'Clear filters';
+
+  @override
+  String get expenseDetailTitle => 'Expense';
+
+  @override
+  String get expenseDetailAddedBy => 'Added by';
+
+  @override
+  String get expenseDetailPayment => 'Payment';
+
+  @override
+  String get expenseNotYoursMessage => 'You can change only your own expenses.';
+
+  @override
+  String get expenseLedgerFund => 'Paid from the family fund';
+
+  @override
+  String expenseLedgerPersonal(String name) {
+    return 'Paid by $name from their own money, no reimbursement';
+  }
+
+  @override
+  String expenseLedgerPending(String name, String amount) {
+    return 'Paid by $name. $amount is waiting to be reimbursed.';
+  }
+
+  @override
+  String expenseLedgerPartial(String name, String settled, String total) {
+    return 'Paid by $name. $settled of $total has been reimbursed.';
+  }
+
+  @override
+  String expenseLedgerSettled(String name) {
+    return 'Paid by $name. Fully reimbursed.';
+  }
+
+  @override
+  String get expenseLedgerVoided => 'The reimbursement was cancelled with the expense.';
+
+  @override
+  String get expenseDeleteTitle => 'Delete this expense?';
+
+  @override
+  String expenseDeleteMessage(String name) {
+    return '$name will be removed from the totals. You can undo it right away.';
+  }
+
+  @override
+  String get expenseDeleted => 'Expense deleted';
+
+  @override
+  String get expenseRestore => 'Restore';
+
+  @override
+  String get expenseRestored => 'Expense restored';
+
+  @override
+  String get expenseHistoryTitle => 'Edit history';
+
+  @override
+  String get expenseHistoryEmpty => 'No changes yet.';
+
+  @override
+  String expenseHistoryEntry(String who, String date) {
+    return '$who changed this on $date';
+  }
+
+  @override
+  String expenseHistoryWas(String field, String value) {
+    return '$field was: $value';
+  }
+
+  @override
+  String get catalogTitle => 'Catalog';
+
+  @override
+  String get catalogTabCategories => 'Categories';
+
+  @override
+  String get catalogTabItems => 'Items';
+
+  @override
+  String get catalogAdd => 'Add';
+
+  @override
+  String get catalogAddCategory => 'Add category';
+
+  @override
+  String get catalogEditCategory => 'Edit category';
+
+  @override
+  String get catalogAddItem => 'Add item';
+
+  @override
+  String get catalogEditItem => 'Edit item';
+
+  @override
+  String get catalogCategoryName => 'Category name';
+
+  @override
+  String get catalogNameBn => 'Name in Bangla';
+
+  @override
+  String get catalogNameEn => 'Name in English (optional)';
+
+  @override
+  String get catalogEmoji => 'Emoji (optional)';
+
+  @override
+  String get catalogColour => 'Colour';
+
+  @override
+  String catalogColourSemantics(int number) {
+    return 'Colour $number';
+  }
+
+  @override
+  String get catalogActive => 'Shown in lists';
+
+  @override
+  String get catalogActiveHint => 'Turn off to hide it without deleting.';
+
+  @override
+  String get catalogHidden => 'Hidden';
+
+  @override
+  String get catalogReorder => 'Drag to reorder';
+
+  @override
+  String get catalogReadOnly => 'You can look at this, but only the Household Manager or Admin can change it.';
+
+  @override
+  String get catalogCategoriesEmpty => 'No categories yet';
+
+  @override
+  String get catalogItemsEmpty => 'No items found';
+
+  @override
+  String get catalogSearch => 'Search items';
+
+  @override
+  String get catalogAllCategories => 'All';
+
+  @override
+  String get catalogDefaultUnit => 'Default unit';
+
+  @override
+  String get catalogAliases => 'Other spellings (for search)';
+
+  @override
+  String get catalogAliasField => 'Add a spelling';
+
+  @override
+  String get catalogAliasAdd => 'Add spelling';
+
+  @override
+  String get catalogAliasLimit => 'At most 10 spellings.';
+
+  @override
+  String get bazarSettingsWeekStart => 'Week starts on';
+
+  @override
+  String get bazarSettingsTarget => 'Monthly family contribution target';
+
+  @override
+  String get bazarSettingsDueDay => 'Contribution due day of the month';
+
+  @override
+  String get bazarSettingsAlerts => 'Budget alerts (percent of the budget)';
+
+  @override
+  String get bazarSettingsWarnAt => 'Warn at';
+
+  @override
+  String get bazarSettingsExceededAt => 'Exceeded at';
+
+  @override
+  String get bazarSettingsThresholdRange => 'Enter whole numbers from 1 to 200.';
+
+  @override
+  String get bazarSettingsThresholdOrder => 'The warning level must be lower than the exceeded level.';
+
+  @override
+  String get bazarSettingsFundStart => 'Fund start month';
+
+  @override
+  String get bazarSettingsFundStartUnset => 'Set automatically when you record the opening balance.';
 }

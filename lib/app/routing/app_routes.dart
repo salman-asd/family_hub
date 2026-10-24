@@ -27,6 +27,17 @@ abstract final class AppRoutes {
   static const String bazar = '/bazar';
   static const String family = '/family';
 
+  // ── Bazar sub-routes (nested under [bazar]) ───────────────────────────────
+  static const String bazarExpenses = '/bazar/expenses';
+  static const String bazarExpenseNew = '/bazar/expenses/new';
+  static const String bazarExpensePattern = '/bazar/expenses/:id';
+  static String bazarExpense(String id) => '/bazar/expenses/$id';
+  static const String bazarExpenseEditPattern = '/bazar/expenses/:id/edit';
+  static String bazarExpenseEdit(String id) => '/bazar/expenses/$id/edit';
+  static const String bazarTripNew = '/bazar/trip/new';
+  static const String bazarCatalog = '/bazar/catalog';
+  static const String bazarSettings = '/bazar/settings';
+
   // ── Onboarding sub-routes ─────────────────────────────────────────────────
   static const String createFamily = '/family-choice/create';
   static const String joinFamily = '/family-choice/join';

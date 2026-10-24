@@ -1244,5 +1244,365 @@
     }
   },
   "personPickerNone": "কেউ নয়",
-  "@personPickerNone": {}
+  "@personPickerNone": {},
+  "actionUndo": "পূর্বাবস্থায় ফেরান",
+  "@actionUndo": {},
+  "bazarErrExpenseDeleted": "এই খরচটি মুছে ফেলা হয়েছে। আগে ফিরিয়ে আনুন।",
+  "@bazarErrExpenseDeleted": {},
+  "expenseAddTitle": "খরচ যোগ করুন",
+  "@expenseAddTitle": {},
+  "expenseEditTitle": "খরচ সম্পাদনা",
+  "@expenseEditTitle": {},
+  "expenseMenuTrip": "বাজার ট্রিপ (অনেক পণ্য)",
+  "@expenseMenuTrip": {},
+  "expenseDateLabel": "তারিখ",
+  "@expenseDateLabel": {},
+  "expenseItemLabel": "পণ্য",
+  "@expenseItemLabel": {},
+  "expenseItemHint": "পণ্যের নাম লিখুন",
+  "@expenseItemHint": {},
+  "expenseAddNewItem": "{name} নতুন পণ্য হিসেবে যোগ করুন",
+  "@expenseAddNewItem": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseCategoryLabel": "ক্যাটেগরি",
+  "@expenseCategoryLabel": {},
+  "expenseRememberItem": "পণ্যটি মনে রাখুন",
+  "@expenseRememberItem": {},
+  "expenseTotalField": "মোট টাকা",
+  "@expenseTotalField": {},
+  "expenseTotalLabel": "মোট",
+  "@expenseTotalLabel": {},
+  "expenseQtyPriceSection": "অথবা পরিমাণ ও প্রতি এককের দাম লিখুন",
+  "@expenseQtyPriceSection": {},
+  "expenseQtyField": "পরিমাণ",
+  "@expenseQtyField": {},
+  "expenseUnitLabel": "একক",
+  "@expenseUnitLabel": {},
+  "expenseUnitPriceField": "প্রতি এককের দাম",
+  "@expenseUnitPriceField": {},
+  "expenseUnitPriceHint": "সর্বশেষ দাম: {price}",
+  "@expenseUnitPriceHint": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseFundingLabel": "কে টাকা দিয়েছে?",
+  "@expenseFundingLabel": {},
+  "expenseFundingFund": "পরিবারের তহবিল থেকে",
+  "@expenseFundingFund": {},
+  "expenseFundingReimbursable": "সদস্য দিয়েছে, ফেরত পাবে",
+  "@expenseFundingReimbursable": {},
+  "expenseFundingPersonal": "সদস্য নিজের টাকায় দিয়েছে, ফেরত নয়",
+  "@expenseFundingPersonal": {},
+  "expensePaidByLabel": "যিনি দিয়েছেন",
+  "@expensePaidByLabel": {},
+  "expenseMoreSection": "আরও তথ্য",
+  "@expenseMoreSection": {},
+  "expenseShopField": "দোকান",
+  "@expenseShopField": {},
+  "expenseNoteField": "নোট",
+  "@expenseNoteField": {},
+  "expensePurchaserLabel": "যিনি কিনেছেন",
+  "@expensePurchaserLabel": {},
+  "expenseSaveAddAnother": "সংরক্ষণ করে আরেকটি যোগ করুন",
+  "@expenseSaveAddAnother": {},
+  "expenseSaved": "খরচ সংরক্ষণ হয়েছে",
+  "@expenseSaved": {},
+  "expenseUpdated": "খরচ হালনাগাদ হয়েছে",
+  "@expenseUpdated": {},
+  "expenseUnknownMember": "একজন সদস্য",
+  "@expenseUnknownMember": {},
+  "expenseDuplicateTitle": "মনে হচ্ছে একই খরচ আগেই যোগ হয়েছে",
+  "@expenseDuplicateTitle": {},
+  "expenseDuplicateMessage": "{item} একই টাকায় কয়েক মিনিট আগে যোগ করা হয়েছে।",
+  "@expenseDuplicateMessage": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDuplicateSaveAnyway": "তবুও সংরক্ষণ করুন",
+  "@expenseDuplicateSaveAnyway": {},
+  "tripTitle": "বাজার ট্রিপ",
+  "@tripTitle": {},
+  "tripAddLine": "পণ্য যোগ করুন",
+  "@tripAddLine": {},
+  "tripLineSheetTitle": "ট্রিপে পণ্য যোগ করুন",
+  "@tripLineSheetTitle": {},
+  "tripLineSheetSave": "ট্রিপে যোগ করুন",
+  "@tripLineSheetSave": {},
+  "tripLinesCount": "পণ্য: {count}",
+  "@tripLinesCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "tripEmpty": "এখনো কোনো পণ্য নেই। প্রথম পণ্যটি যোগ করুন।",
+  "@tripEmpty": {},
+  "tripTotalLabel": "ট্রিপের মোট",
+  "@tripTotalLabel": {},
+  "tripSaveAll": "সব সংরক্ষণ করুন",
+  "@tripSaveAll": {},
+  "tripSaved": "ট্রিপ সংরক্ষণ হয়েছে",
+  "@tripSaved": {},
+  "tripLineRemoved": "পণ্য সরানো হয়েছে",
+  "@tripLineRemoved": {},
+  "tripLimitReached": "একটি ট্রিপে সর্বোচ্চ ৪০টি পণ্য থাকতে পারে।",
+  "@tripLimitReached": {},
+  "expenseListTitle": "খরচের তালিকা",
+  "@expenseListTitle": {},
+  "expenseListFilteredTotal": "এই তালিকার মোট",
+  "@expenseListFilteredTotal": {},
+  "expenseListEmptyTitle": "এই মাসে কোনো খরচ নেই",
+  "@expenseListEmptyTitle": {},
+  "expenseListEmptyMessage": "প্রথম খরচ যোগ করলে এখানে দেখা যাবে।",
+  "@expenseListEmptyMessage": {},
+  "expenseListFilteredEmptyTitle": "ফিল্টারের সাথে মেলে এমন কিছু নেই",
+  "@expenseListFilteredEmptyTitle": {},
+  "expenseListFilteredEmptyMessage": "সব খরচ দেখতে ফিল্টার মুছে ফেলুন।",
+  "@expenseListFilteredEmptyMessage": {},
+  "expenseListLocked": "এই মাস বন্ধ। এন্ট্রি শুধু দেখা যাবে।",
+  "@expenseListLocked": {},
+  "expenseListRefresh": "রিফ্রেশ",
+  "@expenseListRefresh": {},
+  "expenseShowMore": "আরও দেখান",
+  "@expenseShowMore": {},
+  "expenseRowDeleted": "মুছে ফেলা",
+  "@expenseRowDeleted": {},
+  "expenseRowTrip": "ট্রিপ",
+  "@expenseRowTrip": {},
+  "expenseFilterTitle": "ফিল্টার",
+  "@expenseFilterTitle": {},
+  "expenseFilterRange": "তারিখের সীমা",
+  "@expenseFilterRange": {},
+  "expenseFilterRangeActive": "{start} থেকে {end}",
+  "@expenseFilterRangeActive": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseRangeAll": "পুরো মাস",
+  "@expenseRangeAll": {},
+  "expenseRangeToday": "আজ",
+  "@expenseRangeToday": {},
+  "expenseRangeYesterday": "গতকাল",
+  "@expenseRangeYesterday": {},
+  "expenseRangeLast7": "গত ৭ দিন",
+  "@expenseRangeLast7": {},
+  "expenseRangeThisWeek": "এই সপ্তাহ",
+  "@expenseRangeThisWeek": {},
+  "expenseRangeThisMonth": "এই মাস",
+  "@expenseRangeThisMonth": {},
+  "expenseRangeLastMonth": "গত মাস",
+  "@expenseRangeLastMonth": {},
+  "expenseRangeThisYear": "এই বছর",
+  "@expenseRangeThisYear": {},
+  "expenseRangeCustom": "তারিখ বেছে নিন",
+  "@expenseRangeCustom": {},
+  "expenseFilterCategory": "ক্যাটেগরি",
+  "@expenseFilterCategory": {},
+  "expenseFilterItem": "পণ্য",
+  "@expenseFilterItem": {},
+  "expenseFilterMember": "সদস্য",
+  "@expenseFilterMember": {},
+  "expenseFilterFunding": "টাকার উৎস",
+  "@expenseFilterFunding": {},
+  "expenseFilterAny": "যেকোনো",
+  "@expenseFilterAny": {},
+  "expenseFilterShowDeleted": "মুছে ফেলা দেখান",
+  "@expenseFilterShowDeleted": {},
+  "expenseFilterReset": "ফিল্টার মুছুন",
+  "@expenseFilterReset": {},
+  "expenseDetailTitle": "খরচ",
+  "@expenseDetailTitle": {},
+  "expenseDetailAddedBy": "যোগ করেছেন",
+  "@expenseDetailAddedBy": {},
+  "expenseDetailPayment": "টাকার উৎস ও হিসাব",
+  "@expenseDetailPayment": {},
+  "expenseNotYoursMessage": "আপনি শুধু নিজের খরচ পরিবর্তন করতে পারবেন।",
+  "@expenseNotYoursMessage": {},
+  "expenseLedgerFund": "পরিবারের তহবিল থেকে দেওয়া হয়েছে",
+  "@expenseLedgerFund": {},
+  "expenseLedgerPersonal": "{name} নিজের টাকায় দিয়েছেন, ফেরত নেই",
+  "@expenseLedgerPersonal": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerPending": "{name} দিয়েছেন। {amount} ফেরত দেওয়া বাকি।",
+  "@expenseLedgerPending": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerPartial": "{name} দিয়েছেন। {total} এর মধ্যে {settled} ফেরত দেওয়া হয়েছে।",
+  "@expenseLedgerPartial": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "settled": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerSettled": "{name} দিয়েছেন। পুরোটা ফেরত দেওয়া হয়েছে।",
+  "@expenseLedgerSettled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseLedgerVoided": "খরচের সাথে ফেরতও বাতিল হয়েছে।",
+  "@expenseLedgerVoided": {},
+  "expenseDeleteTitle": "এই খরচ মুছে ফেলবেন?",
+  "@expenseDeleteTitle": {},
+  "expenseDeleteMessage": "{name} মোট থেকে বাদ যাবে। সাথে সাথে পূর্বাবস্থায় ফেরাতে পারবেন।",
+  "@expenseDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseDeleted": "খরচ মুছে ফেলা হয়েছে",
+  "@expenseDeleted": {},
+  "expenseRestore": "ফিরিয়ে আনুন",
+  "@expenseRestore": {},
+  "expenseRestored": "খরচ ফিরিয়ে আনা হয়েছে",
+  "@expenseRestored": {},
+  "expenseHistoryTitle": "পরিবর্তনের ইতিহাস",
+  "@expenseHistoryTitle": {},
+  "expenseHistoryEmpty": "এখনো কোনো পরিবর্তন নেই।",
+  "@expenseHistoryEmpty": {},
+  "expenseHistoryEntry": "{who} {date} তারিখে পরিবর্তন করেছেন",
+  "@expenseHistoryEntry": {
+    "placeholders": {
+      "who": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "expenseHistoryWas": "{field} আগে ছিল: {value}",
+  "@expenseHistoryWas": {
+    "placeholders": {
+      "field": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "catalogTitle": "পণ্য ও ক্যাটেগরি",
+  "@catalogTitle": {},
+  "catalogTabCategories": "ক্যাটেগরি",
+  "@catalogTabCategories": {},
+  "catalogTabItems": "পণ্য",
+  "@catalogTabItems": {},
+  "catalogAdd": "যোগ করুন",
+  "@catalogAdd": {},
+  "catalogAddCategory": "ক্যাটেগরি যোগ করুন",
+  "@catalogAddCategory": {},
+  "catalogEditCategory": "ক্যাটেগরি সম্পাদনা",
+  "@catalogEditCategory": {},
+  "catalogAddItem": "পণ্য যোগ করুন",
+  "@catalogAddItem": {},
+  "catalogEditItem": "পণ্য সম্পাদনা",
+  "@catalogEditItem": {},
+  "catalogCategoryName": "ক্যাটেগরির নাম",
+  "@catalogCategoryName": {},
+  "catalogNameBn": "বাংলা নাম",
+  "@catalogNameBn": {},
+  "catalogNameEn": "ইংরেজি নাম (ঐচ্ছিক)",
+  "@catalogNameEn": {},
+  "catalogEmoji": "ইমোজি (ঐচ্ছিক)",
+  "@catalogEmoji": {},
+  "catalogColour": "রং",
+  "@catalogColour": {},
+  "catalogColourSemantics": "রং {number}",
+  "@catalogColourSemantics": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "catalogActive": "তালিকায় দেখানো হবে",
+  "@catalogActive": {},
+  "catalogActiveHint": "মুছে না ফেলে লুকাতে বন্ধ করুন।",
+  "@catalogActiveHint": {},
+  "catalogHidden": "লুকানো",
+  "@catalogHidden": {},
+  "catalogReorder": "সাজাতে টেনে আনুন",
+  "@catalogReorder": {},
+  "catalogReadOnly": "আপনি এটি দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন পরিবর্তন করতে পারবেন।",
+  "@catalogReadOnly": {},
+  "catalogCategoriesEmpty": "এখনো কোনো ক্যাটেগরি নেই",
+  "@catalogCategoriesEmpty": {},
+  "catalogItemsEmpty": "কোনো পণ্য পাওয়া যায়নি",
+  "@catalogItemsEmpty": {},
+  "catalogSearch": "পণ্য খুঁজুন",
+  "@catalogSearch": {},
+  "catalogAllCategories": "সব",
+  "@catalogAllCategories": {},
+  "catalogDefaultUnit": "সাধারণ একক",
+  "@catalogDefaultUnit": {},
+  "catalogAliases": "অন্য বানান (খোঁজার জন্য)",
+  "@catalogAliases": {},
+  "catalogAliasField": "একটি বানান যোগ করুন",
+  "@catalogAliasField": {},
+  "catalogAliasAdd": "বানান যোগ করুন",
+  "@catalogAliasAdd": {},
+  "catalogAliasLimit": "সর্বোচ্চ ১০টি বানান দেওয়া যাবে।",
+  "@catalogAliasLimit": {},
+  "bazarSettingsWeekStart": "সপ্তাহ শুরু",
+  "@bazarSettingsWeekStart": {},
+  "bazarSettingsTarget": "মাসিক পারিবারিক চাঁদার লক্ষ্য",
+  "@bazarSettingsTarget": {},
+  "bazarSettingsDueDay": "চাঁদা দেওয়ার তারিখ (প্রতি মাসে)",
+  "@bazarSettingsDueDay": {},
+  "bazarSettingsAlerts": "বাজেট সতর্কতা (বাজেটের শতাংশ)",
+  "@bazarSettingsAlerts": {},
+  "bazarSettingsWarnAt": "সতর্ক করুন",
+  "@bazarSettingsWarnAt": {},
+  "bazarSettingsExceededAt": "সীমা ছাড়ালে",
+  "@bazarSettingsExceededAt": {},
+  "bazarSettingsThresholdRange": "১ থেকে ২০০ এর মধ্যে পূর্ণ সংখ্যা দিন।",
+  "@bazarSettingsThresholdRange": {},
+  "bazarSettingsThresholdOrder": "সতর্কতার শতাংশ সীমা ছাড়ানোর শতাংশের চেয়ে কম হতে হবে।",
+  "@bazarSettingsThresholdOrder": {},
+  "bazarSettingsFundStart": "তহবিল শুরুর মাস",
+  "@bazarSettingsFundStart": {},
+  "bazarSettingsFundStartUnset": "শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।",
+  "@bazarSettingsFundStartUnset": {}
 }

@@ -1,7 +1,9 @@
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/bazar/fund/domain/month_closing.dart';
 import 'package:family_hub/features/bazar/fund/presentation/fund_providers.dart';
+import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:family_hub/shared/widgets/person_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Today in the family's time zone (H12).  Never `DateTime.now()`.
@@ -36,3 +38,20 @@ final monthLockedProvider = Provider.family<bool, MonthKey>(
   (ref, month) =>
       MonthLocks.isLocked(month, ref.watch(monthClosingMapProvider)),
 );
+
+/// The active members as picker options (payer, purchaser, filter).
+///
+/// Sorted by display name so the order is stable between screens.
+final bazarMemberOptionsProvider = Provider<List<PersonOption>>((ref) {
+  final members = ref.watch(membersProvider).value ?? const <Member>[];
+  final options = <PersonOption>[
+    for (final member in members)
+      if (member.isActive)
+        PersonOption(
+          id: member.uid,
+          name: member.displayName,
+          avatarKey: member.avatarKey,
+        ),
+  ]..sort((a, b) => a.name.compareTo(b.name));
+  return options;
+});

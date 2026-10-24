@@ -1383,4 +1383,426 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get personPickerNone => 'কেউ নয়';
+
+  @override
+  String get actionUndo => 'পূর্বাবস্থায় ফেরান';
+
+  @override
+  String get bazarErrExpenseDeleted => 'এই খরচটি মুছে ফেলা হয়েছে। আগে ফিরিয়ে আনুন।';
+
+  @override
+  String get expenseAddTitle => 'খরচ যোগ করুন';
+
+  @override
+  String get expenseEditTitle => 'খরচ সম্পাদনা';
+
+  @override
+  String get expenseMenuTrip => 'বাজার ট্রিপ (অনেক পণ্য)';
+
+  @override
+  String get expenseDateLabel => 'তারিখ';
+
+  @override
+  String get expenseItemLabel => 'পণ্য';
+
+  @override
+  String get expenseItemHint => 'পণ্যের নাম লিখুন';
+
+  @override
+  String expenseAddNewItem(String name) {
+    return '$name নতুন পণ্য হিসেবে যোগ করুন';
+  }
+
+  @override
+  String get expenseCategoryLabel => 'ক্যাটেগরি';
+
+  @override
+  String get expenseRememberItem => 'পণ্যটি মনে রাখুন';
+
+  @override
+  String get expenseTotalField => 'মোট টাকা';
+
+  @override
+  String get expenseTotalLabel => 'মোট';
+
+  @override
+  String get expenseQtyPriceSection => 'অথবা পরিমাণ ও প্রতি এককের দাম লিখুন';
+
+  @override
+  String get expenseQtyField => 'পরিমাণ';
+
+  @override
+  String get expenseUnitLabel => 'একক';
+
+  @override
+  String get expenseUnitPriceField => 'প্রতি এককের দাম';
+
+  @override
+  String expenseUnitPriceHint(String price) {
+    return 'সর্বশেষ দাম: $price';
+  }
+
+  @override
+  String get expenseFundingLabel => 'কে টাকা দিয়েছে?';
+
+  @override
+  String get expenseFundingFund => 'পরিবারের তহবিল থেকে';
+
+  @override
+  String get expenseFundingReimbursable => 'সদস্য দিয়েছে, ফেরত পাবে';
+
+  @override
+  String get expenseFundingPersonal => 'সদস্য নিজের টাকায় দিয়েছে, ফেরত নয়';
+
+  @override
+  String get expensePaidByLabel => 'যিনি দিয়েছেন';
+
+  @override
+  String get expenseMoreSection => 'আরও তথ্য';
+
+  @override
+  String get expenseShopField => 'দোকান';
+
+  @override
+  String get expenseNoteField => 'নোট';
+
+  @override
+  String get expensePurchaserLabel => 'যিনি কিনেছেন';
+
+  @override
+  String get expenseSaveAddAnother => 'সংরক্ষণ করে আরেকটি যোগ করুন';
+
+  @override
+  String get expenseSaved => 'খরচ সংরক্ষণ হয়েছে';
+
+  @override
+  String get expenseUpdated => 'খরচ হালনাগাদ হয়েছে';
+
+  @override
+  String get expenseUnknownMember => 'একজন সদস্য';
+
+  @override
+  String get expenseDuplicateTitle => 'মনে হচ্ছে একই খরচ আগেই যোগ হয়েছে';
+
+  @override
+  String expenseDuplicateMessage(String item) {
+    return '$item একই টাকায় কয়েক মিনিট আগে যোগ করা হয়েছে।';
+  }
+
+  @override
+  String get expenseDuplicateSaveAnyway => 'তবুও সংরক্ষণ করুন';
+
+  @override
+  String get tripTitle => 'বাজার ট্রিপ';
+
+  @override
+  String get tripAddLine => 'পণ্য যোগ করুন';
+
+  @override
+  String get tripLineSheetTitle => 'ট্রিপে পণ্য যোগ করুন';
+
+  @override
+  String get tripLineSheetSave => 'ট্রিপে যোগ করুন';
+
+  @override
+  String tripLinesCount(String count) {
+    return 'পণ্য: $count';
+  }
+
+  @override
+  String get tripEmpty => 'এখনো কোনো পণ্য নেই। প্রথম পণ্যটি যোগ করুন।';
+
+  @override
+  String get tripTotalLabel => 'ট্রিপের মোট';
+
+  @override
+  String get tripSaveAll => 'সব সংরক্ষণ করুন';
+
+  @override
+  String get tripSaved => 'ট্রিপ সংরক্ষণ হয়েছে';
+
+  @override
+  String get tripLineRemoved => 'পণ্য সরানো হয়েছে';
+
+  @override
+  String get tripLimitReached => 'একটি ট্রিপে সর্বোচ্চ ৪০টি পণ্য থাকতে পারে।';
+
+  @override
+  String get expenseListTitle => 'খরচের তালিকা';
+
+  @override
+  String get expenseListFilteredTotal => 'এই তালিকার মোট';
+
+  @override
+  String get expenseListEmptyTitle => 'এই মাসে কোনো খরচ নেই';
+
+  @override
+  String get expenseListEmptyMessage => 'প্রথম খরচ যোগ করলে এখানে দেখা যাবে।';
+
+  @override
+  String get expenseListFilteredEmptyTitle => 'ফিল্টারের সাথে মেলে এমন কিছু নেই';
+
+  @override
+  String get expenseListFilteredEmptyMessage => 'সব খরচ দেখতে ফিল্টার মুছে ফেলুন।';
+
+  @override
+  String get expenseListLocked => 'এই মাস বন্ধ। এন্ট্রি শুধু দেখা যাবে।';
+
+  @override
+  String get expenseListRefresh => 'রিফ্রেশ';
+
+  @override
+  String get expenseShowMore => 'আরও দেখান';
+
+  @override
+  String get expenseRowDeleted => 'মুছে ফেলা';
+
+  @override
+  String get expenseRowTrip => 'ট্রিপ';
+
+  @override
+  String get expenseFilterTitle => 'ফিল্টার';
+
+  @override
+  String get expenseFilterRange => 'তারিখের সীমা';
+
+  @override
+  String expenseFilterRangeActive(String start, String end) {
+    return '$start থেকে $end';
+  }
+
+  @override
+  String get expenseRangeAll => 'পুরো মাস';
+
+  @override
+  String get expenseRangeToday => 'আজ';
+
+  @override
+  String get expenseRangeYesterday => 'গতকাল';
+
+  @override
+  String get expenseRangeLast7 => 'গত ৭ দিন';
+
+  @override
+  String get expenseRangeThisWeek => 'এই সপ্তাহ';
+
+  @override
+  String get expenseRangeThisMonth => 'এই মাস';
+
+  @override
+  String get expenseRangeLastMonth => 'গত মাস';
+
+  @override
+  String get expenseRangeThisYear => 'এই বছর';
+
+  @override
+  String get expenseRangeCustom => 'তারিখ বেছে নিন';
+
+  @override
+  String get expenseFilterCategory => 'ক্যাটেগরি';
+
+  @override
+  String get expenseFilterItem => 'পণ্য';
+
+  @override
+  String get expenseFilterMember => 'সদস্য';
+
+  @override
+  String get expenseFilterFunding => 'টাকার উৎস';
+
+  @override
+  String get expenseFilterAny => 'যেকোনো';
+
+  @override
+  String get expenseFilterShowDeleted => 'মুছে ফেলা দেখান';
+
+  @override
+  String get expenseFilterReset => 'ফিল্টার মুছুন';
+
+  @override
+  String get expenseDetailTitle => 'খরচ';
+
+  @override
+  String get expenseDetailAddedBy => 'যোগ করেছেন';
+
+  @override
+  String get expenseDetailPayment => 'টাকার উৎস ও হিসাব';
+
+  @override
+  String get expenseNotYoursMessage => 'আপনি শুধু নিজের খরচ পরিবর্তন করতে পারবেন।';
+
+  @override
+  String get expenseLedgerFund => 'পরিবারের তহবিল থেকে দেওয়া হয়েছে';
+
+  @override
+  String expenseLedgerPersonal(String name) {
+    return '$name নিজের টাকায় দিয়েছেন, ফেরত নেই';
+  }
+
+  @override
+  String expenseLedgerPending(String name, String amount) {
+    return '$name দিয়েছেন। $amount ফেরত দেওয়া বাকি।';
+  }
+
+  @override
+  String expenseLedgerPartial(String name, String settled, String total) {
+    return '$name দিয়েছেন। $total এর মধ্যে $settled ফেরত দেওয়া হয়েছে।';
+  }
+
+  @override
+  String expenseLedgerSettled(String name) {
+    return '$name দিয়েছেন। পুরোটা ফেরত দেওয়া হয়েছে।';
+  }
+
+  @override
+  String get expenseLedgerVoided => 'খরচের সাথে ফেরতও বাতিল হয়েছে।';
+
+  @override
+  String get expenseDeleteTitle => 'এই খরচ মুছে ফেলবেন?';
+
+  @override
+  String expenseDeleteMessage(String name) {
+    return '$name মোট থেকে বাদ যাবে। সাথে সাথে পূর্বাবস্থায় ফেরাতে পারবেন।';
+  }
+
+  @override
+  String get expenseDeleted => 'খরচ মুছে ফেলা হয়েছে';
+
+  @override
+  String get expenseRestore => 'ফিরিয়ে আনুন';
+
+  @override
+  String get expenseRestored => 'খরচ ফিরিয়ে আনা হয়েছে';
+
+  @override
+  String get expenseHistoryTitle => 'পরিবর্তনের ইতিহাস';
+
+  @override
+  String get expenseHistoryEmpty => 'এখনো কোনো পরিবর্তন নেই।';
+
+  @override
+  String expenseHistoryEntry(String who, String date) {
+    return '$who $date তারিখে পরিবর্তন করেছেন';
+  }
+
+  @override
+  String expenseHistoryWas(String field, String value) {
+    return '$field আগে ছিল: $value';
+  }
+
+  @override
+  String get catalogTitle => 'পণ্য ও ক্যাটেগরি';
+
+  @override
+  String get catalogTabCategories => 'ক্যাটেগরি';
+
+  @override
+  String get catalogTabItems => 'পণ্য';
+
+  @override
+  String get catalogAdd => 'যোগ করুন';
+
+  @override
+  String get catalogAddCategory => 'ক্যাটেগরি যোগ করুন';
+
+  @override
+  String get catalogEditCategory => 'ক্যাটেগরি সম্পাদনা';
+
+  @override
+  String get catalogAddItem => 'পণ্য যোগ করুন';
+
+  @override
+  String get catalogEditItem => 'পণ্য সম্পাদনা';
+
+  @override
+  String get catalogCategoryName => 'ক্যাটেগরির নাম';
+
+  @override
+  String get catalogNameBn => 'বাংলা নাম';
+
+  @override
+  String get catalogNameEn => 'ইংরেজি নাম (ঐচ্ছিক)';
+
+  @override
+  String get catalogEmoji => 'ইমোজি (ঐচ্ছিক)';
+
+  @override
+  String get catalogColour => 'রং';
+
+  @override
+  String catalogColourSemantics(int number) {
+    return 'রং $number';
+  }
+
+  @override
+  String get catalogActive => 'তালিকায় দেখানো হবে';
+
+  @override
+  String get catalogActiveHint => 'মুছে না ফেলে লুকাতে বন্ধ করুন।';
+
+  @override
+  String get catalogHidden => 'লুকানো';
+
+  @override
+  String get catalogReorder => 'সাজাতে টেনে আনুন';
+
+  @override
+  String get catalogReadOnly => 'আপনি এটি দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন পরিবর্তন করতে পারবেন।';
+
+  @override
+  String get catalogCategoriesEmpty => 'এখনো কোনো ক্যাটেগরি নেই';
+
+  @override
+  String get catalogItemsEmpty => 'কোনো পণ্য পাওয়া যায়নি';
+
+  @override
+  String get catalogSearch => 'পণ্য খুঁজুন';
+
+  @override
+  String get catalogAllCategories => 'সব';
+
+  @override
+  String get catalogDefaultUnit => 'সাধারণ একক';
+
+  @override
+  String get catalogAliases => 'অন্য বানান (খোঁজার জন্য)';
+
+  @override
+  String get catalogAliasField => 'একটি বানান যোগ করুন';
+
+  @override
+  String get catalogAliasAdd => 'বানান যোগ করুন';
+
+  @override
+  String get catalogAliasLimit => 'সর্বোচ্চ ১০টি বানান দেওয়া যাবে।';
+
+  @override
+  String get bazarSettingsWeekStart => 'সপ্তাহ শুরু';
+
+  @override
+  String get bazarSettingsTarget => 'মাসিক পারিবারিক চাঁদার লক্ষ্য';
+
+  @override
+  String get bazarSettingsDueDay => 'চাঁদা দেওয়ার তারিখ (প্রতি মাসে)';
+
+  @override
+  String get bazarSettingsAlerts => 'বাজেট সতর্কতা (বাজেটের শতাংশ)';
+
+  @override
+  String get bazarSettingsWarnAt => 'সতর্ক করুন';
+
+  @override
+  String get bazarSettingsExceededAt => 'সীমা ছাড়ালে';
+
+  @override
+  String get bazarSettingsThresholdRange => '১ থেকে ২০০ এর মধ্যে পূর্ণ সংখ্যা দিন।';
+
+  @override
+  String get bazarSettingsThresholdOrder => 'সতর্কতার শতাংশ সীমা ছাড়ানোর শতাংশের চেয়ে কম হতে হবে।';
+
+  @override
+  String get bazarSettingsFundStart => 'তহবিল শুরুর মাস';
+
+  @override
+  String get bazarSettingsFundStartUnset => 'শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।';
 }

@@ -2463,6 +2463,798 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'কেউ নয়'**
   String get personPickerNone;
+
+  /// No description provided for @actionUndo.
+  ///
+  /// In bn, this message translates to:
+  /// **'পূর্বাবস্থায় ফেরান'**
+  String get actionUndo;
+
+  /// No description provided for @bazarErrExpenseDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই খরচটি মুছে ফেলা হয়েছে। আগে ফিরিয়ে আনুন।'**
+  String get bazarErrExpenseDeleted;
+
+  /// No description provided for @expenseAddTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ যোগ করুন'**
+  String get expenseAddTitle;
+
+  /// No description provided for @expenseEditTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ সম্পাদনা'**
+  String get expenseEditTitle;
+
+  /// No description provided for @expenseMenuTrip.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ট্রিপ (অনেক পণ্য)'**
+  String get expenseMenuTrip;
+
+  /// No description provided for @expenseDateLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখ'**
+  String get expenseDateLabel;
+
+  /// No description provided for @expenseItemLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য'**
+  String get expenseItemLabel;
+
+  /// No description provided for @expenseItemHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্যের নাম লিখুন'**
+  String get expenseItemHint;
+
+  /// No description provided for @expenseAddNewItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} নতুন পণ্য হিসেবে যোগ করুন'**
+  String expenseAddNewItem(String name);
+
+  /// No description provided for @expenseCategoryLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি'**
+  String get expenseCategoryLabel;
+
+  /// No description provided for @expenseRememberItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্যটি মনে রাখুন'**
+  String get expenseRememberItem;
+
+  /// No description provided for @expenseTotalField.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট টাকা'**
+  String get expenseTotalField;
+
+  /// No description provided for @expenseTotalLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট'**
+  String get expenseTotalLabel;
+
+  /// No description provided for @expenseQtyPriceSection.
+  ///
+  /// In bn, this message translates to:
+  /// **'অথবা পরিমাণ ও প্রতি এককের দাম লিখুন'**
+  String get expenseQtyPriceSection;
+
+  /// No description provided for @expenseQtyField.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিমাণ'**
+  String get expenseQtyField;
+
+  /// No description provided for @expenseUnitLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'একক'**
+  String get expenseUnitLabel;
+
+  /// No description provided for @expenseUnitPriceField.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতি এককের দাম'**
+  String get expenseUnitPriceField;
+
+  /// No description provided for @expenseUnitPriceHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বশেষ দাম: {price}'**
+  String expenseUnitPriceHint(String price);
+
+  /// No description provided for @expenseFundingLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'কে টাকা দিয়েছে?'**
+  String get expenseFundingLabel;
+
+  /// No description provided for @expenseFundingFund.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের তহবিল থেকে'**
+  String get expenseFundingFund;
+
+  /// No description provided for @expenseFundingReimbursable.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য দিয়েছে, ফেরত পাবে'**
+  String get expenseFundingReimbursable;
+
+  /// No description provided for @expenseFundingPersonal.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য নিজের টাকায় দিয়েছে, ফেরত নয়'**
+  String get expenseFundingPersonal;
+
+  /// No description provided for @expensePaidByLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'যিনি দিয়েছেন'**
+  String get expensePaidByLabel;
+
+  /// No description provided for @expenseMoreSection.
+  ///
+  /// In bn, this message translates to:
+  /// **'আরও তথ্য'**
+  String get expenseMoreSection;
+
+  /// No description provided for @expenseShopField.
+  ///
+  /// In bn, this message translates to:
+  /// **'দোকান'**
+  String get expenseShopField;
+
+  /// No description provided for @expenseNoteField.
+  ///
+  /// In bn, this message translates to:
+  /// **'নোট'**
+  String get expenseNoteField;
+
+  /// No description provided for @expensePurchaserLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'যিনি কিনেছেন'**
+  String get expensePurchaserLabel;
+
+  /// No description provided for @expenseSaveAddAnother.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষণ করে আরেকটি যোগ করুন'**
+  String get expenseSaveAddAnother;
+
+  /// No description provided for @expenseSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ সংরক্ষণ হয়েছে'**
+  String get expenseSaved;
+
+  /// No description provided for @expenseUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ হালনাগাদ হয়েছে'**
+  String get expenseUpdated;
+
+  /// No description provided for @expenseUnknownMember.
+  ///
+  /// In bn, this message translates to:
+  /// **'একজন সদস্য'**
+  String get expenseUnknownMember;
+
+  /// No description provided for @expenseDuplicateTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'মনে হচ্ছে একই খরচ আগেই যোগ হয়েছে'**
+  String get expenseDuplicateTitle;
+
+  /// No description provided for @expenseDuplicateMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'{item} একই টাকায় কয়েক মিনিট আগে যোগ করা হয়েছে।'**
+  String expenseDuplicateMessage(String item);
+
+  /// No description provided for @expenseDuplicateSaveAnyway.
+  ///
+  /// In bn, this message translates to:
+  /// **'তবুও সংরক্ষণ করুন'**
+  String get expenseDuplicateSaveAnyway;
+
+  /// No description provided for @tripTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ট্রিপ'**
+  String get tripTitle;
+
+  /// No description provided for @tripAddLine.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য যোগ করুন'**
+  String get tripAddLine;
+
+  /// No description provided for @tripLineSheetTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপে পণ্য যোগ করুন'**
+  String get tripLineSheetTitle;
+
+  /// No description provided for @tripLineSheetSave.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপে যোগ করুন'**
+  String get tripLineSheetSave;
+
+  /// No description provided for @tripLinesCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য: {count}'**
+  String tripLinesCount(String count);
+
+  /// No description provided for @tripEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো পণ্য নেই। প্রথম পণ্যটি যোগ করুন।'**
+  String get tripEmpty;
+
+  /// No description provided for @tripTotalLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপের মোট'**
+  String get tripTotalLabel;
+
+  /// No description provided for @tripSaveAll.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব সংরক্ষণ করুন'**
+  String get tripSaveAll;
+
+  /// No description provided for @tripSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপ সংরক্ষণ হয়েছে'**
+  String get tripSaved;
+
+  /// No description provided for @tripLineRemoved.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য সরানো হয়েছে'**
+  String get tripLineRemoved;
+
+  /// No description provided for @tripLimitReached.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি ট্রিপে সর্বোচ্চ ৪০টি পণ্য থাকতে পারে।'**
+  String get tripLimitReached;
+
+  /// No description provided for @expenseListTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচের তালিকা'**
+  String get expenseListTitle;
+
+  /// No description provided for @expenseListFilteredTotal.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই তালিকার মোট'**
+  String get expenseListFilteredTotal;
+
+  /// No description provided for @expenseListEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসে কোনো খরচ নেই'**
+  String get expenseListEmptyTitle;
+
+  /// No description provided for @expenseListEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রথম খরচ যোগ করলে এখানে দেখা যাবে।'**
+  String get expenseListEmptyMessage;
+
+  /// No description provided for @expenseListFilteredEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টারের সাথে মেলে এমন কিছু নেই'**
+  String get expenseListFilteredEmptyTitle;
+
+  /// No description provided for @expenseListFilteredEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব খরচ দেখতে ফিল্টার মুছে ফেলুন।'**
+  String get expenseListFilteredEmptyMessage;
+
+  /// No description provided for @expenseListLocked.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস বন্ধ। এন্ট্রি শুধু দেখা যাবে।'**
+  String get expenseListLocked;
+
+  /// No description provided for @expenseListRefresh.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিফ্রেশ'**
+  String get expenseListRefresh;
+
+  /// No description provided for @expenseShowMore.
+  ///
+  /// In bn, this message translates to:
+  /// **'আরও দেখান'**
+  String get expenseShowMore;
+
+  /// No description provided for @expenseRowDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে ফেলা'**
+  String get expenseRowDeleted;
+
+  /// No description provided for @expenseRowTrip.
+  ///
+  /// In bn, this message translates to:
+  /// **'ট্রিপ'**
+  String get expenseRowTrip;
+
+  /// No description provided for @expenseFilterTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টার'**
+  String get expenseFilterTitle;
+
+  /// No description provided for @expenseFilterRange.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখের সীমা'**
+  String get expenseFilterRange;
+
+  /// No description provided for @expenseFilterRangeActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'{start} থেকে {end}'**
+  String expenseFilterRangeActive(String start, String end);
+
+  /// No description provided for @expenseRangeAll.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুরো মাস'**
+  String get expenseRangeAll;
+
+  /// No description provided for @expenseRangeToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজ'**
+  String get expenseRangeToday;
+
+  /// No description provided for @expenseRangeYesterday.
+  ///
+  /// In bn, this message translates to:
+  /// **'গতকাল'**
+  String get expenseRangeYesterday;
+
+  /// No description provided for @expenseRangeLast7.
+  ///
+  /// In bn, this message translates to:
+  /// **'গত ৭ দিন'**
+  String get expenseRangeLast7;
+
+  /// No description provided for @expenseRangeThisWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সপ্তাহ'**
+  String get expenseRangeThisWeek;
+
+  /// No description provided for @expenseRangeThisMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস'**
+  String get expenseRangeThisMonth;
+
+  /// No description provided for @expenseRangeLastMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'গত মাস'**
+  String get expenseRangeLastMonth;
+
+  /// No description provided for @expenseRangeThisYear.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই বছর'**
+  String get expenseRangeThisYear;
+
+  /// No description provided for @expenseRangeCustom.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখ বেছে নিন'**
+  String get expenseRangeCustom;
+
+  /// No description provided for @expenseFilterCategory.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি'**
+  String get expenseFilterCategory;
+
+  /// No description provided for @expenseFilterItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য'**
+  String get expenseFilterItem;
+
+  /// No description provided for @expenseFilterMember.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য'**
+  String get expenseFilterMember;
+
+  /// No description provided for @expenseFilterFunding.
+  ///
+  /// In bn, this message translates to:
+  /// **'টাকার উৎস'**
+  String get expenseFilterFunding;
+
+  /// No description provided for @expenseFilterAny.
+  ///
+  /// In bn, this message translates to:
+  /// **'যেকোনো'**
+  String get expenseFilterAny;
+
+  /// No description provided for @expenseFilterShowDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে ফেলা দেখান'**
+  String get expenseFilterShowDeleted;
+
+  /// No description provided for @expenseFilterReset.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টার মুছুন'**
+  String get expenseFilterReset;
+
+  /// No description provided for @expenseDetailTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ'**
+  String get expenseDetailTitle;
+
+  /// No description provided for @expenseDetailAddedBy.
+  ///
+  /// In bn, this message translates to:
+  /// **'যোগ করেছেন'**
+  String get expenseDetailAddedBy;
+
+  /// No description provided for @expenseDetailPayment.
+  ///
+  /// In bn, this message translates to:
+  /// **'টাকার উৎস ও হিসাব'**
+  String get expenseDetailPayment;
+
+  /// No description provided for @expenseNotYoursMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি শুধু নিজের খরচ পরিবর্তন করতে পারবেন।'**
+  String get expenseNotYoursMessage;
+
+  /// No description provided for @expenseLedgerFund.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের তহবিল থেকে দেওয়া হয়েছে'**
+  String get expenseLedgerFund;
+
+  /// No description provided for @expenseLedgerPersonal.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} নিজের টাকায় দিয়েছেন, ফেরত নেই'**
+  String expenseLedgerPersonal(String name);
+
+  /// No description provided for @expenseLedgerPending.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} দিয়েছেন। {amount} ফেরত দেওয়া বাকি।'**
+  String expenseLedgerPending(String name, String amount);
+
+  /// No description provided for @expenseLedgerPartial.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} দিয়েছেন। {total} এর মধ্যে {settled} ফেরত দেওয়া হয়েছে।'**
+  String expenseLedgerPartial(String name, String settled, String total);
+
+  /// No description provided for @expenseLedgerSettled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} দিয়েছেন। পুরোটা ফেরত দেওয়া হয়েছে।'**
+  String expenseLedgerSettled(String name);
+
+  /// No description provided for @expenseLedgerVoided.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচের সাথে ফেরতও বাতিল হয়েছে।'**
+  String get expenseLedgerVoided;
+
+  /// No description provided for @expenseDeleteTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই খরচ মুছে ফেলবেন?'**
+  String get expenseDeleteTitle;
+
+  /// No description provided for @expenseDeleteMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} মোট থেকে বাদ যাবে। সাথে সাথে পূর্বাবস্থায় ফেরাতে পারবেন।'**
+  String expenseDeleteMessage(String name);
+
+  /// No description provided for @expenseDeleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ মুছে ফেলা হয়েছে'**
+  String get expenseDeleted;
+
+  /// No description provided for @expenseRestore.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিরিয়ে আনুন'**
+  String get expenseRestore;
+
+  /// No description provided for @expenseRestored.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ ফিরিয়ে আনা হয়েছে'**
+  String get expenseRestored;
+
+  /// No description provided for @expenseHistoryTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবর্তনের ইতিহাস'**
+  String get expenseHistoryTitle;
+
+  /// No description provided for @expenseHistoryEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো পরিবর্তন নেই।'**
+  String get expenseHistoryEmpty;
+
+  /// No description provided for @expenseHistoryEntry.
+  ///
+  /// In bn, this message translates to:
+  /// **'{who} {date} তারিখে পরিবর্তন করেছেন'**
+  String expenseHistoryEntry(String who, String date);
+
+  /// No description provided for @expenseHistoryWas.
+  ///
+  /// In bn, this message translates to:
+  /// **'{field} আগে ছিল: {value}'**
+  String expenseHistoryWas(String field, String value);
+
+  /// No description provided for @catalogTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য ও ক্যাটেগরি'**
+  String get catalogTitle;
+
+  /// No description provided for @catalogTabCategories.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি'**
+  String get catalogTabCategories;
+
+  /// No description provided for @catalogTabItems.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য'**
+  String get catalogTabItems;
+
+  /// No description provided for @catalogAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'যোগ করুন'**
+  String get catalogAdd;
+
+  /// No description provided for @catalogAddCategory.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি যোগ করুন'**
+  String get catalogAddCategory;
+
+  /// No description provided for @catalogEditCategory.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি সম্পাদনা'**
+  String get catalogEditCategory;
+
+  /// No description provided for @catalogAddItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য যোগ করুন'**
+  String get catalogAddItem;
+
+  /// No description provided for @catalogEditItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য সম্পাদনা'**
+  String get catalogEditItem;
+
+  /// No description provided for @catalogCategoryName.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরির নাম'**
+  String get catalogCategoryName;
+
+  /// No description provided for @catalogNameBn.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাংলা নাম'**
+  String get catalogNameBn;
+
+  /// No description provided for @catalogNameEn.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইংরেজি নাম (ঐচ্ছিক)'**
+  String get catalogNameEn;
+
+  /// No description provided for @catalogEmoji.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইমোজি (ঐচ্ছিক)'**
+  String get catalogEmoji;
+
+  /// No description provided for @catalogColour.
+  ///
+  /// In bn, this message translates to:
+  /// **'রং'**
+  String get catalogColour;
+
+  /// No description provided for @catalogColourSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'রং {number}'**
+  String catalogColourSemantics(int number);
+
+  /// No description provided for @catalogActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকায় দেখানো হবে'**
+  String get catalogActive;
+
+  /// No description provided for @catalogActiveHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'মুছে না ফেলে লুকাতে বন্ধ করুন।'**
+  String get catalogActiveHint;
+
+  /// No description provided for @catalogHidden.
+  ///
+  /// In bn, this message translates to:
+  /// **'লুকানো'**
+  String get catalogHidden;
+
+  /// No description provided for @catalogReorder.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাজাতে টেনে আনুন'**
+  String get catalogReorder;
+
+  /// No description provided for @catalogReadOnly.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি এটি দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন পরিবর্তন করতে পারবেন।'**
+  String get catalogReadOnly;
+
+  /// No description provided for @catalogCategoriesEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো ক্যাটেগরি নেই'**
+  String get catalogCategoriesEmpty;
+
+  /// No description provided for @catalogItemsEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো পণ্য পাওয়া যায়নি'**
+  String get catalogItemsEmpty;
+
+  /// No description provided for @catalogSearch.
+  ///
+  /// In bn, this message translates to:
+  /// **'পণ্য খুঁজুন'**
+  String get catalogSearch;
+
+  /// No description provided for @catalogAllCategories.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব'**
+  String get catalogAllCategories;
+
+  /// No description provided for @catalogDefaultUnit.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাধারণ একক'**
+  String get catalogDefaultUnit;
+
+  /// No description provided for @catalogAliases.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্য বানান (খোঁজার জন্য)'**
+  String get catalogAliases;
+
+  /// No description provided for @catalogAliasField.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি বানান যোগ করুন'**
+  String get catalogAliasField;
+
+  /// No description provided for @catalogAliasAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'বানান যোগ করুন'**
+  String get catalogAliasAdd;
+
+  /// No description provided for @catalogAliasLimit.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বোচ্চ ১০টি বানান দেওয়া যাবে।'**
+  String get catalogAliasLimit;
+
+  /// No description provided for @bazarSettingsWeekStart.
+  ///
+  /// In bn, this message translates to:
+  /// **'সপ্তাহ শুরু'**
+  String get bazarSettingsWeekStart;
+
+  /// No description provided for @bazarSettingsTarget.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসিক পারিবারিক চাঁদার লক্ষ্য'**
+  String get bazarSettingsTarget;
+
+  /// No description provided for @bazarSettingsDueDay.
+  ///
+  /// In bn, this message translates to:
+  /// **'চাঁদা দেওয়ার তারিখ (প্রতি মাসে)'**
+  String get bazarSettingsDueDay;
+
+  /// No description provided for @bazarSettingsAlerts.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট সতর্কতা (বাজেটের শতাংশ)'**
+  String get bazarSettingsAlerts;
+
+  /// No description provided for @bazarSettingsWarnAt.
+  ///
+  /// In bn, this message translates to:
+  /// **'সতর্ক করুন'**
+  String get bazarSettingsWarnAt;
+
+  /// No description provided for @bazarSettingsExceededAt.
+  ///
+  /// In bn, this message translates to:
+  /// **'সীমা ছাড়ালে'**
+  String get bazarSettingsExceededAt;
+
+  /// No description provided for @bazarSettingsThresholdRange.
+  ///
+  /// In bn, this message translates to:
+  /// **'১ থেকে ২০০ এর মধ্যে পূর্ণ সংখ্যা দিন।'**
+  String get bazarSettingsThresholdRange;
+
+  /// No description provided for @bazarSettingsThresholdOrder.
+  ///
+  /// In bn, this message translates to:
+  /// **'সতর্কতার শতাংশ সীমা ছাড়ানোর শতাংশের চেয়ে কম হতে হবে।'**
+  String get bazarSettingsThresholdOrder;
+
+  /// No description provided for @bazarSettingsFundStart.
+  ///
+  /// In bn, this message translates to:
+  /// **'তহবিল শুরুর মাস'**
+  String get bazarSettingsFundStart;
+
+  /// No description provided for @bazarSettingsFundStartUnset.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।'**
+  String get bazarSettingsFundStartUnset;
 }
 
 class _AppLocalizationsDelegate

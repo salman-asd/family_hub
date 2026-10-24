@@ -127,3 +127,12 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 - Paged range queries order by `(dateKey DESC, document id DESC)` and resume with `startAfter([dateKey, id])`.
 - New shared widgets (all in the gallery via `gallery_sections_p2.dart`): `MonthSwitcher`, `AmountField`, `TotalDisplay`, `ProgressBarStatus`, `DaySectionHeader`, `PersonPicker`, `CategoryBadge`. `AmountField` never parses; controllers use `Money.parse` / `Quantity.parse`.
 - ARB keys are added to `app_bn.arb`, `app_en.arb` AND the three generated files when no SDK is available; `flutter gen-l10n` must then show no diff.
+
+## Phase 2 additions (P2-13 to P2-16)
+- Entry forms (add/edit expense, trip line) read amounts only through `readAmountInput` (domain): quantity x unit price wins over a typed total, a lone quantity or price is an error, text is parsed with `Money.parse`/`Quantity.parse`.  Never parse in a widget.
+- A form controller generates its ids (`expenseId`, `eventId`, `newItemId`, trip and line ids) once, keeps them across failed saves, and only `Save and add another` makes new ones.
+- Lists are flattened with `buildExpenseListItems` and shown with `ListView.builder`; never build a day group as one big widget.
+- Catalog edits that are not covered by an Add/Update/Deactivate use case go through `ReactivateCategory`, `ReactivateItem`, `ReorderCategories`; the UI never calls `CatalogRepository` directly.
+- Every mutating control on the catalog and settings screens is hidden or disabled with `PermissionGate`/`ref.can(Permission.manageCatalogAndBudgets)`; people without it see a read-only banner.
+- Undo after a delete captures everything it needs (use case, ids, messenger) BEFORE the first `await`, so it keeps working after the screen closes.
+- New Bazar routes are nested under `/bazar`; `expenses/new` is declared before `expenses/:id`.

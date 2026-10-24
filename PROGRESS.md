@@ -712,6 +712,36 @@ No Flutter/Dart SDK, Java or emulator was available (downloads blocked). Run fir
 | P2-10 | Expense/fund/advance data layer, rules, indexes | Done (audited; 2 fixes); rules suite unverified | `lib/features/bazar/*/data/`, `firebase/rules_test/{expenses,fund,advances}.test.mjs` |
 | P2-11 | Bazar providers (sync layer) | Written, not run | `lib/features/bazar/**/presentation/*_providers.dart`, `test/features/bazar/presentation/bazar_providers_test.dart` |
 | P2-12 | Shared widgets + gallery | Written, not run | `lib/shared/widgets/` (7 new), `lib/app/gallery/gallery_sections_p2.dart` |
+| P2-13 | Add/Edit Expense screen | Written, not run | `expenses/presentation/{controllers,screens/add_expense_screen.dart,widgets}`, `expenses/domain/amount_input.dart`, `test/features/bazar/expenses/presentation/` |
+| P2-14 | Bazar Trip screen | Written, not run | `controllers/trip_form_controller.dart`, `screens/bazar_trip_screen.dart`, `widgets/trip_line_sheet.dart`, `trip_line_tile.dart` |
+| P2-15 | Expense list, detail, edit, delete/undo, history | Written, not run | `screens/expense_{list,detail}_screen.dart`, `expense_detail_providers.dart`, `widgets/expense_{row,filter_sheet,ledger_line,history_section,delete_flow}.dart`, `domain/expense_list_items.dart` |
+| P2-16 | Catalog manager + Bazar settings screens | Written, not run | `items_categories/presentation/{screens,widgets,controllers}`, `domain/usecases/{reactivate_category,reactivate_item,reorder_categories}.dart`, `settings/presentation/screens/bazar_settings_screen.dart` |
+
+## Phase 2 - P2-13..P2-16 Expense screens, trip, list/detail, catalog manager, settings
+
+Verification before building: P2-01..P2-12 were checked by reading (providers, use cases, shared widgets, ARB, tests helpers) against the code in the upload; nothing was compiled.  Expect a first `dart format` / `flutter analyze` / `flutter test` round.
+
+**What was built**
+- P2-13: `AddExpenseScreen` (add and edit) on `expenseFormProvider(ExpenseFormArgs)`; pure `readAmountInput` (domain) shared with the trip line sheet; `ItemAutocompleteField` (inline results, "add as new item" row), `AmountBlock`, `FundingSelector`, `ExpenseMoreSection`, `DateChipField`, duplicate sheet.  Bazar home FAB and four entries (Add expense, Trip, Expenses, Catalog, Settings).
+- P2-14: `BazarTripScreen` on `tripFormProvider`; line sheet; swipe or button remove with Undo; 40-line cap (`kMaxTripLines`).
+- P2-15: list (month switcher, filter sheet, day groups via pure `buildExpenseListItems`, 30 rows per page, "show more"), detail (ledger line from `expenseAdvanceProvider`, history for people who may edit), delete with Undo (`confirmAndDeleteExpense`), Restore button for managers.
+- P2-16: catalog manager (tabs, reorder, edit sheets), `BazarSettingsScreen`.
+
+**Assumptions / deviations**
+- Three use cases were missing for the P2-16 card and were added: `ReactivateCategory`, `ReactivateItem`, `ReorderCategories` (audited as category/item *updated*; no rules change).  Reorder writes only the rows whose position changed, one batch each, so a failure part-way leaves a valid, partly re-ordered list.
+- The form controller keeps `saving` and `failure` in its own state (not `newActionProvider`) because a save also returns "duplicate warning" and per-field errors.  The catalog sheets and settings use `newActionProvider`.
+- On a successful save the form stays "busy" until the screen closes, so a second tap cannot repeat the write.
+- Form default for "Remember this item" is OFF (a typo should not create a catalog item).  Edit mode prefills a row that has quantity and unit price with an EMPTY total; the total is recalculated on save like `computeTotal`.
+- A custom range that leaves the selected month is read with `rangeExpensesProvider` (`queryRange` + `startAfter`, not live, Refresh button).  Inside the month, filters run on the live month list.
+- Detail screen reads the expense once (`getExpense`) and follows the live month list; it re-reads after an edit returns.
+- Settings screen edits exactly two thresholds (warn, exceeded).  A stored list with more than two values is replaced by those two on save.
+- Added `bazarErrExpenseDeleted` (maps `Conflict('expense_deleted')`) and 132 other ARB keys, written to both ARBs and the three generated files by hand.  Long generated lines are not wrapped the way gen-l10n would; `flutter gen-l10n` may show a whitespace-only diff - keep gen-l10n's output.
+- `lib/app/routing/app_routes.dart` gained `bazarSettings`.
+
+**Not done / to check by hand**
+- Goldens and the 200 % text-scale overflow tests for the new screens (listed by the cards) are not written; add them with the first green run.
+- No test for the filter sheet, catalog manager or settings screen widgets yet (use cases and controllers are covered).
+- Checking order on a device: Bangla keyboard digits in `AmountField`, the inline suggestion list with the soft keyboard open, drag-reorder on Android.
 
 ## Known limitations (honest list)
 
@@ -723,7 +753,7 @@ No Flutter/Dart SDK, Java or emulator was available (downloads blocked). Run fir
 - Custom relationship entries have per-item shape checks only in the app, not in the rules (rules bound the list to 40 items).
 - Screen-state harness covers 4 screens so far.
 - `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
-- P2-01..P2-12 exist in code; P2-11/P2-12 and the audit fixes are unverified (no SDK). Next: P2-13 (Add Expense screen).
+- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). Next: P2-17 (Contributions, fund screens).
 - Phase 2 has its P2-01 skeleton (Bazar home + seams), P2-02 pure helpers, P2-03 vocabulary,
   P2-04 catalog domain/search, P2-05 catalog data/rules/providers, P2-06 default seed/backfill,
   P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain and P2-09 expense

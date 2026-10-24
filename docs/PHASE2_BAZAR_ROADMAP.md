@@ -880,6 +880,9 @@ Goal: record a normal item in ≤ 10 seconds and ≤ 4 taps after choosing the i
 **Tests:** widget tests (member sees read-only controls with a reason; moderator with finance off is read-only; admin adds/edits/deactivates; reorder persists `sortOrder`; alias limit; long Bangla names), settings validation messages, goldens.
 **Done when:** an admin can fix a typo in an item name and the Add Expense autocomplete shows it immediately.
 
+**Build notes (P2-13 to P2-16, written, not run):** see `PROGRESS.md` section "P2-13..P2-16".  Deviations from the cards: three extra use cases for the catalog manager (`ReactivateCategory`, `ReactivateItem`, `ReorderCategories`); the expense form keeps `saving`/`failure` in its own state instead of `newActionProvider`; custom ranges outside the month use a non-live `rangeExpensesProvider`; the settings screen edits two alert thresholds; the route `bazarSettings` (`/bazar/settings`) was added to `AppRoutes`.
+
+
 ---
 
 ## 9. Step cards — Wave E: budgets (P2-17 … P2-18)

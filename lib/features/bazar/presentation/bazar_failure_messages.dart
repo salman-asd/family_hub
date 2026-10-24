@@ -36,6 +36,7 @@ extension BazarFailureMessages on AppLocalizations {
     Conflict(code: 'import_already_undone') => bazarErrImportAlreadyUndone,
     Conflict(code: 'import_has_locked_month') => bazarErrImportHasLockedMonth,
     Conflict(code: 'concurrent_edit') => bazarErrConcurrentEdit,
+    Conflict(code: 'expense_deleted') => bazarErrExpenseDeleted,
     Conflict() => bazarErrUnknown,
     NotFound() => bazarErrNotFound,
     PermissionDenied() => bazarErrNotAllowed,
