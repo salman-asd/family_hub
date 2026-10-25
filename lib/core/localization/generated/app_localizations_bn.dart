@@ -1805,4 +1805,100 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get bazarSettingsFundStartUnset => 'শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।';
+
+  @override
+  String get budgetTitle => 'বাজেট';
+
+  @override
+  String get budgetNote => 'বাজেট একটি পরিকল্পনা; তহবিলের ব্যালান্সই আসল টাকা।';
+
+  @override
+  String get budgetEmptyTitle => 'এই মাসের কোনো বাজেট নেই';
+
+  @override
+  String get budgetEmptyMessage => 'মাসের পরিকল্পনা করলে খরচের সঙ্গে তুলনা দেখতে পাবেন।';
+
+  @override
+  String get budgetEmptyReadOnly => 'সংসার ব্যবস্থাপক বা অ্যাডমিন এখনো এই মাসের পরিকল্পনা করেননি।';
+
+  @override
+  String get budgetPlanThisMonth => 'এই মাসের পরিকল্পনা করুন';
+
+  @override
+  String get budgetCopyLast => 'গত মাসের বাজেট কপি করুন';
+
+  @override
+  String get budgetEdit => 'বাজেট সম্পাদনা';
+
+  @override
+  String get budgetOverall => 'পুরো মাস';
+
+  @override
+  String budgetLeft(String amount) {
+    return '$amount বাকি';
+  }
+
+  @override
+  String budgetOver(String amount) {
+    return '$amount বেশি';
+  }
+
+  @override
+  String get budgetByCategory => 'ক্যাটাগরি অনুযায়ী';
+
+  @override
+  String get budgetDryTitle => 'শুকনা বাজারের আনুমানিক হিসাব';
+
+  @override
+  String budgetDrySummary(String count, String total) {
+    return '$countটি আইটেম, $total';
+  }
+
+  @override
+  String get budgetDryEmpty => 'এখনো কোনো আইটেম নেই।';
+
+  @override
+  String get budgetTotalField => 'মোট বাজেট (খালি রাখলে যোগফল ধরা হবে)';
+
+  @override
+  String get budgetDryFromLines => 'নিচের আইটেমগুলোর যোগফল';
+
+  @override
+  String get budgetCategoryEstimates => 'ক্যাটাগরি অনুযায়ী আনুমানিক হিসাব';
+
+  @override
+  String get budgetLineName => 'আইটেম';
+
+  @override
+  String get budgetLineStock => 'মজুদ';
+
+  @override
+  String get budgetLineRate => 'দর';
+
+  @override
+  String get budgetLineTotal => 'মোট';
+
+  @override
+  String get budgetAddLine => 'আইটেম যোগ করুন';
+
+  @override
+  String get budgetRemoveLine => 'আইটেম সরান';
+
+  @override
+  String get budgetLinesSum => 'আইটেমের মোট';
+
+  @override
+  String get budgetSaved => 'বাজেট সংরক্ষিত হয়েছে';
+
+  @override
+  String get budgetErrExists => 'এই মাসের বাজেট আগেই আছে।';
+
+  @override
+  String get budgetNoLastMonth => 'কপি করার মতো গত মাসের বাজেট নেই।';
+
+  @override
+  String get budgetReadOnly => 'আপনি বাজেট দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন বদলাতে পারবেন।';
+
+  @override
+  String get budgetAlertsTitle => 'বাজেট সতর্কতা';
 }

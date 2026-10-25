@@ -173,6 +173,25 @@ export const bazarSettingsDoc = (uid, extra = {}) =>
     ...extra,
   });
 
+/** `BudgetMappers.toMap` shape; money is integer paisa (P2-17). */
+export const budgetDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    monthKey: '2026-10',
+    totalEstimatePaisa: 864000,
+    categoryEstimates: { cat_dry_groceries: 864000 },
+    lines: [
+      {
+        name: 'চাল',
+        plannedQtyMilli: 50000,
+        unit: 'kg',
+        estimatedRatePaisa: 7000,
+        estimatedTotalPaisa: 350000,
+      },
+    ],
+    alertThresholds: [80, 100],
+    ...extra,
+  });
+
 /** `CatalogMappers.categoryToMap` shape (P2-05). */
 export const categoryDoc = (uid, extra = {}) =>
   baseDoc(uid, {

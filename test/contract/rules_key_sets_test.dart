@@ -8,6 +8,8 @@ import 'package:family_hub/core/utils/quantity.dart';
 import 'package:family_hub/features/bazar/advances/data/advance_mappers.dart';
 import 'package:family_hub/features/bazar/advances/domain/member_advance.dart';
 import 'package:family_hub/features/bazar/advances/domain/settlement.dart';
+import 'package:family_hub/features/bazar/budgets/data/budget_mappers.dart';
+import 'package:family_hub/features/bazar/budgets/domain/budget.dart';
 import 'package:family_hub/features/bazar/expenses/data/expense_mappers.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense_repository.dart';
@@ -169,6 +171,29 @@ void main() {
       now: DateTime.utc(2026, 10, 18, 9),
     ).keys.toSet();
     expect(rulesList('itemKeys').containsAll(keys), isTrue);
+  });
+
+  test('budgetToMap keys == budgetKeys()', () {
+    final budget = Budget(
+      month: MonthKey(2026, 10),
+      totalEstimate: const Money.paisa(864000),
+      categoryEstimates: const <String, Money>{
+        'cat_dry_groceries': Money.paisa(350000),
+      },
+      lines: const <BudgetLine>[
+        BudgetLine(
+          name: 'Rice',
+          plannedQty: Quantity.milli(50000),
+          unit: Unit.kg,
+          estimatedRate: Money.paisa(7000),
+          estimatedTotal: Money.paisa(350000),
+        ),
+      ],
+    );
+    expect(
+      BudgetMappers.toMap(budget, meta).keys.toSet(),
+      rulesList('budgetKeys'),
+    );
   });
 
   test('expenseToMap keys == expenseKeys()', () {

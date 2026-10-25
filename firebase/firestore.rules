@@ -15,6 +15,7 @@ rules_version = '2';
 //   families/{f}/invitations/{i}
 //   families/{f}/bazarCategories/{c}   (P2-05)
 //   families/{f}/bazarItems/{i}        (P2-05)
+//   families/{f}/budgets/{yyyy-MM}     (P2-17)
 //   families/{f}/settings/{s}   (general, modules, rotationPolicy,
 //                                notificationDefaults, permissions,
 //                                relationships)
@@ -216,6 +217,12 @@ service cloud.firestore {
               'seedKey', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
               'schemaVersion', 'deletedAt', 'deletedBy'];
     }
+    // Phase 2 budgets (P2-17): the exact fields `BudgetMappers.toMap` writes.
+    function budgetKeys() {
+      return ['monthKey', 'totalEstimatePaisa', 'categoryEstimates', 'lines',
+              'alertThresholds', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
     // Phase 2 expenses, trips, ledger and advances (P2-10).  These mirror
     // ExpenseMappers / FundMappers / AdvanceMappers and MonthClosingMappers.
     function expenseKeys() {
@@ -337,6 +344,23 @@ service cloud.firestore {
         && d.get('active', false) is bool
         && d.get('builtIn', false) is bool
         && optStr(d, 'seedKey', 40);
+    }
+
+    // A month's budget (P2-17).  The document id IS the month key.  Rules
+    // cannot iterate a map or list, so sizes are bounded here (40 category
+    // estimates, 150 lines, 4 thresholds) and the app tolerates a malformed
+    // entry on read.  Total is integer paisa.
+    function budgetOk(d, id) {
+      return d.keys().hasOnly(budgetKeys())
+        && monthKeyOk(d.get('monthKey', ''))
+        && d.get('monthKey', '') == id
+        && moneyOk(d, 'totalEstimatePaisa')
+        && d.get('categoryEstimates', null) is map
+        && d.get('categoryEstimates', {}).size() <= 40
+        && d.get('lines', null) is list
+        && d.get('lines', []).size() <= 150
+        && d.get('alertThresholds', null) is list
+        && d.get('alertThresholds', []).size() <= 4;
     }
 
     // ── Phase 2 expense / ledger shapes (P2-10) ────────────────────────────
@@ -1269,6 +1293,22 @@ service cloud.firestore {
         allow delete: if false;
       }
 
+      // ── budgets/{yyyy-MM} — finance managers write, members read (P2-17) ─
+      // A budget is a plan, so it is not tied to the month lock.  A moderator
+      // needs `moderatorManagesFinance` (financeManager).  No hard delete.
+      match /budgets/{b} {
+        allow read: if canReadFamilyData(f);
+        allow create: if verified()
+          && financeManager(f)
+          && createsAsSelf()
+          && budgetOk(request.resource.data, b);
+        allow update: if verified()
+          && financeManager(f)
+          && writesAsSelf()
+          && budgetOk(request.resource.data, b);
+        allow delete: if false;
+      }
+
       // ── Append-only logs ───────────────────────────────────────────────
       match /activity/{a} {
         allow read: if isActiveMember(f);
@@ -1292,7 +1332,7 @@ service cloud.firestore {
     // rule is in place first so that a forgotten collection can only ever
     // under-grant.  Each of those steps must still add its own read/write and
     // field-validation rules here.
-    //   expenses, bazarTrips, budgets, contributions, contributionPlans,
+    //   contributions, contributionPlans,
     //   fundTransactions, memberAdvances, settlements, choreTemplates,
     //   dutyGroups, choreOccurrences, memberAvailability, swapRequests,
     //   notificationInbox, memberStats

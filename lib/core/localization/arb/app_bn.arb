@@ -1604,5 +1604,86 @@
   "bazarSettingsFundStart": "তহবিল শুরুর মাস",
   "@bazarSettingsFundStart": {},
   "bazarSettingsFundStartUnset": "শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।",
-  "@bazarSettingsFundStartUnset": {}
+  "@bazarSettingsFundStartUnset": {},
+  "budgetTitle": "বাজেট",
+  "@budgetTitle": {},
+  "budgetNote": "বাজেট একটি পরিকল্পনা; তহবিলের ব্যালান্সই আসল টাকা।",
+  "@budgetNote": {},
+  "budgetEmptyTitle": "এই মাসের কোনো বাজেট নেই",
+  "@budgetEmptyTitle": {},
+  "budgetEmptyMessage": "মাসের পরিকল্পনা করলে খরচের সঙ্গে তুলনা দেখতে পাবেন।",
+  "@budgetEmptyMessage": {},
+  "budgetEmptyReadOnly": "সংসার ব্যবস্থাপক বা অ্যাডমিন এখনো এই মাসের পরিকল্পনা করেননি।",
+  "@budgetEmptyReadOnly": {},
+  "budgetPlanThisMonth": "এই মাসের পরিকল্পনা করুন",
+  "@budgetPlanThisMonth": {},
+  "budgetCopyLast": "গত মাসের বাজেট কপি করুন",
+  "@budgetCopyLast": {},
+  "budgetEdit": "বাজেট সম্পাদনা",
+  "@budgetEdit": {},
+  "budgetOverall": "পুরো মাস",
+  "@budgetOverall": {},
+  "budgetLeft": "{amount} বাকি",
+  "@budgetLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetOver": "{amount} বেশি",
+  "@budgetOver": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetByCategory": "ক্যাটাগরি অনুযায়ী",
+  "@budgetByCategory": {},
+  "budgetDryTitle": "শুকনা বাজারের আনুমানিক হিসাব",
+  "@budgetDryTitle": {},
+  "budgetDrySummary": "{count}টি আইটেম, {total}",
+  "@budgetDrySummary": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetDryEmpty": "এখনো কোনো আইটেম নেই।",
+  "@budgetDryEmpty": {},
+  "budgetTotalField": "মোট বাজেট (খালি রাখলে যোগফল ধরা হবে)",
+  "@budgetTotalField": {},
+  "budgetDryFromLines": "নিচের আইটেমগুলোর যোগফল",
+  "@budgetDryFromLines": {},
+  "budgetCategoryEstimates": "ক্যাটাগরি অনুযায়ী আনুমানিক হিসাব",
+  "@budgetCategoryEstimates": {},
+  "budgetLineName": "আইটেম",
+  "@budgetLineName": {},
+  "budgetLineStock": "মজুদ",
+  "@budgetLineStock": {},
+  "budgetLineRate": "দর",
+  "@budgetLineRate": {},
+  "budgetLineTotal": "মোট",
+  "@budgetLineTotal": {},
+  "budgetAddLine": "আইটেম যোগ করুন",
+  "@budgetAddLine": {},
+  "budgetRemoveLine": "আইটেম সরান",
+  "@budgetRemoveLine": {},
+  "budgetLinesSum": "আইটেমের মোট",
+  "@budgetLinesSum": {},
+  "budgetSaved": "বাজেট সংরক্ষিত হয়েছে",
+  "@budgetSaved": {},
+  "budgetErrExists": "এই মাসের বাজেট আগেই আছে।",
+  "@budgetErrExists": {},
+  "budgetNoLastMonth": "কপি করার মতো গত মাসের বাজেট নেই।",
+  "@budgetNoLastMonth": {},
+  "budgetReadOnly": "আপনি বাজেট দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন বদলাতে পারবেন।",
+  "@budgetReadOnly": {},
+  "budgetAlertsTitle": "বাজেট সতর্কতা",
+  "@budgetAlertsTitle": {}
 }

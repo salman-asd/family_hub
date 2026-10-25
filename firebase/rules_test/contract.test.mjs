@@ -125,6 +125,9 @@ const seeders = {
   settings_bazar: async (db) => {
     await seedFamilyWithAdmin(db);
   },
+  budget: async (db) => {
+    await seedFamilyWithAdmin(db);
+  },
   item_usage: async (db) => {
     await seedFamilyWithAdmin(db);
     await setDoc(

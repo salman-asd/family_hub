@@ -14,6 +14,8 @@ import 'package:family_hub/core/utils/quantity.dart';
 import 'package:family_hub/features/bazar/advances/data/advance_mappers.dart';
 import 'package:family_hub/features/bazar/advances/domain/member_advance.dart';
 import 'package:family_hub/features/bazar/advances/domain/settlement.dart';
+import 'package:family_hub/features/bazar/budgets/data/budget_mappers.dart';
+import 'package:family_hub/features/bazar/budgets/domain/budget.dart';
 import 'package:family_hub/features/bazar/expenses/data/expense_mappers.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense_repository.dart';
@@ -99,6 +101,7 @@ List<Map<String, dynamic>> _fixtures() => <Map<String, dynamic>>[
   _item(),
   _itemUsage(),
   _settingsBazar(),
+  _budget(),
   _expenseFund(),
   _expenseMemberAdvance(),
   _expensePersonal(),
@@ -318,6 +321,54 @@ Map<String, dynamic> _settingsBazar() {
     _write(
       'set',
       FirestorePaths.auditLogDoc(_familyId, 'ev12'),
+      FamilyMappers.eventMap(event),
+    ),
+  ]);
+}
+
+/// P2-17: the real budget map (a dry-grocery line plus a category estimate) and
+/// its two log entries.
+Map<String, dynamic> _budget() {
+  final budget = Budget(
+    month: MonthKey(2026, 10),
+    totalEstimate: const Money.paisa(864000),
+    categoryEstimates: const <String, Money>{
+      'cat_dry_groceries': Money.paisa(350000),
+    },
+    lines: const <BudgetLine>[
+      BudgetLine(
+        name: 'Rice',
+        plannedQty: Quantity.milli(50000),
+        unit: Unit.kg,
+        estimatedRate: Money.paisa(7000),
+        estimatedTotal: Money.paisa(350000),
+        stock: Quantity.milli(5000),
+      ),
+    ],
+  );
+  final event = AuditEvent(
+    id: 'ev13',
+    type: AuditEventType.bazarBudgetSaved,
+    actorId: _admin,
+    refType: AuditRefType.budget,
+    refId: '2026-10',
+    at: _at,
+    params: const <String, String>{'month': '2026-10', 'amount': '864000'},
+  );
+  return _fixture('budget', _admin, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.budgetDoc(_familyId, '2026-10'),
+      BudgetMappers.toMap(budget, _meta(_admin)),
+    ),
+    _write(
+      'set',
+      FirestorePaths.activityDoc(_familyId, 'ev13'),
+      FamilyMappers.eventMap(event),
+    ),
+    _write(
+      'set',
+      FirestorePaths.auditLogDoc(_familyId, 'ev13'),
       FamilyMappers.eventMap(event),
     ),
   ]);

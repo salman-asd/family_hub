@@ -136,3 +136,10 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 - Every mutating control on the catalog and settings screens is hidden or disabled with `PermissionGate`/`ref.can(Permission.manageCatalogAndBudgets)`; people without it see a read-only banner.
 - Undo after a delete captures everything it needs (use case, ids, messenger) BEFORE the first `await`, so it keeps working after the screen closes.
 - New Bazar routes are nested under `/bazar`; `expenses/new` is declared before `expenses/:id`.
+
+## Phase 2 additions (P2-17 to P2-18)
+- Budgets: `budgets/{yyyy-MM}` is a plan, never a ledger row. `SaveBudget` / `CopyLastMonthBudget` run `prepareBudget` (trim names, `quantity x rate` totals, **Dry-groceries estimate = sum of the lines**, zero total = sum of the category estimates). Everyday write: one batch, no probe, queues offline; a closed month does not block it.
+- Levels come only from `ComputeBudgetStatus` (exact integer compare) fed by `monthSpendProvider` (rule 30) and the live `settings/bazar.alertThresholds`. Screens read `budgetStatusProvider(month)` / `budgetAlertsProvider`; alerts never block an expense and the Add Expense form never reads them.
+- The budget editor keeps TEXT drafts in `budgetControllerProvider(month)`; only `readLineDrafts` / `readCategoryTexts` / `readTotalText` (domain) parse them. A controller makes a new `eventId` after each successful save (log entries are never rewritten).
+- `Budget.createdAt/createdBy` are carried so a re-save keeps the author without a read; the rules do not freeze them on update.
+- Rules sizes for a budget: 40 category estimates, 150 lines, 4 thresholds (`budgetOk`); the app tolerates a malformed entry when reading.

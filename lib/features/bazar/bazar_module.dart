@@ -1,5 +1,6 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/features/bazar/budgets/presentation/screens/budget_screen.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/screens/add_expense_screen.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/screens/bazar_trip_screen.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/screens/expense_detail_screen.dart';
@@ -72,6 +73,10 @@ class BazarModule extends FamilyModule {
         GoRoute(
           path: 'catalog',
           builder: (context, state) => const CatalogManagerScreen(),
+        ),
+        GoRoute(
+          path: 'budget',
+          builder: (context, state) => const BudgetScreen(),
         ),
         GoRoute(
           path: 'settings',

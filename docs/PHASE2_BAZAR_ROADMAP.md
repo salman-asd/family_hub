@@ -937,6 +937,8 @@ Goal: record a normal item in ≤ 10 seconds and ≤ 4 taps after choosing the i
 **Tests:** widget tests (bars update when a fake expense is added; thresholds render icon + label; copy-last-month; read-only for members; table total recalculates; empty state), goldens in 2 themes × 2 languages.
 **Done when:** a month budget with the workbook's dry-grocery estimate (27 lines, ৳8,640) can be entered, and the bars move as expenses are added.
 
+**Implementation status (P2-17/P2-18):** written, not compiled; deviations and assumptions are listed in `PROGRESS.md` ("Phase 2 - P2-17 and P2-18"). Alert levels read the live `settings/bazar.alertThresholds`; the budget's own list is a snapshot.
+
 ---
 
 ## 10. Step cards — Wave F: contributions, advances, month close (P2-19 … P2-23)

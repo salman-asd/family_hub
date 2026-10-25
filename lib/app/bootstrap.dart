@@ -10,6 +10,8 @@ import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/bazar/advances/data/firestore_advance_repository.dart';
 import 'package:family_hub/features/bazar/advances/presentation/advance_providers.dart';
+import 'package:family_hub/features/bazar/budgets/data/firestore_budget_repository.dart';
+import 'package:family_hub/features/bazar/budgets/presentation/budget_providers.dart';
 import 'package:family_hub/features/bazar/expenses/data/firestore_expense_repository.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/expense_providers.dart';
 import 'package:family_hub/features/bazar/fund/data/firestore_fund_repository.dart';
@@ -97,6 +99,7 @@ Future<void> bootstrap(Flavor flavor) async {
       clock: clock,
     );
     final expenses = FirestoreExpenseRepository(tx: tx, clock: clock);
+    final budgets = FirestoreBudgetRepository(tx: tx);
     final funds = FirestoreFundRepository();
     final advances = FirestoreAdvanceRepository();
 
@@ -124,6 +127,7 @@ Future<void> bootstrap(Flavor flavor) async {
           catalogRepositoryProvider.overrideWithValue(catalog),
           bazarSettingsRepositoryProvider.overrideWithValue(bazarSettings),
           expenseRepositoryProvider.overrideWithValue(expenses),
+          budgetRepositoryProvider.overrideWithValue(budgets),
           fundRepositoryProvider.overrideWithValue(funds),
           advanceRepositoryProvider.overrideWithValue(advances),
           themePreferenceSyncProvider.overrideWithValue(

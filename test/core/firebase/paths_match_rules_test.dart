@@ -14,7 +14,6 @@ void main() {
   // Collections whose rules arrive in Phase 2/3 (CLAUDE.md: the step that adds
   // a collection extends the rules in the same commit and removes it here).
   const pending = <String>{
-    FirestorePaths.budgetsSubcollection,
     FirestorePaths.contributionsSubcollection,
     FirestorePaths.contributionPlansSubcollection,
     FirestorePaths.choreTemplatesSubcollection,
@@ -48,6 +47,7 @@ void main() {
       FirestorePaths.auditLogsSubcollection,
       FirestorePaths.bazarCategoriesSubcollection,
       FirestorePaths.bazarItemsSubcollection,
+      FirestorePaths.budgetsSubcollection,
       FirestorePaths.expensesSubcollection,
       FirestorePaths.bazarTripsSubcollection,
       FirestorePaths.fundTransactionsSubcollection,

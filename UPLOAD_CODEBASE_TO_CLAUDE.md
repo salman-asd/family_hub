@@ -120,7 +120,7 @@ This is the current Family Hub codebase (changed outside Claude with Copilot/oth
 Read CLAUDE.md, PROGRESS.md and PHASE2_BAZAR_ROADMAP.md (sections 1-3 and the card for the
 step) first. Do not assume the code matches your earlier changes; inspect the files and verify
 the steps marked Done in PROGRESS.md before building on them.
-Task: <describe the task, e.g. "implement P2-13">.
+Task: <describe the task, e.g. "implement P2-19 to P2-20">.
 Assume it is not compiled on your side: I will run dart format / flutter analyze / flutter test.
 Give me the changed files only as a zip with the same folder structure, and update
 PROGRESS.md, CLAUDE.md and this file when they are affected.
@@ -131,6 +131,8 @@ PROGRESS.md, CLAUDE.md and this file when they are affected.
 - Roadmap: `PHASE2_BAZAR_ROADMAP.md` (also `docs/`). Say which step to do, e.g. "implement P2-13".
 - In `PROGRESS.md` each step says Done / Written (not run). Steps marked "not run" were written without a Flutter SDK, so run `dart format .`, `flutter gen-l10n`, `flutter analyze`, `flutter test --exclude-tags golden` and the rules suite first and paste any errors back.
 - Bazar code: `lib/features/bazar/**`, `lib/shared/widgets/`, `lib/app/gallery/`, tests under `test/features/bazar/` and `test/support/in_memory_bazar_backend.dart`. Include `firebase/rules_test/fixtures` (small JSON) so contract tests can be checked.
+- Contract fixtures: when a step adds a mapper, Claude hand-writes the matching `firebase/rules_test/fixtures/*.json` (P2-17: `budget.json`). Run `flutter test test/contract/rules_fixtures_test.dart` once; if `git diff firebase/rules_test/fixtures` shows a change, keep the generated file.
+- The zip may be named after a folder (for example `android.zip`) but must contain the project root (`lib/`, `test/`, `firebase/`, the `*.md` files). Claude lists it before reading.
 - `Bazar.xlsx` and the chores PDF are not code; attach them separately only for the import/seed steps (P2-26+).
 
 ## 3c. Applying the changed-files zip Claude sends back

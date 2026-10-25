@@ -716,6 +716,8 @@ No Flutter/Dart SDK, Java or emulator was available (downloads blocked). Run fir
 | P2-14 | Bazar Trip screen | Written, not run | `controllers/trip_form_controller.dart`, `screens/bazar_trip_screen.dart`, `widgets/trip_line_sheet.dart`, `trip_line_tile.dart` |
 | P2-15 | Expense list, detail, edit, delete/undo, history | Written, not run | `screens/expense_{list,detail}_screen.dart`, `expense_detail_providers.dart`, `widgets/expense_{row,filter_sheet,ledger_line,history_section,delete_flow}.dart`, `domain/expense_list_items.dart` |
 | P2-16 | Catalog manager + Bazar settings screens | Written, not run | `items_categories/presentation/{screens,widgets,controllers}`, `domain/usecases/{reactivate_category,reactivate_item,reorder_categories}.dart`, `settings/presentation/screens/bazar_settings_screen.dart` |
+| P2-17 | Budgets: domain, data, rules | Written, not run | `lib/features/bazar/budgets/{domain,data}`, `firebase/firestore.rules` (`budgetKeys`, `budgetOk`, `match /budgets/{b}`), `firebase/rules_test/budgets.test.mjs`, `fixtures/budget.json` (hand-written, regenerate), `test/features/bazar/budgets/` |
+| P2-18 | Budget screen and alerts provider | Written, not run | `budgets/presentation/{budget_providers,controllers/budget_controller,screens/budget_screen,widgets/*}.dart`, route `/bazar/budget`, Bazar home tile |
 
 ## Phase 2 - P2-13..P2-16 Expense screens, trip, list/detail, catalog manager, settings
 
@@ -743,6 +745,34 @@ Verification before building: P2-01..P2-12 were checked by reading (providers, u
 - No test for the filter sheet, catalog manager or settings screen widgets yet (use cases and controllers are covered).
 - Checking order on a device: Bangla keyboard digits in `AmountField`, the inline suggestion list with the soft keyboard open, drag-reorder on Android.
 
+## Phase 2 - P2-17 and P2-18 Budgets (domain, data, rules, screen, alerts)
+
+Written without an SDK or emulator; **nothing was compiled or run**. Run first: `flutter pub get`, `dart format .`, `flutter gen-l10n` (keep its output if it differs only in whitespace), `flutter analyze`, `flutter test --exclude-tags golden`, then `flutter test test/contract/rules_fixtures_test.dart` (regenerates `fixtures/budget.json`; `git diff` must show no change, else keep the generated file), the rules suite and `node tools/check_indexes.mjs` (no index change). Then the *Update goldens* workflow if you add goldens (none were added).
+
+**P2-17 built**
+- Domain (pure): `Budget`, `BudgetLine` (`lineEstimate` = quantity x rate half-up, else typed total), `BudgetLevel`, `CategoryBudgetStatus`, `BudgetStatusReport`, `ComputeBudgetStatus`, `BudgetAlert` + `buildBudgetAlerts`, `prepareBudget` / `validateAlertThresholds`, `BudgetRepository`, `SaveBudget`, `CopyLastMonthBudget`, plus `BudgetLineDraft` / `readLineDrafts` / `readCategoryTexts` for the editor.
+- Data: `BudgetMappers` (tolerant reads), `FirestoreBudgetRepository` (one batch with `AuditWriter`, no probe, so it queues offline), wired in `bootstrap.dart`.
+- Rules: `budgetKeys()`, `budgetOk(d, id)`, `match /budgets/{b}` (read active members; create/update `verified() && financeManager(f)`; no delete). Rules tests, contract fixture + seeder, key-set mirror test; `budgets` moved from `pending` to `implemented` in `paths_match_rules_test`.
+- Providers: `budgetRepositoryProvider`, `monthBudgetProvider`, `saveBudgetProvider`, `copyLastMonthBudgetProvider`.
+
+**P2-18 built**
+- `budgetStatusProvider(month)`, `budgetAlertsProvider` (current month, worst first).
+- `BudgetScreen` (`/bazar/budget`): `MonthSwitcher`, whole-month bar, per-category bars (`CategoryBadge` + `ProgressBarStatus`), dry-grocery summary, edit mode (`BudgetEditorForm` + `DryGroceryTableEditor`), empty state with "Plan this month" and "Copy last month", read-only banner for people without `manageCatalogAndBudgets`, the "a budget is a plan" note.
+- `BudgetController` (`budgetControllerProvider(month)`, auto-dispose family): holds text drafts, reads them only through the domain readers, saves once; a failed save keeps the draft and the event id.
+- 29 ARB keys (`budget*`) in bn + en + the three generated files by hand; `bazarFailureMessage` maps `Conflict('budget_exists')`.
+
+**Assumptions / deviations**
+- Alert levels come from the live `settings/bazar.alertThresholds`; the thresholds stored in the budget are a snapshot (copied when the budget is saved or copied), so changing the setting re-levels every month at once.
+- `Budget` carries optional `createdAt`/`createdBy` (not part of equality) so a re-save keeps the original author without reading first. Rules do not freeze `createdBy` on update: a forced rejection of a queued offline write would be silent.
+- A budget is a plan: a closed month does NOT block saving it (the card names no lock; rule 31 is about dated records).
+- Level comparison is exact integer (`spent*100 >= limit*percent`), so 79.99 % stays `ok`; the bar's percent uses `basisPoints` (rounded). With one threshold `t`: warning at `t`, exceeded at 100 (at `t` when `t >= 100`).
+- Rules cannot check money inside the `categoryEstimates` map or `lines`; only sizes (40 / 150 / 4) and `totalEstimatePaisa`. The app skips malformed entries when reading.
+- `NotFound('budget')` from "Copy last month" is shown with a specific message in the screen (the generic `bazarFailureMessage` text stays generic).
+- Dry-grocery rows use a plain name field (no `ItemAutocompleteField`) and keep `itemId` null for new rows.
+- `contract/budget.json` was written by hand to match `JsonEncoder.withIndent`; regenerate it with the Dart test to be sure.
+- The Dry-groceries category id is `cat_dry_groceries` (seed key `dry_groceries`).
+- Not done: goldens for the budget screen, a Bazar-home alert strip (P2-29 consumes `budgetAlertsProvider`), per-category thresholds.
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -753,7 +783,7 @@ Verification before building: P2-01..P2-12 were checked by reading (providers, u
 - Custom relationship entries have per-item shape checks only in the app, not in the rules (rules bound the list to 40 items).
 - Screen-state harness covers 4 screens so far.
 - `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
-- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). Next: P2-17 (Contributions, fund screens).
+- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). P2-17/P2-18 (budgets) are written and unverified too. Next: P2-19 (Contributions: domain, data, rules).
 - Phase 2 has its P2-01 skeleton (Bazar home + seams), P2-02 pure helpers, P2-03 vocabulary,
   P2-04 catalog domain/search, P2-05 catalog data/rules/providers, P2-06 default seed/backfill,
   P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain and P2-09 expense

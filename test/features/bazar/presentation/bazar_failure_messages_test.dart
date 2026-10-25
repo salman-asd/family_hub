@@ -36,6 +36,7 @@ const List<String> _conflictCodes = <String>[
   'import_already_undone',
   'import_has_locked_month',
   'concurrent_edit',
+  'budget_exists',
 ];
 
 const List<String> _notFoundEntities = <String>[

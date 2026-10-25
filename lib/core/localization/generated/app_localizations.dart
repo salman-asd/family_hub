@@ -3255,6 +3255,186 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।'**
   String get bazarSettingsFundStartUnset;
+
+  /// No description provided for @budgetTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট'**
+  String get budgetTitle;
+
+  /// No description provided for @budgetNote.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট একটি পরিকল্পনা; তহবিলের ব্যালান্সই আসল টাকা।'**
+  String get budgetNote;
+
+  /// No description provided for @budgetEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসের কোনো বাজেট নেই'**
+  String get budgetEmptyTitle;
+
+  /// No description provided for @budgetEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসের পরিকল্পনা করলে খরচের সঙ্গে তুলনা দেখতে পাবেন।'**
+  String get budgetEmptyMessage;
+
+  /// No description provided for @budgetEmptyReadOnly.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংসার ব্যবস্থাপক বা অ্যাডমিন এখনো এই মাসের পরিকল্পনা করেননি।'**
+  String get budgetEmptyReadOnly;
+
+  /// No description provided for @budgetPlanThisMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসের পরিকল্পনা করুন'**
+  String get budgetPlanThisMonth;
+
+  /// No description provided for @budgetCopyLast.
+  ///
+  /// In bn, this message translates to:
+  /// **'গত মাসের বাজেট কপি করুন'**
+  String get budgetCopyLast;
+
+  /// No description provided for @budgetEdit.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট সম্পাদনা'**
+  String get budgetEdit;
+
+  /// No description provided for @budgetOverall.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুরো মাস'**
+  String get budgetOverall;
+
+  /// No description provided for @budgetLeft.
+  ///
+  /// In bn, this message translates to:
+  /// **'{amount} বাকি'**
+  String budgetLeft(String amount);
+
+  /// No description provided for @budgetOver.
+  ///
+  /// In bn, this message translates to:
+  /// **'{amount} বেশি'**
+  String budgetOver(String amount);
+
+  /// No description provided for @budgetByCategory.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটাগরি অনুযায়ী'**
+  String get budgetByCategory;
+
+  /// No description provided for @budgetDryTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুকনা বাজারের আনুমানিক হিসাব'**
+  String get budgetDryTitle;
+
+  /// No description provided for @budgetDrySummary.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি আইটেম, {total}'**
+  String budgetDrySummary(String count, String total);
+
+  /// No description provided for @budgetDryEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো আইটেম নেই।'**
+  String get budgetDryEmpty;
+
+  /// No description provided for @budgetTotalField.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট বাজেট (খালি রাখলে যোগফল ধরা হবে)'**
+  String get budgetTotalField;
+
+  /// No description provided for @budgetDryFromLines.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিচের আইটেমগুলোর যোগফল'**
+  String get budgetDryFromLines;
+
+  /// No description provided for @budgetCategoryEstimates.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটাগরি অনুযায়ী আনুমানিক হিসাব'**
+  String get budgetCategoryEstimates;
+
+  /// No description provided for @budgetLineName.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেম'**
+  String get budgetLineName;
+
+  /// No description provided for @budgetLineStock.
+  ///
+  /// In bn, this message translates to:
+  /// **'মজুদ'**
+  String get budgetLineStock;
+
+  /// No description provided for @budgetLineRate.
+  ///
+  /// In bn, this message translates to:
+  /// **'দর'**
+  String get budgetLineRate;
+
+  /// No description provided for @budgetLineTotal.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট'**
+  String get budgetLineTotal;
+
+  /// No description provided for @budgetAddLine.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেম যোগ করুন'**
+  String get budgetAddLine;
+
+  /// No description provided for @budgetRemoveLine.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেম সরান'**
+  String get budgetRemoveLine;
+
+  /// No description provided for @budgetLinesSum.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেমের মোট'**
+  String get budgetLinesSum;
+
+  /// No description provided for @budgetSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট সংরক্ষিত হয়েছে'**
+  String get budgetSaved;
+
+  /// No description provided for @budgetErrExists.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসের বাজেট আগেই আছে।'**
+  String get budgetErrExists;
+
+  /// No description provided for @budgetNoLastMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'কপি করার মতো গত মাসের বাজেট নেই।'**
+  String get budgetNoLastMonth;
+
+  /// No description provided for @budgetReadOnly.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি বাজেট দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন বদলাতে পারবেন।'**
+  String get budgetReadOnly;
+
+  /// No description provided for @budgetAlertsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট সতর্কতা'**
+  String get budgetAlertsTitle;
 }
 
 class _AppLocalizationsDelegate

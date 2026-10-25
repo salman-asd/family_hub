@@ -1,0 +1,96 @@
+{
+  "scenario": "budget",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/budgets/2026-10",
+      "data": {
+        "monthKey": "2026-10",
+        "totalEstimatePaisa": 864000,
+        "categoryEstimates": {
+          "cat_dry_groceries": 350000
+        },
+        "lines": [
+          {
+            "name": "Rice",
+            "plannedQtyMilli": 50000,
+            "unit": "kg",
+            "estimatedRatePaisa": 7000,
+            "estimatedTotalPaisa": 350000,
+            "stockMilli": 5000
+          }
+        ],
+        "alertThresholds": [
+          80,
+          100
+        ],
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev13",
+      "data": {
+        "type": "bazar.budget_saved",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "budget",
+        "refId": "2026-10",
+        "params": {
+          "month": "2026-10",
+          "amount": "864000"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev13",
+      "data": {
+        "type": "bazar.budget_saved",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "budget",
+        "refId": "2026-10",
+        "params": {
+          "month": "2026-10",
+          "amount": "864000"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

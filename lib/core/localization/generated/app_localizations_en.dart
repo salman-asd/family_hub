@@ -1810,4 +1810,100 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bazarSettingsFundStartUnset => 'Set automatically when you record the opening balance.';
+
+  @override
+  String get budgetTitle => 'Budget';
+
+  @override
+  String get budgetNote => 'A budget is a plan; the fund balance is real money.';
+
+  @override
+  String get budgetEmptyTitle => 'No budget for this month';
+
+  @override
+  String get budgetEmptyMessage => 'Plan the month to see how your spending compares.';
+
+  @override
+  String get budgetEmptyReadOnly => 'The Household Manager or Admin has not planned this month yet.';
+
+  @override
+  String get budgetPlanThisMonth => 'Plan this month';
+
+  @override
+  String get budgetCopyLast => 'Copy last month';
+
+  @override
+  String get budgetEdit => 'Edit budget';
+
+  @override
+  String get budgetOverall => 'Whole month';
+
+  @override
+  String budgetLeft(String amount) {
+    return '$amount left';
+  }
+
+  @override
+  String budgetOver(String amount) {
+    return '$amount over';
+  }
+
+  @override
+  String get budgetByCategory => 'By category';
+
+  @override
+  String get budgetDryTitle => 'Dry-grocery estimate';
+
+  @override
+  String budgetDrySummary(String count, String total) {
+    return '$count lines, $total';
+  }
+
+  @override
+  String get budgetDryEmpty => 'No estimate lines yet.';
+
+  @override
+  String get budgetTotalField => 'Total budget (leave empty to use the sum)';
+
+  @override
+  String get budgetDryFromLines => 'Sum of the lines below';
+
+  @override
+  String get budgetCategoryEstimates => 'Estimate per category';
+
+  @override
+  String get budgetLineName => 'Item';
+
+  @override
+  String get budgetLineStock => 'In stock';
+
+  @override
+  String get budgetLineRate => 'Rate';
+
+  @override
+  String get budgetLineTotal => 'Total';
+
+  @override
+  String get budgetAddLine => 'Add line';
+
+  @override
+  String get budgetRemoveLine => 'Remove line';
+
+  @override
+  String get budgetLinesSum => 'Lines total';
+
+  @override
+  String get budgetSaved => 'Budget saved';
+
+  @override
+  String get budgetErrExists => 'This month already has a budget.';
+
+  @override
+  String get budgetNoLastMonth => 'There is no budget for last month to copy.';
+
+  @override
+  String get budgetReadOnly => 'You can see the budget, but only the Household Manager or Admin can change it.';
+
+  @override
+  String get budgetAlertsTitle => 'Budget alerts';
 }

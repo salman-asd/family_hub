@@ -1604,5 +1604,86 @@
   "bazarSettingsFundStart": "Fund start month",
   "@bazarSettingsFundStart": {},
   "bazarSettingsFundStartUnset": "Set automatically when you record the opening balance.",
-  "@bazarSettingsFundStartUnset": {}
+  "@bazarSettingsFundStartUnset": {},
+  "budgetTitle": "Budget",
+  "@budgetTitle": {},
+  "budgetNote": "A budget is a plan; the fund balance is real money.",
+  "@budgetNote": {},
+  "budgetEmptyTitle": "No budget for this month",
+  "@budgetEmptyTitle": {},
+  "budgetEmptyMessage": "Plan the month to see how your spending compares.",
+  "@budgetEmptyMessage": {},
+  "budgetEmptyReadOnly": "The Household Manager or Admin has not planned this month yet.",
+  "@budgetEmptyReadOnly": {},
+  "budgetPlanThisMonth": "Plan this month",
+  "@budgetPlanThisMonth": {},
+  "budgetCopyLast": "Copy last month",
+  "@budgetCopyLast": {},
+  "budgetEdit": "Edit budget",
+  "@budgetEdit": {},
+  "budgetOverall": "Whole month",
+  "@budgetOverall": {},
+  "budgetLeft": "{amount} left",
+  "@budgetLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetOver": "{amount} over",
+  "@budgetOver": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetByCategory": "By category",
+  "@budgetByCategory": {},
+  "budgetDryTitle": "Dry-grocery estimate",
+  "@budgetDryTitle": {},
+  "budgetDrySummary": "{count} lines, {total}",
+  "@budgetDrySummary": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "budgetDryEmpty": "No estimate lines yet.",
+  "@budgetDryEmpty": {},
+  "budgetTotalField": "Total budget (leave empty to use the sum)",
+  "@budgetTotalField": {},
+  "budgetDryFromLines": "Sum of the lines below",
+  "@budgetDryFromLines": {},
+  "budgetCategoryEstimates": "Estimate per category",
+  "@budgetCategoryEstimates": {},
+  "budgetLineName": "Item",
+  "@budgetLineName": {},
+  "budgetLineStock": "In stock",
+  "@budgetLineStock": {},
+  "budgetLineRate": "Rate",
+  "@budgetLineRate": {},
+  "budgetLineTotal": "Total",
+  "@budgetLineTotal": {},
+  "budgetAddLine": "Add line",
+  "@budgetAddLine": {},
+  "budgetRemoveLine": "Remove line",
+  "@budgetRemoveLine": {},
+  "budgetLinesSum": "Lines total",
+  "@budgetLinesSum": {},
+  "budgetSaved": "Budget saved",
+  "@budgetSaved": {},
+  "budgetErrExists": "This month already has a budget.",
+  "@budgetErrExists": {},
+  "budgetNoLastMonth": "There is no budget for last month to copy.",
+  "@budgetNoLastMonth": {},
+  "budgetReadOnly": "You can see the budget, but only the Household Manager or Admin can change it.",
+  "@budgetReadOnly": {},
+  "budgetAlertsTitle": "Budget alerts",
+  "@budgetAlertsTitle": {}
 }

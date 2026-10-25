@@ -36,6 +36,7 @@ abstract final class AppRoutes {
   static String bazarExpenseEdit(String id) => '/bazar/expenses/$id/edit';
   static const String bazarTripNew = '/bazar/trip/new';
   static const String bazarCatalog = '/bazar/catalog';
+  static const String bazarBudget = '/bazar/budget';
   static const String bazarSettings = '/bazar/settings';
 
   // ── Onboarding sub-routes ─────────────────────────────────────────────────

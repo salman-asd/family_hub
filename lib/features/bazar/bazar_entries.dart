@@ -62,6 +62,12 @@ final List<BazarEntry> bazarEntries = <BazarEntry>[
     route: AppRoutes.bazarCatalog,
   ),
   BazarEntry(
+    id: 'budget',
+    icon: Icons.savings_outlined,
+    label: (l10n) => l10n.budgetTitle,
+    route: AppRoutes.bazarBudget,
+  ),
+  BazarEntry(
     id: 'settings',
     icon: Icons.tune_outlined,
     label: (l10n) => l10n.bazarSettingsTitle,
