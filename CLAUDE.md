@@ -143,3 +143,10 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 - The budget editor keeps TEXT drafts in `budgetControllerProvider(month)`; only `readLineDrafts` / `readCategoryTexts` / `readTotalText` (domain) parse them. A controller makes a new `eventId` after each successful save (log entries are never rewritten).
 - `Budget.createdAt/createdBy` are carried so a re-save keeps the author without a read; the rules do not freeze them on update.
 - Rules sizes for a budget: 40 category estimates, 150 lines, 4 thresholds (`budgetOk`); the app tolerates a malformed entry when reading.
+
+## Phase 2 additions (P2-19)
+- Contributions: only an APPROVED, non-voided contribution is received money and has a ledger row (`con_<id>`). A member's `RequestContribution` writes `pending` and NO ledger row; a manager's `RecordContribution` writes `approved` + the `con_<id>` row in ONE batch. Decisions (approve, reject, change approve/reject), void and the opening balance need the server and read the contribution fresh (`getContribution(fresh: true)`).
+- A changed contribution is written as the WHOLE document (`ContributionWriteStager.contribution`); optional fields are left OUT when absent (the rules test `!('fundTxId' in d)`). The rules allow each transition only by its exact changed keys (`contributionUpdateOk`); add a transition there AND in `contributions.test.mjs`.
+- Corrections are new rows: a change approval writes `adj_<eventId>` (delta) or the `_out`/`_in` pair when the month changes; a void writes `adj_<eventId>` of `-amount`. The `con_<id>` row is never edited.
+- Plans: `contributionPlans/{yyyy-MM}_{memberId}`; `GenerateMonthPlans` never overwrites an override. Every active member reads all contributions and plans (D-P2-5): no role filter in any provider.
+- `RecordOpeningBalance` needs `Permission.editFamilySettings` (admin) because only an admin may write an `opening` row (open point for P2-21 `CloseMonth`).

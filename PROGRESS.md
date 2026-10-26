@@ -718,6 +718,7 @@ No Flutter/Dart SDK, Java or emulator was available (downloads blocked). Run fir
 | P2-16 | Catalog manager + Bazar settings screens | Written, not run | `items_categories/presentation/{screens,widgets,controllers}`, `domain/usecases/{reactivate_category,reactivate_item,reorder_categories}.dart`, `settings/presentation/screens/bazar_settings_screen.dart` |
 | P2-17 | Budgets: domain, data, rules | Written, not run | `lib/features/bazar/budgets/{domain,data}`, `firebase/firestore.rules` (`budgetKeys`, `budgetOk`, `match /budgets/{b}`), `firebase/rules_test/budgets.test.mjs`, `fixtures/budget.json` (hand-written, regenerate), `test/features/bazar/budgets/` |
 | P2-18 | Budget screen and alerts provider | Written, not run | `budgets/presentation/{budget_providers,controllers/budget_controller,screens/budget_screen,widgets/*}.dart`, route `/bazar/budget`, Bazar home tile |
+| P2-19 | Contributions: domain, data, rules | Written, not run | `lib/features/bazar/contributions/{domain,data,presentation/contribution_providers.dart}`, `firebase/firestore.rules` (`contributionKeys`, `contributionPlanKeys`, `contributionOk`, `contributionCreateOk`, `contributionUpdateOk`, `match /contributions`, `match /contributionPlans`), `firebase/rules_test/contributions.test.mjs`, `test/features/bazar/contributions/`, contract fixtures (generated, see below) |
 
 ## Phase 2 - P2-13..P2-16 Expense screens, trip, list/detail, catalog manager, settings
 
@@ -773,6 +774,35 @@ Written without an SDK or emulator; **nothing was compiled or run**. Run first: 
 - The Dry-groceries category id is `cat_dry_groceries` (seed key `dry_groceries`).
 - Not done: goldens for the budget screen, a Bazar-home alert strip (P2-29 consumes `budgetAlertsProvider`), per-category thresholds.
 
+## Phase 2 - P2-19 Contributions (domain, data, rules, providers)
+
+Written without an SDK or emulator; **nothing was compiled or run**. Run first: `flutter pub get`, `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden`, then `flutter test test/contract/rules_fixtures_test.dart` (it WRITES the three new fixtures `contribution_request.json`, `contribution_recorded.json`, `contribution_plan.json`; they were not hand-written this time, so keep the generated files and commit them), the rules suite and `node tools/check_indexes.mjs` (no index change: both queries are equality-only).
+
+**Verified before building:** CLAUDE.md, the P2-19 card, the rules (`fundTxOk` already allows `con_`/`adj_` contribution rows, `monthOpen`, `financeManager`), `AuditEventType`/`AuditRefType` (all contribution types already existed), `Permission.requestContribution`, `FundTransaction` factories, `BazarSettings`. Nothing from earlier steps had to be changed except `paths_match_rules_test.dart` (the two collections moved from `pending` to `implemented`), `bootstrap.dart` (one repository) and the three contract test files.
+
+**Built**
+- Domain (pure): `Contribution`, `ContributionChange`, `ContributionPlan`, enums; `ContributionStatusCalculator` (expected / received / remaining / credit / `pendingTotal`); `generateEqualSplit` (D-P2-11); write plans; `ContributionRepository`; shared `contribution_guards.dart`.
+- 13 use cases: `RecordContribution` (manager, approved + `con_` row), `RequestContribution` (member, pending, no ledger row), `EditPendingContribution`, `CancelContributionRequest`, `ApproveContribution`, `RejectContribution`, `RequestContributionChange`, `ApproveContributionChange`, `RejectContributionChange`, `VoidContribution`, `SetContributionPlan`, `GenerateMonthPlans`, `RecordOpeningBalance`.
+- Data: `ContributionMappers`, `ContributionWriteStager`, `FirestoreContributionRepository` (everyday writes queue offline; approve/reject/change decisions, void and opening balance probe the server; the decision use cases read the contribution fresh from the server).
+- Rules: closed key sets, `contributionOk`, one `contributionUpdateOk` listing each allowed transition by its exact changed keys; approve and record require the matching `con_<id>` row in the same batch (`existsAfter`/`getAfter`, amount and date compared); every write needs an open month; no delete. `contributionPlans`: managers write, everyone reads, id must be `<yyyy-MM>_<memberId>`.
+- Providers: `contributionPlansProvider(month)`, `contributionsProvider(month)` (one listener each, no role filter), `contributionStatusProvider`, `pendingContributionsProvider`, `myContributionsProvider`, `activeMemberIdsProvider`, one provider per use case. Repository wired in `bootstrap.dart`.
+- Tests: `contribution_domain_test`, `contribution_usecases_test` (incl. a scripted month), `contribution_mappers_test`, `contributions.test.mjs` (allowed + denied per rule), key-set mirror tests, contract fixtures.
+
+**Assumptions / deviations from the card (please review)**
+1. **Opening balance permission.** The card says only "permission". The P2-10 rules (and their test "denies a moderator writing an opening row") let only an ADMIN write an `opening` row, so `RecordOpeningBalance` requires `Permission.editFamilySettings` (admin). **P2-21 (`CloseMonth`) will hit the same mismatch**: `closeBazarMonth` allows a Household Manager but the carry-forward `opening` row is admin-only in the rules. Decide there: either relax `fundTxOk` for `opening` to `financeManager(f)` (and update that test) or make close admin-only.
+2. `settings.monthlyTarget` in the card is `BazarSettings.defaultMonthlyContribution` in code; it is treated as the FAMILY's monthly total, split equally (D-P2-11). The split is computed over all active members, but only members WITHOUT a plan get one written.
+3. The card's "৳5,000 / 3 = 1,667.00 / 1,667.00 / 1,666.00" is rounded; the exact paisa split is 166,667 / 166,667 / 166,666 (the test uses this).
+4. `Contribution` also carries `createdAt` (needed to re-write the whole document without a read). A changed contribution is written as a full `set`, so removing `pendingChange` is a real removal.
+5. The owner edit rule also allows `monthKey` to change (an edit of the date can cross a month); both the old and the new month must be open.
+6. `ApproveContributionChange`: same month = ONE row `adj_<eventId>` of `new - old` (none when equal); date moved into another month = `adj_<eventId>_out` (`-old`, old date) + `adj_<eventId>_in` (`+new`, new date), so each month's rows still add up. The rules do not check the adjustment rows of a change approval (they cannot know the delta of the old document); the use case and its tests do.
+7. `VoidContribution` also drops a stale `pendingChange`; the compensating row keeps the contribution's own date. `CancelContributionRequest` and `RejectContributionChange` follow the same month-lock rule as every other write (rules need an open month).
+8. `RecordContribution` (manager) also refuses a future date and a non-active target member (the rules check the member document too).
+9. Reject reasons, change reasons and old/new amounts go into audit `params` as machine values, never display text.
+10. A second approval from stale state is stopped three ways: fresh server read + probe, `resource.status == pending` in the rules, and the `con_<id>` row cannot be written twice (ledger rows are create-only).
+11. New `Conflict` codes (`contribution_not_pending`, `contribution_not_approved`, `change_already_pending`, `no_pending_change`, `already_voided`, `fund_already_started`) fall back to the generic message in `bazarFailureMessage`; their ARB strings come with the screens in P2-22 (no ARB or generated l10n file was touched here).
+
+**Not done:** screens, ARB strings (P2-22), `ledger_integrity` use of the new rows, goldens.
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -783,7 +813,7 @@ Written without an SDK or emulator; **nothing was compiled or run**. Run first: 
 - Custom relationship entries have per-item shape checks only in the app, not in the rules (rules bound the list to 40 items).
 - Screen-state harness covers 4 screens so far.
 - `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
-- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). P2-17/P2-18 (budgets) are written and unverified too. Next: P2-19 (Contributions: domain, data, rules).
+- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). P2-17/P2-18 (budgets) and P2-19 (contributions) are written and unverified too. Next: P2-20 (Advances & settlements) and P2-22 (fund screens).
 - Phase 2 has its P2-01 skeleton (Bazar home + seams), P2-02 pure helpers, P2-03 vocabulary,
   P2-04 catalog domain/search, P2-05 catalog data/rules/providers, P2-06 default seed/backfill,
   P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain and P2-09 expense

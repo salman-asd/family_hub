@@ -16,6 +16,8 @@ import 'package:family_hub/features/bazar/advances/domain/member_advance.dart';
 import 'package:family_hub/features/bazar/advances/domain/settlement.dart';
 import 'package:family_hub/features/bazar/budgets/data/budget_mappers.dart';
 import 'package:family_hub/features/bazar/budgets/domain/budget.dart';
+import 'package:family_hub/features/bazar/contributions/data/contribution_mappers.dart';
+import 'package:family_hub/features/bazar/contributions/domain/contribution.dart';
 import 'package:family_hub/features/bazar/expenses/data/expense_mappers.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense_repository.dart';
@@ -118,6 +120,9 @@ List<Map<String, dynamic>> _fixtures() => <Map<String, dynamic>>[
   _advance(),
   _settlement(),
   _monthClosing(),
+  _contributionRequest(),
+  _contributionRecorded(),
+  _contributionPlan(),
 ];
 
 Map<String, dynamic> _fixture(
@@ -1302,4 +1307,103 @@ final class _Increment {
   const _Increment(this.value);
 
   final int value;
+}
+
+/// P2-19: a member's own pending request (no ledger row) and its log entries.
+Map<String, dynamic> _contributionRequest() {
+  final contribution = Contribution(
+    id: 'fixCon1',
+    memberId: _member,
+    monthKey: _day.monthKey,
+    dateKey: _day,
+    amount: const Money.paisa(100000),
+    method: ContributionMethod.bkash,
+    note: 'Monthly share',
+    status: ContributionApproval.pending,
+    requestedBy: _member,
+    createdAt: _at,
+  );
+  final event = _bazarEvent(
+    'ev30',
+    AuditEventType.bazarContributionRequested,
+    AuditRefType.contribution,
+    'fixCon1',
+  );
+  return _fixture('contribution_request', _member, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.contributionDoc(_familyId, 'fixCon1'),
+      ContributionMappers.toMap(contribution, _meta(_member)),
+    ),
+    ..._eventWrites(event),
+  ]);
+}
+
+/// P2-19: a manager's record: the approved contribution and its `con_` row in
+/// ONE batch.
+Map<String, dynamic> _contributionRecorded() {
+  final contribution = Contribution(
+    id: 'fixCon2',
+    memberId: _member,
+    monthKey: _day.monthKey,
+    dateKey: _day,
+    amount: const Money.paisa(100000),
+    status: ContributionApproval.approved,
+    requestedBy: _admin,
+    createdAt: _at,
+    fundTxId: 'con_fixCon2',
+    decidedBy: _admin,
+    decidedAt: _at,
+  );
+  final row = FundTransaction.forContribution(
+    contributionId: 'fixCon2',
+    amount: const Money.paisa(100000),
+    dateKey: _day,
+    createdBy: _admin,
+    createdAt: _at,
+  );
+  final event = _bazarEvent(
+    'ev31',
+    AuditEventType.bazarContributionRecorded,
+    AuditRefType.contribution,
+    'fixCon2',
+    actor: _admin,
+  );
+  return _fixture('contribution_recorded', _admin, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.contributionDoc(_familyId, 'fixCon2'),
+      ContributionMappers.toMap(contribution, _meta(_admin)),
+    ),
+    _write(
+      'set',
+      FirestorePaths.fundTransactionDoc(_familyId, row.id),
+      FundMappers.fundTxToMap(row, _meta(_admin)),
+    ),
+    ..._eventWrites(event),
+  ]);
+}
+
+/// P2-19: the generated equal-split plans.
+Map<String, dynamic> _contributionPlan() {
+  final plan = ContributionPlan(
+    month: _day.monthKey,
+    memberId: _member,
+    expected: const Money.paisa(166700),
+  );
+  final event = _bazarEvent(
+    'ev32',
+    AuditEventType.bazarContributionPlanSet,
+    AuditRefType.contributionPlan,
+    plan.id,
+    actor: _admin,
+  );
+  return _fixture('contribution_plan', _admin, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.contributionPlanDoc(_familyId, plan.id),
+      ContributionMappers.planToMap(plan, _meta(_admin)),
+    ),
+    ..._eventWrites(event),
+  ]);
 }

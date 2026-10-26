@@ -207,6 +207,15 @@ const seeders = {
   month_closing: async (db) => {
     await seedFamilyWithAdmin(db);
   },
+  contribution_request: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  contribution_recorded: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  contribution_plan: async (db) => {
+    await seedFamilyWithMember(db);
+  },
 };
 
 const seedFamilyWithAdmin = async (db) => {

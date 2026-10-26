@@ -10,6 +10,8 @@ import 'package:family_hub/features/bazar/advances/domain/member_advance.dart';
 import 'package:family_hub/features/bazar/advances/domain/settlement.dart';
 import 'package:family_hub/features/bazar/budgets/data/budget_mappers.dart';
 import 'package:family_hub/features/bazar/budgets/domain/budget.dart';
+import 'package:family_hub/features/bazar/contributions/data/contribution_mappers.dart';
+import 'package:family_hub/features/bazar/contributions/domain/contribution.dart';
 import 'package:family_hub/features/bazar/expenses/data/expense_mappers.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense_repository.dart';
@@ -371,6 +373,48 @@ void main() {
     expect(
       AdvanceMappers.settlementToMap(settlement, meta).keys.toSet(),
       rulesList('settlementKeys'),
+    );
+  });
+
+  test('contribution toMap keys == contributionKeys()', () {
+    final full = Contribution(
+      id: 'c1',
+      memberId: 'u1',
+      monthKey: MonthKey(2026, 10),
+      dateKey: DateKey(2026, 10, 5),
+      amount: const Money.paisa(100000),
+      method: ContributionMethod.cash,
+      note: 'n',
+      status: ContributionApproval.approved,
+      requestedBy: 'u1',
+      createdAt: DateTime.utc(2026, 10, 5),
+      fundTxId: 'con_c1',
+      decidedBy: 'u2',
+      decidedAt: DateTime.utc(2026, 10, 5),
+      rejectReason: 'r',
+      pendingChange: ContributionChange(
+        amount: const Money.paisa(1),
+        date: DateKey(2026, 10, 6),
+        requestedAt: DateTime.utc(2026, 10, 6),
+      ),
+      voidedAt: DateTime.utc(2026, 10, 7),
+      voidedBy: 'u2',
+    );
+    expect(
+      ContributionMappers.toMap(full, meta).keys.toSet(),
+      rulesList('contributionKeys'),
+    );
+  });
+
+  test('contribution plan toMap keys == contributionPlanKeys()', () {
+    final plan = ContributionPlan(
+      month: MonthKey(2026, 10),
+      memberId: 'u1',
+      expected: const Money.paisa(100),
+    );
+    expect(
+      ContributionMappers.planToMap(plan, meta).keys.toSet(),
+      rulesList('contributionPlanKeys'),
     );
   });
 }

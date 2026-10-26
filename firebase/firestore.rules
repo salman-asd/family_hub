@@ -223,6 +223,20 @@ service cloud.firestore {
               'alertThresholds', 'createdAt', 'createdBy', 'updatedAt',
               'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
     }
+    // Phase 2 contributions (P2-19): the exact fields `ContributionMappers`
+    // writes.  Optional values (fundTxId, decidedBy, ...) are ABSENT until set.
+    function contributionKeys() {
+      return ['memberId', 'monthKey', 'dateKey', 'amountPaisa', 'method',
+              'note', 'status', 'requestedBy', 'fundTxId', 'decidedBy',
+              'decidedAt', 'rejectReason', 'pendingChange', 'voidedAt',
+              'voidedBy', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+              'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function contributionPlanKeys() {
+      return ['monthKey', 'memberId', 'expectedPaisa', 'createdAt',
+              'createdBy', 'updatedAt', 'updatedBy', 'schemaVersion',
+              'deletedAt', 'deletedBy'];
+    }
     // Phase 2 expenses, trips, ledger and advances (P2-10).  These mirror
     // ExpenseMappers / FundMappers / AdvanceMappers and MonthClosingMappers.
     function expenseKeys() {
@@ -361,6 +375,201 @@ service cloud.firestore {
         && d.get('lines', []).size() <= 150
         && d.get('alertThresholds', null) is list
         && d.get('alertThresholds', []).size() <= 4;
+    }
+
+    // ── Phase 2 contributions (P2-19, D-P2-18) ─────────────────────────────
+    function contributionMethods() {
+      return ['cash', 'bkash', 'nagad', 'bank', 'other'];
+    }
+    function contributionPath(f, c) {
+      return /databases/$(database)/documents/families/$(f)/contributions/$(c);
+    }
+    function fundTxPathOf(f, t) {
+      return /databases/$(database)/documents/families/$(f)/fundTransactions/$(t);
+    }
+    // A member's change request stored on an approved contribution.
+    function pendingChangeOk(p) {
+      return p is map
+        && p.keys().hasOnly(['amountPaisa', 'dateKey', 'method', 'note',
+                             'requestedAt'])
+        && p.get('amountPaisa', 0) is int
+        && p.amountPaisa > 0
+        && dateKeyOk(p.get('dateKey', ''))
+        && (!('method' in p.keys()) || p.method in contributionMethods())
+        && (!('note' in p.keys()) || str(p.note, 0, 300))
+        && p.get('requestedAt', null) is timestamp;
+    }
+    // The shape every contribution document keeps, whoever writes it.
+    function contributionOk(d, id) {
+      return d.keys().hasOnly(contributionKeys())
+        && str(d.get('memberId', ''), 1, 64)
+        && monthKeyOk(d.get('monthKey', ''))
+        && dateKeyOk(d.get('dateKey', ''))
+        && d.get('dateKey', '').matches('^' + d.get('monthKey', '') + '-[0-9]{2}$')
+        && d.get('amountPaisa', 0) is int
+        && d.amountPaisa > 0
+        && (!('method' in d.keys()) || d.method in contributionMethods())
+        && optStr(d, 'note', 300)
+        && d.get('status', '') in ['pending', 'approved', 'rejected']
+        && str(d.get('requestedBy', ''), 1, 64)
+        && optStr(d, 'rejectReason', 200)
+        && optStr(d, 'decidedBy', 64)
+        && optStr(d, 'voidedBy', 64)
+        && optStr(d, 'fundTxId', 64)
+        && (!('decidedAt' in d.keys()) || d.decidedAt is timestamp)
+        && (!('voidedAt' in d.keys()) || d.voidedAt is timestamp)
+        && (!('pendingChange' in d.keys()) || pendingChangeOk(d.pendingChange))
+        && (d.status != 'rejected' || d.get('rejectReason', '') != '')
+        && (d.status != 'approved'
+            || d.get('fundTxId', '') == 'con_' + id);
+    }
+    // A fresh document carries no decision, void or change request.
+    function contributionFresh(d) {
+      return !('fundTxId' in d.keys())
+        && !('decidedBy' in d.keys())
+        && !('decidedAt' in d.keys())
+        && !('rejectReason' in d.keys())
+        && !('pendingChange' in d.keys())
+        && !('voidedAt' in d.keys())
+        && !('voidedBy' in d.keys());
+    }
+    // The ledger row written in the SAME batch as an approval/record: right id,
+    // right amount, right date, right reference.
+    function contributionLedgerOk(f, c, d) {
+      return existsAfter(fundTxPathOf(f, 'con_' + c))
+        && getAfter(fundTxPathOf(f, 'con_' + c)).data.get('type', '') == 'contribution'
+        && getAfter(fundTxPathOf(f, 'con_' + c)).data.get('refId', '') == c
+        && getAfter(fundTxPathOf(f, 'con_' + c)).data.get('amountPaisa', 0)
+             == d.amountPaisa
+        && getAfter(fundTxPathOf(f, 'con_' + c)).data.get('dateKey', '')
+             == d.dateKey;
+    }
+    function activeMemberDoc(f, uid) {
+      return exists(memberPath(f, uid))
+        && get(memberPath(f, uid)).data.get('status', 'pending') == 'active'
+        && get(memberPath(f, uid)).data.get('removedAt', null) == null;
+    }
+    // Who the money belongs to AND who entered it: a member's own request.
+    function ownsContribution(r) {
+      return r.get('memberId', '') == request.auth.uid
+        && r.get('requestedBy', '') == request.auth.uid;
+    }
+    function contributionCreateOk(f, c, d) {
+      return contributionOk(d, c)
+        && d.requestedBy == request.auth.uid
+        && monthOpen(f, d.monthKey)
+        && (
+          // (a) a member's own REQUEST: pending, no ledger row, nothing decided.
+          (isActiveMember(f)
+            && d.memberId == request.auth.uid
+            && d.status == 'pending'
+            && contributionFresh(d))
+          // (b) a manager's RECORD: approved at once, with its ledger row.
+          || (financeManager(f)
+            && d.status == 'approved'
+            && d.get('decidedBy', '') == request.auth.uid
+            && activeMemberDoc(f, d.memberId)
+            && !('rejectReason' in d.keys())
+            && !('pendingChange' in d.keys())
+            && !('voidedAt' in d.keys())
+            && !('voidedBy' in d.keys())
+            && contributionLedgerOk(f, c, d))
+        );
+    }
+    // One update, by exactly one of the allowed transitions.  `a` is the set of
+    // fields that change; the rules never trust a full-document replace.
+    function contributionUpdateOk(f, c) {
+      let before = resource.data;
+      let after = request.resource.data;
+      let a = request.resource.data.diff(resource.data).affectedKeys();
+      return contributionOk(after, c)
+        && after.get('createdAt', null) == before.get('createdAt', null)
+        && after.get('createdBy', '') == before.get('createdBy', '')
+        && after.get('memberId', '') == before.get('memberId', '')
+        && after.get('requestedBy', '') == before.get('requestedBy', '')
+        && monthOpen(f, before.monthKey)
+        && monthOpen(f, after.monthKey)
+        && (
+          // Owner edits a PENDING request (the status cannot move).
+          (isActiveMember(f)
+            && ownsContribution(before)
+            && before.status == 'pending'
+            && !('voidedAt' in before.keys())
+            && after.status == 'pending'
+            && a.hasOnly(['amountPaisa', 'dateKey', 'monthKey', 'method',
+                          'note', 'updatedAt', 'updatedBy']))
+          // Owner withdraws a PENDING request (soft void, no ledger row).
+          || (isActiveMember(f)
+            && ownsContribution(before)
+            && before.status == 'pending'
+            && !('voidedAt' in before.keys())
+            && a.hasOnly(['voidedAt', 'voidedBy', 'updatedAt', 'updatedBy'])
+            && after.get('voidedBy', '') == request.auth.uid)
+          // Owner asks to change an APPROVED contribution.
+          || (isActiveMember(f)
+            && before.memberId == request.auth.uid
+            && before.status == 'approved'
+            && !('voidedAt' in before.keys())
+            && !('pendingChange' in before.keys())
+            && a.hasOnly(['pendingChange', 'updatedAt', 'updatedBy']))
+          // Manager approves a PENDING request; the ledger row is written in
+          // the same batch.
+          || (financeManager(f)
+            && before.status == 'pending'
+            && !('voidedAt' in before.keys())
+            && after.status == 'approved'
+            && a.hasOnly(['status', 'fundTxId', 'decidedBy', 'decidedAt',
+                          'updatedAt', 'updatedBy'])
+            && after.get('decidedBy', '') == request.auth.uid
+            && contributionLedgerOk(f, c, after))
+          // Manager rejects a PENDING request (a reason is required).
+          || (financeManager(f)
+            && before.status == 'pending'
+            && !('voidedAt' in before.keys())
+            && after.status == 'rejected'
+            && a.hasOnly(['status', 'rejectReason', 'decidedBy', 'decidedAt',
+                          'updatedAt', 'updatedBy'])
+            && after.get('decidedBy', '') == request.auth.uid)
+          // Manager approves a change: the stored request becomes the values.
+          || (financeManager(f)
+            && before.status == 'approved'
+            && !('voidedAt' in before.keys())
+            && before.get('pendingChange', null) != null
+            && !('pendingChange' in after.keys())
+            && after.status == 'approved'
+            && a.hasOnly(['amountPaisa', 'dateKey', 'monthKey', 'method',
+                          'note', 'pendingChange', 'updatedAt', 'updatedBy'])
+            && after.amountPaisa == before.pendingChange.amountPaisa
+            && after.dateKey == before.pendingChange.dateKey
+            && after.get('method', null)
+                 == before.pendingChange.get('method', null)
+            && after.get('note', null)
+                 == before.pendingChange.get('note', null))
+          // Manager declines a change: only the request disappears.
+          || (financeManager(f)
+            && before.status == 'approved'
+            && !('voidedAt' in before.keys())
+            && before.get('pendingChange', null) != null
+            && !('pendingChange' in after.keys())
+            && a.hasOnly(['pendingChange', 'updatedAt', 'updatedBy']))
+          // Manager voids an APPROVED contribution (the compensating ledger
+          // row is the use case's job; the rows are append-only).
+          || (financeManager(f)
+            && before.status == 'approved'
+            && !('voidedAt' in before.keys())
+            && a.hasOnly(['voidedAt', 'voidedBy', 'pendingChange',
+                          'updatedAt', 'updatedBy'])
+            && after.get('voidedBy', '') == request.auth.uid
+            && !('pendingChange' in after.keys()))
+        );
+    }
+    // A month's plan for one member.  The id is `<yyyy-MM>_<memberId>`.
+    function contributionPlanOk(d, id) {
+      return d.keys().hasOnly(contributionPlanKeys())
+        && monthKeyOk(d.get('monthKey', ''))
+        && str(d.get('memberId', ''), 1, 64)
+        && id == d.monthKey + '_' + d.memberId
+        && moneyOk(d, 'expectedPaisa');
     }
 
     // ── Phase 2 expense / ledger shapes (P2-10) ────────────────────────────
@@ -1306,6 +1515,41 @@ service cloud.firestore {
           && financeManager(f)
           && writesAsSelf()
           && budgetOk(request.resource.data, b);
+        allow delete: if false;
+      }
+
+      // ── contributionPlans/{yyyy-MM_memberId} (P2-19) ─────────────────────
+      // Every active member reads every plan (D-P2-5).  A plan is a plan, not
+      // a ledger row, so a closed month does not block it (like budgets).
+      match /contributionPlans/{p} {
+        allow read: if canReadFamilyData(f);
+        allow create: if verified()
+          && financeManager(f)
+          && createsAsSelf()
+          && contributionPlanOk(request.resource.data, p);
+        allow update: if verified()
+          && financeManager(f)
+          && writesAsSelf()
+          && contributionPlanOk(request.resource.data, p)
+          && request.resource.data.get('memberId', '')
+               == resource.data.get('memberId', '')
+          && request.resource.data.get('monthKey', '')
+               == resource.data.get('monthKey', '');
+        allow delete: if false;
+      }
+
+      // ── contributions/{c} — requests, records and decisions (P2-19) ─────
+      // Every active member reads every contribution (D-P2-5).  A member can
+      // only REQUEST (pending, no ledger row); the Household Manager or Admin
+      // records, approves, rejects and voids.  Every write needs an open month.
+      match /contributions/{c} {
+        allow read: if canReadFamilyData(f);
+        allow create: if verified()
+          && createsAsSelf()
+          && contributionCreateOk(f, c, request.resource.data);
+        allow update: if verified()
+          && writesAsSelf()
+          && contributionUpdateOk(f, c);
         allow delete: if false;
       }
 

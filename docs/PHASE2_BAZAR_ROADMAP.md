@@ -980,6 +980,8 @@ Goal: record a normal item in ≤ 10 seconds and ≤ 4 taps after choosing the i
 **Note (resolved by the owner):** members may add/modify their own contributions, but only as requests that the **Household Manager or Admin approves** (D-P2-18). `docs/permission_matrix.md` must be regenerated to show `requestContribution` for members.
 **Done when:** a scripted month of contributions yields the hand-computed expected / received / remaining per member.
 
+**Implementation status (P2-19):** written, not compiled; deviations and assumptions are listed in `PROGRESS.md` ("Phase 2 - P2-19"). The card's `settings.monthlyTarget` is `defaultMonthlyContribution`; `RecordOpeningBalance` needs the admin permission `editFamilySettings` (the rules allow only an admin to write an `opening` row).
+
 ---
 
 ### P2-20 — Advances and settlements
