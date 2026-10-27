@@ -24,10 +24,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// The Fund screen's scrollable content: balance card, banners, per-member
 /// rows, the manager tools and the month's ledger.
 class FundBody extends ConsumerWidget {
-  const FundBody({required this.month, required this.canRecord, super.key});
+  const FundBody({
+    required this.month,
+    required this.canRecord,
+    this.focusPendingApprovals = false,
+    super.key,
+  });
 
   final MonthKey month;
   final bool canRecord;
+  final bool focusPendingApprovals;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -114,7 +120,10 @@ class FundBody extends ConsumerWidget {
             ),
         if (canRecord) ...[
           const SizedBox(height: 12),
-          PendingApprovalsSection(month: month),
+          PendingApprovalsSection(
+            month: month,
+            focusOnMount: focusPendingApprovals,
+          ),
         ],
         const SizedBox(height: 16),
         SectionHeader(title: l10n.fundHistoryTitle),

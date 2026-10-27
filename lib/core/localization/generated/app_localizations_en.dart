@@ -2053,6 +2053,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundPendingTitle => 'Waiting for approval';
 
   @override
+  String bazarDashboardPendingApprovals(String count) {
+    return '$count contributions awaiting approval';
+  }
+
+  @override
   String get fundPendingEmpty => 'No requests are waiting.';
 
   @override

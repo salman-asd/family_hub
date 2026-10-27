@@ -724,6 +724,7 @@ No Flutter/Dart SDK, Java or emulator was available (downloads blocked). Run fir
 | P2-22 | Fund and contributions screens | Written, not run | `lib/features/bazar/fund/presentation/{screens/fund_screen.dart,widgets/*}`, `contributions/presentation/{controllers/contribution_form_*,widgets/*}`, `fund/domain/{ledger_integrity_check,balance_drift}.dart`, `fund_providers.dart` (`ledgerIntegrityProvider`, `balanceDriftProvider`, `monthFundTransactionsProvider`), route `/bazar/fund`, Bazar home tile, 63 `fund*` ARB keys, `test/features/bazar/fund/presentation/` |
 | P2-26 | Import parser and mapping | Not implemented | |
 | P2-25 | Reports screen (`fl_chart`) | Written, not run | `pubspec.yaml` (`fl_chart: ^1.3.0`), `lib/features/bazar/reports/presentation/{report_providers.dart,screens/reports_screen.dart,widgets/*}`, route `/bazar/reports` + Bazar home tile, 56 `report*`/`chart*` ARB keys, `test/features/bazar/reports/presentation/` |
+| P2-29 | Dashboard cards and module hooks | Written, not run | `lib/features/bazar/presentation/widgets/dashboard/`, `bazar_module.dart`, dashboard and Bazar home screens, `docs/bazar_dashboard_contract.md`, `test/features/bazar/presentation/dashboard_cards_test.dart` |
 | P2-24 | Report engine (pure Dart) | Written, not run | `lib/features/bazar/reports/domain/{report_query,report_data,period_comparison,report_engine,report_loader}.dart`, `query_limits.dart` (`kReportPageSize`, `kMaxReportDocs`), `test/features/bazar/reports/{report_engine,report_loader,report_query}_test.dart` |
 | P2-23 | Advances and Month-close screens | Written, not run | `lib/features/bazar/advances/{domain/settlement_builder.dart,domain/usecases/settle_advance.dart,domain/advance_grouping.dart,presentation/screens/advances_screen.dart,presentation/widgets/*}`, `fund/presentation/screens/month_close_screen.dart`, `fund/presentation/widgets/{month_close_actions,month_close_preview_card,month_list,reopen_month_dialog,locked_month_banner}.dart`, `fund/domain/{month_choices,month_close_preview}.dart`, routes `/bazar/advances` + `/bazar/month-close`, 33 `advance*`/`month*` ARB keys, `test/features/bazar/advances/`, `test/features/bazar/fund/presentation/month_close_screen_test.dart` |
 
@@ -779,7 +780,7 @@ Written without an SDK or emulator; **nothing was compiled or run**. Run first: 
 - Dry-grocery rows use a plain name field (no `ItemAutocompleteField`) and keep `itemId` null for new rows.
 - `contract/budget.json` was written by hand to match `JsonEncoder.withIndent`; regenerate it with the Dart test to be sure.
 - The Dry-groceries category id is `cat_dry_groceries` (seed key `dry_groceries`).
-- Not done: goldens for the budget screen, a Bazar-home alert strip (P2-29 consumes `budgetAlertsProvider`), per-category thresholds.
+- Not done: goldens for the budget screen and per-category thresholds. P2-29 adds the Bazar-home alert badge using `budgetAlertsProvider`.
 
 ## Phase 2 - P2-19 Contributions (domain, data, rules, providers)
 
@@ -950,8 +951,8 @@ Written without an SDK; **nothing was compiled or run**. Run first, in this orde
   month), because a contribution query is month-bounded.
 - No goldens were added; the widget tests cover bn at 2x instead.
 
-**Not done:** goldens, a dedicated item chart (the item tab is a table; a second bar chart would repeat
-what the categories chart shows), the dashboard card (P2-29).
+**Not done:** goldens and a dedicated item chart (the item tab is a table; a second bar chart would
+repeat what the categories chart shows). P2-29 adds the dashboard cards.
 
 ## Phase 2 - P2-20 (settlement half) and P2-23 Advances and Month-close screens
 
@@ -1034,7 +1035,27 @@ collection, rules, index, screen or ARB change, so the rules suite and `check_in
 - `shareBp` is `null` when the report total is zero (a share of nothing is undefined, not 0).
 - The loader pushes only `memberId` and `funding` to Firestore (both are single-field filters); the
   category/item filters run in the engine so the category and item breakdowns stay complete.
-- The screen (P2-25) is not built; nothing in `presentation/` was added for reports.
+- Report screen behavior and dashboard report-view hooks remain unverified.
+
+## Phase 2 - P2-29 Dashboard cards and module hooks
+
+Written without a Flutter/Dart SDK; **nothing was compiled or run**.
+
+**Built**
+- `BazarModule.dashboardCards` contributes the month spend, fund balance and
+  worst-budget-alert cards; it also exposes `bazar_month` and `bazar_categories`
+  report views.
+- The Home tab renders cards only from `visibleModulesProvider`, so a disabled
+  Bazar module contributes no dashboard content.
+- Bazar Home reuses the same cards and shows a localized alert count on its
+  Budget entry. The fund approval count is permission-gated and deep-links to
+  the pending-approval section.
+- Added `docs/bazar_dashboard_contract.md`, localized pending-count text and
+  widget coverage for data, empty, loading/error handling, module visibility,
+  permissions, and bn/en at 2x text scaling.
+
+**Not verified:** formatting, analysis, widget tests and goldens. No generated
+golden images were added; those are produced by the Linux workflow.
 
 ## Known limitations (honest list)
 
@@ -1046,10 +1067,11 @@ collection, rules, index, screen or ARB change, so the rules suite and `check_in
 - Custom relationship entries have per-item shape checks only in the app, not in the rules (rules bound the list to 40 items).
 - Screen-state harness covers 4 screens so far.
 - `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
-- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). P2-17/P2-18 (budgets), P2-19 (contributions), P2-20/P2-23 (advances, settlements and both screens), P2-21 (month close), P2-22 (fund screens), P2-24 (report engine) and P2-25 (reports screen) are written and unverified too. Next: P2-26 (spreadsheet import parser, per Appendix B).
+- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). P2-17/P2-18 (budgets), P2-19 (contributions), P2-20/P2-23 (advances, settlements and both screens), P2-21 (month close), P2-22 (fund screens), P2-24 (report engine), P2-25 (reports screen) and P2-29 (dashboard integration) are written and unverified too. P2-26 is not implemented. Next: P2-30 hardening and sign-off.
 - **New dependency, unverified:** `fl_chart: ^1.3.0` (P2-25) was added to `pubspec.yaml` from pub.dev's current stable release. `pubspec.lock` was NOT regenerated (no SDK here): run `flutter pub get` and commit the lock file.
 - Phase 2 has its P2-01 skeleton (Bazar home + seams), P2-02 pure helpers, P2-03 vocabulary,
   P2-04 catalog domain/search, P2-05 catalog data/rules/providers, P2-06 default seed/backfill,
   P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain and P2-09 expense
-  domain/use cases; the Bazar/Chores/Dashboard features and UI are not implemented yet. The
-  P2-05/P2-06/P2-07 rules suite has not been run (no Java).
+  domain/use cases; P2-29 adds the Bazar dashboard cards and module hooks, while the Chores
+  dashboard remains unimplemented. The P2-05/P2-06/P2-07 rules suite has not
+  been run (no Java).

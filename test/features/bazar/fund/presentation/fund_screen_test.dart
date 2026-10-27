@@ -45,9 +45,11 @@ void main() {
     Role role = Role.admin,
     Locale locale = const Locale('en'),
     double textScale = 1,
+    double height = 1600,
+    bool focusPendingApprovals = false,
   }) async {
     tester.view
-      ..physicalSize = const Size(420, 1600)
+      ..physicalSize = Size(420, height)
       ..devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(
@@ -72,7 +74,7 @@ void main() {
             ).copyWith(textScaler: TextScaler.linear(textScale)),
             child: child!,
           ),
-          home: const FundScreen(),
+          home: FundScreen(focusPendingApprovals: focusPendingApprovals),
         ),
       ),
     );
@@ -226,5 +228,22 @@ void main() {
     // The widget hides itself by permission, so nothing is drawn for Cara.
     expect(find.byKey(const ValueKey('pending-approvals')), findsNothing);
     expect(find.byType(ContributionHistoryList), findsNothing);
+  });
+
+  testWidgets('pending approval deep link scrolls to the manager section', (
+    tester,
+  ) async {
+    await contributions.request(
+      actorUid: 'cara',
+      familyId: ContributionFixture.familyId,
+      memberId: 'cara',
+      amount: const Money.paisa(50000),
+      date: contributions.today,
+    );
+    await pump(tester, height: 520, focusPendingApprovals: true);
+
+    final section = tester.getRect(find.byKey(const ValueKey('pending-approvals')));
+    expect(section.top, lessThan(520));
+    expect(tester.takeException(), isNull);
   });
 }

@@ -1806,6 +1806,14 @@
   "@fundMethodOther": {},
   "fundPendingTitle": "অনুমোদনের অপেক্ষায়",
   "@fundPendingTitle": {},
+  "bazarDashboardPendingApprovals": "{count}টি জমার অনুরোধ অনুমোদনের অপেক্ষায়",
+  "@bazarDashboardPendingApprovals": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "fundPendingEmpty": "কোনো অনুরোধ অপেক্ষায় নেই।",
   "@fundPendingEmpty": {},
   "fundApprove": "অনুমোদন",

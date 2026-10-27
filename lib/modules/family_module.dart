@@ -34,7 +34,7 @@ abstract class FamilyModule {
   /// Routes of this module's navigation branch.
   List<RouteBase> get routes;
 
-  /// Dashboard cards the module contributes (Step 27).
+  /// Dashboard cards the module contributes (P2-29).
   List<WidgetBuilder> get dashboardCards => const [];
 
   /// Ids of report views the module contributes (Step 18).

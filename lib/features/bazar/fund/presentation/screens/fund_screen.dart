@@ -21,7 +21,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// see the integrity banners.  The balance is the ledger sum (ADR 0007), so a
 /// new expense, a settlement or a month close moves it without a refresh.
 class FundScreen extends ConsumerWidget {
-  const FundScreen({super.key});
+  const FundScreen({super.key, this.focusPendingApprovals = false});
+
+  final bool focusPendingApprovals;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,7 +48,11 @@ class FundScreen extends ConsumerWidget {
           Expanded(
             child: configured == null && canRecord
                 ? _SetupFund(month: month)
-                : FundBody(month: month, canRecord: canRecord),
+                : FundBody(
+                    month: month,
+                    canRecord: canRecord,
+                    focusPendingApprovals: focusPendingApprovals,
+                  ),
           ),
         ],
       ),

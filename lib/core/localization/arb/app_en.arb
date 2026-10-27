@@ -1806,6 +1806,14 @@
   "@fundMethodOther": {},
   "fundPendingTitle": "Waiting for approval",
   "@fundPendingTitle": {},
+  "bazarDashboardPendingApprovals": "{count} contributions awaiting approval",
+  "@bazarDashboardPendingApprovals": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "fundPendingEmpty": "No requests are waiting.",
   "@fundPendingEmpty": {},
   "fundApprove": "Approve",

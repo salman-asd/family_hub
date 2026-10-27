@@ -3706,6 +3706,12 @@ abstract class AppLocalizations {
   /// **'অনুমোদনের অপেক্ষায়'**
   String get fundPendingTitle;
 
+  /// No description provided for @bazarDashboardPendingApprovals.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি জমার অনুরোধ অনুমোদনের অপেক্ষায়'**
+  String bazarDashboardPendingApprovals(String count);
+
   /// No description provided for @fundPendingEmpty.
   ///
   /// In bn, this message translates to:

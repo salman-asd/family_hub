@@ -2048,6 +2048,11 @@ class AppLocalizationsBn extends AppLocalizations {
   String get fundPendingTitle => 'অনুমোদনের অপেক্ষায়';
 
   @override
+  String bazarDashboardPendingApprovals(String count) {
+    return '$countটি জমার অনুরোধ অনুমোদনের অপেক্ষায়';
+  }
+
+  @override
   String get fundPendingEmpty => 'কোনো অনুরোধ অপেক্ষায় নেই।';
 
   @override

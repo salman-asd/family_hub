@@ -3,9 +3,13 @@ import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
+import 'package:family_hub/features/bazar/budgets/domain/budget_alert.dart';
+import 'package:family_hub/features/bazar/budgets/domain/budget_status.dart';
+import 'package:family_hub/features/bazar/budgets/presentation/budget_providers.dart';
 import 'package:family_hub/features/bazar/bazar_entries.dart';
 import 'package:family_hub/features/bazar/items_categories/presentation/catalog_providers.dart';
 import 'package:family_hub/features/bazar/presentation/bazar_failure_messages.dart';
+import 'package:family_hub/features/bazar/presentation/widgets/dashboard/bazar_dashboard_cards.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/app_card.dart';
@@ -20,9 +24,10 @@ import 'package:go_router/go_router.dart';
 /// [entries] is a seam for widget tests; production reads the shared
 /// [bazarEntries] list that each Phase 2 step appends to.
 class BazarHomeScreen extends ConsumerWidget {
-  const BazarHomeScreen({super.key, this.entries});
+  const BazarHomeScreen({super.key, this.entries, this.dashboardCards});
 
   final List<BazarEntry>? entries;
+  final List<WidgetBuilder>? dashboardCards;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,6 +39,11 @@ class BazarHomeScreen extends ConsumerWidget {
     ];
     final categories = ref.watch(categoriesProvider);
     final needsSetup = categories.hasValue && categories.value!.isEmpty;
+    final cards = dashboardCards ?? bazarDashboardCards;
+    final showsBudgetEntry = visible.any((entry) => entry.id == 'budget');
+    final alerts = needsSetup || !showsBudgetEntry
+        ? const <BudgetAlert>[]
+        : ref.watch(budgetAlertsProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navBazar)),
@@ -53,11 +63,17 @@ class BazarHomeScreen extends ConsumerWidget {
               title: l10n.bazarHomeEmptyTitle,
               message: l10n.bazarHomeEmptyMessage,
             )
-          : ListView.builder(
+          : ListView(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-              itemCount: visible.length,
-              itemBuilder: (context, index) =>
-                  _BazarEntryCard(entry: visible[index]),
+              children: [
+                for (final buildCard in cards) buildCard(context),
+                for (final entry in visible)
+                  _BazarEntryCard(
+                    entry: entry,
+                    alertCount: entry.id == 'budget' ? alerts.length : 0,
+                    alertLevel: alerts.isEmpty ? null : alerts.first.status.level,
+                  ),
+              ],
             ),
     );
   }
@@ -182,9 +198,15 @@ class _SeedCatalogButtonState extends ConsumerState<_SeedCatalogButton> {
 }
 
 class _BazarEntryCard extends StatelessWidget {
-  const _BazarEntryCard({required this.entry});
+  const _BazarEntryCard({
+    required this.entry,
+    required this.alertCount,
+    required this.alertLevel,
+  });
 
   final BazarEntry entry;
+  final int alertCount;
+  final BudgetLevel? alertLevel;
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +226,43 @@ class _BazarEntryCard extends StatelessWidget {
                   ?.copyWith(color: tokens.textPrimary),
             ),
           ),
+          if (alertCount > 0)
+            _AlertCountBadge(count: alertCount, level: alertLevel!),
+          const SizedBox(width: 8),
           Icon(Icons.chevron_right_rounded, color: tokens.textSecondary),
+        ],
+      ),
+    );
+  }
+}
+
+class _AlertCountBadge extends ConsumerWidget {
+  const _AlertCountBadge({required this.count, required this.level});
+
+  final int count;
+  final BudgetLevel level;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = context.l10n;
+    final color = level == BudgetLevel.exceeded
+        ? context.tokens.danger
+        : context.tokens.warning;
+    return Semantics(
+      label:
+          '${l10n.budgetAlertsTitle} ${ref.watch(appFormattersProvider).number(count)}',
+      excludeSemantics: true,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.warning_amber_rounded, color: color, size: 18),
+          const SizedBox(width: 4),
+          Text(
+            ref.watch(appFormattersProvider).number(count),
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: color,
+            ),
+          ),
         ],
       ),
     );

@@ -10,6 +10,7 @@ import 'package:family_hub/features/bazar/fund/presentation/screens/fund_screen.
 import 'package:family_hub/features/bazar/fund/presentation/screens/month_close_screen.dart';
 import 'package:family_hub/features/bazar/items_categories/presentation/screens/catalog_manager_screen.dart';
 import 'package:family_hub/features/bazar/presentation/bazar_home_screen.dart';
+import 'package:family_hub/features/bazar/presentation/widgets/dashboard/bazar_dashboard_cards.dart';
 import 'package:family_hub/features/bazar/reports/presentation/screens/reports_screen.dart';
 import 'package:family_hub/features/bazar/settings/presentation/screens/bazar_settings_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
@@ -84,7 +85,10 @@ class BazarModule extends FamilyModule {
         ),
         GoRoute(
           path: 'fund',
-          builder: (context, state) => const FundScreen(),
+          builder: (context, state) => FundScreen(
+            focusPendingApprovals:
+                state.uri.queryParameters['section'] == 'pending',
+          ),
         ),
         GoRoute(
           path: 'advances',
@@ -105,4 +109,10 @@ class BazarModule extends FamilyModule {
       ],
     ),
   ];
+
+  @override
+  List<WidgetBuilder> get dashboardCards => bazarDashboardCards;
+
+  @override
+  List<String> get reports => const ['bazar_month', 'bazar_categories'];
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
@@ -20,18 +22,60 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// row: member, amount (old -> new for a change), date and method, plus
 /// Approve and Reject.  Reject always asks for a reason.  A decision needs the
 /// server; offline it fails with the localized network message.
-class PendingApprovalsSection extends ConsumerWidget {
-  const PendingApprovalsSection({required this.month, super.key});
+class PendingApprovalsSection extends ConsumerStatefulWidget {
+  const PendingApprovalsSection({
+    required this.month,
+    this.focusOnMount = false,
+    super.key,
+  });
 
   final MonthKey month;
+  final bool focusOnMount;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PendingApprovalsSection> createState() =>
+      _PendingApprovalsSectionState();
+}
+
+class _PendingApprovalsSectionState
+    extends ConsumerState<PendingApprovalsSection> {
+  bool _focusScheduled = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _scheduleFocus();
+  }
+
+  @override
+  void didUpdateWidget(covariant PendingApprovalsSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.focusOnMount && widget.focusOnMount) _scheduleFocus();
+  }
+
+  void _scheduleFocus() {
+    if (!widget.focusOnMount || _focusScheduled) return;
+    _focusScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        unawaited(
+          Scrollable.ensureVisible(
+            context,
+            alignment: 0.1,
+            duration: Duration.zero,
+          ),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final canRecord = ref.can(Permission.recordContribution);
     if (!canRecord) return const SizedBox.shrink();
 
     final l10n = context.l10n;
-    final pending = ref.watch(pendingContributionsProvider(month));
+    final pending = ref.watch(pendingContributionsProvider(widget.month));
     final members = ref.watch(membersProvider).value ?? const <Member>[];
 
     return Column(
@@ -54,7 +98,7 @@ class PendingApprovalsSection extends ConsumerWidget {
           _PendingRow(
             contribution: row,
             name: _nameOf(members, row.memberId),
-            month: month,
+            month: widget.month,
           ),
       ],
     );
