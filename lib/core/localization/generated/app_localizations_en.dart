@@ -1393,7 +1393,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionUndo => 'Undo';
 
   @override
-  String get bazarErrExpenseDeleted => 'This expense was deleted. Restore it first.';
+  String get bazarErrExpenseDeleted =>
+      'This expense was deleted. Restore it first.';
 
   @override
   String get expenseAddTitle => 'Add expense';
@@ -1548,10 +1549,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get expenseListFilteredEmptyTitle => 'Nothing matches the filters';
 
   @override
-  String get expenseListFilteredEmptyMessage => 'Clear the filters to see every expense.';
+  String get expenseListFilteredEmptyMessage =>
+      'Clear the filters to see every expense.';
 
   @override
-  String get expenseListLocked => 'This month is closed. Entries are read-only.';
+  String get expenseListLocked =>
+      'This month is closed. Entries are read-only.';
 
   @override
   String get expenseListRefresh => 'Refresh';
@@ -1660,7 +1663,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get expenseLedgerVoided => 'The reimbursement was cancelled with the expense.';
+  String get expenseLedgerVoided =>
+      'The reimbursement was cancelled with the expense.';
 
   @override
   String get expenseDeleteTitle => 'Delete this expense?';
@@ -1752,7 +1756,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get catalogReorder => 'Drag to reorder';
 
   @override
-  String get catalogReadOnly => 'You can look at this, but only the Household Manager or Admin can change it.';
+  String get catalogReadOnly =>
+      'You can look at this, but only the Household Manager or Admin can change it.';
 
   @override
   String get catalogCategoriesEmpty => 'No categories yet';
@@ -1800,31 +1805,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bazarSettingsExceededAt => 'Exceeded at';
 
   @override
-  String get bazarSettingsThresholdRange => 'Enter whole numbers from 1 to 200.';
+  String get bazarSettingsThresholdRange =>
+      'Enter whole numbers from 1 to 200.';
 
   @override
-  String get bazarSettingsThresholdOrder => 'The warning level must be lower than the exceeded level.';
+  String get bazarSettingsThresholdOrder =>
+      'The warning level must be lower than the exceeded level.';
 
   @override
   String get bazarSettingsFundStart => 'Fund start month';
 
   @override
-  String get bazarSettingsFundStartUnset => 'Set automatically when you record the opening balance.';
+  String get bazarSettingsFundStartUnset =>
+      'Set automatically when you record the opening balance.';
 
   @override
   String get budgetTitle => 'Budget';
 
   @override
-  String get budgetNote => 'A budget is a plan; the fund balance is real money.';
+  String get budgetNote =>
+      'A budget is a plan; the fund balance is real money.';
 
   @override
   String get budgetEmptyTitle => 'No budget for this month';
 
   @override
-  String get budgetEmptyMessage => 'Plan the month to see how your spending compares.';
+  String get budgetEmptyMessage =>
+      'Plan the month to see how your spending compares.';
 
   @override
-  String get budgetEmptyReadOnly => 'The Household Manager or Admin has not planned this month yet.';
+  String get budgetEmptyReadOnly =>
+      'The Household Manager or Admin has not planned this month yet.';
 
   @override
   String get budgetPlanThisMonth => 'Plan this month';
@@ -1902,7 +1913,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get budgetNoLastMonth => 'There is no budget for last month to copy.';
 
   @override
-  String get budgetReadOnly => 'You can see the budget, but only the Household Manager or Admin can change it.';
+  String get budgetReadOnly =>
+      'You can see the budget, but only the Household Manager or Admin can change it.';
 
   @override
   String get budgetAlertsTitle => 'Budget alerts';
@@ -1928,13 +1940,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get fundMonthClosedNotice => 'This month is closed, so nothing new can be added to it.';
+  String get fundMonthClosedNotice =>
+      'This month is closed, so nothing new can be added to it.';
 
   @override
-  String get fundOverflowWarning => 'The fund list is very long; close older months so the balance stays exact.';
+  String get fundOverflowWarning =>
+      'The fund list is very long; close older months so the balance stays exact.';
 
   @override
-  String get fundDriftWarning => 'A closed month does not match the ledger. Reopen it, fix it and close it again.';
+  String get fundDriftWarning =>
+      'A closed month does not match the ledger. Reopen it, fix it and close it again.';
 
   @override
   String fundLedgerIssues(int count) {
@@ -1993,7 +2008,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fundSetupTitle => 'Set up the fund';
 
   @override
-  String get fundSetupMessage => 'Record the money the family already has, to start the fund and its first month.';
+  String get fundSetupMessage =>
+      'Record the money the family already has, to start the fund and its first month.';
 
   @override
   String get fundOpeningBalance => 'Opening balance';
@@ -2123,7 +2139,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get advanceEmptyTitle => 'Nothing to pay back';
 
   @override
-  String get advanceEmptyMessage => 'When a member pays for the family out of their own pocket, it appears here until they are paid back.';
+  String get advanceEmptyMessage =>
+      'When a member pays for the family out of their own pocket, it appears here until they are paid back.';
 
   @override
   String get advanceSettledOf => 'repaid';
@@ -2141,10 +2158,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get monthCloseTitle => 'Close month';
 
   @override
-  String get monthCloseManagerOnly => 'Only the Household Manager or Admin can close or reopen a month.';
+  String get monthCloseManagerOnly =>
+      'Only the Household Manager or Admin can close or reopen a month.';
 
   @override
-  String get monthCloseCurrentHint => 'Closing this month makes it read-only and carries its balance into next month.';
+  String get monthCloseCurrentHint =>
+      'Closing this month makes it read-only and carries its balance into next month.';
 
   @override
   String get monthCloseWillRecord => 'Closing balance this month will record';
@@ -2165,7 +2184,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get monthCloseConfirmTitle => 'Close this month?';
 
   @override
-  String get monthCloseConfirmMessage => 'The month becomes read-only and the balance carries into the next month. You can reopen it later if something is wrong.';
+  String get monthCloseConfirmMessage =>
+      'The month becomes read-only and the balance carries into the next month. You can reopen it later if something is wrong.';
 
   @override
   String get monthClosedDone => 'Month closed';
@@ -2316,7 +2336,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reportExpected => 'planned';
 
   @override
-  String get reportTruncated => 'This period has too many entries to show in full. Choose a shorter period for an exact report.';
+  String get reportTruncated =>
+      'This period has too many entries to show in full. Choose a shorter period for an exact report.';
 
   @override
   String get chartNoData => 'Nothing to chart for this period yet.';

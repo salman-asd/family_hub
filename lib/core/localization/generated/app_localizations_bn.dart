@@ -1388,7 +1388,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get actionUndo => 'পূর্বাবস্থায় ফেরান';
 
   @override
-  String get bazarErrExpenseDeleted => 'এই খরচটি মুছে ফেলা হয়েছে। আগে ফিরিয়ে আনুন।';
+  String get bazarErrExpenseDeleted =>
+      'এই খরচটি মুছে ফেলা হয়েছে। আগে ফিরিয়ে আনুন।';
 
   @override
   String get expenseAddTitle => 'খরচ যোগ করুন';
@@ -1540,10 +1541,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get expenseListEmptyMessage => 'প্রথম খরচ যোগ করলে এখানে দেখা যাবে।';
 
   @override
-  String get expenseListFilteredEmptyTitle => 'ফিল্টারের সাথে মেলে এমন কিছু নেই';
+  String get expenseListFilteredEmptyTitle =>
+      'ফিল্টারের সাথে মেলে এমন কিছু নেই';
 
   @override
-  String get expenseListFilteredEmptyMessage => 'সব খরচ দেখতে ফিল্টার মুছে ফেলুন।';
+  String get expenseListFilteredEmptyMessage =>
+      'সব খরচ দেখতে ফিল্টার মুছে ফেলুন।';
 
   @override
   String get expenseListLocked => 'এই মাস বন্ধ। এন্ট্রি শুধু দেখা যাবে।';
@@ -1629,7 +1632,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get expenseDetailPayment => 'টাকার উৎস ও হিসাব';
 
   @override
-  String get expenseNotYoursMessage => 'আপনি শুধু নিজের খরচ পরিবর্তন করতে পারবেন।';
+  String get expenseNotYoursMessage =>
+      'আপনি শুধু নিজের খরচ পরিবর্তন করতে পারবেন।';
 
   @override
   String get expenseLedgerFund => 'পরিবারের তহবিল থেকে দেওয়া হয়েছে';
@@ -1747,7 +1751,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get catalogReorder => 'সাজাতে টেনে আনুন';
 
   @override
-  String get catalogReadOnly => 'আপনি এটি দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন পরিবর্তন করতে পারবেন।';
+  String get catalogReadOnly =>
+      'আপনি এটি দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন পরিবর্তন করতে পারবেন।';
 
   @override
   String get catalogCategoriesEmpty => 'এখনো কোনো ক্যাটেগরি নেই';
@@ -1795,16 +1800,19 @@ class AppLocalizationsBn extends AppLocalizations {
   String get bazarSettingsExceededAt => 'সীমা ছাড়ালে';
 
   @override
-  String get bazarSettingsThresholdRange => '১ থেকে ২০০ এর মধ্যে পূর্ণ সংখ্যা দিন।';
+  String get bazarSettingsThresholdRange =>
+      '১ থেকে ২০০ এর মধ্যে পূর্ণ সংখ্যা দিন।';
 
   @override
-  String get bazarSettingsThresholdOrder => 'সতর্কতার শতাংশ সীমা ছাড়ানোর শতাংশের চেয়ে কম হতে হবে।';
+  String get bazarSettingsThresholdOrder =>
+      'সতর্কতার শতাংশ সীমা ছাড়ানোর শতাংশের চেয়ে কম হতে হবে।';
 
   @override
   String get bazarSettingsFundStart => 'তহবিল শুরুর মাস';
 
   @override
-  String get bazarSettingsFundStartUnset => 'শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।';
+  String get bazarSettingsFundStartUnset =>
+      'শুরুর জমা (ওপেনিং ব্যালান্স) লিখলে নিজে থেকে ঠিক হবে।';
 
   @override
   String get budgetTitle => 'বাজেট';
@@ -1816,10 +1824,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get budgetEmptyTitle => 'এই মাসের কোনো বাজেট নেই';
 
   @override
-  String get budgetEmptyMessage => 'মাসের পরিকল্পনা করলে খরচের সঙ্গে তুলনা দেখতে পাবেন।';
+  String get budgetEmptyMessage =>
+      'মাসের পরিকল্পনা করলে খরচের সঙ্গে তুলনা দেখতে পাবেন।';
 
   @override
-  String get budgetEmptyReadOnly => 'সংসার ব্যবস্থাপক বা অ্যাডমিন এখনো এই মাসের পরিকল্পনা করেননি।';
+  String get budgetEmptyReadOnly =>
+      'সংসার ব্যবস্থাপক বা অ্যাডমিন এখনো এই মাসের পরিকল্পনা করেননি।';
 
   @override
   String get budgetPlanThisMonth => 'এই মাসের পরিকল্পনা করুন';
@@ -1897,7 +1907,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get budgetNoLastMonth => 'কপি করার মতো গত মাসের বাজেট নেই।';
 
   @override
-  String get budgetReadOnly => 'আপনি বাজেট দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন বদলাতে পারবেন।';
+  String get budgetReadOnly =>
+      'আপনি বাজেট দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন বদলাতে পারবেন।';
 
   @override
   String get budgetAlertsTitle => 'বাজেট সতর্কতা';
@@ -1923,13 +1934,16 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get fundMonthClosedNotice => 'এই মাস বন্ধ, তাই এতে নতুন কিছু যোগ করা যাবে না।';
+  String get fundMonthClosedNotice =>
+      'এই মাস বন্ধ, তাই এতে নতুন কিছু যোগ করা যাবে না।';
 
   @override
-  String get fundOverflowWarning => 'ফান্ডের তালিকা অনেক বড়; ব্যালেন্স ঠিক রাখতে পুরোনো মাসগুলো বন্ধ করুন।';
+  String get fundOverflowWarning =>
+      'ফান্ডের তালিকা অনেক বড়; ব্যালেন্স ঠিক রাখতে পুরোনো মাসগুলো বন্ধ করুন।';
 
   @override
-  String get fundDriftWarning => 'একটি বন্ধ মাস খাতার সাথে মিলছে না। সেটি আবার খুলে, ঠিক করে আবার বন্ধ করুন।';
+  String get fundDriftWarning =>
+      'একটি বন্ধ মাস খাতার সাথে মিলছে না। সেটি আবার খুলে, ঠিক করে আবার বন্ধ করুন।';
 
   @override
   String fundLedgerIssues(int count) {
@@ -1988,7 +2002,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get fundSetupTitle => 'ফান্ড শুরু করুন';
 
   @override
-  String get fundSetupMessage => 'পরিবারের কাছে এখন যে টাকা আছে লিখে ফান্ড ও তার প্রথম মাস শুরু করুন।';
+  String get fundSetupMessage =>
+      'পরিবারের কাছে এখন যে টাকা আছে লিখে ফান্ড ও তার প্রথম মাস শুরু করুন।';
 
   @override
   String get fundOpeningBalance => 'প্রারম্ভিক ব্যালেন্স';
@@ -2118,7 +2133,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get advanceEmptyTitle => 'ফেরত দেওয়ার কিছু নেই';
 
   @override
-  String get advanceEmptyMessage => 'কোনো সদস্য নিজের টাকায় পরিবারের জন্য খরচ করলে, ফেরত দেওয়ার আগে পর্যন্ত তা এখানে দেখা যাবে।';
+  String get advanceEmptyMessage =>
+      'কোনো সদস্য নিজের টাকায় পরিবারের জন্য খরচ করলে, ফেরত দেওয়ার আগ পর্যন্ত তা এখানে দেখা যাবে।';
 
   @override
   String get advanceSettledOf => 'ফেরত দেওয়া';
@@ -2136,10 +2152,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get monthCloseTitle => 'মাস বন্ধ করুন';
 
   @override
-  String get monthCloseManagerOnly => 'শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন মাস বন্ধ বা আবার খুলতে পারবেন।';
+  String get monthCloseManagerOnly =>
+      'শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন মাস বন্ধ বা আবার খুলতে পারবেন।';
 
   @override
-  String get monthCloseCurrentHint => 'এই মাস বন্ধ করলে এটি পড়ার মতো হয়ে যাবে এবং এর ব্যালেন্স পরের মাসে যাবে।';
+  String get monthCloseCurrentHint =>
+      'এই মাস বন্ধ করলে এটি পড়ার মতো হয়ে যাবে এবং এর ব্যালেন্স পরের মাসে যাবে।';
 
   @override
   String get monthCloseWillRecord => 'এই মাস যে ব্যালেন্স নথিভুক্ত করবে';
@@ -2160,7 +2178,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get monthCloseConfirmTitle => 'এই মাস বন্ধ করবেন?';
 
   @override
-  String get monthCloseConfirmMessage => 'মাসটি পড়ার মতো হয়ে যাবে এবং ব্যালেন্স পরের মাসে যাবে। কিছু ভুল থাকলে পরে আবার খুলতে পারবেন।';
+  String get monthCloseConfirmMessage =>
+      'মাসটি পড়ার মতো হয়ে যাবে এবং ব্যালেন্স পরের মাসে যাবে। কিছু ভুল থাকলে পরে আবার খুলতে পারবেন।';
 
   @override
   String get monthClosedDone => 'মাস বন্ধ হয়েছে';
@@ -2299,7 +2318,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get reportDryPlanned => 'পরিকল্পনা';
 
   @override
-  String get reportDryEmpty => 'এই সময়ের জন্য শুকনা বাজারের কোনো পরিকল্পনা নেই।';
+  String get reportDryEmpty =>
+      'এই সময়ের জন্য শুকনা বাজারের কোনো পরিকল্পনা নেই।';
 
   @override
   String get reportOver => 'বেশি';
@@ -2311,7 +2331,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get reportExpected => 'পরিকল্পিত';
 
   @override
-  String get reportTruncated => 'এই সময়ে অনেকগুলো এন্ট্রি, সব দেখানো যাচ্ছে না। নির্ভুল রিপোর্টের জন্য ছোট সময় বেছে নিন।';
+  String get reportTruncated =>
+      'এই সময়ে অনেকগুলো এন্ট্রি, সব দেখানো যাচ্ছে না। নির্ভুল রিপোর্টের জন্য ছোট সময় বেছে নিন।';
 
   @override
   String get chartNoData => 'এই সময়ের জন্য দেখানোর মতো কিছু নেই।';

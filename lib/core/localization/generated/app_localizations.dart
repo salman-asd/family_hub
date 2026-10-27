@@ -3829,7 +3829,7 @@ abstract class AppLocalizations {
   /// No description provided for @advanceEmptyMessage.
   ///
   /// In bn, this message translates to:
-  /// **'কোনো সদস্য নিজের টাকায় পরিবারের জন্য খরচ করলে, ফেরত দেওয়ার আগে পর্যন্ত তা এখানে দেখা যাবে।'**
+  /// **'কোনো সদস্য নিজের টাকায় পরিবারের জন্য খরচ করলে, ফেরত দেওয়ার আগ পর্যন্ত তা এখানে দেখা যাবে।'**
   String get advanceEmptyMessage;
 
   /// No description provided for @advanceSettledOf.
