@@ -1,11 +1,12 @@
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/modules/module_visibility_providers.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Placeholder for the Home tab; the real dashboard arrives in Step 27.
+/// The Home tab renders dashboard cards supplied by visible modules.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -14,16 +15,25 @@ class HomeScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final t = context.tokens;
     final flavor = ref.watch(flavorProvider);
+    final cards = [
+      for (final module in ref.watch(visibleModulesProvider))
+        for (final buildCard in module.dashboardCards) buildCard(context),
+    ];
     return Scaffold(
       appBar: AppBar(title: Text(l10n.appName)),
       body: Column(
         children: [
           Expanded(
-            child: EmptyState(
-              icon: Icons.home_rounded,
-              title: l10n.moduleComingSoonTitle,
-              message: l10n.moduleComingSoonMessage,
-            ),
+            child: cards.isEmpty
+                ? EmptyState(
+                    icon: Icons.home_rounded,
+                    title: l10n.moduleComingSoonTitle,
+                    message: l10n.moduleComingSoonMessage,
+                  )
+                : ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                    children: cards,
+                  ),
           ),
           // Flavor marker kept from Step 1 so a build is identifiable.
           Padding(

@@ -15,6 +15,7 @@ import {
   getDoc,
   setDoc,
   updateDoc,
+  writeBatch,
 } from 'firebase/firestore';
 import { after, afterEach, before, beforeEach, describe, it } from 'mocha';
 
@@ -277,7 +278,7 @@ describe('families/{f}/fundTransactions', () => {
     );
   });
 
-  it('denies a moderator writing an opening row', async () => {
+  it('denies a moderator writing an opening row on its own', async () => {
     await assertFails(
       setDoc(
         doc(as(BOB), txPath('open_2026-11')),
@@ -290,6 +291,95 @@ describe('families/{f}/fundTransactions', () => {
           monthKey: '2026-11',
         }),
       ),
+    );
+  });
+
+  it('allows a finance moderator to carry the balance into the month it just closed', async () => {
+    // P2-21: the closing document and the `open_<next>` row are ONE batch.
+    await assertSucceeds(
+      writeBatch(as(BOB))
+        .set(
+          doc(as(BOB), `families/${FAM_A}/monthClosings/2026-10`),
+          closingDoc(BOB),
+        )
+        .set(
+          doc(as(BOB), txPath('open_2026-11')),
+          fundTxDoc(BOB, {
+            type: 'opening',
+            amountPaisa: 5000,
+            refType: 'month',
+            refId: '2026-11',
+            dateKey: '2026-11-01',
+            monthKey: '2026-11',
+          }),
+        )
+        .commit(),
+    );
+  });
+
+  it('denies a carry-forward row when the next month is not closed in the same batch', async () => {
+    await assertFails(
+      setDoc(
+        doc(as(BOB), txPath('open_2026-11')),
+        fundTxDoc(BOB, {
+          type: 'opening',
+          amountPaisa: 5000,
+          refType: 'month',
+          refId: '2026-11',
+          dateKey: '2026-11-01',
+          monthKey: '2026-11',
+        }),
+      ),
+    );
+  });
+
+  it('denies a carry-forward row landing in an already closed month', async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(
+        doc(ctx.firestore(), `families/${FAM_A}/monthClosings/2026-11`),
+        closingDoc(BOB, { monthKey: '2026-11' }),
+      );
+    });
+    await assertFails(
+      writeBatch(as(BOB))
+        .set(
+          doc(as(BOB), `families/${FAM_A}/monthClosings/2026-10`),
+          closingDoc(BOB),
+        )
+        .set(
+          doc(as(BOB), txPath('open_2026-11')),
+          fundTxDoc(BOB, {
+            type: 'opening',
+            amountPaisa: 5000,
+            refType: 'month',
+            refId: '2026-11',
+            dateKey: '2026-11-01',
+            monthKey: '2026-11',
+          }),
+        )
+        .commit(),
+    );
+  });
+
+  it('denies a plain member carrying a balance forward', async () => {
+    await assertFails(
+      writeBatch(as(CARA))
+        .set(
+          doc(as(CARA), `families/${FAM_A}/monthClosings/2026-10`),
+          closingDoc(CARA),
+        )
+        .set(
+          doc(as(CARA), txPath('open_2026-11')),
+          fundTxDoc(CARA, {
+            type: 'opening',
+            amountPaisa: 5000,
+            refType: 'month',
+            refId: '2026-11',
+            dateKey: '2026-11-01',
+            monthKey: '2026-11',
+          }),
+        )
+        .commit(),
     );
   });
 

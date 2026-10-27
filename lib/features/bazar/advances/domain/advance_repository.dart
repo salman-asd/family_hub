@@ -1,10 +1,10 @@
+import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/features/bazar/advances/domain/member_advance.dart';
 import 'package:family_hub/features/bazar/advances/domain/settlement.dart';
+import 'package:family_hub/features/bazar/advances/domain/settlement_plan.dart';
 
 /// Read port for member advances and their append-only settlements.
-///
-/// P2-20 extends this interface with `commitSettlement`.
 abstract interface class AdvanceRepository {
   /// Advances whose status is `pending` or `partial`.
   ///
@@ -21,5 +21,17 @@ abstract interface class AdvanceRepository {
   Stream<List<Settlement>> watchSettlements(
     String familyId, {
     String? advanceId,
+  });
+
+  /// Writes ONE settlement, its ledger row and the advance update in one batch.
+  ///
+  /// [build] receives the advance as read INSIDE the write (the repository
+  /// reads it immediately before staging), so overpayment and void checks use
+  /// fresh state; a `Failure` from [build] writes nothing.  Needs the server.
+  Future<Result<SettlementPlan>> commitSettlement(
+    String familyId, {
+    required String advanceId,
+    required Result<SettlementPlan> Function(MemberAdvance? current) build,
+    required AuditEvent event,
   });
 }

@@ -68,6 +68,31 @@ final List<BazarEntry> bazarEntries = <BazarEntry>[
     route: AppRoutes.bazarBudget,
   ),
   BazarEntry(
+    id: 'fund',
+    icon: Icons.account_balance_wallet_outlined,
+    label: (l10n) => l10n.fundTitle,
+    route: AppRoutes.bazarFund,
+  ),
+  BazarEntry(
+    id: 'advances',
+    icon: Icons.price_check_outlined,
+    label: (l10n) => l10n.advanceTitle,
+    route: AppRoutes.bazarAdvances,
+  ),
+  BazarEntry(
+    id: 'month-close',
+    icon: Icons.lock_clock_outlined,
+    label: (l10n) => l10n.monthCloseTitle,
+    route: AppRoutes.bazarMonthClose,
+    requires: Permission.closeBazarMonth,
+  ),
+  BazarEntry(
+    id: 'reports',
+    icon: Icons.insights_outlined,
+    label: (l10n) => l10n.reportTitle,
+    route: AppRoutes.bazarReports,
+  ),
+  BazarEntry(
     id: 'settings',
     icon: Icons.tune_outlined,
     label: (l10n) => l10n.bazarSettingsTitle,

@@ -1,12 +1,17 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/features/bazar/advances/presentation/screens/advances_screen.dart';
 import 'package:family_hub/features/bazar/budgets/presentation/screens/budget_screen.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/screens/add_expense_screen.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/screens/bazar_trip_screen.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/screens/expense_detail_screen.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/screens/expense_list_screen.dart';
+import 'package:family_hub/features/bazar/fund/presentation/screens/fund_screen.dart';
+import 'package:family_hub/features/bazar/fund/presentation/screens/month_close_screen.dart';
 import 'package:family_hub/features/bazar/items_categories/presentation/screens/catalog_manager_screen.dart';
 import 'package:family_hub/features/bazar/presentation/bazar_home_screen.dart';
+import 'package:family_hub/features/bazar/presentation/widgets/dashboard/bazar_dashboard_cards.dart';
+import 'package:family_hub/features/bazar/reports/presentation/screens/reports_screen.dart';
 import 'package:family_hub/features/bazar/settings/presentation/screens/bazar_settings_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
 import 'package:flutter/material.dart';
@@ -79,10 +84,35 @@ class BazarModule extends FamilyModule {
           builder: (context, state) => const BudgetScreen(),
         ),
         GoRoute(
+          path: 'fund',
+          builder: (context, state) => FundScreen(
+            focusPendingApprovals:
+                state.uri.queryParameters['section'] == 'pending',
+          ),
+        ),
+        GoRoute(
+          path: 'advances',
+          builder: (context, state) => const AdvancesScreen(),
+        ),
+        GoRoute(
+          path: 'month-close',
+          builder: (context, state) => const MonthCloseScreen(),
+        ),
+        GoRoute(
+          path: 'reports',
+          builder: (context, state) => const ReportsScreen(),
+        ),
+        GoRoute(
           path: 'settings',
           builder: (context, state) => const BazarSettingsScreen(),
         ),
       ],
     ),
   ];
+
+  @override
+  List<WidgetBuilder> get dashboardCards => bazarDashboardCards;
+
+  @override
+  List<String> get reports => const ['bazar_month', 'bazar_categories'];
 }

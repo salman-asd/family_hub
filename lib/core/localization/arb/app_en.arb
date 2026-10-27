@@ -1685,5 +1685,379 @@
   "budgetReadOnly": "You can see the budget, but only the Household Manager or Admin can change it.",
   "@budgetReadOnly": {},
   "budgetAlertsTitle": "Budget alerts",
-  "@budgetAlertsTitle": {}
+  "@budgetAlertsTitle": {},
+  "fundTitle": "Family fund",
+  "@fundTitle": {},
+  "fundBalanceTitle": "Fund balance",
+  "@fundBalanceTitle": {},
+  "fundReceived": "Received",
+  "@fundReceived": {},
+  "fundSpent": "Spent",
+  "@fundSpent": {},
+  "fundReimbursed": "Reimbursed",
+  "@fundReimbursed": {},
+  "fundClosedOn": "Closed on {date}",
+  "@fundClosedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "fundMonthClosedNotice": "This month is closed, so nothing new can be added to it.",
+  "@fundMonthClosedNotice": {},
+  "fundOverflowWarning": "The fund list is very long; close older months so the balance stays exact.",
+  "@fundOverflowWarning": {},
+  "fundDriftWarning": "A closed month does not match the ledger. Reopen it, fix it and close it again.",
+  "@fundDriftWarning": {},
+  "fundLedgerIssues": "{count} expenses do not match their fund entries.",
+  "@fundLedgerIssues": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fundMembersTitle": "Contributions by member",
+  "@fundMembersTitle": {},
+  "fundNoMembers": "No active members yet.",
+  "@fundNoMembers": {},
+  "fundNoPlan": "no plan this month",
+  "@fundNoPlan": {},
+  "fundPaidUp": "fully paid",
+  "@fundPaidUp": {},
+  "fundRemainingAmount": "{amount} left",
+  "@fundRemainingAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "fundCredit": "{amount} extra",
+  "@fundCredit": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "fundAwaitingApproval": "{amount} awaiting approval",
+  "@fundAwaitingApproval": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "fundHistoryTitle": "Fund history",
+  "@fundHistoryTitle": {},
+  "fundHistoryEmpty": "Nothing in the fund this month yet.",
+  "@fundHistoryEmpty": {},
+  "fundTxContribution": "Contribution",
+  "@fundTxContribution": {},
+  "fundTxExpense": "Expense",
+  "@fundTxExpense": {},
+  "fundTxReimbursement": "Reimbursement",
+  "@fundTxReimbursement": {},
+  "fundTxOpening": "Opening balance",
+  "@fundTxOpening": {},
+  "fundTxAdjustment": "Correction",
+  "@fundTxAdjustment": {},
+  "fundSetupTitle": "Set up the fund",
+  "@fundSetupTitle": {},
+  "fundSetupMessage": "Record the money the family already has, to start the fund and its first month.",
+  "@fundSetupMessage": {},
+  "fundOpeningBalance": "Opening balance",
+  "@fundOpeningBalance": {},
+  "fundSaveOpening": "Save opening balance",
+  "@fundSaveOpening": {},
+  "fundAddContribution": "Add contribution",
+  "@fundAddContribution": {},
+  "fundRequestContribution": "Request contribution",
+  "@fundRequestContribution": {},
+  "fundSaveContribution": "Save contribution",
+  "@fundSaveContribution": {},
+  "fundSendRequest": "Send request",
+  "@fundSendRequest": {},
+  "fundSendChangeRequest": "Send change request",
+  "@fundSendChangeRequest": {},
+  "fundEditRequest": "Edit request",
+  "@fundEditRequest": {},
+  "fundRequestChange": "Request a change",
+  "@fundRequestChange": {},
+  "fundContributionLocked": "Month closed",
+  "@fundContributionLocked": {},
+  "fundMemberLabel": "Who paid",
+  "@fundMemberLabel": {},
+  "fundAmountLabel": "Amount",
+  "@fundAmountLabel": {},
+  "fundMethodLabel": "How it was paid",
+  "@fundMethodLabel": {},
+  "fundMethodCash": "Cash",
+  "@fundMethodCash": {},
+  "fundMethodBkash": "bKash",
+  "@fundMethodBkash": {},
+  "fundMethodNagad": "Nagad",
+  "@fundMethodNagad": {},
+  "fundMethodBank": "Bank",
+  "@fundMethodBank": {},
+  "fundMethodOther": "Other",
+  "@fundMethodOther": {},
+  "fundPendingTitle": "Waiting for approval",
+  "@fundPendingTitle": {},
+  "bazarDashboardPendingApprovals": "{count} contributions awaiting approval",
+  "@bazarDashboardPendingApprovals": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "fundPendingEmpty": "No requests are waiting.",
+  "@fundPendingEmpty": {},
+  "fundApprove": "Approve",
+  "@fundApprove": {},
+  "fundReject": "Reject",
+  "@fundReject": {},
+  "fundRejectReasonTitle": "Why is it rejected?",
+  "@fundRejectReasonTitle": {},
+  "fundRejectReasonHint": "The member will see this reason.",
+  "@fundRejectReasonHint": {},
+  "fundRejectedReason": "Rejected: {reason}",
+  "@fundRejectedReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "fundVoid": "Void",
+  "@fundVoid": {},
+  "fundGeneratePlan": "Generate this month's plan",
+  "@fundGeneratePlan": {},
+  "fundStatusPending": "awaiting approval",
+  "@fundStatusPending": {},
+  "fundStatusApproved": "approved",
+  "@fundStatusApproved": {},
+  "fundStatusRejected": "rejected",
+  "@fundStatusRejected": {},
+  "fundStatusVoided": "voided",
+  "@fundStatusVoided": {},
+  "advanceTitle": "Advance repayments",
+  "@advanceTitle": {},
+  "advanceOwedTo": "Owed to {name}",
+  "@advanceOwedTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "advancePaidTo": "Paid to {name}",
+  "@advancePaidTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "advanceOpenCount": "{count} open advances",
+  "@advanceOpenCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "advanceTotalOwed": "Total still owed",
+  "@advanceTotalOwed": {},
+  "advanceShowSettled": "Show settled",
+  "@advanceShowSettled": {},
+  "advanceEmptyTitle": "Nothing to pay back",
+  "@advanceEmptyTitle": {},
+  "advanceEmptyMessage": "When a member pays for the family out of their own pocket, it appears here until they are paid back.",
+  "@advanceEmptyMessage": {},
+  "advanceSettledOf": "repaid",
+  "@advanceSettledOf": {},
+  "advanceRemaining": "still owed",
+  "@advanceRemaining": {},
+  "advanceSettleTitle": "Pay this back",
+  "@advanceSettleTitle": {},
+  "advanceSettleAction": "Record repayment",
+  "@advanceSettleAction": {},
+  "monthCloseTitle": "Close month",
+  "@monthCloseTitle": {},
+  "monthCloseManagerOnly": "Only the Household Manager or Admin can close or reopen a month.",
+  "@monthCloseManagerOnly": {},
+  "monthCloseCurrentHint": "Closing this month makes it read-only and carries its balance into next month.",
+  "@monthCloseCurrentHint": {},
+  "monthCloseWillRecord": "Closing balance this month will record",
+  "@monthCloseWillRecord": {},
+  "monthCloseAdvances": "Open advances after closing",
+  "@monthCloseAdvances": {},
+  "monthCloseExpected": "Planned contributions",
+  "@monthCloseExpected": {},
+  "monthCloseReceived": "Contributions received",
+  "@monthCloseReceived": {},
+  "monthClose": "Close month",
+  "@monthClose": {},
+  "monthCloseConfirmTitle": "Close this month?",
+  "@monthCloseConfirmTitle": {},
+  "monthCloseConfirmMessage": "The month becomes read-only and the balance carries into the next month. You can reopen it later if something is wrong.",
+  "@monthCloseConfirmMessage": {},
+  "monthClosedDone": "Month closed",
+  "@monthClosedDone": {},
+  "monthReopen": "Reopen month",
+  "@monthReopen": {},
+  "monthReopenedDone": "Month reopened",
+  "@monthReopenedDone": {},
+  "monthReopenNoteTitle": "Why reopen this month?",
+  "@monthReopenNoteTitle": {},
+  "monthReopenNoteHint": "A short reason (at least 3 characters).",
+  "@monthReopenNoteHint": {},
+  "monthClosedChip": "{month} (closed)",
+  "@monthClosedChip": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "reportTitle": "Reports",
+  "@reportTitle": {},
+  "reportTabSummary": "Summary",
+  "@reportTabSummary": {},
+  "reportTabCategories": "Categories",
+  "@reportTabCategories": {},
+  "reportTabItems": "Items",
+  "@reportTabItems": {},
+  "reportTabDays": "Days",
+  "@reportTabDays": {},
+  "reportTabMembers": "Members",
+  "@reportTabMembers": {},
+  "reportTabDry": "Dry groceries",
+  "@reportTabDry": {},
+  "reportTabContributions": "Contributions",
+  "@reportTabContributions": {},
+  "reportTotal": "Total",
+  "@reportTotal": {},
+  "reportAmount": "Amount",
+  "@reportAmount": {},
+  "reportAveragePerDay": "Average per day",
+  "@reportAveragePerDay": {},
+  "reportRows": "Entries",
+  "@reportRows": {},
+  "reportRange": "Period",
+  "@reportRange": {},
+  "reportSummaryColumn": "Measure",
+  "@reportSummaryColumn": {},
+  "reportCategoryColumn": "Category",
+  "@reportCategoryColumn": {},
+  "reportItemColumn": "Item",
+  "@reportItemColumn": {},
+  "reportDayColumn": "Day",
+  "@reportDayColumn": {},
+  "reportMemberColumn": "Member",
+  "@reportMemberColumn": {},
+  "reportPercent": "{percent}%",
+  "@reportPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "reportUp": "Up",
+  "@reportUp": {},
+  "reportDown": "Down",
+  "@reportDown": {},
+  "reportFlat": "No change",
+  "@reportFlat": {},
+  "reportPrevious": "Before",
+  "@reportPrevious": {},
+  "reportComparedWith": "compared with {period}",
+  "@reportComparedWith": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "reportNoPreviousData": "no earlier data",
+  "@reportNoPreviousData": {},
+  "reportComparisonSemantics": "{direction} {amount}, {percent}, compared with {period}",
+  "@reportComparisonSemantics": {
+    "placeholders": {
+      "direction": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "reportPrevDay": "the day before",
+  "@reportPrevDay": {},
+  "reportPrevWeek": "last week",
+  "@reportPrevWeek": {},
+  "reportPrevMonth": "last month",
+  "@reportPrevMonth": {},
+  "reportPrevYear": "last year",
+  "@reportPrevYear": {},
+  "reportPrevRange": "the previous period",
+  "@reportPrevRange": {},
+  "reportDryEstimate": "Planned",
+  "@reportDryEstimate": {},
+  "reportDryActual": "Spent",
+  "@reportDryActual": {},
+  "reportDryDelta": "Difference",
+  "@reportDryDelta": {},
+  "reportDryPlanned": "planned",
+  "@reportDryPlanned": {},
+  "reportDryEmpty": "No dry-grocery plan for this period.",
+  "@reportDryEmpty": {},
+  "reportOver": "over",
+  "@reportOver": {},
+  "reportUnder": "under",
+  "@reportUnder": {},
+  "reportExpected": "planned",
+  "@reportExpected": {},
+  "reportTruncated": "This period has too many entries to show in full. Choose a shorter period for an exact report.",
+  "@reportTruncated": {},
+  "chartNoData": "Nothing to chart for this period yet.",
+  "@chartNoData": {},
+  "chartOther": "Other",
+  "@chartOther": {},
+  "chartSlice": "{name} {amount}, {percent}% of total",
+  "@chartSlice": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "chartDaySummary": "Highest spending on {day}: {amount}",
+  "@chartDaySummary": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

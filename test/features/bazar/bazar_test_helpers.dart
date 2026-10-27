@@ -16,6 +16,10 @@ import 'package:family_hub/features/bazar/expenses/domain/usecases/soft_delete_e
 import 'package:family_hub/features/bazar/expenses/domain/usecases/update_expense.dart';
 import 'package:family_hub/features/bazar/fund/domain/fund_transaction.dart';
 import 'package:family_hub/features/bazar/fund/domain/month_closing.dart';
+import 'package:family_hub/features/bazar/fund/domain/usecases/close_month.dart';
+import 'package:family_hub/features/bazar/fund/domain/usecases/reopen_month.dart';
+import 'package:family_hub/features/bazar/settings/domain/bazar_settings.dart';
+import 'package:family_hub/features/bazar/settings/domain/bazar_settings_repository.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/category.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/item.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/usecases/add_category.dart';
@@ -32,6 +36,27 @@ import 'package:family_hub/features/family/domain/membership.dart';
 
 import '../../support/in_memory_bazar_backend.dart';
 import '../family/family_test_helpers.dart' show SeqIds;
+
+/// The Bazar settings `CloseMonth` reads: one fixed value, never saved.
+class _ReadOnlySettings implements BazarSettingsRepository {
+  _ReadOnlySettings([this.value = BazarSettings.defaults]);
+
+  final BazarSettings value;
+
+  @override
+  Stream<BazarSettings> watch(String familyId) => Stream.value(value);
+
+  @override
+  Future<Result<BazarSettings>> get(String familyId) async =>
+      Success<BazarSettings>(value);
+
+  @override
+  Future<Result<void>> save(
+    String familyId,
+    BazarSettings settings,
+    AuditEvent event,
+  ) async => const Success<void>(null);
+}
 
 /// Shared fixture for Bazar tests: one backend that is both the family and the
 /// catalog port, a fixed clock, deterministic ids and the standard family.
@@ -202,6 +227,32 @@ class BazarFixture {
 
   CheckDuplicate get checkDuplicate =>
       CheckDuplicate(expenses: backend, families: backend, clock: clock);
+
+  CloseMonth get closeMonth => CloseMonth(
+    funds: backend,
+    openingRows: backend,
+    settings: settings ?? _ReadOnlySettings(),
+    families: backend,
+    clock: clock,
+    newId: ids.call,
+    dateKeys: dateKeys,
+  );
+
+  ReopenMonth get reopenMonth => ReopenMonth(
+    funds: backend,
+    families: backend,
+    clock: clock,
+    newId: ids.call,
+  );
+
+  /// The Bazar settings `CloseMonth` reads; a test sets `fundStartMonth` here.
+  BazarSettingsRepository? settings;
+
+  /// Sets the fund window start `CloseMonth` should use.
+  void setFundStart(MonthKey month) =>
+      settings = _ReadOnlySettings(
+        BazarSettings.defaults.copyWith(fundStartMonth: month),
+      );
 
   /// A valid draft with sensible defaults for the fixed test clock.
   ExpenseDraft draft({
