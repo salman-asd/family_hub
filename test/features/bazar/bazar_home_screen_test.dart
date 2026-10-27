@@ -35,7 +35,7 @@ void main() {
     final f = BazarFixture();
     await _pump(
       tester,
-      const BazarHomeScreen(),
+      const BazarHomeScreen(entries: [], dashboardCards: []),
       actor: const PermissionActor(
         uid: 'alice',
         role: Role.admin,
@@ -74,7 +74,7 @@ void main() {
 
     await _pump(
       tester,
-      BazarHomeScreen(entries: entries),
+      BazarHomeScreen(entries: entries, dashboardCards: []),
       actor: const PermissionActor(
         uid: 'member',
         role: Role.member,

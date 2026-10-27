@@ -26,6 +26,13 @@ void main() {
       expect(registry.byId('events'), isNull);
     });
 
+    test('Bazar contributes its dashboard cards and report views', () {
+      final bazar = ModuleRegistry.standard().byId('bazar')!;
+
+      expect(bazar.dashboardCards, hasLength(3));
+      expect(bazar.reports, ['bazar_month', 'bazar_categories']);
+    });
+
     test('duplicate ids are rejected', () {
       expect(
         () => ModuleRegistry(const [ChoresModule(), ChoresModule()]),

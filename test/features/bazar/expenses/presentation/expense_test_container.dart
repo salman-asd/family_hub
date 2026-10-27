@@ -36,5 +36,6 @@ List<Override> bazarOverrides(
   catalogRepositoryProvider.overrideWithValue(fx.backend),
   expenseRepositoryProvider.overrideWithValue(fx.backend),
   fundRepositoryProvider.overrideWithValue(fx.backend),
+  fundOpeningLedgerProvider.overrideWithValue(fx.backend),
   advanceRepositoryProvider.overrideWithValue(fx.backend),
 ];
