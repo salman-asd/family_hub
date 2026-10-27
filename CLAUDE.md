@@ -8,7 +8,7 @@ ARCHITECTURE: feature-first Clean Architecture. Each feature has data/, domain/,
 1. Money is integer paisa in a Money value object. Quantities are integer milli-units. Never double.
 2. Time-based records store a UTC Timestamp plus dateKey (yyyy-MM-dd) and monthKey (yyyy-MM) computed in the family timezone (default Asia/Dhaka). Use an injected Clock; never call DateTime.now() in domain code.
 3. All writes go through use cases. A use case checks permission (PermissionPolicy), applies business rules, writes through a repository, and writes audit and activity entries in the same batch/transaction where required.
-4. Deterministic IDs: occurrences {templateId}_{yyyyMMdd}; budgets {yyyy-MM}; contribution plans {yyyy-MM}_{memberId}.
+4. Deterministic IDs: occurrence ids are `{templateId}_{yyyyMMdd}` for the `main` slot and `{templateId}_{yyyyMMdd}_{slotKey}` for other slots (never `add()`; ADR 0009); budgets {yyyy-MM}; contribution plans {yyyy-MM}_{memberId}.
 5. Soft delete only (deletedAt, deletedBy). Every document has createdAt, createdBy, updatedAt, updatedBy, schemaVersion.
 6. No raw Color(0x...) or hex outside lib/app/theme/. Screens read tokens via context.tokens.
 7. No hard-coded user-visible strings. Use ARB localization (bn default, en). Test long Bangla strings for overflow.
@@ -29,7 +29,7 @@ ARCHITECTURE: feature-first Clean Architecture. Each feature has data/, domain/,
 Naming: snake_case files; FooRepository (interface), FirestoreFooRepository (impl), FooController, FooScreen, FooMapper, AddFooUseCase. One class per use case file. Split widget files over ~300 lines.
 
 ## Folder structure
-lib/ main_dev.dart, main_prod.dart; app/ (app, router, bootstrap, flavor, theme/); core/ (errors, utils, firebase, localization, notifications, permissions, constants); shared/ (widgets, services); modules/; features/ auth, onboarding, family, dashboard, settings, notifications, bazar/{expenses, items_categories, budgets, contributions, advances, reports, import, fund, settings}, chores/{templates, duty_groups, occurrences, calendar, swaps, availability, comments, achievements} (each: data/ domain/ presentation/). test/ mirrors lib/. firebase/ holds firestore.rules, firestore.indexes.json, rules_test/.
+lib/ main_dev.dart, main_prod.dart; app/ (app, router, bootstrap, flavor, theme/); core/ (errors, utils, firebase, localization, notifications, permissions, constants); shared/ (widgets, services); modules/; features/ auth, onboarding, family, dashboard, settings, notifications, bazar/{expenses, items_categories, budgets, contributions, advances, reports, import, fund, settings}, chores/{settings, templates, duty_groups, occurrences, calendar, rota, swaps, availability, comments, achievements} (each: data/ domain/ presentation/; `calendar` and `rota` have no data layer), notifications (module-neutral inbox: data/ domain/ presentation/). test/ mirrors lib/. firebase/ holds firestore.rules, firestore.indexes.json, rules_test/.
 
 ## WORKING METHOD
 Before coding, list the files you will create or change. Write tests together with the code. Afterwards run dart format, flutter analyze and flutter test and report the results. Do not add packages not named. When something depends on current Firebase pricing, quotas, or package versions, check official docs instead of guessing. If an instruction is ambiguous, state your assumption and continue; ask only when a wrong guess would be expensive. End every task with: files changed, how to verify, anything you assumed.
@@ -197,3 +197,21 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 - `parseBanglaQuantity` is integer-only: fractions round half-up to milli-units (`১/৩` -> 333); `১০০ টাকার` is value-based and carries no quantity.
 - The dry-grocery table's typed `মোট` wins over `quantity x rate`; a blank amount (electricity in Oct-26) becomes `SkippedEstimateLine(no_amount)`.
 - `planImport` writes nothing: it produces `ImportPlan` + `ImportReport` (`sheetTotal` vs `importTotal`, `reconciles`) for the wizard to confirm (P2-27).
+
+## Phase 3 rules (Chores) - binding from P3-01
+
+Source of truth: `docs/PHASE3_CHORES_ROADMAP.md` (sections 1-3 and the step card); the decisions are restated in `docs/decisions/0009`-`0013`.
+
+34. No literal option list (group, due-time preset, absence reason, calendar view) in chores presentation code; lists come from the `settings/chores` providers (D-P3-4).
+35. Dates, assignees and statuses are derived only by the pure engines `RecurrenceEngine`, `RotationEngine`, `OccurrenceGenerator`, `effectiveStatus`, `SubtaskSync` and `CalendarMonthModel`; widgets never compute them.
+36. The stored `status` is a cache. The UI reads `ChoreItem.status` (effective), never `occurrence.status` directly (ADR 0012).
+37. One Firestore listener per visible month; scope ("mine / family") and filters are in memory; no per-day queries.
+38. Occurrence documents are written with deterministic ids only (ADR 0009).
+39. Occurrence snapshots (`nameBn`, `subtasks`, ...) never change except by `ReplanOccurrences` on unstarted documents.
+40. Reassign, swap, reopen, skip, exception and absence need a reason (3-300 characters) collected by the shared `ReasonSheet`.
+41. Rotation follows the calendar, never "who completed last"; every rotation version snapshots its own `weekStartDay`.
+42. Comments are never deleted; managers may hide one with a note.
+43. Calendar targets are at least 48 dp; status = glyph + label + colour; honour reduced motion.
+44. Only the packages in roadmap Appendix D may be added in Phase 3 (`animations`, `flutter_slidable`); anything else needs an ADR.
+
+**P3-01 seams.** The Chores tab is `ChoresHomeScreen` (route `/chores`; the calendar replaces its body in P3-22). `/chores/manage` is `ChoresManageScreen`, which renders `choresEntries` (`lib/features/chores/chores_entries.dart`) and hides a tile the viewer lacks `requires` for. Every later step appends one `ChoresEntry`; new routes are child routes of `ChoresModule`'s `/chores` route and constants in `AppRoutes`. ADR files live in `docs/decisions/` (the roadmap card says `docs/adr/`; this repo already uses `decisions`).

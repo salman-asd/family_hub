@@ -2059,5 +2059,17 @@
         "type": "String"
       }
     }
-  }
+  },
+  "choresEmptyTitle": "কোনো কাজ নেই",
+  "@choresEmptyTitle": {},
+  "choresEmptyMessage": "কাজ যোগ হলে এখানে দেখা যাবে।",
+  "@choresEmptyMessage": {},
+  "choresManageAction": "পরিচালনা",
+  "@choresManageAction": {},
+  "choresManageTitle": "কাজ পরিচালনা",
+  "@choresManageTitle": {},
+  "choresManageEmptyTitle": "এখনো কিছু নেই",
+  "@choresManageEmptyTitle": {},
+  "choresManageEmptyMessage": "কাজ পরিচালনার টুল এখানে দেখা যাবে।",
+  "@choresManageEmptyMessage": {}
 }

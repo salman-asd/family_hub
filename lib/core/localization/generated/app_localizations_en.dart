@@ -2354,4 +2354,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String chartDaySummary(String day, String amount) {
     return 'Highest spending on $day: $amount';
   }
+
+  @override
+  String get choresEmptyTitle => 'No chores yet';
+
+  @override
+  String get choresEmptyMessage => 'Chores will show up here once they are added.';
+
+  @override
+  String get choresManageAction => 'Manage';
+
+  @override
+  String get choresManageTitle => 'Manage chores';
+
+  @override
+  String get choresManageEmptyTitle => 'Nothing here yet';
+
+  @override
+  String get choresManageEmptyMessage => 'Chore tools will appear here.';
 }

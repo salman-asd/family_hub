@@ -4220,6 +4220,42 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'সবচেয়ে বেশি খরচ {day}: {amount}'**
   String chartDaySummary(String day, String amount);
+
+  /// No description provided for @choresEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো কাজ নেই'**
+  String get choresEmptyTitle;
+
+  /// No description provided for @choresEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ যোগ হলে এখানে দেখা যাবে।'**
+  String get choresEmptyMessage;
+
+  /// No description provided for @choresManageAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিচালনা'**
+  String get choresManageAction;
+
+  /// No description provided for @choresManageTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ পরিচালনা'**
+  String get choresManageTitle;
+
+  /// No description provided for @choresManageEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কিছু নেই'**
+  String get choresManageEmptyTitle;
+
+  /// No description provided for @choresManageEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ পরিচালনার টুল এখানে দেখা যাবে।'**
+  String get choresManageEmptyMessage;
 }
 
 class _AppLocalizationsDelegate

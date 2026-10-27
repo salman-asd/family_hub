@@ -1,11 +1,13 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
-import 'package:family_hub/features/chores/presentation/chores_placeholder_screen.dart';
+import 'package:family_hub/features/chores/presentation/chores_home_screen.dart';
+import 'package:family_hub/features/chores/presentation/chores_manage_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// The Chores module (stub: a placeholder screen until Phase 3).
+/// The Chores module.  Routes nest under [AppRoutes.chores]; every later
+/// Phase 3 screen is added as a child route (roadmap 3.10).
 class ChoresModule extends FamilyModule {
   const ChoresModule();
 
@@ -34,7 +36,13 @@ class ChoresModule extends FamilyModule {
   List<RouteBase> get routes => [
     GoRoute(
       path: AppRoutes.chores,
-      builder: (context, state) => const ChoresPlaceholderScreen(),
+      builder: (context, state) => const ChoresHomeScreen(),
+      routes: [
+        GoRoute(
+          path: 'manage',
+          builder: (context, state) => const ChoresManageScreen(),
+        ),
+      ],
     ),
   ];
 }

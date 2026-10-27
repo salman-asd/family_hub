@@ -27,6 +27,9 @@ abstract final class AppRoutes {
   static const String bazar = '/bazar';
   static const String family = '/family';
 
+  // ── Chores sub-routes (nested under [chores]; more arrive in Phase 3) ────
+  static const String choresManage = '/chores/manage';
+
   // ── Bazar sub-routes (nested under [bazar]) ───────────────────────────────
   static const String bazarExpenses = '/bazar/expenses';
   static const String bazarExpenseNew = '/bazar/expenses/new';

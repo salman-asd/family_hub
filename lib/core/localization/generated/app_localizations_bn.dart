@@ -2349,4 +2349,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String chartDaySummary(String day, String amount) {
     return 'সবচেয়ে বেশি খরচ $day: $amount';
   }
+
+  @override
+  String get choresEmptyTitle => 'কোনো কাজ নেই';
+
+  @override
+  String get choresEmptyMessage => 'কাজ যোগ হলে এখানে দেখা যাবে।';
+
+  @override
+  String get choresManageAction => 'পরিচালনা';
+
+  @override
+  String get choresManageTitle => 'কাজ পরিচালনা';
+
+  @override
+  String get choresManageEmptyTitle => 'এখনো কিছু নেই';
+
+  @override
+  String get choresManageEmptyMessage => 'কাজ পরিচালনার টুল এখানে দেখা যাবে।';
 }

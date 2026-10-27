@@ -2059,5 +2059,17 @@
         "type": "String"
       }
     }
-  }
+  },
+  "choresEmptyTitle": "No chores yet",
+  "@choresEmptyTitle": {},
+  "choresEmptyMessage": "Chores will show up here once they are added.",
+  "@choresEmptyMessage": {},
+  "choresManageAction": "Manage",
+  "@choresManageAction": {},
+  "choresManageTitle": "Manage chores",
+  "@choresManageTitle": {},
+  "choresManageEmptyTitle": "Nothing here yet",
+  "@choresManageEmptyTitle": {},
+  "choresManageEmptyMessage": "Chore tools will appear here.",
+  "@choresManageEmptyMessage": {}
 }

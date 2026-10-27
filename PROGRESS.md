@@ -727,6 +727,7 @@ No Flutter/Dart SDK, Java or emulator was available (downloads blocked). Run fir
 | P2-29 | Dashboard cards and module hooks | Written, not run | `lib/features/bazar/presentation/widgets/dashboard/`, `bazar_module.dart`, dashboard and Bazar home screens, `docs/bazar_dashboard_contract.md`, `test/features/bazar/presentation/dashboard_cards_test.dart` |
 | P2-24 | Report engine (pure Dart) | Written, not run | `lib/features/bazar/reports/domain/{report_query,report_data,period_comparison,report_engine,report_loader}.dart`, `query_limits.dart` (`kReportPageSize`, `kMaxReportDocs`), `test/features/bazar/reports/{report_engine,report_loader,report_query}_test.dart` |
 | P2-23 | Advances and Month-close screens | Written, not run | `lib/features/bazar/advances/{domain/settlement_builder.dart,domain/usecases/settle_advance.dart,domain/advance_grouping.dart,presentation/screens/advances_screen.dart,presentation/widgets/*}`, `fund/presentation/screens/month_close_screen.dart`, `fund/presentation/widgets/{month_close_actions,month_close_preview_card,month_list,reopen_month_dialog,locked_month_banner}.dart`, `fund/domain/{month_choices,month_close_preview}.dart`, routes `/bazar/advances` + `/bazar/month-close`, 33 `advance*`/`month*` ARB keys, `test/features/bazar/advances/`, `test/features/bazar/fund/presentation/month_close_screen_test.dart` |
+| P3-01 | Preflight gate, Chores skeleton, seams | Written, not run; **gate not executed (no SDK here)** | `lib/features/chores/{chores_entries.dart,chores_module.dart,presentation/chores_{home,manage}_screen.dart}`, `docs/decisions/0009`-`0013`, CLAUDE.md rules 34-44, `test/features/chores/` |
 
 ## Phase 2 - P2-13..P2-16 Expense screens, trip, list/detail, catalog manager, settings
 
@@ -1057,6 +1058,44 @@ Written without a Flutter/Dart SDK; **nothing was compiled or run**.
 **Not verified:** formatting, analysis, widget tests and goldens. No generated
 golden images were added; those are produced by the Linux workflow.
 
+## Phase 3 - P3-01 Preflight gate, Chores skeleton, seams
+
+Written without a Flutter/Dart SDK, Java or emulator; **nothing was compiled or run**.
+
+### P3-01 gate (to be run on your machine; paste the output into this table)
+
+Run in this order. If anything is red, fix ONLY that in a separate commit `P3-00: repair base` before P3-02.
+
+| Gate command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | **NOT RUN** (expect the formatter to touch the new files) |
+| `flutter pub get` | **NOT RUN** (`pubspec.lock` is unchanged by this step) |
+| `flutter gen-l10n` | **NOT RUN** (must show no diff: 6 keys were hand-added to both ARBs and the three generated files, appended after `chartDaySummary`) |
+| `flutter analyze` | **NOT RUN** |
+| `flutter test --exclude-tags golden` | **NOT RUN** |
+| rules suite (`npx firebase emulators:exec ...`) | **NOT RUN** (P3-01 changes no rules) |
+| `node tools/check_indexes.mjs` | **NOT RUN** (P3-01 changes no indexes) |
+
+Base verification: the Phase 2 rows in the status table above are all "Written, not run" (P2-11 onward) and P2-26 and P2-30 are not done, so the base is **unverified**. The gate above is the first real check of that base.
+
+### Built
+- `lib/features/chores/chores_entries.dart`: `ChoresEntry {id, icon, title, subtitle?, route, requires?, badge?}` and the empty `choresEntries` list; every later step appends one entry.
+- `presentation/chores_home_screen.dart`: the Chores tab. Friendly empty state ("কোনো কাজ নেই" / "No chores yet"); the "Manage" action appears only when `ref.can(Permission.manageChoreTemplates)`. The calendar replaces the body in P3-22.
+- `presentation/chores_manage_screen.dart`: the hub; renders `choresEntries` (or an injected list for tests), hides tiles the viewer lacks `requires` for, shows an empty state when nothing is visible, and a badge count (digits through `AppFormatters`).
+- `chores_module.dart`: `/chores` -> `ChoresHomeScreen` with the child route `manage` -> `ChoresManageScreen`. The module contract is unchanged (`requiredPermission` null, no dashboard cards, no reports). `AppRoutes.choresManage = '/chores/manage'`. The disabled-module redirect already matches by prefix, so the new route disappears with the module.
+- Deleted `presentation/chores_placeholder_screen.dart`.
+- ARB keys `choresEmptyTitle`, `choresEmptyMessage`, `choresManageAction`, `choresManageTitle`, `choresManageEmptyTitle`, `choresManageEmptyMessage` (bn + en + the three generated files).
+- ADRs `docs/decisions/0009`-`0013`; CLAUDE.md: rule 4 amended, folder list extended, rules 34-44 and a P3-01 seams note.
+- Tests: `test/features/chores/chores_module_test.dart` (routes, registry contract, module off, guards for `/chores/manage`, entries sanity) and `presentation/chores_screens_test.dart` (manager / member, navigation, hub filtering, badge digits, bn/en, text scale 2.0).
+
+### Assumptions / deviations
+- ADR folder: the card says `docs/adr/`; this repo already uses `docs/decisions/`, so the five ADRs are there.
+- `ChoresEntry` follows the `BazarEntry` shape (`title` / `subtitle` are functions of `AppLocalizations`, `requires` is a `Permission?`) instead of the card's `titleKey` / `requiredPermission` names, so no string keys are looked up by name. `badge` is a `ProviderListenable<int>`.
+- `ChoresManageScreen` takes an optional `entries` list (same trick as `BazarHomeScreen`); production reads `choresEntries`.
+- Not done because the files were not in the upload: `ROADMAP.md` (add one line at Step 20: "re-cut as P3-xx, see `docs/PHASE3_CHORES_ROADMAP.md`"), and the roadmap file itself arrived at the zip root, not in `docs/`; move it to `docs/PHASE3_CHORES_ROADMAP.md` if it is not already there. `lib/features/notifications/{domain,data,presentation}/.gitkeep` already existed.
+- The manage route is reachable by any active member (the redirect has no per-route permission); the hub shows only tiles the member may use, so a plain member sees the empty state. Tighten per route when the real tools arrive (P3-16 onward).
+- The tests pin `appFormattersProvider` because formatting follows the stored language preference, not the `MaterialApp` locale.
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -1075,3 +1114,4 @@ golden images were added; those are produced by the Linux workflow.
   domain/use cases; P2-29 adds the Bazar dashboard cards and module hooks, while the Chores
   dashboard remains unimplemented. The P2-05/P2-06/P2-07 rules suite has not
   been run (no Java).
+- P3-01 (Chores skeleton, seams, ADRs 0009-0013, CLAUDE.md rules 34-44) is written and unverified; its gate has not been run. Next: P3-02 (pure helpers).
