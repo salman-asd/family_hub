@@ -1901,4 +1901,426 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get budgetAlertsTitle => 'বাজেট সতর্কতা';
+
+  @override
+  String get fundTitle => 'পারিবারিক ফান্ড';
+
+  @override
+  String get fundBalanceTitle => 'ফান্ডের ব্যালেন্স';
+
+  @override
+  String get fundReceived => 'জমা';
+
+  @override
+  String get fundSpent => 'খরচ';
+
+  @override
+  String get fundReimbursed => 'ফেরত দেওয়া';
+
+  @override
+  String fundClosedOn(String date) {
+    return '$date তারিখে বন্ধ হয়েছে';
+  }
+
+  @override
+  String get fundMonthClosedNotice => 'এই মাস বন্ধ, তাই এতে নতুন কিছু যোগ করা যাবে না।';
+
+  @override
+  String get fundOverflowWarning => 'ফান্ডের তালিকা অনেক বড়; ব্যালেন্স ঠিক রাখতে পুরোনো মাসগুলো বন্ধ করুন।';
+
+  @override
+  String get fundDriftWarning => 'একটি বন্ধ মাস খাতার সাথে মিলছে না। সেটি আবার খুলে, ঠিক করে আবার বন্ধ করুন।';
+
+  @override
+  String fundLedgerIssues(int count) {
+    return '$countটি খরচের সাথে ফান্ডের এন্ট্রি মিলছে না।';
+  }
+
+  @override
+  String get fundMembersTitle => 'সদস্যদের জমা';
+
+  @override
+  String get fundNoMembers => 'এখনো কোনো সক্রিয় সদস্য নেই।';
+
+  @override
+  String get fundNoPlan => 'এই মাসের কোনো পরিকল্পনা নেই';
+
+  @override
+  String get fundPaidUp => 'সম্পূর্ণ জমা হয়েছে';
+
+  @override
+  String fundRemainingAmount(String amount) {
+    return '$amount বাকি';
+  }
+
+  @override
+  String fundCredit(String amount) {
+    return '$amount বেশি';
+  }
+
+  @override
+  String fundAwaitingApproval(String amount) {
+    return '$amount অনুমোদনের অপেক্ষায়';
+  }
+
+  @override
+  String get fundHistoryTitle => 'ফান্ডের হিসাব';
+
+  @override
+  String get fundHistoryEmpty => 'এই মাসে ফান্ডে এখনো কিছু নেই।';
+
+  @override
+  String get fundTxContribution => 'জমা';
+
+  @override
+  String get fundTxExpense => 'খরচ';
+
+  @override
+  String get fundTxReimbursement => 'ফেরত দেওয়া';
+
+  @override
+  String get fundTxOpening => 'প্রারম্ভিক ব্যালেন্স';
+
+  @override
+  String get fundTxAdjustment => 'সংশোধন';
+
+  @override
+  String get fundSetupTitle => 'ফান্ড শুরু করুন';
+
+  @override
+  String get fundSetupMessage => 'পরিবারের কাছে এখন যে টাকা আছে লিখে ফান্ড ও তার প্রথম মাস শুরু করুন।';
+
+  @override
+  String get fundOpeningBalance => 'প্রারম্ভিক ব্যালেন্স';
+
+  @override
+  String get fundSaveOpening => 'প্রারম্ভিক ব্যালেন্স সংরক্ষণ';
+
+  @override
+  String get fundAddContribution => 'জমা যোগ করুন';
+
+  @override
+  String get fundRequestContribution => 'জমার অনুরোধ করুন';
+
+  @override
+  String get fundSaveContribution => 'জমা সংরক্ষণ';
+
+  @override
+  String get fundSendRequest => 'অনুরোধ পাঠান';
+
+  @override
+  String get fundSendChangeRequest => 'পরিবর্তনের অনুরোধ পাঠান';
+
+  @override
+  String get fundEditRequest => 'অনুরোধ সম্পাদনা';
+
+  @override
+  String get fundRequestChange => 'পরিবর্তনের অনুরোধ';
+
+  @override
+  String get fundContributionLocked => 'মাস বন্ধ';
+
+  @override
+  String get fundMemberLabel => 'কে দিয়েছেন';
+
+  @override
+  String get fundAmountLabel => 'টাকার পরিমাণ';
+
+  @override
+  String get fundMethodLabel => 'কীভাবে দেওয়া হয়েছে';
+
+  @override
+  String get fundMethodCash => 'নগদ';
+
+  @override
+  String get fundMethodBkash => 'বিকাশ';
+
+  @override
+  String get fundMethodNagad => 'নগদ (Nagad)';
+
+  @override
+  String get fundMethodBank => 'ব্যাংক';
+
+  @override
+  String get fundMethodOther => 'অন্য';
+
+  @override
+  String get fundPendingTitle => 'অনুমোদনের অপেক্ষায়';
+
+  @override
+  String get fundPendingEmpty => 'কোনো অনুরোধ অপেক্ষায় নেই।';
+
+  @override
+  String get fundApprove => 'অনুমোদন';
+
+  @override
+  String get fundReject => 'প্রত্যাখ্যান';
+
+  @override
+  String get fundRejectReasonTitle => 'কেন প্রত্যাখ্যান করছেন?';
+
+  @override
+  String get fundRejectReasonHint => 'সদস্য এই কারণটি দেখতে পাবেন।';
+
+  @override
+  String fundRejectedReason(String reason) {
+    return 'প্রত্যাখ্যাত: $reason';
+  }
+
+  @override
+  String get fundVoid => 'বাতিল';
+
+  @override
+  String get fundGeneratePlan => 'এই মাসের পরিকল্পনা তৈরি করুন';
+
+  @override
+  String get fundStatusPending => 'অনুমোদনের অপেক্ষায়';
+
+  @override
+  String get fundStatusApproved => 'অনুমোদিত';
+
+  @override
+  String get fundStatusRejected => 'প্রত্যাখ্যাত';
+
+  @override
+  String get fundStatusVoided => 'বাতিল করা';
+
+  @override
+  String get advanceTitle => 'অগ্রিম ফেরত';
+
+  @override
+  String advanceOwedTo(String name) {
+    return '$name-কে দিতে হবে';
+  }
+
+  @override
+  String advancePaidTo(String name) {
+    return '$name-কে দেওয়া হয়েছে';
+  }
+
+  @override
+  String advanceOpenCount(int count) {
+    return '$countটি অগ্রিম বাকি';
+  }
+
+  @override
+  String get advanceTotalOwed => 'মোট বাকি';
+
+  @override
+  String get advanceShowSettled => 'পরিশোধিত দেখান';
+
+  @override
+  String get advanceEmptyTitle => 'ফেরত দেওয়ার কিছু নেই';
+
+  @override
+  String get advanceEmptyMessage => 'কোনো সদস্য নিজের টাকায় পরিবারের জন্য খরচ করলে, ফেরত দেওয়ার আগে পর্যন্ত তা এখানে দেখা যাবে।';
+
+  @override
+  String get advanceSettledOf => 'ফেরত দেওয়া';
+
+  @override
+  String get advanceRemaining => 'বাকি';
+
+  @override
+  String get advanceSettleTitle => 'ফেরত দিন';
+
+  @override
+  String get advanceSettleAction => 'ফেরত দেওয়া লিখুন';
+
+  @override
+  String get monthCloseTitle => 'মাস বন্ধ করুন';
+
+  @override
+  String get monthCloseManagerOnly => 'শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন মাস বন্ধ বা আবার খুলতে পারবেন।';
+
+  @override
+  String get monthCloseCurrentHint => 'এই মাস বন্ধ করলে এটি পড়ার মতো হয়ে যাবে এবং এর ব্যালেন্স পরের মাসে যাবে।';
+
+  @override
+  String get monthCloseWillRecord => 'এই মাস যে ব্যালেন্স নথিভুক্ত করবে';
+
+  @override
+  String get monthCloseAdvances => 'বন্ধের পর অগ্রিম বাকি';
+
+  @override
+  String get monthCloseExpected => 'পরিকল্পিত জমা';
+
+  @override
+  String get monthCloseReceived => 'গৃহীত জমা';
+
+  @override
+  String get monthClose => 'মাস বন্ধ করুন';
+
+  @override
+  String get monthCloseConfirmTitle => 'এই মাস বন্ধ করবেন?';
+
+  @override
+  String get monthCloseConfirmMessage => 'মাসটি পড়ার মতো হয়ে যাবে এবং ব্যালেন্স পরের মাসে যাবে। কিছু ভুল থাকলে পরে আবার খুলতে পারবেন।';
+
+  @override
+  String get monthClosedDone => 'মাস বন্ধ হয়েছে';
+
+  @override
+  String get monthReopen => 'মাস আবার খুলুন';
+
+  @override
+  String get monthReopenedDone => 'মাস আবার খোলা হয়েছে';
+
+  @override
+  String get monthReopenNoteTitle => 'কেন এই মাস আবার খুলছেন?';
+
+  @override
+  String get monthReopenNoteHint => 'একটি ছোট কারণ (অন্তত ৩ অক্ষর)।';
+
+  @override
+  String monthClosedChip(String month) {
+    return '$month (বন্ধ)';
+  }
+
+  @override
+  String get reportTitle => 'রিপোর্ট';
+
+  @override
+  String get reportTabSummary => 'সারসংক্ষেপ';
+
+  @override
+  String get reportTabCategories => 'ক্যাটেগরি';
+
+  @override
+  String get reportTabItems => 'আইটেম';
+
+  @override
+  String get reportTabDays => 'দিন';
+
+  @override
+  String get reportTabMembers => 'সদস্য';
+
+  @override
+  String get reportTabDry => 'শুকনা বাজার';
+
+  @override
+  String get reportTabContributions => 'জমা';
+
+  @override
+  String get reportTotal => 'মোট';
+
+  @override
+  String get reportAmount => 'টাকা';
+
+  @override
+  String get reportAveragePerDay => 'দৈনিক গড়';
+
+  @override
+  String get reportRows => 'এন্ট্রি';
+
+  @override
+  String get reportRange => 'সময়কাল';
+
+  @override
+  String get reportSummaryColumn => 'বিবরণ';
+
+  @override
+  String get reportCategoryColumn => 'ক্যাটেগরি';
+
+  @override
+  String get reportItemColumn => 'আইটেম';
+
+  @override
+  String get reportDayColumn => 'দিন';
+
+  @override
+  String get reportMemberColumn => 'সদস্য';
+
+  @override
+  String reportPercent(String percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get reportUp => 'বেড়েছে';
+
+  @override
+  String get reportDown => 'কমেছে';
+
+  @override
+  String get reportFlat => 'অপরিবর্তিত';
+
+  @override
+  String get reportPrevious => 'আগে';
+
+  @override
+  String reportComparedWith(String period) {
+    return '$period-এর তুলনায়';
+  }
+
+  @override
+  String get reportNoPreviousData => 'আগের কোনো তথ্য নেই';
+
+  @override
+  String reportComparisonSemantics(
+    String direction,
+    String amount,
+    String percent,
+    String period,
+  ) {
+    return '$period-এর তুলনায় $direction $amount, $percent';
+  }
+
+  @override
+  String get reportPrevDay => 'আগের দিন';
+
+  @override
+  String get reportPrevWeek => 'গত সপ্তাহ';
+
+  @override
+  String get reportPrevMonth => 'গত মাস';
+
+  @override
+  String get reportPrevYear => 'গত বছর';
+
+  @override
+  String get reportPrevRange => 'আগের সময়কাল';
+
+  @override
+  String get reportDryEstimate => 'পরিকল্পিত';
+
+  @override
+  String get reportDryActual => 'খরচ';
+
+  @override
+  String get reportDryDelta => 'পার্থক্য';
+
+  @override
+  String get reportDryPlanned => 'পরিকল্পনা';
+
+  @override
+  String get reportDryEmpty => 'এই সময়ের জন্য শুকনা বাজারের কোনো পরিকল্পনা নেই।';
+
+  @override
+  String get reportOver => 'বেশি';
+
+  @override
+  String get reportUnder => 'কম';
+
+  @override
+  String get reportExpected => 'পরিকল্পিত';
+
+  @override
+  String get reportTruncated => 'এই সময়ে অনেকগুলো এন্ট্রি, সব দেখানো যাচ্ছে না। নির্ভুল রিপোর্টের জন্য ছোট সময় বেছে নিন।';
+
+  @override
+  String get chartNoData => 'এই সময়ের জন্য দেখানোর মতো কিছু নেই।';
+
+  @override
+  String get chartOther => 'অন্যান্য';
+
+  @override
+  String chartSlice(String name, String amount, String percent) {
+    return '$name $amount, মোটের $percent%';
+  }
+
+  @override
+  String chartDaySummary(String day, String amount) {
+    return 'সবচেয়ে বেশি খরচ $day: $amount';
+  }
 }

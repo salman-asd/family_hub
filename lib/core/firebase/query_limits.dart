@@ -12,3 +12,10 @@ const int kMaxListenerDocs = 500;
 /// Hard cap for one catalog listener (11 categories + 54 built-in items plus
 /// room for custom entries; the rules cap the same collections implicitly).
 const int kMaxCatalogDocs = 500;
+
+/// Page size of the report range loader (`report_loader.dart`, P2-24).
+const int kReportPageSize = 500;
+
+/// Most expenses one report loads.  Past this the report is marked truncated
+/// instead of paging forever, so a long range can never stall the screen.
+const int kMaxReportDocs = 5000;

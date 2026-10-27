@@ -1,3 +1,4 @@
+import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/money.dart';
 
@@ -209,4 +210,15 @@ final class FundTransaction {
   @override
   String toString() =>
       'FundTransaction($id, ${type.name}, ${amount.paisa} paisa)';
+}
+
+/// The read the month carry-forward needs: the amount of a month's `opening`
+/// row, or `null` when that month has none yet.
+///
+/// The ledger port implements it as one exact-id `get` of `open_<yyyy-MM>`,
+/// which the rules let every active member read.  A separate port (instead of
+/// a `getTransactionsFromServer` call) keeps `CloseMonth` from depending on a
+/// server-only read it can do without — and the interface stays fake-able.
+abstract interface class ExistingOpeningLedger {
+  Future<Result<Money?>> getOpeningAmount(String familyId, MonthKey month);
 }

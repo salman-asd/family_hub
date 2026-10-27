@@ -687,6 +687,18 @@ service cloud.firestore {
             && d.refType == 'settlement'
             && t == 'stl_' + d.refId)
           || (d.type == 'opening'
+            // P2-21: CloseMonth carries the balance into the next month, so the
+            // person who may close (admin, or a finance moderator — the same
+            // `financeManager`) also writes this one row, in the SAME batch as
+            // the closing document.  A moderating member without finance rights
+            // and a plain member are still denied.
+            && financeManager(f)
+            && getAfter(closingPath(f, d.monthKey)).data.get('status', '') ==
+                 'closed'
+            && d.refType == 'month'
+            && d.refId == d.monthKey
+            && t == 'open_' + d.refId)
+          || (d.type == 'opening'
             && isAdmin(f)
             && d.refType == 'month'
             && d.refId == d.monthKey

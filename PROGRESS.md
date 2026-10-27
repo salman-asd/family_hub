@@ -719,6 +719,13 @@ No Flutter/Dart SDK, Java or emulator was available (downloads blocked). Run fir
 | P2-17 | Budgets: domain, data, rules | Written, not run | `lib/features/bazar/budgets/{domain,data}`, `firebase/firestore.rules` (`budgetKeys`, `budgetOk`, `match /budgets/{b}`), `firebase/rules_test/budgets.test.mjs`, `fixtures/budget.json` (hand-written, regenerate), `test/features/bazar/budgets/` |
 | P2-18 | Budget screen and alerts provider | Written, not run | `budgets/presentation/{budget_providers,controllers/budget_controller,screens/budget_screen,widgets/*}.dart`, route `/bazar/budget`, Bazar home tile |
 | P2-19 | Contributions: domain, data, rules | Written, not run | `lib/features/bazar/contributions/{domain,data,presentation/contribution_providers.dart}`, `firebase/firestore.rules` (`contributionKeys`, `contributionPlanKeys`, `contributionOk`, `contributionCreateOk`, `contributionUpdateOk`, `match /contributions`, `match /contributionPlans`), `firebase/rules_test/contributions.test.mjs`, `test/features/bazar/contributions/`, contract fixtures (generated, see below) |
+| P2-20 | Advances and settlements | Written, not run | `lib/features/bazar/advances/domain/usecases/settle_advance.dart`, `domain/settlement_plan.dart`, `advance_repository.dart` (`commitSettlement`), `data/firestore_advance_repository.dart`, `firebase/rules_test/advances.test.mjs` (settlement transaction), `test/features/bazar/advances/` |
+| P2-21 | Month close and reopen | Written, not run | `lib/features/bazar/fund/domain/{month_plans,month_carry_forward}.dart`, `domain/usecases/{close_month,reopen_month}.dart`, `fund_repository.dart` (`commitClose`, `commitReopen`, `getTransactionsFromServer`, `ExistingOpeningLedger`), `data/firestore_fund_repository.dart`, `presentation/fund_providers.dart` (`closeMonthProvider`, `reopenMonthProvider`), `firebase/rules_test/fund.test.mjs` (`opening` rows now `financeManager`), `test/features/bazar/fund/domain/{month_carry_forward,close_reopen_month}_test.dart` |
+| P2-22 | Fund and contributions screens | Written, not run | `lib/features/bazar/fund/presentation/{screens/fund_screen.dart,widgets/*}`, `contributions/presentation/{controllers/contribution_form_*,widgets/*}`, `fund/domain/{ledger_integrity_check,balance_drift}.dart`, `fund_providers.dart` (`ledgerIntegrityProvider`, `balanceDriftProvider`, `monthFundTransactionsProvider`), route `/bazar/fund`, Bazar home tile, 63 `fund*` ARB keys, `test/features/bazar/fund/presentation/` |
+| P2-26 | Import parser and mapping | Not implemented | |
+| P2-25 | Reports screen (`fl_chart`) | Written, not run | `pubspec.yaml` (`fl_chart: ^1.3.0`), `lib/features/bazar/reports/presentation/{report_providers.dart,screens/reports_screen.dart,widgets/*}`, route `/bazar/reports` + Bazar home tile, 56 `report*`/`chart*` ARB keys, `test/features/bazar/reports/presentation/` |
+| P2-24 | Report engine (pure Dart) | Written, not run | `lib/features/bazar/reports/domain/{report_query,report_data,period_comparison,report_engine,report_loader}.dart`, `query_limits.dart` (`kReportPageSize`, `kMaxReportDocs`), `test/features/bazar/reports/{report_engine,report_loader,report_query}_test.dart` |
+| P2-23 | Advances and Month-close screens | Written, not run | `lib/features/bazar/advances/{domain/settlement_builder.dart,domain/usecases/settle_advance.dart,domain/advance_grouping.dart,presentation/screens/advances_screen.dart,presentation/widgets/*}`, `fund/presentation/screens/month_close_screen.dart`, `fund/presentation/widgets/{month_close_actions,month_close_preview_card,month_list,reopen_month_dialog,locked_month_banner}.dart`, `fund/domain/{month_choices,month_close_preview}.dart`, routes `/bazar/advances` + `/bazar/month-close`, 33 `advance*`/`month*` ARB keys, `test/features/bazar/advances/`, `test/features/bazar/fund/presentation/month_close_screen_test.dart` |
 
 ## Phase 2 - P2-13..P2-16 Expense screens, trip, list/detail, catalog manager, settings
 
@@ -803,6 +810,232 @@ Written without an SDK or emulator; **nothing was compiled or run**. Run first: 
 
 **Not done:** screens, ARB strings (P2-22), `ledger_integrity` use of the new rows, goldens.
 
+## Phase 2 - P2-21 Month close and reopen
+
+Written without an SDK or emulator; **nothing was compiled or run**. Run first: `dart format .`,
+`flutter analyze`, `flutter test --exclude-tags golden`, then the rules suite (this step changes
+`fundTxOk`) and `node tools/check_indexes.mjs` (no index change: the window read reuses the existing
+`(monthKey, dateKey)` order).
+
+**Built**
+- `fund/domain/month_plans.dart`: `MonthClosePlan` (closing + at most one carry-forward row) and
+  `MonthReopenPlan`.
+- `fund/domain/month_carry_forward.dart`: the pure carry-forward rule.  No `open_<next>` row yet ->
+  one `opening` row of the closing balance (nothing when the balance is zero); a row already exists
+  (a re-close after a reopen) -> one `adj_<eventId>_carry` row of `closingBalance - existingOpening`
+  (nothing when the delta is zero).  The opening row is never edited (rule 28).
+- `fund/domain/usecases/close_month.dart`: `closeBazarMonth`; month must not be in the future
+  (`invalid_month`), not already closed (`already_closed`), and no LATER month may be closed
+  (`month_locked`).  The balance comes from `getTransactionsFromServer` over the window
+  (`closeWindowStart`: month after the latest closed month, else `fundStartMonth`, else the month
+  itself) capped at the month being closed.  ONE server-required batch.
+- `fund/domain/usecases/reopen_month.dart`: `closeBazarMonth`; note >= 3 characters
+  (`reopen_note_required`), month must be closed (`not_closed`), no later closed month
+  (`later_month_closed`); sets `open` + `reopenedAt/By/Note` + `reopenCount + 1`.  The note is kept
+  whole in the document and clipped to 100 runes in the audit params.
+- `FundRepository`: `commitClose`, `commitReopen`, `getTransactionsFromServer`.  `ExistingOpeningLedger`
+  (declared next to `FundTransaction`) adds `getOpeningAmount` as ONE exact-id server read of
+  `open_<yyyy-MM>` — a separate port so `CloseMonth` does not depend on a collection scan it can avoid.
+- Data: both writes probe the server and run one batch through `_stageClosing` (merge, keeping the
+  original `closedAt/closedBy`) + `AuditWriter`.
+- Rules: an `opening` row is now writable by `financeManager(f)` (was `isAdmin`), because `CloseMonth`
+  is allowed for the Household Manager and writes exactly that row.  The card's own P2-19 open point.
+- Providers: `closeMonthProvider`, `reopenMonthProvider`, `fundOpeningLedgerProvider` (bootstrap wires
+  the same `FirestoreFundRepository` to both).
+- Tests: `month_carry_forward_test.dart` (13 cases incl. overdrawn fund, re-close delta, window
+  fallbacks) and `close_reopen_month_test.dart` (carry-forward, re-close delta, no double count, the
+  window moves, permissions, month locks, one log entry, server failure).
+
+**Assumptions / deviations**
+- "The next month must not be closed" is checked as "no closed month LATER than this one".  A month
+  cannot be closed out of order anyway (closing October requires no later closed month), so the two
+  statements are equivalent for every state a use case can produce.
+- `closeWindowStart` falls back to the month itself when the family never set `fundStartMonth`; the
+  card's `MonthLocks.fundWindowStart` returns `null` there and a `null` window would close at zero.
+- A zero closing balance writes no `opening` row (a zero ledger row is invalid and an absent opening
+  already means zero); a re-close to a zero balance writes the `adj_` row for `-existingOpening`.
+- The balance window stops AT the month being closed, so ledger rows that were already written into a
+  later month are not part of its closing (they belong to that later month).
+- Known limitation, stated in the code and ADR 0007: the SDK cannot query inside a transaction, so the
+  closing balance is a server read just before the batch.  `CloseMonth` is server-required (probe), and
+  `balanceDriftProvider` (P2-22) surfaces a stored closing that no longer matches the ledger.
+- Not done: the Month-close screen itself (P2-23).
+
+## Phase 2 - P2-22 Fund and contributions screens
+
+Written without an SDK; **nothing was compiled or run**. Run first: `flutter gen-l10n` (the 63 `fund*`
+keys were hand-added to both ARBs and all three generated files; the output must differ only in
+whitespace), `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden`.  No rules or
+index change, so the rules suite and `check_indexes` are unaffected by this step (run them anyway for
+P2-21's `fundTxOk` change).
+
+**Built**
+- `fund/domain/ledger_integrity_check.dart`: `checkLedger({expenses, txs, month})`.  A live fund-funded
+  expense must have rows summing to `-total`, a deleted or member-funded one to `0`; a row whose ref is
+  no expense (and looks like one) is an `orphan`; contribution/settlement/month rows are never judged;
+  only the checked month counts.  Provider `ledgerIntegrityProvider(month)`.
+- `fund/domain/balance_drift.dart`: `detectBalanceDrift` compares the newest closed month's stored
+  balance with the ledger window; provider `balanceDriftProvider` (the P2-21 limitation made visible).
+- `FundScreen` (`/bazar/fund`, tile on the Bazar home): `MonthSwitcher`; the balance card (large
+  balance + received/spent/reimbursed chips + "Closed on ..."); banners for a closed month, a full
+  window, a drifted closing and ledger issues (managers); one row per member (received / expected,
+  remaining / credit / no plan, "৳X awaiting approval"); the manager's pending-approval list; the
+  month's ledger with type icon + label + sign.  The FAB is "Add contribution" for a manager and
+  "Request contribution" for a member, and explains the lock in a closed month.  Everyone sees every
+  member's row (D-P2-5); no role test anywhere (only `ref.can`).
+- `ContributionFormController`/`State`: modes record / request / editPending / requestChange, one
+  event id per sheet, `Money.parse` only in the controller, and `saveOpening` for
+  `RecordOpeningBalance`.  Sheet widgets: person picker (locked to the actor for a request), amount,
+  date, method chips; a reject reason dialog (1..200 characters).
+- `MemberContributionRow`, `FundBalanceCard`, `FundHistoryList`, `PendingApprovalsSection`,
+  `ContributionHistoryList`, `MemberActionsButton`, `ContributeButton`, `FundBody` — all under 300
+  lines; every string comes from the ARBs.
+
+**Assumptions / deviations**
+- The card's "Set up the fund" card shows only to someone who may record contributions; a member
+  before the fund exists sees the normal (empty) screen.
+- The per-member edit / request-change buttons are hidden from managers (they use the approval list),
+  and from anyone who is not the owner.
+- `ContributionHistoryList` is surfaced through the pending list and the member rows rather than as a
+  fifth section, to keep the screen inside the 300-line cap; the widget carries the void action and the
+  owner's reject reason.
+- Rejection and approval do not show a success snackbar (the listener updates the row); a failure is
+  shown with `bazarFailureMessage`.
+- The old `ledger_integrity_check.dart` value-object test now also covers `checkLedger` (mismatch,
+  orphan, deleted/member rows, other ref types, month scoping, sorting).
+- Goldens for the new screen are not written; the widget test covers bn at 2x text instead (an
+  overflow would fail it).
+
+**Not done:** goldens, the `settings/bazar` target UI for `defaultMonthlyContribution`.
+
+## Phase 2 - P2-25 Reports screen
+
+Written without an SDK; **nothing was compiled or run**. Run first, in this order: `flutter pub get`
+(the new `fl_chart: ^1.3.0` must resolve; COMMIT the regenerated `pubspec.lock`), `flutter gen-l10n`,
+`dart format .`, `flutter analyze`, `flutter test --exclude-tags golden`.
+
+**Built**
+- `pubspec.yaml`: `fl_chart: ^1.3.0` (pub.dev's current stable; needs Dart >= 3.6.2 / Flutter >= 3.27.4,
+  both below this app's minimum).
+- `reports/presentation/report_providers.dart`: `reportQueryProvider` (a `Notifier` that resolves the
+  preset against the injected clock AND `bazarSettingsProvider.weekStartDay`, so changing the setting
+  re-resolves "This week" at once), `reportRowsProvider(range)` (a whole month reuses the LIVE
+  `monthExpensesProvider` — zero extra reads — anything else goes through `loadRange`),
+  `reportDataProvider` (engine output + `withComparison`) and `reportTruncatedProvider`.
+- `screens/reports_screen.dart`: preset chips (`ChoiceWrap<RangePreset>`), a custom range picker (never
+  past today), a scrollable `TabBar` of seven tabs and the permission fallback: a member without
+  `viewFamilyReports` gets ONLY the contributions tab (no `TabBar` at all).
+- Widgets: `report_chart_card.dart` (ONE `Semantics(label:)` per chart, `excludeSemantics`, honours
+  reduced motion), `category_chart.dart` (pie from `tokens.chart[0..9]`, the rest folded into "Other"),
+  `day_chart.dart` (bars, thinned labels, a non-zero grid interval), `report_table.dart` (horizontally
+  scrollable `DataTable`, so bn at 2x never overflows), `comparison_row.dart` (icon + word + amount + %,
+  no percentage when the previous period is empty), `report_tabs.dart` / `report_tabs_detail.dart` (the
+  seven tabs, split for the 300-line cap), `contributions_tab.dart` (visible to everyone, D-P2-5) and
+  `report_preset_bar.dart`.
+- Route `/bazar/reports` + a Bazar home tile; 56 `report*`/`chart*` ARB keys in bn + en + the three
+  generated files.
+- Tests: `report_providers_test` (default month, week-start change, live month reuse, comparison, the
+  category filter, the family report switch, a custom range keeping the filters) and
+  `reports_screen_test` (summary totals + comparison text, pie with a semantics label, bar chart, preset
+  re-target, permission fallback, a member WITH the default switch, bn at 2x on two tabs, empty state).
+
+**Assumptions / deviations**
+- Chart colours come only from `context.tokens.chart` / `chartGrid` (rule 22); a pie shows at most 10
+  slices and folds the rest into "Other", so it stays readable and its text alternative stays short.
+- `reportRowsProvider` reuses the month listener only for a range that is EXACTLY one whole month; a
+  partial month (for example "last 7 days" across a month boundary) goes through `loadRange`.
+- The screen never aggregates (rule 30); the engine does.  The truncated banner appears only when
+  `loadRange` reached `kMaxReportDocs`.
+- The contributions tab shows one month (the range's month when that is a whole month, else the current
+  month), because a contribution query is month-bounded.
+- No goldens were added; the widget tests cover bn at 2x instead.
+
+**Not done:** goldens, a dedicated item chart (the item tab is a table; a second bar chart would repeat
+what the categories chart shows), the dashboard card (P2-29).
+
+## Phase 2 - P2-20 (settlement half) and P2-23 Advances and Month-close screens
+
+Written without an SDK or emulator; **nothing was compiled or run**. Run first: `flutter gen-l10n`
+(33 `advance*`/`month*` keys hand-added to both ARBs and the three generated files), `dart format .`,
+`flutter analyze`, `flutter test --exclude-tags golden`, then the rules suite (the settlement rules were
+already covered; no rules change in this step).
+
+**Built**
+- P2-20 (the part P2-23 consumes): `advances/domain/settlement_plan.dart`, a pure
+  `buildSettlementPlan` and `SettleAdvance`.  `AdvanceRepository.commitSettlement` reads the advance
+  from the SERVER before building the plan, so overpayment and void checks see the current amount; ONE
+  batch = settlement + `stl_<id>` ledger row + advance update + audit.  `FirestoreAdvanceRepository` now
+  takes a `TxRunner`.
+- P2-23 advances: `AdvancesScreen` (`/bazar/advances`) groups open advances by member (pure
+  `groupAdvances`, `AdvanceGroup`), shows name/date/settled/remaining + a status chip (icon + word), a
+  "show settled" filter, and opens the settle sheet.  A plain member sees only their own rows (the
+  provider narrows to their uid) and no settle button.
+- P2-23 settle sheet: amount prefilled with the remaining value, date, method chips, inline
+  `overpayment` message; the write needs the server (network message offline, never queued).
+- P2-23 month close: `MonthCloseScreen` (`/bazar/month-close`, `closeBazarMonth` only) with the
+  `MonthSwitcher`, a derived preview (`monthClosePreviewProvider`: month summary, open advances,
+  planned vs received), a Close confirmation and, for a closed month, Reopen with a note (>= 3
+  characters, validated inline).  A closed month in the list shows a lock icon + "(closed)".
+- `LockedMonthBanner`, a shared closed-month notice for the entry sheets.
+- Providers: `settleAdvanceProvider`, `advanceSettlementsProvider`, `advanceExpenseNameProvider`,
+  `monthClosePreviewProvider`.  Bazar home tiles for Advances and Close month.
+- Tests: `settle_advance_test` (partial/full, overpayment, fresh state, voided/missing, expense
+  untouched, locks/permission, the pure builder), `advance_grouping_test`, `advances_screen_test`,
+  `month_close_screen_test`.
+
+**Assumptions / deviations**
+- The settlement audit uses `AuditRefType.settlement` (the closed vocabulary has no `advance` ref); the
+  params carry the advance id.  No rules change was needed.
+- The settle sheet offers cash / bKash / Nagad (a settlement's `method` is a free string in the rules).
+- "Show settled" filters the list the app already holds (open advances); the settled history itself
+  belongs to the expense detail, so the screen does not open a second unbounded query.
+- Month-close offers the current month and the previous eleven, plus any month that was ever closed.
+- The preview recomputes from the ledger; it never stores its numbers.
+- Not done: goldens for the two screens (the widget tests cover bn at 2x text), and a dedicated
+  "settlement transaction" fixture in the contract tests (the rules tests already cover allowed/denied).
+
+## Phase 2 - P2-24 Report engine (pure Dart)
+
+Written without an SDK; **nothing was compiled or run**. Run first: `dart format .`, `flutter analyze`,
+`flutter test --exclude-tags golden` (the report tests are the first to exercise `loadRange`).  No
+collection, rules, index, screen or ARB change, so the rules suite and `check_indexes` are unaffected.
+
+**Built**
+- `report_query.dart`: `ReportQuery { preset, range, categoryId, itemId, memberId, funding }`.
+  `range` is already resolved and is what the engine reads, so the domain never calls `DateTime.now()`;
+  `ReportQuery.resolve` / `.thisMonth` resolve a preset against an injected `today` and the family
+  `weekStartDay`, and `withRange` rebuilds the query for the comparison period.
+- `report_data.dart`: `ReportSummary` (total, count, `averagePerDay` = integer half-up, range),
+  `CategoryTotal` (with `shareBp`), `ItemTotal` (key = `itemId` ?? normalized name), `DayTotal`
+  (every day, zero-filled), `MemberTotal`, `LineComparison` / `DryGroceryComparison`, and `ReportData`.
+  `PeriodComparison` and `halfUpRatioBp` live in `period_comparison.dart` (file-size cap).
+- `report_engine.dart`: `ReportEngine.build` applies the SAME filters as the expense list
+  (`applyFilters`), excludes soft-deleted rows, and computes every view in ONE pass (rule 30).
+  `compare` uses `previousComparable` (previous full month/year or same-length range).
+  Dry-grocery lines are matched by `itemId`, else by normalized name; each spent row is claimed by at
+  most one line, and unplanned spend is listed with a zero estimate so `actual` is never double counted.
+- `report_loader.dart`: `loadRange` pages `queryRange` by `(dateKey DESC, id DESC)` in
+  `kReportPageSize` steps up to `kMaxReportDocs` and returns `ReportLoad { expenses, truncated }`; a
+  failure returns the failure, never a partial report.
+- `query_limits.dart`: `kReportPageSize = 500`, `kMaxReportDocs = 5000`.
+- Tests: `report_engine_test` (totals to the paisa, daily average, boundaries incl. year rollover and the
+  2028 leap day, March-vs-February, soft-deleted, every spec question as a named test, filters, 5,000-row
+  build under 300 ms), `report_loader_test` (paging, truncation, exact-multiple cap, read failure),
+  `report_query_test` (preset resolution, `withRange`, percentage rounding).
+
+**Assumptions / deviations**
+- The card's `build({expenses, range, budget, filters})` is `build({expenses, query, budget})`: the query
+  carries the resolved range plus the filters, so there is one argument that cannot disagree with itself.
+- `compare(current:, previousExpenses:, previousBudget:)` is a named-argument method rather than a
+  positional `compare(ReportData, ReportData)`, because the comparison needs the previous rows to compute
+  the previous total with the same filters.
+- The daily average divides by the calendar days of the range (a zero-spend day counts), which is what a
+  user means by "per day".
+- `shareBp` is `null` when the report total is zero (a share of nothing is undefined, not 0).
+- The loader pushes only `memberId` and `funding` to Firestore (both are single-field filters); the
+  category/item filters run in the engine so the category and item breakdowns stay complete.
+- The screen (P2-25) is not built; nothing in `presentation/` was added for reports.
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -813,7 +1046,8 @@ Written without an SDK or emulator; **nothing was compiled or run**. Run first: 
 - Custom relationship entries have per-item shape checks only in the app, not in the rules (rules bound the list to 40 items).
 - Screen-state harness covers 4 screens so far.
 - `firestore_family_repository.dart` exceeds 300 lines (allow-listed).
-- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). P2-17/P2-18 (budgets) and P2-19 (contributions) are written and unverified too. Next: P2-20 (Advances & settlements) and P2-22 (fund screens).
+- P2-01..P2-16 exist in code; P2-11..P2-16 and the audit fixes are unverified (no SDK). P2-17/P2-18 (budgets), P2-19 (contributions), P2-20/P2-23 (advances, settlements and both screens), P2-21 (month close), P2-22 (fund screens), P2-24 (report engine) and P2-25 (reports screen) are written and unverified too. Next: P2-26 (spreadsheet import parser, per Appendix B).
+- **New dependency, unverified:** `fl_chart: ^1.3.0` (P2-25) was added to `pubspec.yaml` from pub.dev's current stable release. `pubspec.lock` was NOT regenerated (no SDK here): run `flutter pub get` and commit the lock file.
 - Phase 2 has its P2-01 skeleton (Bazar home + seams), P2-02 pure helpers, P2-03 vocabulary,
   P2-04 catalog domain/search, P2-05 catalog data/rules/providers, P2-06 default seed/backfill,
   P2-07 settings domain/data/rules/providers, P2-08 fund/advance domain and P2-09 expense

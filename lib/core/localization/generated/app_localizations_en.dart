@@ -1906,4 +1906,426 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get budgetAlertsTitle => 'Budget alerts';
+
+  @override
+  String get fundTitle => 'Family fund';
+
+  @override
+  String get fundBalanceTitle => 'Fund balance';
+
+  @override
+  String get fundReceived => 'Received';
+
+  @override
+  String get fundSpent => 'Spent';
+
+  @override
+  String get fundReimbursed => 'Reimbursed';
+
+  @override
+  String fundClosedOn(String date) {
+    return 'Closed on $date';
+  }
+
+  @override
+  String get fundMonthClosedNotice => 'This month is closed, so nothing new can be added to it.';
+
+  @override
+  String get fundOverflowWarning => 'The fund list is very long; close older months so the balance stays exact.';
+
+  @override
+  String get fundDriftWarning => 'A closed month does not match the ledger. Reopen it, fix it and close it again.';
+
+  @override
+  String fundLedgerIssues(int count) {
+    return '$count expenses do not match their fund entries.';
+  }
+
+  @override
+  String get fundMembersTitle => 'Contributions by member';
+
+  @override
+  String get fundNoMembers => 'No active members yet.';
+
+  @override
+  String get fundNoPlan => 'no plan this month';
+
+  @override
+  String get fundPaidUp => 'fully paid';
+
+  @override
+  String fundRemainingAmount(String amount) {
+    return '$amount left';
+  }
+
+  @override
+  String fundCredit(String amount) {
+    return '$amount extra';
+  }
+
+  @override
+  String fundAwaitingApproval(String amount) {
+    return '$amount awaiting approval';
+  }
+
+  @override
+  String get fundHistoryTitle => 'Fund history';
+
+  @override
+  String get fundHistoryEmpty => 'Nothing in the fund this month yet.';
+
+  @override
+  String get fundTxContribution => 'Contribution';
+
+  @override
+  String get fundTxExpense => 'Expense';
+
+  @override
+  String get fundTxReimbursement => 'Reimbursement';
+
+  @override
+  String get fundTxOpening => 'Opening balance';
+
+  @override
+  String get fundTxAdjustment => 'Correction';
+
+  @override
+  String get fundSetupTitle => 'Set up the fund';
+
+  @override
+  String get fundSetupMessage => 'Record the money the family already has, to start the fund and its first month.';
+
+  @override
+  String get fundOpeningBalance => 'Opening balance';
+
+  @override
+  String get fundSaveOpening => 'Save opening balance';
+
+  @override
+  String get fundAddContribution => 'Add contribution';
+
+  @override
+  String get fundRequestContribution => 'Request contribution';
+
+  @override
+  String get fundSaveContribution => 'Save contribution';
+
+  @override
+  String get fundSendRequest => 'Send request';
+
+  @override
+  String get fundSendChangeRequest => 'Send change request';
+
+  @override
+  String get fundEditRequest => 'Edit request';
+
+  @override
+  String get fundRequestChange => 'Request a change';
+
+  @override
+  String get fundContributionLocked => 'Month closed';
+
+  @override
+  String get fundMemberLabel => 'Who paid';
+
+  @override
+  String get fundAmountLabel => 'Amount';
+
+  @override
+  String get fundMethodLabel => 'How it was paid';
+
+  @override
+  String get fundMethodCash => 'Cash';
+
+  @override
+  String get fundMethodBkash => 'bKash';
+
+  @override
+  String get fundMethodNagad => 'Nagad';
+
+  @override
+  String get fundMethodBank => 'Bank';
+
+  @override
+  String get fundMethodOther => 'Other';
+
+  @override
+  String get fundPendingTitle => 'Waiting for approval';
+
+  @override
+  String get fundPendingEmpty => 'No requests are waiting.';
+
+  @override
+  String get fundApprove => 'Approve';
+
+  @override
+  String get fundReject => 'Reject';
+
+  @override
+  String get fundRejectReasonTitle => 'Why is it rejected?';
+
+  @override
+  String get fundRejectReasonHint => 'The member will see this reason.';
+
+  @override
+  String fundRejectedReason(String reason) {
+    return 'Rejected: $reason';
+  }
+
+  @override
+  String get fundVoid => 'Void';
+
+  @override
+  String get fundGeneratePlan => 'Generate this month\'s plan';
+
+  @override
+  String get fundStatusPending => 'awaiting approval';
+
+  @override
+  String get fundStatusApproved => 'approved';
+
+  @override
+  String get fundStatusRejected => 'rejected';
+
+  @override
+  String get fundStatusVoided => 'voided';
+
+  @override
+  String get advanceTitle => 'Advance repayments';
+
+  @override
+  String advanceOwedTo(String name) {
+    return 'Owed to $name';
+  }
+
+  @override
+  String advancePaidTo(String name) {
+    return 'Paid to $name';
+  }
+
+  @override
+  String advanceOpenCount(int count) {
+    return '$count open advances';
+  }
+
+  @override
+  String get advanceTotalOwed => 'Total still owed';
+
+  @override
+  String get advanceShowSettled => 'Show settled';
+
+  @override
+  String get advanceEmptyTitle => 'Nothing to pay back';
+
+  @override
+  String get advanceEmptyMessage => 'When a member pays for the family out of their own pocket, it appears here until they are paid back.';
+
+  @override
+  String get advanceSettledOf => 'repaid';
+
+  @override
+  String get advanceRemaining => 'still owed';
+
+  @override
+  String get advanceSettleTitle => 'Pay this back';
+
+  @override
+  String get advanceSettleAction => 'Record repayment';
+
+  @override
+  String get monthCloseTitle => 'Close month';
+
+  @override
+  String get monthCloseManagerOnly => 'Only the Household Manager or Admin can close or reopen a month.';
+
+  @override
+  String get monthCloseCurrentHint => 'Closing this month makes it read-only and carries its balance into next month.';
+
+  @override
+  String get monthCloseWillRecord => 'Closing balance this month will record';
+
+  @override
+  String get monthCloseAdvances => 'Open advances after closing';
+
+  @override
+  String get monthCloseExpected => 'Planned contributions';
+
+  @override
+  String get monthCloseReceived => 'Contributions received';
+
+  @override
+  String get monthClose => 'Close month';
+
+  @override
+  String get monthCloseConfirmTitle => 'Close this month?';
+
+  @override
+  String get monthCloseConfirmMessage => 'The month becomes read-only and the balance carries into the next month. You can reopen it later if something is wrong.';
+
+  @override
+  String get monthClosedDone => 'Month closed';
+
+  @override
+  String get monthReopen => 'Reopen month';
+
+  @override
+  String get monthReopenedDone => 'Month reopened';
+
+  @override
+  String get monthReopenNoteTitle => 'Why reopen this month?';
+
+  @override
+  String get monthReopenNoteHint => 'A short reason (at least 3 characters).';
+
+  @override
+  String monthClosedChip(String month) {
+    return '$month (closed)';
+  }
+
+  @override
+  String get reportTitle => 'Reports';
+
+  @override
+  String get reportTabSummary => 'Summary';
+
+  @override
+  String get reportTabCategories => 'Categories';
+
+  @override
+  String get reportTabItems => 'Items';
+
+  @override
+  String get reportTabDays => 'Days';
+
+  @override
+  String get reportTabMembers => 'Members';
+
+  @override
+  String get reportTabDry => 'Dry groceries';
+
+  @override
+  String get reportTabContributions => 'Contributions';
+
+  @override
+  String get reportTotal => 'Total';
+
+  @override
+  String get reportAmount => 'Amount';
+
+  @override
+  String get reportAveragePerDay => 'Average per day';
+
+  @override
+  String get reportRows => 'Entries';
+
+  @override
+  String get reportRange => 'Period';
+
+  @override
+  String get reportSummaryColumn => 'Measure';
+
+  @override
+  String get reportCategoryColumn => 'Category';
+
+  @override
+  String get reportItemColumn => 'Item';
+
+  @override
+  String get reportDayColumn => 'Day';
+
+  @override
+  String get reportMemberColumn => 'Member';
+
+  @override
+  String reportPercent(String percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get reportUp => 'Up';
+
+  @override
+  String get reportDown => 'Down';
+
+  @override
+  String get reportFlat => 'No change';
+
+  @override
+  String get reportPrevious => 'Before';
+
+  @override
+  String reportComparedWith(String period) {
+    return 'compared with $period';
+  }
+
+  @override
+  String get reportNoPreviousData => 'no earlier data';
+
+  @override
+  String reportComparisonSemantics(
+    String direction,
+    String amount,
+    String percent,
+    String period,
+  ) {
+    return '$direction $amount, $percent, compared with $period';
+  }
+
+  @override
+  String get reportPrevDay => 'the day before';
+
+  @override
+  String get reportPrevWeek => 'last week';
+
+  @override
+  String get reportPrevMonth => 'last month';
+
+  @override
+  String get reportPrevYear => 'last year';
+
+  @override
+  String get reportPrevRange => 'the previous period';
+
+  @override
+  String get reportDryEstimate => 'Planned';
+
+  @override
+  String get reportDryActual => 'Spent';
+
+  @override
+  String get reportDryDelta => 'Difference';
+
+  @override
+  String get reportDryPlanned => 'planned';
+
+  @override
+  String get reportDryEmpty => 'No dry-grocery plan for this period.';
+
+  @override
+  String get reportOver => 'over';
+
+  @override
+  String get reportUnder => 'under';
+
+  @override
+  String get reportExpected => 'planned';
+
+  @override
+  String get reportTruncated => 'This period has too many entries to show in full. Choose a shorter period for an exact report.';
+
+  @override
+  String get chartNoData => 'Nothing to chart for this period yet.';
+
+  @override
+  String get chartOther => 'Other';
+
+  @override
+  String chartSlice(String name, String amount, String percent) {
+    return '$name $amount, $percent% of total';
+  }
+
+  @override
+  String chartDaySummary(String day, String amount) {
+    return 'Highest spending on $day: $amount';
+  }
 }

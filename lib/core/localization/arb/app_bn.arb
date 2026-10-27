@@ -1685,5 +1685,371 @@
   "budgetReadOnly": "আপনি বাজেট দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন বদলাতে পারবেন।",
   "@budgetReadOnly": {},
   "budgetAlertsTitle": "বাজেট সতর্কতা",
-  "@budgetAlertsTitle": {}
+  "@budgetAlertsTitle": {},
+  "fundTitle": "পারিবারিক ফান্ড",
+  "@fundTitle": {},
+  "fundBalanceTitle": "ফান্ডের ব্যালেন্স",
+  "@fundBalanceTitle": {},
+  "fundReceived": "জমা",
+  "@fundReceived": {},
+  "fundSpent": "খরচ",
+  "@fundSpent": {},
+  "fundReimbursed": "ফেরত দেওয়া",
+  "@fundReimbursed": {},
+  "fundClosedOn": "{date} তারিখে বন্ধ হয়েছে",
+  "@fundClosedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "fundMonthClosedNotice": "এই মাস বন্ধ, তাই এতে নতুন কিছু যোগ করা যাবে না।",
+  "@fundMonthClosedNotice": {},
+  "fundOverflowWarning": "ফান্ডের তালিকা অনেক বড়; ব্যালেন্স ঠিক রাখতে পুরোনো মাসগুলো বন্ধ করুন।",
+  "@fundOverflowWarning": {},
+  "fundDriftWarning": "একটি বন্ধ মাস খাতার সাথে মিলছে না। সেটি আবার খুলে, ঠিক করে আবার বন্ধ করুন।",
+  "@fundDriftWarning": {},
+  "fundLedgerIssues": "{count}টি খরচের সাথে ফান্ডের এন্ট্রি মিলছে না।",
+  "@fundLedgerIssues": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fundMembersTitle": "সদস্যদের জমা",
+  "@fundMembersTitle": {},
+  "fundNoMembers": "এখনো কোনো সক্রিয় সদস্য নেই।",
+  "@fundNoMembers": {},
+  "fundNoPlan": "এই মাসের কোনো পরিকল্পনা নেই",
+  "@fundNoPlan": {},
+  "fundPaidUp": "সম্পূর্ণ জমা হয়েছে",
+  "@fundPaidUp": {},
+  "fundRemainingAmount": "{amount} বাকি",
+  "@fundRemainingAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "fundCredit": "{amount} বেশি",
+  "@fundCredit": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "fundAwaitingApproval": "{amount} অনুমোদনের অপেক্ষায়",
+  "@fundAwaitingApproval": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "fundHistoryTitle": "ফান্ডের হিসাব",
+  "@fundHistoryTitle": {},
+  "fundHistoryEmpty": "এই মাসে ফান্ডে এখনো কিছু নেই।",
+  "@fundHistoryEmpty": {},
+  "fundTxContribution": "জমা",
+  "@fundTxContribution": {},
+  "fundTxExpense": "খরচ",
+  "@fundTxExpense": {},
+  "fundTxReimbursement": "ফেরত দেওয়া",
+  "@fundTxReimbursement": {},
+  "fundTxOpening": "প্রারম্ভিক ব্যালেন্স",
+  "@fundTxOpening": {},
+  "fundTxAdjustment": "সংশোধন",
+  "@fundTxAdjustment": {},
+  "fundSetupTitle": "ফান্ড শুরু করুন",
+  "@fundSetupTitle": {},
+  "fundSetupMessage": "পরিবারের কাছে এখন যে টাকা আছে লিখে ফান্ড ও তার প্রথম মাস শুরু করুন।",
+  "@fundSetupMessage": {},
+  "fundOpeningBalance": "প্রারম্ভিক ব্যালেন্স",
+  "@fundOpeningBalance": {},
+  "fundSaveOpening": "প্রারম্ভিক ব্যালেন্স সংরক্ষণ",
+  "@fundSaveOpening": {},
+  "fundAddContribution": "জমা যোগ করুন",
+  "@fundAddContribution": {},
+  "fundRequestContribution": "জমার অনুরোধ করুন",
+  "@fundRequestContribution": {},
+  "fundSaveContribution": "জমা সংরক্ষণ",
+  "@fundSaveContribution": {},
+  "fundSendRequest": "অনুরোধ পাঠান",
+  "@fundSendRequest": {},
+  "fundSendChangeRequest": "পরিবর্তনের অনুরোধ পাঠান",
+  "@fundSendChangeRequest": {},
+  "fundEditRequest": "অনুরোধ সম্পাদনা",
+  "@fundEditRequest": {},
+  "fundRequestChange": "পরিবর্তনের অনুরোধ",
+  "@fundRequestChange": {},
+  "fundContributionLocked": "মাস বন্ধ",
+  "@fundContributionLocked": {},
+  "fundMemberLabel": "কে দিয়েছেন",
+  "@fundMemberLabel": {},
+  "fundAmountLabel": "টাকার পরিমাণ",
+  "@fundAmountLabel": {},
+  "fundMethodLabel": "কীভাবে দেওয়া হয়েছে",
+  "@fundMethodLabel": {},
+  "fundMethodCash": "নগদ",
+  "@fundMethodCash": {},
+  "fundMethodBkash": "বিকাশ",
+  "@fundMethodBkash": {},
+  "fundMethodNagad": "নগদ (Nagad)",
+  "@fundMethodNagad": {},
+  "fundMethodBank": "ব্যাংক",
+  "@fundMethodBank": {},
+  "fundMethodOther": "অন্য",
+  "@fundMethodOther": {},
+  "fundPendingTitle": "অনুমোদনের অপেক্ষায়",
+  "@fundPendingTitle": {},
+  "fundPendingEmpty": "কোনো অনুরোধ অপেক্ষায় নেই।",
+  "@fundPendingEmpty": {},
+  "fundApprove": "অনুমোদন",
+  "@fundApprove": {},
+  "fundReject": "প্রত্যাখ্যান",
+  "@fundReject": {},
+  "fundRejectReasonTitle": "কেন প্রত্যাখ্যান করছেন?",
+  "@fundRejectReasonTitle": {},
+  "fundRejectReasonHint": "সদস্য এই কারণটি দেখতে পাবেন।",
+  "@fundRejectReasonHint": {},
+  "fundRejectedReason": "প্রত্যাখ্যাত: {reason}",
+  "@fundRejectedReason": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "fundVoid": "বাতিল",
+  "@fundVoid": {},
+  "fundGeneratePlan": "এই মাসের পরিকল্পনা তৈরি করুন",
+  "@fundGeneratePlan": {},
+  "fundStatusPending": "অনুমোদনের অপেক্ষায়",
+  "@fundStatusPending": {},
+  "fundStatusApproved": "অনুমোদিত",
+  "@fundStatusApproved": {},
+  "fundStatusRejected": "প্রত্যাখ্যাত",
+  "@fundStatusRejected": {},
+  "fundStatusVoided": "বাতিল করা",
+  "@fundStatusVoided": {},
+  "advanceTitle": "অগ্রিম ফেরত",
+  "@advanceTitle": {},
+  "advanceOwedTo": "{name}-কে দিতে হবে",
+  "@advanceOwedTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "advancePaidTo": "{name}-কে দেওয়া হয়েছে",
+  "@advancePaidTo": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "advanceOpenCount": "{count}টি অগ্রিম বাকি",
+  "@advanceOpenCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "advanceTotalOwed": "মোট বাকি",
+  "@advanceTotalOwed": {},
+  "advanceShowSettled": "পরিশোধিত দেখান",
+  "@advanceShowSettled": {},
+  "advanceEmptyTitle": "ফেরত দেওয়ার কিছু নেই",
+  "@advanceEmptyTitle": {},
+  "advanceEmptyMessage": "কোনো সদস্য নিজের টাকায় পরিবারের জন্য খরচ করলে, ফেরত দেওয়ার আগ পর্যন্ত তা এখানে দেখা যাবে।",
+  "@advanceEmptyMessage": {},
+  "advanceSettledOf": "ফেরত দেওয়া",
+  "@advanceSettledOf": {},
+  "advanceRemaining": "বাকি",
+  "@advanceRemaining": {},
+  "advanceSettleTitle": "ফেরত দিন",
+  "@advanceSettleTitle": {},
+  "advanceSettleAction": "ফেরত দেওয়া লিখুন",
+  "@advanceSettleAction": {},
+  "monthCloseTitle": "মাস বন্ধ করুন",
+  "@monthCloseTitle": {},
+  "monthCloseManagerOnly": "শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন মাস বন্ধ বা আবার খুলতে পারবেন।",
+  "@monthCloseManagerOnly": {},
+  "monthCloseCurrentHint": "এই মাস বন্ধ করলে এটি পড়ার মতো হয়ে যাবে এবং এর ব্যালেন্স পরের মাসে যাবে।",
+  "@monthCloseCurrentHint": {},
+  "monthCloseWillRecord": "এই মাস যে ব্যালেন্স নথিভুক্ত করবে",
+  "@monthCloseWillRecord": {},
+  "monthCloseAdvances": "বন্ধের পর অগ্রিম বাকি",
+  "@monthCloseAdvances": {},
+  "monthCloseExpected": "পরিকল্পিত জমা",
+  "@monthCloseExpected": {},
+  "monthCloseReceived": "গৃহীত জমা",
+  "@monthCloseReceived": {},
+  "monthClose": "মাস বন্ধ করুন",
+  "@monthClose": {},
+  "monthCloseConfirmTitle": "এই মাস বন্ধ করবেন?",
+  "@monthCloseConfirmTitle": {},
+  "monthCloseConfirmMessage": "মাসটি পড়ার মতো হয়ে যাবে এবং ব্যালেন্স পরের মাসে যাবে। কিছু ভুল থাকলে পরে আবার খুলতে পারবেন।",
+  "@monthCloseConfirmMessage": {},
+  "monthClosedDone": "মাস বন্ধ হয়েছে",
+  "@monthClosedDone": {},
+  "monthReopen": "মাস আবার খুলুন",
+  "@monthReopen": {},
+  "monthReopenedDone": "মাস আবার খোলা হয়েছে",
+  "@monthReopenedDone": {},
+  "monthReopenNoteTitle": "কেন এই মাস আবার খুলছেন?",
+  "@monthReopenNoteTitle": {},
+  "monthReopenNoteHint": "একটি ছোট কারণ (অন্তত ৩ অক্ষর)।",
+  "@monthReopenNoteHint": {},
+  "monthClosedChip": "{month} (বন্ধ)",
+  "@monthClosedChip": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "reportTitle": "রিপোর্ট",
+  "@reportTitle": {},
+  "reportTabSummary": "সারসংক্ষেপ",
+  "@reportTabSummary": {},
+  "reportTabCategories": "ক্যাটেগরি",
+  "@reportTabCategories": {},
+  "reportTabItems": "আইটেম",
+  "@reportTabItems": {},
+  "reportTabDays": "দিন",
+  "@reportTabDays": {},
+  "reportTabMembers": "সদস্য",
+  "@reportTabMembers": {},
+  "reportTabDry": "শুকনা বাজার",
+  "@reportTabDry": {},
+  "reportTabContributions": "জমা",
+  "@reportTabContributions": {},
+  "reportTotal": "মোট",
+  "@reportTotal": {},
+  "reportAmount": "টাকা",
+  "@reportAmount": {},
+  "reportAveragePerDay": "দৈনিক গড়",
+  "@reportAveragePerDay": {},
+  "reportRows": "এন্ট্রি",
+  "@reportRows": {},
+  "reportRange": "সময়কাল",
+  "@reportRange": {},
+  "reportSummaryColumn": "বিবরণ",
+  "@reportSummaryColumn": {},
+  "reportCategoryColumn": "ক্যাটেগরি",
+  "@reportCategoryColumn": {},
+  "reportItemColumn": "আইটেম",
+  "@reportItemColumn": {},
+  "reportDayColumn": "দিন",
+  "@reportDayColumn": {},
+  "reportMemberColumn": "সদস্য",
+  "@reportMemberColumn": {},
+  "reportPercent": "{percent}%",
+  "@reportPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "reportUp": "বেড়েছে",
+  "@reportUp": {},
+  "reportDown": "কমেছে",
+  "@reportDown": {},
+  "reportFlat": "অপরিবর্তিত",
+  "@reportFlat": {},
+  "reportPrevious": "আগে",
+  "@reportPrevious": {},
+  "reportComparedWith": "{period}-এর তুলনায়",
+  "@reportComparedWith": {
+    "placeholders": {
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "reportNoPreviousData": "আগের কোনো তথ্য নেই",
+  "@reportNoPreviousData": {},
+  "reportComparisonSemantics": "{period}-এর তুলনায় {direction} {amount}, {percent}",
+  "@reportComparisonSemantics": {
+    "placeholders": {
+      "direction": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      },
+      "period": {
+        "type": "String"
+      }
+    }
+  },
+  "reportPrevDay": "আগের দিন",
+  "@reportPrevDay": {},
+  "reportPrevWeek": "গত সপ্তাহ",
+  "@reportPrevWeek": {},
+  "reportPrevMonth": "গত মাস",
+  "@reportPrevMonth": {},
+  "reportPrevYear": "গত বছর",
+  "@reportPrevYear": {},
+  "reportPrevRange": "আগের সময়কাল",
+  "@reportPrevRange": {},
+  "reportDryEstimate": "পরিকল্পিত",
+  "@reportDryEstimate": {},
+  "reportDryActual": "খরচ",
+  "@reportDryActual": {},
+  "reportDryDelta": "পার্থক্য",
+  "@reportDryDelta": {},
+  "reportDryPlanned": "পরিকল্পনা",
+  "@reportDryPlanned": {},
+  "reportDryEmpty": "এই সময়ের জন্য শুকনা বাজারের কোনো পরিকল্পনা নেই।",
+  "@reportDryEmpty": {},
+  "reportOver": "বেশি",
+  "@reportOver": {},
+  "reportUnder": "কম",
+  "@reportUnder": {},
+  "reportExpected": "পরিকল্পিত",
+  "@reportExpected": {},
+  "reportTruncated": "এই সময়ে অনেকগুলো এন্ট্রি, সব দেখানো যাচ্ছে না। নির্ভুল রিপোর্টের জন্য ছোট সময় বেছে নিন।",
+  "@reportTruncated": {},
+  "chartNoData": "এই সময়ের জন্য দেখানোর মতো কিছু নেই।",
+  "@chartNoData": {},
+  "chartOther": "অন্যান্য",
+  "@chartOther": {},
+  "chartSlice": "{name} {amount}, মোটের {percent}%",
+  "@chartSlice": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "chartDaySummary": "সবচেয়ে বেশি খরচ {day}: {amount}",
+  "@chartDaySummary": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  }
 }

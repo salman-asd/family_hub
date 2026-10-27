@@ -3435,6 +3435,785 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'বাজেট সতর্কতা'**
   String get budgetAlertsTitle;
+
+  /// No description provided for @fundTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পারিবারিক ফান্ড'**
+  String get fundTitle;
+
+  /// No description provided for @fundBalanceTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফান্ডের ব্যালেন্স'**
+  String get fundBalanceTitle;
+
+  /// No description provided for @fundReceived.
+  ///
+  /// In bn, this message translates to:
+  /// **'জমা'**
+  String get fundReceived;
+
+  /// No description provided for @fundSpent.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ'**
+  String get fundSpent;
+
+  /// No description provided for @fundReimbursed.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফেরত দেওয়া'**
+  String get fundReimbursed;
+
+  /// No description provided for @fundClosedOn.
+  ///
+  /// In bn, this message translates to:
+  /// **'{date} তারিখে বন্ধ হয়েছে'**
+  String fundClosedOn(String date);
+
+  /// No description provided for @fundMonthClosedNotice.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস বন্ধ, তাই এতে নতুন কিছু যোগ করা যাবে না।'**
+  String get fundMonthClosedNotice;
+
+  /// No description provided for @fundOverflowWarning.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফান্ডের তালিকা অনেক বড়; ব্যালেন্স ঠিক রাখতে পুরোনো মাসগুলো বন্ধ করুন।'**
+  String get fundOverflowWarning;
+
+  /// No description provided for @fundDriftWarning.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি বন্ধ মাস খাতার সাথে মিলছে না। সেটি আবার খুলে, ঠিক করে আবার বন্ধ করুন।'**
+  String get fundDriftWarning;
+
+  /// No description provided for @fundLedgerIssues.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি খরচের সাথে ফান্ডের এন্ট্রি মিলছে না।'**
+  String fundLedgerIssues(int count);
+
+  /// No description provided for @fundMembersTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্যদের জমা'**
+  String get fundMembersTitle;
+
+  /// No description provided for @fundNoMembers.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো সক্রিয় সদস্য নেই।'**
+  String get fundNoMembers;
+
+  /// No description provided for @fundNoPlan.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসের কোনো পরিকল্পনা নেই'**
+  String get fundNoPlan;
+
+  /// No description provided for @fundPaidUp.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পূর্ণ জমা হয়েছে'**
+  String get fundPaidUp;
+
+  /// No description provided for @fundRemainingAmount.
+  ///
+  /// In bn, this message translates to:
+  /// **'{amount} বাকি'**
+  String fundRemainingAmount(String amount);
+
+  /// No description provided for @fundCredit.
+  ///
+  /// In bn, this message translates to:
+  /// **'{amount} বেশি'**
+  String fundCredit(String amount);
+
+  /// No description provided for @fundAwaitingApproval.
+  ///
+  /// In bn, this message translates to:
+  /// **'{amount} অনুমোদনের অপেক্ষায়'**
+  String fundAwaitingApproval(String amount);
+
+  /// No description provided for @fundHistoryTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফান্ডের হিসাব'**
+  String get fundHistoryTitle;
+
+  /// No description provided for @fundHistoryEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসে ফান্ডে এখনো কিছু নেই।'**
+  String get fundHistoryEmpty;
+
+  /// No description provided for @fundTxContribution.
+  ///
+  /// In bn, this message translates to:
+  /// **'জমা'**
+  String get fundTxContribution;
+
+  /// No description provided for @fundTxExpense.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ'**
+  String get fundTxExpense;
+
+  /// No description provided for @fundTxReimbursement.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফেরত দেওয়া'**
+  String get fundTxReimbursement;
+
+  /// No description provided for @fundTxOpening.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রারম্ভিক ব্যালেন্স'**
+  String get fundTxOpening;
+
+  /// No description provided for @fundTxAdjustment.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংশোধন'**
+  String get fundTxAdjustment;
+
+  /// No description provided for @fundSetupTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফান্ড শুরু করুন'**
+  String get fundSetupTitle;
+
+  /// No description provided for @fundSetupMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের কাছে এখন যে টাকা আছে লিখে ফান্ড ও তার প্রথম মাস শুরু করুন।'**
+  String get fundSetupMessage;
+
+  /// No description provided for @fundOpeningBalance.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রারম্ভিক ব্যালেন্স'**
+  String get fundOpeningBalance;
+
+  /// No description provided for @fundSaveOpening.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রারম্ভিক ব্যালেন্স সংরক্ষণ'**
+  String get fundSaveOpening;
+
+  /// No description provided for @fundAddContribution.
+  ///
+  /// In bn, this message translates to:
+  /// **'জমা যোগ করুন'**
+  String get fundAddContribution;
+
+  /// No description provided for @fundRequestContribution.
+  ///
+  /// In bn, this message translates to:
+  /// **'জমার অনুরোধ করুন'**
+  String get fundRequestContribution;
+
+  /// No description provided for @fundSaveContribution.
+  ///
+  /// In bn, this message translates to:
+  /// **'জমা সংরক্ষণ'**
+  String get fundSaveContribution;
+
+  /// No description provided for @fundSendRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধ পাঠান'**
+  String get fundSendRequest;
+
+  /// No description provided for @fundSendChangeRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবর্তনের অনুরোধ পাঠান'**
+  String get fundSendChangeRequest;
+
+  /// No description provided for @fundEditRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধ সম্পাদনা'**
+  String get fundEditRequest;
+
+  /// No description provided for @fundRequestChange.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবর্তনের অনুরোধ'**
+  String get fundRequestChange;
+
+  /// No description provided for @fundContributionLocked.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস বন্ধ'**
+  String get fundContributionLocked;
+
+  /// No description provided for @fundMemberLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'কে দিয়েছেন'**
+  String get fundMemberLabel;
+
+  /// No description provided for @fundAmountLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'টাকার পরিমাণ'**
+  String get fundAmountLabel;
+
+  /// No description provided for @fundMethodLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'কীভাবে দেওয়া হয়েছে'**
+  String get fundMethodLabel;
+
+  /// No description provided for @fundMethodCash.
+  ///
+  /// In bn, this message translates to:
+  /// **'নগদ'**
+  String get fundMethodCash;
+
+  /// No description provided for @fundMethodBkash.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিকাশ'**
+  String get fundMethodBkash;
+
+  /// No description provided for @fundMethodNagad.
+  ///
+  /// In bn, this message translates to:
+  /// **'নগদ (Nagad)'**
+  String get fundMethodNagad;
+
+  /// No description provided for @fundMethodBank.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাংক'**
+  String get fundMethodBank;
+
+  /// No description provided for @fundMethodOther.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্য'**
+  String get fundMethodOther;
+
+  /// No description provided for @fundPendingTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদনের অপেক্ষায়'**
+  String get fundPendingTitle;
+
+  /// No description provided for @fundPendingEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো অনুরোধ অপেক্ষায় নেই।'**
+  String get fundPendingEmpty;
+
+  /// No description provided for @fundApprove.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদন'**
+  String get fundApprove;
+
+  /// No description provided for @fundReject.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রত্যাখ্যান'**
+  String get fundReject;
+
+  /// No description provided for @fundRejectReasonTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেন প্রত্যাখ্যান করছেন?'**
+  String get fundRejectReasonTitle;
+
+  /// No description provided for @fundRejectReasonHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য এই কারণটি দেখতে পাবেন।'**
+  String get fundRejectReasonHint;
+
+  /// No description provided for @fundRejectedReason.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রত্যাখ্যাত: {reason}'**
+  String fundRejectedReason(String reason);
+
+  /// No description provided for @fundVoid.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল'**
+  String get fundVoid;
+
+  /// No description provided for @fundGeneratePlan.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসের পরিকল্পনা তৈরি করুন'**
+  String get fundGeneratePlan;
+
+  /// No description provided for @fundStatusPending.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদনের অপেক্ষায়'**
+  String get fundStatusPending;
+
+  /// No description provided for @fundStatusApproved.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদিত'**
+  String get fundStatusApproved;
+
+  /// No description provided for @fundStatusRejected.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রত্যাখ্যাত'**
+  String get fundStatusRejected;
+
+  /// No description provided for @fundStatusVoided.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল করা'**
+  String get fundStatusVoided;
+
+  /// No description provided for @advanceTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অগ্রিম ফেরত'**
+  String get advanceTitle;
+
+  /// No description provided for @advanceOwedTo.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name}-কে দিতে হবে'**
+  String advanceOwedTo(String name);
+
+  /// No description provided for @advancePaidTo.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name}-কে দেওয়া হয়েছে'**
+  String advancePaidTo(String name);
+
+  /// No description provided for @advanceOpenCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি অগ্রিম বাকি'**
+  String advanceOpenCount(int count);
+
+  /// No description provided for @advanceTotalOwed.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট বাকি'**
+  String get advanceTotalOwed;
+
+  /// No description provided for @advanceShowSettled.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিশোধিত দেখান'**
+  String get advanceShowSettled;
+
+  /// No description provided for @advanceEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফেরত দেওয়ার কিছু নেই'**
+  String get advanceEmptyTitle;
+
+  /// No description provided for @advanceEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো সদস্য নিজের টাকায় পরিবারের জন্য খরচ করলে, ফেরত দেওয়ার আগে পর্যন্ত তা এখানে দেখা যাবে।'**
+  String get advanceEmptyMessage;
+
+  /// No description provided for @advanceSettledOf.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফেরত দেওয়া'**
+  String get advanceSettledOf;
+
+  /// No description provided for @advanceRemaining.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাকি'**
+  String get advanceRemaining;
+
+  /// No description provided for @advanceSettleTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফেরত দিন'**
+  String get advanceSettleTitle;
+
+  /// No description provided for @advanceSettleAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফেরত দেওয়া লিখুন'**
+  String get advanceSettleAction;
+
+  /// No description provided for @monthCloseTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস বন্ধ করুন'**
+  String get monthCloseTitle;
+
+  /// No description provided for @monthCloseManagerOnly.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন মাস বন্ধ বা আবার খুলতে পারবেন।'**
+  String get monthCloseManagerOnly;
+
+  /// No description provided for @monthCloseCurrentHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস বন্ধ করলে এটি পড়ার মতো হয়ে যাবে এবং এর ব্যালেন্স পরের মাসে যাবে।'**
+  String get monthCloseCurrentHint;
+
+  /// No description provided for @monthCloseWillRecord.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস যে ব্যালেন্স নথিভুক্ত করবে'**
+  String get monthCloseWillRecord;
+
+  /// No description provided for @monthCloseAdvances.
+  ///
+  /// In bn, this message translates to:
+  /// **'বন্ধের পর অগ্রিম বাকি'**
+  String get monthCloseAdvances;
+
+  /// No description provided for @monthCloseExpected.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিকল্পিত জমা'**
+  String get monthCloseExpected;
+
+  /// No description provided for @monthCloseReceived.
+  ///
+  /// In bn, this message translates to:
+  /// **'গৃহীত জমা'**
+  String get monthCloseReceived;
+
+  /// No description provided for @monthClose.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস বন্ধ করুন'**
+  String get monthClose;
+
+  /// No description provided for @monthCloseConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাস বন্ধ করবেন?'**
+  String get monthCloseConfirmTitle;
+
+  /// No description provided for @monthCloseConfirmMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসটি পড়ার মতো হয়ে যাবে এবং ব্যালেন্স পরের মাসে যাবে। কিছু ভুল থাকলে পরে আবার খুলতে পারবেন।'**
+  String get monthCloseConfirmMessage;
+
+  /// No description provided for @monthClosedDone.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস বন্ধ হয়েছে'**
+  String get monthClosedDone;
+
+  /// No description provided for @monthReopen.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস আবার খুলুন'**
+  String get monthReopen;
+
+  /// No description provided for @monthReopenedDone.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস আবার খোলা হয়েছে'**
+  String get monthReopenedDone;
+
+  /// No description provided for @monthReopenNoteTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেন এই মাস আবার খুলছেন?'**
+  String get monthReopenNoteTitle;
+
+  /// No description provided for @monthReopenNoteHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি ছোট কারণ (অন্তত ৩ অক্ষর)।'**
+  String get monthReopenNoteHint;
+
+  /// No description provided for @monthClosedChip.
+  ///
+  /// In bn, this message translates to:
+  /// **'{month} (বন্ধ)'**
+  String monthClosedChip(String month);
+
+  /// No description provided for @reportTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিপোর্ট'**
+  String get reportTitle;
+
+  /// No description provided for @reportTabSummary.
+  ///
+  /// In bn, this message translates to:
+  /// **'সারসংক্ষেপ'**
+  String get reportTabSummary;
+
+  /// No description provided for @reportTabCategories.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি'**
+  String get reportTabCategories;
+
+  /// No description provided for @reportTabItems.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেম'**
+  String get reportTabItems;
+
+  /// No description provided for @reportTabDays.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিন'**
+  String get reportTabDays;
+
+  /// No description provided for @reportTabMembers.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য'**
+  String get reportTabMembers;
+
+  /// No description provided for @reportTabDry.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুকনা বাজার'**
+  String get reportTabDry;
+
+  /// No description provided for @reportTabContributions.
+  ///
+  /// In bn, this message translates to:
+  /// **'জমা'**
+  String get reportTabContributions;
+
+  /// No description provided for @reportTotal.
+  ///
+  /// In bn, this message translates to:
+  /// **'মোট'**
+  String get reportTotal;
+
+  /// No description provided for @reportAmount.
+  ///
+  /// In bn, this message translates to:
+  /// **'টাকা'**
+  String get reportAmount;
+
+  /// No description provided for @reportAveragePerDay.
+  ///
+  /// In bn, this message translates to:
+  /// **'দৈনিক গড়'**
+  String get reportAveragePerDay;
+
+  /// No description provided for @reportRows.
+  ///
+  /// In bn, this message translates to:
+  /// **'এন্ট্রি'**
+  String get reportRows;
+
+  /// No description provided for @reportRange.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময়কাল'**
+  String get reportRange;
+
+  /// No description provided for @reportSummaryColumn.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিবরণ'**
+  String get reportSummaryColumn;
+
+  /// No description provided for @reportCategoryColumn.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটেগরি'**
+  String get reportCategoryColumn;
+
+  /// No description provided for @reportItemColumn.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইটেম'**
+  String get reportItemColumn;
+
+  /// No description provided for @reportDayColumn.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিন'**
+  String get reportDayColumn;
+
+  /// No description provided for @reportMemberColumn.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য'**
+  String get reportMemberColumn;
+
+  /// No description provided for @reportPercent.
+  ///
+  /// In bn, this message translates to:
+  /// **'{percent}%'**
+  String reportPercent(String percent);
+
+  /// No description provided for @reportUp.
+  ///
+  /// In bn, this message translates to:
+  /// **'বেড়েছে'**
+  String get reportUp;
+
+  /// No description provided for @reportDown.
+  ///
+  /// In bn, this message translates to:
+  /// **'কমেছে'**
+  String get reportDown;
+
+  /// No description provided for @reportFlat.
+  ///
+  /// In bn, this message translates to:
+  /// **'অপরিবর্তিত'**
+  String get reportFlat;
+
+  /// No description provided for @reportPrevious.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগে'**
+  String get reportPrevious;
+
+  /// No description provided for @reportComparedWith.
+  ///
+  /// In bn, this message translates to:
+  /// **'{period}-এর তুলনায়'**
+  String reportComparedWith(String period);
+
+  /// No description provided for @reportNoPreviousData.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের কোনো তথ্য নেই'**
+  String get reportNoPreviousData;
+
+  /// No description provided for @reportComparisonSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'{period}-এর তুলনায় {direction} {amount}, {percent}'**
+  String reportComparisonSemantics(
+    String direction,
+    String amount,
+    String percent,
+    String period,
+  );
+
+  /// No description provided for @reportPrevDay.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের দিন'**
+  String get reportPrevDay;
+
+  /// No description provided for @reportPrevWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'গত সপ্তাহ'**
+  String get reportPrevWeek;
+
+  /// No description provided for @reportPrevMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'গত মাস'**
+  String get reportPrevMonth;
+
+  /// No description provided for @reportPrevYear.
+  ///
+  /// In bn, this message translates to:
+  /// **'গত বছর'**
+  String get reportPrevYear;
+
+  /// No description provided for @reportPrevRange.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের সময়কাল'**
+  String get reportPrevRange;
+
+  /// No description provided for @reportDryEstimate.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিকল্পিত'**
+  String get reportDryEstimate;
+
+  /// No description provided for @reportDryActual.
+  ///
+  /// In bn, this message translates to:
+  /// **'খরচ'**
+  String get reportDryActual;
+
+  /// No description provided for @reportDryDelta.
+  ///
+  /// In bn, this message translates to:
+  /// **'পার্থক্য'**
+  String get reportDryDelta;
+
+  /// No description provided for @reportDryPlanned.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিকল্পনা'**
+  String get reportDryPlanned;
+
+  /// No description provided for @reportDryEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সময়ের জন্য শুকনা বাজারের কোনো পরিকল্পনা নেই।'**
+  String get reportDryEmpty;
+
+  /// No description provided for @reportOver.
+  ///
+  /// In bn, this message translates to:
+  /// **'বেশি'**
+  String get reportOver;
+
+  /// No description provided for @reportUnder.
+  ///
+  /// In bn, this message translates to:
+  /// **'কম'**
+  String get reportUnder;
+
+  /// No description provided for @reportExpected.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিকল্পিত'**
+  String get reportExpected;
+
+  /// No description provided for @reportTruncated.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সময়ে অনেকগুলো এন্ট্রি, সব দেখানো যাচ্ছে না। নির্ভুল রিপোর্টের জন্য ছোট সময় বেছে নিন।'**
+  String get reportTruncated;
+
+  /// No description provided for @chartNoData.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সময়ের জন্য দেখানোর মতো কিছু নেই।'**
+  String get chartNoData;
+
+  /// No description provided for @chartOther.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যান্য'**
+  String get chartOther;
+
+  /// No description provided for @chartSlice.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {amount}, মোটের {percent}%'**
+  String chartSlice(String name, String amount, String percent);
+
+  /// No description provided for @chartDaySummary.
+  ///
+  /// In bn, this message translates to:
+  /// **'সবচেয়ে বেশি খরচ {day}: {amount}'**
+  String chartDaySummary(String day, String amount);
 }
 
 class _AppLocalizationsDelegate

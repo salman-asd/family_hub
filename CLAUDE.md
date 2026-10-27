@@ -150,3 +150,50 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
 - Corrections are new rows: a change approval writes `adj_<eventId>` (delta) or the `_out`/`_in` pair when the month changes; a void writes `adj_<eventId>` of `-amount`. The `con_<id>` row is never edited.
 - Plans: `contributionPlans/{yyyy-MM}_{memberId}`; `GenerateMonthPlans` never overwrites an override. Every active member reads all contributions and plans (D-P2-5): no role filter in any provider.
 - `RecordOpeningBalance` needs `Permission.editFamilySettings` (admin) because only an admin may write an `opening` row (open point for P2-21 `CloseMonth`).
+
+## Phase 2 additions (P2-21 to P2-22)
+- `opening` rows are now writable by `financeManager(f)` (admin, or moderator while `moderatorManagesFinance` is on) — the same people `closeBazarMonth` admits, because `CloseMonth` writes the carry-forward row. That resolved the P2-19 open point; `RecordOpeningBalance` keeps the stricter admin permission.
+- `CloseMonth` / `ReopenMonth` are money-integrity writes (server probe + ONE batch).  The carry-forward is a pure rule (`MonthCarryForwardRules`): no `open_<next>` row -> one `opening` row; a row already there (re-close after a reopen) -> one `adj_<eventId>_carry` row of the delta; a zero delta writes nothing.  The opening row is never edited.
+- The closing balance is a SERVER read taken just before the batch (the SDK cannot query in a transaction).  `balanceDriftProvider` compares the stored closing with the ledger and the Fund screen warns a manager; Reopen -> fix -> Close repairs it.  `CloseMonth` reads the existing `open_<next>` row through `ExistingOpeningLedger` (one exact-id `get`), not a collection scan.
+- The fund balance and the closing never double count: the closing writes no money, it only carries the balance into the next month's window.
+- The Fund screen (`/bazar/fund`) reads only derived providers: `fundSummaryProvider`, `fundBalanceProvider`, `monthFundTransactionsProvider`, `contributionStatusProvider(month)`, `ledgerIntegrityProvider(month)` (managers), `balanceDriftProvider`, `fundWindowOverflowProvider`, `monthLockedProvider(month)`.  Every member sees every member's row (D-P2-5); mutating controls use `ref.can` / `PermissionGate`, never a role test.
+- `checkLedger` judges only expense references: a live fund expense must sum to `-total`, a deleted/member-funded one to `0`, an expense-looking row with no expense is an orphan.  Contribution, settlement and month rows are never reported.
+- The contribution sheet is driven by `contributionFormProvider(args)` (`ContributionFormMode` record / request / editPending / requestChange): one event id per sheet, text parsed only in `submit()`/`saveOpening()` through `Money.parse`, and a second tap while saving is ignored.
+- 63 `fund*` ARB keys were hand-added to both ARBs and the three generated files; `flutter gen-l10n` must then show no functional diff.
+
+## Phase 2 additions (P2-20 settlement, P2-23 screens)
+- `SettleAdvance` builds its plan with the pure `buildSettlementPlan` from the advance the repository reads from the SERVER, so an overpayment (`overpayment`), a voided advance (`advance_voided`) or a missing one (`NotFound`) is judged on current state.  ONE batch: settlement + `stl_<id>` ledger row + the advance's `settled/status` update + audit.  The original expense and its `exp_` row are never touched, so no category total changes when a member is paid back.  Needs the server (rule 26).
+- A settlement's audit entry uses `AuditRefType.settlement` (there is no `advance` ref type in the closed vocabulary) and carries the advance id in `params`.
+- The Advances screen reads `openAdvancesProvider` (already narrowed to the caller's uid for a plain member — a rules check is not a filter) and groups with the pure `groupAdvances`; only people with `recordContribution` see the settle action.
+- The settled history of one advance is shown on the expense detail (`watchSettlements(advanceId:)`); the Advances screen only filters the open list, so it never opens a second unbounded query.
+- Month close is `closeBazarMonth` only: `MonthCloseScreen` shows a DERIVED preview (`monthClosePreviewProvider`) and the Close confirmation / Reopen note dialog.  Reopen needs a note of at least `kMinReopenNote` characters; the use case checks it again.
+- `LockedMonthBanner` is the one closed-month notice for entry sheets (`monthLockedProvider(month)`); it renders nothing while the month is open.
+- P2-23 ARB keys (`advance*`, `monthClose*`, `monthReopen*`, `monthClosedChip`) were hand-added to both ARBs and the three generated files.
+
+## Phase 2 additions (P2-24 report engine)
+- `features/bazar/reports/domain/` is PURE Dart: `ReportQuery` carries an ALREADY-RESOLVED `range` (the engine never reads a clock); `ReportQuery.resolve` / `.thisMonth` resolve a preset against an injected `today` and the family `weekStartDay`, and `withRange` rebuilds the query for the comparison period.
+- `ReportEngine.build({expenses, query, budget})` applies the SAME `applyFilters` the expense list uses, so a report and a filtered list can never disagree, and it excludes soft-deleted rows.  One pass feeds every view (rule 30).  `ReportEngine.compare` uses `previousComparable` (previous full month/year or an equal-length range).
+- Money is integer paisa everywhere: `averageMoney` (half-up) and `halfUpRatioBp` (half-away-from-zero, `null` base-free case handled by the caller) are the only division helpers.
+- `days` is always every calendar day of the range, zero-filled and ascending; `shareBp` is `null` when the total is zero.
+- Dry-grocery matching: a line by `itemId`, else by `normalizeSearch(name)`; each spent row is claimed by at most one line, and unplanned spend is appended with a zero estimate so `actual` never double counts.
+- `loadRange` is the only report read: pages of `kReportPageSize` (500) via `queryRange` + `startAfter`, capped at `kMaxReportDocs` (5000) with a `truncated` flag; a failure returns the failure, never a partial report.  Only `memberId`/`funding` are pushed to Firestore (single-field filters); category/item filters run in the engine so the breakdowns stay complete.
+- A future reports screen (P2-25) reads these domain types only; it must not re-aggregate.
+
+## Phase 2 additions (P2-25 reports screen)
+- `fl_chart` (`^1.3.0`) is the ONE chart dependency (D-P2-15).  Chart colours come only from `context.tokens.chart[0..9]` and `chartGrid` (rule 22); no `Color(...)` in the reports feature.
+- `reportQueryProvider` resolves the preset against the injected clock AND `bazarSettingsProvider.weekStartDay`, so the family week-start setting re-resolves "This week" immediately (D-P2-12).  The domain stays clock-free.
+- `reportRowsProvider(range)` reuses the LIVE `monthExpensesProvider` for a range that is exactly one whole month (zero extra reads, and it updates with a new expense); every other range goes through `loadRange`.  `reportDataProvider` runs the engine once and attaches `withComparison`; the screen never adds anything up (rule 30).
+- `viewFamilyReports` decides the whole screen: with it, seven tabs; without it, ONLY the contributions tab (no TabBar), because contributions are visible to every active member (D-P2-5).
+- Every chart is wrapped in ONE `Semantics(label:)` with `excludeSemantics` and a generated text alternative; the table beneath each chart is the accessible content.  `DataTable`s scroll HORIZONTALLY so bn at 2.0 text scale never overflows; chart `duration` is zero when `MediaQuery.disableAnimationsOf` is true.
+- The pie caps at 10 slices (the token colours) and folds the rest into "Other", so `tokens.chart[i % length]` never crashes and the label list stays short.
+- 56 `report*`/`chart*` ARB keys were hand-added to both ARBs and the three generated files; `flutter gen-l10n` must then show no functional diff.
+
+## Phase 2 additions (P2-26 spreadsheet import)
+- `features/bazar/import/domain/` is PURE Dart; `excel` is imported in ONE file, `data/xlsx_workbook_reader.dart`.  Cells are neutral (`String`, `int`, `DateTime`, `null`), numbers are converted to DECIMAL STRINGS immediately, so no float ever reaches money code.
+- **Formula cells are dropped** (`null`): the library does not evaluate them, and `Bazar.xlsx`'s day/category totals are formulas the importer recomputes.
+- `cleanLabel` strips emoji/symbols from both ends; `labelKey` = `cleanLabel` + `normalizeSearch`, so one normaliser compares every label.
+- `parseExpenseRows`: date CARRY-FORWARD over blank date cells, `0`/blank price rows skipped (placeholders, not errors), and every bad row COLLECTED as an `ImportRowIssue` — never thrown.  `today` is injected for the `future_date` check.
+- The label table (`category_mapping.dart`) maps `পিয়াজ`/`আলু` to an item id, but generic labels (`সবজি`, `বাজার`, `মাছ`) NEVER link a catalog item; an unknown label stays unresolved for the wizard, never a guess.
+- `parseBanglaQuantity` is integer-only: fractions round half-up to milli-units (`১/৩` -> 333); `১০০ টাকার` is value-based and carries no quantity.
+- The dry-grocery table's typed `মোট` wins over `quantity x rate`; a blank amount (electricity in Oct-26) becomes `SkippedEstimateLine(no_amount)`.
+- `planImport` writes nothing: it produces `ImportPlan` + `ImportReport` (`sheetTotal` vs `importTotal`, `reconciles`) for the wizard to confirm (P2-27).

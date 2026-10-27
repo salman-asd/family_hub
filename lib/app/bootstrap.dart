@@ -102,8 +102,8 @@ Future<void> bootstrap(Flavor flavor) async {
     );
     final expenses = FirestoreExpenseRepository(tx: tx, clock: clock);
     final budgets = FirestoreBudgetRepository(tx: tx);
-    final funds = FirestoreFundRepository();
-    final advances = FirestoreAdvanceRepository();
+    final funds = FirestoreFundRepository(tx: tx);
+    final advances = FirestoreAdvanceRepository(tx: tx);
     final contributions = FirestoreContributionRepository(tx: tx);
 
     runApp(
@@ -132,6 +132,7 @@ Future<void> bootstrap(Flavor flavor) async {
           expenseRepositoryProvider.overrideWithValue(expenses),
           budgetRepositoryProvider.overrideWithValue(budgets),
           fundRepositoryProvider.overrideWithValue(funds),
+          fundOpeningLedgerProvider.overrideWithValue(funds),
           advanceRepositoryProvider.overrideWithValue(advances),
           contributionRepositoryProvider.overrideWithValue(contributions),
           themePreferenceSyncProvider.overrideWithValue(

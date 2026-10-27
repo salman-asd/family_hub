@@ -4,9 +4,11 @@ import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/utils/date_key.dart';
+import 'package:family_hub/core/utils/money.dart';
 import 'package:family_hub/features/bazar/advances/domain/advance_repository.dart';
 import 'package:family_hub/features/bazar/advances/domain/member_advance.dart';
 import 'package:family_hub/features/bazar/advances/domain/settlement.dart';
+import 'package:family_hub/features/bazar/advances/domain/settlement_plan.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense_repository.dart';
 import 'package:family_hub/features/bazar/expenses/domain/funding.dart';
@@ -15,6 +17,7 @@ import 'package:family_hub/features/bazar/expenses/domain/write_plans.dart';
 import 'package:family_hub/features/bazar/fund/domain/fund_repository.dart';
 import 'package:family_hub/features/bazar/fund/domain/fund_transaction.dart';
 import 'package:family_hub/features/bazar/fund/domain/month_closing.dart';
+import 'package:family_hub/features/bazar/fund/domain/month_plans.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/catalog_repository.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/category.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/default_catalog.dart';
@@ -34,6 +37,7 @@ class InMemoryBazarBackend extends InMemoryBackend
         CatalogRepository,
         ExpenseRepository,
         FundRepository,
+        ExistingOpeningLedger,
         AdvanceRepository {
   final Map<String, Map<String, Category>> categories = {};
   final Map<String, Map<String, Item>> items = {};
@@ -83,6 +87,17 @@ class InMemoryBazarBackend extends InMemoryBackend
     ...(closings[familyId] ?? const <MonthKey, MonthClosing>{}).values,
   ];
 
+  /// `[from, to]`, both inclusive.
+  List<FundTransaction> fundTransactionsBetween(
+    String familyId,
+    MonthKey from,
+    MonthKey to,
+  ) => <FundTransaction>[
+    for (final row in fundTransactionsOf(familyId))
+      if (row.monthKey.compareTo(from) >= 0 && row.monthKey.compareTo(to) <= 0)
+        row,
+  ];
+
   List<ExpenseRevision> revisionsOf(
     String familyId,
     String expenseId,
@@ -90,6 +105,9 @@ class InMemoryBazarBackend extends InMemoryBackend
     ...(revisions[familyId]?[expenseId] ?? const <String, ExpenseRevision>{})
         .values,
   ];
+
+  /// Tests: the next range read fails with this (an offline report, P2-24).
+  AppFailure? failNextRangeRead;
 
   /// Lets tests mutate the maps directly and then publish the change.
   void catalogNotify() => _catalogChanges.add(null);
@@ -363,6 +381,11 @@ class InMemoryBazarBackend extends InMemoryBackend
     int limit = defaultExpensePageSize,
     Expense? startAfter,
   }) async {
+    final readFailure = failNextRangeRead;
+    if (readFailure != null) {
+      failNextRangeRead = null;
+      return Failure<List<Expense>>(readFailure);
+    }
     final rows = <Expense>[
       for (final expense in expensesOf(familyId))
         if (range.contains(expense.dateKey) &&
@@ -531,6 +554,66 @@ class InMemoryBazarBackend extends InMemoryBackend
     MonthKey month,
   ) async => Success<MonthClosing?>(closings[familyId]?[month]);
 
+  /// No cache in memory: the server read is the same read (P2-21).
+  @override
+  Future<Result<List<FundTransaction>>> getTransactionsFromServer(
+    String familyId,
+    MonthKey from,
+  ) async {
+    final rows =
+        <FundTransaction>[
+          for (final row in fundTransactionsOf(familyId))
+            if (row.monthKey.compareTo(from) >= 0) row,
+        ]..sort((a, b) {
+          final byMonth = a.monthKey.compareTo(b.monthKey);
+          if (byMonth != 0) return byMonth;
+          final byDate = a.dateKey.compareTo(b.dateKey);
+          return byDate != 0 ? byDate : a.id.compareTo(b.id);
+        });
+    return Success<List<FundTransaction>>(rows.take(500).toList());
+  }
+
+  @override
+  Future<Result<void>> commitClose(
+    String familyId,
+    MonthClosePlan plan,
+    AuditEvent event,
+  ) async {
+    final failed = _takeWriteFailure();
+    if (failed != null) return failed;
+    (closings[familyId] ??= <MonthKey, MonthClosing>{})[plan.closing.monthKey] =
+        plan.closing;
+    final rows = plan.nextOpening ?? plan.nextAdjustment;
+    if (rows != null) {
+      // The `open_<next>` row is append-only: writing it twice is a bug.
+      final ledger = fundTransactions[familyId] ??= <String, FundTransaction>{};
+      if (plan.nextOpening != null && ledger.containsKey(rows.id)) {
+        throw StateError('ledger row ${rows.id} written twice');
+      }
+      ledger[rows.id] = rows;
+    }
+    _addEventOnce(event);
+    writes++;
+    _expenseChanges.add(null);
+    return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<void>> commitReopen(
+    String familyId,
+    MonthReopenPlan plan,
+    AuditEvent event,
+  ) async {
+    final failed = _takeWriteFailure();
+    if (failed != null) return failed;
+    (closings[familyId] ??= <MonthKey, MonthClosing>{})[plan.reopened
+        .monthKey] = plan.reopened;
+    _addEventOnce(event);
+    writes++;
+    _expenseChanges.add(null);
+    return const Success<void>(null);
+  }
+
   List<FundTransaction> _transactionsFrom(String familyId, MonthKey from) {
     final rows =
         <FundTransaction>[
@@ -543,6 +626,70 @@ class InMemoryBazarBackend extends InMemoryBackend
           return byDate != 0 ? byDate : b.id.compareTo(a.id);
         });
     return rows.take(500).toList();
+  }
+
+  @override
+  Future<Result<Money?>> getOpeningAmount(
+    String familyId,
+    MonthKey month,
+  ) async => Success<Money?>(
+    fundTransactions[familyId]?['open_$month']?.amount,
+  );
+
+  /// Mirrors the Firestore window query: rows with `monthKey >= from`,
+  /// read fresh (no cache), newest month first.
+  @override
+  Future<Result<List<FundTransaction>>> getTransactionsFromServer(
+    String familyId,
+    MonthKey from,
+  ) async => Success<List<FundTransaction>>(_transactionsFrom(familyId, from));
+
+  @override
+  Future<Result<void>> commitClose(
+    String familyId,
+    MonthClosePlan plan,
+    AuditEvent event,
+  ) async {
+    final failed = _takeWriteFailure();
+    if (failed != null) return failed;
+    (closings[familyId] ??= <MonthKey, MonthClosing>{})[plan.closing.monthKey] =
+        plan.closing;
+    _appendLedger(familyId, <FundTransaction?>[
+      plan.nextOpening,
+      plan.nextAdjustment,
+    ]);
+    _addEventOnce(event);
+    writes++;
+    _expenseChanges.add(null);
+    return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<void>> commitReopen(
+    String familyId,
+    MonthReopenPlan plan,
+    AuditEvent event,
+  ) async {
+    final failed = _takeWriteFailure();
+    if (failed != null) return failed;
+    (closings[familyId] ??= <MonthKey, MonthClosing>{})[plan.reopened.monthKey] =
+        plan.reopened;
+    _addEventOnce(event);
+    writes++;
+    _expenseChanges.add(null);
+    return const Success<void>(null);
+  }
+
+  void _appendLedger(String familyId, Iterable<FundTransaction?> rows) {
+    final map = fundTransactions[familyId] ??= <String, FundTransaction>{};
+    for (final row in rows) {
+      if (row == null) continue;
+      // A ledger row is append-only: the same id twice is a bug.
+      if (map.containsKey(row.id)) {
+        throw StateError('ledger row ${row.id} written twice');
+      }
+      map[row.id] = row;
+    }
   }
 
   List<MonthClosing> _closingList(String familyId) {
@@ -583,6 +730,35 @@ class InMemoryBazarBackend extends InMemoryBackend
     await for (final _ in _expenseChanges.stream) {
       yield _settlementList(familyId, advanceId);
     }
+  }
+
+  @override
+  Future<Result<SettlementPlan>> commitSettlement(
+    String familyId, {
+    required String advanceId,
+    required Result<SettlementPlan> Function(MemberAdvance? current) build,
+    required AuditEvent event,
+  }) async {
+    final failed = _takeWriteFailure();
+    if (failed != null) return Failure<SettlementPlan>(failed);
+    // The plan is built from the CURRENT advance, like the Firestore read.
+    final plan = build(advances[familyId]?[advanceId]);
+    final planFailure = plan.failureOrNull;
+    if (planFailure != null) return Failure<SettlementPlan>(planFailure);
+    final value = plan.valueOrNull!;
+
+    final settlementMap = settlements[familyId] ??= <String, Settlement>{};
+    if (settlementMap.containsKey(value.settlement.id)) {
+      throw StateError('settlement ${value.settlement.id} written twice');
+    }
+    settlementMap[value.settlement.id] = value.settlement;
+    _appendLedger(familyId, <FundTransaction?>[value.reimbursement]);
+    (advances[familyId] ??= <String, MemberAdvance>{})[advanceId] =
+        value.advanceAfter;
+    _addEventOnce(event);
+    writes++;
+    _expenseChanges.add(null);
+    return Success<SettlementPlan>(value);
   }
 
   List<MemberAdvance> _openAdvances(String familyId) {
