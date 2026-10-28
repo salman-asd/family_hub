@@ -1,4 +1,4 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:io';
 
 import 'package:family_hub/core/firebase/base_mapper.dart';
@@ -21,8 +21,31 @@ void main() {
   );
 
   test('the JS fixture keys == ChoreTemplateMappers.toMap keys', () {
-    final keys = _jsFixtureKeys();
-    expect(keys, isNotEmpty, reason: 'the parser found no keys');
+    final source = File('firebase/rules_test/support.mjs').readAsStringSync();
+    final start = source.indexOf('export const choreTemplateDoc');
+    expect(start, greaterThan(-1), reason: 'choreTemplateDoc not found');
+    // The fixture's own map closes with a line that is exactly `  });`; the
+    // nested `reminders` block closes deeper and must not end the scan.
+    final close = RegExp(
+      r'^  \}\);$',
+      multiLine: true,
+    ).firstMatch(source.substring(start));
+    expect(close, isNotNull, reason: 'the fixture never closes');
+    final body = source.substring(start, start + close!.start);
+    // `key:` at the start of a line (nested maps are indented deeper).
+    final jsKeys = RegExp(
+      r'^ {4}([A-Za-z][A-Za-z0-9]*):',
+      multiLine: true,
+    ).allMatches(body).map((match) => match.group(1)!).toSet();
+    // The fixture wraps its map in `...baseDoc(uid, { … })`, whose keys sit one
+    // level deeper; `metadataToMap` writes exactly those.
+    final spread = RegExp(
+      r'^ {6}([A-Za-z][A-Za-z0-9]*):',
+      multiLine: true,
+    ).allMatches(body).map((match) => match.group(1)!).toSet();
+    expect(jsKeys, isNotEmpty, reason: 'the parser found no keys');
+    expect(spread, isNotEmpty, reason: 'the parser found no metadata keys');
+    jsKeys.addAll(spread);
 
     final dartKeys = ChoreTemplateMappers.toMap(
       ChoreTemplate(id: 'tpl_1', draft: aTemplate()),
@@ -30,14 +53,19 @@ void main() {
     ).keys.toSet();
 
     expect(
-      keys.difference(dartKeys),
+      jsKeys.difference(dartKeys),
       isEmpty,
       reason: 'the JS fixture has keys the mapper never writes',
     );
     expect(
-      dartKeys.difference(keys),
+      dartKeys.difference(jsKeys),
       isEmpty,
       reason: 'the mapper writes keys the JS fixture lacks',
+    );
+    expect(
+      spread.difference(jsKeys),
+      isEmpty,
+      reason: 'the metadata spread must stay inside the fixture',
     );
   });
 
@@ -49,7 +77,7 @@ void main() {
     final template = writes.cast<Map<String, dynamic>>().firstWhere(
       (w) => '${w['path']}'.contains('/choreTemplates/'),
     );
-    final data = template['data'] as Map<String, dynamic>;
+    final data = (template['data'] as Map<String, dynamic>);
     expect(data['revision'], 1);
     expect(data['seedKey'], isNull);
     expect(data['recurrence'], isA<Map<String, dynamic>>());
@@ -60,37 +88,4 @@ void main() {
     expect(data['slots'], hasLength(2));
     expect(data['subtasks'], hasLength(2));
   });
-}
-
-/// Keys written directly in the `choreTemplateDoc` map (4-space indent), plus
-/// the `...baseDoc(uid, { … })` spread one level deeper (that is
-/// `metadataToMap`). Nested value maps (`recurrence`, `slots`, `reminders`)
-/// are deeper still and are not collected.
-Set<String> _jsFixtureKeys() {
-  final source = File('firebase/rules_test/support.mjs').readAsStringSync();
-  final lines = const LineSplitter().convert(source);
-  final start = lines.indexWhere(
-    (line) => line.contains('export const choreTemplateDoc'),
-  );
-  expect(start, greaterThan(-1), reason: 'choreTemplateDoc not found');
-
-  final keys = <String>{};
-  for (var i = start + 1; i < lines.length; i++) {
-    final line = lines[i];
-    if (line.trim() == '});') break; // the fixture's own map ends here
-    // The document keys sit 4 spaces deep inside `...baseDoc(uid, { … })`.
-    // Nested VALUE maps (`reminders`) are deeper; their keys are not document
-    // keys and must not be collected.
-    final match = RegExp(r'^ {4}([A-Za-z][A-Za-z0-9]*):').firstMatch(line);
-    if (match != null) keys.add(match.group(1)!);
-  }
-  // ...baseDoc(uid, { … }) supplies BaseMapper.metadataToMap's keys.
-  keys.addAll(const <String>[
-    'createdAt',
-    'createdBy',
-    'updatedAt',
-    'updatedBy',
-    'schemaVersion',
-  ]);
-  return keys;
 }
