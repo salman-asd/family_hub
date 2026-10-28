@@ -1,4 +1,4 @@
-import 'package:family_hub/core/audit/audit_event.dart';
+﻿import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
@@ -12,6 +12,12 @@ import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 
 import '../../support/in_memory_backend.dart';
+import '../../support/in_memory_chores_backend.dart';
+
+import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
+import 'package:family_hub/features/chores/templates/domain/recurrence/recurrence.dart';
+import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
+import 'package:family_hub/core/utils/date_key.dart';
 
 /// Deterministic ids: `id_1`, `id_2`, …
 class SeqIds {
@@ -40,6 +46,7 @@ class ChoresFixture {
   final FakeClock clock;
   final SeqIds ids;
   final FakeChoreSettingsRepository settings = FakeChoreSettingsRepository();
+  final InMemoryChoresBackend chores = InMemoryChoresBackend();
 
   void _seedFamily() {
     backend.families[familyId] = const Family(
@@ -72,6 +79,65 @@ class ChoresFixture {
   /// The family port the use cases ask for permissions through.
   FamilyRepository get families => backend;
 }
+
+/// A valid draft: daily "wash the dishes", manual assignment, one main slot.
+/// Tests override only what they are about.
+TemplateDraft aTemplate({
+  String nameBn = 'বাসন ধোয়া',
+  String? nameEn = 'Wash the dishes',
+  String? groupId = 'kitchen',
+  Recurrence? recurrence,
+  List<TemplateSlot>? slots,
+  AssigneeSpec? assignee,
+  String instructions = '',
+  List<TemplateSubtask>? subtasks,
+  int? estimatedMinutes,
+  Difficulty difficulty = Difficulty.normal,
+  VerificationMode verification = VerificationMode.off,
+  ReminderConfig? reminders,
+  DateKey? startDate,
+  DateKey? endDate,
+  int? colorIndex,
+  String? iconKey,
+}) => TemplateDraft(
+  nameBn: nameBn,
+  nameEn: nameEn,
+  groupId: groupId,
+  recurrence: recurrence ?? const DailyRecurrence(),
+  slots: slots ?? <TemplateSlot>[aSlot()],
+  assignee: assignee ?? AssigneeSpec.manual,
+  instructions: instructions,
+  subtasks: subtasks ?? const <TemplateSubtask>[],
+  estimatedMinutes: estimatedMinutes,
+  difficulty: difficulty,
+  verification: verification,
+  reminders: reminders ?? ReminderConfig.off,
+  startDate: startDate ?? DateKey(2026, 10, 1),
+  endDate: endDate,
+  colorIndex: colorIndex,
+  iconKey: iconKey,
+);
+
+/// The main slot: due at 09:00 by default.
+TemplateSlot aSlot({
+  String key = TemplateLimits.mainSlotKey,
+  String? labelBn,
+  String? labelEn,
+  int? dueMinutes = 540,
+}) => TemplateSlot(
+  key: key,
+  labelBn: labelBn,
+  labelEn: labelEn,
+  dueMinutes: dueMinutes,
+);
+
+/// A subtask with a stable id.
+TemplateSubtask aSubtask({
+  String id = 'step_1',
+  String title = 'প্লেট ধোয়া',
+  bool required = false,
+  String? hint,
+}) => TemplateSubtask(id: id, title: title, required: required, hint: hint);
 
 /// In-memory [ChoreSettingsRepository] for use-case tests.
 class FakeChoreSettingsRepository implements ChoreSettingsRepository {

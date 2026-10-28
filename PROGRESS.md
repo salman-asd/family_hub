@@ -1253,6 +1253,42 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 
 **Pre-existing failures in that run (unchanged, not P3-06):** `no_hard_coded_strings` (Bazar), `no_unbounded_queries` (advance repository), `no_step_todos` (`member_access.dart`), `phase1_docs` (`DATA_MODEL.md`).
 
+## Phase 3 - P3-07 Template domain, use cases, in-memory backend
+
+### Built (NEW under `lib/features/chores/templates/domain/`)
+- `template_enums.dart`: `AssigneeStrategy`, `Difficulty`, `VerificationMode`, `TemplateLimits`.
+- `template_rotation.dart`: `CycleUnit`, `Rotation`, `RotationVersion` (the STORED shape only; the engine is P3-09).
+- `template_parts.dart`: `TemplateSlot`, `TemplateSubtask`, `AssigneeSpec`, `ReminderConfig`.
+- `chore_template.dart`: `TemplateDraft` (the editable content) + `ChoreTemplate` (identity + bookkeeping).
+- `template_saved.dart`: `TemplateSaved` + `ReplanScope {futureOnly, includeUpcoming}`.
+- `template_validator.dart`: the road map 3.6 codes; pure, no repository.
+- `template_repository.dart` (port) and `usecases/`: `create_template.dart`, `update_template.dart`, `pause_template.dart`, `resume_template.dart`, `archive_template.dart`, `duplicate_template.dart`, plus `template_change.dart` (the shared load→change→save skeleton).
+- NEW `test/support/in_memory_chores_backend.dart` (templates now; other steps add their collections to it).
+- EXTENDED `test/features/chores/chores_test_helpers.dart`: `ChoresFixture.chores`, `aTemplate()`, `aSlot()`, `aSubtask()`.
+
+### Decisions worth knowing
+- **`TemplateDraft` vs `ChoreTemplate`.** The editor only ever builds a draft, which has NO `id`, `revision`, `builtIn`, `seedKey`, `sortOrder`, `active` or `archivedAt`. Those are set by the use cases, so an editor cannot accidentally change identity.
+- **`UpdateTemplate` never touches occurrences.** It returns `TemplateSaved(template, replanScope)`; the editor controller (P3-16) runs P3-12's regeneration. Content edits bump `revision` by exactly one and keep every identity field.
+- **`ResumeTemplate` refuses an ARCHIVED template** (`Conflict('template_paused')`). Archive is retirement, not a pause; restoring is a deliberate act the UI does not offer, so the code matches the documented rule instead of silently re-activating it.
+- **Archiving twice keeps the FIRST `archivedAt`**: when the family retired the chore is history and must not move.
+- **`DuplicateTemplate` takes the suffix as a parameter** (`nameSuffix`, e.g. " (কপি)" from the ARB): the domain never hard-codes a word. A name at the 80-character limit is trimmed so the suffix still fits.
+- **Rotation shape lives here, the engine does not.** A template may carry its own rotation, so the stored shape is needed now; P3-09 adds `RotationEngine` on top without moving these classes. The validator checks what could never be evaluated (>= 2 members, unique members, anchor index in range, strictly increasing `from`, `weekStartDay` 1-7, <= 12 members, <= 20 versions).
+
+### Tests
+- NEW `test/features/chores/templates/domain/template_usecases_test.dart` (31): permission matrix for all six use cases (admin, manager, member, pending), revision bump keeping identity, `ReplanScope` default and override, audit type/params, `NotFound`, starter-pack ids and the duplicate-seed conflict, duplicate independence, the name-suffix overflow, archive/pause/resume semantics and "never deleted".
+- NEW `test/features/chores/templates/domain/template_validator_test.dart` (31): every code and every boundary (name 80/81, 6/7 slots, 30/31 subtasks, 4000/4001 instructions, 1..600 minutes, 12/13 members, 20/21 versions, 5/6 reminder offsets, colour 11/12).
+
+### Gate (this step)
+
+| Command | Result |
+| --- | --- |
+| `dart format` | **PASS** |
+| `flutter analyze lib/features/chores test/features/chores/templates test/support/in_memory_chores_backend.dart` | **PASS for every P3-07 file** ("No issues found"); the only errors are the pre-existing P3-01 screen errors listed below. |
+| `flutter test test/features/chores/templates test/features/chores/settings test/architecture/layer_boundaries_test.dart test/architecture/file_size_test.dart` | **PASS - 166/166** |
+| `domain/` purity (no Firestore/Flutter import) | **PASS** - `layer_boundaries_test` covers the transitive graph. |
+
+**Pre-existing, still open (unchanged):** the P3-01 screens (`chores_entries.dart`, `chores_home_screen.dart`, `chores_manage_screen.dart`) do not compile - that step was written without an SDK. Plus the five inherited gate items and the Phase 2 analyzer debt.
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -1276,4 +1312,5 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 - P3-03 (vocabulary) is written; its targeted tests pass (160/160) and no file it touches has an analyzer issue. The rules emulator suite has not been run.
 - P3-04 (shared widgets + gallery + `skipped`) is written and its 40 focused tests pass. Still open, all inherited: the five items listed under P3-04's gate, plus the Phase 2 analyzer debt.
 - P3-05 (recurrence engine) is written and fully green: 48 tests including the whole Appendix F.1 table, analyzer clean, pure Dart.
-- P3-06 (chore settings and catalogs) is written: 47 focused Dart tests pass, analyzer clean, and the key-set contract test proves the mapper and `settingsKeys()` agree. The **rules suite has not been run** (no Java): `firebase/rules_test/chore_settings.test.mjs` must be run before P3-07 relies on the rules. Next: `P3-00: repair base`, then P3-07.
+- P3-06 (chore settings and catalogs) is written: 47 focused Dart tests pass, analyzer clean, and the key-set contract test proves the mapper and `settingsKeys()` agree. The **rules suite has not been run** (no Java): `firebase/rules_test/chore_settings.test.mjs` must be run before P3-07 relies on the rules.
+- P3-07 (template domain + use cases + in-memory backend) is written and green: 62 new tests, 166/166 across the chores suites and the architecture tests, analyzer clean. Next: `P3-00: repair base` (the P3-01 screen errors now block any full build), then P3-08.
