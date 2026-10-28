@@ -75,16 +75,14 @@ class _EntryTile extends ConsumerWidget {
                 children: [
                   Text(
                     entry.title(l10n),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleMedium?.copyWith(color: t.textPrimary),
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(color: t.textPrimary),
                   ),
                   if (subtitle != null)
                     Text(
                       subtitle,
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+                      style: Theme.of(context).textTheme.bodySmall
+                          ?.copyWith(color: t.textSecondary),
                     ),
                 ],
               ),

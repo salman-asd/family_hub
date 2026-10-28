@@ -26,9 +26,7 @@ class ChoresHomeScreen extends ConsumerWidget {
         title: l10n.choresEmptyTitle,
         message: l10n.choresEmptyMessage,
         actionLabel: canManage ? l10n.choresManageAction : null,
-        onAction: canManage
-            ? () => context.push(AppRoutes.choresManage)
-            : null,
+        onAction: canManage ? () => context.push(AppRoutes.choresManage) : null,
       ),
     );
   }

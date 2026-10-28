@@ -1185,6 +1185,37 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 - `shared_widgets_test.dart` and `month_switcher_test.dart` do not compile: `monthSwitcherSelectTitle` is missing from both ARB files (P2 widget shipped without its string).
 - `no_hard_coded_strings`: Bazar presentation files use literal `Text('...')`.
 
+## Phase 3 - P3-05 Recurrence engine (pure)
+
+### Built (NEW `lib/features/chores/templates/domain/recurrence/`)
+- `recurrence.dart`: `RecurrenceKind` (the eight road map 3.2 ids), `MonthEndMode` (`clamp` / `skip`), `RecurrenceLimits` (`n` 2-60, 400-day search), the sealed `Recurrence` base with `kind`, `toMap()` and a total `Recurrence.fromMap`.
+- `recurrence_types.dart`: the eight value classes as a `part` (a sealed class cannot be extended across libraries). `WeekdaysRecurrence` / `EveryNWeeksRecurrence` / `DaysOfMonthRecurrence` compare and hash their day lists order-insensitively, so `[1, 3]` == `[3, 1]`.
+- `recurrence_engine.dart`: `occursOn`, `datesIn`, `nextAfter` (bounded, end-date aware), `countBetween`, `nthWeekdayOf`. All in local `DateKey` days; no `DateTime`, no clock, no UTC.
+- `recurrence_validator.dart`: `RecurrenceCheck { errors, warnings }` with the exact codes `invalid_recurrence`, `no_dates`, `invalid_range`, `invalid_date`. Day-31-with-`skip` is a WARNING, never an error.
+- `recurrence_describe.dart`: `RecurrenceSummary` (kind, n, weekdays, days, nth, weekday, monthEnd, `isLast`) with **no strings**, so Bangla wording stays in the ARB files.
+
+### Decisions worth knowing
+- `fromMap` is TOTAL: a missing number reads as 0 and a missing list as empty, so the validator reports the real problem instead of the reader inventing a default. Only an unknown `kind` (`invalid_recurrence`) or a missing required date (`invalid_date`) fails at read time.
+- `every_n_weeks` floors the week index for negative distances (`a ~/ b` truncates in Dart), which is what makes a day before the anchor land in the right week.
+- `nextAfter` stops at the end date AND at the 400-day limit, so a generator can never scan forever.
+- `datesIn` special-cases `once` (one comparison) instead of walking the range.
+
+### Tests
+- NEW `test/features/chores/templates/domain/recurrence_engine_test.dart`: Appendix F.1 rows 1-26 as data-driven tests, including the pair #8/#9 that exists to prove `weekStart` must be snapshotted, the 365-day fuzz (#25) over nine rule shapes, and the ascending/unique/within-span invariant (#26).
+- NEW `test/features/chores/templates/domain/recurrence_shape_test.dart`: rows 19-23 (validation), the `toMap` -> `fromMap` round trip for every kind, malformed input, missing-field behaviour, order-insensitive equality and `RecurrenceSummary`.
+
+### Gate (this step)
+
+| Command | Result |
+| --- | --- |
+| `dart format` | **PASS** |
+| `flutter analyze lib/features/chores test/features/chores/templates` | **PASS** - No issues found |
+| `flutter test test/features/chores/templates` | **PASS - 48/48** |
+| `flutter test` layer_boundaries + file_size (+ the template tests) | **PASS - 57/57** |
+| purity grep (Flutter/Firebase/Riverpod/`DateTime.now`) | **PASS** - no match |
+
+**Pre-existing, found here:** `flutter analyze lib/features/chores` reports errors in the P3-01 screens (`chores_manage_screen.dart`, `chores_home_screen.dart`, `chores_entries.dart`) - that step was written without an SDK and never analyzed. They are not P3-05 files and I did not touch them.
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -1206,4 +1237,5 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 - P3-01 (Chores skeleton, seams, ADRs 0009-0013, CLAUDE.md rules 34-44) is written; its gate has not been run.
 - P3-02 (pure helpers) is written and its own tests pass, but the repo-wide gate is still red from the Phase 2 base (130 analyzer issues, 61 failing tests, all in Bazar code).
 - P3-03 (vocabulary) is written; its targeted tests pass (160/160) and no file it touches has an analyzer issue. The rules emulator suite has not been run.
-- P3-04 (shared widgets + gallery + `skipped`) is written and its 40 focused tests pass. Still open, all inherited: the five items listed under P3-04's gate, plus the Phase 2 analyzer debt. Next: `P3-00: repair base` (those five items are small and mechanical), then P3-05.
+- P3-04 (shared widgets + gallery + `skipped`) is written and its 40 focused tests pass. Still open, all inherited: the five items listed under P3-04's gate, plus the Phase 2 analyzer debt.
+- P3-05 (recurrence engine) is written and fully green: 48 tests including the whole Appendix F.1 table, analyzer clean, pure Dart. Next: `P3-00: repair base` (the inherited items plus the P3-01 screen analyzer errors), then P3-06.
