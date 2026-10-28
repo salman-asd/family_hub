@@ -173,6 +173,77 @@ export const bazarSettingsDoc = (uid, extra = {}) =>
     ...extra,
   });
 
+/** One catalog row as `ChoreSettingsMappers.toMap` writes it (P3-06). */
+export const catalogRow = (id, label, extra = {}) => ({
+  id,
+  nameBn: label,
+  nameEn: null,
+  colorIndex: 0,
+  iconKey: 'other',
+  sortOrder: 0,
+  active: true,
+  builtIn: true,
+  ...extra,
+});
+
+/**
+ * `ChoreSettingsMappers.toMap` shape (P3-06).
+ *
+ * The default catalogs are shortened on purpose: the rules check the list SIZE
+ * and the shape of the first/last row, not every row, so three rows prove the
+ * same thing as seven and keep the fixture readable.
+ */
+export const choreSettingsDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    weekStartDay: 6,
+    defaultCalendarView: 'agenda',
+    defaultScope: 'mine',
+    generationHorizonDays: 30,
+    showProjected: true,
+    projectedMonthsAhead: 3,
+    overdueGraceMinutes: 0,
+    swapsEnabled: true,
+    swapExpiryBufferMinutes: 120,
+    absenceNeedsApproval: false,
+    workloadVisibleToMembers: false,
+    houseRules: '',
+    dueTimePresets: [
+      {
+        id: 'morning',
+        labelBn: 'সকাল ৯টা',
+        labelEn: '9:00 am',
+        minutes: 540,
+        active: true,
+        builtIn: true,
+      },
+      {
+        id: 'noon',
+        labelBn: 'দুপুর ২টা',
+        labelEn: '2:00 pm',
+        minutes: 840,
+        active: true,
+        builtIn: true,
+      },
+    ],
+    groups: [
+      catalogRow('kitchen', 'রান্নাঘর'),
+      catalogRow('other', 'অন্যান্য'),
+    ],
+    absenceReasons: [
+      { id: 'sick', labelBn: 'অসুস্থ', labelEn: 'Sick', active: true, builtIn: true },
+      { id: 'travel', labelBn: 'ভ্রমণ', labelEn: 'Travelling', active: true, builtIn: true },
+    ],
+    ...extra,
+  });
+
+/** `settings/rotationPolicy` shape (P3-06). */
+export const rotationPolicyDoc = (uid, policy = 'ask_cover', extra = {}) =>
+  baseDoc(uid, { absencePolicy: policy, ...extra });
+
+/** `settings/choreGeneration` shape (P3-06, D-P3-10). */
+export const generationDoc = (uid, throughEpochDay, extra = {}) =>
+  baseDoc(uid, { throughEpochDay, ...extra });
+
 /** `BudgetMappers.toMap` shape; money is integer paisa (P2-17). */
 export const budgetDoc = (uid, extra = {}) =>
   baseDoc(uid, {

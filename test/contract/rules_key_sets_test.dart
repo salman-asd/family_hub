@@ -27,6 +27,8 @@ import 'package:family_hub/features/bazar/items_categories/domain/item.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/item_usage_bump.dart';
 import 'package:family_hub/features/bazar/settings/data/bazar_settings_mappers.dart';
 import 'package:family_hub/features/bazar/settings/domain/bazar_settings.dart';
+import 'package:family_hub/features/chores/settings/data/chore_settings_mappers.dart';
+import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/core/audit/audit_event.dart';
@@ -100,6 +102,9 @@ void main() {
       ...FamilyMappers.rotationPolicyMap(meta).keys,
       ...FamilyMappers.notificationDefaultsMap(meta).keys,
       ...BazarSettingsMappers.toMap(BazarSettings.defaults, meta).keys,
+      // P3-06: settings/chores and settings/choreGeneration.
+      ...ChoreSettingsMappers.toMap(ChoreSettings.defaults, meta).keys,
+      'throughEpochDay',
     };
     expect(produced, rulesList('settingsKeys'));
   });

@@ -202,8 +202,91 @@ service cloud.firestore {
               // P2-07: settings/bazar.
               'weekStartDay', 'defaultMonthlyContributionPaisa',
               'contributionDueDay', 'alertThresholds', 'fundStartMonth',
+              // P3-06: settings/chores (road map 3.2).
+              'defaultCalendarView', 'defaultScope', 'generationHorizonDays',
+              'showProjected', 'projectedMonthsAhead', 'overdueGraceMinutes',
+              'swapsEnabled', 'swapExpiryBufferMinutes',
+              'absenceNeedsApproval', 'workloadVisibleToMembers', 'houseRules',
+              'dueTimePresets', 'groups', 'absenceReasons',
+              // P3-06: settings/choreGeneration (the generation marker).
+              'throughEpochDay',
               'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
               'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    // P3-06: a catalog row is a map whose `id` is a machine id.  Rules cannot
+    // loop, so only the SIZE of a list and the shape of its FIRST and LAST row
+    // are checked here; the app tolerates a malformed row in the middle and
+    // ChoreSettingsValidator is the authority for every row.
+    function catalogIdOk(v) {
+      return v is string && v.size() >= 1 && v.size() <= 24
+        && v.matches('^[a-z0-9_]+$');
+    }
+    function catalogRowOk(item, labelKey) {
+      return item is map
+        && catalogIdOk(item.get('id', ''))
+        && item.get(labelKey, '') is string
+        && item.get('builtIn', false) is bool
+        && item.get('active', true) is bool;
+    }
+    function catalogOk(d, k, maxItems, labelKey) {
+      return !(k in d.keys()) || (
+        d[k] is list
+        && d[k].size() <= maxItems
+        && (d[k].size() == 0
+            || (catalogRowOk(d[k][0], labelKey)
+                && catalogRowOk(d[k][d[k].size() - 1], labelKey)))
+      );
+    }
+    // P3-06: settings/chores.  Ranges of road map 3.2; the same limits are in
+    // ChoreSettingsLimits / ChoreSettingsValidator (mirrored by a Dart test).
+    function choreSettingsOk(d) {
+      return settingsOk(d)
+        && d.get('weekStartDay', 6) is int
+        && d.get('weekStartDay', 6) >= 1 && d.get('weekStartDay', 6) <= 7
+        && d.get('defaultCalendarView', 'agenda') in ['agenda', 'month', 'week']
+        && d.get('defaultScope', 'mine') in ['mine', 'all']
+        && d.get('generationHorizonDays', 30) is int
+        && d.get('generationHorizonDays', 30) >= 14
+        && d.get('generationHorizonDays', 30) <= 90
+        && boolOk(d, 'showProjected')
+        && d.get('projectedMonthsAhead', 3) is int
+        && d.get('projectedMonthsAhead', 3) >= 0
+        && d.get('projectedMonthsAhead', 3) <= 12
+        && d.get('overdueGraceMinutes', 0) is int
+        && d.get('overdueGraceMinutes', 0) >= 0
+        && d.get('overdueGraceMinutes', 0) <= 240
+        && boolOk(d, 'swapsEnabled')
+        && d.get('swapExpiryBufferMinutes', 120) is int
+        && d.get('swapExpiryBufferMinutes', 120) >= 0
+        && d.get('swapExpiryBufferMinutes', 120) <= 1440
+        && boolOk(d, 'absenceNeedsApproval')
+        && boolOk(d, 'workloadVisibleToMembers')
+        && optStr(d, 'houseRules', 2000)
+        && catalogOk(d, 'groups', 30, 'nameBn')
+        && catalogOk(d, 'dueTimePresets', 8, 'labelBn')
+        && catalogOk(d, 'absenceReasons', 12, 'labelBn');
+    }
+    // P3-06: settings/choreGeneration {throughEpochDay}.  Any active member may
+    // only ADVANCE the marker, by at most 120 days per write (D-P3-10).  A
+    // create is always an advance (there is no previous value).
+    function generationOk(d) {
+      return d.get('throughEpochDay', 0) is int
+        && d.get('throughEpochDay', 0) >= 0;
+    }
+    function generationAdvances() {
+      // `resource` is null on a create, which is always an advance.  (No
+      // exists() call: the rules budget is 10 document reads per request.)
+      return resource == null
+        || (
+          request.resource.data.throughEpochDay
+            > resource.data.get('throughEpochDay', -1)
+          && request.resource.data.throughEpochDay
+            <= resource.data.get('throughEpochDay', -1) + 120
+        );
+    }
+    function rotationPolicyOk(d) {
+      return settingsOk(d)
+        && d.get('absencePolicy', 'ask_cover') in ['ask_cover', 'auto_cover', 'skip'];
     }
     // Phase 2 catalog (P2-05): the exact fields `CatalogMappers` writes.
     function categoryKeys() {
@@ -1535,6 +1618,44 @@ service cloud.firestore {
           && (isAdmin(f) || (s == 'bazar' && financeManager(f)))
           && writesAsSelf()
           && settingsOk(request.resource.data);
+        allow delete: if false;
+      }
+
+      // ── settings/chores — the chore catalogs and preferences (P3-06) ────────
+      // A Household Manager may edit them (C-4: the Bazar rule above would have
+      // limited this to an admin).  The document is created on first save.
+      match /settings/chores {
+        allow read: if isActiveMember(f);
+        allow create, update: if verified()
+          && isManager(f)
+          && writesAsSelf()
+          && choreSettingsOk(request.resource.data);
+        allow delete: if false;
+      }
+
+      // ── settings/choreGeneration — the generation marker (P3-06, D-P3-10) ──
+      // ANY active member may advance it (a plain member must be able to
+      // complete today's chore even if no manager opened the app).  It may only
+      // move forward, by at most 120 days per write, and never backwards.
+      match /settings/choreGeneration {
+        allow read: if isActiveMember(f);
+        allow create, update: if verified()
+          && isActiveMember(f)
+          && writesAsSelf()
+          && generationOk(request.resource.data)
+          && generationAdvances();
+        allow delete: if false;
+      }
+
+      // ── settings/rotationPolicy — the absence policy (P3-06, closes C-3) ────
+      // The document already exists (written at family creation); only the
+      // manager or an admin may change which policy it holds.
+      match /settings/rotationPolicy {
+        allow read: if isActiveMember(f);
+        allow create, update: if verified()
+          && isManager(f)
+          && writesAsSelf()
+          && rotationPolicyOk(request.resource.data);
         allow delete: if false;
       }
 

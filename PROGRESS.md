@@ -1216,6 +1216,43 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 
 **Pre-existing, found here:** `flutter analyze lib/features/chores` reports errors in the P3-01 screens (`chores_manage_screen.dart`, `chores_home_screen.dart`, `chores_entries.dart`) - that step was written without an SDK and never analyzed. They are not P3-05 files and I did not touch them.
 
+## Phase 3 - P3-06 Chore settings and catalogs (domain + data + rules + providers)
+
+### Built (NEW under `lib/features/chores/settings/`)
+- `domain/chore_catalog_entries.dart`: `ChoreGroup`, `DueTimePreset`, `AbsenceReason` (value objects with `toMap`, `copyWith`, `==`/`hashCode`), the closed `CalendarViewKind` / `CalendarScopeKind` enums, and `ChoreSettingsLimits` (the ranges the validator and the rules share).
+- `domain/chore_settings.dart`: `ChoreSettings` with the road map 3.2 scalars; lists compare ORDER-SENSITIVELY (the order is meaningful).
+- `domain/default_chore_settings.dart`: the Appendix A.3 seed catalogs (7 groups, 5 presets, 6 reasons) and `seedOptionIds` for the P3-07 architecture test. **The only file allowed to contain a seed id.**
+- `domain/chore_catalogs.dart`: `ChoreCatalogs` - `groupOf` falls back to `other` then to the first group, `presetOf`/`reasonOf` return null, `active*` getters, groups sorted by `sortOrder`, presets sorted by CLOCK TIME.
+- `domain/chore_settings_validator.dart`: returns the first `Validation` with a stable code (`invalid_week_start`, `invalid_horizon`, `invalid_range`, `too_long`, `too_many_items`, `duplicate_id`, `required`, `no_dates`, `invalid_minutes`, `invalid_recurrence`).
+- `domain/chore_settings_repository.dart` (+ `AbsencePolicy` enum), `domain/usecases/update_chore_settings.dart`, `update_rotation_policy.dart` (permission -> validation -> write, audit in the same batch).
+- `data/chore_settings_mappers.dart` (tolerant per field, whole-object write, rotation-policy map), `data/firestore_chore_settings_repository.dart` (two documents, `set(merge: true)` in a server-required batch with its audit entry).
+- `presentation/chore_settings_providers.dart`: `choreSettingsProvider`, `choreCatalogsProvider`, `choreGroupsProvider`, `dueTimePresetsProvider`, `absenceReasonsProvider`, `rotationPolicyProvider`, `updateChoreSettingsProvider`, `updateRotationPolicyProvider`.
+- `firebase/firestore.rules`: `settingsKeys()` extended; `catalogIdOk` / `catalogRowOk` / `catalogOk` (size + first/last row shape, since rules cannot loop), `choreSettingsOk`, `generationOk` / `generationAdvances` (create or strictly forward, <= +120, no `exists()` call so the read budget stays at 0), `rotationPolicyOk`; new `settings/chores` (manager or admin - C-4), `settings/choreGeneration` (any active member), `settings/rotationPolicy` (manager or admin - C-3) blocks.
+- `test/features/chores/chores_test_helpers.dart`: `ChoresFixture` (admin alice, manager bob, members cara/dave, pending erin) + `FakeChoreSettingsRepository`, introduced here because the use cases need them (P3-07 extends this file).
+
+### Decisions worth knowing
+- **`settings/chores` is created on first save** by a manager: the rule allows `create` too, and the mapper always writes the whole object, so there is no seeder and no backfill (D-P3-4).
+- **Built-in rows may be renamed and deactivated but never removed.** The validator rejects a missing seed id (`invalid_recurrence`) because a starter pack or an existing occurrence may still reference it. The rules cannot express this (no loops), so it is app-enforced - noted for the rules comment.
+- **A catalog row keeps `builtIn` forever:** demoting a seed row to a custom row is rejected, which stops the next release from re-adding a duplicate.
+- **`fromMap` is tolerant per field and per row:** a bad scalar falls back to its own default, a malformed row is skipped, and an EMPTY or missing list falls back to the built-in catalog so a screen always has something to show.
+
+### Tests
+- `test/features/chores/settings/domain/chore_settings_test.dart` (28): the Appendix A.3 defaults, the whole validation table, the permission matrix (admin / manager / member / pending) for both use cases, permission-before-validation order, the audit type/ref/params, and the repository failure pass-through.
+- `test/features/chores/settings/data/chore_settings_mappers_test.dart` (19): round trips (defaults + heavily edited), unknown `calendarView`, per-field fallbacks, missing/empty/malformed lists, colour clamping, house-rules cut, rotation-policy map, and every `ChoreCatalogs` fallback.
+- `test/contract/rules_key_sets_test.dart`: extended - the real `ChoreSettingsMappers.toMap` keys plus `throughEpochDay` must equal `settingsKeys()` exactly (this is what proves the rules and the mapper cannot drift).
+- NEW `firebase/rules_test/chore_settings.test.mjs` + fixtures in `support.mjs`: admin/manager allowed, member/pending/other-family/no-family denied, read by any active member, each range and each list size, a malformed row, an unknown field, no hard delete; the generation marker (create, +120, decrease, same value, +121, pending member, negative); the rotation policy (manager, member, unknown value, all three values).
+
+### Gate (this step)
+
+| Command | Result |
+| --- | --- |
+| `dart format` | **PASS** |
+| `flutter analyze lib/features/chores/settings test/features/chores/settings test/contract` | **PASS** - No issues found |
+| `flutter test test/features/chores/settings test/contract test/core test/architecture` | **PASS for every P3-06 file (47 + 461)**; the 4 failures are the inherited ones below. |
+| rules suite (`chore_settings.test.mjs`) | **NOT RUN** - no Java/emulator on this machine. The test file and fixtures are written; run `npm run test:emulator` in `firebase/rules_test`. |
+
+**Pre-existing failures in that run (unchanged, not P3-06):** `no_hard_coded_strings` (Bazar), `no_unbounded_queries` (advance repository), `no_step_todos` (`member_access.dart`), `phase1_docs` (`DATA_MODEL.md`).
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -1238,4 +1275,5 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 - P3-02 (pure helpers) is written and its own tests pass, but the repo-wide gate is still red from the Phase 2 base (130 analyzer issues, 61 failing tests, all in Bazar code).
 - P3-03 (vocabulary) is written; its targeted tests pass (160/160) and no file it touches has an analyzer issue. The rules emulator suite has not been run.
 - P3-04 (shared widgets + gallery + `skipped`) is written and its 40 focused tests pass. Still open, all inherited: the five items listed under P3-04's gate, plus the Phase 2 analyzer debt.
-- P3-05 (recurrence engine) is written and fully green: 48 tests including the whole Appendix F.1 table, analyzer clean, pure Dart. Next: `P3-00: repair base` (the inherited items plus the P3-01 screen analyzer errors), then P3-06.
+- P3-05 (recurrence engine) is written and fully green: 48 tests including the whole Appendix F.1 table, analyzer clean, pure Dart.
+- P3-06 (chore settings and catalogs) is written: 47 focused Dart tests pass, analyzer clean, and the key-set contract test proves the mapper and `settingsKeys()` agree. The **rules suite has not been run** (no Java): `firebase/rules_test/chore_settings.test.mjs` must be run before P3-07 relies on the rules. Next: `P3-00: repair base`, then P3-07.
