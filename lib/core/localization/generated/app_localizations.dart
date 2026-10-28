@@ -158,6 +158,60 @@ abstract class AppLocalizations {
   /// **'সম্পাদনা'**
   String get actionEdit;
 
+  /// No description provided for @actionAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'যোগ করুন'**
+  String get actionAdd;
+
+  /// No description provided for @catalogEditorEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনও কিছু নেই।'**
+  String get catalogEditorEmpty;
+
+  /// No description provided for @catalogEditorActions.
+  ///
+  /// In bn, this message translates to:
+  /// **'সারির কাজ'**
+  String get catalogEditorActions;
+
+  /// No description provided for @catalogEditorActivate.
+  ///
+  /// In bn, this message translates to:
+  /// **'আবার চালু করুন'**
+  String get catalogEditorActivate;
+
+  /// No description provided for @catalogEditorDeactivate.
+  ///
+  /// In bn, this message translates to:
+  /// **'বন্ধ করুন'**
+  String get catalogEditorDeactivate;
+
+  /// No description provided for @catalogEditorAddTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন সারি'**
+  String get catalogEditorAddTitle;
+
+  /// No description provided for @catalogEditorEditTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সারি সম্পাদনা'**
+  String get catalogEditorEditTitle;
+
+  /// No description provided for @catalogEditorLabelBn.
+  ///
+  /// In bn, this message translates to:
+  /// **'নাম (বাংলা)'**
+  String get catalogEditorLabelBn;
+
+  /// No description provided for @catalogEditorLabelEn.
+  ///
+  /// In bn, this message translates to:
+  /// **'নাম (ইংরেজি, ঐচ্ছিক)'**
+  String get catalogEditorLabelEn;
+
   /// No description provided for @actionClose.
   ///
   /// In bn, this message translates to:
@@ -1681,6 +1735,84 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'অবস্থার চিপ'**
   String get galleryStatusChip;
+
+  /// No description provided for @galleryStatusGlyph.
+  ///
+  /// In bn, this message translates to:
+  /// **'অবস্থার চিহ্ন'**
+  String get galleryStatusGlyph;
+
+  /// No description provided for @galleryFlagChip.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফ্ল্যাগ চিপ'**
+  String get galleryFlagChip;
+
+  /// No description provided for @galleryReasonSheet.
+  ///
+  /// In bn, this message translates to:
+  /// **'কারণ শিট'**
+  String get galleryReasonSheet;
+
+  /// No description provided for @galleryMinutesField.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময়ের ঘর'**
+  String get galleryMinutesField;
+
+  /// No description provided for @galleryWeekdayChips.
+  ///
+  /// In bn, this message translates to:
+  /// **'বার বাছাই'**
+  String get galleryWeekdayChips;
+
+  /// No description provided for @galleryColorSwatchPicker.
+  ///
+  /// In bn, this message translates to:
+  /// **'রং বাছাই'**
+  String get galleryColorSwatchPicker;
+
+  /// No description provided for @galleryAvatarStack.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাভাটার সারি'**
+  String get galleryAvatarStack;
+
+  /// No description provided for @galleryStepProgress.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধাপের অগ্রগতি'**
+  String get galleryStepProgress;
+
+  /// No description provided for @galleryMiniMarkdown.
+  ///
+  /// In bn, this message translates to:
+  /// **'ঘরের নিয়মের লেখা'**
+  String get galleryMiniMarkdown;
+
+  /// No description provided for @galleryCatalogEditor.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকা সম্পাদনা'**
+  String get galleryCatalogEditor;
+
+  /// No description provided for @galleryOpenSheet.
+  ///
+  /// In bn, this message translates to:
+  /// **'শিট খুলুন'**
+  String get galleryOpenSheet;
+
+  /// No description provided for @gallerySampleDueTime.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ সময়'**
+  String get gallerySampleDueTime;
+
+  /// Sample mini-markdown for the gallery; keep the structure when translating.
+  ///
+  /// In bn, this message translates to:
+  /// **'# ঘরের নিয়ম\n- খাওয়ার পর নিজের প্লেট ধুয়ে রাখা\n- **সকাল ৯টার মধ্যে রান্নাঘর খালি থাকতে হবে**\n1. গাছে পানি দেওয়া\n2. উঠান ঝাঁট দেওয়া'**
+  String get gallerySampleRules;
 
   /// No description provided for @gallerySectionHeader.
   ///
@@ -4256,6 +4388,703 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'কাজ পরিচালনার টুল এখানে দেখা যাবে।'**
   String get choresManageEmptyMessage;
+
+  /// Display name of the Chores module.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ'**
+  String get choresModuleTitle;
+
+  /// No description provided for @permissionManageChoreTemplates.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ ও রোটেশন পরিচালনা'**
+  String get permissionManageChoreTemplates;
+
+  /// No description provided for @permissionReassignChore.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ অন্যজনকে দেওয়া'**
+  String get permissionReassignChore;
+
+  /// No description provided for @permissionRequestSwap.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ বদলের অনুরোধ'**
+  String get permissionRequestSwap;
+
+  /// No description provided for @permissionCompleteOwnChore.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিজের কাজ শেষ করা'**
+  String get permissionCompleteOwnChore;
+
+  /// No description provided for @permissionCommentOnChore.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজে মন্তব্য করা'**
+  String get permissionCommentOnChore;
+
+  /// No description provided for @permissionVerifyChore.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যের কাজ যাচাই করা'**
+  String get permissionVerifyChore;
+
+  /// No description provided for @permissionCompleteChoreForOthers.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যের কাজ শেষ করে দেওয়া'**
+  String get permissionCompleteChoreForOthers;
+
+  /// No description provided for @permissionRecordOwnAvailability.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিজের অনুপস্থিতি জানানো'**
+  String get permissionRecordOwnAvailability;
+
+  /// No description provided for @permissionManageAvailability.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতি পরিচালনা'**
+  String get permissionManageAvailability;
+
+  /// No description provided for @permissionManageChoreOccurrences.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ বাদ দেওয়া, আবার খোলা বা টীকা দেওয়া'**
+  String get permissionManageChoreOccurrences;
+
+  /// No description provided for @permissionModerateChoreComments.
+  ///
+  /// In bn, this message translates to:
+  /// **'মন্তব্য লুকানো'**
+  String get permissionModerateChoreComments;
+
+  /// Status of a chore skipped for an absence or by a manager.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাদ দেওয়া'**
+  String get choreStatusSkipped;
+
+  /// No description provided for @choreFlagNeedsCover.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেউ এখনও নেই'**
+  String get choreFlagNeedsCover;
+
+  /// No description provided for @choreFlagAwaitingVerification.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাই বাকি'**
+  String get choreFlagAwaitingVerification;
+
+  /// No description provided for @choreFlagNeedsAttention.
+  ///
+  /// In bn, this message translates to:
+  /// **'দৃষ্টি দেওয়ার কাজ'**
+  String get choreFlagNeedsAttention;
+
+  /// Shown on a projected occurrence that has no document yet.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিকল্পিত'**
+  String get choreFlagPlanned;
+
+  /// No description provided for @choreFlagSwapPending.
+  ///
+  /// In bn, this message translates to:
+  /// **'বদলের অনুরোধ বাকি'**
+  String get choreFlagSwapPending;
+
+  /// No description provided for @reasonSheetHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেন? (অন্তত ৩টি অক্ষর)'**
+  String get reasonSheetHint;
+
+  /// No description provided for @reasonSheetTooShort.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্তত {min}টি অক্ষর লিখুন।'**
+  String reasonSheetTooShort(int min);
+
+  /// A chore due time that is not set: due by the end of the day.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিনের শেষে'**
+  String get minutesFieldNotSet;
+
+  /// No description provided for @minutesFieldClear.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় মুছে ফেলুন'**
+  String get minutesFieldClear;
+
+  /// No description provided for @colorSwatchLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'রং {index}, মোট {count}টি'**
+  String colorSwatchLabel(int index, int count);
+
+  /// No description provided for @avatarStackMore.
+  ///
+  /// In bn, this message translates to:
+  /// **'{first} এবং আরও {rest} জন'**
+  String avatarStackMore(String first, int rest);
+
+  /// No description provided for @avatarStackMoreShort.
+  ///
+  /// In bn, this message translates to:
+  /// **'+{hidden}'**
+  String avatarStackMoreShort(int hidden);
+
+  /// No description provided for @stepProgressSemantic.
+  ///
+  /// In bn, this message translates to:
+  /// **'{total}টি ধাপের {done}টি শেষ'**
+  String stepProgressSemantic(String done, String total);
+
+  /// No description provided for @choresFailure_required.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি পূরণ করা জরুরি।'**
+  String get choresFailure_required;
+
+  /// No description provided for @choresFailure_too_long.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেখাটি খুব বড় হয়ে গেছে।'**
+  String get choresFailure_too_long;
+
+  /// No description provided for @choresFailure_invalid_time.
+  ///
+  /// In bn, this message translates to:
+  /// **'সঠিক সময় দিন।'**
+  String get choresFailure_invalid_time;
+
+  /// No description provided for @choresFailure_invalid_recurrence.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পুনরাবৃত্তির নিয়ম ঠিক নেই।'**
+  String get choresFailure_invalid_recurrence;
+
+  /// No description provided for @choresFailure_no_dates.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্তত একটি দিন বেছে নিন।'**
+  String get choresFailure_no_dates;
+
+  /// No description provided for @choresFailure_invalid_range.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ তারিখ শুরুর আগে হতে পারে না।'**
+  String get choresFailure_invalid_range;
+
+  /// No description provided for @choresFailure_invalid_date.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখটি সঠিক নয়।'**
+  String get choresFailure_invalid_date;
+
+  /// No description provided for @choresFailure_too_many_subtasks.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধাপ সংখ্যায় বেশি হয়ে গেছে (সর্বোচ্চ ৩০)।'**
+  String get choresFailure_too_many_subtasks;
+
+  /// No description provided for @choresFailure_too_many_slots.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিনে বার সংখ্যায় বেশি (সর্বোচ্চ ৬)।'**
+  String get choresFailure_too_many_slots;
+
+  /// No description provided for @choresFailure_duplicate_slot.
+  ///
+  /// In bn, this message translates to:
+  /// **'একই নামে দুটি বার আছে।'**
+  String get choresFailure_duplicate_slot;
+
+  /// No description provided for @choresFailure_too_many_items.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিমাণটি বেশি হয়ে গেছে।'**
+  String get choresFailure_too_many_items;
+
+  /// No description provided for @choresFailure_duplicate_id.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই নামটি আগেই ব্যবহার করা হয়েছে।'**
+  String get choresFailure_duplicate_id;
+
+  /// No description provided for @choresFailure_reason_required.
+  ///
+  /// In bn, this message translates to:
+  /// **'কারণ লিখতে হবে।'**
+  String get choresFailure_reason_required;
+
+  /// No description provided for @choresFailure_reason_too_short.
+  ///
+  /// In bn, this message translates to:
+  /// **'কারণে অন্তত ৩টি অক্ষর দিন।'**
+  String get choresFailure_reason_too_short;
+
+  /// No description provided for @choresFailure_member_required.
+  ///
+  /// In bn, this message translates to:
+  /// **'একজন সদস্য বেছে নিন।'**
+  String get choresFailure_member_required;
+
+  /// No description provided for @choresFailure_invalid_rotation.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই রোটেশনটি সঠিক নয়।'**
+  String get choresFailure_invalid_rotation;
+
+  /// No description provided for @choresFailure_too_few_members.
+  ///
+  /// In bn, this message translates to:
+  /// **'রোটেশনে অন্তত দুই জন সদস্য দিন।'**
+  String get choresFailure_too_few_members;
+
+  /// No description provided for @choresFailure_invalid_horizon.
+  ///
+  /// In bn, this message translates to:
+  /// **'১৪ থেকে ৯০ দিনের মধ্যে একটি সীমা বেছে নিন।'**
+  String get choresFailure_invalid_horizon;
+
+  /// No description provided for @choresFailure_invalid_week_start.
+  ///
+  /// In bn, this message translates to:
+  /// **'সপ্তাহের প্রথম দিন সঠিকভাবে বেছে নিন।'**
+  String get choresFailure_invalid_week_start;
+
+  /// No description provided for @choresFailure_invalid_minutes.
+  ///
+  /// In bn, this message translates to:
+  /// **'০০:০০ থেকে ২৩:৫৯ এর মধ্যে সময় দিন।'**
+  String get choresFailure_invalid_minutes;
+
+  /// No description provided for @choresFailure_not_assigned_to_you.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি আপনার নয়।'**
+  String get choresFailure_not_assigned_to_you;
+
+  /// No description provided for @choresFailure_already_completed.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি আগেই শেষ হয়েছে।'**
+  String get choresFailure_already_completed;
+
+  /// No description provided for @choresFailure_not_completed.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি এখনও শেষ হয়নি।'**
+  String get choresFailure_not_completed;
+
+  /// No description provided for @choresFailure_required_subtasks_open.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগে জরুরি ধাপগুলো শেষ করুন।'**
+  String get choresFailure_required_subtasks_open;
+
+  /// No description provided for @choresFailure_self_verification.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিজের কাজ নিজে যাচাই করা যায় না।'**
+  String get choresFailure_self_verification;
+
+  /// No description provided for @choresFailure_verification_not_required.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজে যাচাই দরকার নেই।'**
+  String get choresFailure_verification_not_required;
+
+  /// No description provided for @choresFailure_already_verified.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি আগেই যাচাই হয়েছে।'**
+  String get choresFailure_already_verified;
+
+  /// No description provided for @choresFailure_verified_requires_manager.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাই হওয়া কাজ শুধু পরিচালক আবার খুলতে পারেন।'**
+  String get choresFailure_verified_requires_manager;
+
+  /// No description provided for @choresFailure_occurrence_started.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি শুরু হয়ে গেছে।'**
+  String get choresFailure_occurrence_started;
+
+  /// No description provided for @choresFailure_already_skipped.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি আগেই বাদ দেওয়া হয়েছে।'**
+  String get choresFailure_already_skipped;
+
+  /// No description provided for @choresFailure_not_skipped.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি বাদ দেওয়া হয়নি।'**
+  String get choresFailure_not_skipped;
+
+  /// No description provided for @choresFailure_swap_not_pending.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই অনুরোধটি আর খোলা নেই।'**
+  String get choresFailure_swap_not_pending;
+
+  /// No description provided for @choresFailure_swap_expired.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই অনুরোধের সময় শেষ।'**
+  String get choresFailure_swap_expired;
+
+  /// No description provided for @choresFailure_swaps_disabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিবারে কাজ বদল বন্ধ আছে।'**
+  String get choresFailure_swaps_disabled;
+
+  /// No description provided for @choresFailure_cover_not_needed.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজে ইতিমধ্যে কেউ আছেন।'**
+  String get choresFailure_cover_not_needed;
+
+  /// No description provided for @choresFailure_availability_overlap.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই দিনগুলোতে অনুপস্থিতি আগেই জানানো আছে।'**
+  String get choresFailure_availability_overlap;
+
+  /// No description provided for @choresFailure_member_unavailable.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্যটি ওই দিনে অনুপস্থিত।'**
+  String get choresFailure_member_unavailable;
+
+  /// No description provided for @choresFailure_template_paused.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি সাময়িকভাবে বন্ধ।'**
+  String get choresFailure_template_paused;
+
+  /// No description provided for @choresFailure_rotation_member_inactive.
+  ///
+  /// In bn, this message translates to:
+  /// **'রোটেশনের একজন সদস্য আর সক্রিয় নন।'**
+  String get choresFailure_rotation_member_inactive;
+
+  /// No description provided for @choresFailure_range_too_large.
+  ///
+  /// In bn, this message translates to:
+  /// **'একবারে তৈরি করার জন্য সীমাটি বেশি বড়।'**
+  String get choresFailure_range_too_large;
+
+  /// No description provided for @choresFailure_starter_pack_applied.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই স্টার্টার প্যাক আগেই যোগ করা হয়েছে।'**
+  String get choresFailure_starter_pack_applied;
+
+  /// No description provided for @choresFailure_occurrence_deleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি মুছে ফেলা হয়েছে।'**
+  String get choresFailure_occurrence_deleted;
+
+  /// No description provided for @choresFailure_concurrent_edit.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্য কেউ এটি বদলে ফেলেছেন; আবার খুলে চেষ্টা করুন।'**
+  String get choresFailure_concurrent_edit;
+
+  /// No description provided for @choresFailure_last_group_in_use.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই দলটি এখনও কাজে ব্যবহার হচ্ছে।'**
+  String get choresFailure_last_group_in_use;
+
+  /// No description provided for @choresFailure_not_a_recipient.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধটি আপনার জন্য নয়।'**
+  String get choresFailure_not_a_recipient;
+
+  /// No description provided for @choresFailure_not_found.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি আর নেই।'**
+  String get choresFailure_not_found;
+
+  /// No description provided for @choresFailure_permission_denied.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি করার অনুমতি আপনার নেই।'**
+  String get choresFailure_permission_denied;
+
+  /// No description provided for @choresFailure_network.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইন্টারনেট সংযোগ নেই। 연결 দেখে আবার চেষ্টা করুন।'**
+  String get choresFailure_network;
+
+  /// No description provided for @choresFailure_unknown.
+  ///
+  /// In bn, this message translates to:
+  /// **'কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।'**
+  String get choresFailure_unknown;
+
+  /// No description provided for @activityChoresSettingsUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের সেটিংস বদলেছেন'**
+  String get activityChoresSettingsUpdated;
+
+  /// No description provided for @activityChoresRotationPolicyUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতির নিয়ম বদলেছেন'**
+  String get activityChoresRotationPolicyUpdated;
+
+  /// No description provided for @activityChoresTemplateCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} কাজটি যোগ করেছেন'**
+  String activityChoresTemplateCreated(String name);
+
+  /// No description provided for @activityChoresTemplateUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} কাজটি বদলেছেন'**
+  String activityChoresTemplateUpdated(String name);
+
+  /// No description provided for @activityChoresTemplatePaused.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} কাজটি সাময়িকভাবে বন্ধ করেছেন'**
+  String activityChoresTemplatePaused(String name);
+
+  /// No description provided for @activityChoresTemplateResumed.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} কাজটি আবার চালু করেছেন'**
+  String activityChoresTemplateResumed(String name);
+
+  /// No description provided for @activityChoresTemplateArchived.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} কাজটি আর্কাইভ করেছেন'**
+  String activityChoresTemplateArchived(String name);
+
+  /// No description provided for @activityChoresTemplateDuplicated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} কাজটির কপি করেছেন'**
+  String activityChoresTemplateDuplicated(String name);
+
+  /// No description provided for @activityChoresStarterPackApplied.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্টার্টার কাজগুলো যোগ করেছেন ({templates}টি কাজ, {groups}টি দল)'**
+  String activityChoresStarterPackApplied(String templates, String groups);
+
+  /// No description provided for @activityChoresDutyGroupCreated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} দলটি যোগ করেছেন'**
+  String activityChoresDutyGroupCreated(String name);
+
+  /// No description provided for @activityChoresDutyGroupUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} দলটি বদলেছেন'**
+  String activityChoresDutyGroupUpdated(String name);
+
+  /// No description provided for @activityChoresRotationChanged.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} এর রোটেশন বদলেছেন'**
+  String activityChoresRotationChanged(String name);
+
+  /// No description provided for @activityChoresOccurrencesGenerated.
+  ///
+  /// In bn, this message translates to:
+  /// **'{from} থেকে {to} পর্যন্ত কাজ তৈরি হয়েছে ({count})'**
+  String activityChoresOccurrencesGenerated(
+    String from,
+    String to,
+    String count,
+  );
+
+  /// No description provided for @activityChoresOccurrencesReplanned.
+  ///
+  /// In bn, this message translates to:
+  /// **'{from} থেকে {name} কাজটি আবার পরিকল্পনা করেছেন'**
+  String activityChoresOccurrencesReplanned(String name, String from);
+
+  /// No description provided for @activityChoresOccurrenceCompleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} শেষ করেছেন'**
+  String activityChoresOccurrenceCompleted(
+    String member,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresOccurrenceUncompleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} আবার অসম্পূর্ণ করেছেন'**
+  String activityChoresOccurrenceUncompleted(
+    String member,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresOccurrenceVerified.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} যাচাই করেছেন'**
+  String activityChoresOccurrenceVerified(
+    String member,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresOccurrenceReopened.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} আবার খুলেছেন'**
+  String activityChoresOccurrenceReopened(
+    String member,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresOccurrenceException.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} এর জন্য ব্যতিক্রম লিখেছেন'**
+  String activityChoresOccurrenceException(
+    String member,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresOccurrenceSkipped.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} বাদ দিয়েছেন'**
+  String activityChoresOccurrenceSkipped(
+    String member,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresOccurrenceUnskipped.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} আবার চালু করেছেন'**
+  String activityChoresOccurrenceUnskipped(
+    String member,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresOccurrenceReassigned.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} অন্যকে দিয়েছেন'**
+  String activityChoresOccurrenceReassigned(
+    String member,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresCommentAdded.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} নিয়ে মন্তব্য করেছেন'**
+  String activityChoresCommentAdded(String member, String name, String date);
+
+  /// No description provided for @activityChoresCommentHidden.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} এর একটি মন্তব্য লুকিয়েছেন'**
+  String activityChoresCommentHidden(String member, String name, String date);
+
+  /// No description provided for @activityChoresAvailabilityAdded.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {from} থেকে {to} পর্যন্ত অনুপস্থিতি জানিয়েছেন'**
+  String activityChoresAvailabilityAdded(String member, String from, String to);
+
+  /// No description provided for @activityChoresAvailabilityCancelled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {from} থেকে {to} পর্যন্ত অনুপস্থিতি বাতিল করেছেন'**
+  String activityChoresAvailabilityCancelled(
+    String member,
+    String from,
+    String to,
+  );
+
+  /// No description provided for @activityChoresAvailabilityDecided.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {from} থেকে {to} পর্যন্ত অনুপস্থিতির সিদ্ধান্ত দিয়েছেন'**
+  String activityChoresAvailabilityDecided(
+    String member,
+    String from,
+    String to,
+  );
+
+  /// No description provided for @activityChoresSwapRequested.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {to}-কে {date}-এ {name} ধরতে অনুরোধ করেছেন'**
+  String activityChoresSwapRequested(
+    String member,
+    String to,
+    String name,
+    String date,
+  );
+
+  /// No description provided for @activityChoresSwapAccepted.
+  ///
+  /// In bn, this message translates to:
+  /// **'{to} {date}-এ {name} নিতে রাজি হয়েছেন'**
+  String activityChoresSwapAccepted(String to, String name, String date);
+
+  /// No description provided for @activityChoresSwapDeclined.
+  ///
+  /// In bn, this message translates to:
+  /// **'{to} {date}-এ {name} নিতে রাজি হননি'**
+  String activityChoresSwapDeclined(String to, String name, String date);
+
+  /// No description provided for @activityChoresSwapCancelled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} এর অনুরোধ বাতিল করেছেন'**
+  String activityChoresSwapCancelled(String member, String name, String date);
+
+  /// No description provided for @activityChoresSwapExpired.
+  ///
+  /// In bn, this message translates to:
+  /// **'{date}-এ {name} এর অনুরোধের সময় শেষ হয়েছে'**
+  String activityChoresSwapExpired(String name, String date);
+
+  /// No description provided for @activityChoresCoverAssigned.
+  ///
+  /// In bn, this message translates to:
+  /// **'{to} {date}-এ {name} সামলাবেন'**
+  String activityChoresCoverAssigned(String to, String name, String date);
 }
 
 class _AppLocalizationsDelegate

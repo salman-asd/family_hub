@@ -3,11 +3,20 @@ import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:flutter/material.dart';
 
-/// The five statuses a chip can represent (roadmap 5.3).
+/// The six statuses a chip can represent (roadmap 5.3, P3-04).
 ///
 /// [overdue] is a *derived* state in the domain; here it is just a visual
-/// choice so the chip can render it without importing a feature.
-enum WidgetStatus { scheduled, inProgress, completed, verified, overdue }
+/// choice so the chip can render it without importing a feature. [skipped] is
+/// the one stored status Phase 3 adds (absence policy C / a manager skip); its
+/// tokens are deliberately neutral.
+enum WidgetStatus {
+  scheduled,
+  inProgress,
+  completed,
+  verified,
+  overdue,
+  skipped,
+}
 
 /// A compact, accessible status badge: icon + label + colour, so status is
 /// never conveyed by colour alone (CLAUDE.md rule 13).
@@ -78,6 +87,7 @@ class StatusChip extends StatelessWidget {
     WidgetStatus.completed => Icons.check_circle_outline_rounded,
     WidgetStatus.verified => Icons.verified_rounded,
     WidgetStatus.overdue => Icons.warning_amber_rounded,
+    WidgetStatus.skipped => Icons.remove_circle_outline_rounded,
   };
 
   String _defaultLabel(AppLocalizations l10n) => switch (status) {
@@ -86,6 +96,7 @@ class StatusChip extends StatelessWidget {
     WidgetStatus.completed => l10n.statusCompleted,
     WidgetStatus.verified => l10n.statusVerified,
     WidgetStatus.overdue => l10n.statusOverdue,
+    WidgetStatus.skipped => l10n.choreStatusSkipped,
   };
 
   _StatusColors _colors(AppTokens t) => switch (status) {
@@ -108,6 +119,10 @@ class StatusChip extends StatelessWidget {
     WidgetStatus.overdue => _StatusColors(
       t.statusOverdueContainer,
       t.statusOverdueOn,
+    ),
+    WidgetStatus.skipped => _StatusColors(
+      t.statusSkippedContainer,
+      t.statusSkippedOn,
     ),
   };
 }

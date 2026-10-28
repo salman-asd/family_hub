@@ -137,6 +137,15 @@ void main() {
           );
         });
 
+        test('statusSkippedOn on statusSkippedContainer >= 4.5 (P3-04)', () {
+          _assertContrast(
+            'statusSkippedOn/statusSkippedContainer',
+            t.statusSkippedOn,
+            t.statusSkippedContainer,
+            4.5,
+          );
+        });
+
         // ── Icon/status colors on surface >= 3 (large UI icons) ──────────
 
         test('statusScheduled on surface >= 3', () {
@@ -179,6 +188,15 @@ void main() {
           _assertContrast(
             'statusOverdue/surface',
             t.statusOverdue,
+            t.surface,
+            3,
+          );
+        });
+
+        test('statusSkipped on surface >= 3 (P3-04)', () {
+          _assertContrast(
+            'statusSkipped/surface',
+            t.statusSkipped,
             t.surface,
             3,
           );

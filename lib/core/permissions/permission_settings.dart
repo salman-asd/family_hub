@@ -17,6 +17,7 @@ final class PermissionSettings {
     this.membersViewAllContributions = false,
     this.membersCanInvite = false,
     this.choreVerificationEnabled = false,
+    this.membersCanCompleteForOthers = false,
   });
 
   /// What a family gets on creation (and what an unreadable document means).
@@ -40,6 +41,10 @@ final class PermissionSettings {
   /// The family half of the `verifyChore` cell (the template has the other).
   final bool choreVerificationEnabled;
 
+  /// Plain members may complete a chore assigned to somebody else (D-P3-14,
+  /// default off: the assignee or a manager only).
+  final bool membersCanCompleteForOthers;
+
   bool isModuleEnabled(PermissionModule module) => switch (module) {
     // Family administration is not a switchable module.
     PermissionModule.family => true,
@@ -55,6 +60,7 @@ final class PermissionSettings {
     bool? membersViewAllContributions,
     bool? membersCanInvite,
     bool? choreVerificationEnabled,
+    bool? membersCanCompleteForOthers,
   }) => PermissionSettings(
     bazarEnabled: bazarEnabled ?? this.bazarEnabled,
     choresEnabled: choresEnabled ?? this.choresEnabled,
@@ -67,6 +73,8 @@ final class PermissionSettings {
     membersCanInvite: membersCanInvite ?? this.membersCanInvite,
     choreVerificationEnabled:
         choreVerificationEnabled ?? this.choreVerificationEnabled,
+    membersCanCompleteForOthers:
+        membersCanCompleteForOthers ?? this.membersCanCompleteForOthers,
   );
 
   @override
@@ -78,7 +86,8 @@ final class PermissionSettings {
       other.membersViewFamilyReports == membersViewFamilyReports &&
       other.membersViewAllContributions == membersViewAllContributions &&
       other.membersCanInvite == membersCanInvite &&
-      other.choreVerificationEnabled == choreVerificationEnabled;
+      other.choreVerificationEnabled == choreVerificationEnabled &&
+      other.membersCanCompleteForOthers == membersCanCompleteForOthers;
 
   @override
   int get hashCode => Object.hash(
@@ -89,6 +98,7 @@ final class PermissionSettings {
     membersViewAllContributions,
     membersCanInvite,
     choreVerificationEnabled,
+    membersCanCompleteForOthers,
   );
 
   @override
@@ -98,7 +108,8 @@ final class PermissionSettings {
       'memberReports: $membersViewFamilyReports, '
       'memberAllContributions: $membersViewAllContributions, '
       'memberInvite: $membersCanInvite, '
-      'verification: $choreVerificationEnabled)';
+      'verification: $choreVerificationEnabled, '
+      'memberCompleteForOthers: $membersCanCompleteForOthers)';
 }
 
 /// The template-level switch: the "if the template allows it" cell.

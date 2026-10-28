@@ -27,6 +27,11 @@ Cells show the answer with the DEFAULT family settings for an active member. `ow
 | `completeOwnChore` | own | own | own | - | Comment/complete chores: all Yes | yes |
 | `commentOnChore` | yes | yes | yes | - | Comment/complete chores: all Yes | yes |
 | `verifyChore` | other | other | no | `choreVerificationEnabled` + the template switch | (not in spec section 6) | DECIDE |
+| `completeChoreForOthers` | yes | yes | no | `membersCanCompleteForOthers` (default off) | Reassign chores: admin Yes, moderator Yes, member Request/exchange | DECIDE |
+| `recordOwnAvailability` | own | own | own | - | (not in spec section 6) | yes |
+| `manageAvailability` | yes | yes | no | - | (not in spec section 6) | yes |
+| `manageChoreOccurrences` | yes | yes | no | - | (not in spec section 6) | yes |
+| `moderateChoreComments` | yes | yes | no | - | (not in spec section 6) | yes |
 
 ## Cells the owner must decide
 
@@ -42,3 +47,4 @@ Cells show the answer with the DEFAULT family settings for an active member. `ow
 - `closeBazarMonth`: Admin only, or Household Manager while the family allows finance? Confirm.
 - `importBazarData`: Admin only, or Household Manager while the family allows finance? Confirm.
 - `verifyChore`: Not in the spec: verification is off by default and nobody verifies their own work. Confirm.
+- `completeChoreForOthers`: Phase 3: may a plain member tick somebody else's chore? Default is no (assignee or manager). Confirm.

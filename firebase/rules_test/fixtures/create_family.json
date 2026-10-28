@@ -100,6 +100,7 @@
         "membersViewAllContributions": false,
         "membersCanInvite": false,
         "choreVerificationEnabled": false,
+        "membersCanCompleteForOthers": false,
         "createdAt": {
           "__ts": "2026-10-18T10:00:00.000Z"
         },

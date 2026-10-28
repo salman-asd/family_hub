@@ -39,6 +39,9 @@ class AppTokens extends ThemeExtension<AppTokens> {
     required this.statusOverdue,
     required this.statusOverdueContainer,
     required this.statusOverdueOn,
+    required this.statusSkipped,
+    required this.statusSkippedContainer,
+    required this.statusSkippedOn,
     // ── Feedback ────────────────────────────────────────────────────────────
     required this.success,
     required this.warning,
@@ -110,6 +113,12 @@ class AppTokens extends ThemeExtension<AppTokens> {
   final Color statusOverdue;
   final Color statusOverdueContainer;
   final Color statusOverdueOn;
+
+  /// Skipped (absence policy C / a manager skip, P3-04). Deliberately NEUTRAL:
+  /// a skipped chore is neither a failure nor a success.
+  final Color statusSkipped;
+  final Color statusSkippedContainer;
+  final Color statusSkippedOn;
 
   // ── Feedback ──────────────────────────────────────────────────────────────
   final Color success;
@@ -184,6 +193,9 @@ class AppTokens extends ThemeExtension<AppTokens> {
     Color? statusOverdue,
     Color? statusOverdueContainer,
     Color? statusOverdueOn,
+    Color? statusSkipped,
+    Color? statusSkippedContainer,
+    Color? statusSkippedOn,
     Color? success,
     Color? warning,
     Color? danger,
@@ -242,6 +254,10 @@ class AppTokens extends ThemeExtension<AppTokens> {
       statusOverdueContainer:
           statusOverdueContainer ?? this.statusOverdueContainer,
       statusOverdueOn: statusOverdueOn ?? this.statusOverdueOn,
+      statusSkipped: statusSkipped ?? this.statusSkipped,
+      statusSkippedContainer:
+          statusSkippedContainer ?? this.statusSkippedContainer,
+      statusSkippedOn: statusSkippedOn ?? this.statusSkippedOn,
       success: success ?? this.success,
       warning: warning ?? this.warning,
       danger: danger ?? this.danger,
@@ -340,6 +356,13 @@ class AppTokens extends ThemeExtension<AppTokens> {
         t,
       )!,
       statusOverdueOn: Color.lerp(statusOverdueOn, other.statusOverdueOn, t)!,
+      statusSkipped: Color.lerp(statusSkipped, other.statusSkipped, t)!,
+      statusSkippedContainer: Color.lerp(
+        statusSkippedContainer,
+        other.statusSkippedContainer,
+        t,
+      )!,
+      statusSkippedOn: Color.lerp(statusSkippedOn, other.statusSkippedOn, t)!,
       success: Color.lerp(success, other.success, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
       danger: Color.lerp(danger, other.danger, t)!,

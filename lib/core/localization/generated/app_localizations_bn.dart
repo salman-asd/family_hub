@@ -40,6 +40,33 @@ class AppLocalizationsBn extends AppLocalizations {
   String get actionEdit => 'সম্পাদনা';
 
   @override
+  String get actionAdd => 'যোগ করুন';
+
+  @override
+  String get catalogEditorEmpty => 'এখনও কিছু নেই।';
+
+  @override
+  String get catalogEditorActions => 'সারির কাজ';
+
+  @override
+  String get catalogEditorActivate => 'আবার চালু করুন';
+
+  @override
+  String get catalogEditorDeactivate => 'বন্ধ করুন';
+
+  @override
+  String get catalogEditorAddTitle => 'নতুন সারি';
+
+  @override
+  String get catalogEditorEditTitle => 'সারি সম্পাদনা';
+
+  @override
+  String get catalogEditorLabelBn => 'নাম (বাংলা)';
+
+  @override
+  String get catalogEditorLabelEn => 'নাম (ইংরেজি, ঐচ্ছিক)';
+
+  @override
   String get actionClose => 'বন্ধ করুন';
 
   @override
@@ -862,6 +889,46 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get galleryStatusChip => 'অবস্থার চিপ';
+
+  @override
+  String get galleryStatusGlyph => 'অবস্থার চিহ্ন';
+
+  @override
+  String get galleryFlagChip => 'ফ্ল্যাগ চিপ';
+
+  @override
+  String get galleryReasonSheet => 'কারণ শিট';
+
+  @override
+  String get galleryMinutesField => 'সময়ের ঘর';
+
+  @override
+  String get galleryWeekdayChips => 'বার বাছাই';
+
+  @override
+  String get galleryColorSwatchPicker => 'রং বাছাই';
+
+  @override
+  String get galleryAvatarStack => 'অ্যাভাটার সারি';
+
+  @override
+  String get galleryStepProgress => 'ধাপের অগ্রগতি';
+
+  @override
+  String get galleryMiniMarkdown => 'ঘরের নিয়মের লেখা';
+
+  @override
+  String get galleryCatalogEditor => 'তালিকা সম্পাদনা';
+
+  @override
+  String get galleryOpenSheet => 'শিট খুলুন';
+
+  @override
+  String get gallerySampleDueTime => 'শেষ সময়';
+
+  @override
+  String get gallerySampleRules =>
+      '# ঘরের নিয়ম\n- খাওয়ার পর নিজের প্লেট ধুয়ে রাখা\n- **সকাল ৯টার মধ্যে রান্নাঘর খালি থাকতে হবে**\n1. গাছে পানি দেওয়া\n2. উঠান ঝাঁট দেওয়া';
 
   @override
   String get gallerySectionHeader => 'সেকশন হেডার';
@@ -2367,4 +2434,472 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get choresManageEmptyMessage => 'কাজ পরিচালনার টুল এখানে দেখা যাবে।';
+
+  @override
+  String get choresModuleTitle => 'কাজ';
+
+  @override
+  String get permissionManageChoreTemplates => 'কাজ ও রোটেশন পরিচালনা';
+
+  @override
+  String get permissionReassignChore => 'কাজ অন্যজনকে দেওয়া';
+
+  @override
+  String get permissionRequestSwap => 'কাজ বদলের অনুরোধ';
+
+  @override
+  String get permissionCompleteOwnChore => 'নিজের কাজ শেষ করা';
+
+  @override
+  String get permissionCommentOnChore => 'কাজে মন্তব্য করা';
+
+  @override
+  String get permissionVerifyChore => 'অন্যের কাজ যাচাই করা';
+
+  @override
+  String get permissionCompleteChoreForOthers => 'অন্যের কাজ শেষ করে দেওয়া';
+
+  @override
+  String get permissionRecordOwnAvailability => 'নিজের অনুপস্থিতি জানানো';
+
+  @override
+  String get permissionManageAvailability => 'অনুপস্থিতি পরিচালনা';
+
+  @override
+  String get permissionManageChoreOccurrences =>
+      'কাজ বাদ দেওয়া, আবার খোলা বা টীকা দেওয়া';
+
+  @override
+  String get permissionModerateChoreComments => 'মন্তব্য লুকানো';
+
+  @override
+  String get choreStatusSkipped => 'বাদ দেওয়া';
+
+  @override
+  String get choreFlagNeedsCover => 'কেউ এখনও নেই';
+
+  @override
+  String get choreFlagAwaitingVerification => 'যাচাই বাকি';
+
+  @override
+  String get choreFlagNeedsAttention => 'দৃষ্টি দেওয়ার কাজ';
+
+  @override
+  String get choreFlagPlanned => 'পরিকল্পিত';
+
+  @override
+  String get choreFlagSwapPending => 'বদলের অনুরোধ বাকি';
+
+  @override
+  String get reasonSheetHint => 'কেন? (অন্তত ৩টি অক্ষর)';
+
+  @override
+  String reasonSheetTooShort(int min) {
+    return 'অন্তত $minটি অক্ষর লিখুন।';
+  }
+
+  @override
+  String get minutesFieldNotSet => 'দিনের শেষে';
+
+  @override
+  String get minutesFieldClear => 'সময় মুছে ফেলুন';
+
+  @override
+  String colorSwatchLabel(int index, int count) {
+    return 'রং $index, মোট $countটি';
+  }
+
+  @override
+  String avatarStackMore(String first, int rest) {
+    return '$first এবং আরও $rest জন';
+  }
+
+  @override
+  String avatarStackMoreShort(int hidden) {
+    return '+$hidden';
+  }
+
+  @override
+  String stepProgressSemantic(String done, String total) {
+    return '$totalটি ধাপের $doneটি শেষ';
+  }
+
+  @override
+  String get choresFailure_required => 'এটি পূরণ করা জরুরি।';
+
+  @override
+  String get choresFailure_too_long => 'লেখাটি খুব বড় হয়ে গেছে।';
+
+  @override
+  String get choresFailure_invalid_time => 'সঠিক সময় দিন।';
+
+  @override
+  String get choresFailure_invalid_recurrence =>
+      'এই পুনরাবৃত্তির নিয়ম ঠিক নেই।';
+
+  @override
+  String get choresFailure_no_dates => 'অন্তত একটি দিন বেছে নিন।';
+
+  @override
+  String get choresFailure_invalid_range => 'শেষ তারিখ শুরুর আগে হতে পারে না।';
+
+  @override
+  String get choresFailure_invalid_date => 'তারিখটি সঠিক নয়।';
+
+  @override
+  String get choresFailure_too_many_subtasks =>
+      'ধাপ সংখ্যায় বেশি হয়ে গেছে (সর্বোচ্চ ৩০)।';
+
+  @override
+  String get choresFailure_too_many_slots =>
+      'দিনে বার সংখ্যায় বেশি (সর্বোচ্চ ৬)।';
+
+  @override
+  String get choresFailure_duplicate_slot => 'একই নামে দুটি বার আছে।';
+
+  @override
+  String get choresFailure_too_many_items => 'পরিমাণটি বেশি হয়ে গেছে।';
+
+  @override
+  String get choresFailure_duplicate_id => 'এই নামটি আগেই ব্যবহার করা হয়েছে।';
+
+  @override
+  String get choresFailure_reason_required => 'কারণ লিখতে হবে।';
+
+  @override
+  String get choresFailure_reason_too_short => 'কারণে অন্তত ৩টি অক্ষর দিন।';
+
+  @override
+  String get choresFailure_member_required => 'একজন সদস্য বেছে নিন।';
+
+  @override
+  String get choresFailure_invalid_rotation => 'এই রোটেশনটি সঠিক নয়।';
+
+  @override
+  String get choresFailure_too_few_members => 'রোটেশনে অন্তত দুই জন সদস্য দিন।';
+
+  @override
+  String get choresFailure_invalid_horizon =>
+      '১৪ থেকে ৯০ দিনের মধ্যে একটি সীমা বেছে নিন।';
+
+  @override
+  String get choresFailure_invalid_week_start =>
+      'সপ্তাহের প্রথম দিন সঠিকভাবে বেছে নিন।';
+
+  @override
+  String get choresFailure_invalid_minutes =>
+      '০০:০০ থেকে ২৩:৫৯ এর মধ্যে সময় দিন।';
+
+  @override
+  String get choresFailure_not_assigned_to_you => 'এই কাজটি আপনার নয়।';
+
+  @override
+  String get choresFailure_already_completed => 'এই কাজটি আগেই শেষ হয়েছে।';
+
+  @override
+  String get choresFailure_not_completed => 'এই কাজটি এখনও শেষ হয়নি।';
+
+  @override
+  String get choresFailure_required_subtasks_open =>
+      'আগে জরুরি ধাপগুলো শেষ করুন।';
+
+  @override
+  String get choresFailure_self_verification =>
+      'নিজের কাজ নিজে যাচাই করা যায় না।';
+
+  @override
+  String get choresFailure_verification_not_required =>
+      'এই কাজে যাচাই দরকার নেই।';
+
+  @override
+  String get choresFailure_already_verified => 'এই কাজটি আগেই যাচাই হয়েছে।';
+
+  @override
+  String get choresFailure_verified_requires_manager =>
+      'যাচাই হওয়া কাজ শুধু পরিচালক আবার খুলতে পারেন।';
+
+  @override
+  String get choresFailure_occurrence_started => 'এই কাজটি শুরু হয়ে গেছে।';
+
+  @override
+  String get choresFailure_already_skipped =>
+      'এই কাজটি আগেই বাদ দেওয়া হয়েছে।';
+
+  @override
+  String get choresFailure_not_skipped => 'এই কাজটি বাদ দেওয়া হয়নি।';
+
+  @override
+  String get choresFailure_swap_not_pending => 'এই অনুরোধটি আর খোলা নেই।';
+
+  @override
+  String get choresFailure_swap_expired => 'এই অনুরোধের সময় শেষ।';
+
+  @override
+  String get choresFailure_swaps_disabled => 'এই পরিবারে কাজ বদল বন্ধ আছে।';
+
+  @override
+  String get choresFailure_cover_not_needed => 'এই কাজে ইতিমধ্যে কেউ আছেন।';
+
+  @override
+  String get choresFailure_availability_overlap =>
+      'এই দিনগুলোতে অনুপস্থিতি আগেই জানানো আছে।';
+
+  @override
+  String get choresFailure_member_unavailable => 'সদস্যটি ওই দিনে অনুপস্থিত।';
+
+  @override
+  String get choresFailure_template_paused => 'এই কাজটি সাময়িকভাবে বন্ধ।';
+
+  @override
+  String get choresFailure_rotation_member_inactive =>
+      'রোটেশনের একজন সদস্য আর সক্রিয় নন।';
+
+  @override
+  String get choresFailure_range_too_large =>
+      'একবারে তৈরি করার জন্য সীমাটি বেশি বড়।';
+
+  @override
+  String get choresFailure_starter_pack_applied =>
+      'এই স্টার্টার প্যাক আগেই যোগ করা হয়েছে।';
+
+  @override
+  String get choresFailure_occurrence_deleted => 'এই কাজটি মুছে ফেলা হয়েছে।';
+
+  @override
+  String get choresFailure_concurrent_edit =>
+      'অন্য কেউ এটি বদলে ফেলেছেন; আবার খুলে চেষ্টা করুন।';
+
+  @override
+  String get choresFailure_last_group_in_use =>
+      'এই দলটি এখনও কাজে ব্যবহার হচ্ছে।';
+
+  @override
+  String get choresFailure_not_a_recipient => 'অনুরোধটি আপনার জন্য নয়।';
+
+  @override
+  String get choresFailure_not_found => 'এটি আর নেই।';
+
+  @override
+  String get choresFailure_permission_denied => 'এটি করার অনুমতি আপনার নেই।';
+
+  @override
+  String get choresFailure_network =>
+      'ইন্টারনেট সংযোগ নেই। 연결 দেখে আবার চেষ্টা করুন।';
+
+  @override
+  String get choresFailure_unknown => 'কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।';
+
+  @override
+  String get activityChoresSettingsUpdated => 'কাজের সেটিংস বদলেছেন';
+
+  @override
+  String get activityChoresRotationPolicyUpdated => 'অনুপস্থিতির নিয়ম বদলেছেন';
+
+  @override
+  String activityChoresTemplateCreated(String name) {
+    return '$name কাজটি যোগ করেছেন';
+  }
+
+  @override
+  String activityChoresTemplateUpdated(String name) {
+    return '$name কাজটি বদলেছেন';
+  }
+
+  @override
+  String activityChoresTemplatePaused(String name) {
+    return '$name কাজটি সাময়িকভাবে বন্ধ করেছেন';
+  }
+
+  @override
+  String activityChoresTemplateResumed(String name) {
+    return '$name কাজটি আবার চালু করেছেন';
+  }
+
+  @override
+  String activityChoresTemplateArchived(String name) {
+    return '$name কাজটি আর্কাইভ করেছেন';
+  }
+
+  @override
+  String activityChoresTemplateDuplicated(String name) {
+    return '$name কাজটির কপি করেছেন';
+  }
+
+  @override
+  String activityChoresStarterPackApplied(String templates, String groups) {
+    return 'স্টার্টার কাজগুলো যোগ করেছেন ($templatesটি কাজ, $groupsটি দল)';
+  }
+
+  @override
+  String activityChoresDutyGroupCreated(String name) {
+    return '$name দলটি যোগ করেছেন';
+  }
+
+  @override
+  String activityChoresDutyGroupUpdated(String name) {
+    return '$name দলটি বদলেছেন';
+  }
+
+  @override
+  String activityChoresRotationChanged(String name) {
+    return '$name এর রোটেশন বদলেছেন';
+  }
+
+  @override
+  String activityChoresOccurrencesGenerated(
+    String from,
+    String to,
+    String count,
+  ) {
+    return '$from থেকে $to পর্যন্ত কাজ তৈরি হয়েছে ($count)';
+  }
+
+  @override
+  String activityChoresOccurrencesReplanned(String name, String from) {
+    return '$from থেকে $name কাজটি আবার পরিকল্পনা করেছেন';
+  }
+
+  @override
+  String activityChoresOccurrenceCompleted(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member $date-এ $name শেষ করেছেন';
+  }
+
+  @override
+  String activityChoresOccurrenceUncompleted(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member $date-এ $name আবার অসম্পূর্ণ করেছেন';
+  }
+
+  @override
+  String activityChoresOccurrenceVerified(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member $date-এ $name যাচাই করেছেন';
+  }
+
+  @override
+  String activityChoresOccurrenceReopened(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member $date-এ $name আবার খুলেছেন';
+  }
+
+  @override
+  String activityChoresOccurrenceException(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member $date-এ $name এর জন্য ব্যতিক্রম লিখেছেন';
+  }
+
+  @override
+  String activityChoresOccurrenceSkipped(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member $date-এ $name বাদ দিয়েছেন';
+  }
+
+  @override
+  String activityChoresOccurrenceUnskipped(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member $date-এ $name আবার চালু করেছেন';
+  }
+
+  @override
+  String activityChoresOccurrenceReassigned(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member $date-এ $name অন্যকে দিয়েছেন';
+  }
+
+  @override
+  String activityChoresCommentAdded(String member, String name, String date) {
+    return '$member $date-এ $name নিয়ে মন্তব্য করেছেন';
+  }
+
+  @override
+  String activityChoresCommentHidden(String member, String name, String date) {
+    return '$member $date-এ $name এর একটি মন্তব্য লুকিয়েছেন';
+  }
+
+  @override
+  String activityChoresAvailabilityAdded(
+    String member,
+    String from,
+    String to,
+  ) {
+    return '$member $from থেকে $to পর্যন্ত অনুপস্থিতি জানিয়েছেন';
+  }
+
+  @override
+  String activityChoresAvailabilityCancelled(
+    String member,
+    String from,
+    String to,
+  ) {
+    return '$member $from থেকে $to পর্যন্ত অনুপস্থিতি বাতিল করেছেন';
+  }
+
+  @override
+  String activityChoresAvailabilityDecided(
+    String member,
+    String from,
+    String to,
+  ) {
+    return '$member $from থেকে $to পর্যন্ত অনুপস্থিতির সিদ্ধান্ত দিয়েছেন';
+  }
+
+  @override
+  String activityChoresSwapRequested(
+    String member,
+    String to,
+    String name,
+    String date,
+  ) {
+    return '$member $to-কে $date-এ $name ধরতে অনুরোধ করেছেন';
+  }
+
+  @override
+  String activityChoresSwapAccepted(String to, String name, String date) {
+    return '$to $date-এ $name নিতে রাজি হয়েছেন';
+  }
+
+  @override
+  String activityChoresSwapDeclined(String to, String name, String date) {
+    return '$to $date-এ $name নিতে রাজি হননি';
+  }
+
+  @override
+  String activityChoresSwapCancelled(String member, String name, String date) {
+    return '$member $date-এ $name এর অনুরোধ বাতিল করেছেন';
+  }
+
+  @override
+  String activityChoresSwapExpired(String name, String date) {
+    return '$date-এ $name এর অনুরোধের সময় শেষ হয়েছে';
+  }
+
+  @override
+  String activityChoresCoverAssigned(String to, String name, String date) {
+    return '$to $date-এ $name সামলাবেন';
+  }
 }

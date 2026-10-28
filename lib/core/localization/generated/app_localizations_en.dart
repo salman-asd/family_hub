@@ -40,6 +40,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionEdit => 'Edit';
 
   @override
+  String get actionAdd => 'Add';
+
+  @override
+  String get catalogEditorEmpty => 'Nothing here yet.';
+
+  @override
+  String get catalogEditorActions => 'Row actions';
+
+  @override
+  String get catalogEditorActivate => 'Use again';
+
+  @override
+  String get catalogEditorDeactivate => 'Turn off';
+
+  @override
+  String get catalogEditorAddTitle => 'Add a row';
+
+  @override
+  String get catalogEditorEditTitle => 'Edit the row';
+
+  @override
+  String get catalogEditorLabelBn => 'Name (Bangla)';
+
+  @override
+  String get catalogEditorLabelEn => 'Name (English, optional)';
+
+  @override
   String get actionClose => 'Close';
 
   @override
@@ -867,6 +894,46 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get galleryStatusChip => 'Status chip';
+
+  @override
+  String get galleryStatusGlyph => 'Status glyph';
+
+  @override
+  String get galleryFlagChip => 'Flag chip';
+
+  @override
+  String get galleryReasonSheet => 'Reason sheet';
+
+  @override
+  String get galleryMinutesField => 'Time field';
+
+  @override
+  String get galleryWeekdayChips => 'Weekday picker';
+
+  @override
+  String get galleryColorSwatchPicker => 'Colour picker';
+
+  @override
+  String get galleryAvatarStack => 'Avatar stack';
+
+  @override
+  String get galleryStepProgress => 'Step progress';
+
+  @override
+  String get galleryMiniMarkdown => 'House rules text';
+
+  @override
+  String get galleryCatalogEditor => 'List editor';
+
+  @override
+  String get galleryOpenSheet => 'Open the sheet';
+
+  @override
+  String get gallerySampleDueTime => 'Due time';
+
+  @override
+  String get gallerySampleRules =>
+      '# House rules\n- Wash your own plate after eating\n- **The kitchen must be clear by 9 am**\n1. Water the plants\n2. Sweep the yard';
 
   @override
   String get gallerySectionHeader => 'Section header';
@@ -2359,7 +2426,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choresEmptyTitle => 'No chores yet';
 
   @override
-  String get choresEmptyMessage => 'Chores will show up here once they are added.';
+  String get choresEmptyMessage =>
+      'Chores will show up here once they are added.';
 
   @override
   String get choresManageAction => 'Manage';
@@ -2372,4 +2440,485 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get choresManageEmptyMessage => 'Chore tools will appear here.';
+
+  @override
+  String get choresModuleTitle => 'Chores';
+
+  @override
+  String get permissionManageChoreTemplates => 'Manage chores and rotations';
+
+  @override
+  String get permissionReassignChore => 'Reassign a chore';
+
+  @override
+  String get permissionRequestSwap => 'Ask to swap a chore';
+
+  @override
+  String get permissionCompleteOwnChore => 'Complete my chores';
+
+  @override
+  String get permissionCommentOnChore => 'Comment on a chore';
+
+  @override
+  String get permissionVerifyChore => 'Verify someone\'s chore';
+
+  @override
+  String get permissionCompleteChoreForOthers =>
+      'Complete someone else\'s chore';
+
+  @override
+  String get permissionRecordOwnAvailability => 'Record my absence';
+
+  @override
+  String get permissionManageAvailability => 'Manage absences';
+
+  @override
+  String get permissionManageChoreOccurrences =>
+      'Skip, reopen or annotate a chore';
+
+  @override
+  String get permissionModerateChoreComments => 'Hide a comment';
+
+  @override
+  String get choreStatusSkipped => 'Skipped';
+
+  @override
+  String get choreFlagNeedsCover => 'Needs an assignee';
+
+  @override
+  String get choreFlagAwaitingVerification => 'Awaiting verification';
+
+  @override
+  String get choreFlagNeedsAttention => 'Needs attention';
+
+  @override
+  String get choreFlagPlanned => 'Planned';
+
+  @override
+  String get choreFlagSwapPending => 'Swap pending';
+
+  @override
+  String get reasonSheetHint => 'Why? (at least 3 characters)';
+
+  @override
+  String reasonSheetTooShort(int min) {
+    return 'Write at least $min characters.';
+  }
+
+  @override
+  String get minutesFieldNotSet => 'End of day';
+
+  @override
+  String get minutesFieldClear => 'Clear the time';
+
+  @override
+  String colorSwatchLabel(int index, int count) {
+    return 'Colour $index of $count';
+  }
+
+  @override
+  String avatarStackMore(String first, int rest) {
+    return '$first and $rest more';
+  }
+
+  @override
+  String avatarStackMoreShort(int hidden) {
+    return '+$hidden';
+  }
+
+  @override
+  String stepProgressSemantic(String done, String total) {
+    return '$done of $total steps done';
+  }
+
+  @override
+  String get choresFailure_required => 'This field is required.';
+
+  @override
+  String get choresFailure_too_long => 'That text is too long.';
+
+  @override
+  String get choresFailure_invalid_time => 'Enter a valid time.';
+
+  @override
+  String get choresFailure_invalid_recurrence =>
+      'This repeat pattern is not valid.';
+
+  @override
+  String get choresFailure_no_dates => 'Pick at least one day.';
+
+  @override
+  String get choresFailure_invalid_range =>
+      'The end must not be before the start.';
+
+  @override
+  String get choresFailure_invalid_date => 'That date is not valid.';
+
+  @override
+  String get choresFailure_too_many_subtasks => 'Too many steps (30 at most).';
+
+  @override
+  String get choresFailure_too_many_slots =>
+      'Too many times a day (6 at most).';
+
+  @override
+  String get choresFailure_duplicate_slot =>
+      'Two times a day share the same name.';
+
+  @override
+  String get choresFailure_too_many_items => 'That is too many items.';
+
+  @override
+  String get choresFailure_duplicate_id => 'That name is already in use.';
+
+  @override
+  String get choresFailure_reason_required => 'A reason is required.';
+
+  @override
+  String get choresFailure_reason_too_short =>
+      'The reason needs at least 3 characters.';
+
+  @override
+  String get choresFailure_member_required => 'Choose a member.';
+
+  @override
+  String get choresFailure_invalid_rotation => 'This rotation is not valid.';
+
+  @override
+  String get choresFailure_too_few_members =>
+      'Add at least two members to rotate.';
+
+  @override
+  String get choresFailure_invalid_horizon =>
+      'Choose a planning range between 14 and 90 days.';
+
+  @override
+  String get choresFailure_invalid_week_start =>
+      'Choose a valid first day of the week.';
+
+  @override
+  String get choresFailure_invalid_minutes =>
+      'Enter a time between 00:00 and 23:59.';
+
+  @override
+  String get choresFailure_not_assigned_to_you =>
+      'This chore is not assigned to you.';
+
+  @override
+  String get choresFailure_already_completed =>
+      'This chore is already completed.';
+
+  @override
+  String get choresFailure_not_completed => 'This chore is not completed yet.';
+
+  @override
+  String get choresFailure_required_subtasks_open =>
+      'Finish the required steps first.';
+
+  @override
+  String get choresFailure_self_verification =>
+      'You cannot verify your own chore.';
+
+  @override
+  String get choresFailure_verification_not_required =>
+      'This chore does not need verification.';
+
+  @override
+  String get choresFailure_already_verified =>
+      'This chore is already verified.';
+
+  @override
+  String get choresFailure_verified_requires_manager =>
+      'Only a manager can reopen a verified chore.';
+
+  @override
+  String get choresFailure_occurrence_started =>
+      'This chore has already started.';
+
+  @override
+  String get choresFailure_already_skipped => 'This chore is already skipped.';
+
+  @override
+  String get choresFailure_not_skipped => 'This chore is not skipped.';
+
+  @override
+  String get choresFailure_swap_not_pending =>
+      'This request is no longer open.';
+
+  @override
+  String get choresFailure_swap_expired => 'This request has expired.';
+
+  @override
+  String get choresFailure_swaps_disabled =>
+      'Swapping is switched off for this family.';
+
+  @override
+  String get choresFailure_cover_not_needed =>
+      'This chore already has an assignee.';
+
+  @override
+  String get choresFailure_availability_overlap =>
+      'An absence already covers these days.';
+
+  @override
+  String get choresFailure_member_unavailable =>
+      'That member is absent on this day.';
+
+  @override
+  String get choresFailure_template_paused => 'This chore is paused.';
+
+  @override
+  String get choresFailure_rotation_member_inactive =>
+      'A member in the rotation is no longer active.';
+
+  @override
+  String get choresFailure_range_too_large =>
+      'That range is too long to generate at once.';
+
+  @override
+  String get choresFailure_starter_pack_applied =>
+      'That starter pack is already added.';
+
+  @override
+  String get choresFailure_occurrence_deleted => 'This chore was deleted.';
+
+  @override
+  String get choresFailure_concurrent_edit =>
+      'Someone else changed this; reopen and try again.';
+
+  @override
+  String get choresFailure_last_group_in_use => 'Chores still use this group.';
+
+  @override
+  String get choresFailure_not_a_recipient =>
+      'This request is not addressed to you.';
+
+  @override
+  String get choresFailure_not_found => 'That item no longer exists.';
+
+  @override
+  String get choresFailure_permission_denied =>
+      'You do not have permission to do that.';
+
+  @override
+  String get choresFailure_network =>
+      'No connection. Check your internet and try again.';
+
+  @override
+  String get choresFailure_unknown => 'Something went wrong. Please try again.';
+
+  @override
+  String get activityChoresSettingsUpdated => 'Updated the chore settings';
+
+  @override
+  String get activityChoresRotationPolicyUpdated =>
+      'Changed the absence policy';
+
+  @override
+  String activityChoresTemplateCreated(String name) {
+    return 'Added the chore $name';
+  }
+
+  @override
+  String activityChoresTemplateUpdated(String name) {
+    return 'Edited the chore $name';
+  }
+
+  @override
+  String activityChoresTemplatePaused(String name) {
+    return 'Paused the chore $name';
+  }
+
+  @override
+  String activityChoresTemplateResumed(String name) {
+    return 'Resumed the chore $name';
+  }
+
+  @override
+  String activityChoresTemplateArchived(String name) {
+    return 'Archived the chore $name';
+  }
+
+  @override
+  String activityChoresTemplateDuplicated(String name) {
+    return 'Copied the chore $name';
+  }
+
+  @override
+  String activityChoresStarterPackApplied(String templates, String groups) {
+    return 'Added the starter chores ($templates chores, $groups groups)';
+  }
+
+  @override
+  String activityChoresDutyGroupCreated(String name) {
+    return 'Added the duty group $name';
+  }
+
+  @override
+  String activityChoresDutyGroupUpdated(String name) {
+    return 'Edited the duty group $name';
+  }
+
+  @override
+  String activityChoresRotationChanged(String name) {
+    return 'Changed the rotation of $name';
+  }
+
+  @override
+  String activityChoresOccurrencesGenerated(
+    String from,
+    String to,
+    String count,
+  ) {
+    return 'Planned chores from $from to $to ($count)';
+  }
+
+  @override
+  String activityChoresOccurrencesReplanned(String name, String from) {
+    return 'Replanned the chore $name from $from';
+  }
+
+  @override
+  String activityChoresOccurrenceCompleted(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member completed $name on $date';
+  }
+
+  @override
+  String activityChoresOccurrenceUncompleted(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member un-completed $name on $date';
+  }
+
+  @override
+  String activityChoresOccurrenceVerified(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member verified $name on $date';
+  }
+
+  @override
+  String activityChoresOccurrenceReopened(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member reopened $name on $date';
+  }
+
+  @override
+  String activityChoresOccurrenceException(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member recorded an exception for $name on $date';
+  }
+
+  @override
+  String activityChoresOccurrenceSkipped(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member skipped $name on $date';
+  }
+
+  @override
+  String activityChoresOccurrenceUnskipped(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member un-skipped $name on $date';
+  }
+
+  @override
+  String activityChoresOccurrenceReassigned(
+    String member,
+    String name,
+    String date,
+  ) {
+    return '$member reassigned $name on $date';
+  }
+
+  @override
+  String activityChoresCommentAdded(String member, String name, String date) {
+    return '$member commented on $name on $date';
+  }
+
+  @override
+  String activityChoresCommentHidden(String member, String name, String date) {
+    return '$member hid a comment on $name on $date';
+  }
+
+  @override
+  String activityChoresAvailabilityAdded(
+    String member,
+    String from,
+    String to,
+  ) {
+    return '$member recorded an absence from $from to $to';
+  }
+
+  @override
+  String activityChoresAvailabilityCancelled(
+    String member,
+    String from,
+    String to,
+  ) {
+    return '$member cancelled an absence from $from to $to';
+  }
+
+  @override
+  String activityChoresAvailabilityDecided(
+    String member,
+    String from,
+    String to,
+  ) {
+    return '$member decided an absence from $from to $to';
+  }
+
+  @override
+  String activityChoresSwapRequested(
+    String member,
+    String to,
+    String name,
+    String date,
+  ) {
+    return '$member asked $to to take $name on $date';
+  }
+
+  @override
+  String activityChoresSwapAccepted(String to, String name, String date) {
+    return '$to accepted $name on $date';
+  }
+
+  @override
+  String activityChoresSwapDeclined(String to, String name, String date) {
+    return '$to declined $name on $date';
+  }
+
+  @override
+  String activityChoresSwapCancelled(String member, String name, String date) {
+    return '$member cancelled the request for $name on $date';
+  }
+
+  @override
+  String activityChoresSwapExpired(String name, String date) {
+    return 'The request for $name on $date expired';
+  }
+
+  @override
+  String activityChoresCoverAssigned(String to, String name, String date) {
+    return '$to will cover $name on $date';
+  }
 }

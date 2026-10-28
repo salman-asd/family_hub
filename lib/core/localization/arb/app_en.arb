@@ -22,6 +22,24 @@
   "@actionDelete": {},
   "actionEdit": "Edit",
   "@actionEdit": {},
+  "actionAdd": "Add",
+  "@actionAdd": {},
+  "catalogEditorEmpty": "Nothing here yet.",
+  "@catalogEditorEmpty": {},
+  "catalogEditorActions": "Row actions",
+  "@catalogEditorActions": {},
+  "catalogEditorActivate": "Use again",
+  "@catalogEditorActivate": {},
+  "catalogEditorDeactivate": "Turn off",
+  "@catalogEditorDeactivate": {},
+  "catalogEditorAddTitle": "Add a row",
+  "@catalogEditorAddTitle": {},
+  "catalogEditorEditTitle": "Edit the row",
+  "@catalogEditorEditTitle": {},
+  "catalogEditorLabelBn": "Name (Bangla)",
+  "@catalogEditorLabelBn": {},
+  "catalogEditorLabelEn": "Name (English, optional)",
+  "@catalogEditorLabelEn": {},
   "actionClose": "Close",
   "@actionClose": {},
   "actionBack": "Back",
@@ -607,6 +625,34 @@
   "@galleryItemThumb": {},
   "galleryStatusChip": "Status chip",
   "@galleryStatusChip": {},
+  "galleryStatusGlyph": "Status glyph",
+  "@galleryStatusGlyph": {},
+  "galleryFlagChip": "Flag chip",
+  "@galleryFlagChip": {},
+  "galleryReasonSheet": "Reason sheet",
+  "@galleryReasonSheet": {},
+  "galleryMinutesField": "Time field",
+  "@galleryMinutesField": {},
+  "galleryWeekdayChips": "Weekday picker",
+  "@galleryWeekdayChips": {},
+  "galleryColorSwatchPicker": "Colour picker",
+  "@galleryColorSwatchPicker": {},
+  "galleryAvatarStack": "Avatar stack",
+  "@galleryAvatarStack": {},
+  "galleryStepProgress": "Step progress",
+  "@galleryStepProgress": {},
+  "galleryMiniMarkdown": "House rules text",
+  "@galleryMiniMarkdown": {},
+  "galleryCatalogEditor": "List editor",
+  "@galleryCatalogEditor": {},
+  "galleryOpenSheet": "Open the sheet",
+  "@galleryOpenSheet": {},
+  "gallerySampleDueTime": "Due time",
+  "@gallerySampleDueTime": {},
+  "gallerySampleRules": "# House rules\n- Wash your own plate after eating\n- **The kitchen must be clear by 9 am**\n1. Water the plants\n2. Sweep the yard",
+  "@gallerySampleRules": {
+    "description": "Sample mini-markdown for the gallery; keep the structure when translating."
+  },
   "gallerySectionHeader": "Section header",
   "@gallerySectionHeader": {},
   "galleryAppCard": "Card",
@@ -2071,5 +2117,580 @@
   "choresManageEmptyTitle": "Nothing here yet",
   "@choresManageEmptyTitle": {},
   "choresManageEmptyMessage": "Chore tools will appear here.",
-  "@choresManageEmptyMessage": {}
+  "@choresManageEmptyMessage": {},
+  "choresModuleTitle": "Chores",
+  "@choresModuleTitle": {
+    "description": "Display name of the Chores module."
+  },
+  "permissionManageChoreTemplates": "Manage chores and rotations",
+  "@permissionManageChoreTemplates": {},
+  "permissionReassignChore": "Reassign a chore",
+  "@permissionReassignChore": {},
+  "permissionRequestSwap": "Ask to swap a chore",
+  "@permissionRequestSwap": {},
+  "permissionCompleteOwnChore": "Complete my chores",
+  "@permissionCompleteOwnChore": {},
+  "permissionCommentOnChore": "Comment on a chore",
+  "@permissionCommentOnChore": {},
+  "permissionVerifyChore": "Verify someone's chore",
+  "@permissionVerifyChore": {},
+  "permissionCompleteChoreForOthers": "Complete someone else's chore",
+  "@permissionCompleteChoreForOthers": {},
+  "permissionRecordOwnAvailability": "Record my absence",
+  "@permissionRecordOwnAvailability": {},
+  "permissionManageAvailability": "Manage absences",
+  "@permissionManageAvailability": {},
+  "permissionManageChoreOccurrences": "Skip, reopen or annotate a chore",
+  "@permissionManageChoreOccurrences": {},
+  "permissionModerateChoreComments": "Hide a comment",
+  "@permissionModerateChoreComments": {},
+  "choreStatusSkipped": "Skipped",
+  "@choreStatusSkipped": {
+    "description": "Status of a chore skipped for an absence or by a manager."
+  },
+  "choreFlagNeedsCover": "Needs an assignee",
+  "@choreFlagNeedsCover": {},
+  "choreFlagAwaitingVerification": "Awaiting verification",
+  "@choreFlagAwaitingVerification": {},
+  "choreFlagNeedsAttention": "Needs attention",
+  "@choreFlagNeedsAttention": {},
+  "choreFlagPlanned": "Planned",
+  "@choreFlagPlanned": {
+    "description": "Shown on a projected occurrence that has no document yet."
+  },
+  "choreFlagSwapPending": "Swap pending",
+  "@choreFlagSwapPending": {},
+  "reasonSheetHint": "Why? (at least 3 characters)",
+  "@reasonSheetHint": {},
+  "reasonSheetTooShort": "Write at least {min} characters.",
+  "@reasonSheetTooShort": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesFieldNotSet": "End of day",
+  "@minutesFieldNotSet": {
+    "description": "A chore due time that is not set: due by the end of the day."
+  },
+  "minutesFieldClear": "Clear the time",
+  "@minutesFieldClear": {},
+  "colorSwatchLabel": "Colour {index} of {count}",
+  "@colorSwatchLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "avatarStackMore": "{first} and {rest} more",
+  "@avatarStackMore": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "rest": {
+        "type": "int"
+      }
+    }
+  },
+  "avatarStackMoreShort": "+{hidden}",
+  "@avatarStackMoreShort": {
+    "placeholders": {
+      "hidden": {
+        "type": "int"
+      }
+    }
+  },
+  "stepProgressSemantic": "{done} of {total} steps done",
+  "@stepProgressSemantic": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "choresFailure_required": "This field is required.",
+  "@choresFailure_required": {},
+  "choresFailure_too_long": "That text is too long.",
+  "@choresFailure_too_long": {},
+  "choresFailure_invalid_time": "Enter a valid time.",
+  "@choresFailure_invalid_time": {},
+  "choresFailure_invalid_recurrence": "This repeat pattern is not valid.",
+  "@choresFailure_invalid_recurrence": {},
+  "choresFailure_no_dates": "Pick at least one day.",
+  "@choresFailure_no_dates": {},
+  "choresFailure_invalid_range": "The end must not be before the start.",
+  "@choresFailure_invalid_range": {},
+  "choresFailure_invalid_date": "That date is not valid.",
+  "@choresFailure_invalid_date": {},
+  "choresFailure_too_many_subtasks": "Too many steps (30 at most).",
+  "@choresFailure_too_many_subtasks": {},
+  "choresFailure_too_many_slots": "Too many times a day (6 at most).",
+  "@choresFailure_too_many_slots": {},
+  "choresFailure_duplicate_slot": "Two times a day share the same name.",
+  "@choresFailure_duplicate_slot": {},
+  "choresFailure_too_many_items": "That is too many items.",
+  "@choresFailure_too_many_items": {},
+  "choresFailure_duplicate_id": "That name is already in use.",
+  "@choresFailure_duplicate_id": {},
+  "choresFailure_reason_required": "A reason is required.",
+  "@choresFailure_reason_required": {},
+  "choresFailure_reason_too_short": "The reason needs at least 3 characters.",
+  "@choresFailure_reason_too_short": {},
+  "choresFailure_member_required": "Choose a member.",
+  "@choresFailure_member_required": {},
+  "choresFailure_invalid_rotation": "This rotation is not valid.",
+  "@choresFailure_invalid_rotation": {},
+  "choresFailure_too_few_members": "Add at least two members to rotate.",
+  "@choresFailure_too_few_members": {},
+  "choresFailure_invalid_horizon": "Choose a planning range between 14 and 90 days.",
+  "@choresFailure_invalid_horizon": {},
+  "choresFailure_invalid_week_start": "Choose a valid first day of the week.",
+  "@choresFailure_invalid_week_start": {},
+  "choresFailure_invalid_minutes": "Enter a time between 00:00 and 23:59.",
+  "@choresFailure_invalid_minutes": {},
+  "choresFailure_not_assigned_to_you": "This chore is not assigned to you.",
+  "@choresFailure_not_assigned_to_you": {},
+  "choresFailure_already_completed": "This chore is already completed.",
+  "@choresFailure_already_completed": {},
+  "choresFailure_not_completed": "This chore is not completed yet.",
+  "@choresFailure_not_completed": {},
+  "choresFailure_required_subtasks_open": "Finish the required steps first.",
+  "@choresFailure_required_subtasks_open": {},
+  "choresFailure_self_verification": "You cannot verify your own chore.",
+  "@choresFailure_self_verification": {},
+  "choresFailure_verification_not_required": "This chore does not need verification.",
+  "@choresFailure_verification_not_required": {},
+  "choresFailure_already_verified": "This chore is already verified.",
+  "@choresFailure_already_verified": {},
+  "choresFailure_verified_requires_manager": "Only a manager can reopen a verified chore.",
+  "@choresFailure_verified_requires_manager": {},
+  "choresFailure_occurrence_started": "This chore has already started.",
+  "@choresFailure_occurrence_started": {},
+  "choresFailure_already_skipped": "This chore is already skipped.",
+  "@choresFailure_already_skipped": {},
+  "choresFailure_not_skipped": "This chore is not skipped.",
+  "@choresFailure_not_skipped": {},
+  "choresFailure_swap_not_pending": "This request is no longer open.",
+  "@choresFailure_swap_not_pending": {},
+  "choresFailure_swap_expired": "This request has expired.",
+  "@choresFailure_swap_expired": {},
+  "choresFailure_swaps_disabled": "Swapping is switched off for this family.",
+  "@choresFailure_swaps_disabled": {},
+  "choresFailure_cover_not_needed": "This chore already has an assignee.",
+  "@choresFailure_cover_not_needed": {},
+  "choresFailure_availability_overlap": "An absence already covers these days.",
+  "@choresFailure_availability_overlap": {},
+  "choresFailure_member_unavailable": "That member is absent on this day.",
+  "@choresFailure_member_unavailable": {},
+  "choresFailure_template_paused": "This chore is paused.",
+  "@choresFailure_template_paused": {},
+  "choresFailure_rotation_member_inactive": "A member in the rotation is no longer active.",
+  "@choresFailure_rotation_member_inactive": {},
+  "choresFailure_range_too_large": "That range is too long to generate at once.",
+  "@choresFailure_range_too_large": {},
+  "choresFailure_starter_pack_applied": "That starter pack is already added.",
+  "@choresFailure_starter_pack_applied": {},
+  "choresFailure_occurrence_deleted": "This chore was deleted.",
+  "@choresFailure_occurrence_deleted": {},
+  "choresFailure_concurrent_edit": "Someone else changed this; reopen and try again.",
+  "@choresFailure_concurrent_edit": {},
+  "choresFailure_last_group_in_use": "Chores still use this group.",
+  "@choresFailure_last_group_in_use": {},
+  "choresFailure_not_a_recipient": "This request is not addressed to you.",
+  "@choresFailure_not_a_recipient": {},
+  "choresFailure_not_found": "That item no longer exists.",
+  "@choresFailure_not_found": {},
+  "choresFailure_permission_denied": "You do not have permission to do that.",
+  "@choresFailure_permission_denied": {},
+  "choresFailure_network": "No connection. Check your internet and try again.",
+  "@choresFailure_network": {},
+  "choresFailure_unknown": "Something went wrong. Please try again.",
+  "@choresFailure_unknown": {},
+  "activityChoresSettingsUpdated": "Updated the chore settings",
+  "@activityChoresSettingsUpdated": {},
+  "activityChoresRotationPolicyUpdated": "Changed the absence policy",
+  "@activityChoresRotationPolicyUpdated": {},
+  "activityChoresTemplateCreated": "Added the chore {name}",
+  "@activityChoresTemplateCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplateUpdated": "Edited the chore {name}",
+  "@activityChoresTemplateUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplatePaused": "Paused the chore {name}",
+  "@activityChoresTemplatePaused": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplateResumed": "Resumed the chore {name}",
+  "@activityChoresTemplateResumed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplateArchived": "Archived the chore {name}",
+  "@activityChoresTemplateArchived": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplateDuplicated": "Copied the chore {name}",
+  "@activityChoresTemplateDuplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresStarterPackApplied": "Added the starter chores ({templates} chores, {groups} groups)",
+  "@activityChoresStarterPackApplied": {
+    "placeholders": {
+      "templates": {
+        "type": "String"
+      },
+      "groups": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresDutyGroupCreated": "Added the duty group {name}",
+  "@activityChoresDutyGroupCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresDutyGroupUpdated": "Edited the duty group {name}",
+  "@activityChoresDutyGroupUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresRotationChanged": "Changed the rotation of {name}",
+  "@activityChoresRotationChanged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrencesGenerated": "Planned chores from {from} to {to} ({count})",
+  "@activityChoresOccurrencesGenerated": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrencesReplanned": "Replanned the chore {name} from {from}",
+  "@activityChoresOccurrencesReplanned": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceCompleted": "{member} completed {name} on {date}",
+  "@activityChoresOccurrenceCompleted": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceUncompleted": "{member} un-completed {name} on {date}",
+  "@activityChoresOccurrenceUncompleted": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceVerified": "{member} verified {name} on {date}",
+  "@activityChoresOccurrenceVerified": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceReopened": "{member} reopened {name} on {date}",
+  "@activityChoresOccurrenceReopened": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceException": "{member} recorded an exception for {name} on {date}",
+  "@activityChoresOccurrenceException": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceSkipped": "{member} skipped {name} on {date}",
+  "@activityChoresOccurrenceSkipped": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceUnskipped": "{member} un-skipped {name} on {date}",
+  "@activityChoresOccurrenceUnskipped": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceReassigned": "{member} reassigned {name} on {date}",
+  "@activityChoresOccurrenceReassigned": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresCommentAdded": "{member} commented on {name} on {date}",
+  "@activityChoresCommentAdded": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresCommentHidden": "{member} hid a comment on {name} on {date}",
+  "@activityChoresCommentHidden": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresAvailabilityAdded": "{member} recorded an absence from {from} to {to}",
+  "@activityChoresAvailabilityAdded": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresAvailabilityCancelled": "{member} cancelled an absence from {from} to {to}",
+  "@activityChoresAvailabilityCancelled": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresAvailabilityDecided": "{member} decided an absence from {from} to {to}",
+  "@activityChoresAvailabilityDecided": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapRequested": "{member} asked {to} to take {name} on {date}",
+  "@activityChoresSwapRequested": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapAccepted": "{to} accepted {name} on {date}",
+  "@activityChoresSwapAccepted": {
+    "placeholders": {
+      "to": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapDeclined": "{to} declined {name} on {date}",
+  "@activityChoresSwapDeclined": {
+    "placeholders": {
+      "to": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapCancelled": "{member} cancelled the request for {name} on {date}",
+  "@activityChoresSwapCancelled": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapExpired": "The request for {name} on {date} expired",
+  "@activityChoresSwapExpired": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresCoverAssigned": "{to} will cover {name} on {date}",
+  "@activityChoresCoverAssigned": {
+    "placeholders": {
+      "to": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

@@ -27,8 +27,33 @@ abstract final class AppRoutes {
   static const String bazar = '/bazar';
   static const String family = '/family';
 
-  // ── Chores sub-routes (nested under [chores]; more arrive in Phase 3) ────
+  // ── Chores sub-routes (nested under [chores]) ─────────────────────────────
+  //
+  // P3-03 declares the whole Phase 3 vocabulary (road map 3.10) so later steps
+  // only wire screens. A constant whose screen does not exist yet is NOT
+  // registered in the router: a link to it must not resolve before the step
+  // that adds the screen.
   static const String choresManage = '/chores/manage';
+  static const String choresToday = '/chores/today';
+
+  /// P3-15. `choresTemplateNew` must be registered BEFORE this pattern.
+  static const String choresOccurrencePattern = '/chores/occurrence/:id';
+  static String choresOccurrence(String id) => '/chores/occurrence/$id';
+  static const String choresVerify = '/chores/verify';
+  static const String choresTemplates = '/chores/templates';
+  static const String choresTemplateNew = '/chores/templates/new';
+  static const String choresTemplateEditPattern = '/chores/templates/:id';
+  static String choresTemplateEdit(String id) => '/chores/templates/$id';
+  static const String choresSettings = '/chores/settings';
+  static const String choresDutyGroups = '/chores/duty-groups';
+  static const String choresDutyGroupPattern = '/chores/duty-groups/:id';
+  static String choresDutyGroup(String id) => '/chores/duty-groups/$id';
+  static const String choresStarterPack = '/chores/starter-pack';
+  static const String choresAvailability = '/chores/availability';
+  static const String choresRota = '/chores/rota';
+
+  /// The module-neutral inbox: a top-level route above the shell (P3-27).
+  static const String inbox = '/inbox';
 
   // ── Bazar sub-routes (nested under [bazar]) ───────────────────────────────
   static const String bazarExpenses = '/bazar/expenses';

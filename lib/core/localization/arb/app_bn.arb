@@ -22,6 +22,24 @@
   "@actionDelete": {},
   "actionEdit": "সম্পাদনা",
   "@actionEdit": {},
+  "actionAdd": "যোগ করুন",
+  "@actionAdd": {},
+  "catalogEditorEmpty": "এখনও কিছু নেই।",
+  "@catalogEditorEmpty": {},
+  "catalogEditorActions": "সারির কাজ",
+  "@catalogEditorActions": {},
+  "catalogEditorActivate": "আবার চালু করুন",
+  "@catalogEditorActivate": {},
+  "catalogEditorDeactivate": "বন্ধ করুন",
+  "@catalogEditorDeactivate": {},
+  "catalogEditorAddTitle": "নতুন সারি",
+  "@catalogEditorAddTitle": {},
+  "catalogEditorEditTitle": "সারি সম্পাদনা",
+  "@catalogEditorEditTitle": {},
+  "catalogEditorLabelBn": "নাম (বাংলা)",
+  "@catalogEditorLabelBn": {},
+  "catalogEditorLabelEn": "নাম (ইংরেজি, ঐচ্ছিক)",
+  "@catalogEditorLabelEn": {},
   "actionClose": "বন্ধ করুন",
   "@actionClose": {},
   "actionBack": "ফিরে যান",
@@ -607,6 +625,34 @@
   "@galleryItemThumb": {},
   "galleryStatusChip": "অবস্থার চিপ",
   "@galleryStatusChip": {},
+  "galleryStatusGlyph": "অবস্থার চিহ্ন",
+  "@galleryStatusGlyph": {},
+  "galleryFlagChip": "ফ্ল্যাগ চিপ",
+  "@galleryFlagChip": {},
+  "galleryReasonSheet": "কারণ শিট",
+  "@galleryReasonSheet": {},
+  "galleryMinutesField": "সময়ের ঘর",
+  "@galleryMinutesField": {},
+  "galleryWeekdayChips": "বার বাছাই",
+  "@galleryWeekdayChips": {},
+  "galleryColorSwatchPicker": "রং বাছাই",
+  "@galleryColorSwatchPicker": {},
+  "galleryAvatarStack": "অ্যাভাটার সারি",
+  "@galleryAvatarStack": {},
+  "galleryStepProgress": "ধাপের অগ্রগতি",
+  "@galleryStepProgress": {},
+  "galleryMiniMarkdown": "ঘরের নিয়মের লেখা",
+  "@galleryMiniMarkdown": {},
+  "galleryCatalogEditor": "তালিকা সম্পাদনা",
+  "@galleryCatalogEditor": {},
+  "galleryOpenSheet": "শিট খুলুন",
+  "@galleryOpenSheet": {},
+  "gallerySampleDueTime": "শেষ সময়",
+  "@gallerySampleDueTime": {},
+  "gallerySampleRules": "# ঘরের নিয়ম\n- খাওয়ার পর নিজের প্লেট ধুয়ে রাখা\n- **সকাল ৯টার মধ্যে রান্নাঘর খালি থাকতে হবে**\n1. গাছে পানি দেওয়া\n2. উঠান ঝাঁট দেওয়া",
+  "@gallerySampleRules": {
+    "description": "Sample mini-markdown for the gallery; keep the structure when translating."
+  },
   "gallerySectionHeader": "সেকশন হেডার",
   "@gallerySectionHeader": {},
   "galleryAppCard": "কার্ড",
@@ -2071,5 +2117,580 @@
   "choresManageEmptyTitle": "এখনো কিছু নেই",
   "@choresManageEmptyTitle": {},
   "choresManageEmptyMessage": "কাজ পরিচালনার টুল এখানে দেখা যাবে।",
-  "@choresManageEmptyMessage": {}
+  "@choresManageEmptyMessage": {},
+  "choresModuleTitle": "কাজ",
+  "@choresModuleTitle": {
+    "description": "Display name of the Chores module."
+  },
+  "permissionManageChoreTemplates": "কাজ ও রোটেশন পরিচালনা",
+  "@permissionManageChoreTemplates": {},
+  "permissionReassignChore": "কাজ অন্যজনকে দেওয়া",
+  "@permissionReassignChore": {},
+  "permissionRequestSwap": "কাজ বদলের অনুরোধ",
+  "@permissionRequestSwap": {},
+  "permissionCompleteOwnChore": "নিজের কাজ শেষ করা",
+  "@permissionCompleteOwnChore": {},
+  "permissionCommentOnChore": "কাজে মন্তব্য করা",
+  "@permissionCommentOnChore": {},
+  "permissionVerifyChore": "অন্যের কাজ যাচাই করা",
+  "@permissionVerifyChore": {},
+  "permissionCompleteChoreForOthers": "অন্যের কাজ শেষ করে দেওয়া",
+  "@permissionCompleteChoreForOthers": {},
+  "permissionRecordOwnAvailability": "নিজের অনুপস্থিতি জানানো",
+  "@permissionRecordOwnAvailability": {},
+  "permissionManageAvailability": "অনুপস্থিতি পরিচালনা",
+  "@permissionManageAvailability": {},
+  "permissionManageChoreOccurrences": "কাজ বাদ দেওয়া, আবার খোলা বা টীকা দেওয়া",
+  "@permissionManageChoreOccurrences": {},
+  "permissionModerateChoreComments": "মন্তব্য লুকানো",
+  "@permissionModerateChoreComments": {},
+  "choreStatusSkipped": "বাদ দেওয়া",
+  "@choreStatusSkipped": {
+    "description": "Status of a chore skipped for an absence or by a manager."
+  },
+  "choreFlagNeedsCover": "কেউ এখনও নেই",
+  "@choreFlagNeedsCover": {},
+  "choreFlagAwaitingVerification": "যাচাই বাকি",
+  "@choreFlagAwaitingVerification": {},
+  "choreFlagNeedsAttention": "দৃষ্টি দেওয়ার কাজ",
+  "@choreFlagNeedsAttention": {},
+  "choreFlagPlanned": "পরিকল্পিত",
+  "@choreFlagPlanned": {
+    "description": "Shown on a projected occurrence that has no document yet."
+  },
+  "choreFlagSwapPending": "বদলের অনুরোধ বাকি",
+  "@choreFlagSwapPending": {},
+  "reasonSheetHint": "কেন? (অন্তত ৩টি অক্ষর)",
+  "@reasonSheetHint": {},
+  "reasonSheetTooShort": "অন্তত {min}টি অক্ষর লিখুন।",
+  "@reasonSheetTooShort": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesFieldNotSet": "দিনের শেষে",
+  "@minutesFieldNotSet": {
+    "description": "A chore due time that is not set: due by the end of the day."
+  },
+  "minutesFieldClear": "সময় মুছে ফেলুন",
+  "@minutesFieldClear": {},
+  "colorSwatchLabel": "রং {index}, মোট {count}টি",
+  "@colorSwatchLabel": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "avatarStackMore": "{first} এবং আরও {rest} জন",
+  "@avatarStackMore": {
+    "placeholders": {
+      "first": {
+        "type": "String"
+      },
+      "rest": {
+        "type": "int"
+      }
+    }
+  },
+  "avatarStackMoreShort": "+{hidden}",
+  "@avatarStackMoreShort": {
+    "placeholders": {
+      "hidden": {
+        "type": "int"
+      }
+    }
+  },
+  "stepProgressSemantic": "{total}টি ধাপের {done}টি শেষ",
+  "@stepProgressSemantic": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "choresFailure_required": "এটি পূরণ করা জরুরি।",
+  "@choresFailure_required": {},
+  "choresFailure_too_long": "লেখাটি খুব বড় হয়ে গেছে।",
+  "@choresFailure_too_long": {},
+  "choresFailure_invalid_time": "সঠিক সময় দিন।",
+  "@choresFailure_invalid_time": {},
+  "choresFailure_invalid_recurrence": "এই পুনরাবৃত্তির নিয়ম ঠিক নেই।",
+  "@choresFailure_invalid_recurrence": {},
+  "choresFailure_no_dates": "অন্তত একটি দিন বেছে নিন।",
+  "@choresFailure_no_dates": {},
+  "choresFailure_invalid_range": "শেষ তারিখ শুরুর আগে হতে পারে না।",
+  "@choresFailure_invalid_range": {},
+  "choresFailure_invalid_date": "তারিখটি সঠিক নয়।",
+  "@choresFailure_invalid_date": {},
+  "choresFailure_too_many_subtasks": "ধাপ সংখ্যায় বেশি হয়ে গেছে (সর্বোচ্চ ৩০)।",
+  "@choresFailure_too_many_subtasks": {},
+  "choresFailure_too_many_slots": "দিনে বার সংখ্যায় বেশি (সর্বোচ্চ ৬)।",
+  "@choresFailure_too_many_slots": {},
+  "choresFailure_duplicate_slot": "একই নামে দুটি বার আছে।",
+  "@choresFailure_duplicate_slot": {},
+  "choresFailure_too_many_items": "পরিমাণটি বেশি হয়ে গেছে।",
+  "@choresFailure_too_many_items": {},
+  "choresFailure_duplicate_id": "এই নামটি আগেই ব্যবহার করা হয়েছে।",
+  "@choresFailure_duplicate_id": {},
+  "choresFailure_reason_required": "কারণ লিখতে হবে।",
+  "@choresFailure_reason_required": {},
+  "choresFailure_reason_too_short": "কারণে অন্তত ৩টি অক্ষর দিন।",
+  "@choresFailure_reason_too_short": {},
+  "choresFailure_member_required": "একজন সদস্য বেছে নিন।",
+  "@choresFailure_member_required": {},
+  "choresFailure_invalid_rotation": "এই রোটেশনটি সঠিক নয়।",
+  "@choresFailure_invalid_rotation": {},
+  "choresFailure_too_few_members": "রোটেশনে অন্তত দুই জন সদস্য দিন।",
+  "@choresFailure_too_few_members": {},
+  "choresFailure_invalid_horizon": "১৪ থেকে ৯০ দিনের মধ্যে একটি সীমা বেছে নিন।",
+  "@choresFailure_invalid_horizon": {},
+  "choresFailure_invalid_week_start": "সপ্তাহের প্রথম দিন সঠিকভাবে বেছে নিন।",
+  "@choresFailure_invalid_week_start": {},
+  "choresFailure_invalid_minutes": "০০:০০ থেকে ২৩:৫৯ এর মধ্যে সময় দিন।",
+  "@choresFailure_invalid_minutes": {},
+  "choresFailure_not_assigned_to_you": "এই কাজটি আপনার নয়।",
+  "@choresFailure_not_assigned_to_you": {},
+  "choresFailure_already_completed": "এই কাজটি আগেই শেষ হয়েছে।",
+  "@choresFailure_already_completed": {},
+  "choresFailure_not_completed": "এই কাজটি এখনও শেষ হয়নি।",
+  "@choresFailure_not_completed": {},
+  "choresFailure_required_subtasks_open": "আগে জরুরি ধাপগুলো শেষ করুন।",
+  "@choresFailure_required_subtasks_open": {},
+  "choresFailure_self_verification": "নিজের কাজ নিজে যাচাই করা যায় না।",
+  "@choresFailure_self_verification": {},
+  "choresFailure_verification_not_required": "এই কাজে যাচাই দরকার নেই।",
+  "@choresFailure_verification_not_required": {},
+  "choresFailure_already_verified": "এই কাজটি আগেই যাচাই হয়েছে।",
+  "@choresFailure_already_verified": {},
+  "choresFailure_verified_requires_manager": "যাচাই হওয়া কাজ শুধু পরিচালক আবার খুলতে পারেন।",
+  "@choresFailure_verified_requires_manager": {},
+  "choresFailure_occurrence_started": "এই কাজটি শুরু হয়ে গেছে।",
+  "@choresFailure_occurrence_started": {},
+  "choresFailure_already_skipped": "এই কাজটি আগেই বাদ দেওয়া হয়েছে।",
+  "@choresFailure_already_skipped": {},
+  "choresFailure_not_skipped": "এই কাজটি বাদ দেওয়া হয়নি।",
+  "@choresFailure_not_skipped": {},
+  "choresFailure_swap_not_pending": "এই অনুরোধটি আর খোলা নেই।",
+  "@choresFailure_swap_not_pending": {},
+  "choresFailure_swap_expired": "এই অনুরোধের সময় শেষ।",
+  "@choresFailure_swap_expired": {},
+  "choresFailure_swaps_disabled": "এই পরিবারে কাজ বদল বন্ধ আছে।",
+  "@choresFailure_swaps_disabled": {},
+  "choresFailure_cover_not_needed": "এই কাজে ইতিমধ্যে কেউ আছেন।",
+  "@choresFailure_cover_not_needed": {},
+  "choresFailure_availability_overlap": "এই দিনগুলোতে অনুপস্থিতি আগেই জানানো আছে।",
+  "@choresFailure_availability_overlap": {},
+  "choresFailure_member_unavailable": "সদস্যটি ওই দিনে অনুপস্থিত।",
+  "@choresFailure_member_unavailable": {},
+  "choresFailure_template_paused": "এই কাজটি সাময়িকভাবে বন্ধ।",
+  "@choresFailure_template_paused": {},
+  "choresFailure_rotation_member_inactive": "রোটেশনের একজন সদস্য আর সক্রিয় নন।",
+  "@choresFailure_rotation_member_inactive": {},
+  "choresFailure_range_too_large": "একবারে তৈরি করার জন্য সীমাটি বেশি বড়।",
+  "@choresFailure_range_too_large": {},
+  "choresFailure_starter_pack_applied": "এই স্টার্টার প্যাক আগেই যোগ করা হয়েছে।",
+  "@choresFailure_starter_pack_applied": {},
+  "choresFailure_occurrence_deleted": "এই কাজটি মুছে ফেলা হয়েছে।",
+  "@choresFailure_occurrence_deleted": {},
+  "choresFailure_concurrent_edit": "অন্য কেউ এটি বদলে ফেলেছেন; আবার খুলে চেষ্টা করুন।",
+  "@choresFailure_concurrent_edit": {},
+  "choresFailure_last_group_in_use": "এই দলটি এখনও কাজে ব্যবহার হচ্ছে।",
+  "@choresFailure_last_group_in_use": {},
+  "choresFailure_not_a_recipient": "অনুরোধটি আপনার জন্য নয়।",
+  "@choresFailure_not_a_recipient": {},
+  "choresFailure_not_found": "এটি আর নেই।",
+  "@choresFailure_not_found": {},
+  "choresFailure_permission_denied": "এটি করার অনুমতি আপনার নেই।",
+  "@choresFailure_permission_denied": {},
+  "choresFailure_network": "ইন্টারনেট সংযোগ নেই। 연결 দেখে আবার চেষ্টা করুন।",
+  "@choresFailure_network": {},
+  "choresFailure_unknown": "কিছু একটা ভুল হয়েছে। আবার চেষ্টা করুন।",
+  "@choresFailure_unknown": {},
+  "activityChoresSettingsUpdated": "কাজের সেটিংস বদলেছেন",
+  "@activityChoresSettingsUpdated": {},
+  "activityChoresRotationPolicyUpdated": "অনুপস্থিতির নিয়ম বদলেছেন",
+  "@activityChoresRotationPolicyUpdated": {},
+  "activityChoresTemplateCreated": "{name} কাজটি যোগ করেছেন",
+  "@activityChoresTemplateCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplateUpdated": "{name} কাজটি বদলেছেন",
+  "@activityChoresTemplateUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplatePaused": "{name} কাজটি সাময়িকভাবে বন্ধ করেছেন",
+  "@activityChoresTemplatePaused": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplateResumed": "{name} কাজটি আবার চালু করেছেন",
+  "@activityChoresTemplateResumed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplateArchived": "{name} কাজটি আর্কাইভ করেছেন",
+  "@activityChoresTemplateArchived": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresTemplateDuplicated": "{name} কাজটির কপি করেছেন",
+  "@activityChoresTemplateDuplicated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresStarterPackApplied": "স্টার্টার কাজগুলো যোগ করেছেন ({templates}টি কাজ, {groups}টি দল)",
+  "@activityChoresStarterPackApplied": {
+    "placeholders": {
+      "templates": {
+        "type": "String"
+      },
+      "groups": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresDutyGroupCreated": "{name} দলটি যোগ করেছেন",
+  "@activityChoresDutyGroupCreated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresDutyGroupUpdated": "{name} দলটি বদলেছেন",
+  "@activityChoresDutyGroupUpdated": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresRotationChanged": "{name} এর রোটেশন বদলেছেন",
+  "@activityChoresRotationChanged": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrencesGenerated": "{from} থেকে {to} পর্যন্ত কাজ তৈরি হয়েছে ({count})",
+  "@activityChoresOccurrencesGenerated": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrencesReplanned": "{from} থেকে {name} কাজটি আবার পরিকল্পনা করেছেন",
+  "@activityChoresOccurrencesReplanned": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceCompleted": "{member} {date}-এ {name} শেষ করেছেন",
+  "@activityChoresOccurrenceCompleted": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceUncompleted": "{member} {date}-এ {name} আবার অসম্পূর্ণ করেছেন",
+  "@activityChoresOccurrenceUncompleted": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceVerified": "{member} {date}-এ {name} যাচাই করেছেন",
+  "@activityChoresOccurrenceVerified": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceReopened": "{member} {date}-এ {name} আবার খুলেছেন",
+  "@activityChoresOccurrenceReopened": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceException": "{member} {date}-এ {name} এর জন্য ব্যতিক্রম লিখেছেন",
+  "@activityChoresOccurrenceException": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceSkipped": "{member} {date}-এ {name} বাদ দিয়েছেন",
+  "@activityChoresOccurrenceSkipped": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceUnskipped": "{member} {date}-এ {name} আবার চালু করেছেন",
+  "@activityChoresOccurrenceUnskipped": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresOccurrenceReassigned": "{member} {date}-এ {name} অন্যকে দিয়েছেন",
+  "@activityChoresOccurrenceReassigned": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresCommentAdded": "{member} {date}-এ {name} নিয়ে মন্তব্য করেছেন",
+  "@activityChoresCommentAdded": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresCommentHidden": "{member} {date}-এ {name} এর একটি মন্তব্য লুকিয়েছেন",
+  "@activityChoresCommentHidden": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresAvailabilityAdded": "{member} {from} থেকে {to} পর্যন্ত অনুপস্থিতি জানিয়েছেন",
+  "@activityChoresAvailabilityAdded": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresAvailabilityCancelled": "{member} {from} থেকে {to} পর্যন্ত অনুপস্থিতি বাতিল করেছেন",
+  "@activityChoresAvailabilityCancelled": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresAvailabilityDecided": "{member} {from} থেকে {to} পর্যন্ত অনুপস্থিতির সিদ্ধান্ত দিয়েছেন",
+  "@activityChoresAvailabilityDecided": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapRequested": "{member} {to}-কে {date}-এ {name} ধরতে অনুরোধ করেছেন",
+  "@activityChoresSwapRequested": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapAccepted": "{to} {date}-এ {name} নিতে রাজি হয়েছেন",
+  "@activityChoresSwapAccepted": {
+    "placeholders": {
+      "to": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapDeclined": "{to} {date}-এ {name} নিতে রাজি হননি",
+  "@activityChoresSwapDeclined": {
+    "placeholders": {
+      "to": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapCancelled": "{member} {date}-এ {name} এর অনুরোধ বাতিল করেছেন",
+  "@activityChoresSwapCancelled": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresSwapExpired": "{date}-এ {name} এর অনুরোধের সময় শেষ হয়েছে",
+  "@activityChoresSwapExpired": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresCoverAssigned": "{to} {date}-এ {name} সামলাবেন",
+  "@activityChoresCoverAssigned": {
+    "placeholders": {
+      "to": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

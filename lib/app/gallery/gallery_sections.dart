@@ -1,4 +1,5 @@
 import 'package:family_hub/app/gallery/gallery_sections_p2.dart';
+import 'package:family_hub/app/gallery/gallery_sections_p3.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
@@ -61,6 +62,7 @@ List<GallerySection> gallerySections() => <GallerySection>[
   _pillBar,
   _syncBanner,
   ...phase2GallerySections(),
+  ...phase3GallerySections(),
 ];
 
 // ── Sample values ─────────────────────────────────────────────────────────────

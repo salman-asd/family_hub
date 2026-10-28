@@ -44,6 +44,11 @@ final AppTokens modernDarkTokens = AppTokens(
   statusOverdue: const Color(0xFFEF9A9A),
   statusOverdueContainer: const Color(0xFF3B0909),
   statusOverdueOn: const Color(0xFFEF9A9A),
+  // skipped — neutral grey-blue, dark-adapted.
+  // #B0BEC5 on #263238: lum 0.475 vs 0.045 → ≈6.6:1 (WCAG AA ✓)
+  statusSkipped: const Color(0xFF90A4AE),
+  statusSkippedContainer: const Color(0xFF263238),
+  statusSkippedOn: const Color(0xFFB0BEC5),
 
   // ── Feedback ─────────────────────────────────────────────────────────────
   success: const Color(0xFFA5D6A7),

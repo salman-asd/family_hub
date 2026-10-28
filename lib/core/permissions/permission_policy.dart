@@ -30,6 +30,11 @@ import 'package:family_hub/core/permissions/permission_settings.dart';
 /// | completeOwnChore | own | own | own |
 /// | commentOnChore | yes | yes | yes |
 /// | verifyChore | other | other | no |
+/// | completeChoreForOthers | yes | yes | no (setting: membersCanCompleteForOthers) |
+/// | recordOwnAvailability | own | own | own |
+/// | manageAvailability | yes | yes | no |
+/// | manageChoreOccurrences | yes | yes | no |
+/// | moderateChoreComments | yes | yes | no |
 ///
 /// ("own" means `ownerId` must be the actor; "other" means `ownerId` must be
 /// somebody else — nobody verifies their own chore.)
@@ -50,7 +55,8 @@ abstract final class PermissionPolicy {
   /// True when [actor] may do [permission].
   ///
   /// [ownerId] is the member an occurrence/expense belongs to: the assignee for
-  /// `completeOwnChore` and `requestSwap`, the completer for `verifyChore`.
+  /// `completeOwnChore`, `completeChoreForOthers` and `requestSwap`, the
+  /// completer for `verifyChore`, the member for `recordOwnAvailability`.
   /// [settings] carries the family switches, [template] the template switch.
   static bool can(
     PermissionActor actor,
@@ -100,6 +106,17 @@ abstract final class PermissionPolicy {
             (template?.verificationEnabled ?? false) &&
             ownerId != null &&
             ownerId != actor.uid,
+
+      // ── Chores, Phase 3 (road map 3.3) ─────────────────────────────────
+      // Somebody else's chore, or an unassigned one (`ownerId == null`), which
+      // is never "own": a plain member needs the family switch (D-P3-14).
+      Permission.completeChoreForOthers =>
+        actor.isManager ||
+            (settings.membersCanCompleteForOthers && !_owns(actor, ownerId)),
+      Permission.recordOwnAvailability => _owns(actor, ownerId),
+      Permission.manageAvailability => actor.isManager,
+      Permission.manageChoreOccurrences => actor.isManager,
+      Permission.moderateChoreComments => actor.isManager,
     };
   }
 

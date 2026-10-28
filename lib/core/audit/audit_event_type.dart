@@ -59,6 +59,47 @@ abstract final class AuditEventType {
   static const String bazarImportCompleted = 'bazar.import_completed';
   static const String bazarImportUndone = 'bazar.import_undone';
 
+  // ── Chores (Phase 3, road map 3.9) ───────────────────────────────────────
+  static const String choresSettingsUpdated = 'chores.settings_updated';
+  static const String choresRotationPolicyUpdated =
+      'chores.rotation_policy_updated';
+  static const String choresTemplateCreated = 'chores.template_created';
+  static const String choresTemplateUpdated = 'chores.template_updated';
+  static const String choresTemplatePaused = 'chores.template_paused';
+  static const String choresTemplateResumed = 'chores.template_resumed';
+  static const String choresTemplateArchived = 'chores.template_archived';
+  static const String choresTemplateDuplicated = 'chores.template_duplicated';
+  static const String choresStarterPackApplied = 'chores.starter_pack_applied';
+  static const String choresDutyGroupCreated = 'chores.duty_group_created';
+  static const String choresDutyGroupUpdated = 'chores.duty_group_updated';
+  static const String choresRotationChanged = 'chores.rotation_changed';
+  static const String choresOccurrencesGenerated =
+      'chores.occurrences_generated';
+  static const String choresOccurrencesReplanned =
+      'chores.occurrences_replanned';
+  static const String choresOccurrenceCompleted = 'chores.occurrence_completed';
+  static const String choresOccurrenceUncompleted =
+      'chores.occurrence_uncompleted';
+  static const String choresOccurrenceVerified = 'chores.occurrence_verified';
+  static const String choresOccurrenceReopened = 'chores.occurrence_reopened';
+  static const String choresOccurrenceException = 'chores.occurrence_exception';
+  static const String choresOccurrenceSkipped = 'chores.occurrence_skipped';
+  static const String choresOccurrenceUnskipped = 'chores.occurrence_unskipped';
+  static const String choresOccurrenceReassigned =
+      'chores.occurrence_reassigned';
+  static const String choresCommentAdded = 'chores.comment_added';
+  static const String choresCommentHidden = 'chores.comment_hidden';
+  static const String choresAvailabilityAdded = 'chores.availability_added';
+  static const String choresAvailabilityCancelled =
+      'chores.availability_cancelled';
+  static const String choresAvailabilityDecided = 'chores.availability_decided';
+  static const String choresSwapRequested = 'chores.swap_requested';
+  static const String choresSwapAccepted = 'chores.swap_accepted';
+  static const String choresSwapDeclined = 'chores.swap_declined';
+  static const String choresSwapCancelled = 'chores.swap_cancelled';
+  static const String choresSwapExpired = 'chores.swap_expired';
+  static const String choresCoverAssigned = 'chores.cover_assigned';
+
   /// Every type, in the same order as the rules list.
   static const List<String> all = <String>[
     familyCreated,
@@ -104,5 +145,38 @@ abstract final class AuditEventType {
     bazarMonthReopened,
     bazarImportCompleted,
     bazarImportUndone,
+    choresSettingsUpdated,
+    choresRotationPolicyUpdated,
+    choresTemplateCreated,
+    choresTemplateUpdated,
+    choresTemplatePaused,
+    choresTemplateResumed,
+    choresTemplateArchived,
+    choresTemplateDuplicated,
+    choresStarterPackApplied,
+    choresDutyGroupCreated,
+    choresDutyGroupUpdated,
+    choresRotationChanged,
+    choresOccurrencesGenerated,
+    choresOccurrencesReplanned,
+    choresOccurrenceCompleted,
+    choresOccurrenceUncompleted,
+    choresOccurrenceVerified,
+    choresOccurrenceReopened,
+    choresOccurrenceException,
+    choresOccurrenceSkipped,
+    choresOccurrenceUnskipped,
+    choresOccurrenceReassigned,
+    choresCommentAdded,
+    choresCommentHidden,
+    choresAvailabilityAdded,
+    choresAvailabilityCancelled,
+    choresAvailabilityDecided,
+    choresSwapRequested,
+    choresSwapAccepted,
+    choresSwapDeclined,
+    choresSwapCancelled,
+    choresSwapExpired,
+    choresCoverAssigned,
   ];
 }

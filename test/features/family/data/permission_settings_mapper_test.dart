@@ -17,6 +17,7 @@ void main() {
       membersViewAllContributions: true,
       membersCanInvite: true,
       choreVerificationEnabled: true,
+      membersCanCompleteForOthers: true,
     );
     final map = FamilyMappers.permissionsMap(settings, meta);
     expect(FamilyMappers.permissionsFromMap(map), settings);
@@ -54,8 +55,17 @@ void main() {
       'membersViewAllContributions',
       'membersCanInvite',
       'choreVerificationEnabled',
+      'membersCanCompleteForOthers',
       'updatedAt',
       'updatedBy',
     });
+  });
+
+  test('membersCanCompleteForOthers defaults to off (D-P3-14)', () {
+    expect(PermissionSettings.defaults.membersCanCompleteForOthers, isFalse);
+    expect(
+      FamilyMappers.permissionsFromMap({'membersCanCompleteForOthers': true}),
+      PermissionSettings.defaults.copyWith(membersCanCompleteForOthers: true),
+    );
   });
 }

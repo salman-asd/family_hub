@@ -224,6 +224,7 @@ abstract final class FamilyMappers {
         'membersViewAllContributions': s.membersViewAllContributions,
         'membersCanInvite': s.membersCanInvite,
         'choreVerificationEnabled': s.choreVerificationEnabled,
+        'membersCanCompleteForOthers': s.membersCanCompleteForOthers,
       };
 
   /// A missing document, or a missing/ill-typed field, means the default.
@@ -251,6 +252,10 @@ abstract final class FamilyMappers {
       choreVerificationEnabled: flag(
         'choreVerificationEnabled',
         base.choreVerificationEnabled,
+      ),
+      membersCanCompleteForOthers: flag(
+        'membersCanCompleteForOthers',
+        base.membersCanCompleteForOthers,
       ),
     );
   }

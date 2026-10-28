@@ -35,7 +35,25 @@ enum Permission {
   requestSwap(PermissionModule.chores),
   completeOwnChore(PermissionModule.chores),
   commentOnChore(PermissionModule.chores),
-  verifyChore(PermissionModule.chores);
+  verifyChore(PermissionModule.chores),
+
+  // Chores, Phase 3 (road map 3.3).
+  /// Completing a chore assigned to somebody else ("done by"). `ownerId` is
+  /// the assignee. A plain member needs `membersCanCompleteForOthers`; an
+  /// unassigned occurrence is always "somebody else's".
+  completeChoreForOthers(PermissionModule.chores),
+
+  /// Recording an absence for oneself. `ownerId` is the member id.
+  recordOwnAvailability(PermissionModule.chores),
+
+  /// Recording, approving or rejecting an absence for anybody.
+  manageAvailability(PermissionModule.chores),
+
+  /// Skip / unskip, completion exception, reopening a verified task.
+  manageChoreOccurrences(PermissionModule.chores),
+
+  /// Hide / unhide a comment (comments are never deleted, D-P3-18).
+  moderateChoreComments(PermissionModule.chores);
 
   const Permission(this.module);
 

@@ -1122,6 +1122,69 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 
 **Not verified:** a full green gate was impossible because the base (P2-11...P2-16) is red: those analyzer/test failures are unrelated to P3-02 but they block the P3-01 rule "never start a step on a red CI".
 
+## Phase 3 - P3-03 Phase 3 vocabulary: audit types, paths, permissions, settings keys, limits, ARB base
+
+### Built
+- `lib/core/audit/audit_event_type.dart` + `audit_ref_type.dart`: the 33 `chores.*` types and 7 `choreSettings/choreTemplate/dutyGroup/occurrence/comment/availability/swapRequest` ref types of road map 3.9, appended in the same order as the rules.
+- `firebase/firestore.rules`: `eventTypes()` / `refTypes()` carry the same values; `settingsKeys()` and `settingsOk` accept `membersCanCompleteForOthers` (the other new settings keys belong to P3-06).
+- `lib/core/firebase/firestore_paths.dart`: `choreSettingsDoc`, `choreGenerationDoc`, `rotationPolicyDoc`, `inbox` / `inboxDoc` (short aliases over `notificationInbox`).
+- `lib/core/firebase/query_limits.dart`: `kMaxChoreTemplates`, `kMaxDutyGroups`, `kMaxOccurrencesPerMonth`, `kMaxAvailabilityDocs`, `kMaxSwapDocs`, `kMaxInboxDocs`, `kMaxVerifyQueue`, `kMaxCommentsPerOccurrence`, `kMaxEventsPerOccurrence`.
+- Permissions (road map 3.3): `completeChoreForOthers`, `recordOwnAvailability`, `manageAvailability`, `manageChoreOccurrences`, `moderateChoreComments` in `Permission`; the cells in `PermissionPolicy`; `PermissionSettings.membersCanCompleteForOthers` (default **false**, D-P3-14) + `copyWith`/`==`/`hashCode` + `FamilyMappers` read/write.
+- `lib/app/routing/app_routes.dart`: every constant of road map 3.10 (`choresToday`, occurrence pattern/helper, verify, templates + new/edit, settings, duty groups, starter pack, availability, rota, `inbox`). Declared only: none is registered in the router, so no dead link can resolve.
+- ARB (bn + en, then `flutter gen-l10n`): module title, the five new permission labels, `choreStatusSkipped`, the four flag words, every `choresFailure_*` code of road map 3.6, and `activityChores*` sentences wired into `ActivityText.activityText` (P3-29 only refines wording).
+
+### Tests
+- `test/core/permissions/permission_policy_test.dart`: the matrix covers all 26 permissions exactly once, plus a Phase 3 group (completion for others with/without the switch, unassigned occurrences, own-availability only for oneself, member denied on the three manager rows) and the inactive-actor sweep now covers all five new rows.
+- `test/core/permissions/permission_matrix_doc_test.dart` + `docs/permission_matrix.md`: regenerated; the diff is **exactly five new rows**.
+- NEW `test/core/localization/arb_parity_test.dart`: bn and en have the same keys, no blank translation, identical placeholders, and the P3-03 vocabulary present.
+- `test/features/family/data/permission_settings_mapper_test.dart`: the new switch round-trips and defaults to off.
+
+### Gate (this step)
+
+| Command | Result |
+| --- | --- |
+| `dart format` on the touched files | **PASS** |
+| `flutter analyze` (touched files) | **PASS** - zero issues; the 130 repo-wide issues are the same pre-existing Bazar ones. |
+| `flutter test test/core/audit test/core/permissions test/core/localization/arb_parity_test.dart test/core/localization/activity_text_test.dart test/features/family/data/permission_settings_mapper_test.dart` | **PASS - 160/160** |
+| `flutter gen-l10n` twice | **PASS** - the second run produces no further diff. |
+| rules suite (emulator) | **NOT RUN** - no Java/emulator here. The mirror test proves the Dart and rules lists agree; the emulator suite still has to be run before P3-06. |
+
+**Not verified:** the Firestore rules suite on the emulator (`eventTypes()` / `settingsKeys()` are syntax-checked only by reading).
+
+## Phase 3 - P3-04 Shared widgets and gallery (+ `skipped` status, status glyphs)
+
+### Built
+- `pubspec.yaml`: `animations` and `flutter_slidable` added with `flutter pub add` (resolved `^3.0.0` / `^4.0.3`, `pubspec.lock` updated). Analyzer count unchanged afterwards.
+- Tokens: `statusSkipped` / `statusSkippedContainer` / `statusSkippedOn` in `AppTokens` (ctor, fields, `copyWith`, `lerp`) and both themes (neutral grey-blue, 10.2:1 light, 6.6:1 dark).
+- `WidgetStatus.skipped` in `status_chip.dart` (neutral tokens, `remove_circle_outline` icon, `choreStatusSkipped` label).
+- NEW in `lib/shared/widgets/`: `status_glyph.dart` (six shapes by `CustomPainter`, 10/14/18 dp, semantics per status; disc ink from `placeholderOnLight/Dark`, so no colour literal and contrast is already tested), `flag_chip.dart` (+ public `FlagTone`), `reason_sheet.dart`, `minutes_field.dart`, `weekday_chips.dart`, `color_swatch_picker.dart`, `avatar_stack.dart`, `step_progress.dart` (honours `disableAnimations`), `mini_markdown_view.dart`, `catalog_editor.dart` + `catalog_entry_dialog.dart` (split to stay under 300 lines).
+- NEW `lib/app/gallery/gallery_sections_p3.dart` (11 sections, both themes/languages/1.0+2.0 via the existing harness) appended to `gallerySections()`.
+- `settings` was NOT added as an 11th widget: `ChoiceWrap` already does single-select chips, which is what the card allowed ("only if ChoiceWrap cannot do it").
+- ARB (bn + en): flag `swapPending`, reason-sheet, minutes-field, colour-swatch, avatar-stack, step-progress, catalog-editor and gallery labels.
+- `activity_text.dart` was at 313 lines after P3-03; the chore sentences moved to NEW `lib/core/localization/activity_text_chores.dart` (delegated with `?? activityUnknown`) to satisfy `file_size_test`.
+
+### Tests
+- NEW `test/shared/widgets/reason_sheet_test.dart` (2 rejected / 3 accepted, 301 capped at 300, trimming, whitespace-only, cancel -> null, optional-empty, hint timing, bn at 2.0), `chore_widgets_test.dart` (22 tests across WeekdayChips/StatusGlyph/FlagChip/StepProgress/ColorSwatchPicker/MinutesField/AvatarStack/MiniMarkdownView, incl. the 48 dp target check), `catalog_editor_test.dart` (reorder, add with the next `custom_N`, deactivate/reactivate, rename keeping `builtIn`, delete only for custom rows, empty state).
+- `test/app/theme/contrast_test.dart`: two new assertions for the skipped pair.
+- `test/app/gallery/dev_gallery_screen_test.dart` now walks the 11 new sections too.
+
+### Gate (this step)
+
+| Command | Result |
+| --- | --- |
+| `flutter pub add animations flutter_slidable` | **PASS** |
+| `dart format` (touched files) | **PASS** (3 unrelated files the formatter also touched were reverted) |
+| `flutter analyze` (touched files) | **PASS** - zero issues |
+| `flutter test` reason sheet + chore widgets + catalog editor + contrast + gallery | **PASS - 8 + 22 + 9 + contrast + 2** |
+| `flutter test test/architecture test/core test/shared/widgets test/app/gallery test/app/theme` | **9 failures, all pre-existing** (see below); every P3-04 file passes. |
+
+**Pre-existing failures found here (not P3-04, they block a green gate):**
+- `no_step_todos`: `lib/features/family/domain/member_access.dart:9` has a `TODO(step-10)`.
+- `no_unbounded_queries`: `features/bazar/advances/data/firestore_advance_repository.dart:99` has no `.limit()`.
+- `phase1_docs`: `docs/DATA_MODEL.md` does not mention `budgets`, `contributionPlans`, `contributions`.
+- `shared_widgets_test.dart` and `month_switcher_test.dart` do not compile: `monthSwitcherSelectTitle` is missing from both ARB files (P2 widget shipped without its string).
+- `no_hard_coded_strings`: Bazar presentation files use literal `Text('...')`.
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -1141,4 +1204,6 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
   dashboard remains unimplemented. The P2-05/P2-06/P2-07 rules suite has not
   been run (no Java).
 - P3-01 (Chores skeleton, seams, ADRs 0009-0013, CLAUDE.md rules 34-44) is written; its gate has not been run.
-- P3-02 (pure helpers) is written and its own tests pass, but the repo-wide gate is still red from the Phase 2 base (130 analyzer issues, 61 failing tests, all in Bazar code). Next: repair the base (`P3-00`), then P3-03.
+- P3-02 (pure helpers) is written and its own tests pass, but the repo-wide gate is still red from the Phase 2 base (130 analyzer issues, 61 failing tests, all in Bazar code).
+- P3-03 (vocabulary) is written; its targeted tests pass (160/160) and no file it touches has an analyzer issue. The rules emulator suite has not been run.
+- P3-04 (shared widgets + gallery + `skipped`) is written and its 40 focused tests pass. Still open, all inherited: the five items listed under P3-04's gate, plus the Phase 2 analyzer debt. Next: `P3-00: repair base` (those five items are small and mechanical), then P3-05.

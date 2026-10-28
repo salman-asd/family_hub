@@ -128,6 +128,16 @@ _rows = <(Permission, String, String, String?)>[
     '(not in spec section 6)',
     'Not in the spec: verification is off by default and nobody verifies their own work. Confirm.',
   ),
+  (
+    Permission.completeChoreForOthers,
+    '`membersCanCompleteForOthers` (default off)',
+    'Reassign chores: admin Yes, moderator Yes, member Request/exchange',
+    'Phase 3: may a plain member tick somebody else\'s chore? Default is no (assignee or manager). Confirm.',
+  ),
+  (Permission.recordOwnAvailability, '-', '(not in spec section 6)', null),
+  (Permission.manageAvailability, '-', '(not in spec section 6)', null),
+  (Permission.manageChoreOccurrences, '-', '(not in spec section 6)', null),
+  (Permission.moderateChoreComments, '-', '(not in spec section 6)', null),
 ];
 
 const PermissionSettings _defaults = PermissionSettings.defaults;
@@ -140,7 +150,9 @@ String _cell(Role role, Permission permission) {
     PermissionActor(uid: 'me', role: role, isActive: true),
     permission,
     ownerId: switch (permission) {
-      Permission.requestSwap || Permission.completeOwnChore => 'me',
+      Permission.requestSwap ||
+      Permission.completeOwnChore ||
+      Permission.recordOwnAvailability => 'me',
       _ => 'other',
     },
     settings: permission == Permission.verifyChore ? settings : _defaults,
@@ -148,7 +160,9 @@ String _cell(Role role, Permission permission) {
   );
   if (!answer) return 'no';
   return switch (permission) {
-    Permission.requestSwap || Permission.completeOwnChore => 'own',
+    Permission.requestSwap ||
+    Permission.completeOwnChore ||
+    Permission.recordOwnAvailability => 'own',
     Permission.verifyChore => 'other',
     _ => 'yes',
   };

@@ -31,6 +31,12 @@ const List<(Permission, bool, bool, bool)> _matrix =
       (Permission.completeOwnChore, true, true, true),
       (Permission.commentOnChore, true, true, true),
       (Permission.verifyChore, true, true, false),
+      // Phase 3 (road map 3.3).
+      (Permission.completeChoreForOthers, true, true, false),
+      (Permission.recordOwnAvailability, true, true, true),
+      (Permission.manageAvailability, true, true, false),
+      (Permission.manageChoreOccurrences, true, true, false),
+      (Permission.moderateChoreComments, true, true, false),
     ];
 
 /// A context where only the role can make the answer false.
@@ -39,7 +45,9 @@ _contextFor(Permission permission) {
   const settings = PermissionSettings(choreVerificationEnabled: true);
   return switch (permission) {
     // "Own" permissions: the actor owns the record.
-    Permission.requestSwap || Permission.completeOwnChore => (
+    Permission.requestSwap ||
+    Permission.completeOwnChore ||
+    Permission.recordOwnAvailability => (
       ownerId: 'me',
       settings: settings,
       template: null,
@@ -393,6 +401,76 @@ void main() {
     });
   });
 
+  group('Phase 3 chore permissions (road map 3.3)', () {
+    const forOthersOn = PermissionSettings(membersCanCompleteForOthers: true);
+
+    test('completing for others is manager-only by default', () {
+      expect(_can(Role.admin, Permission.completeChoreForOthers), isTrue);
+      expect(_can(Role.moderator, Permission.completeChoreForOthers), isTrue);
+      expect(
+        _can(Role.member, Permission.completeChoreForOthers, ownerId: 'other'),
+        isFalse,
+      );
+    });
+
+    test('everybody may complete for others once the family switch is on', () {
+      expect(
+        _can(
+          Role.member,
+          Permission.completeChoreForOthers,
+          ownerId: 'other',
+          settings: forOthersOn,
+        ),
+        isTrue,
+      );
+      // An unassigned occurrence is never "own".
+      expect(
+        _can(
+          Role.member,
+          Permission.completeChoreForOthers,
+          ownerId: null,
+          settings: forOthersOn,
+        ),
+        isTrue,
+      );
+      expect(
+        _can(Role.admin, Permission.completeChoreForOthers, ownerId: null),
+        isTrue,
+      );
+    });
+
+    test('recordOwnAvailability is always only for oneself', () {
+      for (final role in Role.values) {
+        expect(
+          _can(role, Permission.recordOwnAvailability, ownerId: 'me'),
+          isTrue,
+          reason: role.name,
+        );
+        expect(
+          _can(role, Permission.recordOwnAvailability, ownerId: 'other'),
+          isFalse,
+          reason: role.name,
+        );
+      }
+    });
+
+    test('a plain member may not manage absences, occurrences, comments', () {
+      for (final permission in [
+        Permission.manageAvailability,
+        Permission.manageChoreOccurrences,
+        Permission.moderateChoreComments,
+      ]) {
+        expect(_can(Role.admin, permission), isTrue, reason: permission.name);
+        expect(
+          _can(Role.moderator, permission),
+          isTrue,
+          reason: permission.name,
+        );
+        expect(_can(Role.member, permission), isFalse, reason: permission.name);
+      }
+    });
+  });
+
   group('PermissionActor', () {
     test('reports manager and admin for an active actor', () {
       const admin = PermissionActor(uid: 'a', role: Role.admin, isActive: true);
@@ -475,6 +553,11 @@ void main() {
         'requestContribution',
         'viewFamilyReports',
         'exportData',
+        'completeChoreForOthers',
+        'recordOwnAvailability',
+        'manageAvailability',
+        'manageChoreOccurrences',
+        'moderateChoreComments',
       });
     });
   });

@@ -197,6 +197,8 @@ service cloud.firestore {
               'moderatorManagesFinance', 'membersViewFamilyReports',
               'membersViewAllContributions', 'membersCanInvite',
               'choreVerificationEnabled', 'items',
+              // P3-03: one new family switch (road map 3.3).
+              'membersCanCompleteForOthers',
               // P2-07: settings/bazar.
               'weekStartDay', 'defaultMonthlyContributionPaisa',
               'contributionDueDay', 'alertThresholds', 'fundStartMonth',
@@ -297,6 +299,7 @@ service cloud.firestore {
         && boolOk(d, 'membersViewAllContributions')
         && boolOk(d, 'membersCanInvite')
         && boolOk(d, 'choreVerificationEnabled')
+        && boolOk(d, 'membersCanCompleteForOthers')
         && optStr(d, 'timezone', 64)
         && optStr(d, 'currency', 8)
         && (!('flags' in d.keys())
@@ -790,14 +793,35 @@ service cloud.firestore {
               'bazar.contribution_change_rejected',
               'bazar.opening_balance_set', 'bazar.advance_settled',
               'bazar.month_closed', 'bazar.month_reopened',
-              'bazar.import_completed', 'bazar.import_undone'];
+              'bazar.import_completed', 'bazar.import_undone',
+              // Phase 3 chores vocabulary (road map 3.9).
+              'chores.settings_updated', 'chores.rotation_policy_updated',
+              'chores.template_created', 'chores.template_updated',
+              'chores.template_paused', 'chores.template_resumed',
+              'chores.template_archived', 'chores.template_duplicated',
+              'chores.starter_pack_applied', 'chores.duty_group_created',
+              'chores.duty_group_updated', 'chores.rotation_changed',
+              'chores.occurrences_generated', 'chores.occurrences_replanned',
+              'chores.occurrence_completed', 'chores.occurrence_uncompleted',
+              'chores.occurrence_verified', 'chores.occurrence_reopened',
+              'chores.occurrence_exception', 'chores.occurrence_skipped',
+              'chores.occurrence_unskipped', 'chores.occurrence_reassigned',
+              'chores.comment_added', 'chores.comment_hidden',
+              'chores.availability_added', 'chores.availability_cancelled',
+              'chores.availability_decided', 'chores.swap_requested',
+              'chores.swap_accepted', 'chores.swap_declined',
+              'chores.swap_cancelled', 'chores.swap_expired',
+              'chores.cover_assigned'];
     }
     function refTypes() {
       return ['family', 'member', 'invitation',
               // Phase 2 bazar vocabulary (roadmap section 3.9).
               'category', 'item', 'expense', 'trip', 'budget',
               'contribution', 'contributionPlan', 'settlement', 'month',
-              'importBatch'];
+              'importBatch',
+              // Phase 3 chores vocabulary (road map 3.9).
+              'choreSettings', 'choreTemplate', 'dutyGroup', 'occurrence',
+              'comment', 'availability', 'swapRequest'];
     }
     function paramsOk(d) {
       return !('params' in d.keys())

@@ -44,6 +44,11 @@ final AppTokens modernLightTokens = AppTokens(
   statusOverdue: const Color(0xFFC62828),
   statusOverdueContainer: const Color(0xFFFFCDD2),
   statusOverdueOn: const Color(0xFFB71C1C),
+  // skipped — neutral grey-blue (neither success nor failure).
+  // #37474F on #ECEFF1: lum 0.061 vs 0.854 → ≈10.2:1 (WCAG AA ✓)
+  statusSkipped: const Color(0xFF546E7A),
+  statusSkippedContainer: const Color(0xFFECEFF1),
+  statusSkippedOn: const Color(0xFF37474F),
 
   // ── Feedback ─────────────────────────────────────────────────────────────
   success: const Color(0xFF2E7D32),

@@ -23,6 +23,15 @@ abstract final class AuditRefType {
   static const String month = 'month';
   static const String importBatch = 'importBatch';
 
+  // Phase 3 chores (road map 3.9).
+  static const String choreSettings = 'choreSettings';
+  static const String choreTemplate = 'choreTemplate';
+  static const String dutyGroup = 'dutyGroup';
+  static const String occurrence = 'occurrence';
+  static const String comment = 'comment';
+  static const String availability = 'availability';
+  static const String swapRequest = 'swapRequest';
+
   /// Every ref type, in the same order as the rules list.
   static const List<String> all = <String>[
     family,
@@ -38,5 +47,12 @@ abstract final class AuditRefType {
     settlement,
     month,
     importBatch,
+    choreSettings,
+    choreTemplate,
+    dutyGroup,
+    occurrence,
+    comment,
+    availability,
+    swapRequest,
   ];
 }

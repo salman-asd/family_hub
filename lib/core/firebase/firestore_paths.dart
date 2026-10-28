@@ -61,6 +61,19 @@ abstract final class FirestorePaths {
   static String bazarSettingsDoc(String familyId) =>
       settingsDoc(familyId, 'bazar');
 
+  /// The Chores module's own settings document: `settings/chores` (P3-06).
+  /// An absent document means the built-in defaults (D-P3-4).
+  static String choreSettingsDoc(String familyId) =>
+      settingsDoc(familyId, 'chores');
+
+  /// The occurrence generation marker: `settings/choreGeneration` (D-P3-10).
+  static String choreGenerationDoc(String familyId) =>
+      settingsDoc(familyId, 'choreGeneration');
+
+  /// The absence policy: `settings/rotationPolicy` (D-P3-13).
+  static String rotationPolicyDoc(String familyId) =>
+      settingsDoc(familyId, 'rotationPolicy');
+
   static String invitations(String familyId) =>
       '${familyDoc(familyId)}/$invitationsSubcollection';
   static String invitationDoc(String familyId, String invitationId) =>
@@ -185,6 +198,11 @@ abstract final class FirestorePaths {
       '${familyDoc(familyId)}/$notificationInboxSubcollection';
   static String notificationInboxDoc(String familyId, String inboxItemId) =>
       '${notificationInbox(familyId)}/$inboxItemId';
+
+  /// Shorter names for the inbox, used by `features/notifications` (P3-27).
+  static String inbox(String familyId) => notificationInbox(familyId);
+  static String inboxDoc(String familyId, String inboxItemId) =>
+      notificationInboxDoc(familyId, inboxItemId);
 
   static String activity(String familyId) =>
       '${familyDoc(familyId)}/$activitySubcollection';
