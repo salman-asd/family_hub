@@ -1,0 +1,141 @@
+{
+  "scenario": "chore_template",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/choreTemplates/tpl_fixDishes",
+      "data": {
+        "nameBn": "থালা-বাসন ধোয়া",
+        "nameEn": "Wash the dishes",
+        "groupId": "kitchen",
+        "recurrence": {
+          "kind": "every_n_days",
+          "n": 2,
+          "anchor": "2026-10-01"
+        },
+        "slots": [
+          {
+            "key": "main",
+            "labelBn": "সকাল",
+            "labelEn": null,
+            "dueMinutes": 540
+          },
+          {
+            "key": "noon",
+            "labelBn": "দুপুর",
+            "labelEn": null,
+            "dueMinutes": 840
+          }
+        ],
+        "assignee": {
+          "strategy": "fixed",
+          "fixedMemberId": "fixMember",
+          "dutyGroupId": null,
+          "rotation": null
+        },
+        "instructions": "# নিয়ম\n- **সাবধানে** ধোয়া",
+        "subtasks": [
+          {
+            "id": "rinse",
+            "title": "ধোয়া",
+            "required": true,
+            "hint": null
+          },
+          {
+            "id": "dry",
+            "title": "মুছা",
+            "required": false,
+            "hint": "গামছা ব্যবহার করুন"
+          }
+        ],
+        "estimatedMinutes": 45,
+        "difficulty": "hard",
+        "verification": "required",
+        "reminders": {
+          "enabled": true,
+          "atDue": true,
+          "offsetsMinutes": [
+            10,
+            30
+          ],
+          "overdueEnabled": true,
+          "overdueAfterMinutes": 90
+        },
+        "startDate": "2026-10-01",
+        "endDate": "2027-03-31",
+        "active": true,
+        "archivedAt": null,
+        "colorIndex": 9,
+        "iconKey": "dishes",
+        "sortOrder": 2,
+        "revision": 1,
+        "builtIn": false,
+        "seedKey": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev30",
+      "data": {
+        "type": "chores.template_created",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "choreTemplate",
+        "refId": "tpl_fixDishes",
+        "params": {
+          "name": "থালা-বাসন ধোয়া"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev30",
+      "data": {
+        "type": "chores.template_created",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "choreTemplate",
+        "refId": "tpl_fixDishes",
+        "params": {
+          "name": "থালা-বাসন ধোয়া"
+        },
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

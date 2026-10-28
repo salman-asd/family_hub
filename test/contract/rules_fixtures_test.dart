@@ -34,6 +34,11 @@ import 'package:family_hub/features/bazar/items_categories/domain/item.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/item_usage_bump.dart';
 import 'package:family_hub/features/bazar/settings/data/bazar_settings_mappers.dart';
 import 'package:family_hub/features/bazar/settings/domain/bazar_settings.dart';
+import 'package:family_hub/features/chores/templates/data/chore_template_mappers.dart';
+import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
+import 'package:family_hub/features/chores/templates/domain/recurrence/recurrence.dart';
+import 'package:family_hub/features/chores/templates/domain/template_enums.dart';
+import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/data/relationship_mappers.dart';
 import 'package:family_hub/features/family/domain/family.dart';
@@ -123,6 +128,7 @@ List<Map<String, dynamic>> _fixtures() => <Map<String, dynamic>>[
   _contributionRequest(),
   _contributionRecorded(),
   _contributionPlan(),
+  _choreTemplate(),
 ];
 
 Map<String, dynamic> _fixture(
@@ -896,6 +902,68 @@ Map<String, dynamic> _monthClosing() {
       'set',
       FirestorePaths.monthClosingDoc(_familyId, '2026-10'),
       MonthClosingMappers.closingToMap(closing, _meta(_admin)),
+    ),
+    ..._eventWrites(event),
+  ]);
+}
+
+/// P3-08: the REAL `ChoreTemplateMappers.toMap` payload (every optional field
+/// set, two slots, two subtasks) plus its audit entry.  `contract.test.mjs`
+/// pushes it through `templateOk()`; the maximum-shape case (6 slots, 30
+/// subtasks, 4000-character instructions) is covered by
+/// `chore_templates.test.mjs`.
+Map<String, dynamic> _choreTemplate() {
+  final draft = TemplateDraft(
+    nameBn: 'থালা-বাসন ধোয়া',
+    nameEn: 'Wash the dishes',
+    groupId: 'kitchen',
+    recurrence: EveryNDaysRecurrence(n: 2, anchor: DateKey(2026, 10, 1)),
+    slots: const <TemplateSlot>[
+      TemplateSlot(key: 'main', labelBn: 'সকাল', dueMinutes: 540),
+      TemplateSlot(key: 'noon', labelBn: 'দুপুর', dueMinutes: 840),
+    ],
+    assignee: const AssigneeSpec(
+      strategy: AssigneeStrategy.fixed,
+      fixedMemberId: _member,
+    ),
+    instructions: '# নিয়ম\n- **সাবধানে** ধোয়া',
+    subtasks: const <TemplateSubtask>[
+      TemplateSubtask(id: 'rinse', title: 'ধোয়া', required: true),
+      TemplateSubtask(id: 'dry', title: 'মুছা', hint: 'গামছা ব্যবহার করুন'),
+    ],
+    estimatedMinutes: 45,
+    difficulty: Difficulty.hard,
+    verification: VerificationMode.required,
+    reminders: const ReminderConfig(
+      enabled: true,
+      offsetsMinutes: <int>[10, 30],
+      overdueEnabled: true,
+      overdueAfterMinutes: 90,
+    ),
+    startDate: DateKey(2026, 10, 1),
+    endDate: DateKey(2027, 3, 31),
+    colorIndex: 9,
+    iconKey: 'dishes',
+  );
+  final template = ChoreTemplate(
+    id: 'tpl_fixDishes',
+    draft: draft,
+    sortOrder: 2,
+  );
+  final event = AuditEvent(
+    id: 'ev30',
+    type: AuditEventType.choresTemplateCreated,
+    actorId: _admin,
+    refType: AuditRefType.choreTemplate,
+    refId: template.id,
+    at: _at,
+    params: const <String, String>{'name': 'থালা-বাসন ধোয়া'},
+  );
+  return _fixture('chore_template', _admin, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.choreTemplateDoc(_familyId, template.id),
+      ChoreTemplateMappers.toMap(template, _meta(_admin)),
     ),
     ..._eventWrites(event),
   ]);

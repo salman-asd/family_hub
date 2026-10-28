@@ -244,6 +244,53 @@ export const rotationPolicyDoc = (uid, policy = 'ask_cover', extra = {}) =>
 export const generationDoc = (uid, throughEpochDay, extra = {}) =>
   baseDoc(uid, { throughEpochDay, ...extra });
 
+/**
+ * `ChoreTemplateMappers.toMap` shape (P3-08).
+ *
+ * Every optional field is present, so a test can drop or break exactly the one
+ * it is about.
+ */
+export const choreTemplateDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    nameBn: 'থালা-বাসন ধোয়া',
+    nameEn: 'Wash the dishes',
+    groupId: 'kitchen',
+    recurrence: { kind: 'daily' },
+    slots: [
+      { key: 'main', labelBn: 'সকাল', labelEn: null, dueMinutes: 540 },
+    ],
+    assignee: { strategy: 'manual', fixedMemberId: null, dutyGroupId: null, rotation: null },
+    instructions: '',
+    subtasks: [
+      { id: 'rinse', title: 'ধোয়া', required: false, hint: null },
+    ],
+    estimatedMinutes: 45,
+    difficulty: 'normal',
+    verification: 'off',
+    reminders: {
+      enabled: false,
+      atDue: true,
+      offsetsMinutes: [],
+      overdueEnabled: false,
+      overdueAfterMinutes: 60,
+    },
+    startDate: '2026-10-01',
+    endDate: null,
+    active: true,
+    archivedAt: null,
+    colorIndex: null,
+    iconKey: null,
+    sortOrder: 0,
+    revision: 1,
+    builtIn: false,
+    seedKey: null,
+    // BaseMapper.metadataToMap also stamps the soft-delete pair, so a template
+    // can be soft-deleted later without a key-set change (D-P3-5).
+    deletedAt: null,
+    deletedBy: null,
+    ...extra,
+  });
+
 /** `BudgetMappers.toMap` shape; money is integer paisa (P2-17). */
 export const budgetDoc = (uid, extra = {}) =>
   baseDoc(uid, {

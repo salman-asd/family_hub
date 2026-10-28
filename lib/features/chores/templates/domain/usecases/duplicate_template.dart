@@ -53,7 +53,7 @@ class DuplicateTemplate {
     final found = await _templates.get(familyId, templateId);
     final readFailure = found.failureOrNull;
     if (readFailure != null) return Failure<ChoreTemplate>(readFailure);
-    final source = found.valueOrNull;
+    final source = found.valueOrNull?.template;
     if (source == null) {
       return const Failure<ChoreTemplate>(NotFound(entity: 'template'));
     }
@@ -61,7 +61,10 @@ class DuplicateTemplate {
     final listed = await _templates.list(familyId);
     final listFailure = listed.failureOrNull;
     if (listFailure != null) return Failure<ChoreTemplate>(listFailure);
-    final all = listed.valueOrNull ?? const <ChoreTemplate>[];
+    final all = <ChoreTemplate>[
+      for (final record in listed.valueOrNull ?? const <TemplateRecord>[])
+        record.template,
+    ];
 
     final draft = source.draft.copyWith(
       nameBn: _withSuffix(source.draft.nameBn, nameSuffix),

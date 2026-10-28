@@ -1,4 +1,4 @@
-﻿import 'package:family_hub/core/audit/audit_event_type.dart';
+import 'package:family_hub/core/audit/audit_event_type.dart';
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
@@ -352,8 +352,8 @@ void main() {
 
       final listed = await fixture.chores.list(familyId);
       final active = listed.valueOrNull!
-          .where((t) => t.isGenerating)
-          .map((t) => t.id);
+          .where((record) => record.template.isGenerating)
+          .map((record) => record.template.id);
       expect(active, [keep.id]);
       expect(listed.valueOrNull, hasLength(2), reason: 'never deleted');
     });
@@ -422,8 +422,8 @@ void main() {
       );
 
       final original = await fixture.chores.get(familyId, source.id);
-      expect(original.valueOrNull!.draft.nameBn, 'বাসন ধোয়া');
-      expect(original.valueOrNull!.revision, 1);
+      expect(original.valueOrNull!.template.draft.nameBn, 'বাসন ধোয়া');
+      expect(original.valueOrNull!.template.revision, 1);
     });
 
     test('a copy of a copy still gets a fresh id', () async {
@@ -476,7 +476,10 @@ void main() {
       await seed(draft: aTemplate(nameBn: 'প্রথম'));
       await seed(draft: aTemplate(nameBn: 'দ্বিতীয়'));
       final list = await fixture.chores.watch(familyId).first;
-      expect(list.map((t) => t.draft.nameBn), ['প্রথম', 'দ্বিতীয়']);
+      expect(list.map((record) => record.template.draft.nameBn), [
+        'প্রথম',
+        'দ্বিতীয়',
+      ]);
     });
 
     test('a failing read is surfaced, not swallowed', () async {

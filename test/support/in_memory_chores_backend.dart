@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/core/errors/app_failure.dart';
@@ -42,31 +42,38 @@ class InMemoryChoresBackend implements TemplateRepository {
   void notify(String familyId) => _controller(familyId).add(null);
 
   @override
-  Stream<List<ChoreTemplate>> watch(String familyId) async* {
-    yield _sorted(familyId);
+  Stream<List<TemplateRecord>> watch(String familyId) async* {
+    yield _records(familyId);
     await for (final _ in _controller(familyId).stream) {
-      yield _sorted(familyId);
+      yield _records(familyId);
     }
   }
 
+  List<TemplateRecord> _records(String familyId) => <TemplateRecord>[
+    for (final template in _sorted(familyId)) TemplateRecord(template: template),
+  ];
+
   @override
-  Future<Result<List<ChoreTemplate>>> list(String familyId) async {
+  Future<Result<List<TemplateRecord>>> list(String familyId) async {
     final failure = nextReadFailure;
     if (failure != null) {
       nextReadFailure = null;
-      return Failure<List<ChoreTemplate>>(failure);
+      return Failure<List<TemplateRecord>>(failure);
     }
-    return Success<List<ChoreTemplate>>(_sorted(familyId));
+    return Success<List<TemplateRecord>>(_records(familyId));
   }
 
   @override
-  Future<Result<ChoreTemplate?>> get(String familyId, String templateId) async {
+  Future<Result<TemplateRecord?>> get(String familyId, String templateId) async {
     final failure = nextReadFailure;
     if (failure != null) {
       nextReadFailure = null;
-      return Failure<ChoreTemplate?>(failure);
+      return Failure<TemplateRecord?>(failure);
     }
-    return Success<ChoreTemplate?>(templates[familyId]?[templateId]);
+    final template = templates[familyId]?[templateId];
+    return Success<TemplateRecord?>(
+      template == null ? null : TemplateRecord(template: template),
+    );
   }
 
   @override
@@ -87,3 +94,4 @@ class InMemoryChoresBackend implements TemplateRepository {
     return const Success<void>(null);
   }
 }
+

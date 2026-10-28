@@ -1,4 +1,4 @@
-import 'package:family_hub/app/theme/app_tokens.dart';
+﻿import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/chores_entries.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
@@ -13,8 +13,7 @@ import 'package:go_router/go_router.dart';
 /// It renders [entries] (default: [choresEntries]) and hides every tile the
 /// viewer may not use.  Nothing here knows a role: only `ref.can` (H7).
 class ChoresManageScreen extends ConsumerWidget {
-  const ChoresManageScreen({List<ChoresEntry>? entries, super.key})
-    : _entries = entries;
+  const ChoresManageScreen({this._entries, super.key});
 
   final List<ChoresEntry>? _entries;
 
@@ -99,3 +98,5 @@ class _EntryTile extends ConsumerWidget {
     );
   }
 }
+
+

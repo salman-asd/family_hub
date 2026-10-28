@@ -1289,6 +1289,36 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 
 **Pre-existing, still open (unchanged):** the P3-01 screens (`chores_entries.dart`, `chores_home_screen.dart`, `chores_manage_screen.dart`) do not compile - that step was written without an SDK. Plus the five inherited gate items and the Phase 2 analyzer debt.
 
+## Phase 3 - P3-08 Template data layer, rules, indexes, providers
+
+### Built
+- NEW `templates/data/chore_template_mappers.dart`: `toMap` writes the whole document; `fromDoc`/`fromMap` return a `TemplateRecord` that carries `invalidSchedule`.
+- NEW `templates/data/firestore_chore_template_repository.dart`: one bounded `_query` (`orderBy sortOrder` + `limit kMaxChoreTemplates`, no composite index needed), EVERYDAY writes (batch, no probe) with the audit entry.
+- NEW `templates/presentation/template_providers.dart`: `templatesProvider` (ONE listener), `templatesTruncatedProvider`, `templateIndexProvider`, `invalidScheduleIdsProvider`, `templateProvider(id)`, `activeTemplatesProvider`, `groupTemplatesProvider`, `verificationTemplatesProvider`, and the six use-case providers.
+- `templates/domain/template_repository.dart`: reads now return `TemplateRecord` (template + `invalidSchedule`) so a template whose schedule this build cannot read is LISTED as "invalid schedule" instead of vanishing. The P3-07 use cases and the in-memory backend were adapted (`.template` unwrap).
+- `firebase/firestore.rules`: `templateKeys()`, `slotOk`, `subtaskOk`, `templateOk`, and the `choreTemplates/{id}` block (manager/admin create+update, any active member read, **no delete**, `revision == old + 1`, `seedKey`/`builtIn` immutable).
+- `test/contract/rules_fixtures_test.dart` + `fixtures/chore_template.json`; `contract.test.mjs` seeder; NEW `firebase/rules_test/chore_templates.test.mjs` + `choreTemplateDoc` fixture in `support.mjs`.
+
+### Decisions worth knowing
+- **`TemplateRecord` instead of a bare template.** The card asks for "shown as invalid schedule, never crashes"; a nullable template cannot express that, so the read result carries the flag. Everything else (a missing `main` slot, a malformed row) is repaired silently.
+- **No `status` field on the record.** The P3-07 port returns records; a screen that only needs the entity reads `record.template`.
+- **The mapper enforces the subtask id pattern.** The mapper test caught it: an id that the validator and the rules reject (`BAD`) was being kept, and `subtaskDone` on an occurrence is keyed by that id, so it would have been unusable.
+- **The rules block allows `create` as well as `update`** (a family starts with no templates) and compares `revision`/`seedKey`/`builtIn` against `resource.data`.
+- **A new Dart test proves the JS fixture and the mapper agree on the key set** (`test/contract/chore_template_fixture_test.dart`): the rules suite uses the JS fixture, the contract suite uses the real mapper, and without this they could drift while both "pass".
+- **P3-01 screen errors fixed** (they blocked every whole-folder run): `ProviderListenable` does not exist in Riverpod 3, so `ChoresEntry.badge` is now `Provider<int>?`, and `ChoresManageScreen` uses an initializing formal.
+
+### Gate (this step)
+
+| Command | Result |
+| --- | --- |
+| `dart format` | **PASS** |
+| `flutter analyze lib/features/chores` | **PASS - No issues found!** (the whole feature, P3-01 included) |
+| `flutter test test/features/chores/templates test/features/chores/settings test/contract test/architecture/file_size_test.dart test/architecture/layer_boundaries_test.dart` | **PASS - 203/203** |
+| `flutter test test/architecture/no_unbounded_queries_test.dart` | **my file PASS**; the one remaining offender is the pre-existing `firestore_advance_repository.dart:99`. |
+| rules suite (`chore_templates.test.mjs`, contract) | **NOT RUN** - no Java/emulator here. |
+
+**Pre-existing, still blocking a whole-folder run:** `test/features/chores/chores_module_test.dart` and `chores_screens_test.dart` cannot LOAD because they import the router, which loads the Phase 2 Bazar screens, which do not compile (`familyDateKeysProvider`, `currentDateKeyProvider`, `expenseRangeLast7Days`, a `void` action). Those are Phase 2 files, untouched here.
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -1313,4 +1343,5 @@ Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget
 - P3-04 (shared widgets + gallery + `skipped`) is written and its 40 focused tests pass. Still open, all inherited: the five items listed under P3-04's gate, plus the Phase 2 analyzer debt.
 - P3-05 (recurrence engine) is written and fully green: 48 tests including the whole Appendix F.1 table, analyzer clean, pure Dart.
 - P3-06 (chore settings and catalogs) is written: 47 focused Dart tests pass, analyzer clean, and the key-set contract test proves the mapper and `settingsKeys()` agree. The **rules suite has not been run** (no Java): `firebase/rules_test/chore_settings.test.mjs` must be run before P3-07 relies on the rules.
-- P3-07 (template domain + use cases + in-memory backend) is written and green: 62 new tests, 166/166 across the chores suites and the architecture tests, analyzer clean. Next: `P3-00: repair base` (the P3-01 screen errors now block any full build), then P3-08.
+- P3-07 (template domain + use cases + in-memory backend) is written and green: 62 new tests, 166/166 across the chores suites and the architecture tests, analyzer clean.
+- P3-08 (template data layer, rules, providers) is written: 203/203 across the template, settings, contract and architecture suites; `flutter analyze lib/features/chores` is clean (the P3-01 breakage is fixed). The rules suite has not been run (no Java). Next: P3-09 (rotation engine).

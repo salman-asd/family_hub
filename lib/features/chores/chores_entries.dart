@@ -1,4 +1,4 @@
-import 'package:family_hub/core/localization/generated/app_localizations.dart';
+﻿import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permission.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +39,7 @@ class ChoresEntry {
 
   /// Optional count shown on the tile (for example open verifications).  A
   /// value of zero shows nothing.
-  final ProviderListenable<int>? badge;
+  final Provider<int>? badge;
 }
 
 /// The Manage hub tiles, in display order.
@@ -48,3 +48,5 @@ class ChoresEntry {
 /// (templates P3-16, settings P3-17, duty groups P3-18, ...); keep the order
 /// of the roadmap's route table (section 3.10).
 final List<ChoresEntry> choresEntries = <ChoresEntry>[];
+
+

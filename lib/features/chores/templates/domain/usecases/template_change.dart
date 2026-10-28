@@ -44,7 +44,7 @@ Future<Result<ChoreTemplate>> applyTemplateChange({
   final found = await templates.get(familyId, templateId);
   final readFailure = found.failureOrNull;
   if (readFailure != null) return Failure<ChoreTemplate>(readFailure);
-  final current = found.valueOrNull;
+  final current = found.valueOrNull?.template;
   if (current == null) {
     return const Failure<ChoreTemplate>(NotFound(entity: 'template'));
   }

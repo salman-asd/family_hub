@@ -53,7 +53,10 @@ class CreateTemplate {
     final existing = await _templates.list(familyId);
     final failure = existing.failureOrNull;
     if (failure != null) return Failure<ChoreTemplate>(failure);
-    final current = existing.valueOrNull ?? const <ChoreTemplate>[];
+    final current = <ChoreTemplate>[
+      for (final record in existing.valueOrNull ?? const <TemplateRecord>[])
+        record.template,
+    ];
     if (seedKey != null && current.any((t) => t.seedKey == seedKey)) {
       return const Failure<ChoreTemplate>(Conflict(code: 'duplicate_id'));
     }

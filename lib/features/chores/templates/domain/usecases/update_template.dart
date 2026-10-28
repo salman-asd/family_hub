@@ -58,7 +58,7 @@ class UpdateTemplate {
     final found = await _templates.get(familyId, templateId);
     final readFailure = found.failureOrNull;
     if (readFailure != null) return Failure<TemplateSaved>(readFailure);
-    final current = found.valueOrNull;
+    final current = found.valueOrNull?.template;
     if (current == null) {
       return const Failure<TemplateSaved>(NotFound(entity: 'template'));
     }

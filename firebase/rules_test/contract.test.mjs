@@ -216,6 +216,9 @@ const seeders = {
   contribution_plan: async (db) => {
     await seedFamilyWithMember(db);
   },
+  chore_template: async (db) => {
+    await seedFamilyWithAdmin(db);
+  },
 };
 
 const seedFamilyWithAdmin = async (db) => {
