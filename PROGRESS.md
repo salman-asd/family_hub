@@ -1096,6 +1096,32 @@ Base verification: the Phase 2 rows in the status table above are all "Written, 
 - The manage route is reachable by any active member (the redirect has no per-route permission); the hub shows only tiles the member may use, so a plain member sees the empty state. Tighten per route when the real tools arrive (P3-16 onward).
 - The tests pin `appFormattersProvider` because formatting follows the stored language preference, not the `MaterialApp` locale.
 
+## Phase 3 - P3-02 Pure helpers: time of day, `instantOf`, month matrix, mini-markdown
+
+Run locally on Flutter 3.47.7 / Dart 3.13.5 (Windows). No rules, index or widget change.
+
+### Built
+- `lib/core/utils/date_key.dart`: `DateKey.isoWeekday`, `DateKey.epochDay`, `DateKey.fromEpochDay`. `addDays`, `compareTo` and `MonthKey.addMonths` already existed, so they were not touched.
+- `lib/core/utils/family_date_keys.dart`: `instantOf(DateKey, minutesOfDay)`, `endOfDay(DateKey)`, `minutesOfDayOf(DateTime)`. The result always falls on the requested `dateKey`; on a DST day it uses the wall-clock rule the read-back uses (spring-forward gap: the requested minutes are kept on that day; fall-back repeated hour: the first occurrence), so the day stays in ascending order.
+- `lib/core/utils/month_matrix.dart`: `MonthMatrix.build`, `weekdayOrder`, static `weekOf(DateKey, weekStartDay)` plus `weekContaining` (grid's own week start), `isInMonth`, `days`. Always full weeks, 4-6 rows.
+- `lib/core/utils/mini_markdown.dart`: `MdText`, sealed `MdBlock` (`MdParagraph`, `MdBullet`, `MdNumbered`, `MdHeading`), `plainText`, `MiniMarkdown.parse`. Total parser: unknown syntax, unclosed `**`, HTML and links all stay plain text; no character is dropped.
+- `lib/core/localization/app_formatters.dart`: `timeOfDay` ('সকাল ৯:০০' / '9:00 AM', 12-hour face in both languages), `dayPartKey` -> `DayPart`, `durationLabel` ('৪৫ মি.' / '45 m', '১ ঘ. ৩০ মি.' / '1 h 30 m').
+
+### Tests
+- NEW `test/core/utils/family_date_keys_instant_test.dart` (Dhaka midnight/09:00/23:59/next-day, leap day 2028-02-29, month end, range errors, property sweep of every sampled minute for a Dhaka month and a London DST month, both DST transitions), `month_matrix_test.dart` (week starts 1-7 x Feb 2026 / Oct 2026 / Feb 2028, 4/5/6-row months, contiguous unique days, first cell weekday, `weekOf`), `mini_markdown_test.dart` (blocks, bold, unclosed markers, non-nesting, Bangla, CRLF, 4000 chars in < 5 ms).
+- EXTENDED `test/core/utils/date_key_test.dart` (isoWeekday, epochDay/fromEpochDay round trip).
+
+### Gate (this step)
+
+| Command | Result |
+| --- | --- |
+| `dart format` on the 10 touched files | **PASS** (2 reformatted, re-ran clean) |
+| `flutter analyze` | **FAIL - pre-existing, not this step**: 130 issues, none in the five touched `lib/` files or their tests (filtered with `flutter analyze | Select-String`). They are in Phase 2 Bazar screens/tests and `test/support/in_memory_bazar_backend.dart`. |
+| `flutter test` on `test/core/utils/` + `test/core/localization/` | **my files PASS** (36 date, 10 matrix, 17 markdown, 28 formatter). |
+| `flutter test --exclude-tags golden` (whole repo) | **FAIL - 61 pre-existing failures**, none in the P3-02 files (app/router load errors, `no_step_todos`, `no_unbounded_queries`, `no_hard_coded_strings` in Bazar widgets, Bazar widget tests). |
+
+**Not verified:** a full green gate was impossible because the base (P2-11...P2-16) is red: those analyzer/test failures are unrelated to P3-02 but they block the P3-01 rule "never start a step on a red CI".
+
 ## Known limitations (honest list)
 
 - Nothing has been compiled or run by the author; expect a first round of `flutter analyze` / format / test fixes.
@@ -1114,4 +1140,5 @@ Base verification: the Phase 2 rows in the status table above are all "Written, 
   domain/use cases; P2-29 adds the Bazar dashboard cards and module hooks, while the Chores
   dashboard remains unimplemented. The P2-05/P2-06/P2-07 rules suite has not
   been run (no Java).
-- P3-01 (Chores skeleton, seams, ADRs 0009-0013, CLAUDE.md rules 34-44) is written and unverified; its gate has not been run. Next: P3-02 (pure helpers).
+- P3-01 (Chores skeleton, seams, ADRs 0009-0013, CLAUDE.md rules 34-44) is written; its gate has not been run.
+- P3-02 (pure helpers) is written and its own tests pass, but the repo-wide gate is still red from the Phase 2 base (130 analyzer issues, 61 failing tests, all in Bazar code). Next: repair the base (`P3-00`), then P3-03.

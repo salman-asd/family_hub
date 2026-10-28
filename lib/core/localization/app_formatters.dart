@@ -82,6 +82,62 @@ class AppFormatters {
     return _isBangla ? _weekdaysBn[weekday - 1] : _weekdaysEn[weekday - 1];
   }
 
+  // ── Time of day ──────────────────────────────────────────────────────────
+
+  /// 'সকাল ৯:০০' (bn) / '9:00 AM' (en) for [minutes] after midnight
+  /// (0 … 1439), honouring the digits switch. Bangla words the day part
+  /// (সকাল/দুপুর/বিকাল/সন্ধ্যা/রাত); English uses AM/PM.
+  String timeOfDay(int minutes) {
+    _checkMinutes(minutes);
+    final hour24 = minutes ~/ 60;
+    final paddedMinute = _applyDigits(
+      (minutes % 60).toString().padLeft(2, '0'),
+    );
+    final face = _applyDigits('${_clockHour(hour24)}');
+    if (_isBangla) {
+      return '${_dayPartWordsBn[dayPartKey(minutes).index]} $face:$paddedMinute';
+    }
+    return '$face:$paddedMinute ${hour24 < 12 ? 'AM' : 'PM'}';
+  }
+
+  /// The part of the day [minutes] falls in (5 am, noon, 3 pm, 6 pm, 8 pm
+  /// boundaries). Pure: the wording lives in `_dayPartWordsBn` for the Bangla
+  /// [timeOfDay] and in the ARB `dayPart*` keys for screens that translate it.
+  DayPart dayPartKey(int minutes) {
+    _checkMinutes(minutes);
+    if (minutes < 5 * 60) return DayPart.earlyMorning;
+    if (minutes < 12 * 60) return DayPart.morning;
+    if (minutes < 15 * 60) return DayPart.noon;
+    if (minutes < 18 * 60) return DayPart.afternoon;
+    if (minutes < 20 * 60) return DayPart.evening;
+    return DayPart.night;
+  }
+
+  /// '৪৫ মি.' (bn) / '45 m' (en); '১ ঘ. ৩০ মি.' / '1 h 30 m' past an hour.
+  String durationLabel(int minutes) {
+    if (minutes < 0) {
+      throw RangeError.value(minutes, 'minutes', 'must not be negative');
+    }
+    final hours = minutes ~/ 60;
+    final rest = minutes % 60;
+    final hoursText = _isBangla ? 'ঘ.' : 'h';
+    final minutesText = _isBangla ? 'মি.' : 'm';
+    if (hours == 0) {
+      return '${_applyDigits(rest.toString())} $minutesText';
+    }
+    if (rest == 0) {
+      return '${_applyDigits(hours.toString())} $hoursText';
+    }
+    return '${_applyDigits(hours.toString())} $hoursText '
+        '${_applyDigits(rest.toString())} $minutesText';
+  }
+
+  /// 0 → 12, 13 → 1 (a 12-hour clock face).
+  int _clockHour(int hour24) {
+    final hour = hour24 % 12;
+    return hour == 0 ? 12 : hour;
+  }
+
   // ── Internal ────────────────────────────────────────────────────────────────
 
   String _applyDigits(String text) =>
@@ -110,6 +166,12 @@ class AppFormatters {
   void _checkWeekday(int weekday) {
     if (weekday < 1 || weekday > 7) {
       throw RangeError.range(weekday, 1, 7, 'weekday');
+    }
+  }
+
+  void _checkMinutes(int minutes) {
+    if (minutes < 0 || minutes > 24 * 60 - 1) {
+      throw RangeError.range(minutes, 0, 24 * 60 - 1, 'minutes');
     }
   }
 
@@ -185,4 +247,17 @@ class AppFormatters {
     'Sat',
     'Sun',
   ];
+
+  /// Indexed by [DayPart.index]; the Bangla day-part words of [timeOfDay].
+  static const List<String> _dayPartWordsBn = [
+    'ভোর',
+    'সকাল',
+    'দুপুর',
+    'বিকাল',
+    'সন্ধ্যা',
+    'রাত',
+  ];
 }
+
+/// Part of the day used to group chores on the Today screen (P3-02).
+enum DayPart { earlyMorning, morning, noon, afternoon, evening, night }

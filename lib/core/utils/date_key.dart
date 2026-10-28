@@ -52,10 +52,31 @@ final class DateKey implements Comparable<DateKey> {
 
   DateTime get _utcMidnight => DateTime.utc(year, month, day);
 
+  /// UTC midnight, so differences are whole days whatever the local zone.
+  static final DateTime _epoch = DateTime.utc(1970);
+
   MonthKey get monthKey => MonthKey(year, month);
 
   /// 1 = Monday ... 7 = Sunday.
   int get weekday => _utcMidnight.weekday;
+
+  /// ISO-8601 weekday: 1 = Monday ... 7 = Sunday.
+  ///
+  /// The same numbering as [weekday] and `DateTime.weekday`; named explicitly
+  /// because the chores recurrence and rotation shapes store ISO weekdays.
+  int get isoWeekday => _utcMidnight.weekday;
+
+  /// Whole days since 1970-01-01 (negative before it).
+  ///
+  /// Used for `throughEpochDay` markers and for calendar-day arithmetic that
+  /// must never drift with a timezone or a DST change.
+  int get epochDay => _utcMidnight.difference(_epoch).inDays;
+
+  /// The day [epochDay] days after 1970-01-01.
+  factory DateKey.fromEpochDay(int epochDay) {
+    final moved = _epoch.add(Duration(days: epochDay));
+    return DateKey(moved.year, moved.month, moved.day);
+  }
 
   DateKey addDays(int days) {
     final moved = DateTime.utc(year, month, day + days);

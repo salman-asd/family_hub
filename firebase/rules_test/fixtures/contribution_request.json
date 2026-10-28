@@ -1,0 +1,79 @@
+{
+  "scenario": "contribution_request",
+  "actor": "fixMember",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/contributions/fixCon1",
+      "data": {
+        "memberId": "fixMember",
+        "monthKey": "2026-10",
+        "dateKey": "2026-10-18",
+        "amountPaisa": 100000,
+        "method": "bkash",
+        "note": "Monthly share",
+        "status": "pending",
+        "requestedBy": "fixMember",
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev30",
+      "data": {
+        "type": "bazar.contribution_requested",
+        "actorId": "fixMember",
+        "summary": "",
+        "refType": "contribution",
+        "refId": "fixCon1",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev30",
+      "data": {
+        "type": "bazar.contribution_requested",
+        "actorId": "fixMember",
+        "summary": "",
+        "refType": "contribution",
+        "refId": "fixCon1",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "scenario": "contribution_plan",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/contributionPlans/2026-10_fixMember",
+      "data": {
+        "monthKey": "2026-10",
+        "memberId": "fixMember",
+        "expectedPaisa": 166700,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/ev32",
+      "data": {
+        "type": "bazar.contribution_plan_set",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "contributionPlan",
+        "refId": "2026-10_fixMember",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/ev32",
+      "data": {
+        "type": "bazar.contribution_plan_set",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "contributionPlan",
+        "refId": "2026-10_fixMember",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}
