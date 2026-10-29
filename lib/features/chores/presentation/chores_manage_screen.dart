@@ -1,4 +1,4 @@
-﻿import 'package:family_hub/app/theme/app_tokens.dart';
+import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/chores_entries.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
@@ -23,7 +23,9 @@ class ChoresManageScreen extends ConsumerWidget {
     final entries = _entries ?? choresEntries;
     final visible = [
       for (final entry in entries)
-        if (entry.requires == null || ref.can(entry.requires!)) entry,
+        if ((entry.requires == null || ref.can(entry.requires!)) &&
+            (entry.gate == null || ref.watch(entry.gate!)))
+          entry,
     ];
 
     return Scaffold(
@@ -98,5 +100,3 @@ class _EntryTile extends ConsumerWidget {
     );
   }
 }
-
-

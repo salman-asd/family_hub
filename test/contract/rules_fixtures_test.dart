@@ -34,10 +34,17 @@ import 'package:family_hub/features/bazar/items_categories/domain/item.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/item_usage_bump.dart';
 import 'package:family_hub/features/bazar/settings/data/bazar_settings_mappers.dart';
 import 'package:family_hub/features/bazar/settings/domain/bazar_settings.dart';
+import 'package:family_hub/features/chores/duty_groups/data/duty_group_mappers.dart';
+import 'package:family_hub/features/chores/occurrences/data/occurrence_event_mappers.dart';
+import 'package:family_hub/features/chores/occurrences/data/occurrence_mappers.dart';
+import 'package:family_hub/features/chores/occurrences/domain/occurrence_event.dart';
+import 'package:family_hub/features/chores/occurrences/domain/occurrence_write_plan.dart';
+import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
+import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
+import 'package:family_hub/features/chores/duty_groups/domain/duty_group.dart';
 import 'package:family_hub/features/chores/templates/data/chore_template_mappers.dart';
 import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
 import 'package:family_hub/features/chores/templates/domain/recurrence/recurrence.dart';
-import 'package:family_hub/features/chores/templates/domain/template_enums.dart';
 import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/data/relationship_mappers.dart';
@@ -129,6 +136,10 @@ List<Map<String, dynamic>> _fixtures() => <Map<String, dynamic>>[
   _contributionRecorded(),
   _contributionPlan(),
   _choreTemplate(),
+  _dutyGroup(),
+  _choreOccurrence(),
+  _choreOccurrenceReopen(),
+  _choreOccurrenceRestore(),
 ];
 
 Map<String, dynamic> _fixture(
@@ -967,6 +978,243 @@ Map<String, dynamic> _choreTemplate() {
     ),
     ..._eventWrites(event),
   ]);
+}
+
+/// P3-10: the REAL `DutyGroupMappers.toMap` payload plus its audit entry.
+/// `contract.test.mjs` pushes it through `dutyGroupOk()`; the version-count and
+/// roster-size boundaries live in `duty_groups.test.mjs`.
+Map<String, dynamic> _dutyGroup() {
+  final group = DutyGroup(
+    id: 'group_fixKitchen',
+    nameBn: 'দৈনিক রান্নাঘর ডিউটি',
+    nameEn: 'Daily kitchen duty',
+    colorIndex: 3,
+    rotation: Rotation(
+      versions: <RotationVersion>[
+        RotationVersion(
+          from: DateKey(2026, 9, 1),
+          members: const <String>[_admin, _member, 'fixCara'],
+          anchorDate: DateKey(2026, 10, 3),
+          anchorIndex: 0,
+          cycleUnit: CycleUnit.week,
+          weekStartDay: DateTime.saturday,
+        ),
+      ],
+    ),
+    sortOrder: 1,
+  );
+  final event = AuditEvent(
+    id: 'ev31',
+    type: AuditEventType.choresDutyGroupCreated,
+    actorId: _admin,
+    refType: AuditRefType.dutyGroup,
+    refId: group.id,
+    at: _at,
+    params: const <String, String>{'name': 'দৈনিক রান্নাঘর ডিউটি'},
+  );
+  return _fixture('duty_group', _admin, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.dutyGroupDoc(_familyId, group.id),
+      DutyGroupMappers.toMap(group, _meta(_admin)),
+    ),
+    ..._eventWrites(event),
+  ]);
+}
+
+/// P3-13: the REAL `OccurrenceMappers.toMap` payload (two ticks, a cover
+/// owner, a verification requirement) plus its completion audit entry.
+/// `contract.test.mjs` pushes it through `occurrenceOk()`; the state-machine
+/// transitions live in `chore_occurrences.test.mjs`.
+Map<String, dynamic> _choreOccurrence() {
+  final occurrence = ChoreOccurrence(
+    id: 'tpl_fixDishes_20261018',
+    templateId: 'tpl_fixDishes',
+    templateRev: 3,
+    dateKey: _day,
+    monthKey: _day.monthKey,
+    dueAt: _at,
+    dueMinutes: 540,
+    nameBn: 'থালা-বাসন ধোয়া',
+    nameEn: 'Wash the dishes',
+    groupId: 'kitchen',
+    instructions: '# নিয়ম\n- **সাবধানে** ধোয়া',
+    subtasks: const <TemplateSubtask>[
+      TemplateSubtask(id: 'rinse', title: 'ধোয়া', required: true),
+      TemplateSubtask(id: 'dry', title: 'মুছা', hint: 'গামছা ব্যবহার করুন'),
+    ],
+    difficulty: Difficulty.hard,
+    estimatedMinutes: 45,
+    verification: VerificationMode.required,
+    status: OccurrenceStatus.completed,
+    plannedAssigneeId: _member,
+    assigneeId: 'fixCara',
+    coverForId: _member,
+    assignmentSource: AssignmentSource.cover,
+    subtaskDone: <String, SubtaskDone>{
+      'rinse': SubtaskDone(at: _at, by: 'fixCara'),
+      'dry': SubtaskDone(at: _at, by: 'fixCara'),
+    },
+    completedAt: _at,
+    completedBy: 'fixCara',
+    needsAttention: true,
+    lastCommentAt: _at,
+  );
+  final event = AuditEvent(
+    id: 'ev40',
+    type: AuditEventType.choresOccurrenceCompleted,
+    actorId: 'fixCara',
+    refType: AuditRefType.occurrence,
+    refId: occurrence.id,
+    at: _at,
+    params: const <String, String>{
+      'name': 'থালা-বাসন ধোয়া',
+      'date': '2026-10-18',
+      'member': 'fixCara',
+    },
+  );
+  return _fixture('chore_occurrence', 'fixCara', <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.choreOccurrenceDoc(_familyId, occurrence.id),
+      // `SubtaskDone.toMap` keeps a raw DateTime, which the JSON encoder
+      // cannot serialize; the stored value is a Timestamp, so stamp it here
+      // exactly as the repository's `_wire` does.
+      _timestampsInGrid(OccurrenceMappers.toMap(occurrence, _meta('fixCara'))),
+    ),
+    ..._eventWrites(event),
+  ]);
+}
+
+/// B-04 / B-05: the REAL patch of one "Reopen" on a chore with two ticks
+/// (dotted `subtaskDone.<id>` deletions, `redoSubtaskIds`, `lastEventId`) plus
+/// the `reopened` event `OccurrenceEventMappers.toMap` writes for it.
+///
+/// `contract.test.mjs` pushes BOTH through the emulator in one batch, exactly
+/// like `OccurrenceWriteStager`: if the rules and the patch ever disagree about
+/// the keys, this fails.
+Map<String, dynamic> _choreOccurrenceReopen() {
+  final reopened = ChoreOccurrence(
+    id: 'tpl_fixDishes_20261019',
+    templateId: 'tpl_fixDishes',
+    templateRev: 3,
+    dateKey: DateKey(2026, 10, 19),
+    monthKey: DateKey(2026, 10, 19).monthKey,
+    dueAt: _at,
+    dueMinutes: 540,
+    nameBn: 'থালা-বাসন ধোয়া',
+    subtasks: const <TemplateSubtask>[
+      TemplateSubtask(id: 'rinse', title: 'ধোয়া', required: true),
+      TemplateSubtask(id: 'dry', title: 'মুছা'),
+    ],
+    verification: VerificationMode.off,
+    status: OccurrenceStatus.inProgress,
+    plannedAssigneeId: _member,
+    assigneeId: 'fixCara',
+    assignmentSource: AssignmentSource.manual,
+    subtaskDone: const <String, SubtaskDone>{},
+    reopenCount: 1,
+    redoSubtaskIds: const <String>['rinse', 'dry'],
+  );
+  final event = OccurrenceEvent(
+    id: 'reopened_tokfix02',
+    occurrenceId: reopened.id,
+    type: OccurrenceEventType.reopened,
+    actorId: 'fixCara',
+    at: _at,
+    reason: 'আবার ধুতে হবে',
+    prevCompletedAt: _at,
+    redoSubtaskIds: const <String>['rinse', 'dry'],
+  );
+  // The actor is the ADMIN: the rules only release the lock on treads that the
+  // completing member can drop, while rule 12 (soft delete/restore) is a
+  // manager action.  The patch itself is the real use-case patch.
+  return _fixture('chore_occurrence_reopen', _admin, <Map<String, dynamic>>[
+    _write(
+      'update',
+      FirestorePaths.choreOccurrenceDoc(_familyId, reopened.id),
+      <String, dynamic>{
+        'status': reopened.status.id,
+        'reopenCount': 1,
+        'redoSubtaskIds': const <String>['rinse', 'dry'],
+        'lastEventId': event.id,
+        'completedAt': null,
+        'completedBy': null,
+        // The stager's own `FieldValue.delete()` for an unticked step (the
+        // fixture format has no marker for it; the JS rehydration turns
+        // `__delete` into `deleteField()`).
+        'subtaskDone.rinse': <String, dynamic>{'__delete': true},
+        'subtaskDone.dry': <String, dynamic>{'__delete': true},
+        'updatedAt': BaseMapper.dateTimeToTimestamp(_at),
+        'updatedBy': _admin,
+      },
+    ),
+    _write(
+      'set',
+      FirestorePaths.occurrenceEventDoc(_familyId, reopened.id, event.id),
+      // Same event shape the stager writes; only the actor is the manager.
+      OccurrenceEventMappers.toMap(
+        OccurrenceEvent(
+          id: event.id,
+          occurrenceId: event.occurrenceId,
+          type: event.type,
+          actorId: _admin,
+          at: _at,
+          reason: event.reason,
+          prevCompletedAt: _at,
+          redoSubtaskIds: event.redoSubtaskIds,
+        ),
+        _meta(_admin),
+      ),
+    ),
+  ]);
+}
+
+/// B-06: the REAL `OccurrenceMappers.restoreMap` payload a resumed template
+/// writes over a soft-deleted, never-started day (rule 12 · RESTORE).
+Map<String, dynamic> _choreOccurrenceRestore() {
+  final draft = ChoreOccurrence(
+    id: 'tpl_fixDishes_20261102',
+    templateId: 'tpl_fixDishes',
+    templateRev: 4,
+    dateKey: DateKey(2026, 11, 2),
+    monthKey: DateKey(2026, 11, 2).monthKey,
+    dueAt: _at,
+    dueMinutes: 540,
+    nameBn: 'থালা-বাসন ধোয়া',
+    subtasks: const <TemplateSubtask>[
+      TemplateSubtask(id: 'rinse', title: 'ধোয়া', required: true),
+    ],
+    verification: VerificationMode.off,
+    status: OccurrenceStatus.scheduled,
+    plannedAssigneeId: _member,
+    assigneeId: _member,
+    assignmentSource: AssignmentSource.rotation,
+  );
+  return _fixture('chore_occurrence_restore', _admin, <Map<String, dynamic>>[
+    _write(
+      'update',
+      FirestorePaths.choreOccurrenceDoc(_familyId, draft.id),
+      OccurrenceMappers.restoreMap(draft, actorId: _admin, at: _at),
+    ),
+  ]);
+}
+
+/// The `subtaskDone` grid values as Firestore stores them (`Timestamp`, not
+/// `DateTime`); the repository's patch path does the same conversion.
+Map<String, dynamic> _timestampsInGrid(Map<String, dynamic> map) {
+  final grid = map['subtaskDone'];
+  if (grid is! Map) return map;
+  map['subtaskDone'] = <String, dynamic>{
+    for (final entry in grid.entries)
+      '${entry.key}': <String, dynamic>{
+        for (final field in (entry.value as Map).entries)
+          '${field.key}': field.value is DateTime
+              ? BaseMapper.dateTimeToTimestamp(field.value as DateTime)
+              : field.value,
+      },
+  };
+  return map;
 }
 
 Map<String, dynamic> _join() {

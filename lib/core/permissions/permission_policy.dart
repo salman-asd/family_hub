@@ -52,6 +52,23 @@ import 'package:family_hub/core/permissions/permission_settings.dart';
 /// only their own expenses, admin/moderator any"; Step 25's "reassign
 /// (admin/moderator)"; CLAUDE.md's "members see only their own contributions").
 abstract final class PermissionPolicy {
+  /// "May this person verify OTHER people's chores at all?" (B-02).
+  ///
+  /// `verifyChore` needs a completer and a template, so a screen that only
+  /// decides whether to SHOW the Verify queue has nobody to ask about. This asks
+  /// the same cell with the template switch on and a completer who is never the
+  /// actor, so the family switch, the module switch and the role still decide.
+  static bool canVerifyOthers(
+    PermissionActor actor, {
+    PermissionSettings settings = PermissionSettings.defaults,
+  }) => can(
+    actor,
+    Permission.verifyChore,
+    ownerId: '${actor.uid}#someone-else',
+    settings: settings,
+    template: const PermissionTemplate(verificationEnabled: true),
+  );
+
   /// True when [actor] may do [permission].
   ///
   /// [ownerId] is the member an occurrence/expense belongs to: the assignee for
