@@ -15,7 +15,6 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrenc
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/permission_access.dart';
 import 'package:family_hub/features/notifications/domain/inbox_port.dart';
 
 /// Moves one open chore to another member (Appendix C, `reassigned`).
@@ -86,12 +85,7 @@ class ReassignOccurrence {
     if (loadFailure != null) return Failure<ChoreOccurrence>(loadFailure);
     final context = loaded.valueOrNull!;
 
-    final permitted = await requirePermission(
-      _families,
-      familyId: familyId,
-      actorUid: actorUid,
-      permission: Permission.reassignChore,
-    );
+    final permitted = context.require(Permission.reassignChore);
     final denied = permitted.failureOrNull;
     if (denied != null) return Failure<ChoreOccurrence>(denied);
 

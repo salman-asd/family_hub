@@ -12,7 +12,9 @@ import 'package:family_hub/features/family/domain/member.dart';
 /// rule lives in exactly one matrix instead of in each use case.
 ///
 /// [settings] defaults to the family's `settings/permissions` document (one
-/// extra read per mutation, deliberate: a use case cannot forget it).
+/// extra read per mutation, deliberate: a use case cannot forget it).  A caller
+/// that already holds the member and the settings uses [checkPermission]
+/// instead (Q-02).
 ///
 /// Returns `PermissionDenied` for a missing, rejected, pending or disabled
 /// actor, and for an active actor the matrix does not allow.  A repository
@@ -30,20 +32,42 @@ Future<Result<Member>> requirePermission(
   final failure = result.failureOrNull;
   if (failure != null) return Failure<Member>(failure);
 
-  final actor = result.valueOrNull;
-  if (actor == null || actor.isRemoved) {
-    return const Failure<Member>(PermissionDenied());
-  }
   // H7: the family's permission switches decide the configurable cells (a
   // moderator's finance rights, whether members may invite ...).  An unreadable
   // document falls back to the DEFAULTS, which never grant a member more than
   // the matrix's base cell (members may not invite by default).
   final effective = settings ?? await _loadSettings(repository, familyId);
+  return checkPermission(
+    result.valueOrNull,
+    permission,
+    settings: effective,
+    ownerId: ownerId,
+    template: template,
+  );
+}
+
+/// The pure half of [requirePermission] (Q-02): no read, no `await`.
+///
+/// A use case that already loaded the acting member and the family's
+/// permission switches (the chore actions load both once, in
+/// `loadOccurrenceContext`) asks here instead of reading them a second time.
+/// Returns `PermissionDenied` for a missing or removed actor and for an actor
+/// the matrix does not allow, exactly like [requirePermission].
+Result<Member> checkPermission(
+  Member? actor,
+  Permission permission, {
+  required PermissionSettings settings,
+  String? ownerId,
+  PermissionTemplate? template,
+}) {
+  if (actor == null || actor.isRemoved) {
+    return const Failure<Member>(PermissionDenied());
+  }
   if (!PermissionPolicy.can(
     actor.permissionActor,
     permission,
     ownerId: ownerId,
-    settings: effective,
+    settings: settings,
     template: template,
   )) {
     return const Failure<Member>(PermissionDenied());

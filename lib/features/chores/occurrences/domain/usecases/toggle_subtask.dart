@@ -17,7 +17,6 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrenc
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Ticks (or unticks) ONE subtask of a chore (P3-14, Appendix C).
 ///
@@ -74,11 +73,8 @@ class ToggleSubtask {
 
     final assignee = context.occurrence.assigneeId;
     final own = assignee != null && assignee == actorUid;
-    final permitted = await requirePermission(
-      _families,
-      familyId: familyId,
-      actorUid: actorUid,
-      permission: own
+    final permitted = context.require(
+      own
           ? Permission.completeOwnChore
           : Permission.completeChoreForOthers,
       ownerId: assignee,

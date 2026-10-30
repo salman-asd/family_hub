@@ -6,6 +6,12 @@ import 'package:family_hub/features/chores/occurrences/domain/occurrence_draft.d
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
 
+const Object _unset = Object();
+
+/// `copyWith`'s nullable fields: no argument keeps the value, `null` clears it.
+T? _pick<T>(Object? value, T? current) =>
+    identical(value, _unset) ? current : value as T?;
+
 /// A badge the UI may show on a chore tile (road map P3-11).
 enum ChoreFlag {
   /// Completed, the template requires verification and nobody verified yet.
@@ -195,6 +201,60 @@ final class ChoreItem {
   final ChoreProgress progress;
 
   bool has(ChoreFlag flag) => flags.contains(flag);
+
+  /// A copy with the given fields replaced (Q-04).
+  ///
+  /// Every field is listed here, ONCE, so a view-model field added later cannot
+  /// be silently dropped by a caller that rebuilt the item by hand (the
+  /// overdue overlay used to). A nullable field keeps its value when the
+  /// argument is omitted and is cleared by an explicit `null`.
+  ChoreItem copyWith({
+    String? id,
+    bool? isProjected,
+    String? templateId,
+    int? templateRev,
+    Object? slotKey = _unset,
+    DateKey? dateKey,
+    MonthKey? monthKey,
+    DateTime? dueAt,
+    Object? dueMinutes = _unset,
+    String? nameBn,
+    Object? nameEn = _unset,
+    Object? groupId = _unset,
+    String? instructions,
+    List<TemplateSubtask>? subtasks,
+    Difficulty? difficulty,
+    Object? estimatedMinutes = _unset,
+    VerificationMode? verification,
+    ChoreStatus? status,
+    Set<ChoreFlag>? flags,
+    Object? assigneeId = _unset,
+    Object? plannedAssigneeId = _unset,
+    ChoreProgress? progress,
+  }) => ChoreItem(
+    id: id ?? this.id,
+    isProjected: isProjected ?? this.isProjected,
+    templateId: templateId ?? this.templateId,
+    templateRev: templateRev ?? this.templateRev,
+    slotKey: _pick(slotKey, this.slotKey),
+    dateKey: dateKey ?? this.dateKey,
+    monthKey: monthKey ?? this.monthKey,
+    dueAt: dueAt ?? this.dueAt,
+    dueMinutes: _pick(dueMinutes, this.dueMinutes),
+    nameBn: nameBn ?? this.nameBn,
+    nameEn: _pick(nameEn, this.nameEn),
+    groupId: _pick(groupId, this.groupId),
+    instructions: instructions ?? this.instructions,
+    subtasks: subtasks ?? this.subtasks,
+    difficulty: difficulty ?? this.difficulty,
+    estimatedMinutes: _pick(estimatedMinutes, this.estimatedMinutes),
+    verification: verification ?? this.verification,
+    status: status ?? this.status,
+    flags: flags ?? this.flags,
+    assigneeId: _pick(assigneeId, this.assigneeId),
+    plannedAssigneeId: _pick(plannedAssigneeId, this.plannedAssigneeId),
+    progress: progress ?? this.progress,
+  );
 
   @override
   bool operator ==(Object other) =>

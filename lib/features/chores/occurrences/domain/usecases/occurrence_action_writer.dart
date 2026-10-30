@@ -52,14 +52,18 @@ final class OccurrenceActionWriter {
     final inboxRow = inbox == null || inbox.id.isNotEmpty
         ? inbox
         : inbox.withId(newId());
+    // Q-06: explicit `if` elements; a missing part is simply left out.
+    final draft = context.draft;
+    final eventRow = stamped;
+    final patchRow = linked;
     return OccurrenceWritePlan(
       actorId: context.member.uid,
       at: at,
-      creates: <OccurrenceDraft>[?context.draft],
-      patches: <OccurrencePatch>[?linked],
-      events: <NewEvent>[?stamped],
-      inbox: <NewInboxItem>[?inboxRow],
-      audits: <NewAudit>[?auditEntry],
+      creates: <OccurrenceDraft>[if (draft != null) draft],
+      patches: <OccurrencePatch>[if (patchRow != null) patchRow],
+      events: <NewEvent>[if (eventRow != null) eventRow],
+      inbox: <NewInboxItem>[if (inboxRow != null) inboxRow],
+      audits: <NewAudit>[if (auditEntry != null) auditEntry],
     );
   }
 

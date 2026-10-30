@@ -17,7 +17,6 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrenc
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/permission_access.dart';
 import 'package:family_hub/features/notifications/domain/inbox_port.dart';
 
 /// Reopens a finished chore because something was wrong (Appendix C).
@@ -87,12 +86,7 @@ class ReopenOccurrence {
     final status = effectiveStatus(occurrence);
 
     if (status == ChoreStatus.verified) {
-      final manager = await requirePermission(
-        _families,
-        familyId: familyId,
-        actorUid: actorUid,
-        permission: Permission.manageChoreOccurrences,
-      );
+      final manager = context.require(Permission.manageChoreOccurrences);
       final denied = manager.failureOrNull;
       if (denied != null) {
         return const Failure<ChoreOccurrence>(
@@ -100,12 +94,7 @@ class ReopenOccurrence {
         );
       }
     } else {
-      final commenter = await requirePermission(
-        _families,
-        familyId: familyId,
-        actorUid: actorUid,
-        permission: Permission.commentOnChore,
-      );
+      final commenter = context.require(Permission.commentOnChore);
       final denied = commenter.failureOrNull;
       if (denied != null) return Failure<ChoreOccurrence>(denied);
     }

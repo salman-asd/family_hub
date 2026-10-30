@@ -249,9 +249,16 @@ class InMemoryBackend
     return const Success<void>(null);
   }
 
+  /// Reads of `getMember` / `getPermissionSettings` since the backend was
+  /// built (Q-02: a chore action must not read either one twice).
+  int memberReads = 0;
+  int permissionReads = 0;
+
   @override
-  Future<Result<Member?>> getMember(String familyId, String uid) async =>
-      Success(members[familyId]?[uid]);
+  Future<Result<Member?>> getMember(String familyId, String uid) async {
+    memberReads++;
+    return Success(members[familyId]?[uid]);
+  }
 
   List<Member> _live0(String familyId) => [
     for (final m in (members[familyId] ?? const <String, Member>{}).values)
@@ -293,8 +300,10 @@ class InMemoryBackend
   @override
   Future<Result<PermissionSettings>> getPermissionSettings(
     String familyId,
-  ) async =>
-      Success(permissionSettings[familyId] ?? PermissionSettings.defaults);
+  ) async {
+    permissionReads++;
+    return Success(permissionSettings[familyId] ?? PermissionSettings.defaults);
+  }
 
   @override
   Future<Result<void>> updatePermissionSettings(

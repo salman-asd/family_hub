@@ -14,7 +14,6 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrenc
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Lets a manager finish a chore whose required steps could not all be done
 /// (Appendix C, `exception`).
@@ -71,12 +70,7 @@ class RecordCompletionException {
     if (loadFailure != null) return Failure<ChoreOccurrence>(loadFailure);
     final context = loaded.valueOrNull!;
 
-    final permitted = await requirePermission(
-      _families,
-      familyId: familyId,
-      actorUid: actorUid,
-      permission: Permission.manageChoreOccurrences,
-    );
+    final permitted = context.require(Permission.manageChoreOccurrences);
     final denied = permitted.failureOrNull;
     if (denied != null) return Failure<ChoreOccurrence>(denied);
 

@@ -162,29 +162,6 @@ extension OverdueItem on ChoreItem {
     int graceMinutes,
   ) {
     if (!isOverdue(occurrence, now, graceMinutes)) return this;
-    return ChoreItem(
-      id: id,
-      templateId: templateId,
-      templateRev: templateRev,
-      dateKey: dateKey,
-      monthKey: monthKey,
-      dueAt: dueAt,
-      nameBn: nameBn,
-      subtasks: subtasks,
-      status: ChoreStatus.overdue,
-      flags: flags,
-      progress: progress,
-      isProjected: isProjected,
-      slotKey: slotKey,
-      dueMinutes: dueMinutes,
-      nameEn: nameEn,
-      groupId: groupId,
-      instructions: instructions,
-      difficulty: difficulty,
-      estimatedMinutes: estimatedMinutes,
-      verification: verification,
-      assigneeId: assigneeId,
-      plannedAssigneeId: plannedAssigneeId,
-    );
+    return copyWith(status: ChoreStatus.overdue);
   }
 }

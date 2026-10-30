@@ -1,5 +1,4 @@
 import 'package:family_hub/core/audit/audit_event_type.dart';
-import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
@@ -18,7 +17,6 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrenc
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// The parent checkbox of one chore (P3-14, Appendix C).
 ///
@@ -73,11 +71,8 @@ class ToggleParent {
 
     final assignee = context.occurrence.assigneeId;
     final own = assignee != null && assignee == actorUid;
-    final permitted = await requirePermission(
-      _families,
-      familyId: familyId,
-      actorUid: actorUid,
-      permission: own
+    final permitted = context.require(
+      own
           ? Permission.completeOwnChore
           : Permission.completeChoreForOthers,
       ownerId: assignee,
@@ -92,20 +87,6 @@ class ToggleParent {
       checking ? OccurrenceAction.checkParent : OccurrenceAction.uncheckParent,
     );
     if (blocked != null) return Failure<ChoreOccurrence>(blocked);
-
-    // Checking the parent ticks EVERY step, so an all-optional chore completes
-    // without an exception; only a REQUIRED step that is still open needs one
-    // (SubtaskSync refuses it otherwise).
-    final occurrence = context.occurrence;
-    final required = occurrence.subtasks.where((subtask) => subtask.required);
-    final openRequired = required.where(
-      (subtask) => !occurrence.subtaskDone.containsKey(subtask.id),
-    );
-    if (checking && openRequired.isNotEmpty && occurrence.exception == null) {
-      return const Failure<ChoreOccurrence>(
-        Conflict(code: 'required_subtasks_open'),
-      );
-    }
 
     final at = _clock.nowUtc();
     final patch = SubtaskSync.toggleParent(

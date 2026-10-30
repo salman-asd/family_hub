@@ -1422,3 +1422,18 @@ Written without an SDK or emulator: **nothing was compiled or run.** Run `dart f
 - Rules cannot see which keys are ticked or who ticked (CLAUDE.md rule 45); optional ticks count toward `requiredCount`.
 - `RepairStatus` still writes only `status` (denied for a "completed" repair); `ReopenOccurrence` does not yet put `redoSubtaskIds` on its event.
 
+## Phase 3 - Wave R4 (domain and use-case quality; see docs/PHASE3_REVIEW_ROADMAP.md §7)
+
+Written without an SDK: **nothing was compiled or run.** Run `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden` and fix the first-round fallout.
+
+| Item | Change | Tests |
+| --- | --- | --- |
+| Q-01 | `SubtaskSync.completionPatch(mode: CompletionMode.tickEveryStep \| recordOnly)` is the ONE place for the open-required-step check and the optional-step ticks. `toggleParent` (check branch) and `CompleteOccurrence` call it; `ToggleParent` lost its own pre-check. | `subtask_sync_test.dart` group "completionPatch" |
+| Q-02 | `checkPermission(member, permission, settings:)` (pure) in `permission_access.dart`, shared with `requirePermission`. `OccurrenceContext` carries `permissions` and offers `require(...)`; the ten occurrence use cases use it, so a tap reads member + settings + occurrence once (3 reads, was 5). Cache-first behaviour offline is NOT verified on a device. | `r4_quality_test.dart` (read counters in `InMemoryBackend`) |
+| Q-03 | Test only: repair never changes `effectiveStatus`, including after a reopen. | `r4_quality_test.dart` |
+| Q-04 | `ChoreItem.copyWith` (all fields, nullable ones via sentinel); `_withOverdue` uses it. | `r4_quality_test.dart` |
+| Q-05 | `stateFailure` returns `PermissionDenied`, `not_assigned_to_you`, `already_*`, `not_completed`, `not_a_recipient` or `occurrence_started` by cause; no new ARB keys. | `r4_quality_test.dart` |
+| Q-06 | `OccurrenceActionWriter.planFor` builds its lists with explicit `if` elements. | existing plan tests |
+| Q-07 | `RotationEngine._occurrenceDistance`: the first firing day on or after the anchor is cycle 0 even when the anchor date does not fire (before: one person was skipped). A firing anchor is unchanged. Check stored rotations whose anchor is not a firing day. | `rotation_anchor_test.dart` |
+| Q-08 | NOT done: needs the emulator (400-create test; lower `GenerationLimits.chunkWrites` and record it in ADR 0011 if rejected). | - |
+

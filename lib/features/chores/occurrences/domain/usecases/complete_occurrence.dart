@@ -1,5 +1,4 @@
 import 'package:family_hub/core/audit/audit_event_type.dart';
-import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
@@ -10,7 +9,7 @@ import 'package:family_hub/features/chores/occurrences/domain/effective_status.d
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_repository.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_state_machine.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
-import 'package:family_hub/features/chores/occurrences/domain/occurrence_write_plan.dart';
+import 'package:family_hub/features/chores/occurrences/domain/subtask_sync.dart';
 import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrence_action.dart';
 import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrence_action_writer.dart';
 import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrence_patch_apply.dart';
@@ -18,7 +17,6 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrenc
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Completes a chore in one action (P3-14).
 ///
@@ -71,11 +69,8 @@ class CompleteOccurrence {
 
     final assignee = context.occurrence.assigneeId;
     final own = assignee != null && assignee == actorUid;
-    final permitted = await requirePermission(
-      _families,
-      familyId: familyId,
-      actorUid: actorUid,
-      permission: own
+    final permitted = context.require(
+      own
           ? Permission.completeOwnChore
           : Permission.completeChoreForOthers,
       ownerId: assignee,
@@ -93,36 +88,18 @@ class CompleteOccurrence {
     if (blocked != null) return Failure<ChoreOccurrence>(blocked);
 
     final occurrence = context.occurrence;
-    // Only a step marked REQUIRED can block a one-tap completion.
-    final openRequired = occurrence.subtasks.where(
-      (subtask) =>
-          subtask.required && !occurrence.subtaskDone.containsKey(subtask.id),
-    );
-    if (openRequired.isNotEmpty && occurrence.exception == null) {
-      return const Failure<ChoreOccurrence>(
-        Conflict(code: 'required_subtasks_open'),
-      );
-    }
-
     final at = _clock.nowUtc();
-    final fields = <String, Object?>{
-      'status': OccurrenceStatus.completed.id,
-      'completedAt': at,
-      'completedBy': actorUid,
-    };
-    // A chore whose steps are all OPTIONAL is completed by checking the parent:
-    // the steps it lists are ticked by this same completion (D-P3-9: the derived
-    // status reads `completed` from the ticks, so the boxes stay truthful).
-    if (!occurrence.subtasks.any((subtask) => subtask.required)) {
-      for (final subtask in occurrence.subtasks) {
-        if (occurrence.subtaskDone.containsKey(subtask.id)) continue;
-        fields['subtaskDone.${subtask.id}'] = SubtaskDone(
-          at: at,
-          by: actorUid,
-        ).toMap();
-      }
-    }
-    final patch = OccurrencePatch(occurrenceId: occurrenceId, fields: fields);
+    // Q-01: the open-required-step check and the optional-step ticks live in
+    // ONE place; this use case only adds permission, audit and the real actor.
+    final planned = SubtaskSync.completionPatch(
+      occurrence: occurrence,
+      actorId: actorUid,
+      at: at,
+      mode: CompletionMode.recordOnly,
+    );
+    final patchFailure = planned.failureOrNull;
+    if (patchFailure != null) return Failure<ChoreOccurrence>(patchFailure);
+    final patch = planned.valueOrNull!;
     final forOther = !own;
 
     final staged = await OccurrenceActionWriter(_occurrences).stage(

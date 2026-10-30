@@ -5,6 +5,16 @@ import 'package:family_hub/features/chores/occurrences/domain/effective_status.d
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_write_plan.dart';
 
+/// How [SubtaskSync.completionPatch] treats the steps of the chore.
+enum CompletionMode {
+  /// The parent checkbox: every open step is ticked by the same patch.
+  tickEveryStep,
+
+  /// The one-tap completion: only the completion is recorded; the steps are
+  /// ticked only when every one of them is optional.
+  recordOnly,
+}
+
 /// The pure tick rules of a chore (road map P3-11).
 ///
 /// Each function returns an [OccurrencePatch] that names only the dotted keys
@@ -112,37 +122,71 @@ abstract final class SubtaskSync {
       );
     }
 
-    // Only a step marked REQUIRED can block the parent box: an all-optional
-    // chore is completed by checking the parent, which ticks every step. (The
-    // derived status still treats "no required step" as "every step must be
-    // ticked", which this patch then satisfies.)
-    final openRequired = occurrence.subtasks.where(
+    return completionPatch(
+      occurrence: occurrence,
+      actorId: actorId,
+      at: at,
+      mode: CompletionMode.tickEveryStep,
+    );
+  }
+
+  /// The ONE patch that completes a chore (Q-01).
+  ///
+  /// `ToggleParent` (the checkbox) and `CompleteOccurrence` (the one-tap
+  /// action) used to carry their own copy of "is a required step still open?"
+  /// and "tick the optional steps". Both now ask here, so the rule exists once
+  /// and the use cases only add permission, event and audit.
+  ///
+  /// * A REQUIRED step that is still open refuses with
+  ///   `Conflict('required_subtasks_open')` unless a manager already recorded
+  ///   an exception (Appendix C).
+  /// * [CompletionMode.tickEveryStep] ticks every open step (the parent box
+  ///   means "all done"); [CompletionMode.recordOnly] ticks nothing when a
+  ///   required step exists (the completion is recorded under the REAL actor,
+  ///   D-P3-14), and ticks the steps only when ALL of them are optional, so the
+  ///   derived status can read `completed` from the ticks (D-P3-9).
+  /// * The state rules of [toggleSubtask] apply (verified, skipped, deleted).
+  static Result<OccurrencePatch> completionPatch({
+    required ChoreOccurrence occurrence,
+    required String actorId,
+    required DateTime at,
+    required CompletionMode mode,
+  }) {
+    final blocked = _blocked(occurrence);
+    if (blocked != null) return Failure<OccurrencePatch>(blocked);
+
+    // Only a step marked REQUIRED can block completion: an all-optional chore
+    // is completed by the parent box, which ticks every step.
+    final hasRequired = occurrence.subtasks.any((subtask) => subtask.required);
+    final openRequired = occurrence.subtasks.any(
       (subtask) =>
           subtask.required && !occurrence.subtaskDone.containsKey(subtask.id),
     );
-    if (openRequired.isNotEmpty && occurrence.exception == null) {
+    if (openRequired && occurrence.exception == null) {
       return const Failure<OccurrencePatch>(
         Conflict(code: 'required_subtasks_open'),
       );
     }
 
-    for (final subtask in occurrence.subtasks) {
-      if (occurrence.subtaskDone.containsKey(subtask.id)) continue;
-      fields['subtaskDone.${subtask.id}'] = SubtaskDone(
-        at: at,
-        by: actorId,
-      ).toMap();
+    final fields = <String, Object?>{
+      'status': OccurrenceStatus.completed.id,
+      'completedAt': at,
+      'completedBy': actorId,
+      'updatedAt': at,
+      'updatedBy': actorId,
+    };
+    final tickSteps = mode == CompletionMode.tickEveryStep || !hasRequired;
+    if (tickSteps) {
+      for (final subtask in occurrence.subtasks) {
+        if (occurrence.subtaskDone.containsKey(subtask.id)) continue;
+        fields['subtaskDone.${subtask.id}'] = SubtaskDone(
+          at: at,
+          by: actorId,
+        ).toMap();
+      }
     }
-    fields['status'] = OccurrenceStatus.completed.id;
-    fields['completedAt'] = at;
-    fields['completedBy'] = actorId;
-
     return Success<OccurrencePatch>(
-      OccurrencePatch(
-        occurrenceId: occurrence.id,
-        fields: fields,
-        removedFields: removed,
-      ),
+      OccurrencePatch(occurrenceId: occurrence.id, fields: fields),
     );
   }
 

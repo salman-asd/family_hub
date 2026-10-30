@@ -336,4 +336,81 @@ void main() {
     );
     expect(effectiveStatus(merged), ChoreStatus.completed);
   });
+
+  group('completionPatch (Q-01)', () {
+    final exception = CompletionException(note: 'clean', by: 'bob', at: at);
+
+    test('open required step without an exception is refused (both modes)', () {
+      final occ = anOccurrence(subtasks: twoRequired);
+      for (final mode in CompletionMode.values) {
+        expect(
+          SubtaskSync.completionPatch(
+            occurrence: occ,
+            actorId: actor,
+            at: at,
+            mode: mode,
+          ).failureOrNull,
+          const Conflict(code: 'required_subtasks_open'),
+          reason: '$mode',
+        );
+      }
+    });
+
+    test('recordOnly with an exception ticks nothing and keeps the actor', () {
+      final occ = anOccurrence(subtasks: twoRequired, exception: exception);
+      final patch = SubtaskSync.completionPatch(
+        occurrence: occ,
+        actorId: actor,
+        at: at,
+        mode: CompletionMode.recordOnly,
+      ).valueOrNull!;
+      expect(patch.fields.keys.any((k) => k.startsWith('subtaskDone.')), false);
+      expect(patch.fields['status'], OccurrenceStatus.completed.id);
+      expect(patch.fields['completedBy'], actor);
+    });
+
+    test('recordOnly ticks the steps when all of them are optional', () {
+      final occ = anOccurrence(
+        subtasks: <TemplateSubtask>[aSubtask(id: 'a'), aSubtask(id: 'b')],
+      );
+      final patch = SubtaskSync.completionPatch(
+        occurrence: occ,
+        actorId: actor,
+        at: at,
+        mode: CompletionMode.recordOnly,
+      ).valueOrNull!;
+      expect(patch.fields['subtaskDone.a'], isNotNull);
+      expect(patch.fields['subtaskDone.b'], isNotNull);
+    });
+
+    test('tickEveryStep equals what toggleParent writes when checking', () {
+      final occ = anOccurrence(subtasks: twoRequired, exception: exception);
+      expect(
+        SubtaskSync.completionPatch(
+          occurrence: occ,
+          actorId: actor,
+          at: at,
+          mode: CompletionMode.tickEveryStep,
+        ).valueOrNull,
+        SubtaskSync.toggleParent(
+          occurrence: occ,
+          actorId: actor,
+          at: at,
+        ).valueOrNull,
+      );
+    });
+
+    test('a verified chore is frozen', () {
+      final occ = anOccurrence(verifiedAt: at, verifiedBy: 'bob');
+      expect(
+        SubtaskSync.completionPatch(
+          occurrence: occ,
+          actorId: actor,
+          at: at,
+          mode: CompletionMode.recordOnly,
+        ).failureOrNull,
+        const Conflict(code: 'already_verified'),
+      );
+    });
+  });
 }

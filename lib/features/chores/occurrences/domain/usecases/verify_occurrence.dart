@@ -18,7 +18,6 @@ import 'package:family_hub/features/chores/settings/domain/chore_settings_reposi
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Marks somebody else's completed chore as verified (Appendix C).
 ///
@@ -75,11 +74,8 @@ class VerifyOccurrence {
         Conflict(code: 'self_verification'),
       );
     }
-    final permitted = await requirePermission(
-      _families,
-      familyId: familyId,
-      actorUid: actorUid,
-      permission: Permission.verifyChore,
+    final permitted = context.require(
+      Permission.verifyChore,
       ownerId: occurrence.completedBy,
       template: permissionTemplateFor(occurrence.verification),
     );

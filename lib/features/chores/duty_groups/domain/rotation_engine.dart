@@ -103,13 +103,13 @@ abstract final class RotationEngine {
     }
   }
 
-  /// The number of firing days strictly after [anchor] up to [day], or the
-  /// negative number strictly before it when [day] is earlier.
+  /// The rota cycle of [day] for the `occurrence` unit (Q-07).
   ///
-  /// The anchor itself is cycle 0. Callers must pass a recurrence whose anchor
-  /// is a firing day (the editor and the generator do), otherwise the two
-  /// neighbouring occurrences are two cycles apart, which is still stable but
-  /// not what a rota means.
+  /// The FIRST firing day on or after [anchor] is cycle 0 and every further
+  /// firing day adds one, so consecutive firings always hand over to the next
+  /// person, whether or not the anchor date itself fires. Firing days before
+  /// the anchor count down (-1, -2, ...). The generator only asks for firing
+  /// days; the value for a day that does not fire is stable but unspecified.
   static int _occurrenceDistance(
     Recurrence recurrence,
     DateKey anchor,
@@ -124,6 +124,9 @@ abstract final class RotationEngine {
       endDate: endDate,
     );
     if (day.isAfter(anchor)) {
+      // Firing days in [anchor, day]: the anchor counts as one of them only
+      // when it fires, so `count - 1` is the number of firings after cycle 0
+      // in both cases.
       final count = RecurrenceEngine.countBetween(
         recurrence,
         anchor,
@@ -131,7 +134,7 @@ abstract final class RotationEngine {
         startDate: startDate,
         endDate: endDate,
       );
-      return anchorFires ? count - 1 : count;
+      return count > 0 ? count - 1 : 0;
     }
     final count = RecurrenceEngine.countBetween(
       recurrence,

@@ -17,7 +17,6 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrenc
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
-import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Undoes a completion ("Complete" tapped twice, or the undo of a swipe).
 ///
@@ -68,11 +67,8 @@ class UncompleteOccurrence {
 
     final assignee = context.occurrence.assigneeId;
     final own = assignee != null && assignee == actorUid;
-    final permitted = await requirePermission(
-      _families,
-      familyId: familyId,
-      actorUid: actorUid,
-      permission: own
+    final permitted = context.require(
+      own
           ? Permission.completeOwnChore
           : Permission.completeChoreForOthers,
       ownerId: assignee,

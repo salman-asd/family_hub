@@ -214,6 +214,8 @@ The use cases are stricter than the rules in several places. Rules are the last 
 
 ## 7. Wave R4 — Domain and use-case quality
 
+**Status: implemented (Q-01 … Q-07), NOT yet run** (no SDK). Q-08 still needs the emulator. See `PROGRESS.md` "Wave R4".
+
 | ID | Sev | Finding | Fix |
 | --- | --- | --- | --- |
 | Q-01 | Medium | The "open required step" check and the "tick all optional steps" logic exist **three times**: `SubtaskSync.toggleParent`, `ToggleParent`, `CompleteOccurrence`. | One `SubtaskSync.completionPatch(...)`; the use cases only add permission, event and audit. |
