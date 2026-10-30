@@ -194,6 +194,8 @@ Implement B-07, B-08, B-09, B-10, D-01 from docs/PHASE3_REVIEW_ROADMAP.md, test-
 
 ## 6. Wave R3 — Rules parity with the roadmap (P3-13 "state machine")
 
+**Status: implemented, NOT yet run** (no SDK or emulator here). M-01 … M-09 are done as listed in `PROGRESS.md` "Wave R3" and `docs/PHASE3_CHORES_ROADMAP.md` Appendix I. M-05 was decided as **managers only** (Appendix G Q12).
+
 The use cases are stricter than the rules in several places. Rules are the last line of defence (CLAUDE rule 12).
 
 | ID | Sev | Gap | Fix |

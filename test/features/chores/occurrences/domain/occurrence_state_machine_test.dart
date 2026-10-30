@@ -124,7 +124,8 @@ void main() {
       isManager: true,
       isCompleter: true,
     );
-    const other = OccurrenceActor(uid: 'dave');
+    const plainMember = OccurrenceActor(uid: 'dave');
+    const otherManager = OccurrenceActor(uid: 'eve', isManager: true);
 
     expect(
       OccurrenceStateMachine.can(
@@ -146,7 +147,16 @@ void main() {
       OccurrenceStateMachine.can(
         ChoreStatus.completed,
         OccurrenceAction.verify,
-        other,
+        plainMember,
+      ),
+      // M-05: verification is a manager action.
+      isFalse,
+    );
+    expect(
+      OccurrenceStateMachine.can(
+        ChoreStatus.completed,
+        OccurrenceAction.verify,
+        otherManager,
       ),
       isTrue,
     );

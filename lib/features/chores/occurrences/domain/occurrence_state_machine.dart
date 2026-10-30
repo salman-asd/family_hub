@@ -54,6 +54,7 @@ final class OccurrenceActor {
   final bool canComment;
 
   /// The member who completed it (never allowed to verify their own work).
+  /// Verification is a MANAGER action (M-05).
   final bool isCompleter;
 
   /// The recipient of an ACCEPTED swap/cover request for this occurrence.
@@ -113,8 +114,11 @@ abstract final class OccurrenceStateMachine {
       OccurrenceAction.checkParent => open && actor.mayTick,
       OccurrenceAction.uncheckParent =>
         status == ChoreStatus.completed && actor.mayTick,
+      // M-05: a manager who did not complete it (policy, use case and rules).
       OccurrenceAction.verify =>
-        status == ChoreStatus.completed && !actor.isCompleter,
+        status == ChoreStatus.completed &&
+            actor.isManager &&
+            !actor.isCompleter,
       OccurrenceAction.reopen =>
         (status == ChoreStatus.completed && actor.canComment) ||
             (status == ChoreStatus.verified && actor.isManager),

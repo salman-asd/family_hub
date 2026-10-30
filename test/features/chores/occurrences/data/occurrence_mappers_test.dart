@@ -201,6 +201,7 @@ void main() {
         'groupId',
         'instructions',
         'subtasks',
+        'requiredCount',
         'difficulty',
         'estimatedMinutes',
         'verification',
@@ -218,6 +219,71 @@ void main() {
       expect(map.keys.toSet().difference(allowed), isEmpty);
       expect(map.containsKey('status'), isFalse);
       expect(map.containsKey('subtaskDone'), isFalse);
+    });
+  });
+
+  group('M-01 requiredCount', () {
+    test('counts the required steps', () {
+      final occurrence = anOccurrence(
+        subtasks: <TemplateSubtask>[
+          aSubtask(id: 'a', required: true),
+          aSubtask(id: 'b', required: true),
+          aSubtask(id: 'c'),
+        ],
+      );
+      expect(OccurrenceMappers.toMap(occurrence, meta)['requiredCount'], 2);
+    });
+
+    test('a chore whose steps are all optional needs all of them', () {
+      // `requiredSubtasks` falls back to every step (M-09), and the rules
+      // compare `subtaskDone.size()` with this number.
+      final occurrence = anOccurrence(
+        subtasks: <TemplateSubtask>[aSubtask(id: 'a'), aSubtask(id: 'b')],
+      );
+      expect(OccurrenceMappers.toMap(occurrence, meta)['requiredCount'], 2);
+    });
+
+    test('a chore without steps needs none', () {
+      final occurrence = anOccurrence(subtasks: const <TemplateSubtask>[]);
+      expect(OccurrenceMappers.toMap(occurrence, meta)['requiredCount'], 0);
+    });
+
+    test('requiredCount never exceeds the number of steps', () {
+      final occurrence = anOccurrence(
+        subtasks: <TemplateSubtask>[aSubtask(id: 'a', required: true)],
+      );
+      final map = OccurrenceMappers.toMap(occurrence, meta);
+      expect(
+        map['requiredCount'] as int,
+        lessThanOrEqualTo((map['subtasks'] as List<Object?>).length),
+      );
+    });
+
+    test('a replan and a restore refresh it with the subtasks', () {
+      final draft = anOccurrenceDraft(
+        subtasks: <TemplateSubtask>[
+          aSubtask(id: 'a', required: true),
+          aSubtask(id: 'b', required: true),
+        ],
+      );
+      final replan = OccurrenceMappers.replanMap(
+        OccurrenceReplan(occurrenceId: draft.id, draft: draft),
+        actorId: 'bob',
+        at: at,
+      );
+      final restore = OccurrenceMappers.restoreMap(
+        draft.occurrence,
+        actorId: 'bob',
+        at: at,
+      );
+      expect(replan['requiredCount'], 2);
+      expect(restore['requiredCount'], 2);
+    });
+
+    test('a document written before the field existed still reads', () {
+      final map = OccurrenceMappers.toMap(anOccurrence(), meta)
+        ..remove('requiredCount');
+      expect(OccurrenceMappers.fromDoc('tpl_1_20261024', map), isNotNull);
     });
   });
 

@@ -1391,3 +1391,34 @@ Written test-first, one commit per item. **Nothing was compiled or run** (no Dar
 - `occurrenceProvider` / `occurrenceEventsProvider` (single-document listeners) are still not auto-disposed.
 - `MaterializeDraft` merges plans as given; it does not stamp ids (the action writer already does).
 - D-02 and D-03 are untouched.
+
+## Phase 3 - Wave R3 (rules parity with the roadmap; see docs/PHASE3_REVIEW_ROADMAP.md §6)
+
+Written without an SDK or emulator: **nothing was compiled or run.** Run `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden`, then `npm run test:emulator` in `firebase/rules_test`, and fix the first-round fallout.
+
+| Item | Change | Tests |
+| --- | --- | --- |
+| M-01 | New snapshot key `requiredCount` (derived from `requiredSubtasks.length`; written by create, replan, restore). Completion needs `subtaskDone.size() >= requiredCount` or a manager `exception`. | mapper `requiredCount` group; rules block M-01 |
+| M-02 | Old rules 1 and 2 merged into one tick/complete/uncomplete rule with four branches; `uncompleted` event required in the same batch. | rules block M-02 |
+| M-03 | Create rule rebuilds the id (`templateId_yyyyMMdd[_slot]`) and compares for equality. | rules block M-03 |
+| M-04 | Soft delete needs scheduled, no ticks, no `completedAt`, `reopenCount == 0`. | rules block M-04 |
+| M-05 | Verify is manager-only (rules, `OccurrenceStateMachine`, `stateFailure`); decision recorded as Appendix G Q12. | state-machine test; rules block M-05 |
+| M-06 | `OccurrenceContext.build`: assignee is `assigneeId` only. | `occurrence_context_test.dart`; rules block M-06 |
+| M-07 | ADR 0014 + CLAUDE.md rule 46 (`todayKey` fixed to UTC+6). | - |
+| M-08 | Rules tests: repeated skip, ping-pong reassign, tick after complete, soft delete of a started doc, restore with ticks. | rules block M-08 |
+| M-09 | Documented in Appendix C. | - |
+
+### Bugs found in the R1 state and fixed here
+- Event rule required an `at` the mapper never writes, refused `redoSubtaskIds` and the null `deletedAt/By`, and refused a null `reason`.
+- `occurrenceFresh` tested key absence, but the mapper writes explicit nulls, so every create was denied.
+- JS occurrence fixture carried keys the mapper does not write (`redoSubtaskIds`, `lastEventId`); the reopen seed used dotted keys in `setDoc` (literal field names) and a `prevCompletedAt` that could not match.
+- The `chore_occurrence` contract fixture is now a fresh scheduled create (a completed create can never pass the create rule).
+
+### Run once
+1. `flutter test test/contract` creates `chore_occurrence_reopen.json` and `chore_occurrence_restore.json`; commit them and check `chore_occurrence.json` shows no diff (hand-edited).
+2. Rules suite: not run; paste the result here.
+
+### Known limits / not in R3
+- Rules cannot see which keys are ticked or who ticked (CLAUDE.md rule 45); optional ticks count toward `requiredCount`.
+- `RepairStatus` still writes only `status` (denied for a "completed" repair); `ReopenOccurrence` does not yet put `redoSubtaskIds` on its event.
+

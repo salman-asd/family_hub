@@ -1022,10 +1022,11 @@ Map<String, dynamic> _dutyGroup() {
   ]);
 }
 
-/// P3-13: the REAL `OccurrenceMappers.toMap` payload (two ticks, a cover
-/// owner, a verification requirement) plus its completion audit entry.
-/// `contract.test.mjs` pushes it through `occurrenceOk()`; the state-machine
-/// transitions live in `chore_occurrences.test.mjs`.
+/// P3-13: the REAL `OccurrenceMappers.toMap` payload of a GENERATED chore
+/// (scheduled, no ticks, a verification requirement, one required step of two,
+/// so `requiredCount` is 1). `contract.test.mjs` pushes it through the create
+/// rule (`occurrenceOk` + `occurrenceFresh`); every later transition lives in
+/// `chore_occurrences.test.mjs` and the reopen / restore fixtures below.
 Map<String, dynamic> _choreOccurrence() {
   final occurrence = ChoreOccurrence(
     id: 'tpl_fixDishes_20261018',
@@ -1046,48 +1047,21 @@ Map<String, dynamic> _choreOccurrence() {
     difficulty: Difficulty.hard,
     estimatedMinutes: 45,
     verification: VerificationMode.required,
-    status: OccurrenceStatus.completed,
-    plannedAssigneeId: _member,
+    plannedAssigneeId: 'fixCara',
     assigneeId: 'fixCara',
-    coverForId: _member,
-    assignmentSource: AssignmentSource.cover,
-    subtaskDone: <String, SubtaskDone>{
-      'rinse': SubtaskDone(at: _at, by: 'fixCara'),
-      'dry': SubtaskDone(at: _at, by: 'fixCara'),
-    },
-    completedAt: _at,
-    completedBy: 'fixCara',
-    needsAttention: true,
-    lastCommentAt: _at,
-  );
-  final event = AuditEvent(
-    id: 'ev40',
-    type: AuditEventType.choresOccurrenceCompleted,
-    actorId: 'fixCara',
-    refType: AuditRefType.occurrence,
-    refId: occurrence.id,
-    at: _at,
-    params: const <String, String>{
-      'name': 'থালা-বাসন ধোয়া',
-      'date': '2026-10-18',
-      'member': 'fixCara',
-    },
+    assignmentSource: AssignmentSource.rotation,
   );
   return _fixture('chore_occurrence', 'fixCara', <Map<String, dynamic>>[
     _write(
       'set',
       FirestorePaths.choreOccurrenceDoc(_familyId, occurrence.id),
-      // `SubtaskDone.toMap` keeps a raw DateTime, which the JSON encoder
-      // cannot serialize; the stored value is a Timestamp, so stamp it here
-      // exactly as the repository's `_wire` does.
-      _timestampsInGrid(OccurrenceMappers.toMap(occurrence, _meta('fixCara'))),
+      OccurrenceMappers.toMap(occurrence, _meta('fixCara')),
     ),
-    ..._eventWrites(event),
   ]);
 }
 
 /// B-04 / B-05: the REAL patch of one "Reopen" on a chore with two ticks
-/// (dotted `subtaskDone.<id>` deletions, `redoSubtaskIds`, `lastEventId`) plus
+/// (dotted `subtaskDone.<id>` deletions, cleared completion, `lastEventId`) plus
 /// the `reopened` event `OccurrenceEventMappers.toMap` writes for it.
 ///
 /// `contract.test.mjs` pushes BOTH through the emulator in one batch, exactly
@@ -1114,7 +1088,6 @@ Map<String, dynamic> _choreOccurrenceReopen() {
     assignmentSource: AssignmentSource.manual,
     subtaskDone: const <String, SubtaskDone>{},
     reopenCount: 1,
-    redoSubtaskIds: const <String>['rinse', 'dry'],
   );
   final event = OccurrenceEvent(
     id: 'reopened_tokfix02',
@@ -1136,10 +1109,12 @@ Map<String, dynamic> _choreOccurrenceReopen() {
       <String, dynamic>{
         'status': reopened.status.id,
         'reopenCount': 1,
-        'redoSubtaskIds': const <String>['rinse', 'dry'],
         'lastEventId': event.id,
-        'completedAt': null,
-        'completedBy': null,
+        // The stager's `FieldValue.delete()` for every cleared field.
+        'completedAt': <String, dynamic>{'__delete': true},
+        'completedBy': <String, dynamic>{'__delete': true},
+        'verifiedAt': <String, dynamic>{'__delete': true},
+        'verifiedBy': <String, dynamic>{'__delete': true},
         // The stager's own `FieldValue.delete()` for an unticked step (the
         // fixture format has no marker for it; the JS rehydration turns
         // `__delete` into `deleteField()`).
@@ -1198,23 +1173,6 @@ Map<String, dynamic> _choreOccurrenceRestore() {
       OccurrenceMappers.restoreMap(draft, actorId: _admin, at: _at),
     ),
   ]);
-}
-
-/// The `subtaskDone` grid values as Firestore stores them (`Timestamp`, not
-/// `DateTime`); the repository's patch path does the same conversion.
-Map<String, dynamic> _timestampsInGrid(Map<String, dynamic> map) {
-  final grid = map['subtaskDone'];
-  if (grid is! Map) return map;
-  map['subtaskDone'] = <String, dynamic>{
-    for (final entry in grid.entries)
-      '${entry.key}': <String, dynamic>{
-        for (final field in (entry.value as Map).entries)
-          '${field.key}': field.value is DateTime
-              ? BaseMapper.dateTimeToTimestamp(field.value as DateTime)
-              : field.value,
-      },
-  };
-  return map;
 }
 
 Map<String, dynamic> _join() {

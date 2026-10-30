@@ -10,7 +10,8 @@ import 'package:family_hub/features/chores/templates/domain/template_parts.dart'
 /// Pure functions between [ChoreOccurrence] and `choreOccurrences/{id}`.
 ///
 /// The map is the single source of truth for the closed `occurrenceKeys()` list
-/// and the contract fixture. `toMap` writes the WHOLE document, so the rules can
+/// and the contract fixture. `requiredCount` (M-01) is DERIVED from the
+/// subtasks, never stored on the entity, so it cannot drift from them. `toMap` writes the WHOLE document, so the rules can
 /// compare immutable snapshot fields against the previous version.
 ///
 /// `fromDoc` is TOLERANT: a document with an unknown status, a malformed
@@ -35,6 +36,7 @@ abstract final class OccurrenceMappers {
     'subtasks': <Map<String, Object?>>[
       for (final subtask in occurrence.subtasks) subtask.toMap(),
     ],
+    'requiredCount': occurrence.requiredSubtasks.length,
     'difficulty': occurrence.difficulty.id,
     'estimatedMinutes': occurrence.estimatedMinutes,
     'verification': occurrence.verification.id,
@@ -162,6 +164,9 @@ abstract final class OccurrenceMappers {
       'subtasks': <Map<String, Object?>>[
         for (final subtask in draft.subtasks) subtask.toMap(),
       ],
+      // M-01: the count the rules compare `subtaskDone.size()` with; it moves
+      // with the subtasks, so a replan / restore refreshes both together.
+      'requiredCount': draft.requiredSubtasks.length,
       'difficulty': draft.difficulty.id,
       'estimatedMinutes': draft.estimatedMinutes,
       'verification': draft.verification.id,

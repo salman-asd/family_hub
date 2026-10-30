@@ -248,11 +248,19 @@ const seeders = {
         dateKey: '2026-10-19',
         monthKey: '2026-10',
         status: 'completed',
-        completedAt: nowTs(),
+        // Must equal the event's `prevCompletedAt` (rule 4 compares them).
+        completedAt: Timestamp.fromDate(new Date('2026-10-18T10:00:00.000Z')),
         completedBy: 'fixCara',
-        'subtaskDone.rinse': { at: nowTs(), by: 'fixCara' },
-        'subtaskDone.dry': { at: nowTs(), by: 'fixCara' },
-        redoSubtaskIds: [],
+        // A nested map: dotted keys inside `setDoc` would be LITERAL names.
+        subtaskDone: {
+          rinse: { at: nowTs(), by: 'fixCara' },
+          dry: { at: nowTs(), by: 'fixCara' },
+        },
+        subtasks: [
+          { id: 'rinse', title: 'ধোয়া', required: true, hint: null },
+          { id: 'dry', title: 'মুছা', required: false, hint: null },
+        ],
+        requiredCount: 1,
       }),
     );
   },

@@ -33,42 +33,26 @@
             "hint": "গামছা ব্যবহার করুন"
           }
         ],
+        "requiredCount": 1,
         "difficulty": "hard",
         "estimatedMinutes": 45,
         "verification": "required",
-        "status": "completed",
-        "plannedAssigneeId": "fixMember",
+        "status": "scheduled",
+        "plannedAssigneeId": "fixCara",
         "assigneeId": "fixCara",
-        "coverForId": "fixMember",
-        "assignmentSource": "cover",
+        "coverForId": null,
+        "assignmentSource": "rotation",
         "needsCover": false,
-        "subtaskDone": {
-          "rinse": {
-            "at": {
-              "__ts": "2026-10-18T10:00:00.000Z"
-            },
-            "by": "fixCara"
-          },
-          "dry": {
-            "at": {
-              "__ts": "2026-10-18T10:00:00.000Z"
-            },
-            "by": "fixCara"
-          }
-        },
-        "completedAt": {
-          "__ts": "2026-10-18T10:00:00.000Z"
-        },
-        "completedBy": "fixCara",
+        "subtaskDone": {},
+        "completedAt": null,
+        "completedBy": null,
         "verifiedAt": null,
         "verifiedBy": null,
         "reopenCount": 0,
         "exception": null,
         "skipReason": null,
-        "needsAttention": true,
-        "lastCommentAt": {
-          "__ts": "2026-10-18T10:00:00.000Z"
-        },
+        "needsAttention": false,
+        "lastCommentAt": null,
         "createdAt": {
           "__ts": "2026-10-18T10:00:00.000Z"
         },
@@ -80,62 +64,6 @@
         "schemaVersion": 1,
         "deletedAt": null,
         "deletedBy": null
-      }
-    },
-    {
-      "op": "set",
-      "path": "families/fixFam/activity/ev40",
-      "data": {
-        "type": "chores.occurrence_completed",
-        "actorId": "fixCara",
-        "summary": "",
-        "refType": "occurrence",
-        "refId": "tpl_fixDishes_20261018",
-        "params": {
-          "name": "থালা-বাসন ধোয়া",
-          "date": "2026-10-18",
-          "member": "fixCara"
-        },
-        "recordedAt": {
-          "__serverTime": true
-        },
-        "createdAt": {
-          "__ts": "2026-10-18T10:00:00.000Z"
-        },
-        "createdBy": "fixCara",
-        "updatedAt": {
-          "__ts": "2026-10-18T10:00:00.000Z"
-        },
-        "updatedBy": "fixCara",
-        "schemaVersion": 1
-      }
-    },
-    {
-      "op": "set",
-      "path": "families/fixFam/auditLogs/ev40",
-      "data": {
-        "type": "chores.occurrence_completed",
-        "actorId": "fixCara",
-        "summary": "",
-        "refType": "occurrence",
-        "refId": "tpl_fixDishes_20261018",
-        "params": {
-          "name": "থালা-বাসন ধোয়া",
-          "date": "2026-10-18",
-          "member": "fixCara"
-        },
-        "recordedAt": {
-          "__serverTime": true
-        },
-        "createdAt": {
-          "__ts": "2026-10-18T10:00:00.000Z"
-        },
-        "createdBy": "fixCara",
-        "updatedAt": {
-          "__ts": "2026-10-18T10:00:00.000Z"
-        },
-        "updatedBy": "fixCara",
-        "schemaVersion": 1
       }
     }
   ]

@@ -64,11 +64,11 @@ final class OccurrenceContext {
       isManager:
           settings.isModuleEnabled(PermissionModule.chores) &&
           member.permissionActor.isManager,
-      // A chore nobody owns yet counts its PLANNED owner as the assignee: the
-      // rotation already decided whose turn it is (D-P3-12). Without this a
-      // projected item with `assigneeId == null` would only accept a manager.
-      isAssignee:
-          (occurrence.assigneeId ?? occurrence.plannedAssigneeId) == member.uid,
+      // M-06: ONE definition of "the assignee" everywhere (rules `mayTick`,
+      // `CompleteOccurrence`, this context): `assigneeId` only. A chore nobody
+      // owns is somebody else's (road map 3.3) - only a manager or the family
+      // switch lets a member act on it.
+      isAssignee: occurrence.assigneeId == member.uid,
       canCompleteForOthers: settings.membersCanCompleteForOthers,
       isCompleter:
           occurrence.completedBy != null &&
@@ -150,8 +150,9 @@ Future<Result<OccurrenceContext>> loadOccurrenceContext({
     return const Failure<OccurrenceContext>(NotFound(entity: 'occurrence'));
   }
   // A projected item that an approved absence already covers is UNASSIGNED
-  // (D-P3-12); `OccurrenceContext.build` then treats only a manager as allowed
-  // to act on it, so it is never handed to whoever taps first.
+  // (D-P3-12); `OccurrenceContext.build` then treats only a manager (or the
+  // family switch) as allowed to act on it, so it is never handed to whoever
+  // taps first.
   return Success<OccurrenceContext>(
     OccurrenceContext.build(
       occurrence: draft.toOccurrence(),
@@ -211,7 +212,9 @@ AppFailure? stateFailure(OccurrenceContext context, OccurrenceAction action) {
   if (OccurrenceStateMachine.can(status, action, context.actor)) return null;
   return switch (action) {
     OccurrenceAction.verify =>
-      context.actor.isCompleter
+      !context.actor.isManager
+          ? const PermissionDenied()
+          : context.actor.isCompleter
           ? const Conflict(code: 'self_verification')
           : const Conflict(code: 'not_completed'),
     OccurrenceAction.reopen =>

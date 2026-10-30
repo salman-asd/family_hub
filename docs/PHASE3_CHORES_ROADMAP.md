@@ -1070,7 +1070,7 @@ Stored `status` ∈ `scheduled | in_progress | completed | verified | skipped`; 
 | Untick subtask | in_progress / completed | in_progress / scheduled | same | event `uncompleted` if it was completed | `verified` ⇒ `already_verified` |
 | Parent check | scheduled / in_progress | completed (all subtasks ticked) | same | audit `occurrence_completed` | `required_subtasks_open` (unless exception) |
 | Parent uncheck | completed | scheduled (all subtasks unticked) | same | event `uncompleted` | `already_verified` |
-| Verify | completed | verified | active member ≠ completer; template `verification == required`; family switch on | event `verified`, audit, inbox to completer | `self_verification`, `verification_not_required`, `not_completed` |
+| Verify | completed | verified | **manager** ≠ completer (M-05, Appendix G Q12); template `verification == required`; family switch on | event `verified`, audit, inbox to completer | `self_verification`, `verification_not_required`, `not_completed`; a plain member gets `PermissionDenied` |
 | Reopen | completed | in_progress | anyone who may comment | event `reopened` (+ reason, `prevCompletedAt`), `reopenCount + 1`, inbox to assignee | `reason_required` |
 | Reopen verified | verified | in_progress | manager | same | `verified_requires_manager` |
 | Record exception | scheduled / in_progress | same (+ `exception`) | manager | event `exception` | `reason_required` |
@@ -1082,6 +1082,13 @@ Stored `status` ∈ `scheduled | in_progress | completed | verified | skipped`; 
 | Replan | scheduled, no ticks | same (new snapshots) | manager | audit `occurrences_replanned` | `occurrence_started` |
 
 Derived overdue: `effective ∈ {scheduled, in_progress}` and `now > dueAt + overdueGraceMinutes`. A missed deadline is **never** auto-completed or auto-skipped.
+
+**Notes (Wave R3).**
+- **"The assignee" means `assigneeId` only** (M-06). A chore with `assigneeId == null` (an absence left it unassigned) is somebody else's: only a manager, or any member while `membersCanCompleteForOthers` is on, may act on it. The planned owner gets no special right. The rules (`mayTick`), `CompleteOccurrence` and `OccurrenceContext` all use this one definition.
+- **Completion needs every required step or an exception** (M-01). The occurrence snapshots `requiredCount` (the number of required steps; every step when none is marked required). A document may only be `completed` when `subtaskDone.size() >= requiredCount` or a manager's `exception` exists. The rules cannot tell WHICH keys are ticked, so an optional tick also counts toward the size; the use cases check the real required set and are stricter.
+- **M-09 (documentation only).** A chore whose steps are ALL optional behaves as if every step were required: completing it means ticking every step (`requiredSubtasks` falls back to all steps, `requiredCount` equals their number).
+- **Tick / complete / uncomplete is one rule with four branches** (M-02): stays completed (a tick on a finished chore by anybody who may tick; completion data frozen), completes (`completedBy == uid`), open to open (no completion data), uncompletes (completion cleared, `uncompleted` event in the same batch).
+- **Soft delete** (M-04) needs `scheduled`, no ticks, never completed, `reopenCount == 0`, and a future `dateKey`.
 
 ---
 
@@ -1233,6 +1240,7 @@ Dates: 2026-10-24 is a Saturday. ISO weekdays: 1 = Monday … 7 = Sunday.
 | Q9 | How long before a chore is due should a swap request expire? | 120 minutes before. |
 | Q10 | Reminders and badges wait for Phase 4 — OK? | Yes; Phase 3 only stores the reminder settings. |
 | Q11 | Default calendar view on phones? | Agenda (month and week one tap away). |
+| Q12 | Who may **verify** a completed chore: any member other than the completer (this appendix's old wording), or managers only? | **Managers only** (Wave R3, M-05): it matches `PermissionPolicy.verifyChore`, `VerifyOccurrence`, the state machine and the rules. Tell me if you want any member ≠ completer instead; that is one change in each of those four places. |
 
 
 ---
@@ -1246,3 +1254,18 @@ Dates: 2026-10-24 is a Saturday. ISO weekdays: 1 = Monday … 7 = Sunday.
 | B-06 | **Rule 12 RESTORE** (manager, soft-deleted, `status == scheduled`, no ticks) allows only the replan keys + the delete pair + update stamps; `restoreMap` writes exactly those. |
 | B-11 | Rules compile fixes: `prev()`/`next()` declared inside the occurrence match, no regex capture groups, `todayKey` built from `request.time + duration.value(6,'h')` with `year()/month()/day()`. |
 | B-01/B-02/B-03 | App-open generation starts from the shell and reports non-network failures; `canVerifyAnyProvider` drives the Verify tile/queue; the queue filter is `verifiableOccurrences`. |
+
+## Appendix I - Wave R3 spec corrections (rules parity, docs/PHASE3_REVIEW_ROADMAP.md §6)
+
+| Finding | Spec change |
+| --- | --- |
+| M-01 | New snapshot key `requiredCount` (`0 <= requiredCount <= subtasks.size()`), written by create, replan and restore; a completion needs `subtaskDone.size() >= requiredCount || exception is map`. |
+| M-02 | Rules 1 and 2 are merged into one tick / complete / uncomplete rule with four branches; an `uncompleted` event is required in the same batch. |
+| M-03 | The create rule rebuilds the id as `templateId_yyyyMMdd[_slotKey]` and compares it for equality (the main slot has no suffix). |
+| M-04 | Soft delete also needs `status == scheduled`, no ticks, no `completedAt`, `reopenCount == 0`. |
+| M-05 | Verify is a manager action everywhere (Appendix C, Q12). |
+| M-06 | One definition of the assignee: `assigneeId` only. |
+| M-07 | `todayKey` stays fixed to UTC+6; recorded in ADR 0014 and CLAUDE.md rule 46. |
+| M-08 | Rules tests added: repeated skip, ping-pong reassign, tick after complete by another member, soft delete of a started document, restore with ticks. |
+| M-09 | Documented in Appendix C. |
+| Also fixed | The event rule required an `at` field the mapper never writes and refused `redoSubtaskIds` and the null `deletedAt/By`; a null `reason` was refused (so `uncompleted`, `verified`, `unskipped` events could never be created); the create rule's "no history" check used key absence although the mapper writes explicit nulls. |

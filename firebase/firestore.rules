@@ -416,8 +416,9 @@ service cloud.firestore {
     function occurrenceKeys() {
       return ['templateId', 'templateRev', 'slotKey', 'dateKey', 'monthKey',
               'dueAt', 'dueMinutes', 'nameBn', 'nameEn', 'groupId',
-              'instructions', 'subtasks', 'difficulty', 'estimatedMinutes',
-              'verification', 'status', 'plannedAssigneeId', 'assigneeId',
+              'instructions', 'subtasks', 'requiredCount', 'difficulty',
+              'estimatedMinutes', 'verification', 'status',
+              'plannedAssigneeId', 'assigneeId',
               'coverForId', 'assignmentSource', 'needsCover', 'subtaskDone',
               'completedAt', 'completedBy', 'verifiedAt', 'verifiedBy',
               'reopenCount', 'exception', 'skipReason', 'needsAttention',
@@ -430,13 +431,14 @@ service cloud.firestore {
       return id is string
         && id.matches('^[A-Za-z0-9_]+_[0-9]{8}(_[a-z0-9]{1,12})?$');
     }
-    // B-11: Firestore rules have no regex capture groups, so the id is
-    // compared with the body by building the pattern from the (already
-    // validated) dateKey instead of extracting the date from the id.
+    // M-03: the id IS `templateId_yyyyMMdd[_slotKey]` (the main slot has no
+    // suffix, ADR 0009).  Rules have no regex capture groups (B-11), so the
+    // id is REBUILT from the body and compared for equality: templateId,
+    // dateKey and slotKey can never disagree with the id they live under.
     function occurrenceIdMatchesDate(id, d) {
-      return id.matches('^[A-Za-z0-9_]+_'
+      return id == d.templateId + '_'
         + d.dateKey.replace('-', '').replace('-', '')
-        + '(_[a-z0-9]{1,12})?$');
+        + (d.get('slotKey', null) == null ? '' : '_' + d.slotKey);
     }
     function nullableTimestamp(d, k) {
       return !(k in d.keys()) || d[k] == null || d[k] is timestamp;
@@ -478,6 +480,9 @@ service cloud.firestore {
         && (d.subtasks.size() == 0
             || (subtaskOk(d.subtasks[0])
                 && subtaskOk(d.subtasks[d.subtasks.size() - 1])))
+        && d.get('requiredCount', 0) is int
+        && d.get('requiredCount', 0) >= 0
+        && d.get('requiredCount', 0) <= d.subtasks.size()
         && d.get('difficulty', 'normal') in ['easy', 'normal', 'hard']
         && (!('estimatedMinutes' in d.keys())
             || d.estimatedMinutes == null
@@ -513,16 +518,21 @@ service cloud.firestore {
                 && d.lastEventId.matches('^[A-Za-z0-9_-]{1,64}$')));
     }
     // What a CREATE writes: straight from the generator, no history at all.
+    // The mapper writes every history field as an explicit null, so "no history"
+    // is `== null` (an absent key reads as null through `get`), never a
+    // key-absence test.
     function occurrenceFresh(d) {
       return d.get('status', '') == 'scheduled'
         && d.get('subtaskDone', {}).size() == 0
-        && !('completedAt' in d.keys()) && !('completedBy' in d.keys())
-        && !('verifiedAt' in d.keys()) && !('verifiedBy' in d.keys())
+        && d.get('completedAt', null) == null
+        && d.get('completedBy', null) == null
+        && d.get('verifiedAt', null) == null
+        && d.get('verifiedBy', null) == null
         && d.get('reopenCount', 0) == 0
-        && !('exception' in d.keys())
-        && !('skipReason' in d.keys())
+        && d.get('exception', null) == null
+        && d.get('skipReason', null) == null
         && d.get('needsAttention', false) == false
-        && !('lastCommentAt' in d.keys())
+        && d.get('lastCommentAt', null) == null
         && d.get('deletedAt', null) == null
         && d.get('deletedBy', null) == null;
     }
@@ -544,6 +554,7 @@ service cloud.firestore {
         && after.get('groupId', null) == before.get('groupId', null)
         && after.get('instructions', '') == before.get('instructions', '')
         && after.get('subtasks', []) == before.get('subtasks', [])
+        && after.get('requiredCount', 0) == before.get('requiredCount', 0)
         && after.get('difficulty', 'normal') == before.get('difficulty', 'normal')
         && after.get('estimatedMinutes', null)
              == before.get('estimatedMinutes', null)
@@ -567,6 +578,12 @@ service cloud.firestore {
             || before.get('assigneeId', null) == request.auth.uid
             || membersMayCompleteForOthers(f));
     }
+    // M-01: a finished chore has every required step ticked (the count is a
+    // snapshot taken at create / replan) or a manager recorded an exception.
+    function completionValid(d) {
+      return d.get('subtaskDone', {}).size() >= d.get('requiredCount', 0)
+        || d.get('exception', null) is map;
+    }
     // B-05: every lifecycle event has its OWN unique id, generated once per
     // user intent, and the occurrence names it in `lastEventId`.  The event
     // must be CREATED IN THIS BATCH (absent before, present after), written by
@@ -582,35 +599,50 @@ service cloud.firestore {
         && getAfter(occurrenceEventPath(f, o, e)).data.get('type', '') == type
         && getAfter(occurrenceEventPath(f, o, e)).data.get('actorId', '')
              == request.auth.uid
-        && str(getAfter(occurrenceEventPath(f, o, e)).data.get('reason', ''),
-              minReason, 300);
+        && eventReasonOk(
+             getAfter(occurrenceEventPath(f, o, e)).data.get('reason', null),
+             minReason);
+    }
+    // The mapper always writes `reason`, as null when there is none, so a
+    // null counts as the empty string (a 0-length minimum accepts it).
+    function eventReasonOk(reason, minReason) {
+      return reason == null ? minReason == 0 : str(reason, minReason, 300);
     }
     // The family's calendar day (Asia/Dhaka, UTC+6, no DST).  B-11: only
     // documented timestamp methods (`year()`, `month()`, `day()`) and
     // `timestamp + duration`; the old version used a non-existent
     // `timestamp.date(timestamp.value(..))`, `.year` and `.toString()`.
-    // Still fixed to UTC+6 (M-07): the family timezone setting is not read.
+    // Still fixed to UTC+6 (M-07, ADR 0014, CLAUDE.md rule 46): the family
+    // timezone setting is not read.
     function todayKey(f) {
       let local = request.time + duration.value(6, 'h');
       return string(local.year()) + '-'
         + (local.month() < 10 ? '0' : '') + string(local.month()) + '-'
         + (local.day() < 10 ? '0' : '') + string(local.day());
     }
+    // Exactly what `OccurrenceEventMappers.toMap` writes (the timeline orders
+    // by `createdAt`; there is no separate `at`).  The null soft-delete pair is
+    // part of the base metadata every mapper writes.
     function occurrenceEventOk(d) {
-      return d.keys().hasOnly(['type', 'actorId', 'at', 'fromAssigneeId',
+      return d.keys().hasOnly(['type', 'actorId', 'fromAssigneeId',
                                'toAssigneeId', 'reason', 'prevCompletedAt',
-                               'requestId', 'createdAt', 'createdBy',
-                               'updatedAt', 'updatedBy', 'schemaVersion'])
+                               'redoSubtaskIds', 'requestId', 'createdAt',
+                               'createdBy', 'updatedAt', 'updatedBy',
+                               'schemaVersion', 'deletedAt', 'deletedBy'])
         && d.get('type', '') in ['covered', 'swapped', 'reassigned',
                                  'completed', 'uncompleted', 'verified',
                                  'reopened', 'exception', 'skipped',
                                  'unskipped']
-        && d.get('actorId', '') is string && d.get('at', null) is timestamp
+        && d.get('actorId', '') is string
         && optStr(d, 'reason', 300)
         && nullableId(d, 'fromAssigneeId')
         && nullableId(d, 'toAssigneeId')
         && nullableId(d, 'requestId')
-        && nullableTimestamp(d, 'prevCompletedAt');
+        && nullableTimestamp(d, 'prevCompletedAt')
+        && (!('redoSubtaskIds' in d.keys())
+            || (d.redoSubtaskIds is list && d.redoSubtaskIds.size() <= 30))
+        && d.get('deletedAt', null) == null
+        && d.get('deletedBy', null) == null;
     }
     // Every occurrence update keeps the metadata and the soft-delete pair of a
     // live document; only the transitions listed in the match block change it.
@@ -2051,58 +2083,69 @@ service cloud.firestore {
           && occurrenceOk(o, request.resource.data)
           && occurrenceFresh(request.resource.data);
 
-        // 1. TICK a subtask (or record progress).  Only the touched
-        //    `subtaskDone.<id>` key changes, so two devices never overwrite each
-        //    other; every tick names its own actor (D-P3-9).
+        // 1. TICK / COMPLETE / UNCOMPLETE (M-02: one rule, four branches).
+        //    Whoever acts must pass `mayTick` against the PREVIOUS assignee.
+        //    The metadata that other rules own never moves here.  A chore can
+        //    only be (or stay) `completed` when every required step is ticked
+        //    (`subtaskDone.size() >= requiredCount`) or a manager's
+        //    `exception` exists (M-01).  Limit: the rules cannot read WHICH
+        //    keys were ticked nor who ticked one (CLAUDE.md rule 45), so the
+        //    size also counts optional ticks; the use cases are stricter.
         allow update: if verified()
           && prev().get('deletedAt', null) == null
           && occurrenceOk(o, next())
           && mayTick(f, prev())
-          && next().get('status', '') in ['scheduled', 'in_progress',
-                                          'completed']
-          && (next().get('reopenCount', 0) == prev().get('reopenCount', 0))
-          && (next().get('verifiedAt', null) == prev().get('verifiedAt', null))
-          && (next().get('skipReason', null) == prev().get('skipReason', null))
-          && (next().get('completedBy', null) == request.auth.uid)
-          && occurrenceChanged()
-               .hasOnly(['subtaskDone', 'status', 'completedAt', 'completedBy',
-                         'updatedAt', 'updatedBy']);
-
-        // 2. COMPLETE / UNCOMPLETE the parent (the whole task).  Completing
-        //    records the REAL actor (D-P3-14) and needs either every required
-        //    subtask ticked or an exception.  An `uncompleted` event names
-        //    itself in `lastEventId` (B-05) and must exist in this batch.
-        allow update: if verified()
-          && prev().get('deletedAt', null) == null
-          && occurrenceOk(o, next())
-          && mayTick(f, prev())
-          && prev().get('status', '') in ['scheduled', 'in_progress',
-                                          'completed']
-          && (next().get('completedBy', null) == null
-              || next().get('completedBy', null) == request.auth.uid)
-          && (next().get('completedAt', null) == null
-              || next().completedAt is timestamp)
           && next().get('verifiedAt', null) == prev().get('verifiedAt', null)
+          && next().get('verifiedBy', null) == prev().get('verifiedBy', null)
           && next().get('skipReason', null) == prev().get('skipReason', null)
           && next().get('reopenCount', 0) == prev().get('reopenCount', 0)
           && (
-            (next().get('status', '') == 'completed'
+            // (a) stays completed: a step is ticked/unticked on a finished
+            //     chore by anybody who may tick; completion data unchanged.
+            (prev().get('status', '') == 'completed'
+              && next().get('status', '') == 'completed'
+              && next().get('completedAt', null) == prev().get('completedAt', null)
+              && next().get('completedBy', null) == prev().get('completedBy', null)
+              && completionValid(next())
+              && occurrenceChanged()
+                   .hasOnly(['subtaskDone', 'updatedAt', 'updatedBy']))
+            // (b) completes: records the REAL actor (D-P3-14).
+            || (prev().get('status', '') in ['scheduled', 'in_progress']
+              && next().get('status', '') == 'completed'
               && next().get('completedAt', null) is timestamp
-              && next().get('completedBy', '') == request.auth.uid)
-            || (next().get('status', '') in ['scheduled', 'in_progress']
-              && (next().get('completedAt', null) == null))
-          )
-          && occurrenceChanged()
-               .hasOnly(['subtaskDone', 'status', 'completedAt', 'completedBy',
-                         'lastEventId', 'updatedAt', 'updatedBy'])
-          && (!occurrenceChanged().hasAny(['lastEventId'])
-              || occurrenceEventNew(f, o, 'uncompleted', 0));
+              && next().get('completedBy', null) == request.auth.uid
+              && completionValid(next())
+              && occurrenceChanged()
+                   .hasOnly(['subtaskDone', 'status', 'completedAt',
+                             'completedBy', 'updatedAt', 'updatedBy']))
+            // (c) open -> open: a partial tick; no completion data at all.
+            || (prev().get('status', '') in ['scheduled', 'in_progress']
+              && next().get('status', '') in ['scheduled', 'in_progress']
+              && next().get('completedAt', null) == null
+              && next().get('completedBy', null) == null
+              && occurrenceChanged()
+                   .hasOnly(['subtaskDone', 'status', 'updatedAt',
+                             'updatedBy']))
+            // (d) uncompletes: completion cleared, and the `uncompleted`
+            //     event (B-05, its own id) is created in the same batch.
+            || (prev().get('status', '') == 'completed'
+              && next().get('status', '') in ['scheduled', 'in_progress']
+              && next().get('completedAt', null) == null
+              && next().get('completedBy', null) == null
+              && occurrenceChanged()
+                   .hasOnly(['subtaskDone', 'status', 'completedAt',
+                             'completedBy', 'lastEventId', 'updatedAt',
+                             'updatedBy'])
+              && occurrenceChanged().hasAny(['lastEventId'])
+              && occurrenceEventNew(f, o, 'uncompleted', 0))
+          );
 
-        // 3. VERIFY: never the person who completed it, only a task that
-        //    requires it (snapshot) while the family switch is on, and only
-        //    with the `verified` event in the same batch.
+        // 3. VERIFY (M-05; old rule 2 was merged into rule 1, M-02): a MANAGER who is not the person who completed it,
+        //    only a task that requires it (snapshot) while the family switch
+        //    is on, and only with the `verified` event in the same batch.
+        //    Matches `PermissionPolicy.verifyChore` and the use case.
         allow update: if verified()
-          && isActiveMember(f)
+          && isManager(f)
           && prev().get('deletedAt', null) == null
           && occurrenceOk(o, next())
           && prev().get('status', '') == 'completed'
@@ -2245,19 +2288,25 @@ service cloud.firestore {
           && prev().get('reopenCount', 0) == 0
           && occurrenceChanged()
                .hasOnly(['templateRev', 'nameBn', 'nameEn', 'groupId',
-                         'instructions', 'subtasks', 'difficulty',
+                         'instructions', 'subtasks', 'requiredCount',
+                         'difficulty',
                          'estimatedMinutes', 'verification', 'dueAt',
                          'dueMinutes', 'plannedAssigneeId', 'assigneeId',
                          'assignmentSource', 'needsCover',
                          'updatedAt', 'updatedBy']);
 
-        // 11. SOFT DELETE: a manager, only an unstarted FUTURE document.
+        // 11. SOFT DELETE (M-04): a manager, only an unstarted FUTURE document:
+        //     scheduled, no ticks, never completed, never reopened.
         allow update: if verified()
           && isManager(f)
           && occurrenceOk(o, next())
           && prev().get('deletedAt', null) == null
           && next().get('deletedAt', null) is timestamp
           && next().get('deletedBy', '') == request.auth.uid
+          && prev().get('status', '') == 'scheduled'
+          && prev().get('subtaskDone', {}).size() == 0
+          && prev().get('completedAt', null) == null
+          && prev().get('reopenCount', 0) == 0
           && (next().get('dateKey', '') > todayKey(f))
           && occurrenceChanged()
                .hasOnly(['deletedAt', 'deletedBy', 'updatedAt', 'updatedBy']);
@@ -2277,7 +2326,8 @@ service cloud.firestore {
           && prev().get('subtaskDone', {}).size() == 0
           && occurrenceChanged()
                .hasOnly(['templateRev', 'nameBn', 'nameEn', 'groupId',
-                         'instructions', 'subtasks', 'difficulty',
+                         'instructions', 'subtasks', 'requiredCount',
+                         'difficulty',
                          'estimatedMinutes', 'verification', 'dueAt',
                          'dueMinutes', 'plannedAssigneeId', 'assigneeId',
                          'assignmentSource', 'needsCover',

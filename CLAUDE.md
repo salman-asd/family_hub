@@ -213,5 +213,7 @@ Source of truth: `docs/PHASE3_CHORES_ROADMAP.md` (sections 1-3 and the step card
 42. Comments are never deleted; managers may hide one with a note.
 43. Calendar targets are at least 48 dp; status = glyph + label + colour; honour reduced motion.
 44. Only the packages in roadmap Appendix D may be added in Phase 3 (`animations`, `flutter_slidable`); anything else needs an ADR.
+45. Rules limits (Wave R3): the occurrence rules cannot read WHICH `subtaskDone` keys are ticked nor who ticked one (`subtaskDone.size() >= requiredCount` also counts optional ticks). The use cases enforce the exact required set and the tick author; never relax a use case because "the rules allow it". Any new transition needs a rules test AND a Dart state-machine row.
+46. The occurrence rules' `todayKey` is fixed to UTC+6 (Asia/Dhaka, no DST) and ignores `settings/general.timezone` (ADR 0014). Do not compare it with a family-timezone date in another timezone; if the timezone setting is ever honoured, change the rules, the ADR and the rules tests together.
 
 **P3-01 seams.** The Chores tab is `ChoresHomeScreen` (route `/chores`; the calendar replaces its body in P3-22). `/chores/manage` is `ChoresManageScreen`, which renders `choresEntries` (`lib/features/chores/chores_entries.dart`) and hides a tile the viewer lacks `requires` for. Every later step appends one `ChoresEntry`; new routes are child routes of `ChoresModule`'s `/chores` route and constants in `AppRoutes`. ADR files live in `docs/decisions/` (the roadmap card says `docs/adr/`; this repo already uses `decisions`).

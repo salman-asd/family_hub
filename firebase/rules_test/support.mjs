@@ -338,6 +338,7 @@ export const occurrenceDoc = (uid, extra = {}) =>
     subtasks: [
       { id: 'step_1', title: 'প্লেট ধোয়া', required: true, hint: null },
     ],
+    requiredCount: 1,
     difficulty: 'normal',
     estimatedMinutes: null,
     verification: 'off',
@@ -357,8 +358,6 @@ export const occurrenceDoc = (uid, extra = {}) =>
     exception: null,
     skipReason: null,
     lastCommentAt: null,
-    redoSubtaskIds: [],
-    lastEventId: null,
     ...extra,
   });
 

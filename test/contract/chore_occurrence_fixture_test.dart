@@ -125,8 +125,11 @@ void main() {
     // The id's date and the dateKey agree (the rules re-derive one from the
     // other).
     expect(path.endsWith('${data['dateKey']}'.replaceAll('-', '')), isTrue);
-    expect(data['status'], 'completed');
-    expect(data['subtaskDone'], hasLength(2));
-    expect(data['assignmentSource'], 'cover');
+    // A GENERATED document: scheduled, untouched, `requiredCount` snapshotted
+    // (one required step of two, M-01).
+    expect(data['status'], 'scheduled');
+    expect(data['subtaskDone'], isEmpty);
+    expect(data['requiredCount'], 1);
+    expect(data['assignmentSource'], 'rotation');
   });
 }
