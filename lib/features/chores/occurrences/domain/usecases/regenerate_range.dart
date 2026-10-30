@@ -6,6 +6,7 @@ import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/family_date_keys.dart';
+import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/chores/availability/domain/availability_index.dart';
 import 'package:family_hub/features/chores/duty_groups/domain/duty_group_repository.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
@@ -40,6 +41,7 @@ class RegenerateRange {
     required this._families,
     required this._dateKeys,
     required this._clock,
+    this._newId = randomId,
   });
 
   final OccurrenceRepository _occurrences;
@@ -49,6 +51,9 @@ class RegenerateRange {
   final FamilyRepository _families;
   final FamilyDateKeys _dateKeys;
   final Clock _clock;
+
+  /// One id per audit entry, drawn once per chunk (B-10).
+  final IdGenerator _newId;
 
   Future<Result<GenerationOutcome>> call({
     required String familyId,
@@ -261,6 +266,7 @@ class RegenerateRange {
 
   NewAudit _audit(String familyId, DateKey from, DateKey to, int count) =>
       NewAudit(
+        id: _newId(),
         type: AuditEventType.choresOccurrencesGenerated,
         refType: AuditRefType.choreSettings,
         refId: familyId,

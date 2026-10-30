@@ -29,9 +29,9 @@ class CompletionUseCases {
   ToggleSubtask get toggleSubtask => ToggleSubtask(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );
@@ -39,9 +39,9 @@ class CompletionUseCases {
   ToggleParent get toggleParent => ToggleParent(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );
@@ -49,9 +49,9 @@ class CompletionUseCases {
   CompleteOccurrence get complete => CompleteOccurrence(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );
@@ -59,9 +59,9 @@ class CompletionUseCases {
   UncompleteOccurrence get uncomplete => UncompleteOccurrence(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );
@@ -69,9 +69,9 @@ class CompletionUseCases {
   VerifyOccurrence get verify => VerifyOccurrence(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );
@@ -79,9 +79,9 @@ class CompletionUseCases {
   ReopenOccurrence get reopen => ReopenOccurrence(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
     inbox: inbox,
@@ -90,9 +90,9 @@ class CompletionUseCases {
   RecordCompletionException get recordException => RecordCompletionException(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );
@@ -100,9 +100,9 @@ class CompletionUseCases {
   SkipOccurrence get skip => SkipOccurrence(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );
@@ -110,9 +110,9 @@ class CompletionUseCases {
   UnskipOccurrence get unskip => UnskipOccurrence(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );
@@ -120,9 +120,9 @@ class CompletionUseCases {
   ReassignOccurrence get reassign => ReassignOccurrence(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
     inbox: inbox,
@@ -131,9 +131,9 @@ class CompletionUseCases {
   RepairStatus get repair => RepairStatus(
     occurrences: fixture.occurrences,
     templates: fixture.chores,
-    families: fixture.families,
     dutyGroups: fixture.chores.dutyGroups,
-    settings: fixture.settings,
+    choreSettings: fixture.settings,
+    families: fixture.families,
     dateKeys: fixture.dateKeys,
     clock: fixture.clock,
   );

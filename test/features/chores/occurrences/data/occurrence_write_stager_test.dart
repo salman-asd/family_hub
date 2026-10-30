@@ -1,117 +1,133 @@
 import 'package:family_hub/core/audit/audit_event_type.dart';
 import 'package:family_hub/core/firebase/fake_tx_runner.dart';
 import 'package:family_hub/core/firebase/firestore_paths.dart';
-import 'package:family_hub/core/permissions/permission_settings.dart';
 import 'package:family_hub/features/chores/occurrences/data/occurrence_write_stager.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_write_plan.dart';
-import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrence_action.dart';
-import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrence_action_writer.dart';
+import 'package:family_hub/features/notifications/domain/inbox_port.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../chores_test_helpers.dart';
 
-/// B-10: the audit and inbox ids are the intent's, generated once, not the
-/// identity hash of a fresh object.
+/// B-10: inbox rows and audit entries are written under the id the INTENT
+/// carries, so a retry overwrites the same row instead of adding a second one.
 void main() {
   const familyId = ChoresFixture.familyId;
-  final at = DateTime.utc(2026, 10, 24, 3, 30);
+  final at = DateTime.utc(2026, 10, 24, 9);
 
-  OccurrenceWritePlan planWith({
-    required String auditId,
-    required String inboxId,
-  }) => OccurrenceWritePlan(
-    actorId: 'cara',
-    at: at,
-    audits: <NewAudit>[
-      NewAudit(
-        id: auditId,
-        type: AuditEventType.choresOccurrenceCompleted,
-        refId: 'tpl_1_20261024',
-      ),
-    ],
-    inbox: <NewInboxItem>[
-      NewInboxItem(
-        id: inboxId,
-        toMemberId: 'bob',
-        type: 'verification_needed',
-        refType: 'occurrence',
-        refId: 'tpl_1_20261024',
-      ),
-    ],
+  NewInboxItem inbox(String id) => NewInboxItem(
+    id: id,
+    toMemberId: 'cara',
+    type: InboxType.choreReopened,
+    refType: 'occurrence',
+    refId: 'tpl_1_20261024',
+    params: const <String, String>{'name': 'বাসন ধোয়া'},
   );
 
-  test('B-10: the same intent staged twice writes one audit and one row', () async {
-    final tx = FakeTxRunner();
-    Future<void> stage() => tx.runBatch(
-      (batch) => OccurrenceWriteStager.stage(
-        batch,
-        familyId,
-        planWith(auditId: 'intent_1', inboxId: 'intent_2'),
-      ),
-    );
+  NewAudit audit(String id) => NewAudit(
+    id: id,
+    type: AuditEventType.choresOccurrenceReopened,
+    refId: 'tpl_1_20261024',
+  );
 
-    await stage();
-    await stage();
+  OccurrenceWritePlan plan({
+    required String inboxId,
+    required String auditId,
+  }) => OccurrenceWritePlan(
+    actorId: 'bob',
+    at: at,
+    inbox: <NewInboxItem>[inbox(inboxId)],
+    audits: <NewAudit>[audit(auditId)],
+  );
 
-    final activities = tx.store.keys
-        .where(
-          (path) => path.startsWith('${FirestorePaths.activity(familyId)}/'),
-        )
-        .toList();
-    final auditLogs = tx.store.keys
-        .where(
-          (path) => path.startsWith('${FirestorePaths.auditLogs(familyId)}/'),
-        )
-        .toList();
-    final inbox = tx.store.keys
-        .where(
-          (path) =>
-              path.startsWith('${FirestorePaths.notificationInbox(familyId)}/'),
-        )
-        .toList();
+  Future<FakeTxRunner> stageAll(List<OccurrenceWritePlan> plans) async {
+    final runner = FakeTxRunner();
+    for (final p in plans) {
+      await runner.runBatch(
+        (batch) => OccurrenceWriteStager.stage(batch, familyId, p),
+      );
+    }
+    return runner;
+  }
 
-    expect(activities, <String>[
-      FirestorePaths.activityDoc(familyId, 'aud_intent_1'),
+  Iterable<String> keys(FakeTxRunner runner, String collection) =>
+      runner.store.keys.where((path) => path.startsWith('$collection/'));
+
+  test('the same intent applied twice writes ONE inbox row and ONE audit', () async {
+    final same = plan(inboxId: 'inbox_1', auditId: 'audit_1');
+    final runner = await stageAll(<OccurrenceWritePlan>[same, same]);
+
+    expect(keys(runner, FirestorePaths.inbox(familyId)), <String>[
+      FirestorePaths.inboxDoc(familyId, 'inbox_1'),
     ]);
-    expect(auditLogs, <String>[
-      FirestorePaths.auditLogDoc(familyId, 'aud_intent_1'),
+    expect(keys(runner, FirestorePaths.activity(familyId)), <String>[
+      FirestorePaths.activityDoc(familyId, 'audit_1'),
     ]);
-    expect(inbox, <String>[FirestorePaths.inboxDoc(familyId, 'inb_intent_2')]);
+    expect(keys(runner, FirestorePaths.auditLogs(familyId)), <String>[
+      FirestorePaths.auditLogDoc(familyId, 'audit_1'),
+    ]);
   });
 
-  test('B-10: planFor gives each audit and inbox row its own intent id', () {
-    final context = OccurrenceContext.build(
-      occurrence: anOccurrence(assigneeId: 'cara'),
-      member: aMember(),
-      settings: PermissionSettings.defaults,
-    );
-    var next = 0;
-    String newId() => 'id_${++next}';
+  test('a rebuilt plan with the same ids is the same row', () async {
+    final runner = await stageAll(<OccurrenceWritePlan>[
+      plan(inboxId: 'inbox_1', auditId: 'audit_1'),
+      plan(inboxId: 'inbox_1', auditId: 'audit_1'),
+    ]);
 
-    final plan = OccurrenceActionWriter.planFor(
-      context: context,
-      at: at,
-      patch: null,
-      event: NewEvent(
-        occurrenceId: context.occurrence.id,
-        type: OccurrenceEventType.completed,
-      ),
-      inbox: NewInboxItem(
-        toMemberId: 'bob',
-        type: 'verification_needed',
-        refType: 'occurrence',
-        refId: context.occurrence.id,
-      ),
-      audit: const RequiredAudit(type: AuditEventType.choresOccurrenceCompleted),
-      newId: newId,
-    );
+    expect(keys(runner, FirestorePaths.inbox(familyId)), hasLength(1));
+  });
 
-    final event = plan.events.single;
-    final inboxItem = plan.inbox.single;
-    final audit = plan.audits.single;
-    expect(event.id, isNotEmpty);
-    expect(inboxItem.id, isNotEmpty);
-    expect(audit.id, isNotEmpty);
-    expect(<String>{event.id, inboxItem.id, audit.id}, hasLength(3));
+  test('two different intents write two rows', () async {
+    final runner = await stageAll(<OccurrenceWritePlan>[
+      plan(inboxId: 'inbox_1', auditId: 'audit_1'),
+      plan(inboxId: 'inbox_2', auditId: 'audit_2'),
+    ]);
+
+    expect(keys(runner, FirestorePaths.inbox(familyId)), hasLength(2));
+    expect(keys(runner, FirestorePaths.activity(familyId)), hasLength(2));
+  });
+
+  test('two items of ONE plan never share a row', () async {
+    final runner = await stageAll(<OccurrenceWritePlan>[
+      OccurrenceWritePlan(
+        actorId: 'bob',
+        at: at,
+        inbox: <NewInboxItem>[inbox('inbox_1'), inbox('inbox_2')],
+        audits: <NewAudit>[audit('audit_1'), audit('audit_2')],
+      ),
+    ]);
+
+    expect(keys(runner, FirestorePaths.inbox(familyId)), hasLength(2));
+    expect(keys(runner, FirestorePaths.activity(familyId)), hasLength(2));
+  });
+
+  test('the stored row is keyed by the intent id, not by a hash', () async {
+    final runner = await stageAll(<OccurrenceWritePlan>[
+      plan(inboxId: 'inbox_1', auditId: 'audit_1'),
+    ]);
+
+    expect(
+      runner.store[FirestorePaths.inboxDoc(familyId, 'inbox_1')]?['type'],
+      InboxType.choreReopened,
+    );
+    expect(
+      runner.store[FirestorePaths.activityDoc(familyId, 'audit_1')]?['type'],
+      AuditEventType.choresOccurrenceReopened,
+    );
+  });
+
+  test('an unstamped item is a programming error, not a random row', () async {
+    final runner = FakeTxRunner();
+    for (final unstamped in <OccurrenceWritePlan>[
+      plan(inboxId: '', auditId: 'audit_1'),
+      plan(inboxId: 'inbox_1', auditId: ''),
+    ]) {
+      await expectLater(
+        runner.runBatch(
+          (batch) => OccurrenceWriteStager.stage(batch, familyId, unstamped),
+        ),
+        throwsStateError,
+      );
+    }
+    expect(runner.store, isEmpty);
   });
 }

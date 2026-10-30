@@ -31,22 +31,30 @@ final generationMarkerRepositoryProvider = Provider<GenerationMarkerRepository>(
 
 /// One live listener for [month] (D-P3-8, C-2).
 ///
+/// The CURRENT month stays alive so switching tabs never re-reads it; every
+/// other month is released when its last screen leaves, so browsing the
+/// calendar cannot leave live listeners (reads and battery) behind (D-01,
+/// CLAUDE rule 11). Same pattern as `monthExpensesProvider`.
+///
 /// It returns `null` while the first snapshot is loading (and while offline
 /// with nothing cached), and `truncated` tells a screen that the month holds
 /// more than [kMaxOccurrencesPerMonth] documents.  Soft-deleted documents are
 /// filtered here, once, so no screen has to remember to.
-final monthOccurrencesProvider =
-    StreamProvider.family<MonthOccurrences, MonthKey>((ref, month) {
+final monthOccurrencesProvider = StreamProvider.autoDispose
+    .family<MonthOccurrences, MonthKey>((ref, month) {
       final familyId = ref.watch(currentFamilyIdProvider);
       if (familyId == null) {
         return Stream.value(MonthOccurrences.empty);
+      }
+      if (month == ref.read(familyDateKeysProvider).thisMonth()) {
+        ref.keepAlive();
       }
       final range = monthRange(month);
       return ref
           .watch(occurrenceRepositoryProvider)
           .watchRange(familyId, from: range.start, to: range.end)
           .map(MonthOccurrences.fromDocuments);
-    }, isAutoDispose: false);
+    });
 
 /// One document (a projected item has none: the screen falls back to a draft).
 final occurrenceProvider = StreamProvider.family<ChoreOccurrence?, String>((

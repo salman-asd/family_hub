@@ -14,8 +14,11 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrenc
 /// * the dotted-key patch (never a whole-document write, so two phones merge);
 /// * the lifecycle event the state machine requires, with its OWN unique id
 ///   (B-05) that the patch records as `lastEventId`;
-/// * the inbox row (only when the port builds one);
-/// * the audit entry (always).
+/// * the inbox row (only when the port builds one), with its own id;
+/// * the audit entry (always), with its own id.
+///
+/// Every id is drawn ONCE per intent (B-05, B-10), so staging the same plan
+/// again - a retry - overwrites the same documents.
 final class OccurrenceActionWriter {
   const OccurrenceActionWriter(this._occurrences, [this._newId = randomId]);
 
@@ -42,22 +45,20 @@ final class OccurrenceActionWriter {
     final linked = patch != null && stamped != null
         ? patch.withField('lastEventId', stamped.id)
         : patch;
-    // B-10: the audit and inbox rows get an id generated ONCE per intent too,
-    // so restaging the same plan writes the same path instead of a second row.
-    final inboxItem = inbox == null || inbox.id.isNotEmpty
+    final built = audit?.build(context, at);
+    final auditEntry = built == null || built.id.isNotEmpty
+        ? built
+        : built.withId(newId());
+    final inboxRow = inbox == null || inbox.id.isNotEmpty
         ? inbox
         : inbox.withId(newId());
-    final builtAudit = audit?.build(context, at);
-    final auditEntry = builtAudit == null || builtAudit.id.isNotEmpty
-        ? builtAudit
-        : builtAudit.withId(newId());
     return OccurrenceWritePlan(
       actorId: context.member.uid,
       at: at,
       creates: <OccurrenceDraft>[?context.draft],
       patches: <OccurrencePatch>[?linked],
       events: <NewEvent>[?stamped],
-      inbox: <NewInboxItem>[?inboxItem],
+      inbox: <NewInboxItem>[?inboxRow],
       audits: <NewAudit>[?auditEntry],
     );
   }

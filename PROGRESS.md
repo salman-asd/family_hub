@@ -1370,3 +1370,24 @@ Run `tools/p3_r0_gate.sh`, paste its table here, fix only red items in a commit 
 | P3-13 occurrence data + rules | ? | ? | ? | ? |
 | P3-14 use cases | ? | ? | ? | ? |
 | P3-15 screens | ? | ? | ? | n/a |
+
+## Phase 3 - Wave R2 (data integrity and generation safety; see docs/PHASE3_REVIEW_ROADMAP.md §5)
+
+Written test-first, one commit per item. **Nothing was compiled or run** (no Dart/Flutter SDK): run `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden` and fix the first-round fallout.
+
+| Item | Change | Tests added (written before the fix) |
+| --- | --- | --- |
+| B-07 | `EnsureOccurrences._writeChunk` retries once on `PermissionDenied` as well as `Conflict` (a create on an existing id is an update for the rules, so it is denied). A genuine denial fails again on the retry and is returned as is; a second `Conflict` is still `concurrent_edit`. | `ensure_occurrences_test.dart` (half-chunk race with `permission-denied`; denied twice); backend switch `duplicateCreateFailure` |
+| B-08 | New shared `draftsFor(...)` (`usecases/drafts_for.dart`) loads absence policy, duty groups and roster. Used by `EnsureOccurrences` and by `loadOccurrenceContext` (projected drafts). Dead identical branch removed. All 11 completion use cases + providers take `dutyGroups` and `choreSettings`. Availability index is still empty until P3-26 (callers can pass one). | `projected_duty_group_test.dart`, `drafts_for_test.dart` |
+| B-09 | Paging uses `readAllPages` (`core/firebase/paged_read.dart`): total order `dateKey, documentId`, cursor = last document (`startAfterDocument`), one page size (400). No new index (the implicit `__name__` tie-break). | `paged_read_test.dart` (1,000 docs, 3/day, page 400), `occurrence_paging_source_test.dart` (source guard) |
+| B-10 | `NewAudit` / `NewInboxItem` carry an `id` drawn once per intent (writer, ensure, regenerate, replan). The stager throws `StateError` on an empty id instead of hashing. Ensure reuses the chunk audit id on its retry. | `occurrence_write_stager_test.dart`, `plan_ids_test.dart`, ensure audit-id asserts |
+| D-01 | `monthOccurrencesProvider` is `autoDispose`; only the current month `keepAlive`s. `dayItemsProvider` and `occurrenceItemProvider` are `autoDispose` too (they would otherwise pin a month forever). | `occurrence_providers_test.dart` group "D-01" (backend counts live listeners) |
+
+### Rules suite
+- **Not run.** `npm install` in `firebase/rules_test` worked, but `firebase emulators:exec` could not download `cloud-firestore-emulator-v1.22.0.jar` (storage.googleapis.com is blocked in this environment).
+- R2 changes **no** rules and **no** index files. Static check: the rules put no id pattern on `notificationInbox`, `activity` or `auditLogs`, so the new ids are accepted. Run `npm run test:emulator` in `firebase/rules_test` and paste the result here.
+
+### Known follow-ups (not in R2)
+- `occurrenceProvider` / `occurrenceEventsProvider` (single-document listeners) are still not auto-disposed.
+- `MaterializeDraft` merges plans as given; it does not stamp ids (the action writer already does).
+- D-02 and D-03 are untouched.

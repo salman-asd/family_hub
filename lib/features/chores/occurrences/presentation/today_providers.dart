@@ -36,9 +36,14 @@ final nowProvider = Provider<DateTime>((ref) {
 /// Today's [ChoreItem]s for one day, with the status a screen shows.
 ///
 /// Reads the ONE month listener of that day's month (D-P3-8): no extra query,
-/// and "mine / family" is a filter over the same list. Soft-deleted documents
+/// and "mine / family" is a filter over the same list. It is `autoDispose` on
+/// purpose: a non-disposable provider that watches a month would keep that
+/// month's listener alive forever and undo D-01. Soft-deleted documents
 /// never reach here (filtered once in `MonthOccurrences`).
-final dayItemsProvider = Provider.family<List<ChoreItem>, DateKey>((ref, day) {
+final dayItemsProvider = Provider.autoDispose.family<List<ChoreItem>, DateKey>((
+  ref,
+  day,
+) {
   final month = ref.watch(monthOccurrencesProvider(day.monthKey));
   final grace = ref.watch(choreSettingsProvider).overdueGraceMinutes;
   final now = ref.watch(nowProvider);
@@ -108,7 +113,10 @@ final todayProgressProvider = Provider<TodayProgress>((ref) {
 
 /// One [ChoreItem] for an id, from the month listener when the month is loaded,
 /// else from the single-document listener (a deep link into an old month).
-final occurrenceItemProvider = Provider.family<ChoreItem?, String>((ref, id) {
+final occurrenceItemProvider = Provider.autoDispose.family<ChoreItem?, String>((
+  ref,
+  id,
+) {
   final document = ref.watch(occurrenceProvider(id)).value;
   final month = document == null
       ? null

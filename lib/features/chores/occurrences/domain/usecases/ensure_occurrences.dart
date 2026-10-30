@@ -5,13 +5,14 @@ import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/family_date_keys.dart';
+import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/chores/availability/domain/availability_index.dart';
 import 'package:family_hub/features/chores/duty_groups/domain/duty_group_repository.dart';
 import 'package:family_hub/features/chores/occurrences/domain/generation_plan.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_draft.dart';
-import 'package:family_hub/features/chores/occurrences/domain/occurrence_generator.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_repository.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_write_plan.dart';
+import 'package:family_hub/features/chores/occurrences/domain/usecases/drafts_for.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
 import 'package:family_hub/features/chores/templates/domain/template_repository.dart';
@@ -39,8 +40,8 @@ class EnsureOccurrences {
     required this._families,
     required this._dateKeys,
     required this._clock,
-    IdGenerator newId = randomId,
-  }) : _newId = newId;
+    this._newId = randomId,
+  });
 
   final OccurrenceRepository _occurrences;
   final GenerationMarkerRepository _markers;
@@ -51,7 +52,7 @@ class EnsureOccurrences {
   final FamilyDateKeys _dateKeys;
   final Clock _clock;
 
-  /// One id per chunk's audit entry (B-10), reused by the retry of that chunk.
+  /// One id per audit entry, drawn once per chunk (B-10).
   final IdGenerator _newId;
 
   Future<Result<GenerationOutcome>> call({
@@ -99,29 +100,19 @@ class EnsureOccurrences {
       return _advance(familyId, actorUid, target);
     }
 
-    final loadedPolicy = await _settings.getAbsencePolicy(familyId);
-    final policyFailure = loadedPolicy.failureOrNull;
-    if (policyFailure != null) return Failure<GenerationOutcome>(policyFailure);
-
-    final groups = await _dutyGroups.list(familyId);
-    final groupsFailure = groups.failureOrNull;
-    if (groupsFailure != null) return Failure<GenerationOutcome>(groupsFailure);
-
-    final members = await _families.getMembers(familyId);
-    final membersFailure = members.failureOrNull;
-    if (membersFailure != null) {
-      return Failure<GenerationOutcome>(membersFailure);
-    }
-
-    final drafts = OccurrenceGenerator.drafts(
+    final built = await draftsFor(
+      familyId: familyId,
       templates: generating,
-      dutyGroups: groups.valueOrNull ?? const [],
-      members: members.valueOrNull ?? const [],
       range: range,
+      dutyGroups: _dutyGroups,
+      settings: _settings,
+      families: _families,
       dateKeys: _dateKeys,
       availabilityIndex: availabilityIndex,
-      policy: loadedPolicy.valueOrNull ?? AbsencePolicy.askCover,
     );
+    final builtFailure = built.failureOrNull;
+    if (builtFailure != null) return Failure<GenerationOutcome>(builtFailure);
+    final drafts = built.valueOrNull!;
 
     final existing = await _occurrences.idsInRange(
       familyId,
@@ -181,19 +172,22 @@ class EnsureOccurrences {
     return Success<GenerationOutcome>(GenerationOutcome(through: target));
   }
 
-  /// Stages one chunk, retrying ONCE after re-reading the ids on a conflict.
+  /// Stages one chunk, retrying ONCE after re-reading the ids when the first
+  /// attempt fails with a [Conflict] OR a [PermissionDenied] (B-07).
   ///
-  /// A create whose id already exists is evaluated by the rules as an update
-  /// and denied with `permission-denied` (B-07), so BOTH failure kinds mean
-  /// "somebody else wrote this range first" and get the same re-read.
+  /// A create on an id that another device wrote in the meantime is an UPDATE
+  /// for the rules, which deny it; `guardWrite` reports that as
+  /// `PermissionDenied`, never as `Conflict`. A real denial simply fails the
+  /// same way on the retry and is returned as it is. Any other failure
+  /// (`Network`, ...) is not a race and is not retried.
   Future<Result<int>> _writeChunk({
     required String familyId,
     required String actorUid,
     required DateTime at,
     required List<OccurrenceDraft> chunk,
   }) async {
-    // One audit id for this chunk's intent: the retry below writes the same
-    // row if the first attempt failed AND was actually committed elsewhere.
+    // ONE audit id per chunk, reused by the retry: the first attempt failed,
+    // so nothing was written under it (B-10).
     final auditId = _newId();
     final first = await _occurrences.stageIntegrity(
       familyId,
@@ -238,7 +232,7 @@ class EnsureOccurrences {
     final retryFailure = retry.failureOrNull;
     if (retryFailure != null) {
       return Failure<int>(
-        retryFailure is Conflict || retryFailure is PermissionDenied
+        retryFailure is Conflict
             ? const Conflict(code: 'concurrent_edit')
             : retryFailure,
       );

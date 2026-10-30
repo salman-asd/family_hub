@@ -100,7 +100,6 @@ final class NewEvent {
     this.toAssigneeId,
     this.reason,
     this.prevCompletedAt,
-    this.redoSubtaskIds = const <String>[],
     this.requestId,
   });
 
@@ -116,9 +115,6 @@ final class NewEvent {
   /// Required for `reassigned`, `reopened`, `exception`, `skipped` (3–300).
   final String? reason;
   final DateTime? prevCompletedAt;
-
-  /// The steps a `reopened` event sent back to "not done" (B-04).
-  final List<String> redoSubtaskIds;
   final String? requestId;
 
   NewEvent withId(String newId) => NewEvent(
@@ -129,7 +125,6 @@ final class NewEvent {
     toAssigneeId: toAssigneeId,
     reason: reason,
     prevCompletedAt: prevCompletedAt,
-    redoSubtaskIds: redoSubtaskIds,
     requestId: requestId,
   );
 
@@ -149,9 +144,11 @@ final class NewInboxItem {
     this.params = const <String, String>{},
   });
 
-  /// The row's id, generated ONCE per intent (B-10). The stager writes
-  /// `inb_$id`, so staging the same intent twice writes one row, never two.
+  /// Unique row id, generated ONCE per user intent (B-10). Leave it empty and
+  /// the plan builder stamps it; the stager refuses an empty id, so a retry of
+  /// the same intent overwrites the same row instead of adding a second one.
   final String id;
+
   final String toMemberId;
 
   /// One of `swap_request, swap_result, needs_cover, chore_reopened,
@@ -175,7 +172,8 @@ final class NewInboxItem {
 }
 
 /// One audit/activity entry. The repository stamps the actor and time from the
-/// plan, so the domain never needs a clock.
+/// plan; the [id] is generated ONCE per user intent by the plan builder (B-10),
+/// exactly like an event id, so a retry writes the same entry.
 final class NewAudit {
   const NewAudit({
     this.id = '',
@@ -185,8 +183,8 @@ final class NewAudit {
     this.params = const <String, String>{},
   });
 
-  /// The row's id, generated ONCE per intent (B-10). The stager writes
-  /// `aud_$id`, so staging the same intent twice writes one entry, never two.
+  /// Unique entry id, generated ONCE per user intent (B-10); see
+  /// [NewInboxItem.id].
   final String id;
 
   /// A key of `AuditEventType` (for example `chores.occurrence_completed`).

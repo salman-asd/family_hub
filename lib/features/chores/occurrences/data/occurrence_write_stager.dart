@@ -67,7 +67,7 @@ abstract final class OccurrenceWriteStager {
       );
     }
     for (final item in plan.inbox) {
-      batch.set(docs.inbox(_rowId('inb_', item.id)), <String, dynamic>{
+      batch.set(docs.inbox(_requireId(item.id, 'inbox row $item')), <String, dynamic>{
         'toMemberId': item.toMemberId,
         'type': item.type,
         'refType': item.refType,
@@ -83,7 +83,7 @@ abstract final class OccurrenceWriteStager {
         batch,
         familyId,
         AuditEvent(
-          id: _rowId('aud_', audit.id),
+          id: _requireId(audit.id, 'audit entry $audit'),
           type: audit.type,
           actorId: plan.actorId,
           refType: audit.refType,
@@ -110,16 +110,15 @@ abstract final class OccurrenceWriteStager {
         requestId: event.requestId,
       );
 
-  /// The document id of an audit or inbox row: the intent's id, generated once
-  /// by the use case that built the plan (B-10). Restaging the SAME plan (a
-  /// retry) therefore writes the same path, never a second row.
-  static String _rowId(String prefix, String id) {
+  /// The id of an inbox row or audit entry, generated ONCE per user intent by
+  /// the plan builder (B-10). An empty id is a bug in that builder, never
+  /// something to paper over with a hash or a random value: a hash of the
+  /// object differs per instance, so a retry would add a second row.
+  static String _requireId(String id, String what) {
     if (id.isEmpty) {
-      throw StateError(
-        'An audit/inbox id is generated once per intent; got an empty id.',
-      );
+      throw StateError('The $what has no id; the plan builder must stamp it.');
     }
-    return '$prefix$id';
+    return id;
   }
 }
 

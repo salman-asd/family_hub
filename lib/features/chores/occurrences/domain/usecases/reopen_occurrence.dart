@@ -40,9 +40,9 @@ class ReopenOccurrence {
   const ReopenOccurrence({
     required this._occurrences,
     required this._templates,
-    required this._families,
     required this._dutyGroups,
-    required this._settings,
+    required this._choreSettings,
+    required this._families,
     required this._dateKeys,
     required this._clock,
     this._inbox = const NoopInboxPort(),
@@ -50,9 +50,9 @@ class ReopenOccurrence {
 
   final OccurrenceRepository _occurrences;
   final TemplateRepository _templates;
-  final FamilyRepository _families;
   final DutyGroupRepository _dutyGroups;
-  final ChoreSettingsRepository _settings;
+  final ChoreSettingsRepository _choreSettings;
+  final FamilyRepository _families;
   final FamilyDateKeys _dateKeys;
   final Clock _clock;
   final InboxPort _inbox;
@@ -72,9 +72,9 @@ class ReopenOccurrence {
     final loaded = await loadOccurrenceContext(
       occurrences: _occurrences,
       templates: _templates,
-      families: _families,
       dutyGroups: _dutyGroups,
-      choreSettings: _settings,
+      settings: _choreSettings,
+      families: _families,
       dateKeys: _dateKeys,
       familyId: familyId,
       occurrenceId: occurrenceId,
@@ -154,7 +154,6 @@ class ReopenOccurrence {
         type: OccurrenceEventType.reopened,
         reason: note,
         prevCompletedAt: occurrence.completedAt,
-        redoSubtaskIds: redo,
       ),
       inbox: assignee == null
           ? null

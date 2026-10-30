@@ -4,13 +4,13 @@ import 'package:family_hub/core/firebase/base_mapper.dart';
 import 'package:family_hub/core/firebase/doc_watch.dart';
 import 'package:family_hub/core/firebase/firestore_guard.dart';
 import 'package:family_hub/core/firebase/firestore_paths.dart';
+import 'package:family_hub/core/firebase/paged_read.dart';
 import 'package:family_hub/core/firebase/query_limits.dart';
 import 'package:family_hub/core/firebase/tx_runner.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/occurrences/data/occurrence_event_mappers.dart';
 import 'package:family_hub/features/chores/occurrences/data/occurrence_mappers.dart';
-import 'package:family_hub/features/chores/occurrences/data/occurrence_paging.dart';
 import 'package:family_hub/features/chores/occurrences/data/occurrence_write_stager.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/chores/occurrences/domain/generation_plan.dart';
@@ -57,7 +57,12 @@ class FirestoreOccurrenceRepository
     required DateKey from,
     required DateKey to,
   }) =>
-      _rangeQuery(familyId, from: from, to: to).snapshots().map(_toOccurrences);
+      _rangeQuery(
+        familyId,
+        from: from,
+        to: to,
+        limit: kMaxOccurrencesPerMonth + 1,
+      ).snapshots().map(_toOccurrences);
 
   @override
   Stream<ChoreOccurrence?> watchOne(String familyId, String occurrenceId) =>
@@ -105,7 +110,7 @@ class FirestoreOccurrenceRepository
   }) => guardFirestore(
     () async => <String>[
       for (final occurrence in await _readAll(
-        _rangeQuery(familyId, from: from, to: to),
+        _rangeQuery(familyId, from: from, to: to, limit: kOccurrencePageSize),
       ))
         occurrence.id,
     ],
@@ -116,8 +121,11 @@ class FirestoreOccurrenceRepository
     String familyId, {
     required DateKey from,
     required DateKey to,
-  }) =>
-      guardFirestore(() => _readAll(_rangeQuery(familyId, from: from, to: to)));
+  }) => guardFirestore(
+    () => _readAll(
+      _rangeQuery(familyId, from: from, to: to, limit: kOccurrencePageSize),
+    ),
+  );
 
   @override
   Future<Result<List<ChoreOccurrence>>> listByTemplate(
@@ -131,6 +139,7 @@ class FirestoreOccurrenceRepository
           .where('templateId', isEqualTo: templateId)
           .where('dateKey', isGreaterThanOrEqualTo: from.toString())
           .orderBy('dateKey')
+          .orderBy(FieldPath.documentId)
           .limit(kOccurrencePageSize),
     ),
   );
@@ -205,45 +214,48 @@ class FirestoreOccurrenceRepository
   String _docPath(String familyId, String occurrenceId) =>
       FirestorePaths.choreOccurrenceDoc(familyId, occurrenceId);
 
-  /// The month-window query: a single-field `dateKey` range (automatic index)
-  /// ordered by day, bounded by [kMaxOccurrencesPerMonth] plus ONE probe
-  /// document, so [watchRange] can report a truncated month without a second
-  /// query (C-2).
+  /// The date-window query: a single-field `dateKey` range (automatic index)
+  /// ordered by day and then by document id, so the order is TOTAL and a page
+  /// boundary can fall anywhere without losing or repeating a document (B-09).
+  /// The implicit `__name__` tie-break of every Firestore index makes the
+  /// second sort free: no extra index.
+  ///
+  /// [limit] is [kMaxOccurrencesPerMonth] + 1 for the live month listener (the
+  /// extra document is the truncation probe, C-2) and [kOccurrencePageSize] for
+  /// the one-shot readers, which then page through [_readAll].
   Query<Map<String, dynamic>> _rangeQuery(
     String familyId, {
     required DateKey from,
     required DateKey to,
+    required int limit,
   }) => _db
       .collection(FirestorePaths.choreOccurrences(familyId))
       .where('dateKey', isGreaterThanOrEqualTo: from.toString())
       .where('dateKey', isLessThanOrEqualTo: to.toString())
       .orderBy('dateKey')
-      .limit(kMaxOccurrencesPerMonth + 1);
+      .orderBy(FieldPath.documentId)
+      .limit(limit);
 
-  /// Reads a bounded query page by page (keyset: `dateKey`, then document id),
-  /// so a regeneration range never loads an unbounded result and a page that
-  /// ends inside a day never skips the rest of that day (B-09). Every page uses
-  /// [kOccurrencePageSize], the same limit the loop checks.
+  /// Reads a bounded query to the end, one [kOccurrencePageSize] page at a
+  /// time. [query] must already carry `.limit(kOccurrencePageSize)` and a total
+  /// order; every page resumes with `startAfterDocument(lastSnapshot)`, never
+  /// with a field value (B-09, see [readAllPages]).
   Future<List<ChoreOccurrence>> _readAll(
     Query<Map<String, dynamic>> query,
-  ) => readAllOccurrencePages<ChoreOccurrence>(
+  ) => readAllPages<ChoreOccurrence, DocumentSnapshot<Map<String, dynamic>>>(
     pageSize: kOccurrencePageSize,
-    read: (after, limit) async {
-      final base = query.orderBy(FieldPath.documentId).limit(limit);
-      final page = after == null
-          ? base
-          : base.startAfter(<Object?>[after.dateKey, after.id]);
-      final snapshot = await page.get();
-      final docs = snapshot.docs;
-      final last = docs.isEmpty ? null : docs.last;
-      // A document the rules cannot have written (no string `dateKey`) cannot
-      // be resumed after; stop rather than repeat the same page forever.
-      final rawDay = last?.get('dateKey');
-      return OccurrencePage<ChoreOccurrence>(
+    fetch: (after) async {
+      final snapshot = await (after == null
+              ? query
+              : query.startAfterDocument(after))
+          .get();
+      return PageResult<
+        ChoreOccurrence,
+        DocumentSnapshot<Map<String, dynamic>>
+      >(
         items: _toOccurrences(snapshot),
-        next: docs.length < limit || rawDay is! String
-            ? null
-            : OccurrenceCursor(dateKey: rawDay, id: last!.id),
+        fetched: snapshot.docs.length,
+        cursor: snapshot.docs.isEmpty ? null : snapshot.docs.last,
       );
     },
   );
@@ -262,3 +274,6 @@ class FirestoreOccurrenceRepository
       ?OccurrenceMappers.fromDoc(doc.id, doc.data()),
   ];
 }
+
+/// Documents per one-shot page (generation, regeneration, replan).
+const int kOccurrencePageSize = 400;

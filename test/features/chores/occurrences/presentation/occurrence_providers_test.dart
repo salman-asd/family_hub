@@ -5,6 +5,7 @@ import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_p
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
+import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
 import 'package:family_hub/features/chores/templates/presentation/template_providers.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
@@ -42,6 +43,8 @@ void main() {
         currentUidProvider.overrideWithValue('alice'),
         familyRepositoryProvider.overrideWithValue(fixture.families),
         clockProvider.overrideWithValue(fixture.clock),
+        // No running timer in a unit test.
+        nowTickProvider.overrideWith((ref) => const Stream<DateTime>.empty()),
       ],
     );
     addTearDown(container.dispose);
@@ -52,13 +55,6 @@ void main() {
     fixture.occurrences.occurrences[familyId] = <String, ChoreOccurrence>{
       for (final occurrence in occurrences) occurrence.id: occurrence,
     };
-  }
-
-  /// The app-open run waits on several repositories; one `pump` is not enough.
-  Future<void> settle(ProviderContainer container) async {
-    for (var i = 0; i < 20; i++) {
-      await container.pump();
-    }
   }
 
   test(
@@ -92,6 +88,104 @@ void main() {
       expect(items.truncated, isFalse);
     },
   );
+
+  group('D-01: month listener lifetime', () {
+    /// Lets the provider dispose and the stream cancellation finish.
+    Future<void> settle(ProviderContainer container) async {
+      for (var i = 0; i < 3; i++) {
+        await container.pump();
+        await Future<void>.delayed(Duration.zero);
+      }
+    }
+
+    test('a month that is not the current one is cancelled once unwatched',
+        () async {
+      final container = makeContainer();
+      final past = container.listen(
+        monthOccurrencesProvider(MonthKey(2026, 9)),
+        (_, _) {},
+      );
+      final future = container.listen(
+        monthOccurrencesProvider(MonthKey(2026, 11)),
+        (_, _) {},
+      );
+      await settle(container);
+      expect(fixture.occurrences.activeRangeListeners, 2);
+
+      past.close();
+      future.close();
+      await settle(container);
+
+      expect(fixture.occurrences.activeRangeListeners, 0);
+    });
+
+    test('the current month stays alive after its last listener leaves',
+        () async {
+      final container = makeContainer();
+      final current = container.listen(
+        monthOccurrencesProvider(MonthKey(2026, 10)),
+        (_, _) {},
+      );
+      await settle(container);
+      current.close();
+      await settle(container);
+
+      expect(fixture.occurrences.activeRangeListeners, 1);
+    });
+
+    test('browsing five months leaves only the current month running', () async {
+      final container = makeContainer();
+      for (var m = 8; m <= 12; m++) {
+        container
+            .listen(monthOccurrencesProvider(MonthKey(2026, m)), (_, _) {})
+            .close();
+      }
+      await settle(container);
+
+      expect(fixture.occurrences.activeRangeListeners, 1);
+    });
+
+    test('a deep link into an old month does not pin its listener', () async {
+      seed(<ChoreOccurrence>[
+        anOccurrence(
+          id: 'tpl_1_20260915',
+          dateKey: DateKey(2026, 9, 15),
+          dueAt: DateTime.utc(2026, 9, 15, 3),
+        ),
+      ]);
+      final container = makeContainer();
+      final link = container.listen(
+        occurrenceItemProvider('tpl_1_20260915'),
+        (_, _) {},
+      );
+      await settle(container);
+      expect(fixture.occurrences.activeRangeListeners, 1);
+      expect(container.read(occurrenceItemProvider('tpl_1_20260915')), isNotNull);
+
+      link.close();
+      await settle(container);
+
+      expect(fixture.occurrences.activeRangeListeners, 0);
+    });
+
+    test('a disposed month re-subscribes when it is opened again', () async {
+      final container = makeContainer();
+      container
+          .listen(monthOccurrencesProvider(MonthKey(2026, 9)), (_, _) {})
+          .close();
+      await settle(container);
+
+      container.listen(monthOccurrencesProvider(MonthKey(2026, 9)), (_, _) {});
+      await settle(container);
+
+      expect(
+        container
+            .read(monthOccurrencesProvider(MonthKey(2026, 9)))
+            .hasValue,
+        isTrue,
+      );
+    });
+  });
 
   test('a soft-deleted document never reaches a screen', () async {
     seed(<ChoreOccurrence>[
@@ -190,7 +284,7 @@ void main() {
     final container = makeContainer();
     container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
     fixture.occurrences.nextMarkerFailure = const Network();
-    await settle(container);
+    await container.pump();
 
     expect(
       container.read(ensureOccurrencesOnOpenProvider(familyId)).value,
@@ -198,25 +292,22 @@ void main() {
     );
   });
 
-  test(
-    'the app-open hook reports a denied write instead of hiding it',
-    () async {
-      // B-01: only "offline" is silent; every other failure is surfaced.
-      final container = makeContainer();
-      container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
-      fixture.occurrences.nextMarkerFailure = const PermissionDenied();
-      await settle(container);
+  test('the app-open hook reports a denied write instead of hiding it', () async {
+    // B-01: only "offline" is silent; every other failure is surfaced.
+    final container = makeContainer();
+    container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
+    fixture.occurrences.nextMarkerFailure = const PermissionDenied();
+    await container.pump();
 
-      final state = container.read(ensureOccurrencesOnOpenProvider(familyId));
-      expect(state.hasError, isFalse, reason: 'it never fails the app start');
-      expect(state.value, isA<PermissionDenied>());
-    },
-  );
+    final state = container.read(ensureOccurrencesOnOpenProvider(familyId));
+    expect(state.hasError, isFalse, reason: 'it never fails the app start');
+    expect(state.value, isA<PermissionDenied>());
+  });
 
   test('the app-open hook reports nothing on success', () async {
     final container = makeContainer();
     container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
-    await settle(container);
+    await container.pump();
 
     final state = container.read(ensureOccurrencesOnOpenProvider(familyId));
     expect(state.hasError, isFalse);
@@ -235,7 +326,7 @@ void main() {
     );
     addTearDown(container.dispose);
     container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
-    await settle(container);
+    await container.pump();
 
     expect(
       container.read(ensureOccurrencesOnOpenProvider(familyId)).value,
