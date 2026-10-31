@@ -8,6 +8,8 @@ import 'package:family_hub/features/chores/occurrences/domain/generation_plan.da
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_event.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_repository.dart';
 import 'package:family_hub/features/chores/occurrences/domain/usecases/ensure_occurrences.dart';
+import 'package:family_hub/features/chores/occurrences/domain/usecases/regenerate_range.dart';
+import 'package:family_hub/features/chores/occurrences/domain/usecases/replan_occurrences.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
 import 'package:family_hub/features/chores/templates/presentation/template_providers.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
@@ -99,6 +101,38 @@ final ensureOccurrencesProvider = Provider<EnsureOccurrences>(
   (ref) => EnsureOccurrences(
     occurrences: ref.watch(occurrenceRepositoryProvider),
     markers: ref.watch(generationMarkerRepositoryProvider),
+    templates: ref.watch(templateRepositoryProvider),
+    dutyGroups: ref.watch(dutyGroupRepositoryProvider),
+    settings: ref.watch(choreSettingsRepositoryProvider),
+    families: ref.watch(familyRepositoryProvider),
+    dateKeys: ref.watch(familyDateKeysProvider),
+    clock: ref.watch(clockProvider),
+  ),
+);
+
+/// Brings stored occurrences back in line with one template (P3-12).
+///
+/// The template editor runs this after a save, from today to the generation
+/// marker (or the planning horizon when the marker is behind).
+final regenerateRangeProvider = Provider<RegenerateRange>(
+  (ref) => RegenerateRange(
+    occurrences: ref.watch(occurrenceRepositoryProvider),
+    templates: ref.watch(templateRepositoryProvider),
+    dutyGroups: ref.watch(dutyGroupRepositoryProvider),
+    settings: ref.watch(choreSettingsRepositoryProvider),
+    families: ref.watch(familyRepositoryProvider),
+    dateKeys: ref.watch(familyDateKeysProvider),
+    clock: ref.watch(clockProvider),
+  ),
+);
+
+/// Refreshes the unstarted future occurrences of one template (P3-12).
+///
+/// Only the "also update upcoming work" replan scope runs it; the default
+/// scope leaves already-planned work untouched (D-P3-23).
+final replanOccurrencesProvider = Provider<ReplanOccurrences>(
+  (ref) => ReplanOccurrences(
+    occurrences: ref.watch(occurrenceRepositoryProvider),
     templates: ref.watch(templateRepositoryProvider),
     dutyGroups: ref.watch(dutyGroupRepositoryProvider),
     settings: ref.watch(choreSettingsRepositoryProvider),

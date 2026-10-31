@@ -23,7 +23,7 @@ final templateRepositoryProvider = Provider<TemplateRepository>(
 /// ONE listener for the whole feature: the calendar, the editor and the manage
 /// hub all read this list and filter in memory (D-P3-8 discipline), so opening
 /// a third screen never adds a fourth Firestore listener.
-final _templatesStreamProvider = StreamProvider<List<TemplateRecord>>((ref) {
+final templatesStreamProvider = StreamProvider<List<TemplateRecord>>((ref) {
   final familyId = ref.watch(currentFamilyIdProvider);
   if (familyId == null) return Stream.value(const <TemplateRecord>[]);
   return ref.watch(templateRepositoryProvider).watch(familyId);
@@ -32,7 +32,7 @@ final _templatesStreamProvider = StreamProvider<List<TemplateRecord>>((ref) {
 /// Every template (including paused and archived), synchronously.
 final templatesProvider = Provider<List<TemplateRecord>>(
   (ref) =>
-      ref.watch(_templatesStreamProvider).value ?? const <TemplateRecord>[],
+      ref.watch(templatesStreamProvider).value ?? const <TemplateRecord>[],
 );
 
 /// True when the listener hit [kMaxChoreTemplates]: the list is incomplete and
