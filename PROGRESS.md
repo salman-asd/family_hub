@@ -1437,3 +1437,34 @@ Written without an SDK: **nothing was compiled or run.** Run `dart format .`, `f
 | Q-07 | `RotationEngine._occurrenceDistance`: the first firing day on or after the anchor is cycle 0 even when the anchor date does not fire (before: one person was skipped). A firing anchor is unchanged. Check stored rotations whose anchor is not a firing day. | `rotation_anchor_test.dart` |
 | Q-08 | NOT done: needs the emulator (400-create test; lower `GenerationLimits.chunkWrites` and record it in ADR 0011 if rejected). | - |
 
+
+## Phase 3 - Wave R5 (P3-15 screens; see docs/PHASE3_REVIEW_ROADMAP.md §8)
+
+Written without an SDK: **nothing was compiled or run.** Run `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden` and fix the first-round fallout. The new widget tests use provider overrides I could not check against the resolved Riverpod 3 API (notably `monthOccurrencesProvider.overrideWith((ref, month) => ...)` and `Override` from `flutter_riverpod/misc.dart`); if one does not compile, adjust the override, not the screen.
+
+| Item | Change | Tests |
+| --- | --- | --- |
+| U-01 | `OccurrenceDetailScreen` self-heals from `ref.listenManual(occurrenceProvider, ..., fireImmediately: true)`: it repairs the first time a NON-null document arrives (the old post-frame call saw `null` and gave up). Once per screen. The result is ignored on purpose (best effort; the screen shows the derived status), documented in the code. | `occurrence_detail_screen_test.dart` |
+| U-02 | Already done by R0-4 (screen 211 lines, `_session()`, sheets in `occurrence_action_sheets.dart`). Nothing new. | - |
+| U-03 | `ChoreTile` ignores `onTap` for a projected item (`canOpenOccurrence`); `TodayRow` gives a projected item no swipe panes. The detail provider is unchanged: the projected-draft fallback belongs to P3-21. | `today_screen_test.dart` |
+| U-04 | Today shows `ErrorView` (Retry = `ref.invalidate(month provider)`) when the month listener failed and there is no value; loading only while there is no value. | `today_screen_test.dart` |
+| U-05 | The header is now `TodayHeader` in the BODY (no fixed `AppBar.bottom` height): `ProgressRing` + "n of m done" + the scope toggle. Progress is `TodayProgress.of(scoped)`, so it follows Mine / Whole family. | `today_sections_test.dart`, `today_screen_test.dart` |
+| U-06 | New pure `TodaySections` (domain). `allDone` shows "All done for today" (`todayAllDoneTitle/Message`, 2 new ARB keys); an empty day keeps "Nothing to do today". | `today_sections_test.dart`, `today_screen_test.dart` |
+| U-07 | The scope starts at `choreSettingsProvider.defaultScope`; the person's own tap overrides it. | `today_screen_test.dart` |
+| U-08 | `Dismissible` replaced by `Slidable` (`TodayRow`): swipe right = Mark done (5 s undo), swipe left = Details. A pane exists only when the action can work: no "Mark done" on a finished or skipped chore, or one the viewer may not complete (`mayComplete`). The swipe now REVEALS the action button (tap to confirm) instead of completing on release. `animations` is still unused until P3-22. | `today_screen_test.dart` |
+| U-09 | Verify queue: error state with Retry, pull to refresh, loading only without a value. The `__someone__` sentinel was already gone (B-02). | `verify_queue_screen_test.dart` |
+| U-10 | `OccurrenceActionsBar` keeps at most two buttons; with more, the first (main) action stays and the rest go into one overflow menu (`actions_more`, tooltip from `MaterialLocalizations`). | `occurrence_actions_bar_test.dart` |
+| U-11 | `ChoreTile.semanticActions` -> `CustomSemanticsAction`s ("Mark done", "Chore") on every Today row. | `today_screen_test.dart` |
+| U-12 | Not changed: it belongs to the future `no_hardcoded_options_test` (P-01), which must exempt `chore_icons.dart`. | - |
+
+### Also fixed (found while doing R5)
+- `ChoreTile` wrapped its WHOLE content, `trailing` included, in `Semantics(excludeSemantics: true)`, so a screen reader could not reach the Verify queue's Approve / Send back buttons. `trailing` now sits outside that node. The Verify row also puts its two actions UNDER the tile (they squeezed the title at 2.0 scale). The tile's ink is drawn by a `Material` with a shape, so the splash is visible.
+
+### New files
+`occurrences/domain/today_sections.dart`, `presentation/today_complete.dart`, `presentation/widgets/today_header.dart`, `presentation/widgets/today_row.dart`; tests `today_sections_test.dart`, `today_screen_test.dart`, `verify_queue_screen_test.dart`, `occurrence_detail_screen_test.dart`, `occurrence_actions_bar_test.dart`, `chores_p3_15_support.dart`.
+
+### Known limits / not in R5
+- `overdueItemsProvider` / `isOverdueItem` use `status.isOpen`, which excludes an item whose status is already `overdue`; nothing reads that provider yet (the P3-29 dashboard will). Fix it there.
+- `RepairStatus` failures are ignored (R3 limit: a "completed" repair is denied by the rules).
+- The ARB keys were hand-added to both ARBs and the three generated files; `flutter gen-l10n` must show no functional diff.
+- Goldens for Today / Verify / Detail (roadmap P3-15 matrix) are not added yet.

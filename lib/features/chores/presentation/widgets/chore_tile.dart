@@ -7,6 +7,7 @@ import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart'
     as domain;
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:family_hub/features/chores/presentation/chore_icons.dart';
+import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
@@ -14,6 +15,7 @@ import 'package:family_hub/shared/widgets/flag_chip.dart' as chips;
 import 'package:family_hub/shared/widgets/status_chip.dart';
 import 'package:family_hub/shared/widgets/status_glyph.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// THE chore row of Phase 3: Today, the day panel, the agenda and the verify
@@ -29,6 +31,7 @@ class ChoreTile extends ConsumerWidget {
     required this.formatters,
     required this.onTap,
     this.trailing,
+    this.semanticActions,
     this.dense = false,
     super.key,
   });
@@ -37,8 +40,12 @@ class ChoreTile extends ConsumerWidget {
   final AppFormatters formatters;
   final VoidCallback onTap;
 
-  /// An optional action at the end of the row (for example "Approve").
+  /// An optional action at the end of the row (for example "Approve"). It sits
+  /// OUTSIDE the tile's own semantics node, so a screen reader can reach it.
   final Widget? trailing;
+
+  /// Extra screen-reader actions (a swipe has no gesture for TalkBack, U-11).
+  final Map<CustomSemanticsAction, VoidCallback>? semanticActions;
 
   /// One line instead of two (a calendar panel).
   final bool dense;
@@ -54,89 +61,115 @@ class ChoreTile extends ConsumerWidget {
     final planned = item.plannedAssigneeId == null
         ? null
         : members.where((m) => m.uid == item.plannedAssigneeId).firstOrNull;
+    // U-03: a projected item has no document yet, so it cannot be opened.
+    final VoidCallback? tap = canOpenOccurrence(item) ? onTap : null;
+    final radius = BorderRadius.circular(t.radiusMd);
 
-    return Semantics(
-      button: true,
-      label: _semantic(l10n),
-      excludeSemantics: true,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(t.radiusMd),
-          child: Container(
-            constraints: const BoxConstraints(minHeight: 56),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: item.isProjected ? t.surfaceSunken : t.surface,
-              borderRadius: BorderRadius.circular(t.radiusMd),
-              border: Border.all(
-                color: item.isProjected ? t.accentSoft : t.divider,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(choreIconFor(item), size: 20, color: t.accentStrong),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        _name(context),
-                        maxLines: dense ? 1 : 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: t.textPrimary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      if (!dense) ...[
-                        const SizedBox(height: 4),
-                        _SubLine(
-                          item: item,
-                          formatters: formatters,
-                          coveringName: item.has(domain.ChoreFlag.isCover)
-                              ? planned?.displayName
-                              : null,
-                        ),
-                      ],
-                    ],
+    return Material(
+      color: item.isProjected ? t.surfaceSunken : t.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: radius,
+        side: BorderSide(color: item.isProjected ? t.accentSoft : t.divider),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(minHeight: 56),
+        child: Row(
+          children: [
+            Expanded(
+              child: Semantics(
+                button: tap != null,
+                label: _semantic(l10n),
+                customSemanticsActions: semanticActions,
+                excludeSemantics: true,
+                child: InkWell(
+                  onTap: tap,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                    child: _content(context, l10n, assignee, planned),
                   ),
                 ),
-                const SizedBox(width: 8),
-                StatusGlyph(status: widgetStatusOf(item.status), size: 14),
-                if (item.progress.hasSubtasks) ...[
-                  const SizedBox(width: 6),
-                  Text(
-                    l10n.choreStepsCount(
-                      formatters.number(item.progress.done),
-                      formatters.number(item.progress.total),
-                    ),
-                    style: TextStyle(
-                      color: t.textSecondary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-                if (assignee != null) ...[
-                  const SizedBox(width: 8),
-                  AppAvatar(
-                    id: assignee.uid,
-                    name: assignee.displayName,
-                    avatarKey: assignee.avatarKey,
-                    size: 26,
-                    semanticLabel: assignee.displayName,
-                  ),
-                ],
-                if (trailing != null) ...[const SizedBox(width: 8), trailing!],
-              ],
+              ),
             ),
-          ),
+            if (trailing != null)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(end: 8),
+                child: trailing,
+              ),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _content(
+    BuildContext context,
+    AppLocalizations l10n,
+    Member? assignee,
+    Member? planned,
+  ) {
+    final t = context.tokens;
+    return Row(
+      children: [
+        Icon(choreIconFor(item), size: 20, color: t.accentStrong),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _name(context),
+                maxLines: dense ? 1 : 2,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: t.textPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              if (!dense) ...[
+                const SizedBox(height: 4),
+                _SubLine(
+                  item: item,
+                  formatters: formatters,
+                  coveringName: item.has(domain.ChoreFlag.isCover)
+                      ? planned?.displayName
+                      : null,
+                ),
+              ],
+            ],
+          ),
+        ),
+        const SizedBox(width: 8),
+        StatusGlyph(status: widgetStatusOf(item.status), size: 14),
+        if (item.progress.hasSubtasks) ...[
+          const SizedBox(width: 6),
+          Text(
+            l10n.choreStepsCount(
+              formatters.number(item.progress.done),
+              formatters.number(item.progress.total),
+            ),
+            style: TextStyle(
+              color: t.textSecondary,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+        if (assignee != null) ...[
+          const SizedBox(width: 8),
+          AppAvatar(
+            id: assignee.uid,
+            name: assignee.displayName,
+            avatarKey: assignee.avatarKey,
+            size: 26,
+            semanticLabel: assignee.displayName,
+          ),
+        ],
+      ],
     );
   }
 
@@ -241,6 +274,11 @@ String statusLabelOf(ChoreStatus status, AppLocalizations l10n) =>
       ChoreStatus.overdue => l10n.statusOverdue,
       ChoreStatus.skipped => l10n.choreStatusSkipped,
     };
+
+/// True when [item] can open the detail screen. A projected item (the
+/// generator's draft, not yet written) has no document, so it is shown as
+/// "planned" and stays read-only until the calendar can materialize it (U-03).
+bool canOpenOccurrence(domain.ChoreItem item) => !item.isProjected;
 
 /// True when the viewer may complete [item] (assignee, manager, or the family
 /// switch) — used by a swipe action to hide what cannot work.

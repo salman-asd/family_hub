@@ -5362,6 +5362,18 @@ abstract class AppLocalizations {
   /// **'ফাঁকা সময়টা উপভোগ করুন, বা পরে করার জন্য কাজ যোগ করুন।'**
   String get todayEmptyMessage;
 
+  /// No description provided for @todayAllDoneTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব কাজ শেষ'**
+  String get todayAllDoneTitle;
+
+  /// No description provided for @todayAllDoneMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজকের সব কাজ হয়ে গেছে। ধন্যবাদ!'**
+  String get todayAllDoneMessage;
+
   /// No description provided for @todaySectionOverdue.
   ///
   /// In bn, this message translates to:

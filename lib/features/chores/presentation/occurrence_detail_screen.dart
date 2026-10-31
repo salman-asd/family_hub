@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
@@ -54,21 +56,32 @@ class _OccurrenceDetailScreenState
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _repairOnce());
+    // U-01: the document is not there on the first frame of a cold open, so a
+    // one-shot call in a post-frame callback saw `null` and never repaired.
+    // Listen instead and repair when the first real document arrives.
+    ref.listenManual(
+      occurrenceProvider(_id),
+      (previous, next) => _repairOnce(next.value),
+      fireImmediately: true,
+    );
   }
 
-  /// Self-heal the stored `status` cache once per screen (D-P3-9, C-13).
-  Future<void> _repairOnce() async {
-    if (_repaired || !mounted) return;
+  /// Self-heal the stored `status` cache once per screen (D-P3-9, C-13), from
+  /// the FIRST non-null document. Best effort: the screen shows the derived
+  /// status anyway, so a failed repair (offline, or a denied write) changes
+  /// nothing the person sees and is deliberately not reported.
+  void _repairOnce(ChoreOccurrence? document) {
+    if (_repaired || document == null) return;
     _repaired = true;
-    final document = ref.read(occurrenceProvider(_id)).value;
-    if (document == null || !RepairStatus.needsRepair(document)) return;
+    if (!RepairStatus.needsRepair(document)) return;
     final session = _session();
     if (session == null) return;
-    await ref.read(repairStatusProvider)(
-      familyId: session.familyId,
-      actorUid: session.uid,
-      occurrenceId: _id,
+    unawaited(
+      ref.read(repairStatusProvider)(
+        familyId: session.familyId,
+        actorUid: session.uid,
+        occurrenceId: _id,
+      ),
     );
   }
 

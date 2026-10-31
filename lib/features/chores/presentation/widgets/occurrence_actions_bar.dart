@@ -80,74 +80,87 @@ class OccurrenceActionsBar extends ConsumerWidget {
         );
     final canComment = ref.can(Permission.commentOnChore);
 
-    final actions = <Widget>[
+    final actions = <_BarAction>[
       if (open && mayTick)
-        FilledButton.icon(
-          key: const ValueKey('action_complete'),
-          onPressed: busy ? null : onComplete,
-          icon: const Icon(Icons.check_rounded),
-          label: Text(l10n.occurrenceActionComplete),
+        _BarAction(
+          const ValueKey('action_complete'),
+          Icons.check_rounded,
+          l10n.occurrenceActionComplete,
+          onComplete,
+          filled: true,
         ),
       if (status == ChoreStatus.completed && mayTick)
-        OutlinedButton.icon(
-          key: const ValueKey('action_undo'),
-          onPressed: busy ? null : onUndo,
-          icon: const Icon(Icons.undo_rounded),
-          label: Text(l10n.occurrenceActionUndo),
+        _BarAction(
+          const ValueKey('action_undo'),
+          Icons.undo_rounded,
+          l10n.occurrenceActionUndo,
+          onUndo,
         ),
       if (canVerify)
-        FilledButton.icon(
-          key: const ValueKey('action_verify'),
-          onPressed: busy ? null : onVerify,
-          icon: const Icon(Icons.verified_outlined),
-          label: Text(l10n.occurrenceActionVerify),
+        _BarAction(
+          const ValueKey('action_verify'),
+          Icons.verified_outlined,
+          l10n.occurrenceActionVerify,
+          onVerify,
+          filled: true,
         ),
       if ((status == ChoreStatus.completed && canComment) ||
           (status == ChoreStatus.verified && canManage))
-        OutlinedButton.icon(
-          key: const ValueKey('action_reopen'),
-          onPressed: busy ? null : onReopen,
-          icon: const Icon(Icons.refresh_rounded),
-          label: Text(l10n.occurrenceActionReopen),
+        _BarAction(
+          const ValueKey('action_reopen'),
+          Icons.refresh_rounded,
+          l10n.occurrenceActionReopen,
+          onReopen,
         ),
       if (open && canReassign)
-        OutlinedButton.icon(
-          key: const ValueKey('action_reassign'),
-          onPressed: busy ? null : onReassign,
-          icon: const Icon(Icons.swap_horiz_rounded),
-          label: Text(l10n.occurrenceActionReassign),
+        _BarAction(
+          const ValueKey('action_reassign'),
+          Icons.swap_horiz_rounded,
+          l10n.occurrenceActionReassign,
+          onReassign,
         ),
       if (open && canManage)
-        OutlinedButton.icon(
-          key: const ValueKey('action_skip'),
-          onPressed: busy ? null : onSkip,
-          icon: const Icon(Icons.remove_circle_outline_rounded),
-          label: Text(l10n.occurrenceActionSkip),
+        _BarAction(
+          const ValueKey('action_skip'),
+          Icons.remove_circle_outline_rounded,
+          l10n.occurrenceActionSkip,
+          onSkip,
         ),
       if (status == ChoreStatus.skipped && canManage)
-        OutlinedButton.icon(
-          key: const ValueKey('action_unskip'),
-          onPressed: busy ? null : onUnskip,
-          icon: const Icon(Icons.restore_rounded),
-          label: Text(l10n.occurrenceActionUnskip),
+        _BarAction(
+          const ValueKey('action_unskip'),
+          Icons.restore_rounded,
+          l10n.occurrenceActionUnskip,
+          onUnskip,
         ),
       if (open && canManage)
-        OutlinedButton.icon(
-          key: const ValueKey('action_exception'),
-          onPressed: busy ? null : onException,
-          icon: const Icon(Icons.info_outline_rounded),
-          label: Text(l10n.occurrenceActionException),
+        _BarAction(
+          const ValueKey('action_exception'),
+          Icons.info_outline_rounded,
+          l10n.occurrenceActionException,
+          onException,
         ),
       if (open && mayTick && onSwap != null)
-        OutlinedButton.icon(
-          key: const ValueKey('action_swap'),
-          onPressed: busy ? null : onSwap,
-          icon: const Icon(Icons.person_search_rounded),
-          label: Text(l10n.occurrenceActionSwap),
+        _BarAction(
+          const ValueKey('action_swap'),
+          Icons.person_search_rounded,
+          l10n.occurrenceActionSwap,
+          onSwap!,
         ),
     ];
 
     if (actions.isEmpty) return const SizedBox.shrink();
+
+    // U-10: at most two buttons stay on the bar; with more, the first (the
+    // main action) stays and the rest move into one overflow menu, so the bar
+    // never covers the screen at text scale 2.0 in Bangla.
+    const maxInline = 2;
+    final inline = actions.length <= maxInline
+        ? actions
+        : actions.sublist(0, 1);
+    final overflow = actions.length <= maxInline
+        ? const <_BarAction>[]
+        : actions.sublist(1);
 
     return Container(
       decoration: BoxDecoration(
@@ -158,9 +171,72 @@ class OccurrenceActionsBar extends ConsumerWidget {
         top: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-          child: Wrap(spacing: 8, runSpacing: 8, children: actions),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              for (final action in inline) action.button(busy: busy),
+              if (overflow.isNotEmpty)
+                PopupMenuButton<int>(
+                  key: const ValueKey('actions_more'),
+                  tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+                  icon: const Icon(Icons.more_horiz_rounded),
+                  enabled: !busy,
+                  onSelected: (index) => overflow[index].onPressed(),
+                  itemBuilder: (context) => [
+                    for (var i = 0; i < overflow.length; i++)
+                      PopupMenuItem<int>(
+                        key: overflow[i].key,
+                        value: i,
+                        child: Row(
+                          children: [
+                            Icon(overflow[i].icon, size: 20),
+                            const SizedBox(width: 12),
+                            Flexible(child: Text(overflow[i].label)),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+/// One entry of the bar: a button when it fits, a menu row when it does not.
+class _BarAction {
+  const _BarAction(
+    this.key,
+    this.icon,
+    this.label,
+    this.onPressed, {
+    this.filled = false,
+  });
+
+  final Key key;
+  final IconData icon;
+  final String label;
+  final VoidCallback onPressed;
+  final bool filled;
+
+  Widget button({required bool busy}) {
+    final handler = busy ? null : onPressed;
+    return filled
+        ? FilledButton.icon(
+            key: key,
+            onPressed: handler,
+            icon: Icon(icon),
+            label: Text(label),
+          )
+        : OutlinedButton.icon(
+            key: key,
+            onPressed: handler,
+            icon: Icon(icon),
+            label: Text(label),
+          );
   }
 }

@@ -246,6 +246,8 @@ The use cases are stricter than the rules in several places. Rules are the last 
 | U-11 | Low | list rows | Swipe-to-complete has no semantic custom action. | Add `Semantics(customSemanticsActions: …)`. |
 | U-12 | Low | `chore_icons.dart` | Contains the seed group ids (`'kitchen'`, …). The roadmap allows this file as the one literal map, but the future `no_hardcoded_options_test` must exempt it. | Exempt explicitly. |
 
+**Wave R5 status (static, not compiled):** U-01, U-03 (tile + rows; the projected-draft fallback waits for P3-21), U-04, U-05, U-06, U-07, U-08, U-09, U-10, U-11 are done; U-02 was done by R0-4; U-12 is left to P-01. Details and tests: `PROGRESS.md` "Wave R5".
+
 ---
 
 ## 9. Wave R6 — Process, tests, docs

@@ -7,6 +7,7 @@ import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/chores/occurrences/domain/effective_status.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
+import 'package:family_hub/features/chores/occurrences/domain/today_sections.dart';
 import 'package:family_hub/features/chores/occurrences/domain/verify_queue_filter.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
@@ -93,23 +94,28 @@ final class TodayProgress {
   final int done;
   final int total;
 
+  /// Progress of [items] (U-05: the screen passes the list it shows, so the
+  /// ring follows the Mine / Whole family toggle).
+  factory TodayProgress.of(List<ChoreItem> items) {
+    var done = 0;
+    for (final item in items) {
+      if (isDoneStatus(item.status)) done++;
+    }
+    return TodayProgress(done: done, total: items.length);
+  }
+
   /// True when there is something to celebrate (and something to show).
   bool get isComplete => total > 0 && done >= total;
+
+  /// 0.0 - 1.0 for a progress ring; 0 when there is nothing to do.
+  double get fraction => total == 0 ? 0 : (done / total).clamp(0.0, 1.0);
 }
 
 /// Progress of one day; the dashboard (P3-29) and Today share it, so their
 /// numbers can never disagree.
-final todayProgressProvider = Provider<TodayProgress>((ref) {
-  final items = ref.watch(todayItemsProvider);
-  var done = 0;
-  for (final item in items) {
-    if (item.status == ChoreStatus.completed ||
-        item.status == ChoreStatus.verified) {
-      done++;
-    }
-  }
-  return TodayProgress(done: done, total: items.length);
-});
+final todayProgressProvider = Provider<TodayProgress>(
+  (ref) => TodayProgress.of(ref.watch(todayItemsProvider)),
+);
 
 /// One [ChoreItem] for an id, from the month listener when the month is loaded,
 /// else from the single-document listener (a deep link into an old month).

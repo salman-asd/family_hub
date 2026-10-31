@@ -3074,6 +3074,12 @@ class AppLocalizationsBn extends AppLocalizations {
       'ফাঁকা সময়টা উপভোগ করুন, বা পরে করার জন্য কাজ যোগ করুন।';
 
   @override
+  String get todayAllDoneTitle => 'সব কাজ শেষ';
+
+  @override
+  String get todayAllDoneMessage => 'আজকের সব কাজ হয়ে গেছে। ধন্যবাদ!';
+
+  @override
   String get todaySectionOverdue => 'বিলম্বিত';
 
   @override

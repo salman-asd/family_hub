@@ -11,6 +11,7 @@ import 'package:family_hub/features/chores/presentation/widgets/chore_tile.dart'
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:family_hub/shared/widgets/reason_sheet.dart';
 import 'package:flutter/material.dart';
@@ -39,20 +40,41 @@ class VerifyQueueScreen extends ConsumerWidget {
       message: l10n.verifyEmptyMessage,
     );
 
+    final Widget body;
+    if (!allowed) {
+      body = empty;
+    } else if (queue.hasError && !queue.hasValue) {
+      // U-09: a failed listener is an error, not an empty queue.
+      final error = queue.error;
+      body = ErrorView(
+        message: l10n.choresFailureMessage(
+          error is AppFailure ? error : Unknown(error),
+        ),
+        onRetry: () => ref.invalidate(verifyQueueProvider),
+      );
+    } else if (!queue.hasValue) {
+      body = const LoadingView();
+    } else if (items.isEmpty) {
+      body = empty;
+    } else {
+      body = RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(verifyQueueProvider);
+          await ref.read(verifyQueueProvider.future);
+        },
+        child: ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          itemCount: items.length,
+          separatorBuilder: (context, index) => const SizedBox(height: 8),
+          itemBuilder: (context, index) => _VerifyRow(item: items[index]),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.verifyTitle)),
-      body: !allowed
-          ? empty
-          : queue.isLoading
-          ? const LoadingView()
-          : items.isEmpty
-          ? empty
-          : ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: items.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemBuilder: (context, index) => _VerifyRow(item: items[index]),
-            ),
+      body: body,
     );
   }
 }
@@ -75,31 +97,42 @@ class _VerifyRowState extends ConsumerState<_VerifyRow> {
     final l10n = context.l10n;
     final formatters = ref.watch(appFormattersProvider);
 
-    return ChoreTile(
-      item: widget.item,
-      formatters: formatters,
-      onTap: () => context.push(AppRoutes.choresOccurrence(widget.item.id)),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            key: const ValueKey('verify_send_back'),
-            tooltip: l10n.verifyReopen,
-            onPressed: _busy ? null : _sendBack,
-            icon: Icon(Icons.undo_rounded, color: t.textSecondary),
-          ),
-          FilledButton(
-            key: const ValueKey('verify_approve'),
-            onPressed: _busy ? null : _approve,
-            style: FilledButton.styleFrom(
-              minimumSize: const Size(48, 48),
-              backgroundColor: t.accent,
-              foregroundColor: t.textOnAccent,
+    // The actions sit under the tile, not beside it: at text scale 2.0 in
+    // Bangla a side-by-side button leaves the title no room.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ChoreTile(
+          item: widget.item,
+          formatters: formatters,
+          onTap: () => context.push(AppRoutes.choresOccurrence(widget.item.id)),
+        ),
+        const SizedBox(height: 4),
+        Wrap(
+          alignment: WrapAlignment.end,
+          spacing: 8,
+          runSpacing: 4,
+          children: [
+            TextButton.icon(
+              key: const ValueKey('verify_send_back'),
+              onPressed: _busy ? null : _sendBack,
+              style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+              icon: Icon(Icons.undo_rounded, color: t.textSecondary),
+              label: Text(l10n.verifyReopen),
             ),
-            child: Text(l10n.verifyApprove),
-          ),
-        ],
-      ),
+            FilledButton(
+              key: const ValueKey('verify_approve'),
+              onPressed: _busy ? null : _approve,
+              style: FilledButton.styleFrom(
+                minimumSize: const Size(48, 48),
+                backgroundColor: t.accent,
+                foregroundColor: t.textOnAccent,
+              ),
+              child: Text(l10n.verifyApprove),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

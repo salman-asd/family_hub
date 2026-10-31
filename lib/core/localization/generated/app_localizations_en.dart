@@ -3092,6 +3092,12 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enjoy the free time, or plan a chore for later.';
 
   @override
+  String get todayAllDoneTitle => 'All done for today';
+
+  @override
+  String get todayAllDoneMessage => 'Every chore for today is finished. Well done!';
+
+  @override
   String get todaySectionOverdue => 'Overdue';
 
   @override
