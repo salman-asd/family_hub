@@ -5,10 +5,10 @@ import 'package:family_hub/features/chores/presentation/chores_manage_screen.dar
 import 'package:family_hub/features/chores/presentation/occurrence_detail_screen.dart';
 import 'package:family_hub/features/chores/presentation/today_screen.dart';
 import 'package:family_hub/features/chores/presentation/verify_queue_screen.dart';
+import 'package:family_hub/features/chores/settings/presentation/screens/chore_settings_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 /// The Chores module.  Routes nest under [AppRoutes.chores]; every later
 /// Phase 3 screen is added as a child route (roadmap 3.10).
 class ChoresModule extends FamilyModule {

@@ -1,7 +1,7 @@
 # Uploading the Family Hub codebase to Claude — Phase 3 (Chores)
 
 Use this instead of `UPLOAD_CODEBASE_TO_CLAUDE.md` while you work on `docs/PHASE3_CHORES_ROADMAP.md`.
-The old guide zips almost everything. Phase 3 only touches the chores feature, shared widgets, core helpers, rules and docs, so this guide uploads **only what the step needs** — on your current tree that is about **2.5 MB (458 files) instead of 4.8 MB (653 files)** before zip compression, and far fewer tokens for Claude to read; Delta zips are usually a few hundred KB.
+The old guide zips almost everything. Phase 3 only touches the chores feature, shared widgets, core helpers, rules and docs, so this guide uploads **only what the step needs** — it is a fraction of the full tree (the exact size is printed by the script and `UPLOAD_MANIFEST.txt`) before zip compression, and far fewer tokens for Claude to read; Delta zips are usually a few hundred KB.
 
 Three ways to upload, from smallest to largest:
 
@@ -167,7 +167,8 @@ tar -tf .\family_hub_p3_*.zip | Select-String -Pattern 'google-services|key.prop
 | P3-01 (gate) | **Full** | The gate runs the whole project and Claude may need to repair Phase 2 code |
 | P3-02 … P3-04 | **Lean** | Core helpers, vocabulary and widgets |
 | P3-05 … P3-14 | **Lean** (then **Delta** for follow-up fixes) | Engines, data, rules |
-| P3-15 … P3-19 | **Lean** | Screens |
+| Review waves R0 … R6 | **Lean** | Done (see `PROGRESS.md`); the review findings live in `docs/PHASE3_REVIEW_ROADMAP.md`, which Lean includes |
+| P3-15 … P3-19 | **Lean** | Screens (P3-15 is done; **start new work at P3-16** after the §10 exit criteria of the review roadmap) |
 | P3-20 … P3-24 | **Lean** | Calendar; goldens are not uploaded, so send a screenshot of any visual problem |
 | P3-25 … P3-28 | **Lean** | |
 | P3-29, P3-30 | **Lean**, **Full** for the final review | |
@@ -177,13 +178,15 @@ tar -tf .\family_hub_p3_*.zip | Select-String -Pattern 'google-services|key.prop
 
 ```text
 This is the current Family Hub codebase (PROFILE: lean / delta / full — see UPLOAD_MANIFEST.txt).
-Read CLAUDE.md, PROGRESS.md and docs/PHASE3_CHORES_ROADMAP.md (sections 1-3 and the card for the step) first.
+Read CLAUDE.md, PROGRESS.md, docs/PHASE3_CHORES_ROADMAP.md (sections 1-3, Appendix C/H/I and the card for the step)
+and docs/PHASE3_REVIEW_ROADMAP.md (section 10, the exit criteria) first. Waves R0-R6 are recorded in PROGRESS.md.
 The code may have changed outside Claude (Copilot, my edits): inspect the files and verify the steps marked
 Done in PROGRESS.md before building on them. If something you need is not in the zip, tell me the exact
 path and I will send it; do not guess its contents.
 Task: implement P3-xx (or: fix the errors below).
 Assume you cannot compile: I will run dart format / flutter gen-l10n / flutter analyze / flutter test
-(--exclude-tags golden), the rules suite and node tools/check_indexes.mjs, and paste any errors back.
+(--exclude-tags golden), the rules suite (npm run test:emulator in firebase/rules_test, which now includes the
+parity table) and node tools/check_indexes.mjs, and paste any errors back.
 Return only the files you created or changed, as a zip with the same folder structure, and update
 PROGRESS.md (and CLAUDE.md / this guide if they are affected). List files you deleted separately.
 ```
