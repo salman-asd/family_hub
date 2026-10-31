@@ -5487,6 +5487,408 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'{done}/{total}'**
   String choreStepsCount(String done, String total);
+
+  /// No description provided for @choresSettingsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের সেটিংস'**
+  String get choresSettingsTitle;
+
+  /// No description provided for @choresSettingsSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পছন্দ, আবর্তন নীতিমালা এবং ক্যাটালগ'**
+  String get choresSettingsSubtitle;
+
+  /// No description provided for @choresSettingsCalendarTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যালেন্ডার ও প্রদর্শন'**
+  String get choresSettingsCalendarTitle;
+
+  /// No description provided for @choresSettingsGenerationTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'তৈরি ও সময় নির্ধারণ'**
+  String get choresSettingsGenerationTitle;
+
+  /// No description provided for @choresSettingsCatalogsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যাটালগসমূহ'**
+  String get choresSettingsCatalogsTitle;
+
+  /// No description provided for @choresSettingsPoliciesTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নীতিমালা ও নিয়ম'**
+  String get choresSettingsPoliciesTitle;
+
+  /// No description provided for @choresSettingsHouseRulesTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের নিয়ম'**
+  String get choresSettingsHouseRulesTitle;
+
+  /// No description provided for @choresSettingsDefaultView.
+  ///
+  /// In bn, this message translates to:
+  /// **'ডিফল্ট ক্যালেন্ডার ভিউ'**
+  String get choresSettingsDefaultView;
+
+  /// No description provided for @choresSettingsDefaultScope.
+  ///
+  /// In bn, this message translates to:
+  /// **'ডিফল্ট কাজের পরিধি'**
+  String get choresSettingsDefaultScope;
+
+  /// No description provided for @choresSettingsWeekStart.
+  ///
+  /// In bn, this message translates to:
+  /// **'সপ্তাহ শুরুর দিন'**
+  String get choresSettingsWeekStart;
+
+  /// No description provided for @choresSettingsShowProjected.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্ভাব্য কাজ দেখান'**
+  String get choresSettingsShowProjected;
+
+  /// No description provided for @choresSettingsShowProjectedSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যালেন্ডারে আগামী মাসের অনুমানকৃত কাজ দেখাবে'**
+  String get choresSettingsShowProjectedSubtitle;
+
+  /// No description provided for @choresSettingsProjectedMonths.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগামী পূর্বাভাস: {months} মাস'**
+  String choresSettingsProjectedMonths(int months);
+
+  /// No description provided for @choresCalendarViewAgenda.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকা'**
+  String get choresCalendarViewAgenda;
+
+  /// No description provided for @choresCalendarViewMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসিক'**
+  String get choresCalendarViewMonth;
+
+  /// No description provided for @choresCalendarViewWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাপ্তাহিক'**
+  String get choresCalendarViewWeek;
+
+  /// No description provided for @choresCalendarScopeMine.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমার কাজ'**
+  String get choresCalendarScopeMine;
+
+  /// No description provided for @choresCalendarScopeAll.
+  ///
+  /// In bn, this message translates to:
+  /// **'সবার কাজ'**
+  String get choresCalendarScopeAll;
+
+  /// No description provided for @choresSettingsHorizon.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ তৈরির সময়কাল: {days} দিন'**
+  String choresSettingsHorizon(int days);
+
+  /// No description provided for @choresSettingsHorizonSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কত দিন আগে থেকে স্বয়ংক্রিয়ভাবে কাজ তৈরি হবে (১৪-৯০ দিন)'**
+  String get choresSettingsHorizonSubtitle;
+
+  /// No description provided for @choresSettingsOverdueGrace.
+  ///
+  /// In bn, this message translates to:
+  /// **'গ্রেস পিরিয়ড: {minutes} মিনিট'**
+  String choresSettingsOverdueGrace(int minutes);
+
+  /// No description provided for @choresSettingsOverdueGraceSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্ধারিত সময়ের কত মিনিট পর কাজ বিলম্বিত ধরা হবে'**
+  String get choresSettingsOverdueGraceSubtitle;
+
+  /// No description provided for @choresSettingsGroupsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের গ্রুপসমূহ'**
+  String get choresSettingsGroupsTitle;
+
+  /// No description provided for @choresSettingsPresetsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময়ের প্রিসেটসমূহ'**
+  String get choresSettingsPresetsTitle;
+
+  /// No description provided for @choresSettingsAbsenceReasonsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতির কারণসমূহ'**
+  String get choresSettingsAbsenceReasonsTitle;
+
+  /// No description provided for @choresGroupDeactivateWarningTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'গ্রুপটি বন্ধ করবেন?'**
+  String get choresGroupDeactivateWarningTitle;
+
+  /// No description provided for @choresGroupDeactivateWarningMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই গ্রুপের অধীনে কিছু সক্রিয় কাজ রয়েছে। এটি বন্ধ করলে নতুন কাজে এটি বেছে নেওয়া যাবে না, তবে চলমান কাজে কোনো প্রভাব পড়বে না। চালিয়ে যেতে চান?'**
+  String get choresGroupDeactivateWarningMessage;
+
+  /// No description provided for @choresGroupColor.
+  ///
+  /// In bn, this message translates to:
+  /// **'রং'**
+  String get choresGroupColor;
+
+  /// No description provided for @choresGroupIcon.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইকন'**
+  String get choresGroupIcon;
+
+  /// No description provided for @choresGroupAddTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন গ্রুপ যোগ করুন'**
+  String get choresGroupAddTitle;
+
+  /// No description provided for @choresGroupEditTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'গ্রুপ সম্পাদনা'**
+  String get choresGroupEditTitle;
+
+  /// No description provided for @choresPresetAddTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন সময় প্রিসেট যোগ করুন'**
+  String get choresPresetAddTitle;
+
+  /// No description provided for @choresPresetEditTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় প্রিসেট সম্পাদনা'**
+  String get choresPresetEditTitle;
+
+  /// No description provided for @choresPresetTime.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিনের সময়'**
+  String get choresPresetTime;
+
+  /// No description provided for @choresSettingsAbsencePolicyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতির নীতিমালা'**
+  String get choresSettingsAbsencePolicyTitle;
+
+  /// No description provided for @choresPolicyAskCoverTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কভারের অনুরোধ (পলিসি A)'**
+  String get choresPolicyAskCoverTitle;
+
+  /// No description provided for @choresPolicyAskCoverDesc.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিত সদস্য নিজে পরিবারের অন্য কাউকে তার কাজটি করার অনুরোধ জানান।'**
+  String get choresPolicyAskCoverDesc;
+
+  /// No description provided for @choresPolicyAskCoverExample.
+  ///
+  /// In bn, this message translates to:
+  /// **'উদাহরণ: জরুরি কাজে বাইরে থাকলে অন্য সদস্যকে কাজটি করে দিতে অনুরোধ পাঠানো।'**
+  String get choresPolicyAskCoverExample;
+
+  /// No description provided for @choresPolicyAutoCoverTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্বয়ংক্রিয় কভার প্রস্তাব (পলিসি B)'**
+  String get choresPolicyAutoCoverTitle;
+
+  /// No description provided for @choresPolicyAutoCoverDesc.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাপ উপযুক্ত সদস্যকে স্বয়ংক্রিয়ভাবে বেছে নিয়ে কভারের প্রস্তাব পাঠায় (তিনি গ্রহণ বা প্রত্যাখ্যান করতে পারেন)।'**
+  String get choresPolicyAutoCoverDesc;
+
+  /// No description provided for @choresPolicyAutoCoverExample.
+  ///
+  /// In bn, this message translates to:
+  /// **'উদাহরণ: ঘূর্ণায়মান তালিকায় পরবর্তী ফ্রি সদস্যের কাছে অনুরোধ যাবে।'**
+  String get choresPolicyAutoCoverExample;
+
+  /// No description provided for @choresPolicySkipTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ বাদ দেওয়া (পলিসি C)'**
+  String get choresPolicySkipTitle;
+
+  /// No description provided for @choresPolicySkipDesc.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতির কারণে কাজটি সেদিনের জন্য বাদ দেওয়া হয় এবং স্কোরিংয়ে নিরপেক্ষ থাকে।'**
+  String get choresPolicySkipDesc;
+
+  /// No description provided for @choresPolicySkipExample.
+  ///
+  /// In bn, this message translates to:
+  /// **'উদাহরণ: বিশেষ জরুরি না হলে কাজটি পরবর্তী শিডিউল পর্যন্ত অপেক্ষা করবে।'**
+  String get choresPolicySkipExample;
+
+  /// No description provided for @choresSettingsSwapsEnabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের অদলবদল (Swap) চালু রাখুন'**
+  String get choresSettingsSwapsEnabled;
+
+  /// No description provided for @choresSettingsSwapsEnabledSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্যরা নিজেদের মধ্যে কাজ অদলবদল করতে পারবেন'**
+  String get choresSettingsSwapsEnabledSubtitle;
+
+  /// No description provided for @choresSettingsSwapBuffer.
+  ///
+  /// In bn, this message translates to:
+  /// **'অদলবদল অনুরোধের মেয়াদ: {minutes} মিনিট'**
+  String choresSettingsSwapBuffer(int minutes);
+
+  /// No description provided for @choresSettingsSwapBufferSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধ পাঠানোর পর কতক্ষণ পর্যন্ত এটি কার্যকর থাকবে'**
+  String get choresSettingsSwapBufferSubtitle;
+
+  /// No description provided for @choresSettingsAbsenceApproval.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতিতে অনুমোদনের প্রয়োজন'**
+  String get choresSettingsAbsenceApproval;
+
+  /// No description provided for @choresSettingsAbsenceApprovalSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতির অনুরোধ ম্যানেজারের সিদ্ধান্তের জন্য অপেক্ষা করবে'**
+  String get choresSettingsAbsenceApprovalSubtitle;
+
+  /// No description provided for @choresSettingsWorkloadVisible.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের বণ্টন সবার জন্য উন্মুক্ত'**
+  String get choresSettingsWorkloadVisible;
+
+  /// No description provided for @choresSettingsWorkloadVisibleSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের সব সক্রিয় সদস্য কাজের সমবণ্টনের হিসাব দেখতে পাবেন'**
+  String get choresSettingsWorkloadVisibleSubtitle;
+
+  /// No description provided for @choresSettingsCompleteForOthers.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যের কাজ সম্পন্ন করার অনুমতি'**
+  String get choresSettingsCompleteForOthers;
+
+  /// No description provided for @choresSettingsCompleteForOthersSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'যেকোনো সদস্য অন্যের কাজ সম্পন্ন করতে পারবেন (এডমিন কন্ট্রোল)'**
+  String get choresSettingsCompleteForOthersSubtitle;
+
+  /// No description provided for @choresSettingsHouseRulesEditor.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের নিয়মাবলী (মার্কডাউন)'**
+  String get choresSettingsHouseRulesEditor;
+
+  /// No description provided for @choresSettingsHouseRulesPreview.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রিভিউ'**
+  String get choresSettingsHouseRulesPreview;
+
+  /// No description provided for @choresSettingsHouseRulesHelp.
+  ///
+  /// In bn, this message translates to:
+  /// **'শিরোনাম: # শিরোনাম, বুলেট: - লেখা, গাঢ়: **লেখা**'**
+  String get choresSettingsHouseRulesHelp;
+
+  /// No description provided for @choresSettingsHouseRulesEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের কোনো বিশেষ নিয়ম এখনও যোগ করা হয়নি।'**
+  String get choresSettingsHouseRulesEmpty;
+
+  /// No description provided for @choresSettingsSave.
+  ///
+  /// In bn, this message translates to:
+  /// **'সেটিংস সংরক্ষণ করুন'**
+  String get choresSettingsSave;
+
+  /// No description provided for @choresSettingsResetSection.
+  ///
+  /// In bn, this message translates to:
+  /// **'সেকশন রিসেট করুন'**
+  String get choresSettingsResetSection;
+
+  /// No description provided for @choresSettingsResetConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ডিফল্টে ফিরিয়ে নিতে চান?'**
+  String get choresSettingsResetConfirmTitle;
+
+  /// No description provided for @choresSettingsResetConfirmMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সেকশনের সব পরিবর্তন ডিফল্ট অবস্থায় ফিরে যাবে। আপনার কোনো কাজ বা টেমপ্লেট মুছে যাবে না।'**
+  String get choresSettingsResetConfirmMessage;
+
+  /// No description provided for @choresSettingsDiscardTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবর্তন বাতিল করবেন?'**
+  String get choresSettingsDiscardTitle;
+
+  /// No description provided for @choresSettingsDiscardMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার কিছু পরিবর্তন সংরক্ষণ করা হয়নি। আপনি কি পাতা ত্যাগ করতে চান?'**
+  String get choresSettingsDiscardMessage;
+
+  /// No description provided for @choresSettingsSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের সেটিংস সংরক্ষিত হয়েছে'**
+  String get choresSettingsSaved;
+
+  /// No description provided for @choresSettingsNotAllowed.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের সেটিংস পরিচালনা করার অনুমতি আপনার নেই।'**
+  String get choresSettingsNotAllowed;
+
+  /// No description provided for @choresSettingsPickIcon.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইকন বেছে নিন'**
+  String get choresSettingsPickIcon;
 }
 
 class _AppLocalizationsDelegate

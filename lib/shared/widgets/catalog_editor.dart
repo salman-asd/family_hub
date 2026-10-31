@@ -1,4 +1,4 @@
-﻿import 'package:family_hub/app/theme/app_tokens.dart';
+import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/shared/widgets/catalog_entry_dialog.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,7 @@ class CatalogEntry {
     this.active = true,
     this.builtIn = false,
     this.detail,
+    this.extra,
   });
 
   /// Stable machine id (`kitchen`, `morning`, …). Never shown.
@@ -35,12 +36,14 @@ class CatalogEntry {
   /// A short secondary line (for a preset: the time; for a group: the colour).
   /// Already formatted by the caller.
   final String? detail;
+  final Object? extra;
 
   CatalogEntry copyWith({
     String? labelBn,
     String? labelEn,
     bool? active,
     String? detail,
+    Object? extra,
   }) => CatalogEntry(
     id: id,
     labelBn: labelBn ?? this.labelBn,
@@ -48,6 +51,7 @@ class CatalogEntry {
     active: active ?? this.active,
     builtIn: builtIn,
     detail: detail ?? this.detail,
+    extra: extra ?? this.extra,
   );
 
   @override
@@ -58,11 +62,12 @@ class CatalogEntry {
       other.labelEn == labelEn &&
       other.active == active &&
       other.builtIn == builtIn &&
-      other.detail == detail;
+      other.detail == detail &&
+      other.extra == extra;
 
   @override
   int get hashCode =>
-      Object.hash(id, labelBn, labelEn, active, builtIn, detail);
+      Object.hash(id, labelBn, labelEn, active, builtIn, detail, extra);
 }
 
 /// Reorderable, add/edit/deactivate list of [CatalogEntry] rows (P3-04).
@@ -79,6 +84,8 @@ class CatalogEditor extends StatelessWidget {
     this.addLabel,
     this.emptyLabel,
     this.canReorder = true,
+    this.onEditEntry,
+    this.onBeforeToggleActive,
     super.key,
   });
 
@@ -96,6 +103,10 @@ class CatalogEditor extends StatelessWidget {
   final String? emptyLabel;
 
   final bool canReorder;
+  final Future<CatalogEntry?> Function(BuildContext, CatalogEntry?)?
+      onEditEntry;
+  final Future<bool> Function(BuildContext, CatalogEntry)?
+      onBeforeToggleActive;
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +152,7 @@ class CatalogEditor extends StatelessWidget {
                 showHandle: canReorder,
                 onEdit: () => _edit(context, entry),
                 onToggleActive: () =>
-                    _replace(entry, entry.copyWith(active: !entry.active)),
+                    _handleToggle(context, entry),
                 onDelete: entry.builtIn ? null : () => _remove(entry),
               );
             },
@@ -171,7 +182,25 @@ class CatalogEditor extends StatelessWidget {
   /// Adds a row with a stable `custom_N` id (never `builtIn`).
   void _add(BuildContext context) => _edit(context, null);
 
+  Future<void> _handleToggle(BuildContext context, CatalogEntry entry) async {
+    if (onBeforeToggleActive != null) {
+      final allowed = await onBeforeToggleActive!(context, entry);
+      if (!allowed) return;
+    }
+    _replace(entry, entry.copyWith(active: !entry.active));
+  }
+
   Future<void> _edit(BuildContext context, CatalogEntry? existing) async {
+    if (onEditEntry != null) {
+      final custom = await onEditEntry!(context, existing);
+      if (custom == null) return;
+      if (existing == null) {
+        onChanged([...entries, custom]);
+      } else {
+        _replace(existing, custom);
+      }
+      return;
+    }
     final result = await showCatalogEntryDialog(context, entry: existing);
     if (result == null) return;
     if (existing == null) {

@@ -3095,7 +3095,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get todayAllDoneTitle => 'All done for today';
 
   @override
-  String get todayAllDoneMessage => 'Every chore for today is finished. Well done!';
+  String get todayAllDoneMessage =>
+      'Every chore for today is finished. Well done!';
 
   @override
   String get todaySectionOverdue => 'Overdue';
@@ -3160,4 +3161,236 @@ class AppLocalizationsEn extends AppLocalizations {
   String choreStepsCount(String done, String total) {
     return '$done/$total';
   }
+
+  @override
+  String get choresSettingsTitle => 'Chore settings';
+
+  @override
+  String get choresSettingsSubtitle =>
+      'Preferences, rotation policies and catalogs';
+
+  @override
+  String get choresSettingsCalendarTitle => 'Calendar & display';
+
+  @override
+  String get choresSettingsGenerationTitle => 'Generation & timing';
+
+  @override
+  String get choresSettingsCatalogsTitle => 'Catalogs';
+
+  @override
+  String get choresSettingsPoliciesTitle => 'Policies & rules';
+
+  @override
+  String get choresSettingsHouseRulesTitle => 'House rules';
+
+  @override
+  String get choresSettingsDefaultView => 'Default calendar view';
+
+  @override
+  String get choresSettingsDefaultScope => 'Default chore scope';
+
+  @override
+  String get choresSettingsWeekStart => 'Week start day';
+
+  @override
+  String get choresSettingsShowProjected => 'Show projected chores';
+
+  @override
+  String get choresSettingsShowProjectedSubtitle =>
+      'Displays projected upcoming occurrences on the calendar';
+
+  @override
+  String choresSettingsProjectedMonths(int months) {
+    return 'Projected months ahead: $months';
+  }
+
+  @override
+  String get choresCalendarViewAgenda => 'Agenda';
+
+  @override
+  String get choresCalendarViewMonth => 'Month';
+
+  @override
+  String get choresCalendarViewWeek => 'Week';
+
+  @override
+  String get choresCalendarScopeMine => 'My chores';
+
+  @override
+  String get choresCalendarScopeAll => 'All chores';
+
+  @override
+  String choresSettingsHorizon(int days) {
+    return 'Generation horizon: $days days';
+  }
+
+  @override
+  String get choresSettingsHorizonSubtitle =>
+      'Occurrences are generated this many days in advance (14-90 days)';
+
+  @override
+  String choresSettingsOverdueGrace(int minutes) {
+    return 'Overdue grace period: $minutes minutes';
+  }
+
+  @override
+  String get choresSettingsOverdueGraceSubtitle =>
+      'Buffer after due time before a chore counts as overdue';
+
+  @override
+  String get choresSettingsGroupsTitle => 'Chore groups';
+
+  @override
+  String get choresSettingsPresetsTitle => 'Due-time presets';
+
+  @override
+  String get choresSettingsAbsenceReasonsTitle => 'Absence reasons';
+
+  @override
+  String get choresGroupDeactivateWarningTitle => 'Deactivate group?';
+
+  @override
+  String get choresGroupDeactivateWarningMessage =>
+      'Some active chores use this group. Deactivating it will hide it for new chores, but existing chores keep it. Continue?';
+
+  @override
+  String get choresGroupColor => 'Color';
+
+  @override
+  String get choresGroupIcon => 'Icon';
+
+  @override
+  String get choresGroupAddTitle => 'Add chore group';
+
+  @override
+  String get choresGroupEditTitle => 'Edit chore group';
+
+  @override
+  String get choresPresetAddTitle => 'Add time preset';
+
+  @override
+  String get choresPresetEditTitle => 'Edit time preset';
+
+  @override
+  String get choresPresetTime => 'Time of day';
+
+  @override
+  String get choresSettingsAbsencePolicyTitle => 'Absence policy';
+
+  @override
+  String get choresPolicyAskCoverTitle => 'Ask for cover (Policy A)';
+
+  @override
+  String get choresPolicyAskCoverDesc =>
+      'The absent member personally asks another family member to cover their task.';
+
+  @override
+  String get choresPolicyAskCoverExample =>
+      'Example: When away on urgent work, send a cover request to another member.';
+
+  @override
+  String get choresPolicyAutoCoverTitle => 'Auto-cover proposal (Policy B)';
+
+  @override
+  String get choresPolicyAutoCoverDesc =>
+      'The app suggests a replacement member and sends them a request they may accept or decline.';
+
+  @override
+  String get choresPolicyAutoCoverExample =>
+      'Example: The next free person in rotation gets an automatic cover request.';
+
+  @override
+  String get choresPolicySkipTitle => 'Skip chore (Policy C)';
+
+  @override
+  String get choresPolicySkipDesc =>
+      'The occurrence is marked as skipped due to absence and remains neutral in scoring.';
+
+  @override
+  String get choresPolicySkipExample =>
+      'Example: Non-critical chores are simply skipped until their next scheduled run.';
+
+  @override
+  String get choresSettingsSwapsEnabled => 'Allow chore swaps';
+
+  @override
+  String get choresSettingsSwapsEnabledSubtitle =>
+      'Members may request to swap tasks with one another';
+
+  @override
+  String choresSettingsSwapBuffer(int minutes) {
+    return 'Swap request expiry: $minutes minutes';
+  }
+
+  @override
+  String get choresSettingsSwapBufferSubtitle =>
+      'How long a swap request stays valid before expiring';
+
+  @override
+  String get choresSettingsAbsenceApproval =>
+      'Absence requires manager approval';
+
+  @override
+  String get choresSettingsAbsenceApprovalSubtitle =>
+      'Absence requests stay pending until confirmed by a manager';
+
+  @override
+  String get choresSettingsWorkloadVisible =>
+      'Workload share visible to all members';
+
+  @override
+  String get choresSettingsWorkloadVisibleSubtitle =>
+      'Shows this month\'s chore distribution to all active members';
+
+  @override
+  String get choresSettingsCompleteForOthers =>
+      'Allow members to complete for others';
+
+  @override
+  String get choresSettingsCompleteForOthersSubtitle =>
+      'Members can check off chores assigned to other people (Admin only)';
+
+  @override
+  String get choresSettingsHouseRulesEditor => 'House rules (markdown)';
+
+  @override
+  String get choresSettingsHouseRulesPreview => 'Preview';
+
+  @override
+  String get choresSettingsHouseRulesHelp =>
+      'Use # Heading, - Bullet point, or **bold** text.';
+
+  @override
+  String get choresSettingsHouseRulesEmpty => 'No house rules specified yet.';
+
+  @override
+  String get choresSettingsSave => 'Save settings';
+
+  @override
+  String get choresSettingsResetSection => 'Reset section';
+
+  @override
+  String get choresSettingsResetConfirmTitle => 'Reset section to defaults?';
+
+  @override
+  String get choresSettingsResetConfirmMessage =>
+      'This section\'s values will be reset to defaults. Existing chores and templates will not be deleted.';
+
+  @override
+  String get choresSettingsDiscardTitle => 'Discard changes?';
+
+  @override
+  String get choresSettingsDiscardMessage =>
+      'You have unsaved changes. Are you sure you want to discard them?';
+
+  @override
+  String get choresSettingsSaved => 'Chore settings saved';
+
+  @override
+  String get choresSettingsNotAllowed =>
+      'You do not have permission to manage chore settings.';
+
+  @override
+  String get choresSettingsPickIcon => 'Choose icon';
 }

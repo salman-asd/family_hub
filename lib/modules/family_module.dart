@@ -37,6 +37,9 @@ abstract class FamilyModule {
   /// Dashboard cards the module contributes (P2-29).
   List<WidgetBuilder> get dashboardCards => const [];
 
+  /// Settings entry the module contributes to the Family settings hub (P3-17).
+  WidgetBuilder? get settingsEntry => null;
+
   /// Ids of report views the module contributes (Step 18).
   List<String> get reports => const [];
 

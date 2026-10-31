@@ -3142,4 +3142,235 @@ class AppLocalizationsBn extends AppLocalizations {
   String choreStepsCount(String done, String total) {
     return '$done/$total';
   }
+
+  @override
+  String get choresSettingsTitle => 'কাজের সেটিংস';
+
+  @override
+  String get choresSettingsSubtitle => 'পছন্দ, আবর্তন নীতিমালা এবং ক্যাটালগ';
+
+  @override
+  String get choresSettingsCalendarTitle => 'ক্যালেন্ডার ও প্রদর্শন';
+
+  @override
+  String get choresSettingsGenerationTitle => 'তৈরি ও সময় নির্ধারণ';
+
+  @override
+  String get choresSettingsCatalogsTitle => 'ক্যাটালগসমূহ';
+
+  @override
+  String get choresSettingsPoliciesTitle => 'নীতিমালা ও নিয়ম';
+
+  @override
+  String get choresSettingsHouseRulesTitle => 'পরিবারের নিয়ম';
+
+  @override
+  String get choresSettingsDefaultView => 'ডিফল্ট ক্যালেন্ডার ভিউ';
+
+  @override
+  String get choresSettingsDefaultScope => 'ডিফল্ট কাজের পরিধি';
+
+  @override
+  String get choresSettingsWeekStart => 'সপ্তাহ শুরুর দিন';
+
+  @override
+  String get choresSettingsShowProjected => 'সম্ভাব্য কাজ দেখান';
+
+  @override
+  String get choresSettingsShowProjectedSubtitle =>
+      'ক্যালেন্ডারে আগামী মাসের অনুমানকৃত কাজ দেখাবে';
+
+  @override
+  String choresSettingsProjectedMonths(int months) {
+    return 'আগামী পূর্বাভাস: $months মাস';
+  }
+
+  @override
+  String get choresCalendarViewAgenda => 'তালিকা';
+
+  @override
+  String get choresCalendarViewMonth => 'মাসিক';
+
+  @override
+  String get choresCalendarViewWeek => 'সাপ্তাহিক';
+
+  @override
+  String get choresCalendarScopeMine => 'আমার কাজ';
+
+  @override
+  String get choresCalendarScopeAll => 'সবার কাজ';
+
+  @override
+  String choresSettingsHorizon(int days) {
+    return 'কাজ তৈরির সময়কাল: $days দিন';
+  }
+
+  @override
+  String get choresSettingsHorizonSubtitle =>
+      'কত দিন আগে থেকে স্বয়ংক্রিয়ভাবে কাজ তৈরি হবে (১৪-৯০ দিন)';
+
+  @override
+  String choresSettingsOverdueGrace(int minutes) {
+    return 'গ্রেস পিরিয়ড: $minutes মিনিট';
+  }
+
+  @override
+  String get choresSettingsOverdueGraceSubtitle =>
+      'নির্ধারিত সময়ের কত মিনিট পর কাজ বিলম্বিত ধরা হবে';
+
+  @override
+  String get choresSettingsGroupsTitle => 'কাজের গ্রুপসমূহ';
+
+  @override
+  String get choresSettingsPresetsTitle => 'সময়ের প্রিসেটসমূহ';
+
+  @override
+  String get choresSettingsAbsenceReasonsTitle => 'অনুপস্থিতির কারণসমূহ';
+
+  @override
+  String get choresGroupDeactivateWarningTitle => 'গ্রুপটি বন্ধ করবেন?';
+
+  @override
+  String get choresGroupDeactivateWarningMessage =>
+      'এই গ্রুপের অধীনে কিছু সক্রিয় কাজ রয়েছে। এটি বন্ধ করলে নতুন কাজে এটি বেছে নেওয়া যাবে না, তবে চলমান কাজে কোনো প্রভাব পড়বে না। চালিয়ে যেতে চান?';
+
+  @override
+  String get choresGroupColor => 'রং';
+
+  @override
+  String get choresGroupIcon => 'আইকন';
+
+  @override
+  String get choresGroupAddTitle => 'নতুন গ্রুপ যোগ করুন';
+
+  @override
+  String get choresGroupEditTitle => 'গ্রুপ সম্পাদনা';
+
+  @override
+  String get choresPresetAddTitle => 'নতুন সময় প্রিসেট যোগ করুন';
+
+  @override
+  String get choresPresetEditTitle => 'সময় প্রিসেট সম্পাদনা';
+
+  @override
+  String get choresPresetTime => 'দিনের সময়';
+
+  @override
+  String get choresSettingsAbsencePolicyTitle => 'অনুপস্থিতির নীতিমালা';
+
+  @override
+  String get choresPolicyAskCoverTitle => 'কভারের অনুরোধ (পলিসি A)';
+
+  @override
+  String get choresPolicyAskCoverDesc =>
+      'অনুপস্থিত সদস্য নিজে পরিবারের অন্য কাউকে তার কাজটি করার অনুরোধ জানান।';
+
+  @override
+  String get choresPolicyAskCoverExample =>
+      'উদাহরণ: জরুরি কাজে বাইরে থাকলে অন্য সদস্যকে কাজটি করে দিতে অনুরোধ পাঠানো।';
+
+  @override
+  String get choresPolicyAutoCoverTitle =>
+      'স্বয়ংক্রিয় কভার প্রস্তাব (পলিসি B)';
+
+  @override
+  String get choresPolicyAutoCoverDesc =>
+      'অ্যাপ উপযুক্ত সদস্যকে স্বয়ংক্রিয়ভাবে বেছে নিয়ে কভারের প্রস্তাব পাঠায় (তিনি গ্রহণ বা প্রত্যাখ্যান করতে পারেন)।';
+
+  @override
+  String get choresPolicyAutoCoverExample =>
+      'উদাহরণ: ঘূর্ণায়মান তালিকায় পরবর্তী ফ্রি সদস্যের কাছে অনুরোধ যাবে।';
+
+  @override
+  String get choresPolicySkipTitle => 'কাজ বাদ দেওয়া (পলিসি C)';
+
+  @override
+  String get choresPolicySkipDesc =>
+      'অনুপস্থিতির কারণে কাজটি সেদিনের জন্য বাদ দেওয়া হয় এবং স্কোরিংয়ে নিরপেক্ষ থাকে।';
+
+  @override
+  String get choresPolicySkipExample =>
+      'উদাহরণ: বিশেষ জরুরি না হলে কাজটি পরবর্তী শিডিউল পর্যন্ত অপেক্ষা করবে।';
+
+  @override
+  String get choresSettingsSwapsEnabled => 'কাজের অদলবদল (Swap) চালু রাখুন';
+
+  @override
+  String get choresSettingsSwapsEnabledSubtitle =>
+      'সদস্যরা নিজেদের মধ্যে কাজ অদলবদল করতে পারবেন';
+
+  @override
+  String choresSettingsSwapBuffer(int minutes) {
+    return 'অদলবদল অনুরোধের মেয়াদ: $minutes মিনিট';
+  }
+
+  @override
+  String get choresSettingsSwapBufferSubtitle =>
+      'অনুরোধ পাঠানোর পর কতক্ষণ পর্যন্ত এটি কার্যকর থাকবে';
+
+  @override
+  String get choresSettingsAbsenceApproval => 'অনুপস্থিতিতে অনুমোদনের প্রয়োজন';
+
+  @override
+  String get choresSettingsAbsenceApprovalSubtitle =>
+      'অনুপস্থিতির অনুরোধ ম্যানেজারের সিদ্ধান্তের জন্য অপেক্ষা করবে';
+
+  @override
+  String get choresSettingsWorkloadVisible => 'কাজের বণ্টন সবার জন্য উন্মুক্ত';
+
+  @override
+  String get choresSettingsWorkloadVisibleSubtitle =>
+      'পরিবারের সব সক্রিয় সদস্য কাজের সমবণ্টনের হিসাব দেখতে পাবেন';
+
+  @override
+  String get choresSettingsCompleteForOthers =>
+      'অন্যের কাজ সম্পন্ন করার অনুমতি';
+
+  @override
+  String get choresSettingsCompleteForOthersSubtitle =>
+      'যেকোনো সদস্য অন্যের কাজ সম্পন্ন করতে পারবেন (এডমিন কন্ট্রোল)';
+
+  @override
+  String get choresSettingsHouseRulesEditor => 'পরিবারের নিয়মাবলী (মার্কডাউন)';
+
+  @override
+  String get choresSettingsHouseRulesPreview => 'প্রিভিউ';
+
+  @override
+  String get choresSettingsHouseRulesHelp =>
+      'শিরোনাম: # শিরোনাম, বুলেট: - লেখা, গাঢ়: **লেখা**';
+
+  @override
+  String get choresSettingsHouseRulesEmpty =>
+      'পরিবারের কোনো বিশেষ নিয়ম এখনও যোগ করা হয়নি।';
+
+  @override
+  String get choresSettingsSave => 'সেটিংস সংরক্ষণ করুন';
+
+  @override
+  String get choresSettingsResetSection => 'সেকশন রিসেট করুন';
+
+  @override
+  String get choresSettingsResetConfirmTitle => 'ডিফল্টে ফিরিয়ে নিতে চান?';
+
+  @override
+  String get choresSettingsResetConfirmMessage =>
+      'এই সেকশনের সব পরিবর্তন ডিফল্ট অবস্থায় ফিরে যাবে। আপনার কোনো কাজ বা টেমপ্লেট মুছে যাবে না।';
+
+  @override
+  String get choresSettingsDiscardTitle => 'পরিবর্তন বাতিল করবেন?';
+
+  @override
+  String get choresSettingsDiscardMessage =>
+      'আপনার কিছু পরিবর্তন সংরক্ষণ করা হয়নি। আপনি কি পাতা ত্যাগ করতে চান?';
+
+  @override
+  String get choresSettingsSaved => 'কাজের সেটিংস সংরক্ষিত হয়েছে';
+
+  @override
+  String get choresSettingsNotAllowed =>
+      'কাজের সেটিংস পরিচালনা করার অনুমতি আপনার নেই।';
+
+  @override
+  String get choresSettingsPickIcon => 'আইকন বেছে নিন';
 }
