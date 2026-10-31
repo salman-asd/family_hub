@@ -1468,3 +1468,21 @@ Written without an SDK: **nothing was compiled or run.** Run `dart format .`, `f
 - `RepairStatus` failures are ignored (R3 limit: a "completed" repair is denied by the rules).
 - The ARB keys were hand-added to both ARBs and the three generated files; `flutter gen-l10n` must show no functional diff.
 - Goldens for Today / Verify / Detail (roadmap P3-15 matrix) are not added yet.
+
+## Phase 3 - Wave R6 (process, tests, docs; see docs/PHASE3_REVIEW_ROADMAP.md §9)
+
+Written without an SDK: **nothing was compiled or run, and the rules test was not run against the emulator.** Run `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden`, then `npm run test:emulator` in `firebase/rules_test`.
+
+| Item | Change | Where |
+| --- | --- | --- |
+| P-01 | `no_hardcoded_options_test`: reads `seedOptionIds`, scans `lib/features/chores/**/presentation/` and `lib/shared/widgets/` for a quoted seed id; exempts `chore_icons.dart` (a closed icon map, U-12) and `starter_pack*` files; self-tests the detector. No offender exists today. | `test/architecture/no_hardcoded_options_test.dart` |
+| P-02 | First-slice test (Appendix E.2): app-open generation -> Today row -> tick 2 of 3 steps ("2/3") -> complete -> untick -> complete -> the completer cannot verify, a manager approves -> rename with "future only" (today unchanged, tomorrow changed). The harness now takes a shared fixture and a router. | `test/features/chores/first_slice_test.dart`, `presentation/chores_p3_15_support.dart` |
+| P-03 | ONE transition table run twice: use cases on the in-memory backend (Dart) and the emulator (rules). Six sequences: second skip, skip/unskip, reassign ping-pong, complete/untick twice, verify actors, unassigned chore. | `firebase/rules_test/fixtures/occurrence_transitions.json`, `.../usecases/occurrence_transition_parity_test.dart`, `firebase/rules_test/chore_occurrence_parity.test.mjs` |
+| P-04 | Appendix C now states reopen-unticks-steps, unique event ids, the verify actor, the restore rule and the parity table. | `docs/PHASE3_CHORES_ROADMAP.md` |
+| P-05 | Step 20 of the old roadmap points to the re-cut. | `docs/ROADMAP.md` |
+| P-06 | ADR 0012 records that reopen unticks steps and that the detail screen repairs from the first non-null document. | `docs/decisions/0012-...md` |
+
+### Known limits / open
+- Restore and soft delete are NOT in the parity table: they are driven by `RegenerateRange`, which has no single-step use-case call shaped like the rules write. Add them when P3-21/22 expose one.
+- The first-slice test builds `ReplanOccurrences` by hand because the template editor (P3-16) does not exist yet; switch it to the editor's controller then. Starter-pack wizard steps (E.2 items 1-2) are not covered until P3-19.
+- If a parity step fails, decide whether the RULE or the USE CASE is wrong and fix that side; never edit the table to match.

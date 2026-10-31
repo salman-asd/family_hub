@@ -21,3 +21,13 @@ required box ticked).
 
 **Consequences.** Today, the calendar, the dashboard and reports cannot
 disagree. A stale stored status is harmless; it is only ever corrected.
+
+**Update (Wave R1, B-04).** Reopening a completed chore now UNTICKS the steps
+that are redone, in the same patch as the status change (default: every ticked
+required step; the caller may narrow it). Before, a reopened chore kept every
+tick, so the effective status rebuilt from `subtaskDone` was `completed` again
+and the stored `in_progress` was immediately "repaired" back. The rule above
+still holds: the stored `status` is a cache, and `effectiveStatus` is derived
+from the ticks. The detail screen repairs the cache from the first non-null
+document it receives (Wave R5, U-01), not from a one-shot call on the first
+frame.

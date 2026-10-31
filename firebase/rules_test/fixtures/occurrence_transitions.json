@@ -1,0 +1,64 @@
+{
+  "_comment": "P-03 (Wave R6): ONE transition table, run by two consumers. Dart: test/features/chores/occurrences/domain/usecases/occurrence_transition_parity_test.dart (use cases + InMemoryChoresBackend). Rules: firebase/rules_test/chore_occurrence_parity.test.mjs (emulator). Actors are roles: admin=alice, manager=bob, assignee=cara, plain=dave (Dart) / gina (rules). Every case starts from the named seed; steps run in order and each step's `expect` (allow|deny) must hold on BOTH sides. Add a case here, never on one side only.",
+  "seeds": {
+    "scheduled": "scheduled, assigned to cara, no steps, verification off",
+    "unassigned": "scheduled, assigneeId null (planned owner cara), no steps",
+    "completed_plain": "completed by cara, no steps, verification off",
+    "completed_verify": "completed by cara, no steps, verification required, family verification switch ON"
+  },
+  "cases": [
+    {
+      "name": "M-08 a second skip of a skipped chore is refused",
+      "seed": "scheduled",
+      "steps": [
+        { "actor": "manager", "action": "skip", "expect": "allow" },
+        { "actor": "manager", "action": "skip", "expect": "deny" }
+      ]
+    },
+    {
+      "name": "skip then unskip by a manager; a plain member cannot skip",
+      "seed": "scheduled",
+      "steps": [
+        { "actor": "plain", "action": "skip", "expect": "deny" },
+        { "actor": "manager", "action": "skip", "expect": "allow" },
+        { "actor": "manager", "action": "unskip", "expect": "allow" }
+      ]
+    },
+    {
+      "name": "M-08 reassign ping-pong works (event ids stay unique)",
+      "seed": "scheduled",
+      "steps": [
+        { "actor": "plain", "action": "reassign", "to": "plain", "expect": "deny" },
+        { "actor": "manager", "action": "reassign", "to": "plain", "expect": "allow" },
+        { "actor": "manager", "action": "reassign", "to": "assignee", "expect": "allow" },
+        { "actor": "manager", "action": "reassign", "to": "plain", "expect": "allow" }
+      ]
+    },
+    {
+      "name": "B-05 complete, untick, complete, untick works twice",
+      "seed": "completed_plain",
+      "steps": [
+        { "actor": "assignee", "action": "uncomplete", "expect": "allow" },
+        { "actor": "assignee", "action": "complete", "expect": "allow" },
+        { "actor": "assignee", "action": "uncomplete", "expect": "allow" }
+      ]
+    },
+    {
+      "name": "M-05 only a manager other than the completer verifies",
+      "seed": "completed_verify",
+      "steps": [
+        { "actor": "assignee", "action": "verify", "expect": "deny" },
+        { "actor": "plain", "action": "verify", "expect": "deny" },
+        { "actor": "manager", "action": "verify", "expect": "allow" }
+      ]
+    },
+    {
+      "name": "M-06 an unassigned chore is nobody's: the planned owner cannot complete it",
+      "seed": "unassigned",
+      "steps": [
+        { "actor": "assignee", "action": "complete", "expect": "deny" },
+        { "actor": "manager", "action": "complete", "expect": "allow" }
+      ]
+    }
+  ]
+}

@@ -495,6 +495,8 @@ Tests use a small fixture workbook and prove per-category totals reconcile to th
 
 ### Step 20 — Chore templates and seed data (re-attach `family_chores.pdf` first)
 
+> **Re-cut as P3-xx.** This step was re-planned as the Phase 3 chores roadmap; see `docs/PHASE3_CHORES_ROADMAP.md`.
+
 **Goal:** editable templates that carry the family's own wording.
 
 ```text

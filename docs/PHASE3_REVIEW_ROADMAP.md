@@ -263,6 +263,10 @@ The use cases are stricter than the rules in several places. Rules are the last 
 
 ---
 
+**Wave R6 status (static, not compiled, emulator not run):** P-01 .. P-06 are done; see `PROGRESS.md` "Wave R6" for files and the known limits (restore/soft delete are not in the parity table yet).
+
+---
+
 ## 10. Exit criteria before starting P3-16
 
 - [ ] Wave R0 gate is green and recorded for P3-09 … P3-15 in `PROGRESS.md`.

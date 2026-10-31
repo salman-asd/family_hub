@@ -19,6 +19,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../chores_test_helpers.dart';
@@ -30,7 +31,9 @@ import '../chores_test_helpers.dart';
 /// replace any provider.
 Future<ChoresFixture> pumpP3Screen(
   WidgetTester tester, {
-  required Widget home,
+  Widget? home,
+  GoRouter? router,
+  ChoresFixture? sharedFixture,
   String uid = 'cara',
   Role role = Role.member,
   double textScale = 1.0,
@@ -44,9 +47,11 @@ Future<ChoresFixture> pumpP3Screen(
 
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
-  final fixture = ChoresFixture();
-  fixture.occurrences.occurrences[ChoresFixture.familyId] =
-      <String, ChoreOccurrence>{for (final o in occurrences) o.id: o};
+  final fixture = sharedFixture ?? ChoresFixture();
+  if (occurrences.isNotEmpty || sharedFixture == null) {
+    fixture.occurrences.occurrences[ChoresFixture.familyId] =
+        <String, ChoreOccurrence>{for (final o in occurrences) o.id: o};
+  }
 
   await tester.pumpWidget(
     ProviderScope(
@@ -78,28 +83,50 @@ Future<ChoresFixture> pumpP3Screen(
         nowTickProvider.overrideWith((ref) => const Stream<DateTime>.empty()),
         ...overrides,
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: buildThemeData(appThemes.first),
-        locale: const Locale('en'),
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-        builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: TextScaler.linear(textScale),
-            disableAnimations: true,
-          ),
-          child: child!,
-        ),
-        home: home,
-      ),
+      child: _app(home: home, router: router, textScale: textScale),
     ),
   );
   await tester.pump(const Duration(milliseconds: 250));
   return fixture;
+}
+
+Widget _app({
+  required Widget? home,
+  required GoRouter? router,
+  required double textScale,
+}) {
+  final theme = buildThemeData(appThemes.first);
+  const delegates = <LocalizationsDelegate<dynamic>>[
+    AppLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ];
+  Widget scale(BuildContext context, Widget? child) => MediaQuery(
+    data: MediaQuery.of(context).copyWith(
+      textScaler: TextScaler.linear(textScale),
+      disableAnimations: true,
+    ),
+    child: child!,
+  );
+  if (router != null) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      theme: theme,
+      locale: const Locale('en'),
+      localizationsDelegates: delegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      builder: scale,
+      routerConfig: router,
+    );
+  }
+  return MaterialApp(
+    debugShowCheckedModeBanner: false,
+    theme: theme,
+    locale: const Locale('en'),
+    localizationsDelegates: delegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    builder: scale,
+    home: home,
+  );
 }

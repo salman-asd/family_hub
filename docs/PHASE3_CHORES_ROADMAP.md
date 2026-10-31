@@ -1071,7 +1071,7 @@ Stored `status` ∈ `scheduled | in_progress | completed | verified | skipped`; 
 | Parent check | scheduled / in_progress | completed (all subtasks ticked) | same | audit `occurrence_completed` | `required_subtasks_open` (unless exception) |
 | Parent uncheck | completed | scheduled (all subtasks unticked) | same | event `uncompleted` | `already_verified` |
 | Verify | completed | verified | **manager** ≠ completer (M-05, Appendix G Q12); template `verification == required`; family switch on | event `verified`, audit, inbox to completer | `self_verification`, `verification_not_required`, `not_completed`; a plain member gets `PermissionDenied` |
-| Reopen | completed | in_progress | anyone who may comment | event `reopened` (+ reason, `prevCompletedAt`), `reopenCount + 1`, inbox to assignee | `reason_required` |
+| Reopen | completed | in_progress | anyone who may comment | event `reopened` (+ reason, `prevCompletedAt`, `redoSubtaskIds`), `reopenCount + 1`, **steps unticked in the same patch** (B-04), inbox to assignee | `reason_required`, `Validation('redoSubtaskIds','pick_required_step')` |
 | Reopen verified | verified | in_progress | manager | same | `verified_requires_manager` |
 | Record exception | scheduled / in_progress | same (+ `exception`) | manager | event `exception` | `reason_required` |
 | Skip | scheduled / in_progress | skipped | manager | event `skipped` | `already_skipped`, `occurrence_started` for completed |
@@ -1079,6 +1079,7 @@ Stored `status` ∈ `scheduled | in_progress | completed | verified | skipped`; 
 | Reassign / assign | scheduled / in_progress | same | manager | event `reassigned` + reason | `reason_required` |
 | Swap / cover accepted | scheduled / in_progress | same | recipient (with accepted request) | request update, event `swapped|covered`, inbox | `swap_expired`, `swap_not_pending`, `occurrence_started` |
 | Soft delete | scheduled, future | (deleted) | manager (RegenerateRange) | audit generation | — |
+| Restore | soft-deleted, `scheduled`, no ticks | live again | manager (RegenerateRange) | only the replan keys + `deletedAt/By = null` + update stamps (B-06) | — |
 | Replan | scheduled, no ticks | same (new snapshots) | manager | audit `occurrences_replanned` | `occurrence_started` |
 
 Derived overdue: `effective ∈ {scheduled, in_progress}` and `now > dueAt + overdueGraceMinutes`. A missed deadline is **never** auto-completed or auto-skipped.
@@ -1089,6 +1090,12 @@ Derived overdue: `effective ∈ {scheduled, in_progress}` and `now > dueAt + ove
 - **M-09 (documentation only).** A chore whose steps are ALL optional behaves as if every step were required: completing it means ticking every step (`requiredSubtasks` falls back to all steps, `requiredCount` equals their number).
 - **Tick / complete / uncomplete is one rule with four branches** (M-02): stays completed (a tick on a finished chore by anybody who may tick; completion data frozen), completes (`completedBy == uid`), open to open (no completion data), uncompletes (completion cleared, `uncompleted` event in the same batch).
 - **Soft delete** (M-04) needs `scheduled`, no ticks, never completed, `reopenCount == 0`, and a future `dateKey`.
+- **Design corrections reconciled with the code (Wave R6, P-04).**
+  - *Reopen unticks steps* (B-04): `ReopenOccurrence` removes `subtaskDone.<id>` for the steps to redo (default: every ticked required step; `redoSubtaskIds` narrows it) in the SAME patch, so the status rebuilt from the ticks agrees with the stored `in_progress`. The rules let `subtaskDone` shrink on a reopen and never grow. The step list is not yet stored on the event (open item).
+  - *Event ids are unique per intent* (B-05): the id is generated once by `OccurrenceActionWriter`, the patch carries `lastEventId`, and every rule that needs an event requires it to be created in the same batch (`!exists` before, `existsAfter`). A deterministic `type_reopenCount` / `type_assignee` id made the second skip, the second untick and a reassign ping-pong fail.
+  - *Verify actor* (M-05): verify is a manager action everywhere; the verifier is never the completer (`self_verification`); a plain member gets `PermissionDenied`; the template must require it and the family switch must be on.
+  - *Restore rule* (B-06): rule 12 allows a manager to restore a soft-deleted, `scheduled`, tick-free document by writing only the replan keys, the delete pair and the update stamps; it cannot change the status.
+  - *Parity* (P-03): `firebase/rules_test/fixtures/occurrence_transitions.json` is run by BOTH `occurrence_transition_parity_test.dart` (use cases, in-memory) and `chore_occurrence_parity.test.mjs` (emulator).
 
 ---
 
