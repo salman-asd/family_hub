@@ -3913,5 +3913,49 @@
   "calendarCellSelected": "নির্বাচিত",
   "@calendarCellSelected": {},
   "calendarOpenToday": "আজকের কাজ খুলুন",
-  "@calendarOpenToday": {}
+  "@calendarOpenToday": {},
+  "calendarFreeDays": "{count}টি ফাঁকা দিন",
+  "@calendarFreeDays": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarLoadEarlier": "আগের সপ্তাহ দেখুন",
+  "@calendarLoadEarlier": {},
+  "calendarLoadLater": "পরের সপ্তাহ দেখুন",
+  "@calendarLoadLater": {},
+  "calendarJumpToToday": "আজকে ফিরে যান",
+  "@calendarJumpToToday": {},
+  "calendarLegend": "চিহ্নের অর্থ",
+  "@calendarLegend": {},
+  "calendarFilterGroups": "গ্রুপ",
+  "@calendarFilterGroups": {},
+  "calendarFilterStatuses": "অবস্থা",
+  "@calendarFilterStatuses": {},
+  "calendarFilterMembers": "সদস্য",
+  "@calendarFilterMembers": {},
+  "calendarFilterNeedsAttention": "শুধু নজর দরকার",
+  "@calendarFilterNeedsAttention": {},
+  "calendarSearchHint": "কাজ খুঁজুন",
+  "@calendarSearchHint": {},
+  "calendarAddChore": "কাজ যোগ করুন",
+  "@calendarAddChore": {},
+  "calendarMonthNarrow": "মাসের ভিউয়ের জন্য চওড়া পর্দা লাগে, তাই সপ্তাহ দেখানো হচ্ছে।",
+  "@calendarMonthNarrow": {},
+  "calendarQuickActions": "কাজের অ্যাকশন",
+  "@calendarQuickActions": {},
+  "calendarRemoveFilter": "{label} ফিল্টার সরান",
+  "@calendarRemoveFilter": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarPreviousWeek": "আগের সপ্তাহ",
+  "@calendarPreviousWeek": {},
+  "calendarNextWeek": "পরের সপ্তাহ",
+  "@calendarNextWeek": {}
 }

@@ -1632,3 +1632,33 @@ Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `f
 ### Open / to check when you run it
 - `PageView` inside the scroll view: the fling test assumes a horizontal fling is taken by the pager.
 - The "no overflow at 2.0" tests are the likeliest to need a layout tweak.
+
+
+## Phase 3 - P3-23 Day panel, Agenda, Week
+
+Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `flutter gen-l10n` (16 more keys hand-added to both ARBs and the three generated files), `flutter analyze`, `flutter test --exclude-tags golden`. No collection, rule or index changed. **Deleted:** `calendar/presentation/widgets/day_list.dart`, `calendar/presentation/widgets/filters_sheet.dart` (replaced by `day_panel.dart`, `calendar_filter_sheet.dart`).
+
+### Delivered (`lib/features/chores/calendar/presentation/`)
+- `calendar_screen.dart`: ONE screen for Agenda / Month / Week. Shared selected day, month, scope and filters; view change with `FadeThroughTransition` (instant with reduced motion); each view keeps its scroll offset (`PageStorageKey`). Under 336 dp a stored Month is shown as Week with a note (this closes the P3-22 "cells < 48 dp" deviation).
+- `calendar_agenda_providers.dart`: `AgendaWindow` (weeks back / ahead, 8 + 48 max) and `agendaWindowModelProvider`.
+- `widgets/agenda_view.dart`: bidirectional list around today (`center`), pinned Overdue block, sticky day headers (future days), free-days chip, "Show earlier / later weeks", jump-to-today button.
+- `widgets/day_panel.dart`: `DraggableScrollableSheet`, snaps 0.28 / 0.55 / 0.92, grouped by day part, "Add chore" for managers.
+- `widgets/week_view.dart`: phone = 7-day strip (`DayCell`) + the day by day part; >= 840 dp = seven columns.
+- `widgets/calendar_filter_sheet.dart` (groups, statuses, people, needs attention, search), `filter_chips_row.dart` (removable chips), `legend_sheet.dart`, `quick_actions_sheet.dart` (`quickActionsFor` pure + sheet).
+- `chore_tile.dart` got `onLongPress`; `today_row.dart` opens the quick-actions sheet on long press (also on the Today screen).
+- `calendar_focus.dart`: `shiftDays`.
+- Tests: `calendar_views_test.dart`; `calendar_screen_test.dart` now forces the month view.
+
+### Decisions and deviations (please review)
+1. **Past days of the agenda have no sticky headers**: a reversed sliver cannot pin; their headers scroll. Future days are sticky.
+2. **"Pull to extend" is a button** ("Show earlier / later weeks"), not a pull gesture (reachable by TalkBack and switch access).
+3. **Opening the agenda does not scroll to the selected day** (rows are built lazily, so the day may not exist yet); it shows today, and the selected day's header is marked with a check. Month and Week keep the selected day.
+4. **Quick actions = Mark done + Details.** Swap and reassign appear with P3-26. The comment badge appears with P3-25.
+5. **Unavailable-members strip** of the day panel waits for P3-26 (`availabilityIndexProvider` is still empty).
+6. `normalizeBn` already existed (P3-20); the filter and search use it unchanged.
+7. The week strip reuses the month's `DayCell`, so a day looks the same in both views.
+8. `calendarFiltersProvider` writes remain in `calendarPrefsProvider` (stored) and `calendarQueryProvider` (session search).
+
+### Open / to check when you run it
+- `SliverMainAxisGroup` + pinned `SliverPersistentHeader` inside a `center` scroll view is the most layout-sensitive part: if the agenda tests fail, start there.
+- The long-press and FAB tests rely on `pumpAndSettle` finishing (no running animations).

@@ -6,6 +6,7 @@ import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
 import 'package:family_hub/features/chores/occurrences/domain/today_sections.dart';
 import 'package:family_hub/features/chores/presentation/today_complete.dart';
+import 'package:family_hub/features/chores/calendar/presentation/widgets/quick_actions_sheet.dart';
 import 'package:family_hub/features/chores/presentation/widgets/chore_tile.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,9 @@ class TodayRow extends ConsumerWidget {
           item: item,
           formatters: formatters,
           onTap: open,
+          onLongPress: (openable || completable)
+              ? () => unawaited(showQuickActionsSheet(context, ref, item))
+              : null,
           semanticActions: <CustomSemanticsAction, VoidCallback>{
             if (completable)
               CustomSemanticsAction(label: l10n.occurrenceActionComplete):

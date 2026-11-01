@@ -1,4 +1,5 @@
 import 'package:family_hub/core/utils/date_key.dart';
+import 'package:family_hub/features/chores/calendar/domain/calendar_enums.dart';
 import 'package:family_hub/features/chores/calendar/presentation/calendar_providers.dart';
 import 'package:family_hub/features/chores/calendar/presentation/calendar_screen.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
@@ -21,15 +22,22 @@ void main() {
     double width = 360,
     double textScale = 1.0,
     String languageCode = 'en',
-  }) => pumpP3Screen(
-    tester,
-    home: const Scaffold(body: CalendarScreen()),
-    sharedFixture: fixture,
-    occurrences: occurrences,
-    width: width,
-    textScale: textScale,
-    languageCode: languageCode,
-  );
+  }) {
+    // These tests are about the month; the family default is the agenda.
+    final used = fixture ?? ChoresFixture();
+    used.settings.settings = used.settings.settings.copyWith(
+      defaultCalendarView: CalendarViewKind.month,
+    );
+    return pumpP3Screen(
+      tester,
+      home: const Scaffold(body: CalendarScreen()),
+      sharedFixture: used,
+      occurrences: occurrences,
+      width: width,
+      textScale: textScale,
+      languageCode: languageCode,
+    );
+  }
 
   ProviderContainer containerOf(WidgetTester tester) =>
       ProviderScope.containerOf(tester.element(find.byType(CalendarScreen)));

@@ -7497,6 +7497,102 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'আজকের কাজ খুলুন'**
   String get calendarOpenToday;
+
+  /// No description provided for @calendarFreeDays.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি ফাঁকা দিন'**
+  String calendarFreeDays(String count);
+
+  /// No description provided for @calendarLoadEarlier.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের সপ্তাহ দেখুন'**
+  String get calendarLoadEarlier;
+
+  /// No description provided for @calendarLoadLater.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের সপ্তাহ দেখুন'**
+  String get calendarLoadLater;
+
+  /// No description provided for @calendarJumpToToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজকে ফিরে যান'**
+  String get calendarJumpToToday;
+
+  /// No description provided for @calendarLegend.
+  ///
+  /// In bn, this message translates to:
+  /// **'চিহ্নের অর্থ'**
+  String get calendarLegend;
+
+  /// No description provided for @calendarFilterGroups.
+  ///
+  /// In bn, this message translates to:
+  /// **'গ্রুপ'**
+  String get calendarFilterGroups;
+
+  /// No description provided for @calendarFilterStatuses.
+  ///
+  /// In bn, this message translates to:
+  /// **'অবস্থা'**
+  String get calendarFilterStatuses;
+
+  /// No description provided for @calendarFilterMembers.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য'**
+  String get calendarFilterMembers;
+
+  /// No description provided for @calendarFilterNeedsAttention.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু নজর দরকার'**
+  String get calendarFilterNeedsAttention;
+
+  /// No description provided for @calendarSearchHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ খুঁজুন'**
+  String get calendarSearchHint;
+
+  /// No description provided for @calendarAddChore.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ যোগ করুন'**
+  String get calendarAddChore;
+
+  /// No description provided for @calendarMonthNarrow.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসের ভিউয়ের জন্য চওড়া পর্দা লাগে, তাই সপ্তাহ দেখানো হচ্ছে।'**
+  String get calendarMonthNarrow;
+
+  /// No description provided for @calendarQuickActions.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের অ্যাকশন'**
+  String get calendarQuickActions;
+
+  /// No description provided for @calendarRemoveFilter.
+  ///
+  /// In bn, this message translates to:
+  /// **'{label} ফিল্টার সরান'**
+  String calendarRemoveFilter(String label);
+
+  /// No description provided for @calendarPreviousWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের সপ্তাহ'**
+  String get calendarPreviousWeek;
+
+  /// No description provided for @calendarNextWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের সপ্তাহ'**
+  String get calendarNextWeek;
 }
 
 class _AppLocalizationsDelegate

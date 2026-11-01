@@ -4268,4 +4268,56 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get calendarOpenToday => 'আজকের কাজ খুলুন';
+
+  @override
+  String calendarFreeDays(String count) {
+    return '$countটি ফাঁকা দিন';
+  }
+
+  @override
+  String get calendarLoadEarlier => 'আগের সপ্তাহ দেখুন';
+
+  @override
+  String get calendarLoadLater => 'পরের সপ্তাহ দেখুন';
+
+  @override
+  String get calendarJumpToToday => 'আজকে ফিরে যান';
+
+  @override
+  String get calendarLegend => 'চিহ্নের অর্থ';
+
+  @override
+  String get calendarFilterGroups => 'গ্রুপ';
+
+  @override
+  String get calendarFilterStatuses => 'অবস্থা';
+
+  @override
+  String get calendarFilterMembers => 'সদস্য';
+
+  @override
+  String get calendarFilterNeedsAttention => 'শুধু নজর দরকার';
+
+  @override
+  String get calendarSearchHint => 'কাজ খুঁজুন';
+
+  @override
+  String get calendarAddChore => 'কাজ যোগ করুন';
+
+  @override
+  String get calendarMonthNarrow => 'মাসের ভিউয়ের জন্য চওড়া পর্দা লাগে, তাই সপ্তাহ দেখানো হচ্ছে।';
+
+  @override
+  String get calendarQuickActions => 'কাজের অ্যাকশন';
+
+  @override
+  String calendarRemoveFilter(String label) {
+    return '$label ফিল্টার সরান';
+  }
+
+  @override
+  String get calendarPreviousWeek => 'আগের সপ্তাহ';
+
+  @override
+  String get calendarNextWeek => 'পরের সপ্তাহ';
 }

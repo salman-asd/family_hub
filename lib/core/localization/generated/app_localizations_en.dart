@@ -4288,4 +4288,56 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarOpenToday => 'Open today\'s chores';
+
+  @override
+  String calendarFreeDays(String count) {
+    return '$count free days';
+  }
+
+  @override
+  String get calendarLoadEarlier => 'Show earlier weeks';
+
+  @override
+  String get calendarLoadLater => 'Show later weeks';
+
+  @override
+  String get calendarJumpToToday => 'Jump to today';
+
+  @override
+  String get calendarLegend => 'What the symbols mean';
+
+  @override
+  String get calendarFilterGroups => 'Groups';
+
+  @override
+  String get calendarFilterStatuses => 'Status';
+
+  @override
+  String get calendarFilterMembers => 'People';
+
+  @override
+  String get calendarFilterNeedsAttention => 'Needs attention only';
+
+  @override
+  String get calendarSearchHint => 'Search chores';
+
+  @override
+  String get calendarAddChore => 'Add chore';
+
+  @override
+  String get calendarMonthNarrow => 'The month view needs a wider screen, so the week is shown.';
+
+  @override
+  String get calendarQuickActions => 'Chore actions';
+
+  @override
+  String calendarRemoveFilter(String label) {
+    return 'Remove filter $label';
+  }
+
+  @override
+  String get calendarPreviousWeek => 'Previous week';
+
+  @override
+  String get calendarNextWeek => 'Next week';
 }

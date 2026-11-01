@@ -30,6 +30,7 @@ class ChoreTile extends ConsumerWidget {
     required this.item,
     required this.formatters,
     required this.onTap,
+    this.onLongPress,
     this.trailing,
     this.semanticActions,
     this.dense = false,
@@ -39,6 +40,9 @@ class ChoreTile extends ConsumerWidget {
   final domain.ChoreItem item;
   final AppFormatters formatters;
   final VoidCallback onTap;
+
+  /// A long press (the quick-actions sheet); null leaves the row as before.
+  final VoidCallback? onLongPress;
 
   /// An optional action at the end of the row (for example "Approve"). It sits
   /// OUTSIDE the tile's own semantics node, so a screen reader can reach it.
@@ -84,6 +88,7 @@ class ChoreTile extends ConsumerWidget {
                 excludeSemantics: true,
                 child: InkWell(
                   onTap: tap,
+                  onLongPress: onLongPress,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,

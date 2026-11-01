@@ -3914,5 +3914,49 @@
   "calendarCellSelected": "Selected",
   "@calendarCellSelected": {},
   "calendarOpenToday": "Open today's chores",
-  "@calendarOpenToday": {}
+  "@calendarOpenToday": {},
+  "calendarFreeDays": "{count} free days",
+  "@calendarFreeDays": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarLoadEarlier": "Show earlier weeks",
+  "@calendarLoadEarlier": {},
+  "calendarLoadLater": "Show later weeks",
+  "@calendarLoadLater": {},
+  "calendarJumpToToday": "Jump to today",
+  "@calendarJumpToToday": {},
+  "calendarLegend": "What the symbols mean",
+  "@calendarLegend": {},
+  "calendarFilterGroups": "Groups",
+  "@calendarFilterGroups": {},
+  "calendarFilterStatuses": "Status",
+  "@calendarFilterStatuses": {},
+  "calendarFilterMembers": "People",
+  "@calendarFilterMembers": {},
+  "calendarFilterNeedsAttention": "Needs attention only",
+  "@calendarFilterNeedsAttention": {},
+  "calendarSearchHint": "Search chores",
+  "@calendarSearchHint": {},
+  "calendarAddChore": "Add chore",
+  "@calendarAddChore": {},
+  "calendarMonthNarrow": "The month view needs a wider screen, so the week is shown.",
+  "@calendarMonthNarrow": {},
+  "calendarQuickActions": "Chore actions",
+  "@calendarQuickActions": {},
+  "calendarRemoveFilter": "Remove filter {label}",
+  "@calendarRemoveFilter": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarPreviousWeek": "Previous week",
+  "@calendarPreviousWeek": {},
+  "calendarNextWeek": "Next week",
+  "@calendarNextWeek": {}
 }

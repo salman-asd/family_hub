@@ -11,6 +11,9 @@ class CalendarHeader extends StatelessWidget {
   const CalendarHeader({
     required this.title,
     required this.showToday,
+    required this.showArrows,
+    required this.previousLabel,
+    required this.nextLabel,
     required this.onTitle,
     required this.onPrevious,
     required this.onNext,
@@ -20,6 +23,11 @@ class CalendarHeader extends StatelessWidget {
 
   final String title;
   final bool showToday;
+
+  /// The agenda scrolls, so it has no previous / next.
+  final bool showArrows;
+  final String previousLabel;
+  final String nextLabel;
   final VoidCallback onTitle;
   final VoidCallback onPrevious;
   final VoidCallback onNext;
@@ -75,18 +83,20 @@ class CalendarHeader extends StatelessWidget {
                   onPressed: onToday,
                 ),
               ),
-            IconButton(
-              key: const Key('calendar_previous'),
-              tooltip: l10n.calendarPreviousMonth,
-              onPressed: onPrevious,
-              icon: const Icon(Icons.chevron_left_rounded),
-            ),
-            IconButton(
-              key: const Key('calendar_next'),
-              tooltip: l10n.calendarNextMonth,
-              onPressed: onNext,
-              icon: const Icon(Icons.chevron_right_rounded),
-            ),
+            if (showArrows) ...[
+              IconButton(
+                key: const Key('calendar_previous'),
+                tooltip: previousLabel,
+                onPressed: onPrevious,
+                icon: const Icon(Icons.chevron_left_rounded),
+              ),
+              IconButton(
+                key: const Key('calendar_next'),
+                tooltip: nextLabel,
+                onPressed: onNext,
+                icon: const Icon(Icons.chevron_right_rounded),
+              ),
+            ],
           ],
         ),
       ],

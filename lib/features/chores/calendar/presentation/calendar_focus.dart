@@ -78,6 +78,9 @@ class CalendarFocusController extends Notifier<CalendarFocus> {
   /// The previous (-1) or next (+1) month.
   void shiftMonth(int months) => showMonth(state.month.addMonths(months));
 
+  /// The previous (-7) or next (+7) week; the focused month follows the day.
+  void shiftDays(int days) => selectDay(state.day.addDays(days));
+
   /// The Today pill.
   void goToToday() => selectDay(ref.read(familyDateKeysProvider).today());
 }
