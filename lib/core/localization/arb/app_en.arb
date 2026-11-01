@@ -3843,5 +3843,76 @@
   "calendarTruncatedBanner": "This month has many chores - not all of them are shown",
   "@calendarTruncatedBanner": {},
   "calendarTruncatedBannerAction": "Open filters",
-  "@calendarTruncatedBannerAction": {}
+  "@calendarTruncatedBannerAction": {},
+  "calendarToday": "Today",
+  "@calendarToday": {},
+  "calendarPreviousMonth": "Previous month",
+  "@calendarPreviousMonth": {},
+  "calendarNextMonth": "Next month",
+  "@calendarNextMonth": {},
+  "calendarPickMonth": "Choose month and year",
+  "@calendarPickMonth": {},
+  "calendarPreviousYear": "Previous year",
+  "@calendarPreviousYear": {},
+  "calendarNextYear": "Next year",
+  "@calendarNextYear": {},
+  "calendarGridLabel": "Month calendar",
+  "@calendarGridLabel": {},
+  "calendarFilters": "Filters",
+  "@calendarFilters": {},
+  "calendarFiltersActive": "Filters, {count} on",
+  "@calendarFiltersActive": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarFiltersNone": "No filters are on.",
+  "@calendarFiltersNone": {},
+  "calendarClearFilters": "Clear filters",
+  "@calendarClearFilters": {},
+  "calendarDayEmptyTitle": "No chores this day",
+  "@calendarDayEmptyTitle": {},
+  "calendarDayEmptyMessage": "Nothing is planned for this day.",
+  "@calendarDayEmptyMessage": {},
+  "calendarDayHeader": "{date} · {count} chores",
+  "@calendarDayHeader": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarCellChores": "{count} chores",
+  "@calendarCellChores": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarCellOverdue": "{count} overdue",
+  "@calendarCellOverdue": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarCellMine": "{count} yours",
+  "@calendarCellMine": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarCellSelected": "Selected",
+  "@calendarCellSelected": {},
+  "calendarOpenToday": "Open today's chores",
+  "@calendarOpenToday": {}
 }

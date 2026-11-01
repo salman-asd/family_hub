@@ -7383,6 +7383,120 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'ফিল্টার দেখুন'**
   String get calendarTruncatedBannerAction;
+
+  /// No description provided for @calendarToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজ'**
+  String get calendarToday;
+
+  /// No description provided for @calendarPreviousMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের মাস'**
+  String get calendarPreviousMonth;
+
+  /// No description provided for @calendarNextMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের মাস'**
+  String get calendarNextMonth;
+
+  /// No description provided for @calendarPickMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস ও বছর বাছুন'**
+  String get calendarPickMonth;
+
+  /// No description provided for @calendarPreviousYear.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগের বছর'**
+  String get calendarPreviousYear;
+
+  /// No description provided for @calendarNextYear.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের বছর'**
+  String get calendarNextYear;
+
+  /// No description provided for @calendarGridLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসের ক্যালেন্ডার'**
+  String get calendarGridLabel;
+
+  /// No description provided for @calendarFilters.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টার'**
+  String get calendarFilters;
+
+  /// No description provided for @calendarFiltersActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টার, {count}টি চালু'**
+  String calendarFiltersActive(String count);
+
+  /// No description provided for @calendarFiltersNone.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো ফিল্টার চালু নেই।'**
+  String get calendarFiltersNone;
+
+  /// No description provided for @calendarClearFilters.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফিল্টার মুছুন'**
+  String get calendarClearFilters;
+
+  /// No description provided for @calendarDayEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই দিনে কোনো কাজ নেই'**
+  String get calendarDayEmptyTitle;
+
+  /// No description provided for @calendarDayEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই দিনের জন্য কিছু ঠিক করা নেই।'**
+  String get calendarDayEmptyMessage;
+
+  /// No description provided for @calendarDayHeader.
+  ///
+  /// In bn, this message translates to:
+  /// **'{date} · {count}টি কাজ'**
+  String calendarDayHeader(String date, String count);
+
+  /// No description provided for @calendarCellChores.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি কাজ'**
+  String calendarCellChores(String count);
+
+  /// No description provided for @calendarCellOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি বিলম্বিত'**
+  String calendarCellOverdue(String count);
+
+  /// No description provided for @calendarCellMine.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি আপনার'**
+  String calendarCellMine(String count);
+
+  /// No description provided for @calendarCellSelected.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্বাচিত'**
+  String get calendarCellSelected;
+
+  /// No description provided for @calendarOpenToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজকের কাজ খুলুন'**
+  String get calendarOpenToday;
 }
 
 class _AppLocalizationsDelegate

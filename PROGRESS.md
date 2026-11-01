@@ -1607,3 +1607,28 @@ Tests: `test/features/chores/calendar/presentation/{calendar_prefs,calendar_prov
 - If the "tick that changes nothing does not rebuild the model" test fails, check that this Riverpod version filters provider updates by `==` (Riverpod 3 does); the fix would be `select` in `calendarMonthModelProvider`.
 - The retention test uses real 150 ms timers; loosen the waits if CI is slow.
 - Not covered (later steps): widgets and the screen (P3-22..24), swipe/pager, heat painters.
+
+
+## Phase 3 - P3-22 Calendar Month view
+
+Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `flutter gen-l10n` (19 keys were hand-added to both ARBs and the three generated files), `flutter analyze`, `flutter test --exclude-tags golden`. No collection, rule or index changed.
+
+### Delivered (`lib/features/chores/calendar/presentation/`)
+- `calendar_screen.dart`: header, view / scope / filter row, weekday row, month pager, truncated banner, selected-day list; the whole screen scrolls.
+- `calendar_day_providers.dart`: `dayPanelItemsProvider(day)` (filters, then scope, like the grid; no extra listener).
+- `widgets/`: `calendar_header`, `view_switcher`, `scope_chip`, `filter_button`, `weekday_header_row`, `month_pager` (241 pages, +-120 months around the month the screen opened on), `month_grid`, `month_grid_placeholder`, `day_cell`, `day_markers`, `day_cell_label`, `month_year_picker_sheet`, `filters_sheet` (minimal: count + "Clear filters"), `day_list`.
+- `chores_home_screen.dart` now hosts the calendar. A family with NO template keeps the first-run empty state (+ Manage); the app bar has Today and (managers) Manage buttons.
+- Tests: `calendar_screen_test.dart`; `chores_screens_test.dart` got the chores provider overrides; `pumpP3Screen` got a `width` parameter.
+
+### Decisions and deviations (please review)
+1. **Agenda and Week are P3-23**: the switcher lists them disabled and the screen always draws the month, whatever view is stored.
+2. **Below 336 dp** cells are narrower than 48 dp (still >= 45 dp at 320; height always >= 48). The Week fallback that fixes this arrives with P3-23. At 360 dp every cell is >= 48 x 48.
+3. **No SharedAxisTransition**: the `PageView` slide is used; programmatic moves animate 250 ms (jump when reduced motion is on).
+4. **Selected day = filled pill, today = 2 dp ring** (shapes, not colour). A person mark shows on days with the viewer's chores while the whole family is shown. Heat tint, unavailable hatch and needs-cover corner marks are P3-24.
+5. **The filter sheet is minimal** (count + clear); the real controls and search are P3-23. The truncated banner opens it.
+6. The selected-day list is a plain `Column` of `TodayRow`s under the grid (P3-23 replaces it with the draggable panel). A planned (projected) chore is shown read-only (U-03).
+7. The month label of the year picker takes the last word of `monthLabel` (the year).
+
+### Open / to check when you run it
+- `PageView` inside the scroll view: the fling test assumes a horizontal fling is taken by the pager.
+- The "no overflow at 2.0" tests are the likeliest to need a layout tweak.

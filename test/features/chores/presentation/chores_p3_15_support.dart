@@ -37,12 +37,13 @@ Future<ChoresFixture> pumpP3Screen(
   String uid = 'cara',
   Role role = Role.member,
   double textScale = 1.0,
+  double width = 320,
   String languageCode = 'en',
   List<ChoreOccurrence> occurrences = const <ChoreOccurrence>[],
   List<Override> overrides = const <Override>[],
 }) async {
   tester.view
-    ..physicalSize = const Size(320, 800)
+    ..physicalSize = Size(width, 800)
     ..devicePixelRatio = 1;
   addTearDown(tester.view.reset);
 

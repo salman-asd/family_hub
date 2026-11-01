@@ -3842,5 +3842,76 @@
   "calendarTruncatedBanner": "এই মাসে অনেক কাজ — সব দেখানো যাচ্ছে না",
   "@calendarTruncatedBanner": {},
   "calendarTruncatedBannerAction": "ফিল্টার দেখুন",
-  "@calendarTruncatedBannerAction": {}
+  "@calendarTruncatedBannerAction": {},
+  "calendarToday": "আজ",
+  "@calendarToday": {},
+  "calendarPreviousMonth": "আগের মাস",
+  "@calendarPreviousMonth": {},
+  "calendarNextMonth": "পরের মাস",
+  "@calendarNextMonth": {},
+  "calendarPickMonth": "মাস ও বছর বাছুন",
+  "@calendarPickMonth": {},
+  "calendarPreviousYear": "আগের বছর",
+  "@calendarPreviousYear": {},
+  "calendarNextYear": "পরের বছর",
+  "@calendarNextYear": {},
+  "calendarGridLabel": "মাসের ক্যালেন্ডার",
+  "@calendarGridLabel": {},
+  "calendarFilters": "ফিল্টার",
+  "@calendarFilters": {},
+  "calendarFiltersActive": "ফিল্টার, {count}টি চালু",
+  "@calendarFiltersActive": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarFiltersNone": "কোনো ফিল্টার চালু নেই।",
+  "@calendarFiltersNone": {},
+  "calendarClearFilters": "ফিল্টার মুছুন",
+  "@calendarClearFilters": {},
+  "calendarDayEmptyTitle": "এই দিনে কোনো কাজ নেই",
+  "@calendarDayEmptyTitle": {},
+  "calendarDayEmptyMessage": "এই দিনের জন্য কিছু ঠিক করা নেই।",
+  "@calendarDayEmptyMessage": {},
+  "calendarDayHeader": "{date} · {count}টি কাজ",
+  "@calendarDayHeader": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarCellChores": "{count}টি কাজ",
+  "@calendarCellChores": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarCellOverdue": "{count}টি বিলম্বিত",
+  "@calendarCellOverdue": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarCellMine": "{count}টি আপনার",
+  "@calendarCellMine": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarCellSelected": "নির্বাচিত",
+  "@calendarCellSelected": {},
+  "calendarOpenToday": "আজকের কাজ খুলুন",
+  "@calendarOpenToday": {}
 }

@@ -13,6 +13,7 @@ import 'package:family_hub/features/chores/settings/presentation/chore_settings_
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+export 'package:family_hub/features/chores/calendar/presentation/calendar_day_providers.dart';
 export 'package:family_hub/features/chores/calendar/presentation/calendar_focus.dart';
 export 'package:family_hub/features/chores/calendar/presentation/calendar_items_providers.dart';
 export 'package:family_hub/features/chores/calendar/presentation/calendar_prefs.dart';

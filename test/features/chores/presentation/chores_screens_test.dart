@@ -7,7 +7,14 @@ import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
+import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/features/chores/chores_entries.dart';
+import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_providers.dart';
+import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
+import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
+import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
+import 'package:family_hub/features/chores/templates/presentation/template_providers.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/chores/presentation/chores_home_screen.dart';
 import 'package:family_hub/features/chores/presentation/chores_manage_screen.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
@@ -17,6 +24,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../chores_test_helpers.dart';
 
 PermissionActor _actor(Role role) =>
     PermissionActor(uid: 'u1', role: role, isActive: true);
@@ -56,6 +65,7 @@ Future<void> _pump(
 
   SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
+  final fixture = ChoresFixture();
 
   final router = GoRouter(
     routes: [
@@ -84,6 +94,22 @@ Future<void> _pump(
         permissionSettingsProvider.overrideWithValue(
           PermissionSettings.defaults,
         ),
+        // The Chores tab now reads the chore providers (P3-22); an empty
+        // family keeps the first-run empty state.
+        occurrenceRepositoryProvider.overrideWithValue(fixture.occurrences),
+        generationMarkerRepositoryProvider.overrideWithValue(
+          fixture.occurrences,
+        ),
+        dutyGroupRepositoryProvider.overrideWithValue(
+          fixture.chores.dutyGroups,
+        ),
+        templateRepositoryProvider.overrideWithValue(fixture.chores),
+        choreSettingsRepositoryProvider.overrideWithValue(fixture.settings),
+        familyRepositoryProvider.overrideWithValue(fixture.families),
+        currentFamilyIdProvider.overrideWithValue(ChoresFixture.familyId),
+        currentUidProvider.overrideWithValue('u1'),
+        clockProvider.overrideWithValue(fixture.clock),
+        nowTickProvider.overrideWith((ref) => const Stream<DateTime>.empty()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
