@@ -3201,7 +3201,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Displays projected upcoming occurrences on the calendar';
 
   @override
-  String choresSettingsProjectedMonths(int months) {
+  String choresSettingsProjectedMonths(String months) {
     return 'Projected months ahead: $months';
   }
 
@@ -3221,7 +3221,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choresCalendarScopeAll => 'All chores';
 
   @override
-  String choresSettingsHorizon(int days) {
+  String choresSettingsHorizon(String days) {
     return 'Generation horizon: $days days';
   }
 
@@ -3230,7 +3230,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Occurrences are generated this many days in advance (14-90 days)';
 
   @override
-  String choresSettingsOverdueGrace(int minutes) {
+  String choresSettingsOverdueGrace(String minutes) {
     return 'Overdue grace period: $minutes minutes';
   }
 
@@ -3319,7 +3319,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Members may request to swap tasks with one another';
 
   @override
-  String choresSettingsSwapBuffer(int minutes) {
+  String choresSettingsSwapBuffer(String minutes) {
     return 'Swap request expiry: $minutes minutes';
   }
 
@@ -3607,4 +3607,432 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dutyChoreAdded => 'Chore added to the group';
+
+  @override
+  String get actionDiscard => 'Discard';
+
+  @override
+  String get choresSettingsNeedsInternet => 'Saving chore settings needs an internet connection. Your changes are kept here; try again when you are online.';
+
+  @override
+  String get choresSettingsResetConfirmAction => 'Reset';
+
+  @override
+  String get choreTemplatesTitle => 'Chore templates';
+
+  @override
+  String get choreTemplatesSubtitle => 'Create and edit the family chores';
+
+  @override
+  String get choreTemplatesNotAllowed => 'Only admins and moderators can manage chores.';
+
+  @override
+  String get choreListNew => 'New chore';
+
+  @override
+  String get choreListSearch => 'Search chores';
+
+  @override
+  String get choreListEmptyTitle => 'No chores yet';
+
+  @override
+  String get choreListEmptyMessage => 'Create the first chore with the New chore button.';
+
+  @override
+  String get choreListEmptyFiltered => 'No chores match';
+
+  @override
+  String get choreListTruncated => 'Only the first chores are shown. Archive chores you no longer need to see the rest.';
+
+  @override
+  String get choreListUpdated => 'Updated';
+
+  @override
+  String get choreListInvalidSchedule => 'Schedule cannot be read';
+
+  @override
+  String choreListNext(String date) {
+    return 'Next: $date';
+  }
+
+  @override
+  String get choreStatusActive => 'Active';
+
+  @override
+  String get choreStatusPaused => 'Paused';
+
+  @override
+  String get choreStatusArchived => 'Archived';
+
+  @override
+  String get choreActionPause => 'Pause';
+
+  @override
+  String get choreActionResume => 'Resume';
+
+  @override
+  String get choreActionDuplicate => 'Duplicate';
+
+  @override
+  String get choreActionArchive => 'Archive';
+
+  @override
+  String get choreArchiveConfirmTitle => 'Archive this chore?';
+
+  @override
+  String get choreArchiveConfirmMessage => 'It stops creating new days. Past days and history are kept.';
+
+  @override
+  String get choreDuplicateSuffix => ' (copy)';
+
+  @override
+  String get choreDuplicated => 'Chore duplicated';
+
+  @override
+  String choreSlotCount(String count) {
+    return '$count time(s) a day';
+  }
+
+  @override
+  String get choreStrategyRotation => 'Rotation';
+
+  @override
+  String get choreStrategyFixed => 'Fixed person';
+
+  @override
+  String get choreStrategyManual => 'Assigned by hand';
+
+  @override
+  String get choreEditorTitleNew => 'New chore';
+
+  @override
+  String get choreEditorTitleEdit => 'Edit chore';
+
+  @override
+  String get choreEditorNotFound => 'This chore was not found';
+
+  @override
+  String get choreEditorArchivedNote => 'This chore is archived. It can be viewed but not changed.';
+
+  @override
+  String get choreEditorPlanningFailed => 'The chore was saved, but planning its days failed. Retry to finish.';
+
+  @override
+  String get choreEditorSectionBasics => 'Basics';
+
+  @override
+  String get choreEditorSectionSchedule => 'Schedule';
+
+  @override
+  String get choreEditorSectionWho => 'Who does it';
+
+  @override
+  String get choreEditorSectionSteps => 'Steps';
+
+  @override
+  String get choreEditorSectionInstructions => 'Instructions';
+
+  @override
+  String get choreEditorSectionOptions => 'Options';
+
+  @override
+  String get choreEditorNameBn => 'Name (Bangla)';
+
+  @override
+  String get choreEditorNameEn => 'Name (English, optional)';
+
+  @override
+  String get choreEditorGroup => 'Group';
+
+  @override
+  String get choreEditorIcon => 'Icon';
+
+  @override
+  String get choreEditorColor => 'Color';
+
+  @override
+  String get choreEditorRepeat => 'Repeats';
+
+  @override
+  String get choreEditorRepeatChange => 'Change repeat';
+
+  @override
+  String get choreEditorNextDates => 'Next dates';
+
+  @override
+  String get choreEditorNoNextDates => 'No upcoming dates';
+
+  @override
+  String choreEditorStartDate(String date) {
+    return 'Starts $date';
+  }
+
+  @override
+  String choreEditorEndDate(String date) {
+    return 'Ends $date';
+  }
+
+  @override
+  String get choreEditorEndDateNone => 'No end date';
+
+  @override
+  String get choreEditorEndDateClear => 'Remove end date';
+
+  @override
+  String get choreEditorTimes => 'Times of day';
+
+  @override
+  String get choreEditorEstimatedMinutes => 'Estimated minutes (optional)';
+
+  @override
+  String get choreEditorDifficulty => 'Difficulty';
+
+  @override
+  String get choreDifficultyEasy => 'Easy';
+
+  @override
+  String get choreDifficultyNormal => 'Normal';
+
+  @override
+  String get choreDifficultyHard => 'Hard';
+
+  @override
+  String get choreEditorVerification => 'Needs verification';
+
+  @override
+  String get choreEditorVerificationHelp => 'A manager checks it after it is done.';
+
+  @override
+  String get choreEditorActive => 'Active';
+
+  @override
+  String get choreEditorActiveHelp => 'Paused chores create no new days.';
+
+  @override
+  String get choreRemindersTitle => 'Reminders';
+
+  @override
+  String get choreRemindersStoredNote => 'Saved for later: reminders are sent in a future update.';
+
+  @override
+  String get choreReminderAtDue => 'At the due time';
+
+  @override
+  String get choreReminderBeforeTitle => 'Before the due time';
+
+  @override
+  String choreReminderBefore(String minutes) {
+    return '$minutes min before';
+  }
+
+  @override
+  String get choreReminderCustom => 'Other minutes (1-1440)';
+
+  @override
+  String get choreReminderCustomAdd => 'Add reminder time';
+
+  @override
+  String get choreReminderOverdue => 'When overdue';
+
+  @override
+  String get choreReminderOverdueAfter => 'Minutes after the due time';
+
+  @override
+  String choreSlotTitle(String number) {
+    return 'Time $number';
+  }
+
+  @override
+  String get choreSlotLabel => 'Name of this time (optional)';
+
+  @override
+  String get choreSlotDueTime => 'Due time';
+
+  @override
+  String get choreSlotAdd => 'Add another time';
+
+  @override
+  String get choreSlotRemove => 'Remove this time';
+
+  @override
+  String choreSlotLimit(String max) {
+    return 'At most $max times a day.';
+  }
+
+  @override
+  String get choreSubtasksEmpty => 'No steps yet. Steps are optional.';
+
+  @override
+  String get choreSubtaskAdd => 'Add a step';
+
+  @override
+  String get choreSubtaskTitle => 'Step';
+
+  @override
+  String get choreSubtaskRequired => 'Required step';
+
+  @override
+  String get choreSubtaskHint => 'Hint (optional)';
+
+  @override
+  String get choreSubtaskRemove => 'Remove step';
+
+  @override
+  String choreSubtaskLimit(String max) {
+    return 'At most $max steps.';
+  }
+
+  @override
+  String get choreInstructionsBold => 'Bold';
+
+  @override
+  String get choreInstructionsBullet => 'Bullet list';
+
+  @override
+  String get choreInstructionsNumbered => 'Numbered list';
+
+  @override
+  String get choreInstructionsHint => 'How to do this chore';
+
+  @override
+  String get choreInstructionsEmpty => 'No instructions';
+
+  @override
+  String get choreAssigneeManualHelp => 'Nobody is assigned until a manager picks someone.';
+
+  @override
+  String get choreAssigneeFixedLabel => 'Who does it';
+
+  @override
+  String get choreAssigneeSourceGroup => 'Duty group';
+
+  @override
+  String get choreAssigneeSourceOwn => 'Own rotation';
+
+  @override
+  String get choreAssigneePickGroup => 'Choose a duty group';
+
+  @override
+  String get choreAssigneeNoGroups => 'There is no duty group yet. Create one or use an own rotation.';
+
+  @override
+  String get choreReplanTitle => 'Apply this change to';
+
+  @override
+  String get choreReplanMessage => 'Days that are already started or done are never changed.';
+
+  @override
+  String get choreReplanFutureOnly => 'Future days only';
+
+  @override
+  String get choreReplanIncludeUpcoming => 'Future days and upcoming days nobody has started';
+
+  @override
+  String get recurrenceKindOnce => 'Once';
+
+  @override
+  String get recurrenceKindDaily => 'Every day';
+
+  @override
+  String get recurrenceKindEveryNDays => 'Every few days';
+
+  @override
+  String get recurrenceKindWeekdays => 'On certain weekdays';
+
+  @override
+  String get recurrenceKindEveryNWeeks => 'Every few weeks';
+
+  @override
+  String get recurrenceKindDaysOfMonth => 'Dates of the month';
+
+  @override
+  String get recurrenceKindNthWeekday => 'A weekday of the month';
+
+  @override
+  String get recurrenceKindLastDay => 'Last day of the month';
+
+  @override
+  String get recurrencePickerTitle => 'Repeat';
+
+  @override
+  String get recurrencePickerOnceDate => 'Date';
+
+  @override
+  String get recurrencePickerEveryNDays => 'Every how many days';
+
+  @override
+  String get recurrencePickerEveryNWeeks => 'Every how many weeks';
+
+  @override
+  String get recurrencePickerDaysOfMonth => 'Dates of the month';
+
+  @override
+  String get recurrencePickerMonthEnd => 'If the month is shorter';
+
+  @override
+  String get recurrencePickerMonthEndClamp => 'Use the last day';
+
+  @override
+  String get recurrencePickerMonthEndSkip => 'Skip that month';
+
+  @override
+  String get recurrencePickerNth => 'Which one';
+
+  @override
+  String get recurrencePickerWeekday => 'Day of the week';
+
+  @override
+  String get recurrencePickerWeekdays => 'Days of the week';
+
+  @override
+  String get recurrenceNthFirst => 'first';
+
+  @override
+  String get recurrenceNthSecond => 'second';
+
+  @override
+  String get recurrenceNthThird => 'third';
+
+  @override
+  String get recurrenceNthFourth => 'fourth';
+
+  @override
+  String get recurrenceNthLast => 'last';
+
+  @override
+  String get recurrenceListSeparator => ', ';
+
+  @override
+  String get recurrenceSummaryOnce => 'Once';
+
+  @override
+  String get recurrenceSummaryDaily => 'Every day';
+
+  @override
+  String recurrenceSummaryEveryNDays(String n) {
+    return 'Every $n days';
+  }
+
+  @override
+  String recurrenceSummaryWeekdays(String days) {
+    return 'Every $days';
+  }
+
+  @override
+  String recurrenceSummaryEveryNWeeks(String n, String days) {
+    return 'Every $n weeks on $days';
+  }
+
+  @override
+  String recurrenceSummaryDaysOfMonth(String days) {
+    return 'On day $days of every month';
+  }
+
+  @override
+  String recurrenceSummaryNthWeekday(String nth, String weekday) {
+    return 'Every $nth $weekday of the month';
+  }
+
+  @override
+  String get recurrenceSummaryLastDay => 'On the last day of every month';
 }

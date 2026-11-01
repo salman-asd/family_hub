@@ -5564,7 +5564,7 @@ abstract class AppLocalizations {
   ///
   /// In bn, this message translates to:
   /// **'আগামী পূর্বাভাস: {months} মাস'**
-  String choresSettingsProjectedMonths(int months);
+  String choresSettingsProjectedMonths(String months);
 
   /// No description provided for @choresCalendarViewAgenda.
   ///
@@ -5600,7 +5600,7 @@ abstract class AppLocalizations {
   ///
   /// In bn, this message translates to:
   /// **'কাজ তৈরির সময়কাল: {days} দিন'**
-  String choresSettingsHorizon(int days);
+  String choresSettingsHorizon(String days);
 
   /// No description provided for @choresSettingsHorizonSubtitle.
   ///
@@ -5612,7 +5612,7 @@ abstract class AppLocalizations {
   ///
   /// In bn, this message translates to:
   /// **'গ্রেস পিরিয়ড: {minutes} মিনিট'**
-  String choresSettingsOverdueGrace(int minutes);
+  String choresSettingsOverdueGrace(String minutes);
 
   /// No description provided for @choresSettingsOverdueGraceSubtitle.
   ///
@@ -5768,7 +5768,7 @@ abstract class AppLocalizations {
   ///
   /// In bn, this message translates to:
   /// **'অদলবদল অনুরোধের মেয়াদ: {minutes} মিনিট'**
-  String choresSettingsSwapBuffer(int minutes);
+  String choresSettingsSwapBuffer(String minutes);
 
   /// No description provided for @choresSettingsSwapBufferSubtitle.
   ///
@@ -6273,6 +6273,810 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'কাজটি গ্রুপে যোগ হয়েছে'**
   String get dutyChoreAdded;
+
+  /// No description provided for @actionDiscard.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল করুন'**
+  String get actionDiscard;
+
+  /// No description provided for @choresSettingsNeedsInternet.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের সেটিংস সংরক্ষণ করতে ইন্টারনেট সংযোগ লাগবে। আপনার পরিবর্তনগুলো এখানেই থাকছে, অনলাইন হলে আবার চেষ্টা করুন।'**
+  String get choresSettingsNeedsInternet;
+
+  /// No description provided for @choresSettingsResetConfirmAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিসেট করুন'**
+  String get choresSettingsResetConfirmAction;
+
+  /// No description provided for @choreTemplatesTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের টেমপ্লেট'**
+  String get choreTemplatesTitle;
+
+  /// No description provided for @choreTemplatesSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের কাজ তৈরি ও সম্পাদনা করুন'**
+  String get choreTemplatesSubtitle;
+
+  /// No description provided for @choreTemplatesNotAllowed.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু অ্যাডমিন ও মডারেটর কাজ পরিচালনা করতে পারেন।'**
+  String get choreTemplatesNotAllowed;
+
+  /// No description provided for @choreListNew.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন কাজ'**
+  String get choreListNew;
+
+  /// No description provided for @choreListSearch.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ খুঁজুন'**
+  String get choreListSearch;
+
+  /// No description provided for @choreListEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো কাজ নেই'**
+  String get choreListEmptyTitle;
+
+  /// No description provided for @choreListEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন কাজ বোতাম দিয়ে প্রথম কাজটি তৈরি করুন।'**
+  String get choreListEmptyMessage;
+
+  /// No description provided for @choreListEmptyFiltered.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো কাজ মেলেনি'**
+  String get choreListEmptyFiltered;
+
+  /// No description provided for @choreListTruncated.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু প্রথম দিকের কাজগুলো দেখানো হচ্ছে। বাকিগুলো দেখতে অপ্রয়োজনীয় কাজ আর্কাইভ করুন।'**
+  String get choreListTruncated;
+
+  /// No description provided for @choreListUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'হালনাগাদ হয়েছে'**
+  String get choreListUpdated;
+
+  /// No description provided for @choreListInvalidSchedule.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময়সূচি পড়া যাচ্ছে না'**
+  String get choreListInvalidSchedule;
+
+  /// No description provided for @choreListNext.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরবর্তী: {date}'**
+  String choreListNext(String date);
+
+  /// No description provided for @choreStatusActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'সক্রিয়'**
+  String get choreStatusActive;
+
+  /// No description provided for @choreStatusPaused.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিরতিতে'**
+  String get choreStatusPaused;
+
+  /// No description provided for @choreStatusArchived.
+  ///
+  /// In bn, this message translates to:
+  /// **'আর্কাইভ করা'**
+  String get choreStatusArchived;
+
+  /// No description provided for @choreActionPause.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিরতি দিন'**
+  String get choreActionPause;
+
+  /// No description provided for @choreActionResume.
+  ///
+  /// In bn, this message translates to:
+  /// **'আবার চালু করুন'**
+  String get choreActionResume;
+
+  /// No description provided for @choreActionDuplicate.
+  ///
+  /// In bn, this message translates to:
+  /// **'কপি করুন'**
+  String get choreActionDuplicate;
+
+  /// No description provided for @choreActionArchive.
+  ///
+  /// In bn, this message translates to:
+  /// **'আর্কাইভ করুন'**
+  String get choreActionArchive;
+
+  /// No description provided for @choreArchiveConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি আর্কাইভ করবেন?'**
+  String get choreArchiveConfirmTitle;
+
+  /// No description provided for @choreArchiveConfirmMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এর নতুন দিন আর তৈরি হবে না। আগের দিন ও ইতিহাস থাকবে।'**
+  String get choreArchiveConfirmMessage;
+
+  /// No description provided for @choreDuplicateSuffix.
+  ///
+  /// In bn, this message translates to:
+  /// **' (কপি)'**
+  String get choreDuplicateSuffix;
+
+  /// No description provided for @choreDuplicated.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজটি কপি হয়েছে'**
+  String get choreDuplicated;
+
+  /// No description provided for @choreSlotCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিনে {count} বার'**
+  String choreSlotCount(String count);
+
+  /// No description provided for @choreStrategyRotation.
+  ///
+  /// In bn, this message translates to:
+  /// **'পালাক্রমে'**
+  String get choreStrategyRotation;
+
+  /// No description provided for @choreStrategyFixed.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্দিষ্ট একজন'**
+  String get choreStrategyFixed;
+
+  /// No description provided for @choreStrategyManual.
+  ///
+  /// In bn, this message translates to:
+  /// **'হাতে বণ্টন'**
+  String get choreStrategyManual;
+
+  /// No description provided for @choreEditorTitleNew.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন কাজ'**
+  String get choreEditorTitleNew;
+
+  /// No description provided for @choreEditorTitleEdit.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ সম্পাদনা'**
+  String get choreEditorTitleEdit;
+
+  /// No description provided for @choreEditorNotFound.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজটি পাওয়া যায়নি'**
+  String get choreEditorNotFound;
+
+  /// No description provided for @choreEditorArchivedNote.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি আর্কাইভ করা। দেখা যাবে, কিন্তু বদলানো যাবে না।'**
+  String get choreEditorArchivedNote;
+
+  /// No description provided for @choreEditorPlanningFailed.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজটি সংরক্ষিত হয়েছে, কিন্তু দিন সাজাতে সমস্যা হয়েছে। শেষ করতে আবার চেষ্টা করুন।'**
+  String get choreEditorPlanningFailed;
+
+  /// No description provided for @choreEditorSectionBasics.
+  ///
+  /// In bn, this message translates to:
+  /// **'মূল তথ্য'**
+  String get choreEditorSectionBasics;
+
+  /// No description provided for @choreEditorSectionSchedule.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময়সূচি'**
+  String get choreEditorSectionSchedule;
+
+  /// No description provided for @choreEditorSectionWho.
+  ///
+  /// In bn, this message translates to:
+  /// **'কে করবে'**
+  String get choreEditorSectionWho;
+
+  /// No description provided for @choreEditorSectionSteps.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধাপ'**
+  String get choreEditorSectionSteps;
+
+  /// No description provided for @choreEditorSectionInstructions.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্দেশনা'**
+  String get choreEditorSectionInstructions;
+
+  /// No description provided for @choreEditorSectionOptions.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যান্য'**
+  String get choreEditorSectionOptions;
+
+  /// No description provided for @choreEditorNameBn.
+  ///
+  /// In bn, this message translates to:
+  /// **'নাম (বাংলা)'**
+  String get choreEditorNameBn;
+
+  /// No description provided for @choreEditorNameEn.
+  ///
+  /// In bn, this message translates to:
+  /// **'নাম (ইংরেজি, ঐচ্ছিক)'**
+  String get choreEditorNameEn;
+
+  /// No description provided for @choreEditorGroup.
+  ///
+  /// In bn, this message translates to:
+  /// **'গ্রুপ'**
+  String get choreEditorGroup;
+
+  /// No description provided for @choreEditorIcon.
+  ///
+  /// In bn, this message translates to:
+  /// **'আইকন'**
+  String get choreEditorIcon;
+
+  /// No description provided for @choreEditorColor.
+  ///
+  /// In bn, this message translates to:
+  /// **'রঙ'**
+  String get choreEditorColor;
+
+  /// No description provided for @choreEditorRepeat.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুনরাবৃত্তি'**
+  String get choreEditorRepeat;
+
+  /// No description provided for @choreEditorRepeatChange.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুনরাবৃত্তি বদলান'**
+  String get choreEditorRepeatChange;
+
+  /// No description provided for @choreEditorNextDates.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরবর্তী তারিখ'**
+  String get choreEditorNextDates;
+
+  /// No description provided for @choreEditorNoNextDates.
+  ///
+  /// In bn, this message translates to:
+  /// **'আর কোনো তারিখ নেই'**
+  String get choreEditorNoNextDates;
+
+  /// No description provided for @choreEditorStartDate.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুরু: {date}'**
+  String choreEditorStartDate(String date);
+
+  /// No description provided for @choreEditorEndDate.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ: {date}'**
+  String choreEditorEndDate(String date);
+
+  /// No description provided for @choreEditorEndDateNone.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষের তারিখ নেই'**
+  String get choreEditorEndDateNone;
+
+  /// No description provided for @choreEditorEndDateClear.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষের তারিখ সরান'**
+  String get choreEditorEndDateClear;
+
+  /// No description provided for @choreEditorTimes.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিনের সময়'**
+  String get choreEditorTimes;
+
+  /// No description provided for @choreEditorEstimatedMinutes.
+  ///
+  /// In bn, this message translates to:
+  /// **'আনুমানিক সময় (মিনিট, ঐচ্ছিক)'**
+  String get choreEditorEstimatedMinutes;
+
+  /// No description provided for @choreEditorDifficulty.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাঠিন্য'**
+  String get choreEditorDifficulty;
+
+  /// No description provided for @choreDifficultyEasy.
+  ///
+  /// In bn, this message translates to:
+  /// **'সহজ'**
+  String get choreDifficultyEasy;
+
+  /// No description provided for @choreDifficultyNormal.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাঝারি'**
+  String get choreDifficultyNormal;
+
+  /// No description provided for @choreDifficultyHard.
+  ///
+  /// In bn, this message translates to:
+  /// **'কঠিন'**
+  String get choreDifficultyHard;
+
+  /// No description provided for @choreEditorVerification.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাই লাগবে'**
+  String get choreEditorVerification;
+
+  /// No description provided for @choreEditorVerificationHelp.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ শেষ হলে একজন দায়িত্বশীল যাচাই করবেন।'**
+  String get choreEditorVerificationHelp;
+
+  /// No description provided for @choreEditorActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'সক্রিয়'**
+  String get choreEditorActive;
+
+  /// No description provided for @choreEditorActiveHelp.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিরতিতে থাকা কাজের নতুন দিন তৈরি হয় না।'**
+  String get choreEditorActiveHelp;
+
+  /// No description provided for @choreRemindersTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিমাইন্ডার'**
+  String get choreRemindersTitle;
+
+  /// No description provided for @choreRemindersStoredNote.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরে কাজে লাগবে: রিমাইন্ডার পরের আপডেটে পাঠানো হবে।'**
+  String get choreRemindersStoredNote;
+
+  /// No description provided for @choreReminderAtDue.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্ধারিত সময়ে'**
+  String get choreReminderAtDue;
+
+  /// No description provided for @choreReminderBeforeTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্ধারিত সময়ের আগে'**
+  String get choreReminderBeforeTitle;
+
+  /// No description provided for @choreReminderBefore.
+  ///
+  /// In bn, this message translates to:
+  /// **'{minutes} মিনিট আগে'**
+  String choreReminderBefore(String minutes);
+
+  /// No description provided for @choreReminderCustom.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্য মিনিট (১-১৪৪০)'**
+  String get choreReminderCustom;
+
+  /// No description provided for @choreReminderCustomAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় যোগ করুন'**
+  String get choreReminderCustomAdd;
+
+  /// No description provided for @choreReminderOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'দেরি হলে'**
+  String get choreReminderOverdue;
+
+  /// No description provided for @choreReminderOverdueAfter.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্ধারিত সময়ের কত মিনিট পরে'**
+  String get choreReminderOverdueAfter;
+
+  /// No description provided for @choreSlotTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় {number}'**
+  String choreSlotTitle(String number);
+
+  /// No description provided for @choreSlotLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সময়ের নাম (ঐচ্ছিক)'**
+  String get choreSlotLabel;
+
+  /// No description provided for @choreSlotDueTime.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ সময়'**
+  String get choreSlotDueTime;
+
+  /// No description provided for @choreSlotAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'আরেকটি সময় যোগ করুন'**
+  String get choreSlotAdd;
+
+  /// No description provided for @choreSlotRemove.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সময় মুছুন'**
+  String get choreSlotRemove;
+
+  /// No description provided for @choreSlotLimit.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিনে সর্বোচ্চ {max}টি সময়।'**
+  String choreSlotLimit(String max);
+
+  /// No description provided for @choreSubtasksEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো ধাপ নেই। ধাপ ঐচ্ছিক।'**
+  String get choreSubtasksEmpty;
+
+  /// No description provided for @choreSubtaskAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধাপ যোগ করুন'**
+  String get choreSubtaskAdd;
+
+  /// No description provided for @choreSubtaskTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধাপ'**
+  String get choreSubtaskTitle;
+
+  /// No description provided for @choreSubtaskRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'আবশ্যক ধাপ'**
+  String get choreSubtaskRequired;
+
+  /// No description provided for @choreSubtaskHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইঙ্গিত (ঐচ্ছিক)'**
+  String get choreSubtaskHint;
+
+  /// No description provided for @choreSubtaskRemove.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধাপ মুছুন'**
+  String get choreSubtaskRemove;
+
+  /// No description provided for @choreSubtaskLimit.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বোচ্চ {max}টি ধাপ।'**
+  String choreSubtaskLimit(String max);
+
+  /// No description provided for @choreInstructionsBold.
+  ///
+  /// In bn, this message translates to:
+  /// **'গাঢ়'**
+  String get choreInstructionsBold;
+
+  /// No description provided for @choreInstructionsBullet.
+  ///
+  /// In bn, this message translates to:
+  /// **'তালিকা'**
+  String get choreInstructionsBullet;
+
+  /// No description provided for @choreInstructionsNumbered.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্রমিক তালিকা'**
+  String get choreInstructionsNumbered;
+
+  /// No description provided for @choreInstructionsHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজটি কীভাবে করবেন'**
+  String get choreInstructionsHint;
+
+  /// No description provided for @choreInstructionsEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো নির্দেশনা নেই'**
+  String get choreInstructionsEmpty;
+
+  /// No description provided for @choreAssigneeManualHelp.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো দায়িত্বশীল ঠিক না করা পর্যন্ত কেউ নির্ধারিত থাকবে না।'**
+  String get choreAssigneeManualHelp;
+
+  /// No description provided for @choreAssigneeFixedLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'কে করবে'**
+  String get choreAssigneeFixedLabel;
+
+  /// No description provided for @choreAssigneeSourceGroup.
+  ///
+  /// In bn, this message translates to:
+  /// **'দায়িত্ব গ্রুপ'**
+  String get choreAssigneeSourceGroup;
+
+  /// No description provided for @choreAssigneeSourceOwn.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিজস্ব পালা'**
+  String get choreAssigneeSourceOwn;
+
+  /// No description provided for @choreAssigneePickGroup.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি দায়িত্ব গ্রুপ বাছুন'**
+  String get choreAssigneePickGroup;
+
+  /// No description provided for @choreAssigneeNoGroups.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কোনো দায়িত্ব গ্রুপ নেই। একটি বানান অথবা নিজস্ব পালা ব্যবহার করুন।'**
+  String get choreAssigneeNoGroups;
+
+  /// No description provided for @choreReplanTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিবর্তন কোথায় প্রযোজ্য হবে'**
+  String get choreReplanTitle;
+
+  /// No description provided for @choreReplanMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'যে দিনের কাজ শুরু বা শেষ হয়েছে তা কখনো বদলায় না।'**
+  String get choreReplanMessage;
+
+  /// No description provided for @choreReplanFutureOnly.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু আগামী দিনগুলো'**
+  String get choreReplanFutureOnly;
+
+  /// No description provided for @choreReplanIncludeUpcoming.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগামী দিন এবং এখনো কেউ শুরু করেনি এমন আসন্ন দিনগুলো'**
+  String get choreReplanIncludeUpcoming;
+
+  /// No description provided for @recurrenceKindOnce.
+  ///
+  /// In bn, this message translates to:
+  /// **'একবার'**
+  String get recurrenceKindOnce;
+
+  /// No description provided for @recurrenceKindDaily.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতিদিন'**
+  String get recurrenceKindDaily;
+
+  /// No description provided for @recurrenceKindEveryNDays.
+  ///
+  /// In bn, this message translates to:
+  /// **'কয়েক দিন পর পর'**
+  String get recurrenceKindEveryNDays;
+
+  /// No description provided for @recurrenceKindWeekdays.
+  ///
+  /// In bn, this message translates to:
+  /// **'সপ্তাহের নির্দিষ্ট দিন'**
+  String get recurrenceKindWeekdays;
+
+  /// No description provided for @recurrenceKindEveryNWeeks.
+  ///
+  /// In bn, this message translates to:
+  /// **'কয়েক সপ্তাহ পর পর'**
+  String get recurrenceKindEveryNWeeks;
+
+  /// No description provided for @recurrenceKindDaysOfMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসের নির্দিষ্ট তারিখ'**
+  String get recurrenceKindDaysOfMonth;
+
+  /// No description provided for @recurrenceKindNthWeekday.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসের একটি সপ্তাহের দিন'**
+  String get recurrenceKindNthWeekday;
+
+  /// No description provided for @recurrenceKindLastDay.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসের শেষ দিন'**
+  String get recurrenceKindLastDay;
+
+  /// No description provided for @recurrencePickerTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুনরাবৃত্তি'**
+  String get recurrencePickerTitle;
+
+  /// No description provided for @recurrencePickerOnceDate.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখ'**
+  String get recurrencePickerOnceDate;
+
+  /// No description provided for @recurrencePickerEveryNDays.
+  ///
+  /// In bn, this message translates to:
+  /// **'কত দিন পর পর'**
+  String get recurrencePickerEveryNDays;
+
+  /// No description provided for @recurrencePickerEveryNWeeks.
+  ///
+  /// In bn, this message translates to:
+  /// **'কত সপ্তাহ পর পর'**
+  String get recurrencePickerEveryNWeeks;
+
+  /// No description provided for @recurrencePickerDaysOfMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসের তারিখ'**
+  String get recurrencePickerDaysOfMonth;
+
+  /// No description provided for @recurrencePickerMonthEnd.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস ছোট হলে'**
+  String get recurrencePickerMonthEnd;
+
+  /// No description provided for @recurrencePickerMonthEndClamp.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ দিনে করুন'**
+  String get recurrencePickerMonthEndClamp;
+
+  /// No description provided for @recurrencePickerMonthEndSkip.
+  ///
+  /// In bn, this message translates to:
+  /// **'সেই মাস বাদ দিন'**
+  String get recurrencePickerMonthEndSkip;
+
+  /// No description provided for @recurrencePickerNth.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনটি'**
+  String get recurrencePickerNth;
+
+  /// No description provided for @recurrencePickerWeekday.
+  ///
+  /// In bn, this message translates to:
+  /// **'সপ্তাহের দিন'**
+  String get recurrencePickerWeekday;
+
+  /// No description provided for @recurrencePickerWeekdays.
+  ///
+  /// In bn, this message translates to:
+  /// **'সপ্তাহের দিনগুলো'**
+  String get recurrencePickerWeekdays;
+
+  /// No description provided for @recurrenceNthFirst.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রথম'**
+  String get recurrenceNthFirst;
+
+  /// No description provided for @recurrenceNthSecond.
+  ///
+  /// In bn, this message translates to:
+  /// **'দ্বিতীয়'**
+  String get recurrenceNthSecond;
+
+  /// No description provided for @recurrenceNthThird.
+  ///
+  /// In bn, this message translates to:
+  /// **'তৃতীয়'**
+  String get recurrenceNthThird;
+
+  /// No description provided for @recurrenceNthFourth.
+  ///
+  /// In bn, this message translates to:
+  /// **'চতুর্থ'**
+  String get recurrenceNthFourth;
+
+  /// No description provided for @recurrenceNthLast.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ'**
+  String get recurrenceNthLast;
+
+  /// No description provided for @recurrenceListSeparator.
+  ///
+  /// In bn, this message translates to:
+  /// **', '**
+  String get recurrenceListSeparator;
+
+  /// No description provided for @recurrenceSummaryOnce.
+  ///
+  /// In bn, this message translates to:
+  /// **'একবার'**
+  String get recurrenceSummaryOnce;
+
+  /// No description provided for @recurrenceSummaryDaily.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতিদিন'**
+  String get recurrenceSummaryDaily;
+
+  /// No description provided for @recurrenceSummaryEveryNDays.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতি {n} দিন পর পর'**
+  String recurrenceSummaryEveryNDays(String n);
+
+  /// No description provided for @recurrenceSummaryWeekdays.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতি {days}'**
+  String recurrenceSummaryWeekdays(String days);
+
+  /// No description provided for @recurrenceSummaryEveryNWeeks.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতি {n} সপ্তাহে {days}'**
+  String recurrenceSummaryEveryNWeeks(String n, String days);
+
+  /// No description provided for @recurrenceSummaryDaysOfMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতি মাসের {days} তারিখে'**
+  String recurrenceSummaryDaysOfMonth(String days);
+
+  /// No description provided for @recurrenceSummaryNthWeekday.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতি মাসের {nth} {weekday}'**
+  String recurrenceSummaryNthWeekday(String nth, String weekday);
+
+  /// No description provided for @recurrenceSummaryLastDay.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতি মাসের শেষ দিনে'**
+  String get recurrenceSummaryLastDay;
 }
 
 class _AppLocalizationsDelegate

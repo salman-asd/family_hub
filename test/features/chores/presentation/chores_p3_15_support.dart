@@ -37,6 +37,7 @@ Future<ChoresFixture> pumpP3Screen(
   String uid = 'cara',
   Role role = Role.member,
   double textScale = 1.0,
+  String languageCode = 'en',
   List<ChoreOccurrence> occurrences = const <ChoreOccurrence>[],
   List<Override> overrides = const <Override>[],
 }) async {
@@ -58,7 +59,10 @@ Future<ChoresFixture> pumpP3Screen(
       overrides: <Override>[
         sharedPreferencesProvider.overrideWithValue(prefs),
         appFormattersProvider.overrideWithValue(
-          const AppFormatters(languageCode: 'en', useBanglaDigits: false),
+          AppFormatters(
+            languageCode: languageCode,
+            useBanglaDigits: languageCode == 'bn',
+          ),
         ),
         occurrenceRepositoryProvider.overrideWithValue(fixture.occurrences),
         generationMarkerRepositoryProvider.overrideWithValue(
@@ -83,7 +87,12 @@ Future<ChoresFixture> pumpP3Screen(
         nowTickProvider.overrideWith((ref) => const Stream<DateTime>.empty()),
         ...overrides,
       ],
-      child: _app(home: home, router: router, textScale: textScale),
+      child: _app(
+        home: home,
+        router: router,
+        textScale: textScale,
+        languageCode: languageCode,
+      ),
     ),
   );
   await tester.pump(const Duration(milliseconds: 250));
@@ -94,6 +103,7 @@ Widget _app({
   required Widget? home,
   required GoRouter? router,
   required double textScale,
+  required String languageCode,
 }) {
   final theme = buildThemeData(appThemes.first);
   const delegates = <LocalizationsDelegate<dynamic>>[
@@ -113,7 +123,7 @@ Widget _app({
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: theme,
-      locale: const Locale('en'),
+      locale: Locale(languageCode),
       localizationsDelegates: delegates,
       supportedLocales: AppLocalizations.supportedLocales,
       builder: scale,
@@ -123,7 +133,7 @@ Widget _app({
   return MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: theme,
-    locale: const Locale('en'),
+    locale: Locale(languageCode),
     localizationsDelegates: delegates,
     supportedLocales: AppLocalizations.supportedLocales,
     builder: scale,

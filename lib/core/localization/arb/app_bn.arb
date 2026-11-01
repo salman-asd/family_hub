@@ -2987,7 +2987,7 @@
   "@choresSettingsProjectedMonths": {
     "placeholders": {
       "months": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -3005,7 +3005,7 @@
   "@choresSettingsHorizon": {
     "placeholders": {
       "days": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -3015,7 +3015,7 @@
   "@choresSettingsOverdueGrace": {
     "placeholders": {
       "minutes": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -3073,7 +3073,7 @@
   "@choresSettingsSwapBuffer": {
     "placeholders": {
       "minutes": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -3319,5 +3319,357 @@
   "dutyChoreAddNote": "যে আসন্ন কাজ শুরু হয়নি তা এই রোটায় চলে আসবে।",
   "@dutyChoreAddNote": {},
   "dutyChoreAdded": "কাজটি গ্রুপে যোগ হয়েছে",
-  "@dutyChoreAdded": {}
+  "@dutyChoreAdded": {},
+  "actionDiscard": "বাতিল করুন",
+  "@actionDiscard": {},
+  "choresSettingsNeedsInternet": "কাজের সেটিংস সংরক্ষণ করতে ইন্টারনেট সংযোগ লাগবে। আপনার পরিবর্তনগুলো এখানেই থাকছে, অনলাইন হলে আবার চেষ্টা করুন।",
+  "@choresSettingsNeedsInternet": {},
+  "choresSettingsResetConfirmAction": "রিসেট করুন",
+  "@choresSettingsResetConfirmAction": {},
+  "choreTemplatesTitle": "কাজের টেমপ্লেট",
+  "@choreTemplatesTitle": {},
+  "choreTemplatesSubtitle": "পরিবারের কাজ তৈরি ও সম্পাদনা করুন",
+  "@choreTemplatesSubtitle": {},
+  "choreTemplatesNotAllowed": "শুধু অ্যাডমিন ও মডারেটর কাজ পরিচালনা করতে পারেন।",
+  "@choreTemplatesNotAllowed": {},
+  "choreListNew": "নতুন কাজ",
+  "@choreListNew": {},
+  "choreListSearch": "কাজ খুঁজুন",
+  "@choreListSearch": {},
+  "choreListEmptyTitle": "এখনো কোনো কাজ নেই",
+  "@choreListEmptyTitle": {},
+  "choreListEmptyMessage": "নতুন কাজ বোতাম দিয়ে প্রথম কাজটি তৈরি করুন।",
+  "@choreListEmptyMessage": {},
+  "choreListEmptyFiltered": "কোনো কাজ মেলেনি",
+  "@choreListEmptyFiltered": {},
+  "choreListTruncated": "শুধু প্রথম দিকের কাজগুলো দেখানো হচ্ছে। বাকিগুলো দেখতে অপ্রয়োজনীয় কাজ আর্কাইভ করুন।",
+  "@choreListTruncated": {},
+  "choreListUpdated": "হালনাগাদ হয়েছে",
+  "@choreListUpdated": {},
+  "choreListInvalidSchedule": "সময়সূচি পড়া যাচ্ছে না",
+  "@choreListInvalidSchedule": {},
+  "choreListNext": "পরবর্তী: {date}",
+  "@choreListNext": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "choreStatusActive": "সক্রিয়",
+  "@choreStatusActive": {},
+  "choreStatusPaused": "বিরতিতে",
+  "@choreStatusPaused": {},
+  "choreStatusArchived": "আর্কাইভ করা",
+  "@choreStatusArchived": {},
+  "choreActionPause": "বিরতি দিন",
+  "@choreActionPause": {},
+  "choreActionResume": "আবার চালু করুন",
+  "@choreActionResume": {},
+  "choreActionDuplicate": "কপি করুন",
+  "@choreActionDuplicate": {},
+  "choreActionArchive": "আর্কাইভ করুন",
+  "@choreActionArchive": {},
+  "choreArchiveConfirmTitle": "এই কাজটি আর্কাইভ করবেন?",
+  "@choreArchiveConfirmTitle": {},
+  "choreArchiveConfirmMessage": "এর নতুন দিন আর তৈরি হবে না। আগের দিন ও ইতিহাস থাকবে।",
+  "@choreArchiveConfirmMessage": {},
+  "choreDuplicateSuffix": " (কপি)",
+  "@choreDuplicateSuffix": {},
+  "choreDuplicated": "কাজটি কপি হয়েছে",
+  "@choreDuplicated": {},
+  "choreSlotCount": "দিনে {count} বার",
+  "@choreSlotCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "choreStrategyRotation": "পালাক্রমে",
+  "@choreStrategyRotation": {},
+  "choreStrategyFixed": "নির্দিষ্ট একজন",
+  "@choreStrategyFixed": {},
+  "choreStrategyManual": "হাতে বণ্টন",
+  "@choreStrategyManual": {},
+  "choreEditorTitleNew": "নতুন কাজ",
+  "@choreEditorTitleNew": {},
+  "choreEditorTitleEdit": "কাজ সম্পাদনা",
+  "@choreEditorTitleEdit": {},
+  "choreEditorNotFound": "কাজটি পাওয়া যায়নি",
+  "@choreEditorNotFound": {},
+  "choreEditorArchivedNote": "এই কাজটি আর্কাইভ করা। দেখা যাবে, কিন্তু বদলানো যাবে না।",
+  "@choreEditorArchivedNote": {},
+  "choreEditorPlanningFailed": "কাজটি সংরক্ষিত হয়েছে, কিন্তু দিন সাজাতে সমস্যা হয়েছে। শেষ করতে আবার চেষ্টা করুন।",
+  "@choreEditorPlanningFailed": {},
+  "choreEditorSectionBasics": "মূল তথ্য",
+  "@choreEditorSectionBasics": {},
+  "choreEditorSectionSchedule": "সময়সূচি",
+  "@choreEditorSectionSchedule": {},
+  "choreEditorSectionWho": "কে করবে",
+  "@choreEditorSectionWho": {},
+  "choreEditorSectionSteps": "ধাপ",
+  "@choreEditorSectionSteps": {},
+  "choreEditorSectionInstructions": "নির্দেশনা",
+  "@choreEditorSectionInstructions": {},
+  "choreEditorSectionOptions": "অন্যান্য",
+  "@choreEditorSectionOptions": {},
+  "choreEditorNameBn": "নাম (বাংলা)",
+  "@choreEditorNameBn": {},
+  "choreEditorNameEn": "নাম (ইংরেজি, ঐচ্ছিক)",
+  "@choreEditorNameEn": {},
+  "choreEditorGroup": "গ্রুপ",
+  "@choreEditorGroup": {},
+  "choreEditorIcon": "আইকন",
+  "@choreEditorIcon": {},
+  "choreEditorColor": "রঙ",
+  "@choreEditorColor": {},
+  "choreEditorRepeat": "পুনরাবৃত্তি",
+  "@choreEditorRepeat": {},
+  "choreEditorRepeatChange": "পুনরাবৃত্তি বদলান",
+  "@choreEditorRepeatChange": {},
+  "choreEditorNextDates": "পরবর্তী তারিখ",
+  "@choreEditorNextDates": {},
+  "choreEditorNoNextDates": "আর কোনো তারিখ নেই",
+  "@choreEditorNoNextDates": {},
+  "choreEditorStartDate": "শুরু: {date}",
+  "@choreEditorStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "choreEditorEndDate": "শেষ: {date}",
+  "@choreEditorEndDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "choreEditorEndDateNone": "শেষের তারিখ নেই",
+  "@choreEditorEndDateNone": {},
+  "choreEditorEndDateClear": "শেষের তারিখ সরান",
+  "@choreEditorEndDateClear": {},
+  "choreEditorTimes": "দিনের সময়",
+  "@choreEditorTimes": {},
+  "choreEditorEstimatedMinutes": "আনুমানিক সময় (মিনিট, ঐচ্ছিক)",
+  "@choreEditorEstimatedMinutes": {},
+  "choreEditorDifficulty": "কাঠিন্য",
+  "@choreEditorDifficulty": {},
+  "choreDifficultyEasy": "সহজ",
+  "@choreDifficultyEasy": {},
+  "choreDifficultyNormal": "মাঝারি",
+  "@choreDifficultyNormal": {},
+  "choreDifficultyHard": "কঠিন",
+  "@choreDifficultyHard": {},
+  "choreEditorVerification": "যাচাই লাগবে",
+  "@choreEditorVerification": {},
+  "choreEditorVerificationHelp": "কাজ শেষ হলে একজন দায়িত্বশীল যাচাই করবেন।",
+  "@choreEditorVerificationHelp": {},
+  "choreEditorActive": "সক্রিয়",
+  "@choreEditorActive": {},
+  "choreEditorActiveHelp": "বিরতিতে থাকা কাজের নতুন দিন তৈরি হয় না।",
+  "@choreEditorActiveHelp": {},
+  "choreRemindersTitle": "রিমাইন্ডার",
+  "@choreRemindersTitle": {},
+  "choreRemindersStoredNote": "পরে কাজে লাগবে: রিমাইন্ডার পরের আপডেটে পাঠানো হবে।",
+  "@choreRemindersStoredNote": {},
+  "choreReminderAtDue": "নির্ধারিত সময়ে",
+  "@choreReminderAtDue": {},
+  "choreReminderBeforeTitle": "নির্ধারিত সময়ের আগে",
+  "@choreReminderBeforeTitle": {},
+  "choreReminderBefore": "{minutes} মিনিট আগে",
+  "@choreReminderBefore": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "choreReminderCustom": "অন্য মিনিট (১-১৪৪০)",
+  "@choreReminderCustom": {},
+  "choreReminderCustomAdd": "সময় যোগ করুন",
+  "@choreReminderCustomAdd": {},
+  "choreReminderOverdue": "দেরি হলে",
+  "@choreReminderOverdue": {},
+  "choreReminderOverdueAfter": "নির্ধারিত সময়ের কত মিনিট পরে",
+  "@choreReminderOverdueAfter": {},
+  "choreSlotTitle": "সময় {number}",
+  "@choreSlotTitle": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "choreSlotLabel": "এই সময়ের নাম (ঐচ্ছিক)",
+  "@choreSlotLabel": {},
+  "choreSlotDueTime": "শেষ সময়",
+  "@choreSlotDueTime": {},
+  "choreSlotAdd": "আরেকটি সময় যোগ করুন",
+  "@choreSlotAdd": {},
+  "choreSlotRemove": "এই সময় মুছুন",
+  "@choreSlotRemove": {},
+  "choreSlotLimit": "দিনে সর্বোচ্চ {max}টি সময়।",
+  "@choreSlotLimit": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "choreSubtasksEmpty": "এখনো কোনো ধাপ নেই। ধাপ ঐচ্ছিক।",
+  "@choreSubtasksEmpty": {},
+  "choreSubtaskAdd": "ধাপ যোগ করুন",
+  "@choreSubtaskAdd": {},
+  "choreSubtaskTitle": "ধাপ",
+  "@choreSubtaskTitle": {},
+  "choreSubtaskRequired": "আবশ্যক ধাপ",
+  "@choreSubtaskRequired": {},
+  "choreSubtaskHint": "ইঙ্গিত (ঐচ্ছিক)",
+  "@choreSubtaskHint": {},
+  "choreSubtaskRemove": "ধাপ মুছুন",
+  "@choreSubtaskRemove": {},
+  "choreSubtaskLimit": "সর্বোচ্চ {max}টি ধাপ।",
+  "@choreSubtaskLimit": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "choreInstructionsBold": "গাঢ়",
+  "@choreInstructionsBold": {},
+  "choreInstructionsBullet": "তালিকা",
+  "@choreInstructionsBullet": {},
+  "choreInstructionsNumbered": "ক্রমিক তালিকা",
+  "@choreInstructionsNumbered": {},
+  "choreInstructionsHint": "কাজটি কীভাবে করবেন",
+  "@choreInstructionsHint": {},
+  "choreInstructionsEmpty": "কোনো নির্দেশনা নেই",
+  "@choreInstructionsEmpty": {},
+  "choreAssigneeManualHelp": "কোনো দায়িত্বশীল ঠিক না করা পর্যন্ত কেউ নির্ধারিত থাকবে না।",
+  "@choreAssigneeManualHelp": {},
+  "choreAssigneeFixedLabel": "কে করবে",
+  "@choreAssigneeFixedLabel": {},
+  "choreAssigneeSourceGroup": "দায়িত্ব গ্রুপ",
+  "@choreAssigneeSourceGroup": {},
+  "choreAssigneeSourceOwn": "নিজস্ব পালা",
+  "@choreAssigneeSourceOwn": {},
+  "choreAssigneePickGroup": "একটি দায়িত্ব গ্রুপ বাছুন",
+  "@choreAssigneePickGroup": {},
+  "choreAssigneeNoGroups": "এখনো কোনো দায়িত্ব গ্রুপ নেই। একটি বানান অথবা নিজস্ব পালা ব্যবহার করুন।",
+  "@choreAssigneeNoGroups": {},
+  "choreReplanTitle": "এই পরিবর্তন কোথায় প্রযোজ্য হবে",
+  "@choreReplanTitle": {},
+  "choreReplanMessage": "যে দিনের কাজ শুরু বা শেষ হয়েছে তা কখনো বদলায় না।",
+  "@choreReplanMessage": {},
+  "choreReplanFutureOnly": "শুধু আগামী দিনগুলো",
+  "@choreReplanFutureOnly": {},
+  "choreReplanIncludeUpcoming": "আগামী দিন এবং এখনো কেউ শুরু করেনি এমন আসন্ন দিনগুলো",
+  "@choreReplanIncludeUpcoming": {},
+  "recurrenceKindOnce": "একবার",
+  "@recurrenceKindOnce": {},
+  "recurrenceKindDaily": "প্রতিদিন",
+  "@recurrenceKindDaily": {},
+  "recurrenceKindEveryNDays": "কয়েক দিন পর পর",
+  "@recurrenceKindEveryNDays": {},
+  "recurrenceKindWeekdays": "সপ্তাহের নির্দিষ্ট দিন",
+  "@recurrenceKindWeekdays": {},
+  "recurrenceKindEveryNWeeks": "কয়েক সপ্তাহ পর পর",
+  "@recurrenceKindEveryNWeeks": {},
+  "recurrenceKindDaysOfMonth": "মাসের নির্দিষ্ট তারিখ",
+  "@recurrenceKindDaysOfMonth": {},
+  "recurrenceKindNthWeekday": "মাসের একটি সপ্তাহের দিন",
+  "@recurrenceKindNthWeekday": {},
+  "recurrenceKindLastDay": "মাসের শেষ দিন",
+  "@recurrenceKindLastDay": {},
+  "recurrencePickerTitle": "পুনরাবৃত্তি",
+  "@recurrencePickerTitle": {},
+  "recurrencePickerOnceDate": "তারিখ",
+  "@recurrencePickerOnceDate": {},
+  "recurrencePickerEveryNDays": "কত দিন পর পর",
+  "@recurrencePickerEveryNDays": {},
+  "recurrencePickerEveryNWeeks": "কত সপ্তাহ পর পর",
+  "@recurrencePickerEveryNWeeks": {},
+  "recurrencePickerDaysOfMonth": "মাসের তারিখ",
+  "@recurrencePickerDaysOfMonth": {},
+  "recurrencePickerMonthEnd": "মাস ছোট হলে",
+  "@recurrencePickerMonthEnd": {},
+  "recurrencePickerMonthEndClamp": "শেষ দিনে করুন",
+  "@recurrencePickerMonthEndClamp": {},
+  "recurrencePickerMonthEndSkip": "সেই মাস বাদ দিন",
+  "@recurrencePickerMonthEndSkip": {},
+  "recurrencePickerNth": "কোনটি",
+  "@recurrencePickerNth": {},
+  "recurrencePickerWeekday": "সপ্তাহের দিন",
+  "@recurrencePickerWeekday": {},
+  "recurrencePickerWeekdays": "সপ্তাহের দিনগুলো",
+  "@recurrencePickerWeekdays": {},
+  "recurrenceNthFirst": "প্রথম",
+  "@recurrenceNthFirst": {},
+  "recurrenceNthSecond": "দ্বিতীয়",
+  "@recurrenceNthSecond": {},
+  "recurrenceNthThird": "তৃতীয়",
+  "@recurrenceNthThird": {},
+  "recurrenceNthFourth": "চতুর্থ",
+  "@recurrenceNthFourth": {},
+  "recurrenceNthLast": "শেষ",
+  "@recurrenceNthLast": {},
+  "recurrenceListSeparator": ", ",
+  "@recurrenceListSeparator": {},
+  "recurrenceSummaryOnce": "একবার",
+  "@recurrenceSummaryOnce": {},
+  "recurrenceSummaryDaily": "প্রতিদিন",
+  "@recurrenceSummaryDaily": {},
+  "recurrenceSummaryEveryNDays": "প্রতি {n} দিন পর পর",
+  "@recurrenceSummaryEveryNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryWeekdays": "প্রতি {days}",
+  "@recurrenceSummaryWeekdays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryEveryNWeeks": "প্রতি {n} সপ্তাহে {days}",
+  "@recurrenceSummaryEveryNWeeks": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryDaysOfMonth": "প্রতি মাসের {days} তারিখে",
+  "@recurrenceSummaryDaysOfMonth": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryNthWeekday": "প্রতি মাসের {nth} {weekday}",
+  "@recurrenceSummaryNthWeekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryLastDay": "প্রতি মাসের শেষ দিনে",
+  "@recurrenceSummaryLastDay": {}
 }

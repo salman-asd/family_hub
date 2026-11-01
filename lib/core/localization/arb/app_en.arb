@@ -2988,7 +2988,7 @@
   "@choresSettingsProjectedMonths": {
     "placeholders": {
       "months": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -3006,7 +3006,7 @@
   "@choresSettingsHorizon": {
     "placeholders": {
       "days": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -3016,7 +3016,7 @@
   "@choresSettingsOverdueGrace": {
     "placeholders": {
       "minutes": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -3074,7 +3074,7 @@
   "@choresSettingsSwapBuffer": {
     "placeholders": {
       "minutes": {
-        "type": "int"
+        "type": "String"
       }
     }
   },
@@ -3320,5 +3320,357 @@
   "dutyChoreAddNote": "Upcoming chores that have not started move to this rota.",
   "@dutyChoreAddNote": {},
   "dutyChoreAdded": "Chore added to the group",
-  "@dutyChoreAdded": {}
+  "@dutyChoreAdded": {},
+  "actionDiscard": "Discard",
+  "@actionDiscard": {},
+  "choresSettingsNeedsInternet": "Saving chore settings needs an internet connection. Your changes are kept here; try again when you are online.",
+  "@choresSettingsNeedsInternet": {},
+  "choresSettingsResetConfirmAction": "Reset",
+  "@choresSettingsResetConfirmAction": {},
+  "choreTemplatesTitle": "Chore templates",
+  "@choreTemplatesTitle": {},
+  "choreTemplatesSubtitle": "Create and edit the family chores",
+  "@choreTemplatesSubtitle": {},
+  "choreTemplatesNotAllowed": "Only admins and moderators can manage chores.",
+  "@choreTemplatesNotAllowed": {},
+  "choreListNew": "New chore",
+  "@choreListNew": {},
+  "choreListSearch": "Search chores",
+  "@choreListSearch": {},
+  "choreListEmptyTitle": "No chores yet",
+  "@choreListEmptyTitle": {},
+  "choreListEmptyMessage": "Create the first chore with the New chore button.",
+  "@choreListEmptyMessage": {},
+  "choreListEmptyFiltered": "No chores match",
+  "@choreListEmptyFiltered": {},
+  "choreListTruncated": "Only the first chores are shown. Archive chores you no longer need to see the rest.",
+  "@choreListTruncated": {},
+  "choreListUpdated": "Updated",
+  "@choreListUpdated": {},
+  "choreListInvalidSchedule": "Schedule cannot be read",
+  "@choreListInvalidSchedule": {},
+  "choreListNext": "Next: {date}",
+  "@choreListNext": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "choreStatusActive": "Active",
+  "@choreStatusActive": {},
+  "choreStatusPaused": "Paused",
+  "@choreStatusPaused": {},
+  "choreStatusArchived": "Archived",
+  "@choreStatusArchived": {},
+  "choreActionPause": "Pause",
+  "@choreActionPause": {},
+  "choreActionResume": "Resume",
+  "@choreActionResume": {},
+  "choreActionDuplicate": "Duplicate",
+  "@choreActionDuplicate": {},
+  "choreActionArchive": "Archive",
+  "@choreActionArchive": {},
+  "choreArchiveConfirmTitle": "Archive this chore?",
+  "@choreArchiveConfirmTitle": {},
+  "choreArchiveConfirmMessage": "It stops creating new days. Past days and history are kept.",
+  "@choreArchiveConfirmMessage": {},
+  "choreDuplicateSuffix": " (copy)",
+  "@choreDuplicateSuffix": {},
+  "choreDuplicated": "Chore duplicated",
+  "@choreDuplicated": {},
+  "choreSlotCount": "{count} time(s) a day",
+  "@choreSlotCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "choreStrategyRotation": "Rotation",
+  "@choreStrategyRotation": {},
+  "choreStrategyFixed": "Fixed person",
+  "@choreStrategyFixed": {},
+  "choreStrategyManual": "Assigned by hand",
+  "@choreStrategyManual": {},
+  "choreEditorTitleNew": "New chore",
+  "@choreEditorTitleNew": {},
+  "choreEditorTitleEdit": "Edit chore",
+  "@choreEditorTitleEdit": {},
+  "choreEditorNotFound": "This chore was not found",
+  "@choreEditorNotFound": {},
+  "choreEditorArchivedNote": "This chore is archived. It can be viewed but not changed.",
+  "@choreEditorArchivedNote": {},
+  "choreEditorPlanningFailed": "The chore was saved, but planning its days failed. Retry to finish.",
+  "@choreEditorPlanningFailed": {},
+  "choreEditorSectionBasics": "Basics",
+  "@choreEditorSectionBasics": {},
+  "choreEditorSectionSchedule": "Schedule",
+  "@choreEditorSectionSchedule": {},
+  "choreEditorSectionWho": "Who does it",
+  "@choreEditorSectionWho": {},
+  "choreEditorSectionSteps": "Steps",
+  "@choreEditorSectionSteps": {},
+  "choreEditorSectionInstructions": "Instructions",
+  "@choreEditorSectionInstructions": {},
+  "choreEditorSectionOptions": "Options",
+  "@choreEditorSectionOptions": {},
+  "choreEditorNameBn": "Name (Bangla)",
+  "@choreEditorNameBn": {},
+  "choreEditorNameEn": "Name (English, optional)",
+  "@choreEditorNameEn": {},
+  "choreEditorGroup": "Group",
+  "@choreEditorGroup": {},
+  "choreEditorIcon": "Icon",
+  "@choreEditorIcon": {},
+  "choreEditorColor": "Color",
+  "@choreEditorColor": {},
+  "choreEditorRepeat": "Repeats",
+  "@choreEditorRepeat": {},
+  "choreEditorRepeatChange": "Change repeat",
+  "@choreEditorRepeatChange": {},
+  "choreEditorNextDates": "Next dates",
+  "@choreEditorNextDates": {},
+  "choreEditorNoNextDates": "No upcoming dates",
+  "@choreEditorNoNextDates": {},
+  "choreEditorStartDate": "Starts {date}",
+  "@choreEditorStartDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "choreEditorEndDate": "Ends {date}",
+  "@choreEditorEndDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "choreEditorEndDateNone": "No end date",
+  "@choreEditorEndDateNone": {},
+  "choreEditorEndDateClear": "Remove end date",
+  "@choreEditorEndDateClear": {},
+  "choreEditorTimes": "Times of day",
+  "@choreEditorTimes": {},
+  "choreEditorEstimatedMinutes": "Estimated minutes (optional)",
+  "@choreEditorEstimatedMinutes": {},
+  "choreEditorDifficulty": "Difficulty",
+  "@choreEditorDifficulty": {},
+  "choreDifficultyEasy": "Easy",
+  "@choreDifficultyEasy": {},
+  "choreDifficultyNormal": "Normal",
+  "@choreDifficultyNormal": {},
+  "choreDifficultyHard": "Hard",
+  "@choreDifficultyHard": {},
+  "choreEditorVerification": "Needs verification",
+  "@choreEditorVerification": {},
+  "choreEditorVerificationHelp": "A manager checks it after it is done.",
+  "@choreEditorVerificationHelp": {},
+  "choreEditorActive": "Active",
+  "@choreEditorActive": {},
+  "choreEditorActiveHelp": "Paused chores create no new days.",
+  "@choreEditorActiveHelp": {},
+  "choreRemindersTitle": "Reminders",
+  "@choreRemindersTitle": {},
+  "choreRemindersStoredNote": "Saved for later: reminders are sent in a future update.",
+  "@choreRemindersStoredNote": {},
+  "choreReminderAtDue": "At the due time",
+  "@choreReminderAtDue": {},
+  "choreReminderBeforeTitle": "Before the due time",
+  "@choreReminderBeforeTitle": {},
+  "choreReminderBefore": "{minutes} min before",
+  "@choreReminderBefore": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "choreReminderCustom": "Other minutes (1-1440)",
+  "@choreReminderCustom": {},
+  "choreReminderCustomAdd": "Add reminder time",
+  "@choreReminderCustomAdd": {},
+  "choreReminderOverdue": "When overdue",
+  "@choreReminderOverdue": {},
+  "choreReminderOverdueAfter": "Minutes after the due time",
+  "@choreReminderOverdueAfter": {},
+  "choreSlotTitle": "Time {number}",
+  "@choreSlotTitle": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "choreSlotLabel": "Name of this time (optional)",
+  "@choreSlotLabel": {},
+  "choreSlotDueTime": "Due time",
+  "@choreSlotDueTime": {},
+  "choreSlotAdd": "Add another time",
+  "@choreSlotAdd": {},
+  "choreSlotRemove": "Remove this time",
+  "@choreSlotRemove": {},
+  "choreSlotLimit": "At most {max} times a day.",
+  "@choreSlotLimit": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "choreSubtasksEmpty": "No steps yet. Steps are optional.",
+  "@choreSubtasksEmpty": {},
+  "choreSubtaskAdd": "Add a step",
+  "@choreSubtaskAdd": {},
+  "choreSubtaskTitle": "Step",
+  "@choreSubtaskTitle": {},
+  "choreSubtaskRequired": "Required step",
+  "@choreSubtaskRequired": {},
+  "choreSubtaskHint": "Hint (optional)",
+  "@choreSubtaskHint": {},
+  "choreSubtaskRemove": "Remove step",
+  "@choreSubtaskRemove": {},
+  "choreSubtaskLimit": "At most {max} steps.",
+  "@choreSubtaskLimit": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "choreInstructionsBold": "Bold",
+  "@choreInstructionsBold": {},
+  "choreInstructionsBullet": "Bullet list",
+  "@choreInstructionsBullet": {},
+  "choreInstructionsNumbered": "Numbered list",
+  "@choreInstructionsNumbered": {},
+  "choreInstructionsHint": "How to do this chore",
+  "@choreInstructionsHint": {},
+  "choreInstructionsEmpty": "No instructions",
+  "@choreInstructionsEmpty": {},
+  "choreAssigneeManualHelp": "Nobody is assigned until a manager picks someone.",
+  "@choreAssigneeManualHelp": {},
+  "choreAssigneeFixedLabel": "Who does it",
+  "@choreAssigneeFixedLabel": {},
+  "choreAssigneeSourceGroup": "Duty group",
+  "@choreAssigneeSourceGroup": {},
+  "choreAssigneeSourceOwn": "Own rotation",
+  "@choreAssigneeSourceOwn": {},
+  "choreAssigneePickGroup": "Choose a duty group",
+  "@choreAssigneePickGroup": {},
+  "choreAssigneeNoGroups": "There is no duty group yet. Create one or use an own rotation.",
+  "@choreAssigneeNoGroups": {},
+  "choreReplanTitle": "Apply this change to",
+  "@choreReplanTitle": {},
+  "choreReplanMessage": "Days that are already started or done are never changed.",
+  "@choreReplanMessage": {},
+  "choreReplanFutureOnly": "Future days only",
+  "@choreReplanFutureOnly": {},
+  "choreReplanIncludeUpcoming": "Future days and upcoming days nobody has started",
+  "@choreReplanIncludeUpcoming": {},
+  "recurrenceKindOnce": "Once",
+  "@recurrenceKindOnce": {},
+  "recurrenceKindDaily": "Every day",
+  "@recurrenceKindDaily": {},
+  "recurrenceKindEveryNDays": "Every few days",
+  "@recurrenceKindEveryNDays": {},
+  "recurrenceKindWeekdays": "On certain weekdays",
+  "@recurrenceKindWeekdays": {},
+  "recurrenceKindEveryNWeeks": "Every few weeks",
+  "@recurrenceKindEveryNWeeks": {},
+  "recurrenceKindDaysOfMonth": "Dates of the month",
+  "@recurrenceKindDaysOfMonth": {},
+  "recurrenceKindNthWeekday": "A weekday of the month",
+  "@recurrenceKindNthWeekday": {},
+  "recurrenceKindLastDay": "Last day of the month",
+  "@recurrenceKindLastDay": {},
+  "recurrencePickerTitle": "Repeat",
+  "@recurrencePickerTitle": {},
+  "recurrencePickerOnceDate": "Date",
+  "@recurrencePickerOnceDate": {},
+  "recurrencePickerEveryNDays": "Every how many days",
+  "@recurrencePickerEveryNDays": {},
+  "recurrencePickerEveryNWeeks": "Every how many weeks",
+  "@recurrencePickerEveryNWeeks": {},
+  "recurrencePickerDaysOfMonth": "Dates of the month",
+  "@recurrencePickerDaysOfMonth": {},
+  "recurrencePickerMonthEnd": "If the month is shorter",
+  "@recurrencePickerMonthEnd": {},
+  "recurrencePickerMonthEndClamp": "Use the last day",
+  "@recurrencePickerMonthEndClamp": {},
+  "recurrencePickerMonthEndSkip": "Skip that month",
+  "@recurrencePickerMonthEndSkip": {},
+  "recurrencePickerNth": "Which one",
+  "@recurrencePickerNth": {},
+  "recurrencePickerWeekday": "Day of the week",
+  "@recurrencePickerWeekday": {},
+  "recurrencePickerWeekdays": "Days of the week",
+  "@recurrencePickerWeekdays": {},
+  "recurrenceNthFirst": "first",
+  "@recurrenceNthFirst": {},
+  "recurrenceNthSecond": "second",
+  "@recurrenceNthSecond": {},
+  "recurrenceNthThird": "third",
+  "@recurrenceNthThird": {},
+  "recurrenceNthFourth": "fourth",
+  "@recurrenceNthFourth": {},
+  "recurrenceNthLast": "last",
+  "@recurrenceNthLast": {},
+  "recurrenceListSeparator": ", ",
+  "@recurrenceListSeparator": {},
+  "recurrenceSummaryOnce": "Once",
+  "@recurrenceSummaryOnce": {},
+  "recurrenceSummaryDaily": "Every day",
+  "@recurrenceSummaryDaily": {},
+  "recurrenceSummaryEveryNDays": "Every {n} days",
+  "@recurrenceSummaryEveryNDays": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryWeekdays": "Every {days}",
+  "@recurrenceSummaryWeekdays": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryEveryNWeeks": "Every {n} weeks on {days}",
+  "@recurrenceSummaryEveryNWeeks": {
+    "placeholders": {
+      "n": {
+        "type": "String"
+      },
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryDaysOfMonth": "On day {days} of every month",
+  "@recurrenceSummaryDaysOfMonth": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryNthWeekday": "Every {nth} {weekday} of the month",
+  "@recurrenceSummaryNthWeekday": {
+    "placeholders": {
+      "nth": {
+        "type": "String"
+      },
+      "weekday": {
+        "type": "String"
+      }
+    }
+  },
+  "recurrenceSummaryLastDay": "On the last day of every month",
+  "@recurrenceSummaryLastDay": {}
 }

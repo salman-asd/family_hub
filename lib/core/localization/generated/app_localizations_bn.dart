@@ -3181,7 +3181,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'ক্যালেন্ডারে আগামী মাসের অনুমানকৃত কাজ দেখাবে';
 
   @override
-  String choresSettingsProjectedMonths(int months) {
+  String choresSettingsProjectedMonths(String months) {
     return 'আগামী পূর্বাভাস: $months মাস';
   }
 
@@ -3201,7 +3201,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get choresCalendarScopeAll => 'সবার কাজ';
 
   @override
-  String choresSettingsHorizon(int days) {
+  String choresSettingsHorizon(String days) {
     return 'কাজ তৈরির সময়কাল: $days দিন';
   }
 
@@ -3210,7 +3210,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'কত দিন আগে থেকে স্বয়ংক্রিয়ভাবে কাজ তৈরি হবে (১৪-৯০ দিন)';
 
   @override
-  String choresSettingsOverdueGrace(int minutes) {
+  String choresSettingsOverdueGrace(String minutes) {
     return 'গ্রেস পিরিয়ড: $minutes মিনিট';
   }
 
@@ -3300,7 +3300,7 @@ class AppLocalizationsBn extends AppLocalizations {
       'সদস্যরা নিজেদের মধ্যে কাজ অদলবদল করতে পারবেন';
 
   @override
-  String choresSettingsSwapBuffer(int minutes) {
+  String choresSettingsSwapBuffer(String minutes) {
     return 'অদলবদল অনুরোধের মেয়াদ: $minutes মিনিট';
   }
 
@@ -3587,4 +3587,432 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get dutyChoreAdded => 'কাজটি গ্রুপে যোগ হয়েছে';
+
+  @override
+  String get actionDiscard => 'বাতিল করুন';
+
+  @override
+  String get choresSettingsNeedsInternet => 'কাজের সেটিংস সংরক্ষণ করতে ইন্টারনেট সংযোগ লাগবে। আপনার পরিবর্তনগুলো এখানেই থাকছে, অনলাইন হলে আবার চেষ্টা করুন।';
+
+  @override
+  String get choresSettingsResetConfirmAction => 'রিসেট করুন';
+
+  @override
+  String get choreTemplatesTitle => 'কাজের টেমপ্লেট';
+
+  @override
+  String get choreTemplatesSubtitle => 'পরিবারের কাজ তৈরি ও সম্পাদনা করুন';
+
+  @override
+  String get choreTemplatesNotAllowed => 'শুধু অ্যাডমিন ও মডারেটর কাজ পরিচালনা করতে পারেন।';
+
+  @override
+  String get choreListNew => 'নতুন কাজ';
+
+  @override
+  String get choreListSearch => 'কাজ খুঁজুন';
+
+  @override
+  String get choreListEmptyTitle => 'এখনো কোনো কাজ নেই';
+
+  @override
+  String get choreListEmptyMessage => 'নতুন কাজ বোতাম দিয়ে প্রথম কাজটি তৈরি করুন।';
+
+  @override
+  String get choreListEmptyFiltered => 'কোনো কাজ মেলেনি';
+
+  @override
+  String get choreListTruncated => 'শুধু প্রথম দিকের কাজগুলো দেখানো হচ্ছে। বাকিগুলো দেখতে অপ্রয়োজনীয় কাজ আর্কাইভ করুন।';
+
+  @override
+  String get choreListUpdated => 'হালনাগাদ হয়েছে';
+
+  @override
+  String get choreListInvalidSchedule => 'সময়সূচি পড়া যাচ্ছে না';
+
+  @override
+  String choreListNext(String date) {
+    return 'পরবর্তী: $date';
+  }
+
+  @override
+  String get choreStatusActive => 'সক্রিয়';
+
+  @override
+  String get choreStatusPaused => 'বিরতিতে';
+
+  @override
+  String get choreStatusArchived => 'আর্কাইভ করা';
+
+  @override
+  String get choreActionPause => 'বিরতি দিন';
+
+  @override
+  String get choreActionResume => 'আবার চালু করুন';
+
+  @override
+  String get choreActionDuplicate => 'কপি করুন';
+
+  @override
+  String get choreActionArchive => 'আর্কাইভ করুন';
+
+  @override
+  String get choreArchiveConfirmTitle => 'এই কাজটি আর্কাইভ করবেন?';
+
+  @override
+  String get choreArchiveConfirmMessage => 'এর নতুন দিন আর তৈরি হবে না। আগের দিন ও ইতিহাস থাকবে।';
+
+  @override
+  String get choreDuplicateSuffix => ' (কপি)';
+
+  @override
+  String get choreDuplicated => 'কাজটি কপি হয়েছে';
+
+  @override
+  String choreSlotCount(String count) {
+    return 'দিনে $count বার';
+  }
+
+  @override
+  String get choreStrategyRotation => 'পালাক্রমে';
+
+  @override
+  String get choreStrategyFixed => 'নির্দিষ্ট একজন';
+
+  @override
+  String get choreStrategyManual => 'হাতে বণ্টন';
+
+  @override
+  String get choreEditorTitleNew => 'নতুন কাজ';
+
+  @override
+  String get choreEditorTitleEdit => 'কাজ সম্পাদনা';
+
+  @override
+  String get choreEditorNotFound => 'কাজটি পাওয়া যায়নি';
+
+  @override
+  String get choreEditorArchivedNote => 'এই কাজটি আর্কাইভ করা। দেখা যাবে, কিন্তু বদলানো যাবে না।';
+
+  @override
+  String get choreEditorPlanningFailed => 'কাজটি সংরক্ষিত হয়েছে, কিন্তু দিন সাজাতে সমস্যা হয়েছে। শেষ করতে আবার চেষ্টা করুন।';
+
+  @override
+  String get choreEditorSectionBasics => 'মূল তথ্য';
+
+  @override
+  String get choreEditorSectionSchedule => 'সময়সূচি';
+
+  @override
+  String get choreEditorSectionWho => 'কে করবে';
+
+  @override
+  String get choreEditorSectionSteps => 'ধাপ';
+
+  @override
+  String get choreEditorSectionInstructions => 'নির্দেশনা';
+
+  @override
+  String get choreEditorSectionOptions => 'অন্যান্য';
+
+  @override
+  String get choreEditorNameBn => 'নাম (বাংলা)';
+
+  @override
+  String get choreEditorNameEn => 'নাম (ইংরেজি, ঐচ্ছিক)';
+
+  @override
+  String get choreEditorGroup => 'গ্রুপ';
+
+  @override
+  String get choreEditorIcon => 'আইকন';
+
+  @override
+  String get choreEditorColor => 'রঙ';
+
+  @override
+  String get choreEditorRepeat => 'পুনরাবৃত্তি';
+
+  @override
+  String get choreEditorRepeatChange => 'পুনরাবৃত্তি বদলান';
+
+  @override
+  String get choreEditorNextDates => 'পরবর্তী তারিখ';
+
+  @override
+  String get choreEditorNoNextDates => 'আর কোনো তারিখ নেই';
+
+  @override
+  String choreEditorStartDate(String date) {
+    return 'শুরু: $date';
+  }
+
+  @override
+  String choreEditorEndDate(String date) {
+    return 'শেষ: $date';
+  }
+
+  @override
+  String get choreEditorEndDateNone => 'শেষের তারিখ নেই';
+
+  @override
+  String get choreEditorEndDateClear => 'শেষের তারিখ সরান';
+
+  @override
+  String get choreEditorTimes => 'দিনের সময়';
+
+  @override
+  String get choreEditorEstimatedMinutes => 'আনুমানিক সময় (মিনিট, ঐচ্ছিক)';
+
+  @override
+  String get choreEditorDifficulty => 'কাঠিন্য';
+
+  @override
+  String get choreDifficultyEasy => 'সহজ';
+
+  @override
+  String get choreDifficultyNormal => 'মাঝারি';
+
+  @override
+  String get choreDifficultyHard => 'কঠিন';
+
+  @override
+  String get choreEditorVerification => 'যাচাই লাগবে';
+
+  @override
+  String get choreEditorVerificationHelp => 'কাজ শেষ হলে একজন দায়িত্বশীল যাচাই করবেন।';
+
+  @override
+  String get choreEditorActive => 'সক্রিয়';
+
+  @override
+  String get choreEditorActiveHelp => 'বিরতিতে থাকা কাজের নতুন দিন তৈরি হয় না।';
+
+  @override
+  String get choreRemindersTitle => 'রিমাইন্ডার';
+
+  @override
+  String get choreRemindersStoredNote => 'পরে কাজে লাগবে: রিমাইন্ডার পরের আপডেটে পাঠানো হবে।';
+
+  @override
+  String get choreReminderAtDue => 'নির্ধারিত সময়ে';
+
+  @override
+  String get choreReminderBeforeTitle => 'নির্ধারিত সময়ের আগে';
+
+  @override
+  String choreReminderBefore(String minutes) {
+    return '$minutes মিনিট আগে';
+  }
+
+  @override
+  String get choreReminderCustom => 'অন্য মিনিট (১-১৪৪০)';
+
+  @override
+  String get choreReminderCustomAdd => 'সময় যোগ করুন';
+
+  @override
+  String get choreReminderOverdue => 'দেরি হলে';
+
+  @override
+  String get choreReminderOverdueAfter => 'নির্ধারিত সময়ের কত মিনিট পরে';
+
+  @override
+  String choreSlotTitle(String number) {
+    return 'সময় $number';
+  }
+
+  @override
+  String get choreSlotLabel => 'এই সময়ের নাম (ঐচ্ছিক)';
+
+  @override
+  String get choreSlotDueTime => 'শেষ সময়';
+
+  @override
+  String get choreSlotAdd => 'আরেকটি সময় যোগ করুন';
+
+  @override
+  String get choreSlotRemove => 'এই সময় মুছুন';
+
+  @override
+  String choreSlotLimit(String max) {
+    return 'দিনে সর্বোচ্চ $maxটি সময়।';
+  }
+
+  @override
+  String get choreSubtasksEmpty => 'এখনো কোনো ধাপ নেই। ধাপ ঐচ্ছিক।';
+
+  @override
+  String get choreSubtaskAdd => 'ধাপ যোগ করুন';
+
+  @override
+  String get choreSubtaskTitle => 'ধাপ';
+
+  @override
+  String get choreSubtaskRequired => 'আবশ্যক ধাপ';
+
+  @override
+  String get choreSubtaskHint => 'ইঙ্গিত (ঐচ্ছিক)';
+
+  @override
+  String get choreSubtaskRemove => 'ধাপ মুছুন';
+
+  @override
+  String choreSubtaskLimit(String max) {
+    return 'সর্বোচ্চ $maxটি ধাপ।';
+  }
+
+  @override
+  String get choreInstructionsBold => 'গাঢ়';
+
+  @override
+  String get choreInstructionsBullet => 'তালিকা';
+
+  @override
+  String get choreInstructionsNumbered => 'ক্রমিক তালিকা';
+
+  @override
+  String get choreInstructionsHint => 'কাজটি কীভাবে করবেন';
+
+  @override
+  String get choreInstructionsEmpty => 'কোনো নির্দেশনা নেই';
+
+  @override
+  String get choreAssigneeManualHelp => 'কোনো দায়িত্বশীল ঠিক না করা পর্যন্ত কেউ নির্ধারিত থাকবে না।';
+
+  @override
+  String get choreAssigneeFixedLabel => 'কে করবে';
+
+  @override
+  String get choreAssigneeSourceGroup => 'দায়িত্ব গ্রুপ';
+
+  @override
+  String get choreAssigneeSourceOwn => 'নিজস্ব পালা';
+
+  @override
+  String get choreAssigneePickGroup => 'একটি দায়িত্ব গ্রুপ বাছুন';
+
+  @override
+  String get choreAssigneeNoGroups => 'এখনো কোনো দায়িত্ব গ্রুপ নেই। একটি বানান অথবা নিজস্ব পালা ব্যবহার করুন।';
+
+  @override
+  String get choreReplanTitle => 'এই পরিবর্তন কোথায় প্রযোজ্য হবে';
+
+  @override
+  String get choreReplanMessage => 'যে দিনের কাজ শুরু বা শেষ হয়েছে তা কখনো বদলায় না।';
+
+  @override
+  String get choreReplanFutureOnly => 'শুধু আগামী দিনগুলো';
+
+  @override
+  String get choreReplanIncludeUpcoming => 'আগামী দিন এবং এখনো কেউ শুরু করেনি এমন আসন্ন দিনগুলো';
+
+  @override
+  String get recurrenceKindOnce => 'একবার';
+
+  @override
+  String get recurrenceKindDaily => 'প্রতিদিন';
+
+  @override
+  String get recurrenceKindEveryNDays => 'কয়েক দিন পর পর';
+
+  @override
+  String get recurrenceKindWeekdays => 'সপ্তাহের নির্দিষ্ট দিন';
+
+  @override
+  String get recurrenceKindEveryNWeeks => 'কয়েক সপ্তাহ পর পর';
+
+  @override
+  String get recurrenceKindDaysOfMonth => 'মাসের নির্দিষ্ট তারিখ';
+
+  @override
+  String get recurrenceKindNthWeekday => 'মাসের একটি সপ্তাহের দিন';
+
+  @override
+  String get recurrenceKindLastDay => 'মাসের শেষ দিন';
+
+  @override
+  String get recurrencePickerTitle => 'পুনরাবৃত্তি';
+
+  @override
+  String get recurrencePickerOnceDate => 'তারিখ';
+
+  @override
+  String get recurrencePickerEveryNDays => 'কত দিন পর পর';
+
+  @override
+  String get recurrencePickerEveryNWeeks => 'কত সপ্তাহ পর পর';
+
+  @override
+  String get recurrencePickerDaysOfMonth => 'মাসের তারিখ';
+
+  @override
+  String get recurrencePickerMonthEnd => 'মাস ছোট হলে';
+
+  @override
+  String get recurrencePickerMonthEndClamp => 'শেষ দিনে করুন';
+
+  @override
+  String get recurrencePickerMonthEndSkip => 'সেই মাস বাদ দিন';
+
+  @override
+  String get recurrencePickerNth => 'কোনটি';
+
+  @override
+  String get recurrencePickerWeekday => 'সপ্তাহের দিন';
+
+  @override
+  String get recurrencePickerWeekdays => 'সপ্তাহের দিনগুলো';
+
+  @override
+  String get recurrenceNthFirst => 'প্রথম';
+
+  @override
+  String get recurrenceNthSecond => 'দ্বিতীয়';
+
+  @override
+  String get recurrenceNthThird => 'তৃতীয়';
+
+  @override
+  String get recurrenceNthFourth => 'চতুর্থ';
+
+  @override
+  String get recurrenceNthLast => 'শেষ';
+
+  @override
+  String get recurrenceListSeparator => ', ';
+
+  @override
+  String get recurrenceSummaryOnce => 'একবার';
+
+  @override
+  String get recurrenceSummaryDaily => 'প্রতিদিন';
+
+  @override
+  String recurrenceSummaryEveryNDays(String n) {
+    return 'প্রতি $n দিন পর পর';
+  }
+
+  @override
+  String recurrenceSummaryWeekdays(String days) {
+    return 'প্রতি $days';
+  }
+
+  @override
+  String recurrenceSummaryEveryNWeeks(String n, String days) {
+    return 'প্রতি $n সপ্তাহে $days';
+  }
+
+  @override
+  String recurrenceSummaryDaysOfMonth(String days) {
+    return 'প্রতি মাসের $days তারিখে';
+  }
+
+  @override
+  String recurrenceSummaryNthWeekday(String nth, String weekday) {
+    return 'প্রতি মাসের $nth $weekday';
+  }
+
+  @override
+  String get recurrenceSummaryLastDay => 'প্রতি মাসের শেষ দিনে';
 }

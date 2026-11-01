@@ -71,6 +71,25 @@ final List<ChoresEntry> choresEntries = <ChoresEntry>[
     gate: canVerifyAnyProvider,
     badge: verifyQueueCountProvider,
   ),
+  // P3-16. Managers create and edit chores; the screens re-check the permission
+  // because the route itself is open to every active member.
+  ChoresEntry(
+    id: 'templates',
+    icon: Icons.assignment_outlined,
+    title: (l10n) => l10n.choreTemplatesTitle,
+    subtitle: (l10n) => l10n.choreTemplatesSubtitle,
+    route: AppRoutes.choresTemplates,
+    requires: Permission.manageChoreTemplates,
+  ),
+  // P3-17.
+  ChoresEntry(
+    id: 'settings',
+    icon: Icons.tune_outlined,
+    title: (l10n) => l10n.choresSettingsTitle,
+    subtitle: (l10n) => l10n.choresSettingsSubtitle,
+    route: AppRoutes.choresSettings,
+    requires: Permission.manageChoreTemplates,
+  ),
   // P3-18. No `requires`: every member may READ the groups; the screens hide
   // the controls a member may not use.
   ChoresEntry(

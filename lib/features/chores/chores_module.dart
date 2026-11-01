@@ -7,6 +7,9 @@ import 'package:family_hub/features/chores/presentation/chores_manage_screen.dar
 import 'package:family_hub/features/chores/presentation/occurrence_detail_screen.dart';
 import 'package:family_hub/features/chores/presentation/today_screen.dart';
 import 'package:family_hub/features/chores/presentation/verify_queue_screen.dart';
+import 'package:family_hub/features/chores/settings/presentation/chore_settings_screen.dart';
+import 'package:family_hub/features/chores/templates/presentation/template_editor_screen.dart';
+import 'package:family_hub/features/chores/templates/presentation/template_list_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -54,6 +57,27 @@ class ChoresModule extends FamilyModule {
         GoRoute(
           path: 'verify',
           builder: (context, state) => const VerifyQueueScreen(),
+        ),
+        GoRoute(
+          path: 'templates',
+          builder: (context, state) => const TemplateListScreen(),
+          routes: [
+            // `new` BEFORE `:id`, or it would be read as a template id.
+            GoRoute(
+              path: 'new',
+              builder: (context, state) => const TemplateEditorScreen(),
+            ),
+            GoRoute(
+              path: ':id',
+              builder: (context, state) => TemplateEditorScreen(
+                templateId: state.pathParameters['id'],
+              ),
+            ),
+          ],
+        ),
+        GoRoute(
+          path: 'settings',
+          builder: (context, state) => const ChoreSettingsScreen(),
         ),
         GoRoute(
           path: 'duty-groups',

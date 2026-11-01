@@ -1523,3 +1523,12 @@ P3-17 therefore stays open. The same is true of P3-16: only `template_editor_con
 - The "preview before the boundary is unchanged" rule is proven in `rota_preview_test` (pure) and the sheet shows the post-change preview, but the widget test only asserts the stored versions.
 - No goldens for the new screens. The reorder drag itself is not exercised by a widget test (`RotationDraft.moved` is).
 - `duty_group_providers_test.dart` was not changed; the provider rename (`_dutyGroupsStreamProvider` -> public) has no other users.
+
+
+## P3-16 / P3-17 screens (written without a compiler - run the checks below)
+
+- P3-17: `chore_settings_controller.dart` + `chore_settings_state.dart` (immutable draft, dirty state, one Save for the 3 documents), `chore_settings_screen.dart` (5 sections, per-section Reset with confirm, unsaved guard, "needs internet"), widgets (`calendar_defaults_section`, `generation_section`, `catalog_sections` + `catalog_mapping` + group/preset dialogs, `policies_section` + `absence_policy_cards`, `house_rules_section`, read-only `house_rules_card` on the Manage hub). Routes `templates`, `templates/new`, `templates/:id`, `settings`; Chores entries + Family-tab tile. The old `settings/presentation/screens/` draft was replaced (deleted).
+- P3-16: `template_list_screen.dart`, `template_editor_screen.dart` (6 sections, sticky save, replan dialog, planning-failed banner), widgets `slots_editor`, `subtasks_editor`, `assignee_editor` (rotation / own rotation / fixed / manual), `instructions_editor`, `icon_key_picker`, `reminders_block`, `editor_*_section`, `template_list_row`.
+- ARB: 134 keys added in app_en/app_bn + the 3 generated files (the existing recurrence widgets used ~35 keys that did not exist). Four settings placeholders (`choresSettingsHorizon`, `OverdueGrace`, `SwapBuffer`, `ProjectedMonths`) changed from `int` to `String` because the widgets pass formatted (Bangla-digit) text.
+- Known limits: an own rotation edited in the template replaces the stored versions (use a duty group for versioned rota changes); reminders are stored only; `rotation_editor.dart` and `change_rotation_fields.dart` still use the deprecated `ReorderableListView.onReorder` (the new subtask editor uses `onReorderItem`).
+- Test harness: `pumpP3Screen` got a `languageCode` parameter.

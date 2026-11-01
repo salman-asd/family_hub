@@ -29,6 +29,7 @@ class FamilyScreen extends ConsumerWidget {
     final canInvite = ref.can(Permission.inviteMembers);
     final canChangeRoles = ref.can(Permission.changeRoles);
     final canEditSettings = ref.can(Permission.editFamilySettings);
+    final canManageChores = ref.can(Permission.manageChoreTemplates);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navFamily)),
@@ -80,6 +81,18 @@ class FamilyScreen extends ConsumerWidget {
                       icon: Icons.tune_rounded,
                       label: l10n.familySettingsTitle,
                       onTap: () => context.push(AppRoutes.familySettings),
+                    ),
+                  ),
+                ),
+                PermissionGate(
+                  allowed: canManageChores,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: _SettingsTile(
+                      key: const Key('family_chore_settings'),
+                      icon: Icons.checklist_rounded,
+                      label: l10n.choresSettingsTitle,
+                      onTap: () => context.push(AppRoutes.choresSettings),
                     ),
                   ),
                 ),

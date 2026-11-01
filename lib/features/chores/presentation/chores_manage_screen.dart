@@ -1,6 +1,7 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/chores_entries.dart';
+import 'package:family_hub/features/chores/settings/presentation/widgets/house_rules_card.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/app_card.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
@@ -36,12 +37,16 @@ class ChoresManageScreen extends ConsumerWidget {
               title: l10n.choresManageEmptyTitle,
               message: l10n.choresManageEmptyMessage,
             )
-          : ListView.separated(
+          : ListView(
               padding: const EdgeInsets.all(16),
-              itemCount: visible.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 12),
-              itemBuilder: (context, index) =>
-                  _EntryTile(entry: visible[index]),
+              children: [
+                for (final entry in visible) ...[
+                  _EntryTile(entry: entry),
+                  const SizedBox(height: 12),
+                ],
+                // Read-only for everybody; draws nothing without rules.
+                const HouseRulesCard(),
+              ],
             ),
     );
   }
