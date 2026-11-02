@@ -149,7 +149,7 @@ class ChoreTile extends ConsumerWidget {
           ),
         ),
         const SizedBox(width: 8),
-        StatusGlyph(status: widgetStatusOf(item.status), size: 14),
+        AnimatedStatusGlyph(status: widgetStatusOf(item.status), size: 14),
         if (item.progress.hasSubtasks) ...[
           const SizedBox(width: 6),
           Text(

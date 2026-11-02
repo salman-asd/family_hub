@@ -25,10 +25,78 @@ const List<double> kDayPanelSnaps = <double>[0.28, 0.55, 0.92];
 /// The selected day's chores in a bottom sheet the person drags between three
 /// heights (P3-23). Header: the date, the count and, for a manager, "Add
 /// chore". Rows: the same `TodayRow` as everywhere, grouped by day part.
+///
+/// On a tablet the same list is shown permanently beside the grid by
+/// [DayPanelPane] (P3-24).
 class DayPanel extends ConsumerWidget {
   const DayPanel({required this.day, super.key});
 
   final DateKey day;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = context.tokens;
+    return DraggableScrollableSheet(
+      key: const Key('calendar_day_panel'),
+      initialChildSize: kDayPanelSnaps.first,
+      minChildSize: kDayPanelSnaps.first,
+      maxChildSize: kDayPanelSnaps.last,
+      snap: true,
+      snapSizes: kDayPanelSnaps,
+      builder: (context, controller) => Material(
+        color: t.surfaceRaised,
+        elevation: 8,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(t.radiusLg),
+          ),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: DayPanelList(day: day, controller: controller, handle: true),
+      ),
+    );
+  }
+}
+
+/// The permanent day panel of the tablet two-pane layout (P3-24): the same
+/// content as [DayPanel], in a raised surface that does not move.
+class DayPanelPane extends ConsumerWidget {
+  const DayPanelPane({required this.day, super.key});
+
+  final DateKey day;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = context.tokens;
+    return Semantics(
+      container: true,
+      label: context.l10n.calendarDayPanelLabel,
+      child: Material(
+        key: const Key('calendar_day_pane'),
+        color: t.surfaceRaised,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(t.radiusLg),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: DayPanelList(day: day),
+      ),
+    );
+  }
+}
+
+/// The header and the chores of [day]. [controller] is the sheet's scroll
+/// controller (null in the permanent pane); [handle] draws the drag handle.
+class DayPanelList extends ConsumerWidget {
+  const DayPanelList({
+    required this.day,
+    this.controller,
+    this.handle = false,
+    super.key,
+  });
+
+  final DateKey day;
+  final ScrollController? controller;
+  final bool handle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,104 +108,85 @@ class DayPanel extends ConsumerWidget {
     final date = DateTime.utc(day.year, day.month, day.day);
     final count = items.hasValue ? items.requireValue.length : 0;
 
-    return DraggableScrollableSheet(
-      key: const Key('calendar_day_panel'),
-      initialChildSize: kDayPanelSnaps.first,
-      minChildSize: kDayPanelSnaps.first,
-      maxChildSize: kDayPanelSnaps.last,
-      snap: true,
-      snapSizes: kDayPanelSnaps,
-      builder: (context, controller) {
-        final Widget body;
-        if (items.hasValue) {
-          final list = items.requireValue;
-          body = list.isEmpty
-              ? EmptyState(
-                  icon: Icons.event_available_rounded,
-                  title: l10n.calendarDayEmptyTitle,
-                  message: l10n.calendarDayEmptyMessage,
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final (part, group) in groupByDayPart(list)) ...[
-                      DayPartSection(part: part, count: group.length),
-                      for (final item in group) TodayRow(item: item),
-                    ],
-                  ],
-                );
-        } else if (items.hasError) {
-          final error = items.error;
-          body = ErrorView(
-            message: l10n.choresFailureMessage(
-              error is AppFailure ? error : Unknown(error),
-            ),
-            onRetry: () =>
-                ref.invalidate(monthOccurrencesProvider(day.monthKey)),
-          );
-        } else {
-          body = const SizedBox(height: 120, child: LoadingView());
-        }
+    final Widget body;
+    if (items.hasValue) {
+      final list = items.requireValue;
+      body = list.isEmpty
+          ? EmptyState(
+              icon: Icons.event_available_rounded,
+              title: l10n.calendarDayEmptyTitle,
+              message: l10n.calendarDayEmptyMessage,
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (final (part, group) in groupByDayPart(list)) ...[
+                  DayPartSection(part: part, count: group.length),
+                  for (final item in group) TodayRow(item: item),
+                ],
+              ],
+            );
+    } else if (items.hasError) {
+      final error = items.error;
+      body = ErrorView(
+        message: l10n.choresFailureMessage(
+          error is AppFailure ? error : Unknown(error),
+        ),
+        onRetry: () => ref.invalidate(monthOccurrencesProvider(day.monthKey)),
+      );
+    } else {
+      body = const SizedBox(height: 120, child: LoadingView());
+    }
 
-        return Material(
-          color: t.surfaceRaised,
-          elevation: 8,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(t.radiusLg),
+    return ListView(
+      controller: controller,
+      // The sheet's own controller drives the drag; the pane scrolls itself.
+      primary: false,
+      padding: EdgeInsets.fromLTRB(12, handle ? 0 : 12, 12, 24),
+      children: [
+        if (handle)
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(
+                color: t.divider,
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
-          clipBehavior: Clip.antiAlias,
-          child: ListView(
-            controller: controller,
-            padding: const EdgeInsets.fromLTRB(12, 0, 12, 24),
-            children: [
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: t.divider,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Semantics(
+              header: true,
+              child: Text(
+                l10n.calendarDayHeader(
+                  '${formatters.fullDate(date)}, '
+                      '${formatters.weekdayName(day.isoWeekday)}',
+                  formatters.number(count),
+                ),
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  color: t.textPrimary,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              Wrap(
-                alignment: WrapAlignment.spaceBetween,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Semantics(
-                    header: true,
-                    child: Text(
-                      l10n.calendarDayHeader(
-                        '${formatters.fullDate(date)}, '
-                            '${formatters.weekdayName(day.isoWeekday)}',
-                        formatters.number(count),
-                      ),
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: t.textPrimary,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  if (canAdd)
-                    TextButton.icon(
-                      key: const Key('calendar_add_chore'),
-                      onPressed: () => unawaited(
-                        context.push(AppRoutes.choresTemplateNew),
-                      ),
-                      icon: const Icon(Icons.add_rounded),
-                      label: Text(l10n.calendarAddChore),
-                    ),
-                ],
+            ),
+            if (canAdd)
+              TextButton.icon(
+                key: const Key('calendar_add_chore'),
+                onPressed: () =>
+                    unawaited(context.push(AppRoutes.choresTemplateNew)),
+                icon: const Icon(Icons.add_rounded),
+                label: Text(l10n.calendarAddChore),
               ),
-              const SizedBox(height: 8),
-              body,
-            ],
-          ),
-        );
-      },
+          ],
+        ),
+        const SizedBox(height: 8),
+        body,
+      ],
     );
   }
 }

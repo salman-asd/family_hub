@@ -4320,4 +4320,58 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get calendarNextWeek => 'পরের সপ্তাহ';
+
+  @override
+  String get calendarCellNeedsCover => 'কভার লাগবে';
+
+  @override
+  String get calendarCellNeedsAttention => 'মনোযোগ দরকার';
+
+  @override
+  String get calendarCellAway => 'কেউ অনুপস্থিত';
+
+  @override
+  String get calendarCellPlanned => 'পরিকল্পিত';
+
+  @override
+  String get calendarDisplayOptions => 'দেখানোর ধরন';
+
+  @override
+  String get calendarHeatMode => 'ব্যস্ততার রং';
+
+  @override
+  String get calendarHeatModeHint => 'যে দিনে বেশি কাজ, সেদিনের ঘর গাঢ় দেখায়।';
+
+  @override
+  String get calendarHeatLegend => 'ব্যস্ততার মাত্রা';
+
+  @override
+  String get calendarHeatLess => 'কম';
+
+  @override
+  String get calendarHeatMore => 'বেশি';
+
+  @override
+  String get calendarHeatLegendLabel => 'ব্যস্ততা কম থেকে বেশি, চার ধাপের গাঢ়তায়';
+
+  @override
+  String get calendarLegendMarks => 'দিনের ঘরের চিহ্ন';
+
+  @override
+  String get calendarLegendPlanned => 'তির্যক দাগ: দিনের সব কাজ শুধু পরিকল্পিত';
+
+  @override
+  String get calendarLegendAway => 'উল্টো দিকের দাগ: কেউ অনুপস্থিত';
+
+  @override
+  String get calendarMonthLandscape => 'ফোন আড়াআড়ি ধরলে মাসের ভিউ নেই, তাই সপ্তাহ দেখানো হচ্ছে।';
+
+  @override
+  String get calendarUseFamilyDefaults => 'পরিবারের ডিফল্ট ব্যবহার করুন';
+
+  @override
+  String get calendarDayPanelLabel => 'নির্বাচিত দিনের কাজ';
+
+  @override
+  String get galleryCalendarPolish => 'ক্যালেন্ডারের রং ও দাগ';
 }

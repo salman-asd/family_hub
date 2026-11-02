@@ -4,8 +4,8 @@ import 'package:family_hub/features/chores/calendar/domain/day_summary.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 
 /// The ONE sentence a screen reader hears for a day cell (B.7):
-/// "25 October, Sunday, today, 3 chores, 1 overdue, 1 yours, selected".
-/// Empty parts are left out; a day outside the month is only its date.
+/// "25 October, Sunday, today, 3 chores, 1 overdue, 1 yours, needs cover,
+/// selected". Empty parts are left out; a day outside the month is only its date.
 String dayCellLabel({
   required AppLocalizations l10n,
   required AppFormatters formatters,
@@ -29,6 +29,14 @@ String dayCellLabel({
     if (summary.mineCount > 0) {
       parts.add(l10n.calendarCellMine(formatters.number(summary.mineCount)));
     }
+    // The decorations (hatch, corner marks) are shapes only, so the sentence
+    // names them (B.3, B.7).
+    if (summary.hasProjectedOnly) parts.add(l10n.calendarCellPlanned);
+    if (summary.unavailableMemberIds.isNotEmpty) {
+      parts.add(l10n.calendarCellAway);
+    }
+    if (summary.hasNeedsCover) parts.add(l10n.calendarCellNeedsCover);
+    if (summary.hasNeedsAttention) parts.add(l10n.calendarCellNeedsAttention);
   }
   if (selected) parts.add(l10n.calendarCellSelected);
   return parts.join(', ');

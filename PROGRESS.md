@@ -1662,3 +1662,54 @@ Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `f
 ### Open / to check when you run it
 - `SliverMainAxisGroup` + pinned `SliverPersistentHeader` inside a `center` scroll view is the most layout-sensitive part: if the agenda tests fail, start there.
 - The long-press and FAB tests rely on `pumpAndSettle` finishing (no running animations).
+
+
+## Phase 3 - P3-24 Calendar polish (heat, hatch, motion, accessibility, tablet, goldens)
+
+Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `flutter gen-l10n` (18 keys were hand-added to both ARBs and the three generated files; no functional diff expected), `flutter analyze`, `flutter test --exclude-tags golden`. No collection, field, rule or index changed, so the emulator suite and `check_indexes` are unaffected.
+
+### Verification of the base (what I checked before building)
+- P3-22/P3-23 files listed in their PROGRESS sections exist and match (`calendar_screen`, `agenda_view`, `week_view`, `day_panel`, `quick_actions_sheet`, `legend_sheet`, `calendar_filter_sheet`, `filter_chips_row`; `day_list.dart` / `filters_sheet.dart` are gone). Nothing was compiled, so "Done" is still unproven by a machine.
+- **Base debt found, not fixed here:** `file_size_test` (cap 300 lines) cannot pass on this tree: `agenda_view.dart` (439), `recurrence_picker_sheet.dart` (431), `template_list_screen.dart` (406), `template_editor_controller.dart` (369), `template_editor_screen.dart` (347), `chore_item.dart` (324), `occurrence_action.dart` (319), `chore_occurrence.dart` (308), `chore_settings_screen.dart` (305), `catalog_editor.dart` (303) are over and not on the allow-list. P3-24 split `calendar_screen.dart` (331 -> 193) and keeps every file it adds or edits under 300; `agenda_view.dart` was not touched. Review roadmap section 10 asks for `file_size_test` green: that needs a split pass (or allow-list entries) on the files above.
+- Review exit criteria (section 10) that need a machine and are NOT claimed here: Wave R0 gate rows, the rules suite, the two-account emulator walk-through.
+
+### Delivered
+| File | What |
+| --- | --- |
+| `lib/app/theme/heat_ramp.dart` | `HeatRamp.of(tokens)`: 4-step tint ramp (orange `chart[2]` blended over the background; separate, gentler alpha steps for dark), `ink`, `outsideMonthText` (>= 3:1, fixes `textDisabled` at 2.76:1 on light), `hatchLine(tokens, fill)` |
+| `calendar/presentation/painters/hatch_painter.dart` | `HatchPainter` + `HatchDirection` (`/` = planned only, `\` = someone away, both = cross-hatch) |
+| `calendar/presentation/calendar_motion.dart` | `calendarMotion(context)` = 180/250 ms, zero under `disableAnimations`; EVERY calendar animation takes its length from it |
+| `widgets/day_cell.dart` | heat tint, hatch (number on an opaque disc), corner marks, grow-in selection, `SemanticsRole.cell` |
+| `widgets/day_corner_marks.dart` | needs-cover and needs-attention marks (icon in a ring, theme container/on pairs) |
+| `widgets/day_cell_label.dart` | label now also says planned / someone is away / needs cover / needs attention |
+| `widgets/day_markers.dart` | optional `ink` so "+N" / count stay 4.5:1 on a tint |
+| `widgets/month_grid.dart` | `RepaintBoundary` + `SemanticsRole.row` per week |
+| `widgets/month_pager.dart` | page fade while swiping (none under reduced motion) |
+| `widgets/calendar_header.dart` | Today pill slides/fades in and out |
+| `widgets/month_body.dart` (NEW, extracted) | `MonthBody` (phone: grid + sheet; tablet: two-pane), `MonthPage`; grid is `SemanticsRole.table` |
+| `widgets/calendar_two_pane.dart` | `CalendarTwoPane`, `kTwoPaneMinWidth = 840` |
+| `widgets/day_panel.dart` | split into `DayPanel` (sheet), `DayPanelPane` (tablet), `DayPanelList` (shared content) |
+| `widgets/heat_legend.dart`, `hatch_swatch.dart`, `calendar_display_sheet.dart` | heat key; hatch sample; **display sheet** (heat switch + "Use family defaults") reached by the new tune button |
+| `widgets/legend_sheet.dart` | also explains hatches, corner marks and the heat key |
+| `calendar_screen.dart` | landscape phone (short side < 600) -> Week/Agenda only, with a note; display button |
+| `lib/shared/widgets/status_glyph.dart`, `chore_tile.dart` | `checkProgress` + `AnimatedStatusGlyph`: the check mark DRAWS when a chore becomes completed/verified (instant under reduced motion); the tile uses it |
+| `lib/app/gallery/gallery_sections_calendar.dart` (+ list entry) | gallery demo: heat key, both hatches, day cells in each decoration |
+| ARB | `calendarCell{NeedsCover,NeedsAttention,Away,Planned}`, `calendarDisplayOptions`, `calendarHeat*` (7), `calendarLegend{Marks,Planned,Away}`, `calendarMonthLandscape`, `calendarUseFamilyDefaults`, `calendarDayPanelLabel`, `galleryCalendarPolish` |
+
+Tests: `test/app/theme/heat_ramp_test.dart` (contrast table, every registered theme), `calendar/presentation/calendar_polish_test.dart` (tint, hatch, marks, labels, tablet pane, landscape, no running ticker under reduced motion, display and legend sheets, 900 items: the model is not rebuilt by taps), `calendar/presentation/calendar_golden_test.dart` (tag `golden`; skipped until images exist). Test harness: `pumpP3Screen` got `height` and `themeIndex`.
+
+### Decisions and deviations (please review)
+1. **Heat ramp from `chart[2]`, no new token fields.** Alphas were chosen with a WCAG calculation against the real theme values (day number >= 4.5 on every tint, glyphs >= 3). `AppTokens` is unchanged.
+2. **Hatch line = primary ink at 60% over the cell's fill** (>= 3.5:1 on the background and every tint in both themes by calculation; the test asserts >= 3). The day number sits on an opaque disc on hatched days; markers can still sit on the lines.
+3. **Month swipe stays the `PageView` slide plus a fade**, not `SharedAxisTransition` (as already recorded for P3-22). View change is still `FadeThroughTransition`.
+4. **No "unavailable overlay" preference yet**; the availability index is empty until P3-26, so the away hatch only appears in tests and the gallery.
+5. **Display sheet is minimal**: heat switch and "Use family defaults". Density, marker style and show-projected have providers but no control yet.
+6. **`SemanticsRole.table/row/cell`** (Flutter >= 3.32) are used for the grid; if the analyzer rejects them, drop the `role:` arguments, the labels do not depend on them.
+7. **Tablet two-pane applies to the Month view only** (>= 840 dp wide AND not a landscape phone); Week already has seven columns there, Agenda stays a list.
+8. **Goldens are NOT committed**: they cannot be rendered here and ADR 0005 allows Linux CI only. Run the `Update goldens` workflow, unzip the artifact at the repo root, commit `test/features/chores/calendar/goldens/`. The gallery golden set also gains `calendar_polish_*` images (44 -> more) the same way.
+9. Outside-month day numbers now use `HeatRamp.outsideMonthText` instead of `textDisabled`.
+
+### Open / to check when you run it
+- Likeliest first failures: `Semantics(role: ...)` signatures, the `AnimatedSwitcher` Today pill with zero duration, the two-pane test text finder (`'1 chore'`), the 900-item "model not rebuilt" test (assumes the provider emits once settled).
+- `chore_widgets_test.dart` finds `StatusGlyph`; it is still built inside `AnimatedStatusGlyph`, so finders should hold.
+- B.9-24 (banner when > 900) was already covered by P3-22 tests and is unchanged.

@@ -4340,4 +4340,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarNextWeek => 'Next week';
+
+  @override
+  String get calendarCellNeedsCover => 'needs cover';
+
+  @override
+  String get calendarCellNeedsAttention => 'needs attention';
+
+  @override
+  String get calendarCellAway => 'someone is away';
+
+  @override
+  String get calendarCellPlanned => 'planned';
+
+  @override
+  String get calendarDisplayOptions => 'Display options';
+
+  @override
+  String get calendarHeatMode => 'Workload tint';
+
+  @override
+  String get calendarHeatModeHint => 'Days with more work get a darker background.';
+
+  @override
+  String get calendarHeatLegend => 'Workload';
+
+  @override
+  String get calendarHeatLess => 'Less';
+
+  @override
+  String get calendarHeatMore => 'More';
+
+  @override
+  String get calendarHeatLegendLabel => 'Workload from less to more, in four shades';
+
+  @override
+  String get calendarLegendMarks => 'Day cell marks';
+
+  @override
+  String get calendarLegendPlanned => 'Slanted lines: every chore of the day is only planned';
+
+  @override
+  String get calendarLegendAway => 'Lines leaning the other way: someone is away';
+
+  @override
+  String get calendarMonthLandscape => 'The month view is not offered on a phone held sideways, so the week is shown.';
+
+  @override
+  String get calendarUseFamilyDefaults => 'Use family defaults';
+
+  @override
+  String get calendarDayPanelLabel => 'Chores of the selected day';
+
+  @override
+  String get galleryCalendarPolish => 'Calendar heat and hatch';
 }

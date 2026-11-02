@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:family_hub/core/utils/date_key.dart';
+import 'package:family_hub/features/chores/calendar/presentation/calendar_motion.dart';
 import 'package:flutter/material.dart';
 
 /// How many months a person can swipe in either direction from the month the
@@ -71,8 +72,8 @@ class _MonthPagerState extends State<MonthPager> {
       } else {
         await _controller.animateToPage(
           target,
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeOutCubic,
+          duration: kCalendarMotionLong,
+          curve: kCalendarCurve,
         );
       }
     } finally {
@@ -95,10 +96,27 @@ class _MonthPagerState extends State<MonthPager> {
         if (_programmatic) return;
         widget.onMonthChanged(MonthPager.monthOf(widget.epoch, page));
       },
-      itemBuilder: (context, page) => widget.pageBuilder(
-        context,
-        MonthPager.monthOf(widget.epoch, page),
-      ),
+      itemBuilder: (context, page) {
+        final child = widget.pageBuilder(
+          context,
+          MonthPager.monthOf(widget.epoch, page),
+        );
+        if (widget.reduceMotion) return child;
+        // Shared-axis feel (B.5): the page slides with the finger and fades as
+        // it leaves. No fade at all under reduced motion.
+        return AnimatedBuilder(
+          animation: _controller,
+          child: child,
+          builder: (context, child) {
+            final position =
+                _controller.hasClients && _controller.position.haveDimensions
+                ? (_controller.page ?? page.toDouble())
+                : page.toDouble();
+            final away = (position - page).abs().clamp(0.0, 1.0).toDouble();
+            return Opacity(opacity: 1 - 0.6 * away, child: child);
+          },
+        );
+      },
     );
   }
 }

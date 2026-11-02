@@ -1,4 +1,5 @@
 import 'package:family_hub/app/gallery/gallery_sections.dart';
+import 'package:family_hub/app/gallery/gallery_sections_calendar.dart';
 import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/shared/widgets/avatar_stack.dart';
@@ -28,6 +29,7 @@ List<GallerySection> phase3GallerySections() => <GallerySection>[
   _miniMarkdown,
   _catalogEditor,
   _reasonSheet,
+  calendarPolishSection,
 ];
 
 GallerySection _statusGlyph = GallerySection(

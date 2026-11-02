@@ -18,12 +18,18 @@ class DayMarkers extends StatelessWidget {
     required this.summary,
     required this.style,
     required this.formatters,
+    this.ink,
     super.key,
   });
 
   final DaySummary summary;
   final MarkerStyle style;
   final AppFormatters formatters;
+
+  /// The colour of the "+N" and of the count; the secondary text colour when
+  /// null. A heat-tinted cell passes the primary ink so the text stays at
+  /// least 4.5:1 on the tint (P3-24).
+  final Color? ink;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +47,7 @@ class DayMarkers extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 1),
               child: StatusGlyph(status: widgetStatusOf(status), size: 10),
             ),
-          if (picks.extra > 0) _extra(t, picks.extra),
+          if (picks.extra > 0) _extra(ink ?? t.textSecondary, picks.extra),
         ],
       ),
       MarkerStyle.dots => Row(
@@ -59,14 +65,14 @@ class DayMarkers extends StatelessWidget {
                 ),
               ),
             ),
-          if (picks.extra > 0) _extra(t, picks.extra),
+          if (picks.extra > 0) _extra(ink ?? t.textSecondary, picks.extra),
         ],
       ),
       MarkerStyle.count => Text(
         formatters.number(summary.total),
         maxLines: 1,
         style: TextStyle(
-          color: t.textSecondary,
+          color: ink ?? t.textSecondary,
           fontSize: 12,
           fontWeight: FontWeight.w700,
         ),
@@ -80,13 +86,13 @@ class DayMarkers extends StatelessWidget {
     );
   }
 
-  Widget _extra(AppTokens t, int extra) => Padding(
+  Widget _extra(Color colour, int extra) => Padding(
     padding: const EdgeInsetsDirectional.only(start: 2),
     child: Text(
       '+${formatters.number(extra)}',
       maxLines: 1,
       style: TextStyle(
-        color: t.textSecondary,
+        color: colour,
         fontSize: 12,
         fontWeight: FontWeight.w700,
         height: 1,

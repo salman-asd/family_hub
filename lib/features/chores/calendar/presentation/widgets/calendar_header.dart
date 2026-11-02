@@ -1,5 +1,6 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/features/chores/calendar/presentation/calendar_motion.dart';
 import 'package:flutter/material.dart';
 
 /// The month title, the previous / next arrows and the Today pill (B.2).
@@ -73,16 +74,35 @@ class CalendarHeader extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (showToday)
-              Padding(
-                padding: const EdgeInsetsDirectional.only(end: 4),
-                child: ActionChip(
-                  key: const Key('calendar_today_pill'),
-                  avatar: const Icon(Icons.today_rounded, size: 18),
-                  label: Text(l10n.calendarToday),
-                  onPressed: onToday,
+            // The pill slides in from the side and out again (B.5); with
+            // reduced motion the duration is zero and it just appears.
+            AnimatedSwitcher(
+              duration: calendarMotion(context),
+              switchInCurve: kCalendarCurve,
+              switchOutCurve: kCalendarCurve,
+              transitionBuilder: (child, animation) => FadeTransition(
+                opacity: animation,
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(0.4, 0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
                 ),
               ),
+              child: showToday
+                  ? Padding(
+                      key: const ValueKey<bool>(true),
+                      padding: const EdgeInsetsDirectional.only(end: 4),
+                      child: ActionChip(
+                        key: const Key('calendar_today_pill'),
+                        avatar: const Icon(Icons.today_rounded, size: 18),
+                        label: Text(l10n.calendarToday),
+                        onPressed: onToday,
+                      ),
+                    )
+                  : const SizedBox.shrink(key: ValueKey<bool>(false)),
+            ),
             if (showArrows) ...[
               IconButton(
                 key: const Key('calendar_previous'),

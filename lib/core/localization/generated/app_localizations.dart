@@ -7593,6 +7593,114 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'পরের সপ্তাহ'**
   String get calendarNextWeek;
+
+  /// No description provided for @calendarCellNeedsCover.
+  ///
+  /// In bn, this message translates to:
+  /// **'কভার লাগবে'**
+  String get calendarCellNeedsCover;
+
+  /// No description provided for @calendarCellNeedsAttention.
+  ///
+  /// In bn, this message translates to:
+  /// **'মনোযোগ দরকার'**
+  String get calendarCellNeedsAttention;
+
+  /// No description provided for @calendarCellAway.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেউ অনুপস্থিত'**
+  String get calendarCellAway;
+
+  /// No description provided for @calendarCellPlanned.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিকল্পিত'**
+  String get calendarCellPlanned;
+
+  /// No description provided for @calendarDisplayOptions.
+  ///
+  /// In bn, this message translates to:
+  /// **'দেখানোর ধরন'**
+  String get calendarDisplayOptions;
+
+  /// No description provided for @calendarHeatMode.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যস্ততার রং'**
+  String get calendarHeatMode;
+
+  /// No description provided for @calendarHeatModeHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'যে দিনে বেশি কাজ, সেদিনের ঘর গাঢ় দেখায়।'**
+  String get calendarHeatModeHint;
+
+  /// No description provided for @calendarHeatLegend.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যস্ততার মাত্রা'**
+  String get calendarHeatLegend;
+
+  /// No description provided for @calendarHeatLess.
+  ///
+  /// In bn, this message translates to:
+  /// **'কম'**
+  String get calendarHeatLess;
+
+  /// No description provided for @calendarHeatMore.
+  ///
+  /// In bn, this message translates to:
+  /// **'বেশি'**
+  String get calendarHeatMore;
+
+  /// No description provided for @calendarHeatLegendLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যস্ততা কম থেকে বেশি, চার ধাপের গাঢ়তায়'**
+  String get calendarHeatLegendLabel;
+
+  /// No description provided for @calendarLegendMarks.
+  ///
+  /// In bn, this message translates to:
+  /// **'দিনের ঘরের চিহ্ন'**
+  String get calendarLegendMarks;
+
+  /// No description provided for @calendarLegendPlanned.
+  ///
+  /// In bn, this message translates to:
+  /// **'তির্যক দাগ: দিনের সব কাজ শুধু পরিকল্পিত'**
+  String get calendarLegendPlanned;
+
+  /// No description provided for @calendarLegendAway.
+  ///
+  /// In bn, this message translates to:
+  /// **'উল্টো দিকের দাগ: কেউ অনুপস্থিত'**
+  String get calendarLegendAway;
+
+  /// No description provided for @calendarMonthLandscape.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফোন আড়াআড়ি ধরলে মাসের ভিউ নেই, তাই সপ্তাহ দেখানো হচ্ছে।'**
+  String get calendarMonthLandscape;
+
+  /// No description provided for @calendarUseFamilyDefaults.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের ডিফল্ট ব্যবহার করুন'**
+  String get calendarUseFamilyDefaults;
+
+  /// No description provided for @calendarDayPanelLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্বাচিত দিনের কাজ'**
+  String get calendarDayPanelLabel;
+
+  /// No description provided for @galleryCalendarPolish.
+  ///
+  /// In bn, this message translates to:
+  /// **'ক্যালেন্ডারের রং ও দাগ'**
+  String get galleryCalendarPolish;
 }
 
 class _AppLocalizationsDelegate

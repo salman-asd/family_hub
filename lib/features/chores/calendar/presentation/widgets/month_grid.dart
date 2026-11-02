@@ -4,9 +4,15 @@ import 'package:family_hub/features/chores/calendar/domain/calendar_enums.dart';
 import 'package:family_hub/features/chores/calendar/domain/calendar_month_model.dart';
 import 'package:family_hub/features/chores/calendar/presentation/widgets/day_cell.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 /// The rows of day cells of one month (P3-22). Pure drawing: it takes the model
 /// and callbacks, never a provider.
+///
+/// P3-24: every week is its own `RepaintBoundary` (a selection change repaints
+/// one row, not the month) and its own semantics ROW, so a screen reader can
+/// move through the grid by row and column; the grid itself is the TABLE (set
+/// by the caller).
 class MonthGrid extends StatelessWidget {
   const MonthGrid({
     required this.model,
@@ -34,22 +40,28 @@ class MonthGrid extends StatelessWidget {
     return Column(
       children: [
         for (final week in model.weeks)
-          Row(
-            children: [
-              for (final summary in week)
-                Expanded(
-                  child: DayCell(
-                    summary: summary,
-                    selected: summary.dateKey == selectedDay,
-                    scope: scope,
-                    markerStyle: markerStyle,
-                    formatters: formatters,
-                    minHeight: cellHeight,
-                    onTap: () => onSelect(summary.dateKey),
-                    onLongPress: () => onLongPress(summary.dateKey),
-                  ),
-                ),
-            ],
+          RepaintBoundary(
+            child: Semantics(
+              role: SemanticsRole.row,
+              container: true,
+              child: Row(
+                children: [
+                  for (final summary in week)
+                    Expanded(
+                      child: DayCell(
+                        summary: summary,
+                        selected: summary.dateKey == selectedDay,
+                        scope: scope,
+                        markerStyle: markerStyle,
+                        formatters: formatters,
+                        minHeight: cellHeight,
+                        onTap: () => onSelect(summary.dateKey),
+                        onLongPress: () => onLongPress(summary.dateKey),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
       ],
     );

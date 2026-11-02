@@ -38,12 +38,14 @@ Future<ChoresFixture> pumpP3Screen(
   Role role = Role.member,
   double textScale = 1.0,
   double width = 320,
+  double height = 800,
+  int themeIndex = 0,
   String languageCode = 'en',
   List<ChoreOccurrence> occurrences = const <ChoreOccurrence>[],
   List<Override> overrides = const <Override>[],
 }) async {
   tester.view
-    ..physicalSize = Size(width, 800)
+    ..physicalSize = Size(width, height)
     ..devicePixelRatio = 1;
   addTearDown(tester.view.reset);
 
@@ -93,6 +95,7 @@ Future<ChoresFixture> pumpP3Screen(
         router: router,
         textScale: textScale,
         languageCode: languageCode,
+        themeIndex: themeIndex,
       ),
     ),
   );
@@ -105,8 +108,9 @@ Widget _app({
   required GoRouter? router,
   required double textScale,
   required String languageCode,
+  int themeIndex = 0,
 }) {
-  final theme = buildThemeData(appThemes.first);
+  final theme = buildThemeData(appThemes[themeIndex]);
   const delegates = <LocalizationsDelegate<dynamic>>[
     AppLocalizations.delegate,
     GlobalMaterialLocalizations.delegate,

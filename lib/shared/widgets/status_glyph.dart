@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:family_hub/app/theme/app_tokens.dart';
@@ -28,6 +29,7 @@ class StatusGlyph extends StatelessWidget {
     required this.status,
     this.size = 14,
     this.semanticLabel,
+    this.checkProgress = 1,
     super.key,
   });
 
@@ -39,6 +41,10 @@ class StatusGlyph extends StatelessWidget {
 
   /// Overrides the localized status name announced to screen readers.
   final String? semanticLabel;
+
+  /// How much of the check mark is drawn, 0 … 1 (P3-24 "tick draws a check").
+  /// Always 1 except while [AnimatedStatusGlyph] animates a completion.
+  final double checkProgress;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +62,7 @@ class StatusGlyph extends StatelessWidget {
             status: status,
             colour: colours,
             contextTokens: tokens,
+            checkProgress: checkProgress,
           ),
           // The painter needs no child, but a non-empty semantic node keeps
           // the tap region stable when the glyph sits inside a bigger target.
@@ -92,11 +99,13 @@ class _GlyphPainter extends CustomPainter {
     required this.status,
     required this.colour,
     required this.contextTokens,
+    required this.checkProgress,
   });
 
   final WidgetStatus status;
   final Color colour;
   final AppTokens contextTokens;
+  final double checkProgress;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -138,12 +147,12 @@ class _GlyphPainter extends CustomPainter {
 
       case WidgetStatus.completed:
         canvas.drawCircle(centre, radius, fill);
-        _check(canvas, centre, side, discInk);
+        _check(canvas, centre, side, discInk, checkProgress);
 
       case WidgetStatus.verified:
         canvas.drawCircle(centre, radius, ring);
         canvas.drawCircle(centre, radius * 0.72, fill);
-        _check(canvas, centre, side * 0.8, discInk);
+        _check(canvas, centre, side * 0.8, discInk, checkProgress);
 
       case WidgetStatus.overdue:
         _triangle(canvas, size, side, ring);
@@ -159,7 +168,13 @@ class _GlyphPainter extends CustomPainter {
     }
   }
 
-  static void _check(Canvas canvas, Offset centre, double side, Color colour) {
+  static void _check(
+    Canvas canvas,
+    Offset centre,
+    double side,
+    Color colour,
+    double progress,
+  ) {
     final paint = Paint()
       ..color = colour
       ..style = PaintingStyle.stroke
@@ -170,7 +185,14 @@ class _GlyphPainter extends CustomPainter {
       ..moveTo(centre.dx - side * 0.20, centre.dy + side * 0.01)
       ..lineTo(centre.dx - side * 0.05, centre.dy + side * 0.16)
       ..lineTo(centre.dx + side * 0.21, centre.dy - side * 0.15);
-    canvas.drawPath(path, paint);
+    if (progress >= 1) {
+      canvas.drawPath(path, paint);
+      return;
+    }
+    if (progress <= 0) return;
+    for (final metric in path.computeMetrics()) {
+      canvas.drawPath(metric.extractPath(0, metric.length * progress), paint);
+    }
   }
 
   static void _triangle(Canvas canvas, Size size, double side, Paint paint) {
@@ -203,5 +225,63 @@ class _GlyphPainter extends CustomPainter {
   bool shouldRepaint(_GlyphPainter old) =>
       old.status != status ||
       old.colour != colour ||
-      old.contextTokens != contextTokens;
+      old.contextTokens != contextTokens ||
+      old.checkProgress != checkProgress;
+}
+
+/// A [StatusGlyph] that DRAWS its check mark when the status changes to
+/// completed or verified (B.5, P3-24). Under reduced motion
+/// (`MediaQuery.disableAnimations`) the check simply appears. At rest no
+/// animation runs.
+class AnimatedStatusGlyph extends StatefulWidget {
+  const AnimatedStatusGlyph({required this.status, this.size = 14, super.key});
+
+  final WidgetStatus status;
+  final double size;
+
+  @override
+  State<AnimatedStatusGlyph> createState() => _AnimatedStatusGlyphState();
+}
+
+class _AnimatedStatusGlyphState extends State<AnimatedStatusGlyph>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 220),
+    value: 1,
+  );
+
+  static bool _done(WidgetStatus s) =>
+      s == WidgetStatus.completed || s == WidgetStatus.verified;
+
+  @override
+  void didUpdateWidget(AnimatedStatusGlyph old) {
+    super.didUpdateWidget(old);
+    if (old.status == widget.status) return;
+    if (_done(widget.status) &&
+        !_done(old.status) &&
+        !MediaQuery.disableAnimationsOf(context)) {
+      unawaited(_controller.forward(from: 0));
+    } else {
+      _controller.value = 1;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, _) => StatusGlyph(
+        status: widget.status,
+        size: widget.size,
+        checkProgress: Curves.easeOutCubic.transform(_controller.value),
+      ),
+    );
+  }
 }
