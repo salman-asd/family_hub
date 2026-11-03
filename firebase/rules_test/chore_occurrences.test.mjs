@@ -42,6 +42,7 @@ import {
   memberDoc,
   nowTs,
   occurrenceDoc,
+  swapDoc,
   occurrenceEventDoc,
   permissionsDoc,
   seedWorld,
@@ -678,14 +679,20 @@ describe('reassign, swap and cover', () => {
     await assertFails(batch.commit());
   });
 
-  it('lets an accepted swap move the assignee with a swapped event', async () => {
-    await seedOccurrence();
+  it('lets an ACCEPTED swap move the assignee with a swapped event', async () => {
+    await seedOccurrence({ assigneeId: CARA });
+    await testEnv.withSecurityRulesDisabled((ctx) =>
+      setDoc(
+        doc(ctx.firestore(), `families/${FAM_A}/swapRequests/swap_1`),
+        swapDoc(CARA, { toMemberId: GINA }),
+      ),
+    );
     const db = as(GINA);
     const batch = writeBatch(db);
     batch.update(doc(db, occurrencePath()), {
       lastEventId: `swapped_${GINA}`,
       assigneeId: GINA,
-      coverForId: CARA,
+      coverForId: null,
       assignmentSource: 'swap',
       updatedAt: nowTs(),
       updatedBy: GINA,
@@ -700,7 +707,40 @@ describe('reassign, swap and cover', () => {
         requestId: 'swap_1',
       }),
     );
+    batch.update(doc(db, `families/${FAM_A}/swapRequests/swap_1`), {
+      status: 'accepted',
+      respondedAt: nowTs(),
+      respondedBy: GINA,
+      responseReason: null,
+      updatedAt: nowTs(),
+      updatedBy: GINA,
+    });
     await assertSucceeds(batch.commit());
+  });
+
+  it('denies a swapped event without an accepted request (P3-26)', async () => {
+    await seedOccurrence({ assigneeId: CARA });
+    const db = as(GINA);
+    const batch = writeBatch(db);
+    batch.update(doc(db, occurrencePath()), {
+      lastEventId: `swapped_${GINA}`,
+      assigneeId: GINA,
+      coverForId: null,
+      assignmentSource: 'swap',
+      updatedAt: nowTs(),
+      updatedBy: GINA,
+    });
+    batch.set(
+      doc(db, eventPath(`swapped_${GINA}`)),
+      eventDoc(GINA, {
+        type: 'swapped',
+        reason: 'কেউ পারবে না',
+        fromAssigneeId: CARA,
+        toAssigneeId: GINA,
+        requestId: 'swap_1',
+      }),
+    );
+    await assertFails(batch.commit());
   });
 });
 

@@ -1745,3 +1745,30 @@ Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `f
 
 ### Open / to check when you run it
 - Likeliest first failures: the `switch (thread)` patterns in `comments_section.dart`, `_submit` closure typing, the `Provider.family` record key, `rulesList('commentKeys')` parsing, and the widget test text finders.
+
+## Phase 3 - P3-26 Availability, swaps, covers, inbox
+
+Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `flutter gen-l10n` (no ARB change in this step), `flutter analyze`, `flutter test --exclude-tags golden`, `npm run test:emulator` (new `chore_swaps.test.mjs`; `chore_occurrences.test.mjs` swap test changed) and `node tools/check_indexes.mjs` (passes here: 7 indexes added).
+
+### Delivered
+| Area | Files |
+| --- | --- |
+| availability | `member_availability`, `availability_write_plan`, `availability_repository`, `no_availability_repository`, `availability_index.fromRecords`; use cases `add / cancel / decide_availability`, `apply_absence_policy`; data mappers + Firestore repository; `availability_providers` (real `availabilityIndexProvider`) |
+| swaps | `swap_request`, `swap_write_plan`, `swap_repository`, `swap_rules` (`isUnstarted`, `swapExpiry`, `coverRequestId`), `swap_plan_helpers`, `cover_fallback`; use cases `request / accept / decline / cancel_swap`, `expire_swaps`; data + `swap_providers` |
+| notifications | `inbox_item`, `inbox_repository`, `inbox_writer`, `mark_inbox_read`, `archive_inbox_item`, data, `inbox_providers` (`unreadInboxCountProvider`); real `ChoresInboxPort`; `InboxPort` +4 methods |
+| rules | `memberAvailability`, `swapRequests`, `notificationInbox`; occurrence rule 8 now needs an ACCEPTED request (`swapAcceptedAfter`); indexes |
+| tests | use cases, mappers vs rules, port shapes, in-memory fakes, rules tests |
+
+### Decisions (my recommendations; change if you disagree)
+1. **Policy A/C write nothing on chores**; A sends one `needs_cover` row (with the count) to the member and each manager; C only returns the list. B creates one cover request per unstarted chore; the chore stays with the absent member until the recipient accepts.
+2. **Only stored chores are affected**; a day with no document yet is planned by the generator, which already reads the same index.
+3. **A declined or expired cover** tries the next candidate ONCE (`cv2_`), then falls back to A.
+4. **`absenceNeedsApproval`** makes a member's own absence `pending`; managers' records are active. The 366-day limit and the approval switch are checked in the use case, not in the rules (rules cannot do date arithmetic or read settings cheaply).
+5. Cancelling an absence does not withdraw cover requests already created.
+6. `CommentLoader` (P3-25) is reused as the generic occurrence loader.
+
+### Not done / to review
+- No screens (P3-27): the inbox screen, swap sheet and availability screen are the next step; their providers exist.
+- `ExpireSwaps` must be called on app open (P3-27 wires it); `ApplyAbsencePolicy` must be called after `AddAvailability` / an approval (also P3-27).
+- Contract fixtures for the three new documents were not added; the mapper key sets are checked against the rules in `inbox_test.dart`.
+- Likeliest first failures: `rulesList('...Keys')` parsing, the null-aware elements `?row?.withId(...)`, `NewInboxItem.withId` usage, and the in-memory occurrence backend rejecting a patch it does not know.

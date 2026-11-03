@@ -23,9 +23,17 @@ import 'package:family_hub/features/bazar/items_categories/data/firestore_catalo
 import 'package:family_hub/features/bazar/items_categories/presentation/catalog_providers.dart';
 import 'package:family_hub/features/bazar/settings/data/firestore_bazar_settings_repository.dart';
 import 'package:family_hub/features/bazar/settings/presentation/bazar_settings_providers.dart';
+import 'package:family_hub/features/chores/availability/data/firestore_availability_repository.dart';
+import 'package:family_hub/features/chores/availability/presentation/availability_providers.dart';
 import 'package:family_hub/features/chores/comments/data/firestore_comment_repository.dart';
 import 'package:family_hub/features/chores/comments/presentation/comment_providers.dart';
 import 'package:family_hub/features/chores/duty_groups/data/firestore_duty_group_repository.dart';
+import 'package:family_hub/features/chores/occurrences/presentation/inbox_port_provider.dart';
+import 'package:family_hub/features/chores/presentation/chores_inbox_port.dart';
+import 'package:family_hub/features/chores/swaps/data/firestore_swap_repository.dart';
+import 'package:family_hub/features/chores/swaps/presentation/swap_providers.dart';
+import 'package:family_hub/features/notifications/data/firestore_inbox_repository.dart';
+import 'package:family_hub/features/notifications/presentation/inbox_providers.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_providers.dart';
 import 'package:family_hub/features/chores/occurrences/data/firestore_occurrence_repository.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
@@ -120,6 +128,9 @@ Future<void> bootstrap(Flavor flavor) async {
     final dutyGroups = FirestoreDutyGroupRepository(tx: tx, clock: clock);
     final occurrences = FirestoreOccurrenceRepository(tx: tx, clock: clock);
     final comments = FirestoreCommentRepository(tx: tx);
+    final availability = FirestoreAvailabilityRepository(tx: tx);
+    final swaps = FirestoreSwapRepository(tx: tx);
+    final inbox = FirestoreInboxRepository(tx: tx);
 
     runApp(
       ProviderScope(
@@ -156,6 +167,10 @@ Future<void> bootstrap(Flavor flavor) async {
           occurrenceRepositoryProvider.overrideWithValue(occurrences),
           generationMarkerRepositoryProvider.overrideWithValue(occurrences),
           commentRepositoryProvider.overrideWithValue(comments),
+          availabilityRepositoryProvider.overrideWithValue(availability),
+          swapRepositoryProvider.overrideWithValue(swaps),
+          inboxRepositoryProvider.overrideWithValue(inbox),
+          inboxPortProvider.overrideWithValue(const ChoresInboxPort()),
           themePreferenceSyncProvider.overrideWithValue(
             FirestoreThemePreferenceSync(),
           ),

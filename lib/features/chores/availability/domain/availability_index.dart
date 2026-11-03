@@ -1,4 +1,5 @@
 import 'package:family_hub/core/utils/date_key.dart';
+import 'package:family_hub/features/chores/availability/domain/member_availability.dart';
 
 /// One member's approved (or pending) absence, as the rotation engine needs it.
 ///
@@ -44,6 +45,14 @@ final class AvailabilityIndex {
   static const AvailabilityIndex empty = AvailabilityIndex(
     <AvailabilitySpan>[],
   );
+
+  /// The index of the ACTIVE records (a pending absence is not approved yet, a
+  /// rejected or cancelled one never counts).
+  factory AvailabilityIndex.fromRecords(Iterable<MemberAvailability> records) =>
+      AvailabilityIndex(<AvailabilitySpan>[
+        for (final record in records)
+          if (record.isActive) record.toSpan(),
+      ]);
 
   final List<AvailabilitySpan> spans;
 

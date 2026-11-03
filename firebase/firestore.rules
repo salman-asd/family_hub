@@ -683,6 +683,113 @@ service cloud.firestore {
     function commentChanged() {
       return request.resource.data.diff(resource.data).affectedKeys();
     }
+    // P3-26: availability, swap requests and the inbox.  Each `*Keys()` is
+    // exactly what the matching mapper writes (mirrored in the Dart tests).
+    function swapPath(f, r) {
+      return /databases/$(database)/documents/families/$(f)/swapRequests/$(r);
+    }
+    function dateKeyOk(v) {
+      return v is string && v.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$');
+    }
+    function availabilityKeys() {
+      return ['memberId', 'startDateKey', 'endDateKey', 'typeId', 'reason',
+              'status', 'decidedBy', 'decidedAt', 'createdAt', 'createdBy',
+              'updatedAt', 'updatedBy', 'schemaVersion', 'deletedAt',
+              'deletedBy'];
+    }
+    function availabilityOk(d) {
+      return d.keys().hasOnly(availabilityKeys())
+        && str(d.get('memberId', ''), 1, 64)
+        && dateKeyOk(d.get('startDateKey', null))
+        && dateKeyOk(d.get('endDateKey', null))
+        && d.get('startDateKey', '') <= d.get('endDateKey', '')
+        && str(d.get('typeId', ''), 1, 40)
+        && str(d.get('reason', ''), 3, 200)
+        && d.get('status', '') in ['pending', 'active', 'rejected', 'cancelled']
+        && nullableId(d, 'decidedBy')
+        && nullableTimestamp(d, 'decidedAt')
+        && d.get('deletedAt', null) == null
+        && d.get('deletedBy', null) == null;
+    }
+    function availabilityChanged() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+    function swapKeys() {
+      return ['occurrenceId', 'occurrenceDateKey', 'kind', 'fromMemberId',
+              'toMemberId', 'reason', 'status', 'expiresAt', 'respondedAt',
+              'respondedBy', 'responseReason', 'availabilityId',
+              'requestedBy', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function swapOk(d) {
+      return d.keys().hasOnly(swapKeys())
+        && str(d.get('occurrenceId', ''), 1, 200)
+        && dateKeyOk(d.get('occurrenceDateKey', null))
+        && d.get('kind', '') in ['swap', 'cover']
+        && str(d.get('fromMemberId', ''), 1, 64)
+        && str(d.get('toMemberId', ''), 1, 64)
+        && d.get('fromMemberId', '') != d.get('toMemberId', '')
+        && str(d.get('reason', ''), 3, 300)
+        && d.get('status', '') in ['pending', 'accepted', 'declined',
+                                   'expired', 'cancelled']
+        && d.get('expiresAt', null) is timestamp
+        && nullableTimestamp(d, 'respondedAt')
+        && nullableId(d, 'respondedBy')
+        && optStr(d, 'responseReason', 300)
+        && (d.get('availabilityId', null) == null
+            || str(d.get('availabilityId', null), 1, 200))
+        && str(d.get('requestedBy', ''), 1, 64)
+        && d.get('deletedAt', null) == null
+        && d.get('deletedBy', null) == null;
+    }
+    function swapChanged() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+    function swapChangeKeys() {
+      return ['status', 'respondedAt', 'respondedBy', 'responseReason',
+              'updatedAt', 'updatedBy'];
+    }
+    // The occurrence update that moves the chore must be paired with an
+    // ACCEPTED request in the same batch, answered by its recipient.
+    function swapAcceptedAfter(f, o) {
+      let rid = getAfter(occurrenceEventPath(f, o,
+                  request.resource.data.lastEventId)).data.get('requestId', null);
+      return rid is string
+        && existsAfter(swapPath(f, rid))
+        && getAfter(swapPath(f, rid)).data.get('status', '') == 'accepted'
+        && getAfter(swapPath(f, rid)).data.get('occurrenceId', '') == o
+        && getAfter(swapPath(f, rid)).data.get('toMemberId', '')
+             == request.auth.uid
+        && request.resource.data.get('assigneeId', null) == request.auth.uid
+        && resource.data.get('assigneeId', null)
+             == getAfter(swapPath(f, rid)).data.get('fromMemberId', '')
+        && request.resource.data.get('assignmentSource', '')
+             == (getAfter(swapPath(f, rid)).data.get('kind', '') == 'cover'
+                 ? 'cover' : 'swap');
+    }
+    function inboxKeys() {
+      return ['toMemberId', 'type', 'refType', 'refId', 'params', 'readAt',
+              'archivedAt', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function inboxOk(d) {
+      return d.keys().hasOnly(inboxKeys())
+        && str(d.get('toMemberId', ''), 1, 64)
+        && d.get('type', '') in ['swap_request', 'swap_result', 'needs_cover',
+                                 'chore_reopened', 'comment_attention',
+                                 'verification_needed', 'absence_decision']
+        && str(d.get('refType', ''), 1, 40)
+        && str(d.get('refId', ''), 1, 200)
+        && d.get('params', {}) is map
+        && d.get('params', {}).size() <= 6
+        && nullableTimestamp(d, 'readAt')
+        && nullableTimestamp(d, 'archivedAt')
+        && d.get('deletedAt', null) == null
+        && d.get('deletedBy', null) == null;
+    }
+    function inboxChanged() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
     // Phase 2 catalog (P2-05): the exact fields `CatalogMappers` writes.
     function categoryKeys() {
       return ['nameBn', 'nameEn', 'colorIndex', 'emoji', 'imageData',
@@ -2277,7 +2384,8 @@ service cloud.firestore {
           && occurrenceEventNew(f, o, 'reassigned', 3);
 
         // 8. SWAP / COVER: the assignee moves only with a `swapped`/`covered`
-        //    event that names the accepted request (P3-26 supplies its rules).
+        //    event that names a request ACCEPTED in the same batch by its
+        //    recipient (`swapAcceptedAfter`, P3-26).
         allow update: if verified()
           && isActiveMember(f)
           && prev().get('deletedAt', null) == null
@@ -2295,7 +2403,8 @@ service cloud.firestore {
               && occurrenceEventNew(f, o, 'swapped', 3))
             || (next().get('assignmentSource', '') == 'cover'
               && occurrenceEventNew(f, o, 'covered', 3))
-          );
+          )
+          && swapAcceptedAfter(f, o);
 
         // 9. ATTENTION flag and the comment marker (P3-25).
         allow update: if verified()
@@ -2435,6 +2544,131 @@ service cloud.firestore {
         }
       }
 
+      // ── memberAvailability (P3-26) ───────────────────────────────────────
+      // A member records their own absence (`pending` when the family asks for
+      // approval, which the app decides; a manager may record anybody's).  Only
+      // the owner or a manager cancels; only a manager decides a pending one.
+      match /memberAvailability/{a} {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && availabilityOk(request.resource.data)
+          && request.resource.data.get('status', '') in ['pending', 'active']
+          && request.resource.data.get('decidedBy', null) == null
+          && request.resource.data.get('decidedAt', null) == null
+          && (request.resource.data.get('memberId', '') == request.auth.uid
+              || isManager(f));
+        // CANCEL (owner or manager).
+        allow update: if verified()
+          && isActiveMember(f)
+          && availabilityOk(request.resource.data)
+          && resource.data.get('status', '') in ['pending', 'active']
+          && request.resource.data.get('status', '') == 'cancelled'
+          && (resource.data.get('memberId', '') == request.auth.uid
+              || isManager(f))
+          && availabilityChanged().hasOnly(['status', 'decidedBy', 'decidedAt',
+                                            'updatedAt', 'updatedBy']);
+        // DECIDE (manager).
+        allow update: if verified()
+          && isManager(f)
+          && availabilityOk(request.resource.data)
+          && resource.data.get('status', '') == 'pending'
+          && request.resource.data.get('status', '') in ['active', 'rejected']
+          && request.resource.data.get('decidedBy', null) == request.auth.uid
+          && availabilityChanged().hasOnly(['status', 'decidedBy', 'decidedAt',
+                                            'updatedAt', 'updatedBy']);
+        allow delete: if false;
+      }
+
+      // ── swapRequests (P3-26) ─────────────────────────────────────────────
+      // Created by the requester (or a manager for a cover) as `pending`.
+      // Answered only by the recipient, and an ACCEPTANCE only together with the
+      // occurrence update (`swapAcceptedAfter` on the occurrence side).  The
+      // create rule makes no document lookup: policy B writes many requests in
+      // one batch and the rules allow 20 lookups per batch (C-11).
+      match /swapRequests/{r} {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && swapOk(request.resource.data)
+          && request.resource.data.get('status', '') == 'pending'
+          && request.resource.data.get('respondedAt', null) == null
+          && request.resource.data.get('respondedBy', null) == null
+          && request.resource.data.get('requestedBy', '') == request.auth.uid
+          && (request.resource.data.get('fromMemberId', '') == request.auth.uid
+              || isManager(f))
+          && request.resource.data.get('expiresAt', null) > request.time;
+        // ACCEPT (recipient, before it lapses, paired with the occurrence).
+        allow update: if verified()
+          && isActiveMember(f)
+          && swapOk(request.resource.data)
+          && resource.data.get('status', '') == 'pending'
+          && resource.data.get('toMemberId', '') == request.auth.uid
+          && request.resource.data.get('status', '') == 'accepted'
+          && request.resource.data.get('respondedBy', null) == request.auth.uid
+          && request.time <= resource.data.get('expiresAt', request.time)
+          && swapChanged().hasOnly(swapChangeKeys())
+          && getAfter(occurrencePath(f, resource.data.get('occurrenceId', '')))
+               .data.get('assigneeId', null) == request.auth.uid
+          && get(occurrencePath(f, resource.data.get('occurrenceId', '')))
+               .data.get('assigneeId', null)
+             == resource.data.get('fromMemberId', '');
+        // DECLINE (recipient).
+        allow update: if verified()
+          && isActiveMember(f)
+          && swapOk(request.resource.data)
+          && resource.data.get('status', '') == 'pending'
+          && resource.data.get('toMemberId', '') == request.auth.uid
+          && request.resource.data.get('status', '') == 'declined'
+          && request.resource.data.get('respondedBy', null) == request.auth.uid
+          && swapChanged().hasOnly(swapChangeKeys());
+        // CANCEL (requester or manager).
+        allow update: if verified()
+          && isActiveMember(f)
+          && swapOk(request.resource.data)
+          && resource.data.get('status', '') == 'pending'
+          && (resource.data.get('requestedBy', '') == request.auth.uid
+              || resource.data.get('fromMemberId', '') == request.auth.uid
+              || isManager(f))
+          && request.resource.data.get('status', '') == 'cancelled'
+          && request.resource.data.get('respondedBy', null) == request.auth.uid
+          && swapChanged().hasOnly(swapChangeKeys());
+        // EXPIRE (anybody active, once `expiresAt` has passed).
+        allow update: if verified()
+          && isActiveMember(f)
+          && swapOk(request.resource.data)
+          && resource.data.get('status', '') == 'pending'
+          && request.resource.data.get('status', '') == 'expired'
+          && request.resource.data.get('respondedBy', null) == request.auth.uid
+          && request.time > resource.data.get('expiresAt', request.time)
+          && swapChanged().hasOnly(swapChangeKeys());
+        allow delete: if false;
+      }
+
+      // ── notificationInbox (P3-26) ────────────────────────────────────────
+      // Any active member creates a row (for somebody else or themselves; the
+      // type list is closed and the shape checked); only its OWNER reads it and
+      // only `readAt` / `archivedAt` change.
+      match /notificationInbox/{i} {
+        allow read: if isActiveMember(f)
+          && resource.data.get('toMemberId', '') == request.auth.uid;
+        allow create: if verified()
+          && isActiveMember(f)
+          && createsAsSelf()
+          && inboxOk(request.resource.data)
+          && request.resource.data.get('readAt', null) == null
+          && request.resource.data.get('archivedAt', null) == null;
+        allow update: if verified()
+          && isActiveMember(f)
+          && resource.data.get('toMemberId', '') == request.auth.uid
+          && inboxOk(request.resource.data)
+          && inboxChanged().hasOnly(['readAt', 'archivedAt',
+                                     'updatedAt', 'updatedBy']);
+        allow delete: if false;
+      }
+
       // ── budgets/{yyyy-MM} — finance managers write, members read (P2-17) ─
       // A budget is a plan, so it is not tied to the month lock.  A moderator
       // needs `moderatorManagesFinance` (financeManager).  No hard delete.
@@ -2509,7 +2743,8 @@ service cloud.firestore {
     // rule is in place first so that a forgotten collection can only ever
     // under-grant.  Each of those steps must still add its own read/write and
     // field-validation rules here.
-    //   memberAvailability, swapRequests, notificationInbox, memberStats
+    //   memberStats (memberAvailability, swapRequests and notificationInbox
+    //   were carved out above in P3-26.)
     // (choreOccurrences was carved out above in P3-13.)
     // ══════════════════════════════════════════════════════════════════════
     match /families/{f}/{collection}/{doc} {

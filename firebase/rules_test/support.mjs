@@ -361,6 +361,52 @@ export const occurrenceDoc = (uid, extra = {}) =>
     ...extra,
   });
 
+/** `AvailabilityMappers.toMap` shape (P3-26): the closed `availabilityKeys()`. */
+export const availabilityDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    memberId: uid,
+    startDateKey: '2026-10-24',
+    endDateKey: '2026-10-26',
+    typeId: 'sick',
+    reason: 'Fever',
+    status: 'active',
+    decidedBy: null,
+    decidedAt: null,
+    ...extra,
+  });
+
+/** `SwapMappers.toMap` shape (P3-26): the closed `swapKeys()`. */
+export const swapDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    occurrenceId: 'tpl_1_20261024',
+    occurrenceDateKey: '2026-10-24',
+    kind: 'swap',
+    fromMemberId: uid,
+    toMemberId: 'gina',
+    reason: 'I am travelling',
+    status: 'pending',
+    expiresAt: Timestamp.fromMillis(Date.now() + 24 * 3600 * 1000),
+    respondedAt: null,
+    respondedBy: null,
+    responseReason: null,
+    availabilityId: null,
+    requestedBy: uid,
+    ...extra,
+  });
+
+/** An inbox row as `OccurrenceWriteStager` writes it (P3-26 `inboxKeys()`). */
+export const inboxDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    toMemberId: 'gina',
+    type: 'swap_request',
+    refType: 'swapRequest',
+    refId: 'swap_1',
+    params: { name: 'Dishes', date: '2026-10-24' },
+    readAt: null,
+    archivedAt: null,
+    ...extra,
+  });
+
 /** `CommentMappers.toMap` shape (P3-25): the closed `commentKeys()` set. */
 export const commentDoc = (uid, extra = {}) =>
   baseDoc(uid, {

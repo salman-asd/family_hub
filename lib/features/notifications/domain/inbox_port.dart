@@ -70,6 +70,45 @@ abstract interface class InboxPort {
     required String dateKey,
     required String authorId,
   });
+  /// "Somebody asks you to take a chore" (swap) or "please cover" (policy B) —
+  /// to the recipient (P3-26).
+  NewInboxItem? swapRequested({
+    required String requestId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String fromMemberId,
+    required bool cover,
+  });
+
+  /// "Your request was accepted / declined / cancelled / expired" — to the
+  /// requester (or, for a cancel, to the recipient).
+  NewInboxItem? swapResult({
+    required String requestId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String outcome,
+    required String byMemberId,
+  });
+
+  /// "[count] chores need a cover" — to the absent member and to the managers.
+  NewInboxItem? needsCover({
+    required String availabilityId,
+    required String toMemberId,
+    required String absentMemberId,
+    required int count,
+    required String from,
+    required String to,
+  });
+
+  /// "Your absence was approved / rejected" — to the member.
+  NewInboxItem? absenceDecision({
+    required String availabilityId,
+    required String toMemberId,
+    required String status,
+    required String byMemberId,
+  });
 }
 
 /// The port used before P3-26: it builds nothing, so a test can tell "no inbox
@@ -111,6 +150,43 @@ final class NoopInboxPort implements InboxPort {
     required String choreName,
     required String dateKey,
     required String authorId,
+  }) => null;
+  @override
+  NewInboxItem? swapRequested({
+    required String requestId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String fromMemberId,
+    required bool cover,
+  }) => null;
+
+  @override
+  NewInboxItem? swapResult({
+    required String requestId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String outcome,
+    required String byMemberId,
+  }) => null;
+
+  @override
+  NewInboxItem? needsCover({
+    required String availabilityId,
+    required String toMemberId,
+    required String absentMemberId,
+    required int count,
+    required String from,
+    required String to,
+  }) => null;
+
+  @override
+  NewInboxItem? absenceDecision({
+    required String availabilityId,
+    required String toMemberId,
+    required String status,
+    required String byMemberId,
   }) => null;
 }
 

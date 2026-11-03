@@ -13,6 +13,7 @@ import 'package:family_hub/features/chores/occurrences/domain/usecases/uncomplet
 import 'package:family_hub/features/chores/occurrences/domain/usecases/unskip_occurrence.dart';
 import 'package:family_hub/features/chores/occurrences/domain/usecases/verify_occurrence.dart';
 import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
+import 'package:family_hub/features/chores/presentation/chores_inbox_port.dart';
 import 'package:family_hub/features/notifications/domain/inbox_port.dart';
 
 import '../../../chores_test_helpers.dart';
@@ -202,6 +203,85 @@ class RecordingInboxPort implements InboxPort {
     toMemberId,
     occurrenceId,
     <String, String>{'name': choreName, 'date': dateKey, 'by': authorId},
+  );
+
+  static const ChoresInboxPort _real = ChoresInboxPort();
+
+  NewInboxItem _log(NewInboxItem? item) {
+    sent.add('${item!.type} -> ${item.toMemberId}');
+    return item;
+  }
+
+  @override
+  NewInboxItem? swapRequested({
+    required String requestId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String fromMemberId,
+    required bool cover,
+  }) => _log(
+    _real.swapRequested(
+      requestId: requestId,
+      toMemberId: toMemberId,
+      choreName: choreName,
+      dateKey: dateKey,
+      fromMemberId: fromMemberId,
+      cover: cover,
+    ),
+  );
+
+  @override
+  NewInboxItem? swapResult({
+    required String requestId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String outcome,
+    required String byMemberId,
+  }) => _log(
+    _real.swapResult(
+      requestId: requestId,
+      toMemberId: toMemberId,
+      choreName: choreName,
+      dateKey: dateKey,
+      outcome: outcome,
+      byMemberId: byMemberId,
+    ),
+  );
+
+  @override
+  NewInboxItem? needsCover({
+    required String availabilityId,
+    required String toMemberId,
+    required String absentMemberId,
+    required int count,
+    required String from,
+    required String to,
+  }) => _log(
+    _real.needsCover(
+      availabilityId: availabilityId,
+      toMemberId: toMemberId,
+      absentMemberId: absentMemberId,
+      count: count,
+      from: from,
+      to: to,
+    ),
+  );
+
+  @override
+  NewInboxItem? absenceDecision({
+    required String availabilityId,
+    required String toMemberId,
+    required String status,
+    required String byMemberId,
+  }) => _log(
+    _real.absenceDecision(
+      availabilityId: availabilityId,
+      toMemberId: toMemberId,
+      status: status,
+      byMemberId: byMemberId,
+    ),
   );
 
   NewInboxItem _record(

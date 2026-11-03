@@ -16,6 +16,7 @@ import 'package:family_hub/features/family/domain/family_repository.dart';
 import '../../support/in_memory_backend.dart';
 import '../../support/in_memory_chores_backend.dart';
 import '../../support/in_memory_comment_backend.dart';
+import '../../support/in_memory_swap_backend.dart';
 
 import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
 import 'package:family_hub/features/chores/templates/domain/recurrence/recurrence.dart';
@@ -59,6 +60,11 @@ class ChoresFixture {
   late final InMemoryCommentBackend comments = InMemoryCommentBackend(
     occurrences,
   );
+  late final SwapWorld swapWorld = SwapWorld(occurrences);
+  late final InMemorySwapBackend swaps = InMemorySwapBackend(swapWorld);
+  late final InMemoryAvailabilityBackend availability =
+      InMemoryAvailabilityBackend(swapWorld);
+  final InMemoryInboxBackend inboxRows = InMemoryInboxBackend();
 
   void _seedFamily() {
     backend.families[familyId] = const Family(
