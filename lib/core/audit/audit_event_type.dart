@@ -89,6 +89,7 @@ abstract final class AuditEventType {
       'chores.occurrence_reassigned';
   static const String choresCommentAdded = 'chores.comment_added';
   static const String choresCommentHidden = 'chores.comment_hidden';
+  static const String choresCommentUnhidden = 'chores.comment_unhidden';
   static const String choresAvailabilityAdded = 'chores.availability_added';
   static const String choresAvailabilityCancelled =
       'chores.availability_cancelled';
@@ -169,6 +170,7 @@ abstract final class AuditEventType {
     choresOccurrenceReassigned,
     choresCommentAdded,
     choresCommentHidden,
+    choresCommentUnhidden,
     choresAvailabilityAdded,
     choresAvailabilityCancelled,
     choresAvailabilityDecided,

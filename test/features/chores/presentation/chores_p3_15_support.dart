@@ -8,6 +8,7 @@ import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_providers.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
+import 'package:family_hub/features/chores/comments/presentation/comment_providers.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
@@ -68,6 +69,7 @@ Future<ChoresFixture> pumpP3Screen(
           ),
         ),
         occurrenceRepositoryProvider.overrideWithValue(fixture.occurrences),
+        commentRepositoryProvider.overrideWithValue(fixture.comments),
         generationMarkerRepositoryProvider.overrideWithValue(
           fixture.occurrences,
         ),

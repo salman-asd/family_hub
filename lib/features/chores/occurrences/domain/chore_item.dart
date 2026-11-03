@@ -89,6 +89,7 @@ final class ChoreItem {
     this.verification = VerificationMode.off,
     this.assigneeId,
     this.plannedAssigneeId,
+    this.lastCommentAt,
   }) : flags = Set<ChoreFlag>.unmodifiable(flags);
 
   /// A stored occurrence.
@@ -163,6 +164,7 @@ final class ChoreItem {
       flags: flags,
       assigneeId: assignee,
       plannedAssigneeId: occurrence.plannedAssigneeId,
+      lastCommentAt: occurrence.lastCommentAt,
       progress: ChoreProgress(
         done: occurrence.doneCount,
         total: occurrence.subtasks.length,
@@ -198,6 +200,10 @@ final class ChoreItem {
 
   /// Who the rotation planned, even when somebody else covers it.
   final String? plannedAssigneeId;
+
+  /// When somebody last commented (P3-25); the tile compares it with the
+  /// viewer's local last-seen instant to show the "new comments" dot.
+  final DateTime? lastCommentAt;
   final ChoreProgress progress;
 
   bool has(ChoreFlag flag) => flags.contains(flag);
@@ -230,6 +236,7 @@ final class ChoreItem {
     Set<ChoreFlag>? flags,
     Object? assigneeId = _unset,
     Object? plannedAssigneeId = _unset,
+    Object? lastCommentAt = _unset,
     ChoreProgress? progress,
   }) => ChoreItem(
     id: id ?? this.id,
@@ -253,6 +260,7 @@ final class ChoreItem {
     flags: flags ?? this.flags,
     assigneeId: _pick(assigneeId, this.assigneeId),
     plannedAssigneeId: _pick(plannedAssigneeId, this.plannedAssigneeId),
+    lastCommentAt: _pick(lastCommentAt, this.lastCommentAt),
     progress: progress ?? this.progress,
   );
 
@@ -281,6 +289,7 @@ final class ChoreItem {
       other.flags.containsAll(flags) &&
       other.assigneeId == assigneeId &&
       other.plannedAssigneeId == plannedAssigneeId &&
+      other.lastCommentAt == lastCommentAt &&
       other.progress == progress;
 
   @override
@@ -306,6 +315,7 @@ final class ChoreItem {
     Object.hashAllUnordered(flags),
     assigneeId,
     plannedAssigneeId,
+    lastCommentAt,
     progress,
   ]);
 

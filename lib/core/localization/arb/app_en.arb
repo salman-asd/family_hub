@@ -3994,5 +3994,77 @@
   "calendarDayPanelLabel": "Chores of the selected day",
   "@calendarDayPanelLabel": {},
   "galleryCalendarPolish": "Calendar heat and hatch",
-  "@galleryCalendarPolish": {}
+  "@galleryCalendarPolish": {},
+  "commentsTitle": "Comments",
+  "@commentsTitle": {},
+  "commentsEmpty": "No comments yet. Say what is wrong or what was done.",
+  "@commentsEmpty": {},
+  "commentsHint": "Write a comment",
+  "@commentsHint": {},
+  "commentsSend": "Send",
+  "@commentsSend": {},
+  "commentsFlagLabel": "Flag as incorrect or incomplete",
+  "@commentsFlagLabel": {},
+  "commentFlagged": "Needs attention",
+  "@commentFlagged": {},
+  "commentResolved": "Resolved",
+  "@commentResolved": {},
+  "commentResolve": "Mark as resolved",
+  "@commentResolve": {},
+  "commentReopenWithReason": "Reopen with this reason",
+  "@commentReopenWithReason": {},
+  "commentHide": "Hide",
+  "@commentHide": {},
+  "commentUnhide": "Show again",
+  "@commentUnhide": {},
+  "commentHiddenByManager": "Hidden by a manager",
+  "@commentHiddenByManager": {},
+  "commentHideTitle": "Hide this comment",
+  "@commentHideTitle": {},
+  "commentUnhideTitle": "Show this comment again",
+  "@commentUnhideTitle": {},
+  "commentHideHint": "Why? (3 to 200 characters)",
+  "@commentHideHint": {},
+  "commentYou": "You",
+  "@commentYou": {},
+  "commentUnreadSemantics": "New comments",
+  "@commentUnreadSemantics": {},
+  "commentsLimitReached": "Only the first 200 comments are shown.",
+  "@commentsLimitReached": {},
+  "commentsNew": "{count} new",
+  "@commentsNew": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "commentBubbleLabel": "{author}, {time}: {text}",
+  "@commentBubbleLabel": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresCommentUnhidden": "{member} showed a comment on {name} on {date} again",
+  "@activityChoresCommentUnhidden": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

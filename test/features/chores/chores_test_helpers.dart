@@ -15,6 +15,7 @@ import 'package:family_hub/features/family/domain/family_repository.dart';
 
 import '../../support/in_memory_backend.dart';
 import '../../support/in_memory_chores_backend.dart';
+import '../../support/in_memory_comment_backend.dart';
 
 import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
 import 'package:family_hub/features/chores/templates/domain/recurrence/recurrence.dart';
@@ -55,6 +56,9 @@ class ChoresFixture {
   final FakeChoreSettingsRepository settings = FakeChoreSettingsRepository();
   final InMemoryChoresBackend chores = InMemoryChoresBackend();
   final InMemoryOccurrenceBackend occurrences = InMemoryOccurrenceBackend();
+  late final InMemoryCommentBackend comments = InMemoryCommentBackend(
+    occurrences,
+  );
 
   void _seedFamily() {
     backend.families[familyId] = const Family(

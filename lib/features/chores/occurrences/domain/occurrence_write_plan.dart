@@ -100,6 +100,7 @@ final class NewEvent {
     this.toAssigneeId,
     this.reason,
     this.prevCompletedAt,
+    this.redoSubtaskIds = const <String>[],
     this.requestId,
   });
 
@@ -115,6 +116,9 @@ final class NewEvent {
   /// Required for `reassigned`, `reopened`, `exception`, `skipped` (3–300).
   final String? reason;
   final DateTime? prevCompletedAt;
+
+  /// The steps a reopen sends back to "not done" (B-04).
+  final List<String> redoSubtaskIds;
   final String? requestId;
 
   NewEvent withId(String newId) => NewEvent(
@@ -125,6 +129,7 @@ final class NewEvent {
     toAssigneeId: toAssigneeId,
     reason: reason,
     prevCompletedAt: prevCompletedAt,
+    redoSubtaskIds: redoSubtaskIds,
     requestId: requestId,
   );
 
@@ -132,8 +137,7 @@ final class NewEvent {
   String toString() => 'NewEvent(${type.id} on $occurrenceId)';
 }
 
-/// An inbox row for another member (the real notification port arrives in
-/// P3-26; the plan only carries the data so the write stays one batch).
+/// An inbox row for another member, carried by the plan (one batch).
 final class NewInboxItem {
   const NewInboxItem({
     this.id = '',
@@ -144,9 +148,8 @@ final class NewInboxItem {
     this.params = const <String, String>{},
   });
 
-  /// Unique row id, generated ONCE per user intent (B-10). Leave it empty and
-  /// the plan builder stamps it; the stager refuses an empty id, so a retry of
-  /// the same intent overwrites the same row instead of adding a second one.
+  /// Unique row id, generated ONCE per user intent (B-10); the plan builder
+  /// stamps it and the stager refuses an empty one, so a retry rewrites it.
   final String id;
 
   final String toMemberId;

@@ -7701,6 +7701,132 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'ক্যালেন্ডারের রং ও দাগ'**
   String get galleryCalendarPolish;
+
+  /// No description provided for @commentsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'মন্তব্য'**
+  String get commentsTitle;
+
+  /// No description provided for @commentsEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনও কোনো মন্তব্য নেই। কী ঠিক নেই বা কী করা হয়েছে লিখুন।'**
+  String get commentsEmpty;
+
+  /// No description provided for @commentsHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'মন্তব্য লিখুন'**
+  String get commentsHint;
+
+  /// No description provided for @commentsSend.
+  ///
+  /// In bn, this message translates to:
+  /// **'পাঠান'**
+  String get commentsSend;
+
+  /// No description provided for @commentsFlagLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'ভুল বা অসম্পূর্ণ হিসেবে চিহ্নিত করুন'**
+  String get commentsFlagLabel;
+
+  /// No description provided for @commentFlagged.
+  ///
+  /// In bn, this message translates to:
+  /// **'মনোযোগ দরকার'**
+  String get commentFlagged;
+
+  /// No description provided for @commentResolved.
+  ///
+  /// In bn, this message translates to:
+  /// **'সমাধান হয়েছে'**
+  String get commentResolved;
+
+  /// No description provided for @commentResolve.
+  ///
+  /// In bn, this message translates to:
+  /// **'সমাধান হয়েছে বলুন'**
+  String get commentResolve;
+
+  /// No description provided for @commentReopenWithReason.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কারণে আবার খুলুন'**
+  String get commentReopenWithReason;
+
+  /// No description provided for @commentHide.
+  ///
+  /// In bn, this message translates to:
+  /// **'লুকান'**
+  String get commentHide;
+
+  /// No description provided for @commentUnhide.
+  ///
+  /// In bn, this message translates to:
+  /// **'আবার দেখান'**
+  String get commentUnhide;
+
+  /// No description provided for @commentHiddenByManager.
+  ///
+  /// In bn, this message translates to:
+  /// **'ম্যানেজার লুকিয়েছেন'**
+  String get commentHiddenByManager;
+
+  /// No description provided for @commentHideTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মন্তব্য লুকান'**
+  String get commentHideTitle;
+
+  /// No description provided for @commentUnhideTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মন্তব্য আবার দেখান'**
+  String get commentUnhideTitle;
+
+  /// No description provided for @commentHideHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেন? (৩ থেকে ২০০ অক্ষর)'**
+  String get commentHideHint;
+
+  /// No description provided for @commentYou.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি'**
+  String get commentYou;
+
+  /// No description provided for @commentUnreadSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন মন্তব্য'**
+  String get commentUnreadSemantics;
+
+  /// No description provided for @commentsLimitReached.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু প্রথম ২০০টি মন্তব্য দেখানো হচ্ছে।'**
+  String get commentsLimitReached;
+
+  /// No description provided for @commentsNew.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি নতুন'**
+  String commentsNew(String count);
+
+  /// No description provided for @commentBubbleLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'{author}, {time}: {text}'**
+  String commentBubbleLabel(String author, String time, String text);
+
+  /// No description provided for @activityChoresCommentUnhidden.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member} {date}-এ {name} এর একটি মন্তব্য আবার দেখিয়েছেন'**
+  String activityChoresCommentUnhidden(String member, String name, String date);
 }
 
 class _AppLocalizationsDelegate

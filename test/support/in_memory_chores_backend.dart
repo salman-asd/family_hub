@@ -434,6 +434,7 @@ class InMemoryOccurrenceBackend
           toAssigneeId: event.toAssigneeId,
           reason: event.reason,
           prevCompletedAt: event.prevCompletedAt,
+          redoSubtaskIds: event.redoSubtaskIds,
           requestId: event.requestId,
         ),
       );

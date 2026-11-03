@@ -5,8 +5,9 @@ import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permission.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart'
     as domain;
-import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
+import 'package:family_hub/features/chores/comments/presentation/comment_providers.dart';
 import 'package:family_hub/features/chores/presentation/chore_icons.dart';
+import 'package:family_hub/features/chores/presentation/widgets/chore_tile_mapping.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
@@ -17,6 +18,8 @@ import 'package:family_hub/shared/widgets/status_glyph.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+export 'package:family_hub/features/chores/presentation/widgets/chore_tile_mapping.dart';
 
 /// THE chore row of Phase 3: Today, the day panel, the agenda and the verify
 /// queue all render this widget, so a chore looks the same everywhere (P3-15).
@@ -67,6 +70,9 @@ class ChoreTile extends ConsumerWidget {
         : members.where((m) => m.uid == item.plannedAssigneeId).firstOrNull;
     // U-03: a projected item has no document yet, so it cannot be opened.
     final VoidCallback? tap = canOpenOccurrence(item) ? onTap : null;
+    final unread = ref.watch(
+      hasUnreadCommentProvider((id: item.id, last: item.lastCommentAt)),
+    );
     final radius = BorderRadius.circular(t.radiusMd);
 
     return Material(
@@ -83,7 +89,7 @@ class ChoreTile extends ConsumerWidget {
             Expanded(
               child: Semantics(
                 button: tap != null,
-                label: _semantic(l10n),
+                label: _semantic(l10n, unread: unread),
                 customSemanticsActions: semanticActions,
                 excludeSemantics: true,
                 child: InkWell(
@@ -94,7 +100,7 @@ class ChoreTile extends ConsumerWidget {
                       horizontal: 12,
                       vertical: 10,
                     ),
-                    child: _content(context, l10n, assignee, planned),
+                    child: _content(context, l10n, assignee, planned, unread),
                   ),
                 ),
               ),
@@ -115,6 +121,7 @@ class ChoreTile extends ConsumerWidget {
     AppLocalizations l10n,
     Member? assignee,
     Member? planned,
+    bool unread,
   ) {
     final t = context.tokens;
     return Row(
@@ -149,6 +156,10 @@ class ChoreTile extends ConsumerWidget {
           ),
         ),
         const SizedBox(width: 8),
+        if (unread) ...[
+          Icon(Icons.mode_comment_rounded, size: 14, color: t.accentStrong),
+          const SizedBox(width: 6),
+        ],
         AnimatedStatusGlyph(status: widgetStatusOf(item.status), size: 14),
         if (item.progress.hasSubtasks) ...[
           const SizedBox(width: 6),
@@ -183,7 +194,7 @@ class ChoreTile extends ConsumerWidget {
       ? item.nameBn
       : (item.nameEn ?? item.nameBn);
 
-  String _semantic(AppLocalizations l10n) {
+  String _semantic(AppLocalizations l10n, {bool unread = false}) {
     final parts = <String>[
       _nameLabel(l10n),
       statusLabelOf(item.status, l10n),
@@ -195,6 +206,7 @@ class ChoreTile extends ConsumerWidget {
           formatters.number(item.progress.total),
         ),
       if (item.isProjected) l10n.choreFlagPlanned,
+      if (unread) l10n.commentUnreadSemantics,
       for (final flag in item.flags)
         if (flag != domain.ChoreFlag.isProjected)
           chips.FlagChip.labelFor(sharedFlag(flag), l10n),
@@ -247,52 +259,4 @@ class _SubLine extends StatelessWidget {
       ],
     );
   }
-}
-
-/// The domain's flag set mapped onto the shared widget's enum.
-chips.ChoreFlag sharedFlag(domain.ChoreFlag flag) => switch (flag) {
-  domain.ChoreFlag.needsCover => chips.ChoreFlag.needsCover,
-  domain.ChoreFlag.awaitingVerification => chips.ChoreFlag.awaitingVerification,
-  domain.ChoreFlag.needsAttention => chips.ChoreFlag.needsAttention,
-  domain.ChoreFlag.isProjected => chips.ChoreFlag.planned,
-  domain.ChoreFlag.isCover => chips.ChoreFlag.needsCover,
-  domain.ChoreFlag.hasPendingSwap => chips.ChoreFlag.swapPending,
-};
-
-/// The shared widget's status for a derived [ChoreStatus].
-WidgetStatus widgetStatusOf(ChoreStatus status) => switch (status) {
-  ChoreStatus.scheduled => WidgetStatus.scheduled,
-  ChoreStatus.inProgress => WidgetStatus.inProgress,
-  ChoreStatus.completed => WidgetStatus.completed,
-  ChoreStatus.verified => WidgetStatus.verified,
-  ChoreStatus.overdue => WidgetStatus.overdue,
-  ChoreStatus.skipped => WidgetStatus.skipped,
-};
-
-/// The localized name of a [ChoreStatus].
-String statusLabelOf(ChoreStatus status, AppLocalizations l10n) =>
-    switch (status) {
-      ChoreStatus.scheduled => l10n.statusScheduled,
-      ChoreStatus.inProgress => l10n.statusInProgress,
-      ChoreStatus.completed => l10n.statusCompleted,
-      ChoreStatus.verified => l10n.statusVerified,
-      ChoreStatus.overdue => l10n.statusOverdue,
-      ChoreStatus.skipped => l10n.choreStatusSkipped,
-    };
-
-/// True when [item] can open the detail screen. A projected item (the
-/// generator's draft, not yet written) has no document, so it is shown as
-/// "planned" and stays read-only until the calendar can materialize it (U-03).
-bool canOpenOccurrence(domain.ChoreItem item) => !item.isProjected;
-
-/// True when the viewer may complete [item] (assignee, manager, or the family
-/// switch) — used by a swipe action to hide what cannot work.
-bool mayComplete(WidgetRef ref, domain.ChoreItem item) {
-  final uid = ref.watch(currentUidProvider);
-  if (uid == null) return false;
-  final own = item.assigneeId == uid;
-  return ref.can(
-    own ? Permission.completeOwnChore : Permission.completeChoreForOthers,
-    ownerId: item.assigneeId,
-  );
 }

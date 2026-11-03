@@ -652,6 +652,37 @@ service cloud.firestore {
     function occurrenceChanged() {
       return request.resource.data.diff(resource.data).affectedKeys();
     }
+    // P3-25 comments: exactly what `CommentMappers.toMap` writes.  The text and
+    // the author never change; a later write only resolves, hides or unhides.
+    function commentKeys() {
+      return ['authorId', 'text', 'needsAttention', 'resolvedAt', 'resolvedBy',
+              'hidden', 'hiddenBy', 'hiddenNote', 'createdAt', 'createdBy',
+              'updatedAt', 'updatedBy', 'schemaVersion', 'deletedAt',
+              'deletedBy'];
+    }
+    function commentOk(d) {
+      return d.keys().hasOnly(commentKeys())
+        && str(d.get('authorId', ''), 1, 64)
+        && str(d.get('text', ''), 1, 1000)
+        && d.get('needsAttention', false) is bool
+        && nullableTimestamp(d, 'resolvedAt')
+        && nullableId(d, 'resolvedBy')
+        && d.get('hidden', false) is bool
+        && nullableId(d, 'hiddenBy')
+        && optStr(d, 'hiddenNote', 200)
+        && d.get('deletedAt', null) == null
+        && d.get('deletedBy', null) == null;
+    }
+    function commentFresh(d) {
+      return d.get('hidden', false) == false
+        && d.get('resolvedAt', null) == null
+        && d.get('resolvedBy', null) == null
+        && d.get('hiddenBy', null) == null
+        && d.get('hiddenNote', null) == null;
+    }
+    function commentChanged() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
     // Phase 2 catalog (P2-05): the exact fields `CatalogMappers` writes.
     function categoryKeys() {
       return ['nameBn', 'nameEn', 'colorIndex', 'emoji', 'imageData',
@@ -1254,6 +1285,7 @@ service cloud.firestore {
               'chores.occurrence_exception', 'chores.occurrence_skipped',
               'chores.occurrence_unskipped', 'chores.occurrence_reassigned',
               'chores.comment_added', 'chores.comment_hidden',
+              'chores.comment_unhidden',
               'chores.availability_added', 'chores.availability_cancelled',
               'chores.availability_decided', 'chores.swap_requested',
               'chores.swap_accepted', 'chores.swap_declined',
@@ -2273,9 +2305,11 @@ service cloud.firestore {
           && occurrenceChanged()
                .hasOnly(['needsAttention', 'lastCommentAt',
                          'updatedAt', 'updatedBy'])
-          && (next().get('needsAttention', false) == false
-              ? mayTick(f, prev())
-              : true);
+          // Anybody active may comment (`lastCommentAt` only) or RAISE the
+          // flag; only whoever may act on the chore may clear it (P3-25).
+          && (!occurrenceChanged().hasAny(['needsAttention'])
+              || next().get('needsAttention', false) == true
+              || mayTick(f, prev()));
 
         // 10. REPLAN (manager): only an unstarted document, only its snapshot.
         allow update: if verified()
@@ -2349,6 +2383,55 @@ service cloud.firestore {
                                                  'skipped', 'reassigned'])
                 || str(request.resource.data.get('reason', ''), 3, 300));
           allow update, delete: if false;
+        }
+
+        // P3-25: the comment thread.  Created by any active member as
+        // themselves (the chore must exist after the batch, so a projected
+        // chore can be materialized with its first comment); afterwards ONLY
+        // resolved (whoever may act on the chore), hidden or shown again (a
+        // manager, with a note).  Text and author are frozen; no delete.
+        match /comments/{c} {
+          allow read: if isActiveMember(f);
+          allow create: if verified()
+            && isActiveMember(f)
+            && createsAsSelf()
+            && commentOk(request.resource.data)
+            && commentFresh(request.resource.data)
+            && request.resource.data.authorId == request.auth.uid
+            && existsAfter(occurrencePath(f, o));
+          // RESOLVE a flagged, visible comment.
+          allow update: if verified()
+            && isActiveMember(f)
+            && commentOk(request.resource.data)
+            && resource.data.get('needsAttention', false) == true
+            && resource.data.get('resolvedAt', null) == null
+            && resource.data.get('hidden', false) == false
+            && request.resource.data.get('resolvedAt', null) is timestamp
+            && request.resource.data.get('resolvedBy', null) == request.auth.uid
+            && mayTick(f, get(occurrencePath(f, o)).data)
+            && commentChanged().hasOnly(['resolvedAt', 'resolvedBy',
+                                         'updatedAt', 'updatedBy']);
+          // HIDE (manager, note 3-200).
+          allow update: if verified()
+            && isManager(f)
+            && commentOk(request.resource.data)
+            && resource.data.get('hidden', false) == false
+            && request.resource.data.get('hidden', false) == true
+            && request.resource.data.get('hiddenBy', null) == request.auth.uid
+            && str(request.resource.data.get('hiddenNote', null), 3, 200)
+            && commentChanged().hasOnly(['hidden', 'hiddenBy', 'hiddenNote',
+                                         'updatedAt', 'updatedBy']);
+          // SHOW AGAIN (manager): the hide fields are cleared.
+          allow update: if verified()
+            && isManager(f)
+            && commentOk(request.resource.data)
+            && resource.data.get('hidden', false) == true
+            && request.resource.data.get('hidden', false) == false
+            && request.resource.data.get('hiddenBy', null) == null
+            && request.resource.data.get('hiddenNote', null) == null
+            && commentChanged().hasOnly(['hidden', 'hiddenBy', 'hiddenNote',
+                                         'updatedAt', 'updatedBy']);
+          allow delete: if false;
         }
       }
 

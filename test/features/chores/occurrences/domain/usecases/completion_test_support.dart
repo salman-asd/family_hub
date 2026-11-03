@@ -190,6 +190,20 @@ class RecordingInboxPort implements InboxPort {
     <String, String>{'name': choreName, 'date': dateKey, 'by': byMemberId},
   );
 
+  @override
+  NewInboxItem? commentAttention({
+    required String occurrenceId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String authorId,
+  }) => _record(
+    InboxType.commentAttention,
+    toMemberId,
+    occurrenceId,
+    <String, String>{'name': choreName, 'date': dateKey, 'by': authorId},
+  );
+
   NewInboxItem _record(
     String type,
     String toMemberId,

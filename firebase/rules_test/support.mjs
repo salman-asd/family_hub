@@ -361,6 +361,20 @@ export const occurrenceDoc = (uid, extra = {}) =>
     ...extra,
   });
 
+/** `CommentMappers.toMap` shape (P3-25): the closed `commentKeys()` set. */
+export const commentDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    authorId: uid,
+    text: 'The sink is still dirty',
+    needsAttention: false,
+    resolvedAt: null,
+    resolvedBy: null,
+    hidden: false,
+    hiddenBy: null,
+    hiddenNote: null,
+    ...extra,
+  });
+
 /**
  * `OccurrenceEventMappers.toMap` shape (P3-13).
  *

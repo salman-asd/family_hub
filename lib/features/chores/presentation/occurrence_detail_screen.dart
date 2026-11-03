@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/features/chores/comments/presentation/widgets/comments_section.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/chores/occurrences/domain/usecases/repair_status.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_action_providers.dart';
@@ -143,6 +144,11 @@ class _OccurrenceDetailScreenState
                   formatters: ref.watch(appFormattersProvider),
                   today: ref.watch(familyDateKeysProvider).today(),
                   busy: _busy,
+                  comments: CommentsSection(
+                    occurrence: occurrence,
+                    item: found,
+                    formatters: ref.watch(appFormattersProvider),
+                  ),
                   onToggleParent: () => _run(
                     (s) => ref.read(toggleParentProvider)(
                       familyId: s.familyId,

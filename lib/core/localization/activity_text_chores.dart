@@ -76,6 +76,11 @@ extension ActivityTextChores on AppLocalizations {
         p('name'),
         p('date'),
       ),
+      AuditEventType.choresCommentUnhidden => activityChoresCommentUnhidden(
+        p('member'),
+        p('name'),
+        p('date'),
+      ),
       AuditEventType.choresAvailabilityAdded => activityChoresAvailabilityAdded(
         p('member'),
         p('from'),

@@ -3993,5 +3993,77 @@
   "calendarDayPanelLabel": "নির্বাচিত দিনের কাজ",
   "@calendarDayPanelLabel": {},
   "galleryCalendarPolish": "ক্যালেন্ডারের রং ও দাগ",
-  "@galleryCalendarPolish": {}
+  "@galleryCalendarPolish": {},
+  "commentsTitle": "মন্তব্য",
+  "@commentsTitle": {},
+  "commentsEmpty": "এখনও কোনো মন্তব্য নেই। কী ঠিক নেই বা কী করা হয়েছে লিখুন।",
+  "@commentsEmpty": {},
+  "commentsHint": "মন্তব্য লিখুন",
+  "@commentsHint": {},
+  "commentsSend": "পাঠান",
+  "@commentsSend": {},
+  "commentsFlagLabel": "ভুল বা অসম্পূর্ণ হিসেবে চিহ্নিত করুন",
+  "@commentsFlagLabel": {},
+  "commentFlagged": "মনোযোগ দরকার",
+  "@commentFlagged": {},
+  "commentResolved": "সমাধান হয়েছে",
+  "@commentResolved": {},
+  "commentResolve": "সমাধান হয়েছে বলুন",
+  "@commentResolve": {},
+  "commentReopenWithReason": "এই কারণে আবার খুলুন",
+  "@commentReopenWithReason": {},
+  "commentHide": "লুকান",
+  "@commentHide": {},
+  "commentUnhide": "আবার দেখান",
+  "@commentUnhide": {},
+  "commentHiddenByManager": "ম্যানেজার লুকিয়েছেন",
+  "@commentHiddenByManager": {},
+  "commentHideTitle": "এই মন্তব্য লুকান",
+  "@commentHideTitle": {},
+  "commentUnhideTitle": "এই মন্তব্য আবার দেখান",
+  "@commentUnhideTitle": {},
+  "commentHideHint": "কেন? (৩ থেকে ২০০ অক্ষর)",
+  "@commentHideHint": {},
+  "commentYou": "আপনি",
+  "@commentYou": {},
+  "commentUnreadSemantics": "নতুন মন্তব্য",
+  "@commentUnreadSemantics": {},
+  "commentsLimitReached": "শুধু প্রথম ২০০টি মন্তব্য দেখানো হচ্ছে।",
+  "@commentsLimitReached": {},
+  "commentsNew": "{count}টি নতুন",
+  "@commentsNew": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "commentBubbleLabel": "{author}, {time}: {text}",
+  "@commentBubbleLabel": {
+    "placeholders": {
+      "author": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "text": {
+        "type": "String"
+      }
+    }
+  },
+  "activityChoresCommentUnhidden": "{member} {date}-এ {name} এর একটি মন্তব্য আবার দেখিয়েছেন",
+  "@activityChoresCommentUnhidden": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "name": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

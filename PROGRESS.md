@@ -1713,3 +1713,35 @@ Tests: `test/app/theme/heat_ramp_test.dart` (contrast table, every registered th
 - Likeliest first failures: `Semantics(role: ...)` signatures, the `AnimatedSwitcher` Today pill with zero duration, the two-pane test text finder (`'1 chore'`), the 900-item "model not rebuilt" test (assumes the provider emits once settled).
 - `chore_widgets_test.dart` finds `StatusGlyph`; it is still built inside `AnimatedStatusGlyph`, so finders should hold.
 - B.9-24 (banner when > 900) was already covered by P3-22 tests and is unchanged.
+
+## Phase 3 - P3-25 Comments
+
+Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `flutter gen-l10n` (21 keys hand-added to both ARBs and the three generated files; no functional diff expected), `flutter analyze`, `flutter test --exclude-tags golden`, `npm run test:emulator` (new `chore_comments.test.mjs`), `node tools/check_indexes.mjs` (no index added: the thread is a single-field `createdAt` order).
+
+### Verification of the base (found and fixed)
+- **Compile error in the base:** `OccurrenceWriteStager` and `verify_reopen_skip_reassign_test` used `NewEvent.redoSubtaskIds`, which did not exist. Added the field (+ `withId`), `ReopenOccurrence` now passes the steps it unticks, and the in-memory backend copies it. `occurrence_write_plan.dart` is exactly 300 lines.
+- **Rules bug fixed (rule 9):** `next().needsAttention == false ? mayTick : true` also fired when the flag was NOT changed, so a plain member could not even record `lastCommentAt`. Now: no flag change, or raising it, is open to any active member; only `mayTick` clears it.
+- Not verified here: Wave R0 gate rows, the rules suite, the two-account emulator walk-through (review roadmap section 10). `file_size_test` debt from P3-24 is unchanged; `chore_item.dart` grew by ~9 lines (was already over 300).
+
+### Delivered
+| Area | Files |
+| --- | --- |
+| domain | `comments/domain/{occurrence_comment, comment_write_plan, comment_repository, comment_flags, comment_loader, comment_moderation}.dart`, `usecases/{add_comment, mark_needs_attention, resolve_comment, hide_comment, unhide_comment}.dart` |
+| data | `comments/data/{comment_mappers, firestore_comment_repository}.dart`, wired in `bootstrap.dart` |
+| presentation | `comments/presentation/comment_providers.dart` (`commentsProvider`, `unreadCommentsProvider`, local last-seen), `widgets/{comments_section, comment_composer, comment_bubble}.dart`; detail screen/body edited; `reopenWithSheet(initialReason:)` = "Reopen with this reason"; `ChoreTile` shows an unread dot (mapping helpers moved to `chore_tile_mapping.dart`, re-exported) |
+| shared | `InboxPort.commentAttention` (+ Noop), `ChoreItem.lastCommentAt`, audit type `chores.comment_unhidden` (constants, rules, activity text) |
+| rules | `comments` subcollection (create, resolve, hide, unhide, no delete), rule 9 fix, `commentKeys()`; tests in `chore_comments.test.mjs`, `commentDoc` in `support.mjs` |
+| tests | use cases, mappers (keys == rules), flag math, widget tests (en, bn at 2.0), `InMemoryCommentBackend`, `ChoresFixture.comments` |
+
+### Decisions and deviations (please review)
+1. **Comment write is one `CommentWritePlan`** wrapping an `OccurrenceWritePlan`, not a separate batch, so a flag and its marker cannot split.
+2. **`MarkNeedsAttention` = a flagged `AddComment`** (the text is the reason); the rules allow no later edit of `needsAttention` on a comment.
+3. **Unhide has its own audit type** (`chores.comment_unhidden`) and needs a note (kept in the audit entry).
+4. Hiding/resolving the last open flag clears the occurrence marker; unhiding an open flag sets it again.
+5. Resolve uses `mayTick` (assignee, manager, or `membersCanCompleteForOthers`), the same as the rules.
+6. Hidden text stays readable through the SDK for members (see CLAUDE.md rule 56).
+7. Resolve/hide/unhide write no inbox row; only a flag notifies the assignee (the real inbox arrives in P3-26).
+8. Not done: the calendar day marker's "attention corner" already reads `needsAttention`; contract fixture for a comment document was not added (`CommentMappers` keys are checked against the rules in `comment_mappers_test`).
+
+### Open / to check when you run it
+- Likeliest first failures: the `switch (thread)` patterns in `comments_section.dart`, `_submit` closure typing, the `Provider.family` record key, `rulesList('commentKeys')` parsing, and the widget test text finders.

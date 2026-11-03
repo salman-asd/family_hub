@@ -4374,4 +4374,73 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get galleryCalendarPolish => 'ক্যালেন্ডারের রং ও দাগ';
+
+  @override
+  String get commentsTitle => 'মন্তব্য';
+
+  @override
+  String get commentsEmpty => 'এখনও কোনো মন্তব্য নেই। কী ঠিক নেই বা কী করা হয়েছে লিখুন।';
+
+  @override
+  String get commentsHint => 'মন্তব্য লিখুন';
+
+  @override
+  String get commentsSend => 'পাঠান';
+
+  @override
+  String get commentsFlagLabel => 'ভুল বা অসম্পূর্ণ হিসেবে চিহ্নিত করুন';
+
+  @override
+  String get commentFlagged => 'মনোযোগ দরকার';
+
+  @override
+  String get commentResolved => 'সমাধান হয়েছে';
+
+  @override
+  String get commentResolve => 'সমাধান হয়েছে বলুন';
+
+  @override
+  String get commentReopenWithReason => 'এই কারণে আবার খুলুন';
+
+  @override
+  String get commentHide => 'লুকান';
+
+  @override
+  String get commentUnhide => 'আবার দেখান';
+
+  @override
+  String get commentHiddenByManager => 'ম্যানেজার লুকিয়েছেন';
+
+  @override
+  String get commentHideTitle => 'এই মন্তব্য লুকান';
+
+  @override
+  String get commentUnhideTitle => 'এই মন্তব্য আবার দেখান';
+
+  @override
+  String get commentHideHint => 'কেন? (৩ থেকে ২০০ অক্ষর)';
+
+  @override
+  String get commentYou => 'আপনি';
+
+  @override
+  String get commentUnreadSemantics => 'নতুন মন্তব্য';
+
+  @override
+  String get commentsLimitReached => 'শুধু প্রথম ২০০টি মন্তব্য দেখানো হচ্ছে।';
+
+  @override
+  String commentsNew(String count) {
+    return '$countটি নতুন';
+  }
+
+  @override
+  String commentBubbleLabel(String author, String time, String text) {
+    return '$author, $time: $text';
+  }
+
+  @override
+  String activityChoresCommentUnhidden(String member, String name, String date) {
+    return '$member $date-এ $name এর একটি মন্তব্য আবার দেখিয়েছেন';
+  }
 }

@@ -4394,4 +4394,73 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get galleryCalendarPolish => 'Calendar heat and hatch';
+
+  @override
+  String get commentsTitle => 'Comments';
+
+  @override
+  String get commentsEmpty => 'No comments yet. Say what is wrong or what was done.';
+
+  @override
+  String get commentsHint => 'Write a comment';
+
+  @override
+  String get commentsSend => 'Send';
+
+  @override
+  String get commentsFlagLabel => 'Flag as incorrect or incomplete';
+
+  @override
+  String get commentFlagged => 'Needs attention';
+
+  @override
+  String get commentResolved => 'Resolved';
+
+  @override
+  String get commentResolve => 'Mark as resolved';
+
+  @override
+  String get commentReopenWithReason => 'Reopen with this reason';
+
+  @override
+  String get commentHide => 'Hide';
+
+  @override
+  String get commentUnhide => 'Show again';
+
+  @override
+  String get commentHiddenByManager => 'Hidden by a manager';
+
+  @override
+  String get commentHideTitle => 'Hide this comment';
+
+  @override
+  String get commentUnhideTitle => 'Show this comment again';
+
+  @override
+  String get commentHideHint => 'Why? (3 to 200 characters)';
+
+  @override
+  String get commentYou => 'You';
+
+  @override
+  String get commentUnreadSemantics => 'New comments';
+
+  @override
+  String get commentsLimitReached => 'Only the first 200 comments are shown.';
+
+  @override
+  String commentsNew(String count) {
+    return '$count new';
+  }
+
+  @override
+  String commentBubbleLabel(String author, String time, String text) {
+    return '$author, $time: $text';
+  }
+
+  @override
+  String activityChoresCommentUnhidden(String member, String name, String date) {
+    return '$member showed a comment on $name on $date again';
+  }
 }

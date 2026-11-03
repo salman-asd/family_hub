@@ -60,6 +60,16 @@ abstract interface class InboxPort {
     required String dateKey,
     required String byMemberId,
   });
+
+  /// "Somebody flagged your chore as incorrect or incomplete" — to the
+  /// assignee (P3-25).
+  NewInboxItem? commentAttention({
+    required String occurrenceId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String authorId,
+  });
 }
 
 /// The port used before P3-26: it builds nothing, so a test can tell "no inbox
@@ -92,6 +102,15 @@ final class NoopInboxPort implements InboxPort {
     required String choreName,
     required String dateKey,
     required String byMemberId,
+  }) => null;
+
+  @override
+  NewInboxItem? commentAttention({
+    required String occurrenceId,
+    required String toMemberId,
+    required String choreName,
+    required String dateKey,
+    required String authorId,
   }) => null;
 }
 

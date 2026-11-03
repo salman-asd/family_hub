@@ -26,6 +26,7 @@ class OccurrenceDetailBody extends StatelessWidget {
     required this.busy,
     required this.onToggleParent,
     required this.onToggleSubtask,
+    this.comments,
     super.key,
   });
 
@@ -37,6 +38,10 @@ class OccurrenceDetailBody extends StatelessWidget {
   final bool busy;
   final VoidCallback onToggleParent;
   final ValueChanged<String> onToggleSubtask;
+
+  /// The comment thread (P3-25); built by the screen so this file stays a
+  /// layout file with no providers.
+  final Widget? comments;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +70,7 @@ class OccurrenceDetailBody extends StatelessWidget {
           const SizedBox(height: 8),
           MiniMarkdownView(markdown: occurrence.instructions),
         ],
+        if (comments != null) ...[const SizedBox(height: 20), comments!],
         const SizedBox(height: 20),
         OccurrenceTimeline(events: events, formatters: formatters),
       ],

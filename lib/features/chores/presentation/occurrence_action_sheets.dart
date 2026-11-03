@@ -18,16 +18,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// screen stays a layout file and the "which sheet asks what" rules live in one
 /// place — the same rules the verify queue reuses.
 extension OccurrenceActionSheets on WidgetRef {
-  /// Reopen with a reason. Returns null when the person cancelled a sheet (or
+  /// Reopen with a reason ([initialReason] prefills the sheet, P3-25: "Reopen
+  /// with this reason"). Returns null when the person cancelled a sheet (or
   /// the session ended), otherwise the use case result so the caller can show
   /// the failure.
   Future<Result<Object?>?> reopenWithSheet(
     BuildContext context, {
     required String occurrenceId,
+    String? initialReason,
   }) async {
     final reason = await showReasonSheet(
       context,
       title: context.l10n.occurrenceReopenTitle,
+      initialText: initialReason == null || initialReason.length <= 300
+          ? initialReason
+          : initialReason.substring(0, 300),
     );
     if (reason == null || !context.mounted) return null;
     final familyId = read(currentFamilyIdProvider);
