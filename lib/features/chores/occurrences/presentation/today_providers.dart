@@ -80,10 +80,16 @@ final overdueItemsProvider = Provider<List<ChoreItem>>((ref) {
   ]..sort((a, b) => a.dueAt.compareTo(b.dueAt));
 });
 
-/// "Overdue" for a [ChoreItem]: still open and past `dueAt` + grace.
+/// "Overdue" for a [ChoreItem]: already shown as overdue, or still open and
+/// past `dueAt` + grace.
+///
+/// The first branch matters (P3-29): the day and month providers already apply
+/// the clock, so by the time a list reaches `overdueItemsProvider` the status is
+/// `overdue`, which `isOpen` rejects - the dashboard would never see one.
 bool isOverdueItem(ChoreItem item, DateTime now, int graceMinutes) =>
-    item.status.isOpen &&
-    now.isAfter(item.dueAt.add(Duration(minutes: graceMinutes)));
+    item.status == ChoreStatus.overdue ||
+    (item.status.isOpen &&
+        now.isAfter(item.dueAt.add(Duration(minutes: graceMinutes))));
 
 /// How far through today's chores the family (or one member) is.
 final class TodayProgress {

@@ -3,12 +3,10 @@ import 'dart:async';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
-import 'package:family_hub/features/chores/calendar/presentation/calendar_items_providers.dart';
-import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
-import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:family_hub/features/chores/presentation/date_of_key.dart';
 import 'package:family_hub/features/chores/presentation/member_names.dart';
 import 'package:family_hub/features/chores/presentation/occurrence_action_sheets.dart';
+import 'package:family_hub/features/chores/swaps/presentation/needs_cover_providers.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
@@ -21,29 +19,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class NeedsCoverBoard extends ConsumerWidget {
   const NeedsCoverBoard({super.key});
 
-  bool _open(ChoreItem item) =>
-      item.status != ChoreStatus.completed &&
-      item.status != ChoreStatus.verified &&
-      item.status != ChoreStatus.skipped;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final t = context.tokens;
     final formatters = ref.watch(appFormattersProvider);
-    final keys = ref.watch(familyDateKeysProvider);
-    final today = keys.today();
     final members = ref.watch(membersProvider).value ?? const [];
-    final month = ref.watch(monthItemsProvider(keys.thisMonth()));
     final canAssign = ref.can(Permission.reassignChore);
-    final needing = <ChoreItem>[
-      for (final item in month.value?.items ?? const <ChoreItem>[])
-        if (!item.isProjected &&
-            _open(item) &&
-            !item.dateKey.isBefore(today) &&
-            (item.assigneeId == null || item.flags.contains(ChoreFlag.needsCover)))
-          item,
-    ];
+    final needing = ref.watch(needsCoverItemsProvider);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.needsCoverTitle)),
       body: !canAssign

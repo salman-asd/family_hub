@@ -32,7 +32,7 @@ void main() {
       final chores = ModuleRegistry.standard().byId('chores')!;
       expect(chores, isA<ChoresModule>());
       expect(chores.requiredPermission, isNull);
-      expect(chores.dashboardCards, isEmpty);
+      expect(chores.dashboardCards, hasLength(4));
       expect(chores.reports, isEmpty);
     });
 

@@ -4481,5 +4481,56 @@
         "type": "String"
       }
     }
-  }
+  },
+  "choresDashNext": "পরের কাজ: {name}",
+  "@choresDashNext": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDashOverdueCount": "{count}টি বিলম্বিত",
+  "@choresDashOverdueCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDashOverdueNone": "কিছুই বিলম্বিত নয়",
+  "@choresDashOverdueNone": {},
+  "choresDashOverdueOldest": "সবচেয়ে পুরোনো: {name}",
+  "@choresDashOverdueOldest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDashVerifyCount": "যাচাইয়ের অপেক্ষায় {count}টি কাজ",
+  "@choresDashVerifyCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDashWeekTitle": "এই সপ্তাহ",
+  "@choresDashWeekTitle": {},
+  "choresDashWeekDay": "{day}: {count}টি কাজ",
+  "@choresDashWeekDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "choresNewAction": "নতুন কাজ",
+  "@choresNewAction": {},
+  "choresMyTodayAction": "আমার আজ",
+  "@choresMyTodayAction": {}
 }

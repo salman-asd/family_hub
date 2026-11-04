@@ -4763,4 +4763,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String rotaCellLabel(String member, String day, String count) {
     return '$member, $day: $count chores';
   }
+
+  @override
+  String choresDashNext(String name) {
+    return 'Next: $name';
+  }
+
+  @override
+  String choresDashOverdueCount(String count) {
+    return '$count overdue';
+  }
+
+  @override
+  String get choresDashOverdueNone => 'Nothing is overdue';
+
+  @override
+  String choresDashOverdueOldest(String name) {
+    return 'Oldest: $name';
+  }
+
+  @override
+  String choresDashVerifyCount(String count) {
+    return '$count chores wait for a check';
+  }
+
+  @override
+  String get choresDashWeekTitle => 'This week';
+
+  @override
+  String choresDashWeekDay(String day, String count) {
+    return '$day: $count chores';
+  }
+
+  @override
+  String get choresNewAction => 'New chore';
+
+  @override
+  String get choresMyTodayAction => 'My today';
 }

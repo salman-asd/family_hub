@@ -95,7 +95,7 @@ class _AgendaViewState extends ConsumerState<AgendaView> {
         if (_away)
           PositionedDirectional(
             end: 16,
-            bottom: 16,
+            bottom: 88,
             child: FloatingActionButton.small(
               key: const Key('calendar_jump_today'),
               tooltip: l10n.calendarJumpToToday,

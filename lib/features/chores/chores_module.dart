@@ -6,6 +6,7 @@ import 'package:family_hub/features/chores/rota/presentation/rota_board_screen.d
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_list_screen.dart';
 import 'package:family_hub/features/chores/presentation/chores_home_screen.dart';
 import 'package:family_hub/features/chores/presentation/chores_manage_screen.dart';
+import 'package:family_hub/features/chores/presentation/dashboard/chores_dashboard_cards.dart';
 import 'package:family_hub/features/chores/presentation/occurrence_detail_screen.dart';
 import 'package:family_hub/features/chores/presentation/today_screen.dart';
 import 'package:family_hub/features/chores/presentation/verify_queue_screen.dart';
@@ -130,4 +131,9 @@ class ChoresModule extends FamilyModule {
       ],
     ),
   ];
+
+  /// P3-29: Today, Overdue, Awaiting verification and This week. The Chores
+  /// settings tile stays in the Family tab (P3-17), so `settingsEntry` is unused.
+  @override
+  List<WidgetBuilder> get dashboardCards => choresDashboardCards;
 }

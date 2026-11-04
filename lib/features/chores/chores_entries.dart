@@ -3,6 +3,7 @@ import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permission.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
 import 'package:family_hub/features/chores/rota/presentation/rota_providers.dart';
+import 'package:family_hub/features/chores/swaps/presentation/needs_cover_providers.dart';
 import 'package:family_hub/features/notifications/presentation/inbox_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:flutter/material.dart';
@@ -127,6 +128,7 @@ final List<ChoresEntry> choresEntries = <ChoresEntry>[
     subtitle: (l10n) => l10n.needsCoverSubtitle,
     route: AppRoutes.choresNeedsCover,
     requires: Permission.reassignChore,
+    badge: needsCoverCountProvider,
   ),
   // P3-28. Managers always; members only while the family shows the workload.
   ChoresEntry(

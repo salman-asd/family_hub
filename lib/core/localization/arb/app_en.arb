@@ -4482,5 +4482,56 @@
         "type": "String"
       }
     }
-  }
+  },
+  "choresDashNext": "Next: {name}",
+  "@choresDashNext": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDashOverdueCount": "{count} overdue",
+  "@choresDashOverdueCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDashOverdueNone": "Nothing is overdue",
+  "@choresDashOverdueNone": {},
+  "choresDashOverdueOldest": "Oldest: {name}",
+  "@choresDashOverdueOldest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDashVerifyCount": "{count} chores wait for a check",
+  "@choresDashVerifyCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "choresDashWeekTitle": "This week",
+  "@choresDashWeekTitle": {},
+  "choresDashWeekDay": "{day}: {count} chores",
+  "@choresDashWeekDay": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "choresNewAction": "New chore",
+  "@choresNewAction": {},
+  "choresMyTodayAction": "My today",
+  "@choresMyTodayAction": {}
 }

@@ -4743,4 +4743,41 @@ class AppLocalizationsBn extends AppLocalizations {
   String rotaCellLabel(String member, String day, String count) {
     return '$member, $day: $countটি কাজ';
   }
+
+  @override
+  String choresDashNext(String name) {
+    return 'পরের কাজ: $name';
+  }
+
+  @override
+  String choresDashOverdueCount(String count) {
+    return '$countটি বিলম্বিত';
+  }
+
+  @override
+  String get choresDashOverdueNone => 'কিছুই বিলম্বিত নয়';
+
+  @override
+  String choresDashOverdueOldest(String name) {
+    return 'সবচেয়ে পুরোনো: $name';
+  }
+
+  @override
+  String choresDashVerifyCount(String count) {
+    return 'যাচাইয়ের অপেক্ষায় $countটি কাজ';
+  }
+
+  @override
+  String get choresDashWeekTitle => 'এই সপ্তাহ';
+
+  @override
+  String choresDashWeekDay(String day, String count) {
+    return '$day: $countটি কাজ';
+  }
+
+  @override
+  String get choresNewAction => 'নতুন কাজ';
+
+  @override
+  String get choresMyTodayAction => 'আমার আজ';
 }

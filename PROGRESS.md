@@ -1813,3 +1813,37 @@ Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `f
 
 ### To check when you run it
 Likeliest first failures: `MonthKey` constructor use in `rotaItemsProvider`, `Ref.can` in `rotaVisibleProvider`, `DateKey(today.year, today.month + 1, 1)` rolling December over (the test covers it), and the widget-test finders for the percent text.
+
+## Phase 3 - P3-29 Chores home, manage hub, dashboard cards, activity text, Phase 4 contract
+
+Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `flutter gen-l10n` (9 keys hand-added to both ARBs and the three generated files; expect no diff), `flutter analyze`, `flutter test --exclude-tags golden`. No rules, no index change.
+
+### Verified before building
+P3-27/P3-28 files named in their sections exist; `ChoresEntry`, `HouseRulesCard`, `activity_text_chores.dart` (every Phase 3 audit type already has a bn + en sentence, covered by `activity_text_test`) were already in place, so no stub strings were left to remove.
+
+### Delivered
+| Area | Files |
+| --- | --- |
+| dashboard | `presentation/dashboard/chores_dashboard_providers.dart`, `chores_dashboard_cards.dart` (Today, Overdue, Awaiting verification, This week); `ChoresModule.dashboardCards` |
+| home | `chores_home_screen.dart`: extended FAB, manager = "New chore" (template editor), member = "My today"; only while the calendar shows |
+| manage hub | `needs_cover_providers.dart` (shared by the board and a badge on its tile); `needs_cover_board.dart` now reads it |
+| activity | `core/localization/activity_names.dart` `resolveChoreActivityNames` (uids to names) |
+| bug fix | `isOverdueItem` now accepts status `overdue` (R5 known limit: the Overdue provider was always empty) |
+| docs | `docs/chores_phase4_contract.md`, `new_collection_checklist.md`, `README.md`, `CLAUDE.md` rule 60 |
+| tests | dashboard cards (data, member, bn at 2.0), overdue regression, activity names; `chores_module_test` expects 4 cards |
+
+### Decisions (my recommendations)
+1. **Scope** of the cards = `settings/chores.defaultScope`, the same start as the Today screen.
+2. **Overdue card is month-wide** (this month's open chores past deadline), not today only, so a chore missed yesterday does not vanish at midnight. Today's own Overdue section still shows today only.
+3. **Awaiting verification** shows only to people who can verify and only while the queue is not empty.
+4. **`settingsEntry` stays unused**: the Chores settings tile has lived in the Family tab since P3-17.
+5. The agenda's "jump to today" button moved up (bottom 16 -> 88) to clear the new FAB.
+6. No feed screen exists in `lib/` yet, so `resolveChoreActivityNames` has no caller; whichever screen renders `activityText` must call it first.
+
+### Not done / for you
+* `ROADMAP.md` (Step 20-26 "done via P3-xx") is not in the lean zip: send it and I will edit it; the line is "Steps 20-26: done via P3-05 ... P3-29".
+* `permission_matrix.md` needs no change (no new permission).
+* Review exit criteria needing a machine (R0 gate, rules suite, two-account walk-through) are unchanged and not claimed.
+
+### To check when you run it
+Likeliest first failures: the test harness `pumpP3Screen` with a `Scaffold` home, the `'chores_week_2026-10-24'` key format (`DateKey.toString`), and the 15:00 Dhaka clock making the default occurrence overdue in the cards test.

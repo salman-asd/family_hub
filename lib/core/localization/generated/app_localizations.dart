@@ -8319,6 +8319,60 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'{member}, {day}: {count}টি কাজ'**
   String rotaCellLabel(String member, String day, String count);
+
+  /// No description provided for @choresDashNext.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের কাজ: {name}'**
+  String choresDashNext(String name);
+
+  /// No description provided for @choresDashOverdueCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি বিলম্বিত'**
+  String choresDashOverdueCount(String count);
+
+  /// No description provided for @choresDashOverdueNone.
+  ///
+  /// In bn, this message translates to:
+  /// **'কিছুই বিলম্বিত নয়'**
+  String get choresDashOverdueNone;
+
+  /// No description provided for @choresDashOverdueOldest.
+  ///
+  /// In bn, this message translates to:
+  /// **'সবচেয়ে পুরোনো: {name}'**
+  String choresDashOverdueOldest(String name);
+
+  /// No description provided for @choresDashVerifyCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাইয়ের অপেক্ষায় {count}টি কাজ'**
+  String choresDashVerifyCount(String count);
+
+  /// No description provided for @choresDashWeekTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সপ্তাহ'**
+  String get choresDashWeekTitle;
+
+  /// No description provided for @choresDashWeekDay.
+  ///
+  /// In bn, this message translates to:
+  /// **'{day}: {count}টি কাজ'**
+  String choresDashWeekDay(String day, String count);
+
+  /// No description provided for @choresNewAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন কাজ'**
+  String get choresNewAction;
+
+  /// No description provided for @choresMyTodayAction.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমার আজ'**
+  String get choresMyTodayAction;
 }
 
 class _AppLocalizationsDelegate

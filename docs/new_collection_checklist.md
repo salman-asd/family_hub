@@ -26,3 +26,7 @@ Every step that adds a Firestore collection does ALL of these in the same commit
    widgets; ARB strings in bn and en.
 10. **Seed data** - starter documents come from a `FamilySeeder` (never by editing
     `CreateFamily`); at most 500 writes per batch including the family's own.
+
+## Phase 3 collections (Chores) - checked in P3-29
+
+Every item above was applied to: `settings/chores`, `settings/choreGeneration`, `settings/rotationPolicy`, `choreTemplates`, `dutyGroups`, `choreOccurrences` (+ `events`, `comments`), `memberAvailability`, `swapRequests`, `notificationInbox`. Only `memberStats` is still deny-all (Phase 4, see `docs/chores_phase4_contract.md`). Emulator proof of the whole matrix is P3-30.

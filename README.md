@@ -51,3 +51,7 @@ flutter run --flavor dev -t lib/main_dev.dart --dart-define=USE_EMULATOR=true
 ```
 On an Android emulator the app connects to `10.0.2.2`, elsewhere to `127.0.0.1`.
 The Emulator UI is at http://localhost:4000.
+
+## Chores (Phase 3)
+
+Chore templates with slots and recurrence, rotating duty groups, a generated chore calendar (Agenda / Month / Week) with projected future chores, Today, subtasks with verification, comments, absences, swaps and covers, an inbox, a workload board and Home dashboard cards (Today, Overdue, Awaiting verification, This week). Reminders, badges and the celebration are Phase 4 (`docs/chores_phase4_contract.md`).

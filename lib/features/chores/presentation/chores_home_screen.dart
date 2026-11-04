@@ -72,6 +72,24 @@ class ChoresHomeScreen extends ConsumerWidget {
         ],
       ),
       body: body,
+      // Only while the calendar shows: a manager adds a chore, a member jumps
+      // to their own day (P3-29).
+      floatingActionButton: templates.hasValue && templates.requireValue.isNotEmpty
+          ? FloatingActionButton.extended(
+              key: Key(canManage ? 'chores_fab_new' : 'chores_fab_today'),
+              onPressed: () => unawaited(
+                context.push(
+                  canManage
+                      ? AppRoutes.choresTemplateNew
+                      : AppRoutes.choresToday,
+                ),
+              ),
+              icon: Icon(canManage ? Icons.add_rounded : Icons.today_rounded),
+              label: Text(
+                canManage ? l10n.choresNewAction : l10n.choresMyTodayAction,
+              ),
+            )
+          : null,
     );
   }
 }
