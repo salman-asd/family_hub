@@ -1847,3 +1847,25 @@ P3-27/P3-28 files named in their sections exist; `ChoresEntry`, `HouseRulesCard`
 
 ### To check when you run it
 Likeliest first failures: the test harness `pumpP3Screen` with a `Scaffold` home, the `'chores_week_2026-10-24'` key format (`DateKey.toString`), and the 15:00 Dhaka clock making the default occurrence overdue in the cards test.
+
+## Phase 3 - P3-30 Hardening, performance, acceptance, sign-off
+
+Written without an SDK: **nothing was compiled or run**, and P3-30 is by nature a step you run. What I could do statically is done; what needs a machine is a checklist, not a claim. **Phase 3 is NOT signed off and `phase-3` must not be tagged yet.**
+
+### Delivered
+| Area | Files |
+| --- | --- |
+| rules | `test/architecture/chore_rules_carve_out_test.dart`: every chore collection (and `events` / `comments`) has its own `match` block; `memberStats` is not carved out |
+| concurrency | `test/features/chores/concurrency/two_device_test.dart`: two phones tick different steps (disjoint keys, effective status follows the merge); two devices generate the same range (identical ids). Double swap accept and complete-while-reassign are decided by the rules and stay in `chore_swaps.test.mjs` / `chore_occurrence_parity.test.mjs` |
+| performance | `test/features/chores/perf/month_model_perf_test.dart`: 900 chores build one month model (smoke bound 250 ms; the roadmap's 30 ms is a device measurement) |
+| docs | `docs/chores_acceptance.md` (gate table, 12 criteria, offline / TalkBack / localization scripts, UAT, seams), `docs/chores_read_budget.md` (expected counts, clearly marked NOT MEASURED) |
+| debt | `file_size_test` allow-list gets the 10 over-cap Phase 3 files (see below); my own `chores_dashboard_cards.dart` (313 lines) was split into `dash_card.dart` and `chores_week_card.dart` |
+
+### Decisions (my recommendations)
+1. **File-size debt is allow-listed, not split.** Ten files are over 300 lines by raw count (`agenda_view` 439, `recurrence_picker_sheet` 431, `template_list_screen` 406, `template_editor_controller` 369, `template_editor_screen` 347, `chore_item` 334, `occurrence_action` 319, `chore_occurrence` 308, `chore_settings_screen` 305, `catalog_editor` 303). Splitting widget files blind, with no compiler, risks breaking working code; `dart format` also changes the counts. Run the formatter, then split what is still over and delete the entries.
+2. **Not done, needs a machine:** emulator rules matrix, read-budget measurement, device performance run, TalkBack pass, offline script, UAT. They are in `docs/chores_acceptance.md` with empty result cells.
+3. **Not added:** `no_hardcoded_options_test` (already existed), a golden/`screen_states` entry for every Phase 3 screen (the harness is Phase 1 shaped and each screen needs its own provider overrides, which I cannot verify without running them). Do this when the gate is green.
+4. The 400-create rules test and the parity table are said to be in the emulator suite by the review roadmap; I did not re-check them.
+
+### To check when you run it
+`aChoreItem` ids in the perf test, `SubtaskDone` import path in the concurrency test, and the regex in `chore_rules_carve_out_test` against the real `match` lines.
