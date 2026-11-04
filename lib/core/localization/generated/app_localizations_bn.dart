@@ -4683,4 +4683,64 @@ class AppLocalizationsBn extends AppLocalizations {
   String availabilityAffected(String count) {
     return 'এতে $countটি কাজ প্রভাবিত হবে';
   }
+
+  @override
+  String get rotaTitle => 'দায়িত্ব বোর্ড';
+
+  @override
+  String get rotaSubtitle => 'কে কী করছেন, কতটা';
+
+  @override
+  String get rotaWeek => 'সপ্তাহ';
+
+  @override
+  String get rotaMonth => 'মাস';
+
+  @override
+  String get rotaOnDuty => 'আজ যাঁদের দায়িত্ব';
+
+  @override
+  String get rotaOnDutyNobody => 'আজ কারও কাজ নেই।';
+
+  @override
+  String get rotaShareTitle => 'কাজের ভাগ';
+
+  @override
+  String get rotaMatrixTitle => 'সদস্য ও দিন';
+
+  @override
+  String get rotaEmpty => 'এই সময়ে এখনও কোনো কাজ নেই।';
+
+  @override
+  String get rotaNoAccess => 'কাজের ভাগ সদস্যদের জন্য লুকানো আছে।';
+
+  @override
+  String rotaShareValue(String percent) {
+    return 'কাজের $percent%';
+  }
+
+  @override
+  String rotaMemberStats(String assigned, String done) {
+    return '$assignedটি কাজ, $doneটি শেষ';
+  }
+
+  @override
+  String rotaCovers(String given, String received) {
+    return 'বদলি দিয়েছেন $given, বদলি পেয়েছেন $received';
+  }
+
+  @override
+  String rotaAway(String days) {
+    return '$days দিন অনুপস্থিত';
+  }
+
+  @override
+  String rotaOnDutyCount(String name, String count) {
+    return '$name: $countটি কাজ';
+  }
+
+  @override
+  String rotaCellLabel(String member, String day, String count) {
+    return '$member, $day: $countটি কাজ';
+  }
 }

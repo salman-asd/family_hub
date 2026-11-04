@@ -2,6 +2,7 @@ import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/features/chores/availability/presentation/availability_screen.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_editor_screen.dart';
+import 'package:family_hub/features/chores/rota/presentation/rota_board_screen.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_list_screen.dart';
 import 'package:family_hub/features/chores/presentation/chores_home_screen.dart';
 import 'package:family_hub/features/chores/presentation/chores_manage_screen.dart';
@@ -104,6 +105,11 @@ class ChoresModule extends FamilyModule {
               ),
             ),
           ],
+        ),
+        // P3-28.
+        GoRoute(
+          path: 'rota',
+          builder: (context, state) => const RotaBoardScreen(),
         ),
         // P3-27.
         GoRoute(

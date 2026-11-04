@@ -2,6 +2,7 @@ import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permission.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
+import 'package:family_hub/features/chores/rota/presentation/rota_providers.dart';
 import 'package:family_hub/features/notifications/presentation/inbox_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:flutter/material.dart';
@@ -126,6 +127,15 @@ final List<ChoresEntry> choresEntries = <ChoresEntry>[
     subtitle: (l10n) => l10n.needsCoverSubtitle,
     route: AppRoutes.choresNeedsCover,
     requires: Permission.reassignChore,
+  ),
+  // P3-28. Managers always; members only while the family shows the workload.
+  ChoresEntry(
+    id: 'rota',
+    icon: Icons.table_chart_outlined,
+    title: (l10n) => l10n.rotaTitle,
+    subtitle: (l10n) => l10n.rotaSubtitle,
+    route: AppRoutes.choresRota,
+    gate: rotaVisibleProvider,
   ),
   // P3-27. The module-neutral inbox, with its unread count.
   ChoresEntry(

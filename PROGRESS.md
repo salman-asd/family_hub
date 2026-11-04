@@ -1796,3 +1796,20 @@ Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `f
 
 ### To check when you run it
 Likeliest first failures: `Badge`/`SegmentedButton` generics, `switch` patterns on `AuditRefType` constants in `inbox_screen.dart`, `monthsOfRange`'s `MonthKey.toString()` format in the test, the `Override` import path, and the widget-test finders (button labels).
+
+## Phase 3 - P3-28 Rota board and workload
+
+Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `flutter gen-l10n` (16 keys hand-added to both ARBs and the three generated files; expect no diff), `flutter analyze`, `flutter test --exclude-tags golden`. No rules or index change.
+
+### Delivered
+`rota/domain/{workload_summary, workload_calculator, rota_matrix}.dart`; `rota/presentation/{rota_providers, rota_board_screen}.dart` and `widgets/{member_share_row, on_duty_strip, rota_matrix_view}.dart`; route `/chores/rota`; Manage tile (gated by `rotaVisibleProvider`); tests for the maths, the matrix, the week/month bounds and the screen (visibility, shares, Bangla at 2.0).
+
+### Decisions (my recommendations)
+1. Weights easy 1 / normal 2 / hard 3 (named constants, placeholders); minutes are summed where a chore has an estimate but are not shown yet.
+2. A swapped or covered chore counts for the person who does it; the member it was planned for gets `coversReceived`.
+3. The week starts on the chore week-start day, the month is the calendar month of today; there is no previous/next navigation yet (this step is "now").
+4. A member who may not see the workload gets a short "hidden" message instead of only their own row.
+5. The board lists active members only; chores with no owner are collected in `RotaMatrix.unassigned` but not drawn (the needs-cover board covers them).
+
+### To check when you run it
+Likeliest first failures: `MonthKey` constructor use in `rotaItemsProvider`, `Ref.can` in `rotaVisibleProvider`, `DateKey(today.year, today.month + 1, 1)` rolling December over (the test covers it), and the widget-test finders for the percent text.

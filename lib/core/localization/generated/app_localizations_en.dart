@@ -4703,4 +4703,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String availabilityAffected(String count) {
     return '$count chores are affected';
   }
+
+  @override
+  String get rotaTitle => 'Rota board';
+
+  @override
+  String get rotaSubtitle => 'Who does what, and how much';
+
+  @override
+  String get rotaWeek => 'Week';
+
+  @override
+  String get rotaMonth => 'Month';
+
+  @override
+  String get rotaOnDuty => 'On duty today';
+
+  @override
+  String get rotaOnDutyNobody => 'Nobody has a chore today.';
+
+  @override
+  String get rotaShareTitle => 'Share of the work';
+
+  @override
+  String get rotaMatrixTitle => 'Members by day';
+
+  @override
+  String get rotaEmpty => 'No chores in this range yet.';
+
+  @override
+  String get rotaNoAccess => 'The workload is hidden from members.';
+
+  @override
+  String rotaShareValue(String percent) {
+    return '$percent% of the work';
+  }
+
+  @override
+  String rotaMemberStats(String assigned, String done) {
+    return '$assigned chores, $done done';
+  }
+
+  @override
+  String rotaCovers(String given, String received) {
+    return 'Covered $given, was covered $received';
+  }
+
+  @override
+  String rotaAway(String days) {
+    return '$days days away';
+  }
+
+  @override
+  String rotaOnDutyCount(String name, String count) {
+    return '$name: $count chores';
+  }
+
+  @override
+  String rotaCellLabel(String member, String day, String count) {
+    return '$member, $day: $count chores';
+  }
 }

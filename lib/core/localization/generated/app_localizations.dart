@@ -8223,6 +8223,102 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'এতে {count}টি কাজ প্রভাবিত হবে'**
   String availabilityAffected(String count);
+
+  /// No description provided for @rotaTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'দায়িত্ব বোর্ড'**
+  String get rotaTitle;
+
+  /// No description provided for @rotaSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কে কী করছেন, কতটা'**
+  String get rotaSubtitle;
+
+  /// No description provided for @rotaWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'সপ্তাহ'**
+  String get rotaWeek;
+
+  /// No description provided for @rotaMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস'**
+  String get rotaMonth;
+
+  /// No description provided for @rotaOnDuty.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজ যাঁদের দায়িত্ব'**
+  String get rotaOnDuty;
+
+  /// No description provided for @rotaOnDutyNobody.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজ কারও কাজ নেই।'**
+  String get rotaOnDutyNobody;
+
+  /// No description provided for @rotaShareTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের ভাগ'**
+  String get rotaShareTitle;
+
+  /// No description provided for @rotaMatrixTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য ও দিন'**
+  String get rotaMatrixTitle;
+
+  /// No description provided for @rotaEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সময়ে এখনও কোনো কাজ নেই।'**
+  String get rotaEmpty;
+
+  /// No description provided for @rotaNoAccess.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের ভাগ সদস্যদের জন্য লুকানো আছে।'**
+  String get rotaNoAccess;
+
+  /// No description provided for @rotaShareValue.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের {percent}%'**
+  String rotaShareValue(String percent);
+
+  /// No description provided for @rotaMemberStats.
+  ///
+  /// In bn, this message translates to:
+  /// **'{assigned}টি কাজ, {done}টি শেষ'**
+  String rotaMemberStats(String assigned, String done);
+
+  /// No description provided for @rotaCovers.
+  ///
+  /// In bn, this message translates to:
+  /// **'বদলি দিয়েছেন {given}, বদলি পেয়েছেন {received}'**
+  String rotaCovers(String given, String received);
+
+  /// No description provided for @rotaAway.
+  ///
+  /// In bn, this message translates to:
+  /// **'{days} দিন অনুপস্থিত'**
+  String rotaAway(String days);
+
+  /// No description provided for @rotaOnDutyCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name}: {count}টি কাজ'**
+  String rotaOnDutyCount(String name, String count);
+
+  /// No description provided for @rotaCellLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'{member}, {day}: {count}টি কাজ'**
+  String rotaCellLabel(String member, String day, String count);
 }
 
 class _AppLocalizationsDelegate

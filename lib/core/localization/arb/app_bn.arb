@@ -4398,5 +4398,88 @@
         "type": "String"
       }
     }
+  },
+  "rotaTitle": "দায়িত্ব বোর্ড",
+  "@rotaTitle": {},
+  "rotaSubtitle": "কে কী করছেন, কতটা",
+  "@rotaSubtitle": {},
+  "rotaWeek": "সপ্তাহ",
+  "@rotaWeek": {},
+  "rotaMonth": "মাস",
+  "@rotaMonth": {},
+  "rotaOnDuty": "আজ যাঁদের দায়িত্ব",
+  "@rotaOnDuty": {},
+  "rotaOnDutyNobody": "আজ কারও কাজ নেই।",
+  "@rotaOnDutyNobody": {},
+  "rotaShareTitle": "কাজের ভাগ",
+  "@rotaShareTitle": {},
+  "rotaMatrixTitle": "সদস্য ও দিন",
+  "@rotaMatrixTitle": {},
+  "rotaEmpty": "এই সময়ে এখনও কোনো কাজ নেই।",
+  "@rotaEmpty": {},
+  "rotaNoAccess": "কাজের ভাগ সদস্যদের জন্য লুকানো আছে।",
+  "@rotaNoAccess": {},
+  "rotaShareValue": "কাজের {percent}%",
+  "@rotaShareValue": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "rotaMemberStats": "{assigned}টি কাজ, {done}টি শেষ",
+  "@rotaMemberStats": {
+    "placeholders": {
+      "assigned": {
+        "type": "String"
+      },
+      "done": {
+        "type": "String"
+      }
+    }
+  },
+  "rotaCovers": "বদলি দিয়েছেন {given}, বদলি পেয়েছেন {received}",
+  "@rotaCovers": {
+    "placeholders": {
+      "given": {
+        "type": "String"
+      },
+      "received": {
+        "type": "String"
+      }
+    }
+  },
+  "rotaAway": "{days} দিন অনুপস্থিত",
+  "@rotaAway": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "rotaOnDutyCount": "{name}: {count}টি কাজ",
+  "@rotaOnDutyCount": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "rotaCellLabel": "{member}, {day}: {count}টি কাজ",
+  "@rotaCellLabel": {
+    "placeholders": {
+      "member": {
+        "type": "String"
+      },
+      "day": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
   }
 }
