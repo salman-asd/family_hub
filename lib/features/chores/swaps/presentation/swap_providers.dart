@@ -4,6 +4,7 @@ import 'package:family_hub/features/chores/comments/presentation/comment_provide
 import 'package:family_hub/features/chores/occurrences/presentation/inbox_port_provider.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
+import 'package:family_hub/features/chores/swaps/domain/no_swap_repository.dart';
 import 'package:family_hub/features/chores/swaps/domain/swap_repository.dart';
 import 'package:family_hub/features/chores/swaps/domain/swap_request.dart';
 import 'package:family_hub/features/chores/swaps/domain/usecases/accept_swap.dart';
@@ -14,11 +15,9 @@ import 'package:family_hub/features/chores/swaps/domain/usecases/request_swap.da
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Overridden in `bootstrap.dart` and in tests.
+/// Overridden in `bootstrap.dart` and in tests; the default has no requests.
 final swapRepositoryProvider = Provider<SwapRepository>(
-  (ref) => throw UnimplementedError(
-    'swapRepositoryProvider must be overridden (bootstrap.dart / tests).',
-  ),
+  (ref) => const NoSwapRepository(),
 );
 
 /// Every pending request of the family: ONE listener. "To me / from me / all
@@ -94,3 +93,23 @@ final expireSwapsProvider = Provider<ExpireSwaps>(
     inbox: ref.watch(inboxPortProvider),
   ),
 );
+
+/// Expires lapsed requests ONCE per family per app start (P3-26 "on app open").
+/// Best effort: offline or unwired, it simply does nothing and the next start
+/// tries again.
+final expireSwapsOnOpenProvider = FutureProvider.family<int, String>((
+  ref,
+  familyId,
+) async {
+  try {
+    final uid = ref.read(currentUidProvider);
+    if (uid == null) return 0;
+    final result = await ref.read(expireSwapsProvider)(
+      familyId: familyId,
+      actorUid: uid,
+    );
+    return result.valueOrNull ?? 0;
+  } on Object {
+    return 0;
+  }
+});

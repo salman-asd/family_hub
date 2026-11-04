@@ -4,6 +4,9 @@ import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/comments/presentation/widgets/comments_section.dart';
+import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
+import 'package:family_hub/features/chores/swaps/presentation/swap_sheet.dart';
+import 'package:family_hub/features/chores/swaps/presentation/swap_status_banner.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/chores/occurrences/domain/usecases/repair_status.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_action_providers.dart';
@@ -144,6 +147,7 @@ class _OccurrenceDetailScreenState
                   formatters: ref.watch(appFormattersProvider),
                   today: ref.watch(familyDateKeysProvider).today(),
                   busy: _busy,
+                  banner: SwapStatusBanner(occurrenceId: _id),
                   comments: CommentsSection(
                     occurrence: occurrence,
                     item: found,
@@ -210,7 +214,17 @@ class _OccurrenceDetailScreenState
               onException: () => _run(
                 (_) => ref.exceptionWithSheet(context, occurrenceId: _id),
               ),
-              onSwap: null,
+              onSwap:
+                  ref.watch(choreSettingsProvider).swapsEnabled &&
+                      document.value != null
+                  ? () => _run((_) async {
+                      await ref.requestSwapWithSheet(
+                        context,
+                        occurrence: document.value!,
+                      );
+                      return null;
+                    })
+                  : null,
             ),
     );
   }

@@ -1772,3 +1772,27 @@ Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `f
 - `ExpireSwaps` must be called on app open (P3-27 wires it); `ApplyAbsencePolicy` must be called after `AddAvailability` / an approval (also P3-27).
 - Contract fixtures for the three new documents were not added; the mapper key sets are checked against the rules in `inbox_test.dart`.
 - Likeliest first failures: `rulesList('...Keys')` parsing, the null-aware elements `?row?.withId(...)`, `NewInboxItem.withId` usage, and the in-memory occurrence backend rejecting a patch it does not know.
+
+## Phase 3 - P3-27 Availability, swap, cover and inbox screens
+
+Written without an SDK: **nothing was compiled or run**. Run `dart format .`, `flutter gen-l10n` (this step adds ~65 keys to both ARBs and the three generated files by hand; expect no diff), `flutter analyze`, `flutter test --exclude-tags golden`, `npm run test:emulator` (no rules change), `node tools/check_indexes.mjs`.
+
+### Delivered
+| Area | Files |
+| --- | --- |
+| inbox | `inbox_screen`, `inbox_tile`, `inbox_bell`, `inbox_text` (sentence per type, names from uids), route `/inbox`, bell in the calendar header, Manage tile with unread badge |
+| swaps | `swap_sheet` (eligible people + load bar + reason + preview), `swap_response_sheet` (Accept / Decline + optional reason, "needs internet"), `swap_status_banner` (detail screen), `needs_cover_board` (route `/chores/needs-cover`), `swap_eligibility`, `NoSwapRepository` |
+| availability | `availability_screen` (Mine / Everyone, approve, reject, cancel), `add_availability_sheet` (type chips, date range, reason, "N chores affected", policy line), `availability_card`, `affected_chores` |
+| wiring | `chores_module` routes, `chores_entries` (3 tiles), `occurrence_detail_screen` (swap button when `swapsEnabled`, banner), `ChoresGenerationHook` (expire on open), `NoInboxRepository`, `member_names` |
+| tests | eligibility, affected count, inbox screen + bell, availability screen + add sheet, swap sheet / banner / response (en, bn at 2.0) |
+
+### Decisions (my recommendations)
+1. `swapEntryAvailableProvider` did not exist in the base, so the detail screen simply enables the swap button when `swapsEnabled` (the actions bar already requires `mayTick`).
+2. The needs-cover board lists this month's open, stored chores with no owner or flagged `needsCover`; declined/expired requests are not listed separately yet (their inbox rows and the policy-A fallback cover that case).
+3. Only the viewer's OWN absence is added from the screen; a manager adding for somebody else is possible in the use case but has no UI yet.
+4. After saving an ACTIVE absence (or approving one) the sheet/screen runs `ApplyAbsencePolicy`; a failure is shown, the absence stays.
+5. The tile's `hasPendingSwap` chip is not fed from `pendingSwapsProvider` yet (left as before).
+6. The inbox shows nothing when the Chores module is off.
+
+### To check when you run it
+Likeliest first failures: `Badge`/`SegmentedButton` generics, `switch` patterns on `AuditRefType` constants in `inbox_screen.dart`, `monthsOfRange`'s `MonthKey.toString()` format in the test, the `Override` import path, and the widget-test finders (button labels).

@@ -4065,5 +4065,338 @@
         "type": "String"
       }
     }
+  },
+  "inboxTitle": "বিজ্ঞপ্তি",
+  "@inboxTitle": {},
+  "inboxEmpty": "এখনও কোনো বিজ্ঞপ্তি নেই",
+  "@inboxEmpty": {},
+  "inboxToday": "আজ",
+  "@inboxToday": {},
+  "inboxEarlier": "আগে",
+  "@inboxEarlier": {},
+  "inboxSparkNote": "আপনি অ্যাপ খুললে নতুন অনুরোধ দেখতে পাবেন।",
+  "@inboxSparkNote": {},
+  "inboxMarkAllRead": "সব পড়া হয়েছে",
+  "@inboxMarkAllRead": {},
+  "inboxUnreadSemantics": "অপঠিত",
+  "@inboxUnreadSemantics": {},
+  "inboxSomeone": "কেউ একজন",
+  "@inboxSomeone": {},
+  "inboxUnknown": "নতুন বিজ্ঞপ্তি",
+  "@inboxUnknown": {},
+  "swapSheetTitle": "কাউকে এই কাজটি নিতে বলুন",
+  "@swapSheetTitle": {},
+  "swapSheetPerson": "কে নিতে পারবেন?",
+  "@swapSheetPerson": {},
+  "swapSheetNobody": "ওই দিন কেউ ফাঁকা নেই।",
+  "@swapSheetNobody": {},
+  "swapSheetReasonHint": "কেন করতে পারছেন না?",
+  "@swapSheetReasonHint": {},
+  "swapSheetSend": "অনুরোধ পাঠান",
+  "@swapSheetSend": {},
+  "swapResponseTitle": "অনুরোধের উত্তর দিন",
+  "@swapResponseTitle": {},
+  "swapAccept": "গ্রহণ করুন",
+  "@swapAccept": {},
+  "swapDecline": "না করুন",
+  "@swapDecline": {},
+  "swapDeclineReasonTitle": "কেন নয়? (ঐচ্ছিক)",
+  "@swapDeclineReasonTitle": {},
+  "swapNeedsInternet": "এর জন্য ইন্টারনেট দরকার।",
+  "@swapNeedsInternet": {},
+  "swapBannerCancel": "অনুরোধ বাতিল করুন",
+  "@swapBannerCancel": {},
+  "needsCoverTitle": "যে কাজে বদলি দরকার",
+  "@needsCoverTitle": {},
+  "needsCoverSubtitle": "যে কাজ এখনও কেউ করতে পারছে না",
+  "@needsCoverSubtitle": {},
+  "needsCoverEmpty": "সব কাজেই কেউ আছেন",
+  "@needsCoverEmpty": {},
+  "needsCoverNoAccess": "শুধু ম্যানেজাররা কাজ ঠিক করতে পারেন।",
+  "@needsCoverNoAccess": {},
+  "needsCoverAssign": "ঠিক করুন",
+  "@needsCoverAssign": {},
+  "availabilityTitle": "অনুপস্থিতি",
+  "@availabilityTitle": {},
+  "availabilitySubtitle": "যে দিনগুলো আপনি নেই",
+  "@availabilitySubtitle": {},
+  "availabilityMine": "আমার",
+  "@availabilityMine": {},
+  "availabilityEveryone": "সবার",
+  "@availabilityEveryone": {},
+  "availabilityAdd": "অনুপস্থিতি যোগ করুন",
+  "@availabilityAdd": {},
+  "availabilityEmpty": "কোনো অনুপস্থিতি নেই",
+  "@availabilityEmpty": {},
+  "availabilityType": "ধরন",
+  "@availabilityType": {},
+  "availabilityPickDates": "তারিখ বেছে নিন",
+  "@availabilityPickDates": {},
+  "availabilityReasonHint": "কারণ (৩ থেকে ২০০ অক্ষর)",
+  "@availabilityReasonHint": {},
+  "availabilitySave": "সংরক্ষণ করুন",
+  "@availabilitySave": {},
+  "availabilityApprove": "অনুমোদন",
+  "@availabilityApprove": {},
+  "availabilityReject": "বাতিল",
+  "@availabilityReject": {},
+  "availabilityCancel": "অনুপস্থিতি বাতিল",
+  "@availabilityCancel": {},
+  "availabilityStatusPending": "অনুমোদনের অপেক্ষায়",
+  "@availabilityStatusPending": {},
+  "availabilityStatusActive": "অনুমোদিত",
+  "@availabilityStatusActive": {},
+  "availabilityStatusRejected": "বাতিল হয়েছে",
+  "@availabilityStatusRejected": {},
+  "availabilityStatusCancelled": "বাতিল করা হয়েছে",
+  "@availabilityStatusCancelled": {},
+  "availabilityPolicyAsk": "আপনার কাজগুলো বদলি দরকার হিসেবে দেখানো হবে এবং আপনাকে ও ম্যানেজারদের জানানো হবে।",
+  "@availabilityPolicyAsk": {},
+  "availabilityPolicyAuto": "প্রতিটি কাজের জন্য একজন ফাঁকা সদস্যকে বলা হবে। তিনি রাজি না হওয়া পর্যন্ত কিছু বদলাবে না।",
+  "@availabilityPolicyAuto": {},
+  "availabilityPolicySkip": "একজন ম্যানেজার এই কাজগুলো বাদ দেবেন।",
+  "@availabilityPolicySkip": {},
+  "inboxBellLabel": "বিজ্ঞপ্তি, {count}টি অপঠিত",
+  "@inboxBellLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapRequest": "{name} আপনাকে {date}-এ {chore} নিতে বলছেন",
+  "@inboxSwapRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxCoverRequest": "{name}-এর {date}-এ {chore} কাজে বদলি দরকার",
+  "@inboxCoverRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapAccepted": "{name} {date}-এ {chore} নিতে রাজি হয়েছেন",
+  "@inboxSwapAccepted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapDeclined": "{name} {date}-এ {chore} নিতে রাজি হননি",
+  "@inboxSwapDeclined": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapCancelled": "{name} {date}-এর {chore} অনুরোধ বাতিল করেছেন",
+  "@inboxSwapCancelled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapExpired": "{date}-এর {chore} অনুরোধের সময় শেষ হয়ে গেছে",
+  "@inboxSwapExpired": {
+    "placeholders": {
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxReassigned": "{name} {date}-এর {chore} আপনাকে দিয়েছেন",
+  "@inboxReassigned": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxNeedsCover": "{name} {from} থেকে {to} পর্যন্ত নেই: {count}টি কাজে বদলি দরকার",
+  "@inboxNeedsCover": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxAbsenceApproved": "{name} আপনার অনুপস্থিতি অনুমোদন করেছেন",
+  "@inboxAbsenceApproved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxAbsenceRejected": "{name} আপনার অনুপস্থিতি বাতিল করেছেন",
+  "@inboxAbsenceRejected": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxChoreReopened": "{name} {date}-এর {chore} আবার খুলেছেন",
+  "@inboxChoreReopened": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxCommentAttention": "{name} {date}-এর {chore} চিহ্নিত করেছেন",
+  "@inboxCommentAttention": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxVerificationNeeded": "{name} {date}-এর {chore} শেষ করেছেন; যাচাই দরকার",
+  "@inboxVerificationNeeded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "swapLoadLabel": "এই মাসে {count}টি কাজ",
+  "@swapLoadLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "swapSheetPreview": "{name}-কে অনুরোধ: {date}-এ {chore} নিন",
+  "@swapSheetPreview": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "swapReasonLabel": "কারণ: {reason}",
+  "@swapReasonLabel": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBannerSent": "{name}-কে অনুরোধ পাঠানো হয়েছে",
+  "@swapBannerSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBannerForYou": "{name} আপনাকে এই কাজটি নিতে বলেছেন",
+  "@swapBannerForYou": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "availabilityRangeLine": "{from} থেকে {to}",
+  "@availabilityRangeLine": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "availabilityAffected": "এতে {count}টি কাজ প্রভাবিত হবে",
+  "@availabilityAffected": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   }
 }

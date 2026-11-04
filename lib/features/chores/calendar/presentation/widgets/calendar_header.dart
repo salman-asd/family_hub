@@ -1,6 +1,7 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/calendar/presentation/calendar_motion.dart';
+import 'package:family_hub/features/notifications/presentation/inbox_bell.dart';
 import 'package:flutter/material.dart';
 
 /// The month title, the previous / next arrows and the Today pill (B.2).
@@ -117,6 +118,8 @@ class CalendarHeader extends StatelessWidget {
                 icon: const Icon(Icons.chevron_right_rounded),
               ),
             ],
+            // P3-27: the inbox bell with its unread badge.
+            const InboxBell(),
           ],
         ),
       ],

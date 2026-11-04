@@ -2,6 +2,7 @@ import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permission.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
+import 'package:family_hub/features/notifications/presentation/inbox_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -108,5 +109,31 @@ final List<ChoresEntry> choresEntries = <ChoresEntry>[
     subtitle: (l10n) => l10n.starterPackSubtitle,
     route: AppRoutes.choresStarterPack,
     requires: Permission.manageChoreTemplates,
+  ),
+  // P3-27. Everybody records their own absence; the screen shows managers more.
+  ChoresEntry(
+    id: 'availability',
+    icon: Icons.event_busy_outlined,
+    title: (l10n) => l10n.availabilityTitle,
+    subtitle: (l10n) => l10n.availabilitySubtitle,
+    route: AppRoutes.choresAvailability,
+  ),
+  // P3-27. Managers see what still needs somebody.
+  ChoresEntry(
+    id: 'needsCover',
+    icon: Icons.person_search_outlined,
+    title: (l10n) => l10n.needsCoverTitle,
+    subtitle: (l10n) => l10n.needsCoverSubtitle,
+    route: AppRoutes.choresNeedsCover,
+    requires: Permission.reassignChore,
+  ),
+  // P3-27. The module-neutral inbox, with its unread count.
+  ChoresEntry(
+    id: 'inbox',
+    icon: Icons.notifications_none_rounded,
+    title: (l10n) => l10n.inboxTitle,
+    subtitle: (l10n) => l10n.inboxSparkNote,
+    route: AppRoutes.inbox,
+    badge: unreadInboxCountProvider,
   ),
 ];

@@ -27,6 +27,7 @@ class OccurrenceDetailBody extends StatelessWidget {
     required this.onToggleParent,
     required this.onToggleSubtask,
     this.comments,
+    this.banner,
     super.key,
   });
 
@@ -43,12 +44,16 @@ class OccurrenceDetailBody extends StatelessWidget {
   /// layout file with no providers.
   final Widget? comments;
 
+  /// The pending swap request of this chore (P3-27), above everything else.
+  final Widget? banner;
+
   @override
   Widget build(BuildContext context) {
     final t = context.tokens;
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        ?banner,
         OccurrenceHeader(item: item, formatters: formatters, today: today),
         const SizedBox(height: 20),
         SubtaskChecklist(

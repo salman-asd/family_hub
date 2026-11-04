@@ -4066,5 +4066,338 @@
         "type": "String"
       }
     }
+  },
+  "inboxTitle": "Notifications",
+  "@inboxTitle": {},
+  "inboxEmpty": "No notifications yet",
+  "@inboxEmpty": {},
+  "inboxToday": "Today",
+  "@inboxToday": {},
+  "inboxEarlier": "Earlier",
+  "@inboxEarlier": {},
+  "inboxSparkNote": "You will see new requests when you open the app.",
+  "@inboxSparkNote": {},
+  "inboxMarkAllRead": "Mark all as read",
+  "@inboxMarkAllRead": {},
+  "inboxUnreadSemantics": "Unread",
+  "@inboxUnreadSemantics": {},
+  "inboxSomeone": "Someone",
+  "@inboxSomeone": {},
+  "inboxUnknown": "New notification",
+  "@inboxUnknown": {},
+  "swapSheetTitle": "Ask someone to take this chore",
+  "@swapSheetTitle": {},
+  "swapSheetPerson": "Who can take it?",
+  "@swapSheetPerson": {},
+  "swapSheetNobody": "Nobody is available that day.",
+  "@swapSheetNobody": {},
+  "swapSheetReasonHint": "Why can you not do it?",
+  "@swapSheetReasonHint": {},
+  "swapSheetSend": "Send request",
+  "@swapSheetSend": {},
+  "swapResponseTitle": "Answer the request",
+  "@swapResponseTitle": {},
+  "swapAccept": "Accept",
+  "@swapAccept": {},
+  "swapDecline": "Decline",
+  "@swapDecline": {},
+  "swapDeclineReasonTitle": "Why not? (optional)",
+  "@swapDeclineReasonTitle": {},
+  "swapNeedsInternet": "This needs an internet connection.",
+  "@swapNeedsInternet": {},
+  "swapBannerCancel": "Cancel request",
+  "@swapBannerCancel": {},
+  "needsCoverTitle": "Chores that need a cover",
+  "@needsCoverTitle": {},
+  "needsCoverSubtitle": "Chores nobody can do yet",
+  "@needsCoverSubtitle": {},
+  "needsCoverEmpty": "Every chore has someone",
+  "@needsCoverEmpty": {},
+  "needsCoverNoAccess": "Only managers can assign chores.",
+  "@needsCoverNoAccess": {},
+  "needsCoverAssign": "Assign",
+  "@needsCoverAssign": {},
+  "availabilityTitle": "Absences",
+  "@availabilityTitle": {},
+  "availabilitySubtitle": "Days you are away",
+  "@availabilitySubtitle": {},
+  "availabilityMine": "Mine",
+  "@availabilityMine": {},
+  "availabilityEveryone": "Everyone",
+  "@availabilityEveryone": {},
+  "availabilityAdd": "Add absence",
+  "@availabilityAdd": {},
+  "availabilityEmpty": "No absences",
+  "@availabilityEmpty": {},
+  "availabilityType": "Type",
+  "@availabilityType": {},
+  "availabilityPickDates": "Choose dates",
+  "@availabilityPickDates": {},
+  "availabilityReasonHint": "Reason (3 to 200 characters)",
+  "@availabilityReasonHint": {},
+  "availabilitySave": "Save",
+  "@availabilitySave": {},
+  "availabilityApprove": "Approve",
+  "@availabilityApprove": {},
+  "availabilityReject": "Reject",
+  "@availabilityReject": {},
+  "availabilityCancel": "Cancel absence",
+  "@availabilityCancel": {},
+  "availabilityStatusPending": "Waiting for approval",
+  "@availabilityStatusPending": {},
+  "availabilityStatusActive": "Approved",
+  "@availabilityStatusActive": {},
+  "availabilityStatusRejected": "Rejected",
+  "@availabilityStatusRejected": {},
+  "availabilityStatusCancelled": "Cancelled",
+  "@availabilityStatusCancelled": {},
+  "availabilityPolicyAsk": "Your chores will be listed as needing a cover, and you and the managers will be told.",
+  "@availabilityPolicyAsk": {},
+  "availabilityPolicyAuto": "Someone who is free will be asked to cover each chore. Nothing changes until they accept.",
+  "@availabilityPolicyAuto": {},
+  "availabilityPolicySkip": "A manager will mark these chores as skipped.",
+  "@availabilityPolicySkip": {},
+  "inboxBellLabel": "Notifications, {count} unread",
+  "@inboxBellLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapRequest": "{name} asks you to take {chore} on {date}",
+  "@inboxSwapRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxCoverRequest": "{name} needs a cover for {chore} on {date}",
+  "@inboxCoverRequest": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapAccepted": "{name} accepted {chore} on {date}",
+  "@inboxSwapAccepted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapDeclined": "{name} declined {chore} on {date}",
+  "@inboxSwapDeclined": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapCancelled": "{name} cancelled the request for {chore} on {date}",
+  "@inboxSwapCancelled": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxSwapExpired": "The request for {chore} on {date} ran out of time",
+  "@inboxSwapExpired": {
+    "placeholders": {
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxReassigned": "{name} moved {chore} on {date} to you",
+  "@inboxReassigned": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxNeedsCover": "{name} is away from {from} to {to}: {count} chores need a cover",
+  "@inboxNeedsCover": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxAbsenceApproved": "{name} approved your absence",
+  "@inboxAbsenceApproved": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxAbsenceRejected": "{name} rejected your absence",
+  "@inboxAbsenceRejected": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxChoreReopened": "{name} reopened {chore} on {date}",
+  "@inboxChoreReopened": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxCommentAttention": "{name} flagged {chore} on {date}",
+  "@inboxCommentAttention": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "inboxVerificationNeeded": "{name} finished {chore} on {date}; it needs checking",
+  "@inboxVerificationNeeded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "swapLoadLabel": "{count} chores this month",
+  "@swapLoadLabel": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "swapSheetPreview": "Request to {name}: take {chore} on {date}",
+  "@swapSheetPreview": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "chore": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "swapReasonLabel": "Reason: {reason}",
+  "@swapReasonLabel": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBannerSent": "Request sent to {name}",
+  "@swapBannerSent": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "swapBannerForYou": "{name} asked you to take this chore",
+  "@swapBannerForYou": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "availabilityRangeLine": "{from} to {to}",
+  "@availabilityRangeLine": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "availabilityAffected": "{count} chores are affected",
+  "@availabilityAffected": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
   }
 }

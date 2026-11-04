@@ -4463,4 +4463,244 @@ class AppLocalizationsEn extends AppLocalizations {
   String activityChoresCommentUnhidden(String member, String name, String date) {
     return '$member showed a comment on $name on $date again';
   }
+
+  @override
+  String get inboxTitle => 'Notifications';
+
+  @override
+  String get inboxEmpty => 'No notifications yet';
+
+  @override
+  String get inboxToday => 'Today';
+
+  @override
+  String get inboxEarlier => 'Earlier';
+
+  @override
+  String get inboxSparkNote => 'You will see new requests when you open the app.';
+
+  @override
+  String get inboxMarkAllRead => 'Mark all as read';
+
+  @override
+  String get inboxUnreadSemantics => 'Unread';
+
+  @override
+  String get inboxSomeone => 'Someone';
+
+  @override
+  String get inboxUnknown => 'New notification';
+
+  @override
+  String get swapSheetTitle => 'Ask someone to take this chore';
+
+  @override
+  String get swapSheetPerson => 'Who can take it?';
+
+  @override
+  String get swapSheetNobody => 'Nobody is available that day.';
+
+  @override
+  String get swapSheetReasonHint => 'Why can you not do it?';
+
+  @override
+  String get swapSheetSend => 'Send request';
+
+  @override
+  String get swapResponseTitle => 'Answer the request';
+
+  @override
+  String get swapAccept => 'Accept';
+
+  @override
+  String get swapDecline => 'Decline';
+
+  @override
+  String get swapDeclineReasonTitle => 'Why not? (optional)';
+
+  @override
+  String get swapNeedsInternet => 'This needs an internet connection.';
+
+  @override
+  String get swapBannerCancel => 'Cancel request';
+
+  @override
+  String get needsCoverTitle => 'Chores that need a cover';
+
+  @override
+  String get needsCoverSubtitle => 'Chores nobody can do yet';
+
+  @override
+  String get needsCoverEmpty => 'Every chore has someone';
+
+  @override
+  String get needsCoverNoAccess => 'Only managers can assign chores.';
+
+  @override
+  String get needsCoverAssign => 'Assign';
+
+  @override
+  String get availabilityTitle => 'Absences';
+
+  @override
+  String get availabilitySubtitle => 'Days you are away';
+
+  @override
+  String get availabilityMine => 'Mine';
+
+  @override
+  String get availabilityEveryone => 'Everyone';
+
+  @override
+  String get availabilityAdd => 'Add absence';
+
+  @override
+  String get availabilityEmpty => 'No absences';
+
+  @override
+  String get availabilityType => 'Type';
+
+  @override
+  String get availabilityPickDates => 'Choose dates';
+
+  @override
+  String get availabilityReasonHint => 'Reason (3 to 200 characters)';
+
+  @override
+  String get availabilitySave => 'Save';
+
+  @override
+  String get availabilityApprove => 'Approve';
+
+  @override
+  String get availabilityReject => 'Reject';
+
+  @override
+  String get availabilityCancel => 'Cancel absence';
+
+  @override
+  String get availabilityStatusPending => 'Waiting for approval';
+
+  @override
+  String get availabilityStatusActive => 'Approved';
+
+  @override
+  String get availabilityStatusRejected => 'Rejected';
+
+  @override
+  String get availabilityStatusCancelled => 'Cancelled';
+
+  @override
+  String get availabilityPolicyAsk => 'Your chores will be listed as needing a cover, and you and the managers will be told.';
+
+  @override
+  String get availabilityPolicyAuto => 'Someone who is free will be asked to cover each chore. Nothing changes until they accept.';
+
+  @override
+  String get availabilityPolicySkip => 'A manager will mark these chores as skipped.';
+
+  @override
+  String inboxBellLabel(String count) {
+    return 'Notifications, $count unread';
+  }
+
+  @override
+  String inboxSwapRequest(String name, String chore, String date) {
+    return '$name asks you to take $chore on $date';
+  }
+
+  @override
+  String inboxCoverRequest(String name, String chore, String date) {
+    return '$name needs a cover for $chore on $date';
+  }
+
+  @override
+  String inboxSwapAccepted(String name, String chore, String date) {
+    return '$name accepted $chore on $date';
+  }
+
+  @override
+  String inboxSwapDeclined(String name, String chore, String date) {
+    return '$name declined $chore on $date';
+  }
+
+  @override
+  String inboxSwapCancelled(String name, String chore, String date) {
+    return '$name cancelled the request for $chore on $date';
+  }
+
+  @override
+  String inboxSwapExpired(String chore, String date) {
+    return 'The request for $chore on $date ran out of time';
+  }
+
+  @override
+  String inboxReassigned(String name, String chore, String date) {
+    return '$name moved $chore on $date to you';
+  }
+
+  @override
+  String inboxNeedsCover(String name, String count, String from, String to) {
+    return '$name is away from $from to $to: $count chores need a cover';
+  }
+
+  @override
+  String inboxAbsenceApproved(String name) {
+    return '$name approved your absence';
+  }
+
+  @override
+  String inboxAbsenceRejected(String name) {
+    return '$name rejected your absence';
+  }
+
+  @override
+  String inboxChoreReopened(String name, String chore, String date) {
+    return '$name reopened $chore on $date';
+  }
+
+  @override
+  String inboxCommentAttention(String name, String chore, String date) {
+    return '$name flagged $chore on $date';
+  }
+
+  @override
+  String inboxVerificationNeeded(String name, String chore, String date) {
+    return '$name finished $chore on $date; it needs checking';
+  }
+
+  @override
+  String swapLoadLabel(String count) {
+    return '$count chores this month';
+  }
+
+  @override
+  String swapSheetPreview(String name, String chore, String date) {
+    return 'Request to $name: take $chore on $date';
+  }
+
+  @override
+  String swapReasonLabel(String reason) {
+    return 'Reason: $reason';
+  }
+
+  @override
+  String swapBannerSent(String name) {
+    return 'Request sent to $name';
+  }
+
+  @override
+  String swapBannerForYou(String name) {
+    return '$name asked you to take this chore';
+  }
+
+  @override
+  String availabilityRangeLine(String from, String to) {
+    return '$from to $to';
+  }
+
+  @override
+  String availabilityAffected(String count) {
+    return '$count chores are affected';
+  }
 }

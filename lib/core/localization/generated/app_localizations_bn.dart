@@ -4443,4 +4443,244 @@ class AppLocalizationsBn extends AppLocalizations {
   String activityChoresCommentUnhidden(String member, String name, String date) {
     return '$member $date-এ $name এর একটি মন্তব্য আবার দেখিয়েছেন';
   }
+
+  @override
+  String get inboxTitle => 'বিজ্ঞপ্তি';
+
+  @override
+  String get inboxEmpty => 'এখনও কোনো বিজ্ঞপ্তি নেই';
+
+  @override
+  String get inboxToday => 'আজ';
+
+  @override
+  String get inboxEarlier => 'আগে';
+
+  @override
+  String get inboxSparkNote => 'আপনি অ্যাপ খুললে নতুন অনুরোধ দেখতে পাবেন।';
+
+  @override
+  String get inboxMarkAllRead => 'সব পড়া হয়েছে';
+
+  @override
+  String get inboxUnreadSemantics => 'অপঠিত';
+
+  @override
+  String get inboxSomeone => 'কেউ একজন';
+
+  @override
+  String get inboxUnknown => 'নতুন বিজ্ঞপ্তি';
+
+  @override
+  String get swapSheetTitle => 'কাউকে এই কাজটি নিতে বলুন';
+
+  @override
+  String get swapSheetPerson => 'কে নিতে পারবেন?';
+
+  @override
+  String get swapSheetNobody => 'ওই দিন কেউ ফাঁকা নেই।';
+
+  @override
+  String get swapSheetReasonHint => 'কেন করতে পারছেন না?';
+
+  @override
+  String get swapSheetSend => 'অনুরোধ পাঠান';
+
+  @override
+  String get swapResponseTitle => 'অনুরোধের উত্তর দিন';
+
+  @override
+  String get swapAccept => 'গ্রহণ করুন';
+
+  @override
+  String get swapDecline => 'না করুন';
+
+  @override
+  String get swapDeclineReasonTitle => 'কেন নয়? (ঐচ্ছিক)';
+
+  @override
+  String get swapNeedsInternet => 'এর জন্য ইন্টারনেট দরকার।';
+
+  @override
+  String get swapBannerCancel => 'অনুরোধ বাতিল করুন';
+
+  @override
+  String get needsCoverTitle => 'যে কাজে বদলি দরকার';
+
+  @override
+  String get needsCoverSubtitle => 'যে কাজ এখনও কেউ করতে পারছে না';
+
+  @override
+  String get needsCoverEmpty => 'সব কাজেই কেউ আছেন';
+
+  @override
+  String get needsCoverNoAccess => 'শুধু ম্যানেজাররা কাজ ঠিক করতে পারেন।';
+
+  @override
+  String get needsCoverAssign => 'ঠিক করুন';
+
+  @override
+  String get availabilityTitle => 'অনুপস্থিতি';
+
+  @override
+  String get availabilitySubtitle => 'যে দিনগুলো আপনি নেই';
+
+  @override
+  String get availabilityMine => 'আমার';
+
+  @override
+  String get availabilityEveryone => 'সবার';
+
+  @override
+  String get availabilityAdd => 'অনুপস্থিতি যোগ করুন';
+
+  @override
+  String get availabilityEmpty => 'কোনো অনুপস্থিতি নেই';
+
+  @override
+  String get availabilityType => 'ধরন';
+
+  @override
+  String get availabilityPickDates => 'তারিখ বেছে নিন';
+
+  @override
+  String get availabilityReasonHint => 'কারণ (৩ থেকে ২০০ অক্ষর)';
+
+  @override
+  String get availabilitySave => 'সংরক্ষণ করুন';
+
+  @override
+  String get availabilityApprove => 'অনুমোদন';
+
+  @override
+  String get availabilityReject => 'বাতিল';
+
+  @override
+  String get availabilityCancel => 'অনুপস্থিতি বাতিল';
+
+  @override
+  String get availabilityStatusPending => 'অনুমোদনের অপেক্ষায়';
+
+  @override
+  String get availabilityStatusActive => 'অনুমোদিত';
+
+  @override
+  String get availabilityStatusRejected => 'বাতিল হয়েছে';
+
+  @override
+  String get availabilityStatusCancelled => 'বাতিল করা হয়েছে';
+
+  @override
+  String get availabilityPolicyAsk => 'আপনার কাজগুলো বদলি দরকার হিসেবে দেখানো হবে এবং আপনাকে ও ম্যানেজারদের জানানো হবে।';
+
+  @override
+  String get availabilityPolicyAuto => 'প্রতিটি কাজের জন্য একজন ফাঁকা সদস্যকে বলা হবে। তিনি রাজি না হওয়া পর্যন্ত কিছু বদলাবে না।';
+
+  @override
+  String get availabilityPolicySkip => 'একজন ম্যানেজার এই কাজগুলো বাদ দেবেন।';
+
+  @override
+  String inboxBellLabel(String count) {
+    return 'বিজ্ঞপ্তি, $countটি অপঠিত';
+  }
+
+  @override
+  String inboxSwapRequest(String name, String chore, String date) {
+    return '$name আপনাকে $date-এ $chore নিতে বলছেন';
+  }
+
+  @override
+  String inboxCoverRequest(String name, String chore, String date) {
+    return '$name-এর $date-এ $chore কাজে বদলি দরকার';
+  }
+
+  @override
+  String inboxSwapAccepted(String name, String chore, String date) {
+    return '$name $date-এ $chore নিতে রাজি হয়েছেন';
+  }
+
+  @override
+  String inboxSwapDeclined(String name, String chore, String date) {
+    return '$name $date-এ $chore নিতে রাজি হননি';
+  }
+
+  @override
+  String inboxSwapCancelled(String name, String chore, String date) {
+    return '$name $date-এর $chore অনুরোধ বাতিল করেছেন';
+  }
+
+  @override
+  String inboxSwapExpired(String chore, String date) {
+    return '$date-এর $chore অনুরোধের সময় শেষ হয়ে গেছে';
+  }
+
+  @override
+  String inboxReassigned(String name, String chore, String date) {
+    return '$name $date-এর $chore আপনাকে দিয়েছেন';
+  }
+
+  @override
+  String inboxNeedsCover(String name, String count, String from, String to) {
+    return '$name $from থেকে $to পর্যন্ত নেই: $countটি কাজে বদলি দরকার';
+  }
+
+  @override
+  String inboxAbsenceApproved(String name) {
+    return '$name আপনার অনুপস্থিতি অনুমোদন করেছেন';
+  }
+
+  @override
+  String inboxAbsenceRejected(String name) {
+    return '$name আপনার অনুপস্থিতি বাতিল করেছেন';
+  }
+
+  @override
+  String inboxChoreReopened(String name, String chore, String date) {
+    return '$name $date-এর $chore আবার খুলেছেন';
+  }
+
+  @override
+  String inboxCommentAttention(String name, String chore, String date) {
+    return '$name $date-এর $chore চিহ্নিত করেছেন';
+  }
+
+  @override
+  String inboxVerificationNeeded(String name, String chore, String date) {
+    return '$name $date-এর $chore শেষ করেছেন; যাচাই দরকার';
+  }
+
+  @override
+  String swapLoadLabel(String count) {
+    return 'এই মাসে $countটি কাজ';
+  }
+
+  @override
+  String swapSheetPreview(String name, String chore, String date) {
+    return '$name-কে অনুরোধ: $date-এ $chore নিন';
+  }
+
+  @override
+  String swapReasonLabel(String reason) {
+    return 'কারণ: $reason';
+  }
+
+  @override
+  String swapBannerSent(String name) {
+    return '$name-কে অনুরোধ পাঠানো হয়েছে';
+  }
+
+  @override
+  String swapBannerForYou(String name) {
+    return '$name আপনাকে এই কাজটি নিতে বলেছেন';
+  }
+
+  @override
+  String availabilityRangeLine(String from, String to) {
+    return '$from থেকে $to';
+  }
+
+  @override
+  String availabilityAffected(String count) {
+    return 'এতে $countটি কাজ প্রভাবিত হবে';
+  }
 }

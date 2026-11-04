@@ -1,6 +1,7 @@
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
 import 'package:family_hub/features/chores/presentation/chores_failure_messages.dart';
+import 'package:family_hub/features/chores/swaps/presentation/swap_providers.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
@@ -41,6 +42,8 @@ class ChoresGenerationHook extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final familyId = ref.watch(choresGenerationTargetProvider);
     if (familyId != null) {
+      // P3-27: lapsed swap requests are closed once per start (best effort).
+      ref.watch(expireSwapsOnOpenProvider(familyId));
       ref.listen(ensureOccurrencesOnOpenProvider(familyId), (_, next) {
         final failure = next.hasValue ? next.value : null;
         if (failure == null) return;

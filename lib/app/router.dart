@@ -1,3 +1,4 @@
+import 'package:family_hub/features/notifications/presentation/inbox_screen.dart';
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/gallery/dev_gallery_screen.dart';
 import 'package:family_hub/app/routing/app_routes.dart';
@@ -228,6 +229,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.settingsLanguage,
         builder: (context, state) => const LanguageSettingsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.inbox,
+        builder: (context, state) => const InboxScreen(),
       ),
       GoRoute(
         path: AppRoutes.settingsSecurity,

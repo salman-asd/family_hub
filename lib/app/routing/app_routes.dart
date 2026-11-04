@@ -53,6 +53,7 @@ abstract final class AppRoutes {
   static String choresDutyGroup(String id) => '/chores/duty-groups/$id';
   static const String choresStarterPack = '/chores/starter-pack';
   static const String choresAvailability = '/chores/availability';
+  static const String choresNeedsCover = '/chores/needs-cover';
   static const String choresRota = '/chores/rota';
 
   /// The module-neutral inbox: a top-level route above the shell (P3-27).

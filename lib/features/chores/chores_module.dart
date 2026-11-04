@@ -1,5 +1,6 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/features/chores/availability/presentation/availability_screen.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_editor_screen.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_list_screen.dart';
 import 'package:family_hub/features/chores/presentation/chores_home_screen.dart';
@@ -9,6 +10,7 @@ import 'package:family_hub/features/chores/presentation/today_screen.dart';
 import 'package:family_hub/features/chores/presentation/verify_queue_screen.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_screen.dart';
 import 'package:family_hub/features/chores/starter_packs/presentation/starter_pack_wizard_screen.dart';
+import 'package:family_hub/features/chores/swaps/presentation/needs_cover_board.dart';
 import 'package:family_hub/features/chores/templates/presentation/template_editor_screen.dart';
 import 'package:family_hub/features/chores/templates/presentation/template_list_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
@@ -102,6 +104,15 @@ class ChoresModule extends FamilyModule {
               ),
             ),
           ],
+        ),
+        // P3-27.
+        GoRoute(
+          path: 'availability',
+          builder: (context, state) => const AvailabilityScreen(),
+        ),
+        GoRoute(
+          path: 'needs-cover',
+          builder: (context, state) => const NeedsCoverBoard(),
         ),
         // Declared AFTER the fixed paths above so `today`/`verify` are never
         // captured by the id pattern.

@@ -2,15 +2,14 @@ import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/notifications/domain/inbox_item.dart';
 import 'package:family_hub/features/notifications/domain/inbox_repository.dart';
+import 'package:family_hub/features/notifications/domain/no_inbox_repository.dart';
 import 'package:family_hub/features/notifications/domain/usecases/archive_inbox_item.dart';
 import 'package:family_hub/features/notifications/domain/usecases/mark_inbox_read.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Overridden in `bootstrap.dart` and in tests.
+/// Overridden in `bootstrap.dart` and in tests; the default inbox is empty.
 final inboxRepositoryProvider = Provider<InboxRepository>(
-  (ref) => throw UnimplementedError(
-    'inboxRepositoryProvider must be overridden (bootstrap.dart / tests).',
-  ),
+  (ref) => const NoInboxRepository(),
 );
 
 /// MY newest inbox items (archived ones hidden): ONE listener, at most

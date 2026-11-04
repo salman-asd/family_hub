@@ -7827,6 +7827,402 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'{member} {date}-এ {name} এর একটি মন্তব্য আবার দেখিয়েছেন'**
   String activityChoresCommentUnhidden(String member, String name, String date);
+
+  /// No description provided for @inboxTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিজ্ঞপ্তি'**
+  String get inboxTitle;
+
+  /// No description provided for @inboxEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনও কোনো বিজ্ঞপ্তি নেই'**
+  String get inboxEmpty;
+
+  /// No description provided for @inboxToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজ'**
+  String get inboxToday;
+
+  /// No description provided for @inboxEarlier.
+  ///
+  /// In bn, this message translates to:
+  /// **'আগে'**
+  String get inboxEarlier;
+
+  /// No description provided for @inboxSparkNote.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি অ্যাপ খুললে নতুন অনুরোধ দেখতে পাবেন।'**
+  String get inboxSparkNote;
+
+  /// No description provided for @inboxMarkAllRead.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব পড়া হয়েছে'**
+  String get inboxMarkAllRead;
+
+  /// No description provided for @inboxUnreadSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'অপঠিত'**
+  String get inboxUnreadSemantics;
+
+  /// No description provided for @inboxSomeone.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেউ একজন'**
+  String get inboxSomeone;
+
+  /// No description provided for @inboxUnknown.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন বিজ্ঞপ্তি'**
+  String get inboxUnknown;
+
+  /// No description provided for @swapSheetTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাউকে এই কাজটি নিতে বলুন'**
+  String get swapSheetTitle;
+
+  /// No description provided for @swapSheetPerson.
+  ///
+  /// In bn, this message translates to:
+  /// **'কে নিতে পারবেন?'**
+  String get swapSheetPerson;
+
+  /// No description provided for @swapSheetNobody.
+  ///
+  /// In bn, this message translates to:
+  /// **'ওই দিন কেউ ফাঁকা নেই।'**
+  String get swapSheetNobody;
+
+  /// No description provided for @swapSheetReasonHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেন করতে পারছেন না?'**
+  String get swapSheetReasonHint;
+
+  /// No description provided for @swapSheetSend.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধ পাঠান'**
+  String get swapSheetSend;
+
+  /// No description provided for @swapResponseTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধের উত্তর দিন'**
+  String get swapResponseTitle;
+
+  /// No description provided for @swapAccept.
+  ///
+  /// In bn, this message translates to:
+  /// **'গ্রহণ করুন'**
+  String get swapAccept;
+
+  /// No description provided for @swapDecline.
+  ///
+  /// In bn, this message translates to:
+  /// **'না করুন'**
+  String get swapDecline;
+
+  /// No description provided for @swapDeclineReasonTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কেন নয়? (ঐচ্ছিক)'**
+  String get swapDeclineReasonTitle;
+
+  /// No description provided for @swapNeedsInternet.
+  ///
+  /// In bn, this message translates to:
+  /// **'এর জন্য ইন্টারনেট দরকার।'**
+  String get swapNeedsInternet;
+
+  /// No description provided for @swapBannerCancel.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুরোধ বাতিল করুন'**
+  String get swapBannerCancel;
+
+  /// No description provided for @needsCoverTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'যে কাজে বদলি দরকার'**
+  String get needsCoverTitle;
+
+  /// No description provided for @needsCoverSubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'যে কাজ এখনও কেউ করতে পারছে না'**
+  String get needsCoverSubtitle;
+
+  /// No description provided for @needsCoverEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব কাজেই কেউ আছেন'**
+  String get needsCoverEmpty;
+
+  /// No description provided for @needsCoverNoAccess.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু ম্যানেজাররা কাজ ঠিক করতে পারেন।'**
+  String get needsCoverNoAccess;
+
+  /// No description provided for @needsCoverAssign.
+  ///
+  /// In bn, this message translates to:
+  /// **'ঠিক করুন'**
+  String get needsCoverAssign;
+
+  /// No description provided for @availabilityTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতি'**
+  String get availabilityTitle;
+
+  /// No description provided for @availabilitySubtitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'যে দিনগুলো আপনি নেই'**
+  String get availabilitySubtitle;
+
+  /// No description provided for @availabilityMine.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমার'**
+  String get availabilityMine;
+
+  /// No description provided for @availabilityEveryone.
+  ///
+  /// In bn, this message translates to:
+  /// **'সবার'**
+  String get availabilityEveryone;
+
+  /// No description provided for @availabilityAdd.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতি যোগ করুন'**
+  String get availabilityAdd;
+
+  /// No description provided for @availabilityEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোনো অনুপস্থিতি নেই'**
+  String get availabilityEmpty;
+
+  /// No description provided for @availabilityType.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধরন'**
+  String get availabilityType;
+
+  /// No description provided for @availabilityPickDates.
+  ///
+  /// In bn, this message translates to:
+  /// **'তারিখ বেছে নিন'**
+  String get availabilityPickDates;
+
+  /// No description provided for @availabilityReasonHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'কারণ (৩ থেকে ২০০ অক্ষর)'**
+  String get availabilityReasonHint;
+
+  /// No description provided for @availabilitySave.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষণ করুন'**
+  String get availabilitySave;
+
+  /// No description provided for @availabilityApprove.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদন'**
+  String get availabilityApprove;
+
+  /// No description provided for @availabilityReject.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল'**
+  String get availabilityReject;
+
+  /// No description provided for @availabilityCancel.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতি বাতিল'**
+  String get availabilityCancel;
+
+  /// No description provided for @availabilityStatusPending.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদনের অপেক্ষায়'**
+  String get availabilityStatusPending;
+
+  /// No description provided for @availabilityStatusActive.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদিত'**
+  String get availabilityStatusActive;
+
+  /// No description provided for @availabilityStatusRejected.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল হয়েছে'**
+  String get availabilityStatusRejected;
+
+  /// No description provided for @availabilityStatusCancelled.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল করা হয়েছে'**
+  String get availabilityStatusCancelled;
+
+  /// No description provided for @availabilityPolicyAsk.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার কাজগুলো বদলি দরকার হিসেবে দেখানো হবে এবং আপনাকে ও ম্যানেজারদের জানানো হবে।'**
+  String get availabilityPolicyAsk;
+
+  /// No description provided for @availabilityPolicyAuto.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতিটি কাজের জন্য একজন ফাঁকা সদস্যকে বলা হবে। তিনি রাজি না হওয়া পর্যন্ত কিছু বদলাবে না।'**
+  String get availabilityPolicyAuto;
+
+  /// No description provided for @availabilityPolicySkip.
+  ///
+  /// In bn, this message translates to:
+  /// **'একজন ম্যানেজার এই কাজগুলো বাদ দেবেন।'**
+  String get availabilityPolicySkip;
+
+  /// No description provided for @inboxBellLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিজ্ঞপ্তি, {count}টি অপঠিত'**
+  String inboxBellLabel(String count);
+
+  /// No description provided for @inboxSwapRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} আপনাকে {date}-এ {chore} নিতে বলছেন'**
+  String inboxSwapRequest(String name, String chore, String date);
+
+  /// No description provided for @inboxCoverRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name}-এর {date}-এ {chore} কাজে বদলি দরকার'**
+  String inboxCoverRequest(String name, String chore, String date);
+
+  /// No description provided for @inboxSwapAccepted.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {date}-এ {chore} নিতে রাজি হয়েছেন'**
+  String inboxSwapAccepted(String name, String chore, String date);
+
+  /// No description provided for @inboxSwapDeclined.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {date}-এ {chore} নিতে রাজি হননি'**
+  String inboxSwapDeclined(String name, String chore, String date);
+
+  /// No description provided for @inboxSwapCancelled.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {date}-এর {chore} অনুরোধ বাতিল করেছেন'**
+  String inboxSwapCancelled(String name, String chore, String date);
+
+  /// No description provided for @inboxSwapExpired.
+  ///
+  /// In bn, this message translates to:
+  /// **'{date}-এর {chore} অনুরোধের সময় শেষ হয়ে গেছে'**
+  String inboxSwapExpired(String chore, String date);
+
+  /// No description provided for @inboxReassigned.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {date}-এর {chore} আপনাকে দিয়েছেন'**
+  String inboxReassigned(String name, String chore, String date);
+
+  /// No description provided for @inboxNeedsCover.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {from} থেকে {to} পর্যন্ত নেই: {count}টি কাজে বদলি দরকার'**
+  String inboxNeedsCover(String name, String count, String from, String to);
+
+  /// No description provided for @inboxAbsenceApproved.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} আপনার অনুপস্থিতি অনুমোদন করেছেন'**
+  String inboxAbsenceApproved(String name);
+
+  /// No description provided for @inboxAbsenceRejected.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} আপনার অনুপস্থিতি বাতিল করেছেন'**
+  String inboxAbsenceRejected(String name);
+
+  /// No description provided for @inboxChoreReopened.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {date}-এর {chore} আবার খুলেছেন'**
+  String inboxChoreReopened(String name, String chore, String date);
+
+  /// No description provided for @inboxCommentAttention.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {date}-এর {chore} চিহ্নিত করেছেন'**
+  String inboxCommentAttention(String name, String chore, String date);
+
+  /// No description provided for @inboxVerificationNeeded.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} {date}-এর {chore} শেষ করেছেন; যাচাই দরকার'**
+  String inboxVerificationNeeded(String name, String chore, String date);
+
+  /// No description provided for @swapLoadLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসে {count}টি কাজ'**
+  String swapLoadLabel(String count);
+
+  /// No description provided for @swapSheetPreview.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name}-কে অনুরোধ: {date}-এ {chore} নিন'**
+  String swapSheetPreview(String name, String chore, String date);
+
+  /// No description provided for @swapReasonLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'কারণ: {reason}'**
+  String swapReasonLabel(String reason);
+
+  /// No description provided for @swapBannerSent.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name}-কে অনুরোধ পাঠানো হয়েছে'**
+  String swapBannerSent(String name);
+
+  /// No description provided for @swapBannerForYou.
+  ///
+  /// In bn, this message translates to:
+  /// **'{name} আপনাকে এই কাজটি নিতে বলেছেন'**
+  String swapBannerForYou(String name);
+
+  /// No description provided for @availabilityRangeLine.
+  ///
+  /// In bn, this message translates to:
+  /// **'{from} থেকে {to}'**
+  String availabilityRangeLine(String from, String to);
+
+  /// No description provided for @availabilityAffected.
+  ///
+  /// In bn, this message translates to:
+  /// **'এতে {count}টি কাজ প্রভাবিত হবে'**
+  String availabilityAffected(String count);
 }
 
 class _AppLocalizationsDelegate
