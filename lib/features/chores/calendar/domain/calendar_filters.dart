@@ -2,7 +2,6 @@ import 'package:family_hub/features/chores/calendar/domain/calendar_enums.dart';
 import 'package:family_hub/features/chores/calendar/domain/search_text.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
-import 'package:family_hub/features/chores/settings/domain/chore_catalog_entries.dart';
 
 /// "Mine / Family" and the filter sheet (Appendix B.4), as ONE pure value.
 ///

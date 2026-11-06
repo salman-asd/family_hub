@@ -1,8 +1,6 @@
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/calendar/domain/calendar_filters.dart';
-import 'package:family_hub/features/chores/calendar/presentation/calendar_items_providers.dart';
 import 'package:family_hub/features/chores/calendar/presentation/calendar_providers.dart';
-import 'package:family_hub/features/chores/calendar/presentation/month_items.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

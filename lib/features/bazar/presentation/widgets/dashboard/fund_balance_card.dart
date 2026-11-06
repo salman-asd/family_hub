@@ -25,7 +25,7 @@ class FundBalanceCard extends ConsumerWidget {
     final plans = ref.watch(contributionPlansProvider(month));
     final contributions = ref.watch(contributionsProvider(month));
     final members = ref.watch(membersProvider);
-    final onTap = () => context.go(AppRoutes.bazarFund);
+    void onTap() => context.go(AppRoutes.bazarFund);
 
     return AppCard(
       key: const ValueKey('dashboard-fund-balance'),

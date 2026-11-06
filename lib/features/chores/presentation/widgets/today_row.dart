@@ -8,7 +8,6 @@ import 'package:family_hub/features/chores/occurrences/domain/today_sections.dar
 import 'package:family_hub/features/chores/presentation/today_complete.dart';
 import 'package:family_hub/features/chores/calendar/presentation/widgets/quick_actions_sheet.dart';
 import 'package:family_hub/features/chores/presentation/widgets/chore_tile.dart';
-import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

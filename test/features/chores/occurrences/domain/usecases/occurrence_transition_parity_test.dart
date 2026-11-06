@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:family_hub/core/permissions/permission_settings.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
-import 'package:family_hub/features/chores/occurrences/domain/occurrence_parts.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
 import 'package:flutter_test/flutter_test.dart';

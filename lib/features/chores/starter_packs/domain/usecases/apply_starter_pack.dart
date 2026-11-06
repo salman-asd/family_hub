@@ -94,8 +94,9 @@ class ApplyStarterPack {
       selected.add(template);
     }
     final rotationError = StarterPackPlanner.validateRotation(rotation);
-    if (rotationError != null)
+    if (rotationError != null) {
       return Failure<StarterPackOutcome>(rotationError);
+    }
 
     final readSettings = await _settings.get(familyId);
     final settingsFailure = readSettings.failureOrNull;
@@ -114,8 +115,9 @@ class ApplyStarterPack {
 
     final readGroups = await _dutyGroups.list(familyId);
     final groupsFailure = readGroups.failureOrNull;
-    if (groupsFailure != null)
+    if (groupsFailure != null) {
       return Failure<StarterPackOutcome>(groupsFailure);
+    }
     final storedGroups = readGroups.valueOrNull ?? const <DutyGroup>[];
 
     final plan = StarterPackPlanner.plan(
@@ -192,8 +194,9 @@ class ApplyStarterPack {
         ),
       );
       final writeFailure = written.failureOrNull;
-      if (writeFailure != null)
+      if (writeFailure != null) {
         return Failure<StarterPackOutcome>(writeFailure);
+      }
       dutyGroupsCreated = 1;
     }
 
@@ -231,8 +234,9 @@ class ApplyStarterPack {
         ),
       );
       final writeFailure = written.failureOrNull;
-      if (writeFailure != null)
+      if (writeFailure != null) {
         return Failure<StarterPackOutcome>(writeFailure);
+      }
       templatesCreated++;
     }
 

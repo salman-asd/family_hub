@@ -7,7 +7,6 @@ import 'package:family_hub/features/bazar/fund/presentation/widgets/month_close_
 import 'package:family_hub/features/bazar/fund/presentation/widgets/month_close_preview_card.dart';
 import 'package:family_hub/features/bazar/fund/presentation/widgets/month_list.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/widgets/form_banner.dart';
-import 'package:family_hub/features/bazar/presentation/bazar_providers.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';

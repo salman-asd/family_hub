@@ -224,8 +224,9 @@ class ApplyAbsencePolicy {
           from: record.startDate.toString(),
           to: record.endDate.toString(),
         );
-        if (row != null)
+        if (row != null) {
           inboxRows.add(row.withId('ib_nc_${availabilityId}_$to'));
+        }
       }
     }
 

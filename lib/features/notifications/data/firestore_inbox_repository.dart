@@ -13,9 +13,7 @@ import 'package:family_hub/features/notifications/domain/inbox_repository.dart';
 /// own newest [kMaxInboxDocs] rows (the `(toMemberId, createdAt desc)` index).
 /// Marking read or archiving is an EVERYDAY batch (queues offline).
 class FirestoreInboxRepository implements InboxRepository {
-  FirestoreInboxRepository({required TxRunner tx, FirebaseFirestore? firestore})
-    : _tx = tx,
-      _firestore = firestore;
+  FirestoreInboxRepository({required this._tx, this._firestore});
 
   final TxRunner _tx;
   final FirebaseFirestore? _firestore;

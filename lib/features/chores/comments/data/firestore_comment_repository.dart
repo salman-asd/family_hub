@@ -20,11 +20,7 @@ import 'package:family_hub/features/chores/occurrences/data/occurrence_write_sta
 /// so a flag can never exist without its marker. Everyday write: no server
 /// probe, so it queues offline.
 class FirestoreCommentRepository implements CommentRepository {
-  FirestoreCommentRepository({
-    required TxRunner tx,
-    FirebaseFirestore? firestore,
-  }) : _tx = tx,
-       _firestore = firestore;
+  FirestoreCommentRepository({required this._tx, this._firestore});
 
   final TxRunner _tx;
   final FirebaseFirestore? _firestore;

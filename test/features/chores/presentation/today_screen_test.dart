@@ -7,7 +7,6 @@ import 'package:family_hub/features/chores/presentation/widgets/chore_tile.dart'
 import 'package:family_hub/features/chores/settings/domain/chore_catalog_entries.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_test/flutter_test.dart';
 

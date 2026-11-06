@@ -76,8 +76,9 @@ class RangeExpensesController extends AsyncNotifier<RangePage> {
 
   Future<RangePage> _load(Expense? after, List<Expense> before) async {
     final familyId = ref.read(currentFamilyIdProvider);
-    if (familyId == null)
+    if (familyId == null) {
       return const RangePage(rows: <Expense>[], hasMore: false);
+    }
     final result = await ref
         .read(expenseRepositoryProvider)
         .queryRange(familyId, range, limit: defaultPageSize, startAfter: after);

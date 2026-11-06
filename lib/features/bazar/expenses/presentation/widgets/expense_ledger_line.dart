@@ -43,7 +43,7 @@ class ExpenseLedgerLine extends ConsumerWidget {
         AdvanceStatus.partial => l10n.expenseLedgerPartial(
           name,
           formatters.money(advance!.settled),
-          formatters.money(advance!.amount),
+          formatters.money(advance.amount),
         ),
         AdvanceStatus.settled => l10n.expenseLedgerSettled(name),
         AdvanceStatus.voided => l10n.expenseLedgerVoided,

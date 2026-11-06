@@ -2,7 +2,6 @@ import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/availability/domain/availability_index.dart';
 import 'package:family_hub/features/chores/calendar/domain/calendar_enums.dart';
 import 'package:family_hub/features/chores/calendar/domain/calendar_filters.dart';
-import 'package:family_hub/features/chores/settings/domain/chore_catalog_entries.dart';
 
 /// Who is away on a day, for the hatch and the strip in the day panel
 /// (Appendix B.3).

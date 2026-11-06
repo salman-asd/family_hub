@@ -22,7 +22,7 @@ class BazarMonthCard extends ConsumerWidget {
     final expenses = ref.watch(monthExpensesProvider(month));
     final categories = ref.watch(categoriesProvider);
     final spend = ref.watch(monthSpendProvider(month));
-    final onTap = () => context.go(AppRoutes.bazarExpenses);
+    void onTap() => context.go(AppRoutes.bazarExpenses);
 
     return AppCard(
       key: const ValueKey('dashboard-bazar-month'),

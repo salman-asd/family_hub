@@ -6,7 +6,7 @@ import 'package:family_hub/shared/widgets/app_card.dart';
 import 'package:family_hub/shared/widgets/money_text.dart';
 import 'package:flutter/material.dart';
 
-/// One member's block on the Advances screen: "owed to <name> ৳…" and a row per
+/// One member's block on the Advances screen: "owed to `<name>` ৳…" and a row per
 /// open advance.
 class AdvanceGroupList extends StatelessWidget {
   const AdvanceGroupList({

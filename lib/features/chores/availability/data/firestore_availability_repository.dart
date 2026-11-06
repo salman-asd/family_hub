@@ -20,12 +20,10 @@ import 'package:family_hub/features/chores/swaps/data/swap_mappers.dart';
 /// requests of policy B, and the inbox rows and audit entries.
 class FirestoreAvailabilityRepository implements AvailabilityRepository {
   FirestoreAvailabilityRepository({
-    required TxRunner tx,
-    FirebaseFirestore? firestore,
-    ServerProbe? probe,
-  }) : _tx = tx,
-       _firestore = firestore,
-       _probe = probe;
+    required this._tx,
+    this._firestore,
+    this._probe,
+  });
 
   final TxRunner _tx;
   final FirebaseFirestore? _firestore;

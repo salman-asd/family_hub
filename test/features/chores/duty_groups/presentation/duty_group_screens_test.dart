@@ -6,7 +6,6 @@ import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_e
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_list_screen.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 

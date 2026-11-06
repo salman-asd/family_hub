@@ -18,13 +18,7 @@ import 'package:family_hub/features/chores/swaps/domain/swap_write_plan.dart';
 /// ONE batch; [integrity] probes the server first (offline accepts must not
 /// queue, road map 3.4).
 class FirestoreSwapRepository implements SwapRepository {
-  FirestoreSwapRepository({
-    required TxRunner tx,
-    FirebaseFirestore? firestore,
-    ServerProbe? probe,
-  }) : _tx = tx,
-       _firestore = firestore,
-       _probe = probe;
+  FirestoreSwapRepository({required this._tx, this._firestore, this._probe});
 
   final TxRunner _tx;
   final FirebaseFirestore? _firestore;

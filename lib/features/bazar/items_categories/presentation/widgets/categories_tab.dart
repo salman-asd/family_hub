@@ -100,7 +100,7 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
             buildDefaultDragHandles: false,
             padding: const EdgeInsets.only(bottom: 96),
             itemCount: categories.length,
-            onReorder: (from, to) => _reorder(categories, from, to),
+            onReorderItem: (from, to) => _reorder(categories, from, to),
             itemBuilder: (context, i) {
               final c = categories[i];
               return Opacity(

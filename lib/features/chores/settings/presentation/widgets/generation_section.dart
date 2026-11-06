@@ -1,4 +1,3 @@
-import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_catalog_entries.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';

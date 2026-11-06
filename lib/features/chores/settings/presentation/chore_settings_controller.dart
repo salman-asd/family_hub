@@ -1,5 +1,4 @@
 import 'package:family_hub/core/errors/app_failure.dart';
-import 'package:family_hub/core/permissions/permission_settings.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';

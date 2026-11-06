@@ -2,7 +2,6 @@ import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
-import 'package:family_hub/core/permissions/permission.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart'
     as domain;
 import 'package:family_hub/features/chores/comments/presentation/comment_providers.dart';
@@ -10,10 +9,8 @@ import 'package:family_hub/features/chores/presentation/chore_icons.dart';
 import 'package:family_hub/features/chores/presentation/widgets/chore_tile_mapping.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
-import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
 import 'package:family_hub/shared/widgets/flag_chip.dart' as chips;
-import 'package:family_hub/shared/widgets/status_chip.dart';
 import 'package:family_hub/shared/widgets/status_glyph.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';

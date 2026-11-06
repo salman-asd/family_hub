@@ -74,7 +74,7 @@ final _pending = Contribution(
   memberId: 'member',
   monthKey: _month,
   dateKey: DateKey(2026, 10, 12),
-  amount: Money.paisa(10000),
+  amount: const Money.paisa(10000),
   status: ContributionApproval.pending,
   requestedBy: 'member',
   createdAt: DateTime.utc(2026, 10, 12),

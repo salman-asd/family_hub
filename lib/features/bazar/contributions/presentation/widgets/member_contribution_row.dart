@@ -102,7 +102,7 @@ class MemberContributionRow extends ConsumerWidget {
               ],
             ),
           ),
-          if (trailing != null) trailing!,
+          ?trailing,
         ],
       ),
     );

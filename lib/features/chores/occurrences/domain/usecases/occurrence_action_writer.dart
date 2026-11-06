@@ -59,11 +59,11 @@ final class OccurrenceActionWriter {
     return OccurrenceWritePlan(
       actorId: context.member.uid,
       at: at,
-      creates: <OccurrenceDraft>[if (draft != null) draft],
-      patches: <OccurrencePatch>[if (patchRow != null) patchRow],
-      events: <NewEvent>[if (eventRow != null) eventRow],
-      inbox: <NewInboxItem>[if (inboxRow != null) inboxRow],
-      audits: <NewAudit>[if (auditEntry != null) auditEntry],
+      creates: <OccurrenceDraft>[?draft],
+      patches: <OccurrencePatch>[?patchRow],
+      events: <NewEvent>[?eventRow],
+      inbox: <NewInboxItem>[?inboxRow],
+      audits: <NewAudit>[?auditEntry],
     );
   }
 

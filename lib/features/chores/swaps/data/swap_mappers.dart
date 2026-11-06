@@ -58,8 +58,9 @@ abstract final class SwapMappers {
     final to = map['toMemberId'];
     final occurrenceId = map['occurrenceId'];
     if (date == null || expires == null) return null;
-    if (from is! String || to is! String || occurrenceId is! String)
+    if (from is! String || to is! String || occurrenceId is! String) {
       return null;
+    }
     return SwapRequest(
       id: id,
       occurrenceId: occurrenceId,

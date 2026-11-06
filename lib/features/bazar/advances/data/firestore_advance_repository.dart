@@ -19,9 +19,8 @@ import 'package:family_hub/features/bazar/fund/data/fund_mappers.dart';
 /// server, reads the advance, and stages the settlement, the `stl_` ledger row,
 /// the advance update and the log entry in ONE batch.
 class FirestoreAdvanceRepository implements AdvanceRepository {
-  FirestoreAdvanceRepository({TxRunner? tx, FirebaseFirestore? firestore})
-    : _tx = tx ?? FirestoreTxRunner(),
-      _firestore = firestore;
+  FirestoreAdvanceRepository({TxRunner? tx, this._firestore})
+    : _tx = tx ?? FirestoreTxRunner();
 
   final TxRunner _tx;
   final FirebaseFirestore? _firestore;

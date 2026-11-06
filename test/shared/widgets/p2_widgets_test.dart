@@ -9,7 +9,6 @@ import 'package:family_hub/shared/widgets/person_picker.dart';
 import 'package:family_hub/shared/widgets/progress_bar_status.dart';
 import 'package:family_hub/shared/widgets/total_display.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'shared_widgets_test_support.dart';

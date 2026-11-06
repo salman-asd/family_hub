@@ -192,7 +192,7 @@ void main() {
         tester,
         spec: appThemes.first,
         locale: const Locale('bn'),
-        child: StepProgress(done: 3, total: 5, formatters: bn),
+        child: const StepProgress(done: 3, total: 5, formatters: bn),
       );
       expect(find.text('৩/৫'), findsOneWidget);
     });
@@ -204,7 +204,7 @@ void main() {
         tester,
         spec: appThemes.first,
         locale: const Locale('en'),
-        child: StepProgress(done: 9, total: 4, formatters: en),
+        child: const StepProgress(done: 9, total: 4, formatters: en),
       );
       expect(find.text('4/4'), findsOneWidget);
     });
@@ -214,7 +214,7 @@ void main() {
         tester,
         spec: appThemes.first,
         locale: const Locale('en'),
-        child: StepProgress(done: 2, total: 2, formatters: en),
+        child: const StepProgress(done: 2, total: 2, formatters: en),
       );
       expect(find.text('2/2'), findsOneWidget);
       expect(tester.takeException(), isNull);

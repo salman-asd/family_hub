@@ -6,7 +6,6 @@ import 'package:family_hub/features/chores/calendar/domain/calendar_enums.dart';
 import 'package:family_hub/features/chores/calendar/domain/calendar_filters.dart';
 import 'package:family_hub/features/chores/calendar/presentation/calendar_prefs.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
-import 'package:family_hub/features/chores/settings/domain/chore_catalog_entries.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
