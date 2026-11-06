@@ -2118,3 +2118,27 @@ parity tests include the two stored types; no collection or index was added.
 C1 and the full repository gates remain incomplete. The inbox screen’s complete
 widget suite and the Firestore emulator cases still need a clean build/JDK; the
 foreground notification flow also needs physical-device verification.
+
+## Phase 4 - P4-18 engagement domain
+
+Implemented the pure-Dart engagement model, scoring and streak calculators,
+level table, badge catalog/evaluator, stats model/sync, default settings, and
+cover counter. Scores use integer permille arithmetic and half-up rounding;
+final months retain their original spec version and are not recomputed. Older
+months fold into a `legacy` aggregate once the 40-month window is exceeded.
+Paused days neither add to nor break a streak, per D-P4-20 and Q6. The scoring
+grace value is supplied from `ChoreSettings.overdueGraceMinutes`; no second
+persisted setting was introduced.
+
+| Check | Result |
+| --- | --- |
+| `dart format` on P4-18 domain and tests | Passed; no changes remained. |
+| `dart analyze` on P4-18 domain and tests | Passed; zero issues. |
+| P4-18 unit tests + `layer_boundaries_test.dart` + `file_size_test.dart` | Passed; 60 tests. |
+| `dart format --set-exit-if-changed .` | Reported two unrelated, previously committed P4-17 files as unformatted; formatter edits were restored. The P4-18 directories pass the same check. |
+| Full `flutter analyze` | Fails with 239 existing issues in unrelated application/test files; no P4-18 paths were reported. |
+| `flutter test --exclude-tags golden` | Fails with 53 existing failures and compile errors outside P4-18, including `chore_tile_mapping.dart`, `session_hook.dart`, reports and calendar files. The focused P4-18 suite passes. |
+| Hot restart | Attempted through the connected DTD; no active Flutter app was registered. |
+
+C1 and the full repository gates remain incomplete. P4-18 adds no UI, Firestore
+collection, rules, index, localization entry, or package.
