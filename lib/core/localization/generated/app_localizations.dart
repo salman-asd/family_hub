@@ -7702,6 +7702,198 @@ abstract class AppLocalizations {
   /// **'ক্যালেন্ডারের রং ও দাগ'**
   String get galleryCalendarPolish;
 
+  /// No description provided for @galleryDashboardCardFrame.
+  ///
+  /// In bn, this message translates to:
+  /// **'ড্যাশবোর্ড কার্ড'**
+  String get galleryDashboardCardFrame;
+
+  /// No description provided for @galleryGreetingHeader.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুভেচ্ছা'**
+  String get galleryGreetingHeader;
+
+  /// No description provided for @galleryBellButton.
+  ///
+  /// In bn, this message translates to:
+  /// **'নোটিফিকেশন ঘণ্টা'**
+  String get galleryBellButton;
+
+  /// No description provided for @galleryBellOverflow.
+  ///
+  /// In bn, this message translates to:
+  /// **'৯+'**
+  String get galleryBellOverflow;
+
+  /// No description provided for @galleryAlertStrip.
+  ///
+  /// In bn, this message translates to:
+  /// **'সতর্কতার বার'**
+  String get galleryAlertStrip;
+
+  /// No description provided for @galleryActivityTile.
+  ///
+  /// In bn, this message translates to:
+  /// **'কার্যকলাপ'**
+  String get galleryActivityTile;
+
+  /// No description provided for @galleryStatPill.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিসংখ্যান'**
+  String get galleryStatPill;
+
+  /// No description provided for @galleryTimeOffsetChips.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময়ের ব্যবধান'**
+  String get galleryTimeOffsetChips;
+
+  /// No description provided for @galleryQuietHoursPicker.
+  ///
+  /// In bn, this message translates to:
+  /// **'নীরব সময়'**
+  String get galleryQuietHoursPicker;
+
+  /// No description provided for @galleryQuietHoursStart.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুরুর সময়'**
+  String get galleryQuietHoursStart;
+
+  /// No description provided for @galleryQuietHoursEnd.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষের সময়'**
+  String get galleryQuietHoursEnd;
+
+  /// No description provided for @gallerySwitchTileWithReason.
+  ///
+  /// In bn, this message translates to:
+  /// **'কারণসহ সুইচ'**
+  String get gallerySwitchTileWithReason;
+
+  /// No description provided for @galleryLevelRing.
+  ///
+  /// In bn, this message translates to:
+  /// **'স্তরের অগ্রগতি'**
+  String get galleryLevelRing;
+
+  /// No description provided for @galleryBadgeMedal.
+  ///
+  /// In bn, this message translates to:
+  /// **'অর্জনের ব্যাজ'**
+  String get galleryBadgeMedal;
+
+  /// No description provided for @galleryEarned.
+  ///
+  /// In bn, this message translates to:
+  /// **'অর্জিত'**
+  String get galleryEarned;
+
+  /// No description provided for @galleryUnearned.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনও অর্জিত নয়'**
+  String get galleryUnearned;
+
+  /// No description provided for @galleryPlantStageView.
+  ///
+  /// In bn, this message translates to:
+  /// **'গাছের স্তর'**
+  String get galleryPlantStageView;
+
+  /// No description provided for @galleryConfettiView.
+  ///
+  /// In bn, this message translates to:
+  /// **'উদ্‌যাপনের কনফেটি'**
+  String get galleryConfettiView;
+
+  /// No description provided for @galleryDiagnosticRow.
+  ///
+  /// In bn, this message translates to:
+  /// **'ডায়াগনস্টিক সারি'**
+  String get galleryDiagnosticRow;
+
+  /// No description provided for @galleryReorderableCardTile.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাজানো যায় এমন কার্ড'**
+  String get galleryReorderableCardTile;
+
+  /// No description provided for @galleryDragLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'টেনে সরান'**
+  String get galleryDragLabel;
+
+  /// No description provided for @galleryMoveUp.
+  ///
+  /// In bn, this message translates to:
+  /// **'উপরে সরান'**
+  String get galleryMoveUp;
+
+  /// No description provided for @galleryMoveDown.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিচে সরান'**
+  String get galleryMoveDown;
+
+  /// No description provided for @galleryAccessCell.
+  ///
+  /// In bn, this message translates to:
+  /// **'ভূমিকার প্রবেশাধিকার'**
+  String get galleryAccessCell;
+
+  /// No description provided for @galleryAccessHidden.
+  ///
+  /// In bn, this message translates to:
+  /// **'লুকানো'**
+  String get galleryAccessHidden;
+
+  /// No description provided for @galleryAccessOn.
+  ///
+  /// In bn, this message translates to:
+  /// **'চালু'**
+  String get galleryAccessOn;
+
+  /// No description provided for @galleryAccessOff.
+  ///
+  /// In bn, this message translates to:
+  /// **'বন্ধ'**
+  String get galleryAccessOff;
+
+  /// No description provided for @galleryAccessRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'আবশ্যক'**
+  String get galleryAccessRequired;
+
+  /// No description provided for @galleryDeliveryModeTile.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিজ্ঞপ্তি পাঠানোর ধরন'**
+  String get galleryDeliveryModeTile;
+
+  /// No description provided for @galleryDeliveryNormal.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাধারণ'**
+  String get galleryDeliveryNormal;
+
+  /// No description provided for @galleryDeliveryPush.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ'**
+  String get galleryDeliveryPush;
+
+  /// No description provided for @galleryRecommended.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রস্তাবিত'**
+  String get galleryRecommended;
+
   /// No description provided for @commentsTitle.
   ///
   /// In bn, this message translates to:

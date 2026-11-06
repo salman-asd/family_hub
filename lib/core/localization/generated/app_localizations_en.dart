@@ -3404,19 +3404,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dutyGroupsEmptyTitle => 'No duty groups yet';
 
   @override
-  String get dutyGroupsEmptyMessage => 'A duty group shares a set of chores among a few people, turn by turn.';
+  String get dutyGroupsEmptyMessage =>
+      'A duty group shares a set of chores among a few people, turn by turn.';
 
   @override
   String get dutyGroupNew => 'New duty group';
 
   @override
   String dutyGroupsTruncated(String count) {
-    return 'Only the first ${count} groups are shown.';
+    return 'Only the first $count groups are shown.';
   }
 
   @override
   String dutyGroupOnDutyNow(String name) {
-    return 'On duty now: ${name}';
+    return 'On duty now: $name';
   }
 
   @override
@@ -3424,12 +3425,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String dutyGroupChoreCount(String count) {
-    return 'Chores: ${count}';
+    return 'Chores: $count';
   }
 
   @override
   String dutyGroupMemberCount(String count) {
-    return 'Members: ${count}';
+    return 'Members: $count';
   }
 
   @override
@@ -3448,7 +3449,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dutyGroupActive => 'Active';
 
   @override
-  String get dutyGroupActiveSubtitle => 'A switched-off group stays in the history.';
+  String get dutyGroupActiveSubtitle =>
+      'A switched-off group stays in the history.';
 
   @override
   String get dutyGroupSave => 'Save group';
@@ -3457,7 +3459,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dutyGroupSaved => 'Group saved';
 
   @override
-  String get dutyGroupReadOnly => 'Only people who manage chores can change duty groups.';
+  String get dutyGroupReadOnly =>
+      'Only people who manage chores can change duty groups.';
 
   @override
   String get dutyGroupNotFound => 'This duty group no longer exists.';
@@ -3466,7 +3469,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dutyGroupDeactivateTitle => 'Switch off this group?';
 
   @override
-  String get dutyGroupDeactivateMessage => 'Chores still use this group. They keep pointing at it until you move them.';
+  String get dutyGroupDeactivateMessage =>
+      'Chores still use this group. They keep pointing at it until you move them.';
 
   @override
   String get dutyGroupDeactivateConfirm => 'Switch off';
@@ -3481,16 +3485,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dutyRotationAddMember => 'Add a member';
 
   @override
-  String get dutyRotationNoCandidates => 'Every active member is already in the group.';
+  String get dutyRotationNoCandidates =>
+      'Every active member is already in the group.';
 
   @override
   String dutyRotationRemoveMember(String name) {
-    return 'Remove ${name}';
+    return 'Remove $name';
   }
 
   @override
   String dutyRotationMoveMember(String name) {
-    return 'Drag to move ${name}';
+    return 'Drag to move $name';
   }
 
   @override
@@ -3510,7 +3515,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String dutyRotationWeekStart(String day) {
-    return 'Weeks start on ${day}';
+    return 'Weeks start on $day';
   }
 
   @override
@@ -3526,24 +3531,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dutyRotaTitle => 'Next turns';
 
   @override
-  String get dutyRotaNeedsSchedule => 'This rota counts chore days, so it needs a schedule to preview.';
+  String get dutyRotaNeedsSchedule =>
+      'This rota counts chore days, so it needs a schedule to preview.';
 
   @override
   String get dutyRotaNobody => 'Nobody yet';
 
   @override
   String dutyRotaRange(String start, String end) {
-    return '${start} to ${end}';
+    return '$start to $end';
   }
 
   @override
   String dutyRotaCellLabel(String range, String name) {
-    return '${range}: ${name}';
+    return '$range: $name';
   }
 
   @override
   String dutyRotaCellLabelCover(String range, String name) {
-    return '${range}: ${name}, needs a cover';
+    return '$range: $name, needs a cover';
   }
 
   @override
@@ -3572,7 +3578,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String dutyChangeNothingBefore(String date) {
-    return 'Nothing before ${date} changes.';
+    return 'Nothing before $date changes.';
   }
 
   @override
@@ -3603,7 +3609,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dutyChoreAddNone => 'Every chore is already in this group.';
 
   @override
-  String get dutyChoreAddNote => 'Upcoming chores that have not started move to this rota.';
+  String get dutyChoreAddNote =>
+      'Upcoming chores that have not started move to this rota.';
 
   @override
   String get dutyChoreAdded => 'Chore added to the group';
@@ -3612,7 +3619,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionDiscard => 'Discard';
 
   @override
-  String get choresSettingsNeedsInternet => 'Saving chore settings needs an internet connection. Your changes are kept here; try again when you are online.';
+  String get choresSettingsNeedsInternet =>
+      'Saving chore settings needs an internet connection. Your changes are kept here; try again when you are online.';
 
   @override
   String get choresSettingsResetConfirmAction => 'Reset';
@@ -3624,7 +3632,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreTemplatesSubtitle => 'Create and edit the family chores';
 
   @override
-  String get choreTemplatesNotAllowed => 'Only admins and moderators can manage chores.';
+  String get choreTemplatesNotAllowed =>
+      'Only admins and moderators can manage chores.';
 
   @override
   String get choreListNew => 'New chore';
@@ -3636,13 +3645,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreListEmptyTitle => 'No chores yet';
 
   @override
-  String get choreListEmptyMessage => 'Create the first chore with the New chore button.';
+  String get choreListEmptyMessage =>
+      'Create the first chore with the New chore button.';
 
   @override
   String get choreListEmptyFiltered => 'No chores match';
 
   @override
-  String get choreListTruncated => 'Only the first chores are shown. Archive chores you no longer need to see the rest.';
+  String get choreListTruncated =>
+      'Only the first chores are shown. Archive chores you no longer need to see the rest.';
 
   @override
   String get choreListUpdated => 'Updated';
@@ -3680,7 +3691,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreArchiveConfirmTitle => 'Archive this chore?';
 
   @override
-  String get choreArchiveConfirmMessage => 'It stops creating new days. Past days and history are kept.';
+  String get choreArchiveConfirmMessage =>
+      'It stops creating new days. Past days and history are kept.';
 
   @override
   String get choreDuplicateSuffix => ' (copy)';
@@ -3712,10 +3724,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreEditorNotFound => 'This chore was not found';
 
   @override
-  String get choreEditorArchivedNote => 'This chore is archived. It can be viewed but not changed.';
+  String get choreEditorArchivedNote =>
+      'This chore is archived. It can be viewed but not changed.';
 
   @override
-  String get choreEditorPlanningFailed => 'The chore was saved, but planning its days failed. Retry to finish.';
+  String get choreEditorPlanningFailed =>
+      'The chore was saved, but planning its days failed. Retry to finish.';
 
   @override
   String get choreEditorSectionBasics => 'Basics';
@@ -3800,7 +3814,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreEditorVerification => 'Needs verification';
 
   @override
-  String get choreEditorVerificationHelp => 'A manager checks it after it is done.';
+  String get choreEditorVerificationHelp =>
+      'A manager checks it after it is done.';
 
   @override
   String get choreEditorActive => 'Active';
@@ -3812,7 +3827,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreRemindersTitle => 'Reminders';
 
   @override
-  String get choreRemindersStoredNote => 'Saved for later: reminders are sent in a future update.';
+  String get choreRemindersStoredNote =>
+      'Saved for later: reminders are sent in a future update.';
 
   @override
   String get choreReminderAtDue => 'At the due time';
@@ -3898,7 +3914,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreInstructionsEmpty => 'No instructions';
 
   @override
-  String get choreAssigneeManualHelp => 'Nobody is assigned until a manager picks someone.';
+  String get choreAssigneeManualHelp =>
+      'Nobody is assigned until a manager picks someone.';
 
   @override
   String get choreAssigneeFixedLabel => 'Who does it';
@@ -3913,19 +3930,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get choreAssigneePickGroup => 'Choose a duty group';
 
   @override
-  String get choreAssigneeNoGroups => 'There is no duty group yet. Create one or use an own rotation.';
+  String get choreAssigneeNoGroups =>
+      'There is no duty group yet. Create one or use an own rotation.';
 
   @override
   String get choreReplanTitle => 'Apply this change to';
 
   @override
-  String get choreReplanMessage => 'Days that are already started or done are never changed.';
+  String get choreReplanMessage =>
+      'Days that are already started or done are never changed.';
 
   @override
   String get choreReplanFutureOnly => 'Future days only';
 
   @override
-  String get choreReplanIncludeUpcoming => 'Future days and upcoming days nobody has started';
+  String get choreReplanIncludeUpcoming =>
+      'Future days and upcoming days nobody has started';
 
   @override
   String get recurrenceKindOnce => 'Once';
@@ -4217,7 +4237,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get starterPackStepWho => 'Who does what';
 
   @override
-  String get calendarTruncatedBanner => 'This month has many chores - not all of them are shown';
+  String get calendarTruncatedBanner =>
+      'This month has many chores - not all of them are shown';
 
   @override
   String get calendarTruncatedBannerAction => 'Open filters';
@@ -4325,7 +4346,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarAddChore => 'Add chore';
 
   @override
-  String get calendarMonthNarrow => 'The month view needs a wider screen, so the week is shown.';
+  String get calendarMonthNarrow =>
+      'The month view needs a wider screen, so the week is shown.';
 
   @override
   String get calendarQuickActions => 'Chore actions';
@@ -4360,7 +4382,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarHeatMode => 'Workload tint';
 
   @override
-  String get calendarHeatModeHint => 'Days with more work get a darker background.';
+  String get calendarHeatModeHint =>
+      'Days with more work get a darker background.';
 
   @override
   String get calendarHeatLegend => 'Workload';
@@ -4372,19 +4395,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarHeatMore => 'More';
 
   @override
-  String get calendarHeatLegendLabel => 'Workload from less to more, in four shades';
+  String get calendarHeatLegendLabel =>
+      'Workload from less to more, in four shades';
 
   @override
   String get calendarLegendMarks => 'Day cell marks';
 
   @override
-  String get calendarLegendPlanned => 'Slanted lines: every chore of the day is only planned';
+  String get calendarLegendPlanned =>
+      'Slanted lines: every chore of the day is only planned';
 
   @override
-  String get calendarLegendAway => 'Lines leaning the other way: someone is away';
+  String get calendarLegendAway =>
+      'Lines leaning the other way: someone is away';
 
   @override
-  String get calendarMonthLandscape => 'The month view is not offered on a phone held sideways, so the week is shown.';
+  String get calendarMonthLandscape =>
+      'The month view is not offered on a phone held sideways, so the week is shown.';
 
   @override
   String get calendarUseFamilyDefaults => 'Use family defaults';
@@ -4396,10 +4423,107 @@ class AppLocalizationsEn extends AppLocalizations {
   String get galleryCalendarPolish => 'Calendar heat and hatch';
 
   @override
+  String get galleryDashboardCardFrame => 'Dashboard card';
+
+  @override
+  String get galleryGreetingHeader => 'Greeting';
+
+  @override
+  String get galleryBellButton => 'Notification bell';
+
+  @override
+  String get galleryBellOverflow => '9+';
+
+  @override
+  String get galleryAlertStrip => 'Alert strip';
+
+  @override
+  String get galleryActivityTile => 'Activity';
+
+  @override
+  String get galleryStatPill => 'Stat pill';
+
+  @override
+  String get galleryTimeOffsetChips => 'Time offsets';
+
+  @override
+  String get galleryQuietHoursPicker => 'Quiet hours';
+
+  @override
+  String get galleryQuietHoursStart => 'Start time';
+
+  @override
+  String get galleryQuietHoursEnd => 'End time';
+
+  @override
+  String get gallerySwitchTileWithReason => 'Switch with reason';
+
+  @override
+  String get galleryLevelRing => 'Level progress';
+
+  @override
+  String get galleryBadgeMedal => 'Achievement badge';
+
+  @override
+  String get galleryEarned => 'Earned';
+
+  @override
+  String get galleryUnearned => 'Not earned';
+
+  @override
+  String get galleryPlantStageView => 'Plant stage';
+
+  @override
+  String get galleryConfettiView => 'Celebration confetti';
+
+  @override
+  String get galleryDiagnosticRow => 'Diagnostic row';
+
+  @override
+  String get galleryReorderableCardTile => 'Reorderable card';
+
+  @override
+  String get galleryDragLabel => 'Drag to move';
+
+  @override
+  String get galleryMoveUp => 'Move up';
+
+  @override
+  String get galleryMoveDown => 'Move down';
+
+  @override
+  String get galleryAccessCell => 'Role access';
+
+  @override
+  String get galleryAccessHidden => 'Hidden';
+
+  @override
+  String get galleryAccessOn => 'On';
+
+  @override
+  String get galleryAccessOff => 'Off';
+
+  @override
+  String get galleryAccessRequired => 'Required';
+
+  @override
+  String get galleryDeliveryModeTile => 'Notification delivery';
+
+  @override
+  String get galleryDeliveryNormal => 'Normal';
+
+  @override
+  String get galleryDeliveryPush => 'Push';
+
+  @override
+  String get galleryRecommended => 'Recommended';
+
+  @override
   String get commentsTitle => 'Comments';
 
   @override
-  String get commentsEmpty => 'No comments yet. Say what is wrong or what was done.';
+  String get commentsEmpty =>
+      'No comments yet. Say what is wrong or what was done.';
 
   @override
   String get commentsHint => 'Write a comment';
@@ -4460,7 +4584,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String activityChoresCommentUnhidden(String member, String name, String date) {
+  String activityChoresCommentUnhidden(
+    String member,
+    String name,
+    String date,
+  ) {
     return '$member showed a comment on $name on $date again';
   }
 
@@ -4477,7 +4605,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inboxEarlier => 'Earlier';
 
   @override
-  String get inboxSparkNote => 'You will see new requests when you open the app.';
+  String get inboxSparkNote =>
+      'You will see new requests when you open the app.';
 
   @override
   String get inboxMarkAllRead => 'Mark all as read';
@@ -4591,13 +4720,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get availabilityStatusCancelled => 'Cancelled';
 
   @override
-  String get availabilityPolicyAsk => 'Your chores will be listed as needing a cover, and you and the managers will be told.';
+  String get availabilityPolicyAsk =>
+      'Your chores will be listed as needing a cover, and you and the managers will be told.';
 
   @override
-  String get availabilityPolicyAuto => 'Someone who is free will be asked to cover each chore. Nothing changes until they accept.';
+  String get availabilityPolicyAuto =>
+      'Someone who is free will be asked to cover each chore. Nothing changes until they accept.';
 
   @override
-  String get availabilityPolicySkip => 'A manager will mark these chores as skipped.';
+  String get availabilityPolicySkip =>
+      'A manager will mark these chores as skipped.';
 
   @override
   String inboxBellLabel(String count) {

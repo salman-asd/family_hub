@@ -3384,19 +3384,20 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dutyGroupsEmptyTitle => 'এখনও কোনো ডিউটি গ্রুপ নেই';
 
   @override
-  String get dutyGroupsEmptyMessage => 'একটি ডিউটি গ্রুপ কয়েকজনের মধ্যে একসেট কাজ পালা করে ভাগ করে দেয়।';
+  String get dutyGroupsEmptyMessage =>
+      'একটি ডিউটি গ্রুপ কয়েকজনের মধ্যে একসেট কাজ পালা করে ভাগ করে দেয়।';
 
   @override
   String get dutyGroupNew => 'নতুন ডিউটি গ্রুপ';
 
   @override
   String dutyGroupsTruncated(String count) {
-    return 'প্রথম ${count}টি গ্রুপ দেখানো হচ্ছে।';
+    return 'প্রথম $countটি গ্রুপ দেখানো হচ্ছে।';
   }
 
   @override
   String dutyGroupOnDutyNow(String name) {
-    return 'এখন ডিউটিতে: ${name}';
+    return 'এখন ডিউটিতে: $name';
   }
 
   @override
@@ -3404,12 +3405,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String dutyGroupChoreCount(String count) {
-    return 'কাজ: ${count}';
+    return 'কাজ: $count';
   }
 
   @override
   String dutyGroupMemberCount(String count) {
-    return 'সদস্য: ${count}';
+    return 'সদস্য: $count';
   }
 
   @override
@@ -3437,7 +3438,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dutyGroupSaved => 'গ্রুপ সংরক্ষিত হয়েছে';
 
   @override
-  String get dutyGroupReadOnly => 'যারা কাজ পরিচালনা করেন শুধু তারাই ডিউটি গ্রুপ বদলাতে পারেন।';
+  String get dutyGroupReadOnly =>
+      'যারা কাজ পরিচালনা করেন শুধু তারাই ডিউটি গ্রুপ বদলাতে পারেন।';
 
   @override
   String get dutyGroupNotFound => 'এই ডিউটি গ্রুপটি আর নেই।';
@@ -3446,7 +3448,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dutyGroupDeactivateTitle => 'এই গ্রুপ বন্ধ করবেন?';
 
   @override
-  String get dutyGroupDeactivateMessage => 'কিছু কাজ এখনও এই গ্রুপ ব্যবহার করছে। আপনি না সরানো পর্যন্ত সেগুলো এটিকেই দেখাবে।';
+  String get dutyGroupDeactivateMessage =>
+      'কিছু কাজ এখনও এই গ্রুপ ব্যবহার করছে। আপনি না সরানো পর্যন্ত সেগুলো এটিকেই দেখাবে।';
 
   @override
   String get dutyGroupDeactivateConfirm => 'বন্ধ করুন';
@@ -3461,16 +3464,17 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dutyRotationAddMember => 'সদস্য যোগ করুন';
 
   @override
-  String get dutyRotationNoCandidates => 'সব সক্রিয় সদস্য ইতিমধ্যে গ্রুপে আছেন।';
+  String get dutyRotationNoCandidates =>
+      'সব সক্রিয় সদস্য ইতিমধ্যে গ্রুপে আছেন।';
 
   @override
   String dutyRotationRemoveMember(String name) {
-    return '${name}-কে সরান';
+    return '$name-কে সরান';
   }
 
   @override
   String dutyRotationMoveMember(String name) {
-    return '${name}-কে সরাতে টানুন';
+    return '$name-কে সরাতে টানুন';
   }
 
   @override
@@ -3490,7 +3494,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String dutyRotationWeekStart(String day) {
-    return 'সপ্তাহ শুরু হয় ${day}';
+    return 'সপ্তাহ শুরু হয় $day';
   }
 
   @override
@@ -3506,24 +3510,25 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dutyRotaTitle => 'পরের পালাগুলো';
 
   @override
-  String get dutyRotaNeedsSchedule => 'এই রোটা কাজের দিন গুনে চলে, তাই দেখাতে একটি সময়সূচি লাগবে।';
+  String get dutyRotaNeedsSchedule =>
+      'এই রোটা কাজের দিন গুনে চলে, তাই দেখাতে একটি সময়সূচি লাগবে।';
 
   @override
   String get dutyRotaNobody => 'এখনও কেউ নেই';
 
   @override
   String dutyRotaRange(String start, String end) {
-    return '${start} থেকে ${end}';
+    return '$start থেকে $end';
   }
 
   @override
   String dutyRotaCellLabel(String range, String name) {
-    return '${range}: ${name}';
+    return '$range: $name';
   }
 
   @override
   String dutyRotaCellLabelCover(String range, String name) {
-    return '${range}: ${name}, কভার লাগবে';
+    return '$range: $name, কভার লাগবে';
   }
 
   @override
@@ -3552,7 +3557,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String dutyChangeNothingBefore(String date) {
-    return '${date}-এর আগের কিছুই বদলাবে না।';
+    return '$date-এর আগের কিছুই বদলাবে না।';
   }
 
   @override
@@ -3565,7 +3570,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dutyChangePickMember => 'একজন সদস্য বেছে নিন';
 
   @override
-  String get dutyPlanFailed => 'সংরক্ষিত হয়েছে, কিন্তু তারিখ সাজাতে ব্যর্থ হয়েছে।';
+  String get dutyPlanFailed =>
+      'সংরক্ষিত হয়েছে, কিন্তু তারিখ সাজাতে ব্যর্থ হয়েছে।';
 
   @override
   String get dutyPlanning => 'তারিখ সাজানো হচ্ছে…';
@@ -3583,7 +3589,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dutyChoreAddNone => 'সব কাজ ইতিমধ্যে এই গ্রুপে আছে।';
 
   @override
-  String get dutyChoreAddNote => 'যে আসন্ন কাজ শুরু হয়নি তা এই রোটায় চলে আসবে।';
+  String get dutyChoreAddNote =>
+      'যে আসন্ন কাজ শুরু হয়নি তা এই রোটায় চলে আসবে।';
 
   @override
   String get dutyChoreAdded => 'কাজটি গ্রুপে যোগ হয়েছে';
@@ -3592,7 +3599,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get actionDiscard => 'বাতিল করুন';
 
   @override
-  String get choresSettingsNeedsInternet => 'কাজের সেটিংস সংরক্ষণ করতে ইন্টারনেট সংযোগ লাগবে। আপনার পরিবর্তনগুলো এখানেই থাকছে, অনলাইন হলে আবার চেষ্টা করুন।';
+  String get choresSettingsNeedsInternet =>
+      'কাজের সেটিংস সংরক্ষণ করতে ইন্টারনেট সংযোগ লাগবে। আপনার পরিবর্তনগুলো এখানেই থাকছে, অনলাইন হলে আবার চেষ্টা করুন।';
 
   @override
   String get choresSettingsResetConfirmAction => 'রিসেট করুন';
@@ -3604,7 +3612,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get choreTemplatesSubtitle => 'পরিবারের কাজ তৈরি ও সম্পাদনা করুন';
 
   @override
-  String get choreTemplatesNotAllowed => 'শুধু অ্যাডমিন ও মডারেটর কাজ পরিচালনা করতে পারেন।';
+  String get choreTemplatesNotAllowed =>
+      'শুধু অ্যাডমিন ও মডারেটর কাজ পরিচালনা করতে পারেন।';
 
   @override
   String get choreListNew => 'নতুন কাজ';
@@ -3616,13 +3625,15 @@ class AppLocalizationsBn extends AppLocalizations {
   String get choreListEmptyTitle => 'এখনো কোনো কাজ নেই';
 
   @override
-  String get choreListEmptyMessage => 'নতুন কাজ বোতাম দিয়ে প্রথম কাজটি তৈরি করুন।';
+  String get choreListEmptyMessage =>
+      'নতুন কাজ বোতাম দিয়ে প্রথম কাজটি তৈরি করুন।';
 
   @override
   String get choreListEmptyFiltered => 'কোনো কাজ মেলেনি';
 
   @override
-  String get choreListTruncated => 'শুধু প্রথম দিকের কাজগুলো দেখানো হচ্ছে। বাকিগুলো দেখতে অপ্রয়োজনীয় কাজ আর্কাইভ করুন।';
+  String get choreListTruncated =>
+      'শুধু প্রথম দিকের কাজগুলো দেখানো হচ্ছে। বাকিগুলো দেখতে অপ্রয়োজনীয় কাজ আর্কাইভ করুন।';
 
   @override
   String get choreListUpdated => 'হালনাগাদ হয়েছে';
@@ -3660,7 +3671,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get choreArchiveConfirmTitle => 'এই কাজটি আর্কাইভ করবেন?';
 
   @override
-  String get choreArchiveConfirmMessage => 'এর নতুন দিন আর তৈরি হবে না। আগের দিন ও ইতিহাস থাকবে।';
+  String get choreArchiveConfirmMessage =>
+      'এর নতুন দিন আর তৈরি হবে না। আগের দিন ও ইতিহাস থাকবে।';
 
   @override
   String get choreDuplicateSuffix => ' (কপি)';
@@ -3692,10 +3704,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get choreEditorNotFound => 'কাজটি পাওয়া যায়নি';
 
   @override
-  String get choreEditorArchivedNote => 'এই কাজটি আর্কাইভ করা। দেখা যাবে, কিন্তু বদলানো যাবে না।';
+  String get choreEditorArchivedNote =>
+      'এই কাজটি আর্কাইভ করা। দেখা যাবে, কিন্তু বদলানো যাবে না।';
 
   @override
-  String get choreEditorPlanningFailed => 'কাজটি সংরক্ষিত হয়েছে, কিন্তু দিন সাজাতে সমস্যা হয়েছে। শেষ করতে আবার চেষ্টা করুন।';
+  String get choreEditorPlanningFailed =>
+      'কাজটি সংরক্ষিত হয়েছে, কিন্তু দিন সাজাতে সমস্যা হয়েছে। শেষ করতে আবার চেষ্টা করুন।';
 
   @override
   String get choreEditorSectionBasics => 'মূল তথ্য';
@@ -3780,19 +3794,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get choreEditorVerification => 'যাচাই লাগবে';
 
   @override
-  String get choreEditorVerificationHelp => 'কাজ শেষ হলে একজন দায়িত্বশীল যাচাই করবেন।';
+  String get choreEditorVerificationHelp =>
+      'কাজ শেষ হলে একজন দায়িত্বশীল যাচাই করবেন।';
 
   @override
   String get choreEditorActive => 'সক্রিয়';
 
   @override
-  String get choreEditorActiveHelp => 'বিরতিতে থাকা কাজের নতুন দিন তৈরি হয় না।';
+  String get choreEditorActiveHelp =>
+      'বিরতিতে থাকা কাজের নতুন দিন তৈরি হয় না।';
 
   @override
   String get choreRemindersTitle => 'রিমাইন্ডার';
 
   @override
-  String get choreRemindersStoredNote => 'পরে কাজে লাগবে: রিমাইন্ডার পরের আপডেটে পাঠানো হবে।';
+  String get choreRemindersStoredNote =>
+      'পরে কাজে লাগবে: রিমাইন্ডার পরের আপডেটে পাঠানো হবে।';
 
   @override
   String get choreReminderAtDue => 'নির্ধারিত সময়ে';
@@ -3878,7 +3895,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get choreInstructionsEmpty => 'কোনো নির্দেশনা নেই';
 
   @override
-  String get choreAssigneeManualHelp => 'কোনো দায়িত্বশীল ঠিক না করা পর্যন্ত কেউ নির্ধারিত থাকবে না।';
+  String get choreAssigneeManualHelp =>
+      'কোনো দায়িত্বশীল ঠিক না করা পর্যন্ত কেউ নির্ধারিত থাকবে না।';
 
   @override
   String get choreAssigneeFixedLabel => 'কে করবে';
@@ -3893,19 +3911,22 @@ class AppLocalizationsBn extends AppLocalizations {
   String get choreAssigneePickGroup => 'একটি দায়িত্ব গ্রুপ বাছুন';
 
   @override
-  String get choreAssigneeNoGroups => 'এখনো কোনো দায়িত্ব গ্রুপ নেই। একটি বানান অথবা নিজস্ব পালা ব্যবহার করুন।';
+  String get choreAssigneeNoGroups =>
+      'এখনো কোনো দায়িত্ব গ্রুপ নেই। একটি বানান অথবা নিজস্ব পালা ব্যবহার করুন।';
 
   @override
   String get choreReplanTitle => 'এই পরিবর্তন কোথায় প্রযোজ্য হবে';
 
   @override
-  String get choreReplanMessage => 'যে দিনের কাজ শুরু বা শেষ হয়েছে তা কখনো বদলায় না।';
+  String get choreReplanMessage =>
+      'যে দিনের কাজ শুরু বা শেষ হয়েছে তা কখনো বদলায় না।';
 
   @override
   String get choreReplanFutureOnly => 'শুধু আগামী দিনগুলো';
 
   @override
-  String get choreReplanIncludeUpcoming => 'আগামী দিন এবং এখনো কেউ শুরু করেনি এমন আসন্ন দিনগুলো';
+  String get choreReplanIncludeUpcoming =>
+      'আগামী দিন এবং এখনো কেউ শুরু করেনি এমন আসন্ন দিনগুলো';
 
   @override
   String get recurrenceKindOnce => 'একবার';
@@ -4197,7 +4218,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get starterPackStepWho => 'কে কী করবেন';
 
   @override
-  String get calendarTruncatedBanner => 'এই মাসে অনেক কাজ — সব দেখানো যাচ্ছে না';
+  String get calendarTruncatedBanner =>
+      'এই মাসে অনেক কাজ — সব দেখানো যাচ্ছে না';
 
   @override
   String get calendarTruncatedBannerAction => 'ফিল্টার দেখুন';
@@ -4305,7 +4327,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get calendarAddChore => 'কাজ যোগ করুন';
 
   @override
-  String get calendarMonthNarrow => 'মাসের ভিউয়ের জন্য চওড়া পর্দা লাগে, তাই সপ্তাহ দেখানো হচ্ছে।';
+  String get calendarMonthNarrow =>
+      'মাসের ভিউয়ের জন্য চওড়া পর্দা লাগে, তাই সপ্তাহ দেখানো হচ্ছে।';
 
   @override
   String get calendarQuickActions => 'কাজের অ্যাকশন';
@@ -4340,7 +4363,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get calendarHeatMode => 'ব্যস্ততার রং';
 
   @override
-  String get calendarHeatModeHint => 'যে দিনে বেশি কাজ, সেদিনের ঘর গাঢ় দেখায়।';
+  String get calendarHeatModeHint =>
+      'যে দিনে বেশি কাজ, সেদিনের ঘর গাঢ় দেখায়।';
 
   @override
   String get calendarHeatLegend => 'ব্যস্ততার মাত্রা';
@@ -4352,7 +4376,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get calendarHeatMore => 'বেশি';
 
   @override
-  String get calendarHeatLegendLabel => 'ব্যস্ততা কম থেকে বেশি, চার ধাপের গাঢ়তায়';
+  String get calendarHeatLegendLabel =>
+      'ব্যস্ততা কম থেকে বেশি, চার ধাপের গাঢ়তায়';
 
   @override
   String get calendarLegendMarks => 'দিনের ঘরের চিহ্ন';
@@ -4364,7 +4389,8 @@ class AppLocalizationsBn extends AppLocalizations {
   String get calendarLegendAway => 'উল্টো দিকের দাগ: কেউ অনুপস্থিত';
 
   @override
-  String get calendarMonthLandscape => 'ফোন আড়াআড়ি ধরলে মাসের ভিউ নেই, তাই সপ্তাহ দেখানো হচ্ছে।';
+  String get calendarMonthLandscape =>
+      'ফোন আড়াআড়ি ধরলে মাসের ভিউ নেই, তাই সপ্তাহ দেখানো হচ্ছে।';
 
   @override
   String get calendarUseFamilyDefaults => 'পরিবারের ডিফল্ট ব্যবহার করুন';
@@ -4376,10 +4402,107 @@ class AppLocalizationsBn extends AppLocalizations {
   String get galleryCalendarPolish => 'ক্যালেন্ডারের রং ও দাগ';
 
   @override
+  String get galleryDashboardCardFrame => 'ড্যাশবোর্ড কার্ড';
+
+  @override
+  String get galleryGreetingHeader => 'শুভেচ্ছা';
+
+  @override
+  String get galleryBellButton => 'নোটিফিকেশন ঘণ্টা';
+
+  @override
+  String get galleryBellOverflow => '৯+';
+
+  @override
+  String get galleryAlertStrip => 'সতর্কতার বার';
+
+  @override
+  String get galleryActivityTile => 'কার্যকলাপ';
+
+  @override
+  String get galleryStatPill => 'পরিসংখ্যান';
+
+  @override
+  String get galleryTimeOffsetChips => 'সময়ের ব্যবধান';
+
+  @override
+  String get galleryQuietHoursPicker => 'নীরব সময়';
+
+  @override
+  String get galleryQuietHoursStart => 'শুরুর সময়';
+
+  @override
+  String get galleryQuietHoursEnd => 'শেষের সময়';
+
+  @override
+  String get gallerySwitchTileWithReason => 'কারণসহ সুইচ';
+
+  @override
+  String get galleryLevelRing => 'স্তরের অগ্রগতি';
+
+  @override
+  String get galleryBadgeMedal => 'অর্জনের ব্যাজ';
+
+  @override
+  String get galleryEarned => 'অর্জিত';
+
+  @override
+  String get galleryUnearned => 'এখনও অর্জিত নয়';
+
+  @override
+  String get galleryPlantStageView => 'গাছের স্তর';
+
+  @override
+  String get galleryConfettiView => 'উদ্‌যাপনের কনফেটি';
+
+  @override
+  String get galleryDiagnosticRow => 'ডায়াগনস্টিক সারি';
+
+  @override
+  String get galleryReorderableCardTile => 'সাজানো যায় এমন কার্ড';
+
+  @override
+  String get galleryDragLabel => 'টেনে সরান';
+
+  @override
+  String get galleryMoveUp => 'উপরে সরান';
+
+  @override
+  String get galleryMoveDown => 'নিচে সরান';
+
+  @override
+  String get galleryAccessCell => 'ভূমিকার প্রবেশাধিকার';
+
+  @override
+  String get galleryAccessHidden => 'লুকানো';
+
+  @override
+  String get galleryAccessOn => 'চালু';
+
+  @override
+  String get galleryAccessOff => 'বন্ধ';
+
+  @override
+  String get galleryAccessRequired => 'আবশ্যক';
+
+  @override
+  String get galleryDeliveryModeTile => 'বিজ্ঞপ্তি পাঠানোর ধরন';
+
+  @override
+  String get galleryDeliveryNormal => 'সাধারণ';
+
+  @override
+  String get galleryDeliveryPush => 'পুশ';
+
+  @override
+  String get galleryRecommended => 'প্রস্তাবিত';
+
+  @override
   String get commentsTitle => 'মন্তব্য';
 
   @override
-  String get commentsEmpty => 'এখনও কোনো মন্তব্য নেই। কী ঠিক নেই বা কী করা হয়েছে লিখুন।';
+  String get commentsEmpty =>
+      'এখনও কোনো মন্তব্য নেই। কী ঠিক নেই বা কী করা হয়েছে লিখুন।';
 
   @override
   String get commentsHint => 'মন্তব্য লিখুন';
@@ -4440,7 +4563,11 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String activityChoresCommentUnhidden(String member, String name, String date) {
+  String activityChoresCommentUnhidden(
+    String member,
+    String name,
+    String date,
+  ) {
     return '$member $date-এ $name এর একটি মন্তব্য আবার দেখিয়েছেন';
   }
 
@@ -4571,10 +4698,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get availabilityStatusCancelled => 'বাতিল করা হয়েছে';
 
   @override
-  String get availabilityPolicyAsk => 'আপনার কাজগুলো বদলি দরকার হিসেবে দেখানো হবে এবং আপনাকে ও ম্যানেজারদের জানানো হবে।';
+  String get availabilityPolicyAsk =>
+      'আপনার কাজগুলো বদলি দরকার হিসেবে দেখানো হবে এবং আপনাকে ও ম্যানেজারদের জানানো হবে।';
 
   @override
-  String get availabilityPolicyAuto => 'প্রতিটি কাজের জন্য একজন ফাঁকা সদস্যকে বলা হবে। তিনি রাজি না হওয়া পর্যন্ত কিছু বদলাবে না।';
+  String get availabilityPolicyAuto =>
+      'প্রতিটি কাজের জন্য একজন ফাঁকা সদস্যকে বলা হবে। তিনি রাজি না হওয়া পর্যন্ত কিছু বদলাবে না।';
 
   @override
   String get availabilityPolicySkip => 'একজন ম্যানেজার এই কাজগুলো বাদ দেবেন।';
