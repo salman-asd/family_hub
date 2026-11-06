@@ -5080,6 +5080,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get achievementsTitle => 'Achievements';
 
   @override
+  String get celebrationTitle => 'Today’s chores are complete!';
+
+  @override
+  String get celebrationSemantics =>
+      'You have completed all your chores for today';
+
+  @override
+  String celebrationPointsToday(String points) {
+    return 'You earned $points points today';
+  }
+
+  @override
+  String get celebrationNewBadges => 'New badges';
+
+  @override
+  String get celebrationLevelUp => 'You reached a new level!';
+
+  @override
   String achievementLevel(String level) {
     return 'Level $level';
   }

@@ -4685,6 +4685,22 @@
   "@engagementVisibilityLevels": {},
   "achievementsTitle": "অর্জন",
   "@achievementsTitle": {},
+  "celebrationTitle": "আজকের কাজ সম্পন্ন!",
+  "@celebrationTitle": {},
+  "celebrationSemantics": "আপনার আজকের সব কাজ সম্পন্ন হয়েছে",
+  "@celebrationSemantics": {},
+  "celebrationPointsToday": "আজ পেয়েছেন {points} পয়েন্ট",
+  "@celebrationPointsToday": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "celebrationNewBadges": "নতুন ব্যাজ",
+  "@celebrationNewBadges": {},
+  "celebrationLevelUp": "আপনি নতুন লেভেলে পৌঁছেছেন!",
+  "@celebrationLevelUp": {},
   "achievementLevel": "লেভেল {level}",
   "@achievementLevel": {
     "placeholders": {

@@ -1,5 +1,6 @@
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/routing/app_routes.dart';
+import 'package:family_hub/app/routing/modal_route_tracker.dart';
 import 'package:family_hub/app/routing/not_found_screen.dart';
 import 'package:family_hub/app/routing/redirect_rules.dart';
 import 'package:family_hub/app/routing/settings_routes.dart';
@@ -71,6 +72,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   final disabled = ref.read(hiddenModulesProvider);
 
   final memo = ref.read(_locationMemoProvider);
+  final modalRouteTracker = ref.read(modalRouteTrackerProvider);
   final refresh = ValueNotifier<int>(0);
   ref.listen<SessionPhase>(sessionPhaseProvider, (_, _) => refresh.value++);
   ref.listen<bool>(
@@ -150,6 +152,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   ];
 
   final router = GoRouter(
+    observers: [modalRouteTracker.createObserver()],
     initialLocation: memo.value ?? AppRoutes.splash,
     refreshListenable: refresh,
     errorBuilder: (context, state) => const NotFoundScreen(),
@@ -248,7 +251,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           navigationShell: navigationShell,
           destinations: [for (final t in tabs) t.destination],
         ),
-        branches: [for (final t in tabs) StatefulShellBranch(routes: t.routes)],
+        branches: [
+          for (final t in tabs)
+            StatefulShellBranch(
+              routes: t.routes,
+              observers: [modalRouteTracker.createObserver()],
+            ),
+        ],
       ),
     ],
   );

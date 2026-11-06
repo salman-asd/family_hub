@@ -104,6 +104,7 @@ final class CelebrationShown extends CelebrationState {
     required this.dateKey,
     required this.levelBefore,
     required this.levelAfter,
+    required this.totalPoints,
     required Iterable<String> newBadges,
     required this.pointsToday,
   }) : newBadges = List<String>.unmodifiable(newBadges);
@@ -111,6 +112,7 @@ final class CelebrationShown extends CelebrationState {
   final DateKey dateKey;
   final int levelBefore;
   final int levelAfter;
+  final int totalPoints;
   final List<String> newBadges;
   final int pointsToday;
 
@@ -120,6 +122,7 @@ final class CelebrationShown extends CelebrationState {
       other.dateKey == dateKey &&
       other.levelBefore == levelBefore &&
       other.levelAfter == levelAfter &&
+      other.totalPoints == totalPoints &&
       _sameList(other.newBadges, newBadges) &&
       other.pointsToday == pointsToday;
 
@@ -128,6 +131,7 @@ final class CelebrationShown extends CelebrationState {
     dateKey,
     levelBefore,
     levelAfter,
+    totalPoints,
     Object.hashAll(newBadges),
     pointsToday,
   );

@@ -8830,6 +8830,36 @@ abstract class AppLocalizations {
   /// **'অর্জন'**
   String get achievementsTitle;
 
+  /// No description provided for @celebrationTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজকের কাজ সম্পন্ন!'**
+  String get celebrationTitle;
+
+  /// No description provided for @celebrationSemantics.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার আজকের সব কাজ সম্পন্ন হয়েছে'**
+  String get celebrationSemantics;
+
+  /// No description provided for @celebrationPointsToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজ পেয়েছেন {points} পয়েন্ট'**
+  String celebrationPointsToday(String points);
+
+  /// No description provided for @celebrationNewBadges.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন ব্যাজ'**
+  String get celebrationNewBadges;
+
+  /// No description provided for @celebrationLevelUp.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি নতুন লেভেলে পৌঁছেছেন!'**
+  String get celebrationLevelUp;
+
   /// No description provided for @achievementLevel.
   ///
   /// In bn, this message translates to:

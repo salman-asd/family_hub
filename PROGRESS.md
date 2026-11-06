@@ -2222,3 +2222,25 @@ index, localization, or package changes were needed.
 
 C1 and the full repository gates remain incomplete. P4-21 adds no package,
 localization entry, rule, or composite index.
+
+## Phase 4 - P4-22 celebration overlay, painters, and wiring
+
+Added the localized celebration bottom sheet with token-colored, seeded
+confetti, level progress, level-up plant animation, newly earned badges, and
+reduced-motion behavior. The shell host queues the sheet until the active route,
+all root/tab modal routes, and keyboard/focus state are idle; dismissing it
+acknowledges the event so it cannot replay on rebuild. Today already had the
+quiet all-done state, so no change there was needed.
+
+| Check | Result |
+| --- | --- |
+| `flutter gen-l10n` | Passed; updated both ARBs and all three generated localization files. |
+| Focused `flutter analyze` | Passed with zero issues. |
+| Modal route tracker, celebration controller/host, and overlay tests | Passed (11 tests). |
+| `git diff --check` | Passed. |
+| Repository-wide format check | Found existing formatting differences in `lib/features/notifications/presentation/inbox_providers.dart` and `test/features/notifications/domain/virtual_inbox_test.dart`; check did not modify them. |
+| Full `flutter analyze` | Failed with 239 repository issues; none reported in the P4-22 files. |
+| `flutter test --exclude-tags golden` | 2,196 passed, 100 failed from existing compile/test failures in unrelated app, Chores, Bazar, and calendar files. |
+| Architecture/file-size/ARB parity/no-raw-color guards | Passed. The hard-coded-string guard still reports 12 pre-existing findings in unrelated files. |
+| Hot restart | Attempted through DTD; no Flutter app was connected. |
+| Golden capture | Not generated on Windows; project goldens are generated on Linux. |

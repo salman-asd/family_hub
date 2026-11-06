@@ -5059,6 +5059,23 @@ class AppLocalizationsBn extends AppLocalizations {
   String get achievementsTitle => 'অর্জন';
 
   @override
+  String get celebrationTitle => 'আজকের কাজ সম্পন্ন!';
+
+  @override
+  String get celebrationSemantics => 'আপনার আজকের সব কাজ সম্পন্ন হয়েছে';
+
+  @override
+  String celebrationPointsToday(String points) {
+    return 'আজ পেয়েছেন $points পয়েন্ট';
+  }
+
+  @override
+  String get celebrationNewBadges => 'নতুন ব্যাজ';
+
+  @override
+  String get celebrationLevelUp => 'আপনি নতুন লেভেলে পৌঁছেছেন!';
+
+  @override
   String achievementLevel(String level) {
     return 'লেভেল $level';
   }

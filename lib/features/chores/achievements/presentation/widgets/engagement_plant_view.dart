@@ -8,12 +8,14 @@ class EngagementPlantView extends StatelessWidget {
     required this.stage,
     required this.semanticLabel,
     this.size = 88,
+    this.animate = true,
     super.key,
   });
 
   final int stage;
   final String semanticLabel;
   final double size;
+  final bool animate;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,8 @@ class EngagementPlantView extends StatelessWidget {
         child: SizedBox.square(
           dimension: size,
           child: reduced
+              ? CustomPaint(painter: painter(1))
+              : !animate
               ? CustomPaint(painter: painter(1))
               : TweenAnimationBuilder<double>(
                   key: ValueKey(stage),

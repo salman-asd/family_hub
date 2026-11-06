@@ -4686,6 +4686,22 @@
   "@engagementVisibilityLevels": {},
   "achievementsTitle": "Achievements",
   "@achievementsTitle": {},
+  "celebrationTitle": "Today’s chores are complete!",
+  "@celebrationTitle": {},
+  "celebrationSemantics": "You have completed all your chores for today",
+  "@celebrationSemantics": {},
+  "celebrationPointsToday": "You earned {points} points today",
+  "@celebrationPointsToday": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "celebrationNewBadges": "New badges",
+  "@celebrationNewBadges": {},
+  "celebrationLevelUp": "You reached a new level!",
+  "@celebrationLevelUp": {},
   "achievementLevel": "Level {level}",
   "@achievementLevel": {
     "placeholders": {

@@ -1,11 +1,15 @@
 import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/app/theme/theme_builder.dart';
+import 'package:family_hub/app/theme/theme_registry.dart';
+import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/achievements/domain/celebration_state.dart';
 import 'package:family_hub/features/chores/achievements/domain/default_engagement_settings.dart';
+import 'package:family_hub/features/chores/achievements/domain/engagement_settings.dart';
 import 'package:family_hub/features/chores/achievements/domain/member_stats.dart';
 import 'package:family_hub/features/chores/achievements/domain/member_stats_repository.dart';
 import 'package:family_hub/features/chores/achievements/domain/public_stats.dart';
@@ -13,6 +17,7 @@ import 'package:family_hub/features/chores/achievements/domain/public_stats_repo
 import 'package:family_hub/features/chores/achievements/domain/usecases/mark_celebrated.dart';
 import 'package:family_hub/features/chores/achievements/domain/usecases/sync_member_stats.dart';
 import 'package:family_hub/features/chores/achievements/presentation/celebration_controller.dart';
+import 'package:family_hub/features/chores/achievements/presentation/celebration_host.dart';
 import 'package:family_hub/features/chores/achievements/presentation/engagement_providers.dart';
 import 'package:family_hub/features/chores/availability/domain/availability_index.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
@@ -20,6 +25,9 @@ import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -111,6 +119,7 @@ void main() {
       final shown = container.read(celebrationControllerProvider);
       expect(shown, isA<CelebrationShown>());
       expect((shown as CelebrationShown).pointsToday, 36);
+      expect(shown.totalPoints, 36);
       expect(shown.levelBefore, 1);
       expect(stats.current?.lastCelebratedDateKey, today);
       expect(
@@ -289,6 +298,144 @@ void main() {
       );
     },
   );
+
+  testWidgets('queues over a dialog and presents only once', (tester) async {
+    tester.view
+      ..physicalSize = const Size(400, 900)
+      ..devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final controller = container.read(celebrationControllerProvider.notifier);
+    final items = _items(today);
+    await controller.observe(
+      familyId: familyId,
+      memberId: memberId,
+      today: today,
+      settings: settings,
+      monthItems: [
+        ...items.take(2),
+        items.last.copyWith(
+          status: OccurrenceStatus.scheduled,
+          completedAt: null,
+          completedBy: null,
+        ),
+      ],
+      stats: null,
+      availability: AvailabilityIndex.empty,
+    );
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          theme: buildThemeData(modernLightSpec),
+          locale: const Locale('en'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: CelebrationHost(
+            child: Scaffold(
+              body: Builder(
+                builder: (context) => TextButton(
+                  key: const Key('open_dialog'),
+                  onPressed: () => showDialog<void>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      content: const Text('Blocking dialog'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Close dialog'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  child: const Text('Open dialog'),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const Key('open_dialog')));
+    await tester.pumpAndSettle();
+    await controller.observe(
+      familyId: familyId,
+      memberId: memberId,
+      today: today,
+      settings: settings,
+      monthItems: items,
+      stats: stats.current,
+      availability: AvailabilityIndex.empty,
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Today’s chores are complete!'), findsNothing);
+
+    await tester.tap(find.text('Close dialog'));
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Today’s chores are complete!'), findsOneWidget);
+
+    await tester.ensureVisible(find.text('Done'));
+    await tester.tap(find.text('Done'));
+    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Today’s chores are complete!'), findsNothing);
+  });
+
+  testWidgets('waits until the keyboard is closed', (tester) async {
+    tester.view
+      ..physicalSize = const Size(400, 2000)
+      ..devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    final controller = container.read(celebrationControllerProvider.notifier);
+
+    await tester.pumpWidget(
+      UncontrolledProviderScope(
+        container: container,
+        child: MaterialApp(
+          theme: buildThemeData(modernLightSpec),
+          locale: const Locale('en'),
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: const CelebrationHost(child: Scaffold(body: SizedBox.shrink())),
+        ),
+      ),
+    );
+    tester.view.viewInsets = const FakeViewPadding(bottom: 300);
+    await tester.pump();
+    await controller.observe(
+      familyId: familyId,
+      memberId: memberId,
+      today: today,
+      settings: settings,
+      monthItems: _items(today),
+      stats: null,
+      availability: AvailabilityIndex.empty,
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Today’s chores are complete!'), findsNothing);
+
+    tester.view.viewInsets = const FakeViewPadding();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.text('Today’s chores are complete!'), findsOneWidget);
+
+    Navigator.of(tester.element(find.text('Done'))).pop();
+    await tester.pumpAndSettle();
+  });
 }
 
 ProviderContainer _container({
@@ -310,6 +457,15 @@ ProviderContainer _container({
     overrides: [
       sharedPreferencesProvider.overrideWithValue(preferences),
       clockProvider.overrideWithValue(clock),
+      currentFamilyIdProvider.overrideWithValue('family'),
+      engagementSettingsProvider('family').overrideWith(
+        (ref) => Stream<EngagementSettings>.value(
+          defaultEngagementSettings(
+            startedOn: DateKey(2026, 11, 1),
+            graceMinutes: 30,
+          ),
+        ),
+      ),
       syncMemberStatsProvider.overrideWithValue(sync),
       markCelebratedProvider.overrideWithValue(mark),
     ],

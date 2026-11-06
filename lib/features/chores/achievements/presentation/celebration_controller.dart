@@ -278,6 +278,7 @@ final class CelebrationController extends Notifier<CelebrationState> {
           dateKey: today,
           levelBefore: LevelTable(settings.levels).levelFor(beforePoints),
           levelAfter: LevelTable(settings.levels).levelFor(afterPoints),
+          totalPoints: afterPoints,
           newBadges: <String>[
             for (final id in (updatedStats?.badges.keys ?? const <String>[]))
               if (stats?.badges.containsKey(id) != true) id,
@@ -287,6 +288,13 @@ final class CelebrationController extends Notifier<CelebrationState> {
       }
     } finally {
       _inFlight = false;
+    }
+  }
+
+  void acknowledge(DateKey dateKey) {
+    if (state case CelebrationShown(dateKey: final shownDate)
+        when shownDate == dateKey) {
+      state = CelebrationQuietDone(dateKey);
     }
   }
 }
