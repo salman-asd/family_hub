@@ -5,6 +5,10 @@ enum Flavor {
   prod;
 
   String get label => this == Flavor.dev ? 'Family Hub (dev)' : 'Family Hub';
+
+  String get applicationId => this == Flavor.dev
+      ? 'com.familyhub.family_hub.dev'
+      : 'com.familyhub.family_hub';
 }
 
 /// The running flavor.

@@ -6,6 +6,9 @@ import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/core/firebase/cache_wipe.dart';
 import 'package:family_hub/core/firebase/firebase_bootstrap.dart';
+import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/core/notifications/data/local_notifications_scheduler.dart';
+import 'package:family_hub/core/notifications/domain/notification_tap_router.dart';
 import 'package:family_hub/features/activity/data/firestore_activity_repository.dart';
 import 'package:family_hub/features/activity/presentation/activity_providers.dart';
 import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
@@ -46,7 +49,6 @@ import 'package:family_hub/features/notifications/data/firestore_delivery_reposi
 import 'package:family_hub/features/notifications/data/firestore_notification_defaults_repository.dart';
 import 'package:family_hub/features/notifications/presentation/notification_providers.dart';
 import 'package:family_hub/features/notifications/presentation/reminder_providers.dart';
-import 'package:family_hub/features/notifications/presentation/reminder_diagnostics.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_providers.dart';
 import 'package:family_hub/features/chores/occurrences/data/firestore_occurrence_repository.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
@@ -109,6 +111,17 @@ Future<void> bootstrap(Flavor flavor) async {
     // synchronously — avoids a one-frame flash of the wrong theme.  It is
     // loaded BEFORE Firebase so a pending cache wipe (H9) can run first.
     final prefs = await SharedPreferences.getInstance();
+
+    final notificationTapRouter = NotificationTapRouter();
+    final reminderScheduler = LocalNotificationsScheduler(
+      preferences: prefs,
+      tapRouter: notificationTapRouter,
+      applicationId: flavor.applicationId,
+    );
+    final languageCode = prefs.getString('language_code') == 'en' ? 'en' : 'bn';
+    await reminderScheduler.initialize(
+      localizations: lookupAppLocalizations(Locale(languageCode)),
+    );
 
     // Initialize Firebase and configure Firestore persistence + emulators;
     // clears the previous user's cached data when a sign-out asked for it.
@@ -213,8 +226,9 @@ Future<void> bootstrap(Flavor flavor) async {
           notificationPreferenceSyncProvider.overrideWithValue(
             notificationPrefsSync,
           ),
-          reminderSchedulerProvider.overrideWithValue(
-            const UnavailableReminderScheduler(),
+          reminderSchedulerProvider.overrideWithValue(reminderScheduler),
+          notificationTapRouterProvider.overrideWithValue(
+            notificationTapRouter,
           ),
           dashboardPolicyRepositoryProvider.overrideWithValue(
             dashboardPolicies,

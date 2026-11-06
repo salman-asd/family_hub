@@ -4987,16 +4987,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifChannelChoresDue => 'Chore reminders';
 
   @override
+  String get notifChannelChoresDueDescription =>
+      'Reminders for scheduled chores';
+
+  @override
   String get notifChannelChoresOverdue => 'Overdue chores';
+
+  @override
+  String get notifChannelChoresOverdueDescription =>
+      'Reminders for unfinished chores';
 
   @override
   String get notifChannelDailySummary => 'Morning summary';
 
   @override
+  String get notifChannelDailySummaryDescription =>
+      'A short list of today\'s chores';
+
+  @override
   String get notifChannelBazar => 'Bazar and fund';
 
   @override
+  String get notifChannelBazarDescription => 'Bazar and family fund reminders';
+
+  @override
   String get notifChannelFamily => 'Family';
+
+  @override
+  String get notifChannelFamilyDescription => 'Family-related notifications';
 
   @override
   String get notifChannelPushEvents => 'Push alerts';

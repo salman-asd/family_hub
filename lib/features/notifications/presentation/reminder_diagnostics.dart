@@ -1,8 +1,6 @@
 import 'dart:developer' as developer;
 
 import 'package:family_hub/core/notifications/domain/notification_type.dart';
-import 'package:family_hub/core/notifications/domain/planned_notification.dart';
-import 'package:family_hub/core/notifications/domain/reminder_scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final class ReminderDiagnostics {
@@ -58,29 +56,4 @@ final class ReminderDiagnosticsController
       clearError: true,
     );
   }
-}
-
-final class UnavailableReminderScheduler implements ReminderScheduler {
-  const UnavailableReminderScheduler();
-
-  StateError _unavailable() =>
-      StateError('The platform reminder adapter is not installed yet (P4-13).');
-
-  @override
-  Future<List<PlannedNotification>> pending() async => throw _unavailable();
-
-  @override
-  Future<void> schedule(PlannedNotification notification) async =>
-      throw _unavailable();
-
-  @override
-  Future<void> cancel(List<int> ids) async => throw _unavailable();
-
-  @override
-  Future<void> cancelAll({NotificationCategory? category}) async =>
-      throw _unavailable();
-
-  @override
-  Future<NotificationPermissionState> permissions() async =>
-      throw _unavailable();
 }

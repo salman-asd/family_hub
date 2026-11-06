@@ -8,6 +8,11 @@ final class FakeReminderScheduler implements ReminderScheduler {
   final List<int> cancelledIds = <int>[];
   final List<NotificationCategory?> cancelledAll = <NotificationCategory?>[];
   int pendingCalls = 0;
+  int requestNotificationsCalls = 0;
+  int requestExactAlarmsCalls = 0;
+  int showNowCalls = 0;
+  int batterySettingsCalls = 0;
+  int exactAlarmSettingsCalls = 0;
   bool failOnPending = false;
   Future<void> Function()? beforePending;
   NotificationPermissionState permissionState =
@@ -15,6 +20,8 @@ final class FakeReminderScheduler implements ReminderScheduler {
         granted: true,
         exactAlarmsAllowed: true,
       );
+  bool notificationsRequestResult = true;
+  bool exactAlarmsRequestResult = true;
 
   @override
   Future<List<PlannedNotification>> pending() async {
@@ -65,4 +72,38 @@ final class FakeReminderScheduler implements ReminderScheduler {
 
   @override
   Future<NotificationPermissionState> permissions() async => permissionState;
+
+  @override
+  Future<void> showNow(PlannedNotification notification) async {
+    showNowCalls++;
+  }
+
+  @override
+  Future<bool> requestNotifications() async {
+    requestNotificationsCalls++;
+    return notificationsRequestResult;
+  }
+
+  @override
+  Future<bool> requestExactAlarms() async {
+    requestExactAlarmsCalls++;
+    return exactAlarmsRequestResult;
+  }
+
+  @override
+  Future<ReminderPlatformDiagnostics> diagnostics() async =>
+      ReminderPlatformDiagnostics(
+        permissions: permissionState,
+        pendingCount: _pending.length,
+      );
+
+  @override
+  Future<void> openBatterySettings() async {
+    batterySettingsCalls++;
+  }
+
+  @override
+  Future<void> openExactAlarmSettings() async {
+    exactAlarmSettingsCalls++;
+  }
 }

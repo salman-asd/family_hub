@@ -174,6 +174,7 @@ final class ReminderSyncController {
     notification.payload,
     notification.refId,
     notification.channelId.id,
+    notification.familyTimezone,
   ].map(Uri.encodeComponent).join('|');
 
   void _ensureActive() {

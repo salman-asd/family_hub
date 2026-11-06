@@ -4964,16 +4964,34 @@ class AppLocalizationsBn extends AppLocalizations {
   String get notifChannelChoresDue => 'কাজের সময়';
 
   @override
+  String get notifChannelChoresDueDescription =>
+      'নির্ধারিত কাজের সময়ের অনুস্মারক';
+
+  @override
   String get notifChannelChoresOverdue => 'বিলম্বিত কাজ';
+
+  @override
+  String get notifChannelChoresOverdueDescription =>
+      'অসম্পূর্ণ কাজের অনুস্মারক';
 
   @override
   String get notifChannelDailySummary => 'সকালের সারাংশ';
 
   @override
+  String get notifChannelDailySummaryDescription =>
+      'আজকের কাজের সংক্ষিপ্ত তালিকা';
+
+  @override
   String get notifChannelBazar => 'বাজার ও ফান্ড';
 
   @override
+  String get notifChannelBazarDescription => 'বাজার ও ফান্ডের অনুস্মারক';
+
+  @override
   String get notifChannelFamily => 'পরিবার';
+
+  @override
+  String get notifChannelFamilyDescription => 'পরিবার-সম্পর্কিত বিজ্ঞপ্তি';
 
   @override
   String get notifChannelPushEvents => 'জরুরি বিজ্ঞপ্তি';

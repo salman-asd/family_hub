@@ -7,6 +7,7 @@ import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/notifications/presentation/reminder_providers.dart';
+import 'package:family_hub/modules/module_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -29,6 +30,18 @@ class FamilyHubApp extends ConsumerWidget {
     final localePrefs = ref.watch(localeControllerProvider);
     final specs = resolveThemeSpecs(prefs);
     final router = ref.watch(routerProvider);
+    final moduleFlags = ref.watch(moduleFlagsProvider);
+    ref
+        .watch(notificationTapRouterProvider)
+        .attach(
+          navigate: (route) {
+            WidgetsBinding.instance.addPostFrameCallback(
+              (_) => router.go(route),
+            );
+          },
+          choresEnabled: moduleFlags.isEnabled('chores'),
+          bazarEnabled: moduleFlags.isEnabled('bazar'),
+        );
     // Side effect only: sync theme/language with the account.
     ref.watch(preferenceSyncProvider);
     ref.watch(dashboardPreferenceSyncProvider);

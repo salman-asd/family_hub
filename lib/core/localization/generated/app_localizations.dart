@@ -8668,11 +8668,23 @@ abstract class AppLocalizations {
   /// **'কাজের সময়'**
   String get notifChannelChoresDue;
 
+  /// No description provided for @notifChannelChoresDueDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্ধারিত কাজের সময়ের অনুস্মারক'**
+  String get notifChannelChoresDueDescription;
+
   /// No description provided for @notifChannelChoresOverdue.
   ///
   /// In bn, this message translates to:
   /// **'বিলম্বিত কাজ'**
   String get notifChannelChoresOverdue;
+
+  /// No description provided for @notifChannelChoresOverdueDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'অসম্পূর্ণ কাজের অনুস্মারক'**
+  String get notifChannelChoresOverdueDescription;
 
   /// No description provided for @notifChannelDailySummary.
   ///
@@ -8680,17 +8692,35 @@ abstract class AppLocalizations {
   /// **'সকালের সারাংশ'**
   String get notifChannelDailySummary;
 
+  /// No description provided for @notifChannelDailySummaryDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজকের কাজের সংক্ষিপ্ত তালিকা'**
+  String get notifChannelDailySummaryDescription;
+
   /// No description provided for @notifChannelBazar.
   ///
   /// In bn, this message translates to:
   /// **'বাজার ও ফান্ড'**
   String get notifChannelBazar;
 
+  /// No description provided for @notifChannelBazarDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ও ফান্ডের অনুস্মারক'**
+  String get notifChannelBazarDescription;
+
   /// No description provided for @notifChannelFamily.
   ///
   /// In bn, this message translates to:
   /// **'পরিবার'**
   String get notifChannelFamily;
+
+  /// No description provided for @notifChannelFamilyDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার-সম্পর্কিত বিজ্ঞপ্তি'**
+  String get notifChannelFamilyDescription;
 
   /// No description provided for @notifChannelPushEvents.
   ///

@@ -1,3 +1,5 @@
+import 'package:family_hub/core/utils/time_zones.dart';
+
 enum PlannedNotificationKind {
   due,
   before,
@@ -30,6 +32,7 @@ final class PlannedNotification {
     required this.payload,
     required this.refId,
     required this.channelId,
+    this.familyTimezone = defaultTimezone,
   });
 
   final int id;
@@ -42,6 +45,7 @@ final class PlannedNotification {
   final String payload;
   final String refId;
   final NotificationChannelId channelId;
+  final String familyTimezone;
 
   PlannedNotification copyWith({
     int? id,
@@ -52,6 +56,7 @@ final class PlannedNotification {
     String? payload,
     String? refId,
     NotificationChannelId? channelId,
+    String? familyTimezone,
   }) => PlannedNotification(
     id: id ?? this.id,
     kind: kind ?? this.kind,
@@ -61,6 +66,7 @@ final class PlannedNotification {
     payload: payload ?? this.payload,
     refId: refId ?? this.refId,
     channelId: channelId ?? this.channelId,
+    familyTimezone: familyTimezone ?? this.familyTimezone,
   );
 
   @override
@@ -73,7 +79,8 @@ final class PlannedNotification {
       other.body == body &&
       other.payload == payload &&
       other.refId == refId &&
-      other.channelId == channelId;
+      other.channelId == channelId &&
+      other.familyTimezone == familyTimezone;
 
   @override
   int get hashCode => Object.hash(
@@ -85,5 +92,6 @@ final class PlannedNotification {
     payload,
     refId,
     channelId,
+    familyTimezone,
   );
 }

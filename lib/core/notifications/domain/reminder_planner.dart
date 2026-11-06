@@ -201,6 +201,7 @@ abstract final class ReminderPlanner {
           payload: candidate.payload,
           refId: candidate.refId,
           channelId: candidate.channelId,
+          familyTimezone: input.familyTz,
         );
       }),
     );

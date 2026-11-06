@@ -11,6 +11,22 @@ final class NotificationPermissionState {
   final bool exactAlarmsAllowed;
 }
 
+final class ReminderPlatformDiagnostics {
+  const ReminderPlatformDiagnostics({
+    required this.permissions,
+    this.pendingCount,
+    this.nextFireAt,
+    this.lastError,
+    this.androidSdkVersion,
+  });
+
+  final NotificationPermissionState permissions;
+  final int? pendingCount;
+  final DateTime? nextFireAt;
+  final String? lastError;
+  final int? androidSdkVersion;
+}
+
 abstract interface class ReminderScheduler {
   Future<List<PlannedNotification>> pending();
 
@@ -21,4 +37,16 @@ abstract interface class ReminderScheduler {
   Future<void> cancelAll({NotificationCategory? category});
 
   Future<NotificationPermissionState> permissions();
+
+  Future<void> showNow(PlannedNotification notification);
+
+  Future<bool> requestNotifications();
+
+  Future<bool> requestExactAlarms();
+
+  Future<ReminderPlatformDiagnostics> diagnostics();
+
+  Future<void> openBatterySettings();
+
+  Future<void> openExactAlarmSettings();
 }

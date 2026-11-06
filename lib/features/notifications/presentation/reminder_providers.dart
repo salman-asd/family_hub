@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:family_hub/app/routing/session_phase.dart';
 import 'package:family_hub/app/routing/session_providers.dart';
 import 'package:family_hub/core/notifications/domain/notification_type.dart';
+import 'package:family_hub/core/notifications/domain/notification_tap_router.dart';
 import 'package:family_hub/core/notifications/domain/reminder_scheduler.dart';
 import 'package:family_hub/features/notifications/presentation/lifecycle_observer.dart';
 import 'package:family_hub/features/notifications/presentation/reminder_diagnostics.dart';
@@ -30,6 +31,10 @@ final reminderSchedulerProvider = Provider<ReminderScheduler>(
   (ref) => throw UnimplementedError(
     'reminderSchedulerProvider must be overridden in bootstrap.dart.',
   ),
+);
+
+final notificationTapRouterProvider = Provider<NotificationTapRouter>(
+  (ref) => NotificationTapRouter(),
 );
 
 final reminderDiagnosticsProvider =

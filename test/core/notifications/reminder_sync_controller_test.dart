@@ -54,6 +54,26 @@ void main() {
     expect(scheduler.scheduled, hasLength(1));
   });
 
+  test('family timezone changes replace the scheduled notification', () async {
+    final scheduler = FakeReminderScheduler();
+    final controller = ReminderSyncController(
+      scheduler: scheduler,
+      onError: (_, _) {},
+      onSynced: (_) {},
+    );
+    addTearDown(controller.dispose);
+
+    await controller.syncNow(<PlannedNotification>[
+      _notification(id: 1, familyTimezone: 'Asia/Dhaka'),
+    ]);
+    await controller.syncNow(<PlannedNotification>[
+      _notification(id: 1, familyTimezone: 'Europe/London'),
+    ]);
+
+    expect(scheduler.cancelledIds, <int>[1]);
+    expect(scheduler.scheduled.last.familyTimezone, 'Europe/London');
+  });
+
   test('debounce coalesces rapid plan changes to the latest plan', () async {
     final scheduler = FakeReminderScheduler();
     final controller = ReminderSyncController(
@@ -144,6 +164,7 @@ PlannedNotification _notification({
   required int id,
   String title = 'Reminder',
   bool bazar = false,
+  String familyTimezone = 'Asia/Dhaka',
 }) => PlannedNotification(
   id: id,
   kind: bazar
@@ -157,4 +178,5 @@ PlannedNotification _notification({
   channelId: bazar
       ? NotificationChannelId.bazar
       : NotificationChannelId.choresDue,
+  familyTimezone: familyTimezone,
 );

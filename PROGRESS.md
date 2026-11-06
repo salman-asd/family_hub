@@ -1926,5 +1926,22 @@ Written without an SDK: **nothing was compiled or run.** Vocabulary only; no beh
 5. **Generated l10n is hand-written** in the style of the existing files (long getters wrapped after `=>`). Any `flutter gen-l10n` difference should be cosmetic; if it is more than that, tell me.
 6. **Bangla and English texts are mine** (level names, card names, failure messages, sentences) and need the owner's review in P4-25.
 
+## Phase 4 - P4-13 Android notification adapter
+
+Implemented the Android local notification adapter and bootstrap wiring.
+Resolved package versions: `flutter_local_notifications 23.0.0` and
+`android_intent_plus 6.1.0`. The plugin README requires Android compile SDK 37,
+AGP 9.1.1, Java 17 core-library desugaring, and a drawable keep resource. The
+adapter creates localized channels, stores only schedule metadata locally to
+reconcile plugin pending requests after process restart, and routes validated
+cold/warm notification taps through the app router. Notification and exact
+alarm permissions are not requested at startup.
+
+The adapter uses `SCHEDULE_EXACT_ALARM` and falls back to inexact scheduling
+when access is unavailable. Before store release, confirm current Google Play
+exact-alarm policy eligibility. Device checklist: `docs/reminders_manual_test.md`.
+
+Validation: pending.
+
 ### To check when you run it
 `permission_matrix_doc_test` compares `docs/permission_matrix.md` byte for byte with what the test generates. I edited the file by hand to match; if it fails, run `UPDATE_PERMISSION_MATRIX=1 flutter test test/core/permissions/permission_matrix_doc_test.dart` and tell me what changed. The rest of the rules suite is untouched except the two closed lists in `firestore.rules`.
