@@ -93,6 +93,20 @@ final List<ChoresEntry> choresEntries = <ChoresEntry>[
     route: AppRoutes.choresSettings,
     requires: Permission.manageChoreTemplates,
   ),
+  ChoresEntry(
+    id: 'achievements',
+    icon: Icons.emoji_events_outlined,
+    title: (l10n) => l10n.achievementsTitle,
+    route: AppRoutes.choresAchievements,
+  ),
+  ChoresEntry(
+    id: 'engagementSettings',
+    icon: Icons.auto_awesome_outlined,
+    title: (l10n) => l10n.engagementSettingsGeneral,
+    subtitle: (l10n) => l10n.permissionManageEngagement,
+    route: AppRoutes.choresEngagementSettings,
+    requires: Permission.manageEngagement,
+  ),
   // P3-18. No `requires`: every member may READ the groups; the screens hide
   // the controls a member may not use.
   ChoresEntry(

@@ -4683,6 +4683,255 @@
   "@engagementVisibilityPrivate": {},
   "engagementVisibilityLevels": "শুধু লেভেল ও ব্যাজ",
   "@engagementVisibilityLevels": {},
+  "achievementsTitle": "অর্জন",
+  "@achievementsTitle": {},
+  "achievementLevel": "লেভেল {level}",
+  "@achievementLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementMaxLevel": "আপনি সর্বোচ্চ লেভেলে পৌঁছেছেন।",
+  "@achievementMaxLevel": {},
+  "achievementsDisabledTitle": "এই পরিবারে অর্জন বন্ধ আছে।",
+  "@achievementsDisabledTitle": {},
+  "achievementPoints": "{points} পয়েন্ট",
+  "@achievementPoints": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementProgress": "পরের লেভেলে যেতে {current}/{needed} পয়েন্ট",
+  "@achievementProgress": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "needed": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementStreak": "বর্তমান ধারাবাহিকতা: {days} দিন",
+  "@achievementStreak": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementBestStreak": "সেরা ধারাবাহিকতা: {days} দিন",
+  "@achievementBestStreak": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementCompleted": "সম্পন্ন কাজ",
+  "@achievementCompleted": {},
+  "achievementOnTime": "সময়মতো",
+  "@achievementOnTime": {},
+  "achievementCovers": "অন্যের জন্য কভার",
+  "@achievementCovers": {},
+  "achievementVerified": "সমস্যাহীন যাচাই",
+  "@achievementVerified": {},
+  "achievementBadges": "ব্যাজ",
+  "@achievementBadges": {},
+  "achievementEarned": "অর্জিত",
+  "@achievementEarned": {},
+  "achievementLocked": "এখনো অর্জিত হয়নি",
+  "@achievementLocked": {},
+  "achievementProgressCount": "{current}/{needed}",
+  "@achievementProgressCount": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "needed": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementProgressPercent": "{percent}% সময়মতো",
+  "@achievementProgressPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeFreshStart": "নতুন শুরু",
+  "@badgeFreshStart": {},
+  "badgeFreshStartDescription": "প্রথম কাজটি সম্পন্ন করুন।",
+  "@badgeFreshStartDescription": {},
+  "badgeConsistent": "ধারাবাহিক",
+  "@badgeConsistent": {},
+  "badgeConsistentDescription": "{days} দিনের ধারাবাহিকতা বজায় রাখুন।",
+  "@badgeConsistentDescription": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeReliable": "নির্ভরযোগ্য",
+  "@badgeReliable": {},
+  "badgeReliableDescription": "একটি সম্পূর্ণ মাসে {count}টি কাজ সময়মতো করুন।",
+  "@badgeReliableDescription": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeHelper": "সহায়ক",
+  "@badgeHelper": {},
+  "badgeHelperDescription": "অন্যের জন্য {count}টি কাজ কভার করুন।",
+  "@badgeHelperDescription": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeDetailChampion": "যত্নশীল",
+  "@badgeDetailChampion": {},
+  "badgeDetailChampionDescription": "সমস্যা ছাড়া {count}টি যাচাইকৃত কাজ করুন।",
+  "@badgeDetailChampionDescription": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "engagementPrivacyTitle": "পরিবারের সঙ্গে শেয়ার",
+  "@engagementPrivacyTitle": {},
+  "engagementPrivacyExplanation": "পরিবারের সদস্যরা আপনার লেভেল ও ব্যাজ দেখতে পারবেন কি না বেছে নিন।",
+  "@engagementPrivacyExplanation": {},
+  "engagementSharingSwitch": "আমার লেভেল ও ব্যাজ দেখান",
+  "@engagementSharingSwitch": {},
+  "engagementSharingDescription": "শুধু লেভেল ও অর্জিত ব্যাজ শেয়ার হবে। পয়েন্ট ও ব্যক্তিগত পরিসংখ্যান ব্যক্তিগত থাকবে।",
+  "@engagementSharingDescription": {},
+  "engagementFamilyLevelsTitle": "পরিবারের অর্জন",
+  "@engagementFamilyLevelsTitle": {},
+  "engagementFamilyLevelsEmpty": "এখনো কেউ শেয়ার করার সিদ্ধান্ত নেননি।",
+  "@engagementFamilyLevelsEmpty": {},
+  "engagementSharedLevelAndBadges": "{level} · {count}টি ব্যাজ",
+  "@engagementSharedLevelAndBadges": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "engagementPointsNeverShared": "পয়েন্ট ও ব্যক্তিগত পরিসংখ্যান কখনো শেয়ার হয় না।",
+  "@engagementPointsNeverShared": {},
+  "engagementHelpersTitle": "এই মাসের পারিবারিক সহায়তাকারী",
+  "@engagementHelpersTitle": {},
+  "engagementHelpersCount": "{count}টি কভার",
+  "@engagementHelpersCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "engagementSettingsNotAllowed": "শুধু পরিবারের ব্যবস্থাপকেরা এই সেটিং বদলাতে পারবেন।",
+  "@engagementSettingsNotAllowed": {},
+  "engagementSettingsSaved": "অর্জনের সেটিং সংরক্ষণ করা হয়েছে।",
+  "@engagementSettingsSaved": {},
+  "engagementSettingsSaveFailed": "অর্জনের সেটিং সংরক্ষণ করা যায়নি।",
+  "@engagementSettingsSaveFailed": {},
+  "engagementSettingsOffline": "এই সেটিং সংরক্ষণ করতে ইন্টারনেটে যুক্ত হন।",
+  "@engagementSettingsOffline": {},
+  "engagementSettingsDiscardTitle": "পরিবর্তন বাতিল করবেন?",
+  "@engagementSettingsDiscardTitle": {},
+  "engagementSettingsDiscardMessage": "সংরক্ষণ না করা অর্জনের পরিবর্তন হারিয়ে যাবে।",
+  "@engagementSettingsDiscardMessage": {},
+  "engagementSettingsGeneral": "অর্জন",
+  "@engagementSettingsGeneral": {},
+  "engagementSettingsEnabled": "লেভেল ও ব্যাজ চালু করুন",
+  "@engagementSettingsEnabled": {},
+  "engagementSettingsEnabledDescription": "পরিবারের সদস্যদের অর্জনের অগ্রগতি দেখান।",
+  "@engagementSettingsEnabledDescription": {},
+  "engagementSettingsCelebrations": "নতুন অর্জন উদযাপন",
+  "@engagementSettingsCelebrations": {},
+  "engagementSettingsCelebrationsDescription": "ব্যাজ বা লেভেল অর্জনে ছোট উদযাপন দেখান।",
+  "@engagementSettingsCelebrationsDescription": {},
+  "engagementSettingsHelpers": "পারিবারিক সহায়তাকারী দেখান",
+  "@engagementSettingsHelpers": {},
+  "engagementSettingsHelpersDescription": "আজ ও ড্যাশবোর্ডে এই মাসের সহায়তাকারীদের দেখান।",
+  "@engagementSettingsHelpersDescription": {},
+  "engagementSettingsScoring": "পয়েন্ট",
+  "@engagementSettingsScoring": {},
+  "engagementSettingsEasyPoints": "সহজ কাজের পয়েন্ট",
+  "@engagementSettingsEasyPoints": {},
+  "engagementSettingsNormalPoints": "সাধারণ কাজের পয়েন্ট",
+  "@engagementSettingsNormalPoints": {},
+  "engagementSettingsHardPoints": "কঠিন কাজের পয়েন্ট",
+  "@engagementSettingsHardPoints": {},
+  "engagementSettingsLateBonusPercent": "দেরিতে শেষ করার গুণক (%)",
+  "@engagementSettingsLateBonusPercent": {},
+  "engagementSettingsVerifiedBonusPercent": "যাচাইকৃত কাজের গুণক (%)",
+  "@engagementSettingsVerifiedBonusPercent": {},
+  "engagementSettingsCoverBonusPercent": "কভার বোনাসের গুণক (%)",
+  "@engagementSettingsCoverBonusPercent": {},
+  "engagementSettingsLevels": "লেভেল",
+  "@engagementSettingsLevels": {},
+  "engagementSettingsLevelNameBn": "বাংলা লেভেলের নাম",
+  "@engagementSettingsLevelNameBn": {},
+  "engagementSettingsLevelNameEn": "ইংরেজি লেভেলের নাম",
+  "@engagementSettingsLevelNameEn": {},
+  "engagementSettingsLevelPoints": "প্রয়োজনীয় পয়েন্ট",
+  "@engagementSettingsLevelPoints": {},
+  "engagementSettingsAddLevel": "লেভেল যোগ করুন",
+  "@engagementSettingsAddLevel": {},
+  "engagementSettingsNewLevelName": "লেভেল {number}",
+  "@engagementSettingsNewLevelName": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "engagementSettingsRemoveLevel": "লেভেল সরান",
+  "@engagementSettingsRemoveLevel": {},
+  "engagementSettingsBadgeThresholds": "ব্যাজের সীমা",
+  "@engagementSettingsBadgeThresholds": {},
+  "engagementSettingsConsistentDays": "ধারাবাহিক ব্যাজের দিনের সংখ্যা",
+  "@engagementSettingsConsistentDays": {},
+  "engagementSettingsReliablePercent": "নির্ভরযোগ্য ব্যাজের সময়মতো কাজের হার",
+  "@engagementSettingsReliablePercent": {},
+  "engagementSettingsReliableCount": "প্রয়োজনীয় সম্পন্ন কাজ",
+  "@engagementSettingsReliableCount": {},
+  "engagementSettingsHelperCovers": "সহায়ক ব্যাজের কভার সংখ্যা",
+  "@engagementSettingsHelperCovers": {},
+  "engagementSettingsDetailCount": "যত্নশীল ব্যাজের যাচাইকৃত কাজ",
+  "@engagementSettingsDetailCount": {},
+  "engagementSettingsResetSection": "এই অংশের ডিফল্ট ফিরিয়ে আনুন",
+  "@engagementSettingsResetSection": {},
+  "engagementSettingsVisibility": "পরিবারে দৃশ্যমানতা",
+  "@engagementSettingsVisibility": {},
+  "engagementSettingsPrivate": "ব্যক্তিগত",
+  "@engagementSettingsPrivate": {},
+  "engagementSettingsLevelsOnly": "শুধু লেভেল ও ব্যাজ",
+  "@engagementSettingsLevelsOnly": {},
+  "engagementSettingsVisibilityConfirmTitle": "পরিবারের দৃশ্যমানতা বদলাবেন?",
+  "@engagementSettingsVisibilityConfirmTitle": {},
+  "engagementSettingsVisibilityConfirmMessage": "এর ফলে সদস্যরা শেয়ার করা লেভেল ও ব্যাজ দেখতে পারবেন কি না বদলাবে। পয়েন্ট কখনো শেয়ার হয় না।",
+  "@engagementSettingsVisibilityConfirmMessage": {},
+  "engagementSettingsVisibilityAdminOnly": "শুধু প্রশাসক পরিবারের দৃশ্যমানতা বদলাতে পারবেন।",
+  "@engagementSettingsVisibilityAdminOnly": {},
+  "engagementSettingsInvalidValue": "সঠিক সীমার মধ্যে একটি মান লিখুন।",
+  "@engagementSettingsInvalidValue": {},
   "activityNotificationDefaultsUpdated": "বিজ্ঞপ্তির ডিফল্ট বদলানো হয়েছে",
   "@activityNotificationDefaultsUpdated": {},
   "activityNotificationDeliveryUpdated": "পুশ ও সাধারণ বিজ্ঞপ্তির সেটিং বদলানো হয়েছে",

@@ -4684,6 +4684,255 @@
   "@engagementVisibilityPrivate": {},
   "engagementVisibilityLevels": "levels and badges only",
   "@engagementVisibilityLevels": {},
+  "achievementsTitle": "Achievements",
+  "@achievementsTitle": {},
+  "achievementLevel": "Level {level}",
+  "@achievementLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementMaxLevel": "You have reached the highest level.",
+  "@achievementMaxLevel": {},
+  "achievementsDisabledTitle": "Achievements are turned off for this family.",
+  "@achievementsDisabledTitle": {},
+  "achievementPoints": "{points} points",
+  "@achievementPoints": {
+    "placeholders": {
+      "points": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementProgress": "{current} of {needed} points to the next level",
+  "@achievementProgress": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "needed": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementStreak": "Current streak: {days} days",
+  "@achievementStreak": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementBestStreak": "Best streak: {days} days",
+  "@achievementBestStreak": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementCompleted": "Chores completed",
+  "@achievementCompleted": {},
+  "achievementOnTime": "On time",
+  "@achievementOnTime": {},
+  "achievementCovers": "Covers given",
+  "@achievementCovers": {},
+  "achievementVerified": "Clean verifications",
+  "@achievementVerified": {},
+  "achievementBadges": "Badges",
+  "@achievementBadges": {},
+  "achievementEarned": "Earned",
+  "@achievementEarned": {},
+  "achievementLocked": "Not yet earned",
+  "@achievementLocked": {},
+  "achievementProgressCount": "{current} of {needed}",
+  "@achievementProgressCount": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "needed": {
+        "type": "String"
+      }
+    }
+  },
+  "achievementProgressPercent": "{percent}% on time",
+  "@achievementProgressPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeFreshStart": "Fresh start",
+  "@badgeFreshStart": {},
+  "badgeFreshStartDescription": "Complete your first chore.",
+  "@badgeFreshStartDescription": {},
+  "badgeConsistent": "Consistent",
+  "@badgeConsistent": {},
+  "badgeConsistentDescription": "Keep a streak of {days} days.",
+  "@badgeConsistentDescription": {
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeReliable": "Reliable",
+  "@badgeReliable": {},
+  "badgeReliableDescription": "Finish {count} chores on time in a completed month.",
+  "@badgeReliableDescription": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeHelper": "Helpful",
+  "@badgeHelper": {},
+  "badgeHelperDescription": "Cover {count} chores for someone.",
+  "@badgeHelperDescription": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeDetailChampion": "Detail champion",
+  "@badgeDetailChampion": {},
+  "badgeDetailChampionDescription": "Complete {count} verified chores without issues.",
+  "@badgeDetailChampionDescription": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "engagementPrivacyTitle": "Share with family",
+  "@engagementPrivacyTitle": {},
+  "engagementPrivacyExplanation": "Choose whether family members may see your level and badges.",
+  "@engagementPrivacyExplanation": {},
+  "engagementSharingSwitch": "Show my level and badges",
+  "@engagementSharingSwitch": {},
+  "engagementSharingDescription": "Only your level and earned badges are shared. Your points and personal stats stay private.",
+  "@engagementSharingDescription": {},
+  "engagementFamilyLevelsTitle": "Family achievements",
+  "@engagementFamilyLevelsTitle": {},
+  "engagementFamilyLevelsEmpty": "No family members have chosen to share yet.",
+  "@engagementFamilyLevelsEmpty": {},
+  "engagementSharedLevelAndBadges": "{level} · {count} badges",
+  "@engagementSharedLevelAndBadges": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "engagementPointsNeverShared": "Points and personal stats are never shared.",
+  "@engagementPointsNeverShared": {},
+  "engagementHelpersTitle": "Family helpers this month",
+  "@engagementHelpersTitle": {},
+  "engagementHelpersCount": "{count} covers",
+  "@engagementHelpersCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "engagementSettingsNotAllowed": "Only family managers can change engagement settings.",
+  "@engagementSettingsNotAllowed": {},
+  "engagementSettingsSaved": "Engagement settings saved.",
+  "@engagementSettingsSaved": {},
+  "engagementSettingsSaveFailed": "Could not save engagement settings.",
+  "@engagementSettingsSaveFailed": {},
+  "engagementSettingsOffline": "Connect to the internet to save these settings.",
+  "@engagementSettingsOffline": {},
+  "engagementSettingsDiscardTitle": "Discard changes?",
+  "@engagementSettingsDiscardTitle": {},
+  "engagementSettingsDiscardMessage": "Your unsaved engagement changes will be lost.",
+  "@engagementSettingsDiscardMessage": {},
+  "engagementSettingsGeneral": "Engagement",
+  "@engagementSettingsGeneral": {},
+  "engagementSettingsEnabled": "Enable levels and badges",
+  "@engagementSettingsEnabled": {},
+  "engagementSettingsEnabledDescription": "Show achievement progress to family members.",
+  "@engagementSettingsEnabledDescription": {},
+  "engagementSettingsCelebrations": "Celebrate new achievements",
+  "@engagementSettingsCelebrations": {},
+  "engagementSettingsCelebrationsDescription": "Show a small celebration when a badge or level is earned.",
+  "@engagementSettingsCelebrationsDescription": {},
+  "engagementSettingsHelpers": "Highlight family helpers",
+  "@engagementSettingsHelpers": {},
+  "engagementSettingsHelpersDescription": "Show this month's helpers on Today and the dashboard.",
+  "@engagementSettingsHelpersDescription": {},
+  "engagementSettingsScoring": "Scoring",
+  "@engagementSettingsScoring": {},
+  "engagementSettingsEasyPoints": "Easy chore points",
+  "@engagementSettingsEasyPoints": {},
+  "engagementSettingsNormalPoints": "Normal chore points",
+  "@engagementSettingsNormalPoints": {},
+  "engagementSettingsHardPoints": "Hard chore points",
+  "@engagementSettingsHardPoints": {},
+  "engagementSettingsLateBonusPercent": "Late completion factor (%)",
+  "@engagementSettingsLateBonusPercent": {},
+  "engagementSettingsVerifiedBonusPercent": "Verified completion factor (%)",
+  "@engagementSettingsVerifiedBonusPercent": {},
+  "engagementSettingsCoverBonusPercent": "Cover bonus factor (%)",
+  "@engagementSettingsCoverBonusPercent": {},
+  "engagementSettingsLevels": "Levels",
+  "@engagementSettingsLevels": {},
+  "engagementSettingsLevelNameBn": "Bangla level name",
+  "@engagementSettingsLevelNameBn": {},
+  "engagementSettingsLevelNameEn": "English level name",
+  "@engagementSettingsLevelNameEn": {},
+  "engagementSettingsLevelPoints": "Points required",
+  "@engagementSettingsLevelPoints": {},
+  "engagementSettingsAddLevel": "Add level",
+  "@engagementSettingsAddLevel": {},
+  "engagementSettingsNewLevelName": "Level {number}",
+  "@engagementSettingsNewLevelName": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "engagementSettingsRemoveLevel": "Remove level",
+  "@engagementSettingsRemoveLevel": {},
+  "engagementSettingsBadgeThresholds": "Badge thresholds",
+  "@engagementSettingsBadgeThresholds": {},
+  "engagementSettingsConsistentDays": "Days for the consistency badge",
+  "@engagementSettingsConsistentDays": {},
+  "engagementSettingsReliablePercent": "On-time percentage for reliable badge",
+  "@engagementSettingsReliablePercent": {},
+  "engagementSettingsReliableCount": "Completed chores required",
+  "@engagementSettingsReliableCount": {},
+  "engagementSettingsHelperCovers": "Covers for helper badge",
+  "@engagementSettingsHelperCovers": {},
+  "engagementSettingsDetailCount": "Clean verifications for detail badge",
+  "@engagementSettingsDetailCount": {},
+  "engagementSettingsResetSection": "Reset section",
+  "@engagementSettingsResetSection": {},
+  "engagementSettingsVisibility": "Family visibility",
+  "@engagementSettingsVisibility": {},
+  "engagementSettingsPrivate": "Private",
+  "@engagementSettingsPrivate": {},
+  "engagementSettingsLevelsOnly": "Levels and badges only",
+  "@engagementSettingsLevelsOnly": {},
+  "engagementSettingsVisibilityConfirmTitle": "Change family visibility?",
+  "@engagementSettingsVisibilityConfirmTitle": {},
+  "engagementSettingsVisibilityConfirmMessage": "This changes whether members can see opted-in family level and badge cards. Points are never shared.",
+  "@engagementSettingsVisibilityConfirmMessage": {},
+  "engagementSettingsVisibilityAdminOnly": "Only an administrator can change family visibility.",
+  "@engagementSettingsVisibilityAdminOnly": {},
+  "engagementSettingsInvalidValue": "Enter a valid value within the allowed range.",
+  "@engagementSettingsInvalidValue": {},
   "activityNotificationDefaultsUpdated": "Notification defaults were changed",
   "@activityNotificationDefaultsUpdated": {},
   "activityNotificationDeliveryUpdated": "Push and normal delivery settings were changed",

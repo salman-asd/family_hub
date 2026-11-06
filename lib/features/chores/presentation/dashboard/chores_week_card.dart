@@ -3,6 +3,8 @@ import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/presentation/dashboard/chores_dashboard_providers.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
+import 'package:family_hub/features/chores/achievements/presentation/widgets/helpers_highlight.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/shared/widgets/dashboard_card_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,58 +40,65 @@ class ChoresWeekCard extends ConsumerWidget {
             }
           : null,
       onTap: () => context.go(AppRoutes.chores),
-      child: Row(
+      child: Column(
         children: [
-          for (final day in week.value ?? const <WeekStripDay>[])
-            Expanded(
-              child: Semantics(
-                label: l10n.choresDashWeekDay(
-                  formatters.weekdayShort(day.day.isoWeekday),
-                  formatters.number(day.total),
-                ),
-                excludeSemantics: true,
-                child: Column(
-                  children: [
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        formatters.weekdayShort(day.day.isoWeekday),
-                        style: Theme.of(context).textTheme.labelSmall
-                            ?.copyWith(color: t.textSecondary),
-                      ),
+          Row(
+            children: [
+              for (final day in week.value ?? const <WeekStripDay>[])
+                Expanded(
+                  child: Semantics(
+                    label: l10n.choresDashWeekDay(
+                      formatters.weekdayShort(day.day.isoWeekday),
+                      formatters.number(day.total),
                     ),
-                    const SizedBox(height: 4),
-                    // Today is a filled disc, other days a plain outline:
-                    // shape differs, not only colour.
-                    Container(
-                      key: Key('chores_week_${day.day}'),
-                      constraints: const BoxConstraints(
-                        minWidth: 32,
-                        minHeight: 32,
-                      ),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: day.isToday ? t.accent : null,
-                        border: day.isToday
-                            ? null
-                            : Border.all(color: t.outline),
-                      ),
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          formatters.number(day.total),
-                          style: TextStyle(
-                            color: day.isToday ? t.textOnAccent : t.textPrimary,
-                            fontWeight: FontWeight.w600,
+                    excludeSemantics: true,
+                    child: Column(
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            formatters.weekdayShort(day.day.isoWeekday),
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(color: t.textSecondary),
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 4),
+                        Container(
+                          key: Key('chores_week_${day.day}'),
+                          constraints: const BoxConstraints(
+                            minWidth: 32,
+                            minHeight: 32,
+                          ),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: day.isToday ? t.accent : null,
+                            border: day.isToday
+                                ? null
+                                : Border.all(color: t.outline),
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              formatters.number(day.total),
+                              style: TextStyle(
+                                color: day.isToday
+                                    ? t.textOnAccent
+                                    : t.textPrimary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+            ],
+          ),
+          HelpersHighlight(
+            month: ref.watch(familyDateKeysProvider).thisMonth(),
+          ),
         ],
       ),
     );

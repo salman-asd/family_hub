@@ -5056,6 +5056,286 @@ class AppLocalizationsBn extends AppLocalizations {
   String get engagementVisibilityLevels => 'শুধু লেভেল ও ব্যাজ';
 
   @override
+  String get achievementsTitle => 'অর্জন';
+
+  @override
+  String achievementLevel(String level) {
+    return 'লেভেল $level';
+  }
+
+  @override
+  String get achievementMaxLevel => 'আপনি সর্বোচ্চ লেভেলে পৌঁছেছেন।';
+
+  @override
+  String get achievementsDisabledTitle => 'এই পরিবারে অর্জন বন্ধ আছে।';
+
+  @override
+  String achievementPoints(String points) {
+    return '$points পয়েন্ট';
+  }
+
+  @override
+  String achievementProgress(String current, String needed) {
+    return 'পরের লেভেলে যেতে $current/$needed পয়েন্ট';
+  }
+
+  @override
+  String achievementStreak(String days) {
+    return 'বর্তমান ধারাবাহিকতা: $days দিন';
+  }
+
+  @override
+  String achievementBestStreak(String days) {
+    return 'সেরা ধারাবাহিকতা: $days দিন';
+  }
+
+  @override
+  String get achievementCompleted => 'সম্পন্ন কাজ';
+
+  @override
+  String get achievementOnTime => 'সময়মতো';
+
+  @override
+  String get achievementCovers => 'অন্যের জন্য কভার';
+
+  @override
+  String get achievementVerified => 'সমস্যাহীন যাচাই';
+
+  @override
+  String get achievementBadges => 'ব্যাজ';
+
+  @override
+  String get achievementEarned => 'অর্জিত';
+
+  @override
+  String get achievementLocked => 'এখনো অর্জিত হয়নি';
+
+  @override
+  String achievementProgressCount(String current, String needed) {
+    return '$current/$needed';
+  }
+
+  @override
+  String achievementProgressPercent(String percent) {
+    return '$percent% সময়মতো';
+  }
+
+  @override
+  String get badgeFreshStart => 'নতুন শুরু';
+
+  @override
+  String get badgeFreshStartDescription => 'প্রথম কাজটি সম্পন্ন করুন।';
+
+  @override
+  String get badgeConsistent => 'ধারাবাহিক';
+
+  @override
+  String badgeConsistentDescription(String days) {
+    return '$days দিনের ধারাবাহিকতা বজায় রাখুন।';
+  }
+
+  @override
+  String get badgeReliable => 'নির্ভরযোগ্য';
+
+  @override
+  String badgeReliableDescription(String count) {
+    return 'একটি সম্পূর্ণ মাসে $countটি কাজ সময়মতো করুন।';
+  }
+
+  @override
+  String get badgeHelper => 'সহায়ক';
+
+  @override
+  String badgeHelperDescription(String count) {
+    return 'অন্যের জন্য $countটি কাজ কভার করুন।';
+  }
+
+  @override
+  String get badgeDetailChampion => 'যত্নশীল';
+
+  @override
+  String badgeDetailChampionDescription(String count) {
+    return 'সমস্যা ছাড়া $countটি যাচাইকৃত কাজ করুন।';
+  }
+
+  @override
+  String get engagementPrivacyTitle => 'পরিবারের সঙ্গে শেয়ার';
+
+  @override
+  String get engagementPrivacyExplanation =>
+      'পরিবারের সদস্যরা আপনার লেভেল ও ব্যাজ দেখতে পারবেন কি না বেছে নিন।';
+
+  @override
+  String get engagementSharingSwitch => 'আমার লেভেল ও ব্যাজ দেখান';
+
+  @override
+  String get engagementSharingDescription =>
+      'শুধু লেভেল ও অর্জিত ব্যাজ শেয়ার হবে। পয়েন্ট ও ব্যক্তিগত পরিসংখ্যান ব্যক্তিগত থাকবে।';
+
+  @override
+  String get engagementFamilyLevelsTitle => 'পরিবারের অর্জন';
+
+  @override
+  String get engagementFamilyLevelsEmpty =>
+      'এখনো কেউ শেয়ার করার সিদ্ধান্ত নেননি।';
+
+  @override
+  String engagementSharedLevelAndBadges(String level, String count) {
+    return '$level · $countটি ব্যাজ';
+  }
+
+  @override
+  String get engagementPointsNeverShared =>
+      'পয়েন্ট ও ব্যক্তিগত পরিসংখ্যান কখনো শেয়ার হয় না।';
+
+  @override
+  String get engagementHelpersTitle => 'এই মাসের পারিবারিক সহায়তাকারী';
+
+  @override
+  String engagementHelpersCount(String count) {
+    return '$countটি কভার';
+  }
+
+  @override
+  String get engagementSettingsNotAllowed =>
+      'শুধু পরিবারের ব্যবস্থাপকেরা এই সেটিং বদলাতে পারবেন।';
+
+  @override
+  String get engagementSettingsSaved => 'অর্জনের সেটিং সংরক্ষণ করা হয়েছে।';
+
+  @override
+  String get engagementSettingsSaveFailed =>
+      'অর্জনের সেটিং সংরক্ষণ করা যায়নি।';
+
+  @override
+  String get engagementSettingsOffline =>
+      'এই সেটিং সংরক্ষণ করতে ইন্টারনেটে যুক্ত হন।';
+
+  @override
+  String get engagementSettingsDiscardTitle => 'পরিবর্তন বাতিল করবেন?';
+
+  @override
+  String get engagementSettingsDiscardMessage =>
+      'সংরক্ষণ না করা অর্জনের পরিবর্তন হারিয়ে যাবে।';
+
+  @override
+  String get engagementSettingsGeneral => 'অর্জন';
+
+  @override
+  String get engagementSettingsEnabled => 'লেভেল ও ব্যাজ চালু করুন';
+
+  @override
+  String get engagementSettingsEnabledDescription =>
+      'পরিবারের সদস্যদের অর্জনের অগ্রগতি দেখান।';
+
+  @override
+  String get engagementSettingsCelebrations => 'নতুন অর্জন উদযাপন';
+
+  @override
+  String get engagementSettingsCelebrationsDescription =>
+      'ব্যাজ বা লেভেল অর্জনে ছোট উদযাপন দেখান।';
+
+  @override
+  String get engagementSettingsHelpers => 'পারিবারিক সহায়তাকারী দেখান';
+
+  @override
+  String get engagementSettingsHelpersDescription =>
+      'আজ ও ড্যাশবোর্ডে এই মাসের সহায়তাকারীদের দেখান।';
+
+  @override
+  String get engagementSettingsScoring => 'পয়েন্ট';
+
+  @override
+  String get engagementSettingsEasyPoints => 'সহজ কাজের পয়েন্ট';
+
+  @override
+  String get engagementSettingsNormalPoints => 'সাধারণ কাজের পয়েন্ট';
+
+  @override
+  String get engagementSettingsHardPoints => 'কঠিন কাজের পয়েন্ট';
+
+  @override
+  String get engagementSettingsLateBonusPercent => 'দেরিতে শেষ করার গুণক (%)';
+
+  @override
+  String get engagementSettingsVerifiedBonusPercent =>
+      'যাচাইকৃত কাজের গুণক (%)';
+
+  @override
+  String get engagementSettingsCoverBonusPercent => 'কভার বোনাসের গুণক (%)';
+
+  @override
+  String get engagementSettingsLevels => 'লেভেল';
+
+  @override
+  String get engagementSettingsLevelNameBn => 'বাংলা লেভেলের নাম';
+
+  @override
+  String get engagementSettingsLevelNameEn => 'ইংরেজি লেভেলের নাম';
+
+  @override
+  String get engagementSettingsLevelPoints => 'প্রয়োজনীয় পয়েন্ট';
+
+  @override
+  String get engagementSettingsAddLevel => 'লেভেল যোগ করুন';
+
+  @override
+  String engagementSettingsNewLevelName(String number) {
+    return 'লেভেল $number';
+  }
+
+  @override
+  String get engagementSettingsRemoveLevel => 'লেভেল সরান';
+
+  @override
+  String get engagementSettingsBadgeThresholds => 'ব্যাজের সীমা';
+
+  @override
+  String get engagementSettingsConsistentDays =>
+      'ধারাবাহিক ব্যাজের দিনের সংখ্যা';
+
+  @override
+  String get engagementSettingsReliablePercent =>
+      'নির্ভরযোগ্য ব্যাজের সময়মতো কাজের হার';
+
+  @override
+  String get engagementSettingsReliableCount => 'প্রয়োজনীয় সম্পন্ন কাজ';
+
+  @override
+  String get engagementSettingsHelperCovers => 'সহায়ক ব্যাজের কভার সংখ্যা';
+
+  @override
+  String get engagementSettingsDetailCount => 'যত্নশীল ব্যাজের যাচাইকৃত কাজ';
+
+  @override
+  String get engagementSettingsResetSection => 'এই অংশের ডিফল্ট ফিরিয়ে আনুন';
+
+  @override
+  String get engagementSettingsVisibility => 'পরিবারে দৃশ্যমানতা';
+
+  @override
+  String get engagementSettingsPrivate => 'ব্যক্তিগত';
+
+  @override
+  String get engagementSettingsLevelsOnly => 'শুধু লেভেল ও ব্যাজ';
+
+  @override
+  String get engagementSettingsVisibilityConfirmTitle =>
+      'পরিবারের দৃশ্যমানতা বদলাবেন?';
+
+  @override
+  String get engagementSettingsVisibilityConfirmMessage =>
+      'এর ফলে সদস্যরা শেয়ার করা লেভেল ও ব্যাজ দেখতে পারবেন কি না বদলাবে। পয়েন্ট কখনো শেয়ার হয় না।';
+
+  @override
+  String get engagementSettingsVisibilityAdminOnly =>
+      'শুধু প্রশাসক পরিবারের দৃশ্যমানতা বদলাতে পারবেন।';
+
+  @override
+  String get engagementSettingsInvalidValue =>
+      'সঠিক সীমার মধ্যে একটি মান লিখুন।';
+
+  @override
   String get activityNotificationDefaultsUpdated =>
       'বিজ্ঞপ্তির ডিফল্ট বদলানো হয়েছে';
 

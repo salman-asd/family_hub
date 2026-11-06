@@ -4,5 +4,7 @@ import 'package:family_hub/features/chores/achievements/domain/public_stats.dart
 abstract interface class PublicStatsRepository {
   Stream<PublicStats?> watch(String familyId, String memberId);
 
+  Stream<Map<String, PublicStats>> watchFamily(String familyId);
+
   Future<Result<PublicStats?>> get(String familyId, String memberId);
 }

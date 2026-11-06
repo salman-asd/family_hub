@@ -2169,3 +2169,31 @@ permissions. Real mapper fixtures and rule tests cover these documents.
 
 C1 and the full repository gates remain incomplete. P4-19 adds no new index,
 localization entry, or package.
+
+## Phase 4 - P4-20 achievements and engagement UI
+
+Added the achievements screen with private personal stats, level progress,
+badges, and opt-in family-level cards; the Hub Level plant dashboard card;
+helpers highlights on Today and This week; and an engagement settings screen
+with manager/admin permission gates, section resets, dirty-navigation
+protection, and explicit save/offline feedback. Public family cards use a
+bounded `memberStatsPublic` query and render only level and badge identifiers.
+The plant painter uses seven stages and a 600 ms growth animation, with static
+rendering when reduced motion is enabled. Added Bangla/English copy and a
+Firestore rule test for collection listing; no rule, index, or dependency
+change was needed.
+
+| Check | Result |
+| --- | --- |
+| `dart format .` | Passed; two unrelated formatter-only changes were reverted. |
+| Focused `flutter analyze` on P4-20 sources and tests | Passed with zero issues. |
+| Focused painter, stats-use-case, and file-size tests | Passed (7 tests). |
+| `flutter gen-l10n`, `node --check` for the modified rules test, and `git diff --check` | Passed. |
+| `flutter analyze` | Failed with 239 repository issues outside P4-20. |
+| `flutter test --exclude-tags golden` | 2,183 passed, 100 failed; existing compile/test failures include missing symbols/imports in Chores, Bazar, and other features. The new screen/helper widget tests are blocked by that compile-error baseline. |
+| Firestore emulator rules suite | Not run: Firebase CLI could not spawn `java -version`; install/configure JDK 21+ and rerun the documented command. |
+| Painter goldens | Not generated; the project requires Linux CI for golden images. |
+| Hot restart | Attempted through DTD; no Flutter app was registered. |
+
+C1 and the full repository gates remain incomplete. P4-20 adds no package or
+composite index.

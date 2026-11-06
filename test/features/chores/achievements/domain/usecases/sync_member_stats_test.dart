@@ -199,6 +199,10 @@ final class _PublicStatsRepository implements PublicStatsRepository {
       Stream<PublicStats?>.value(current);
 
   @override
+  Stream<Map<String, PublicStats>> watchFamily(String familyId) =>
+      Stream<Map<String, PublicStats>>.value(const <String, PublicStats>{});
+
+  @override
   Future<Result<PublicStats?>> get(String familyId, String memberId) async =>
       Success<PublicStats?>(current);
 }

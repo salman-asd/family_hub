@@ -5077,6 +5077,288 @@ class AppLocalizationsEn extends AppLocalizations {
   String get engagementVisibilityLevels => 'levels and badges only';
 
   @override
+  String get achievementsTitle => 'Achievements';
+
+  @override
+  String achievementLevel(String level) {
+    return 'Level $level';
+  }
+
+  @override
+  String get achievementMaxLevel => 'You have reached the highest level.';
+
+  @override
+  String get achievementsDisabledTitle =>
+      'Achievements are turned off for this family.';
+
+  @override
+  String achievementPoints(String points) {
+    return '$points points';
+  }
+
+  @override
+  String achievementProgress(String current, String needed) {
+    return '$current of $needed points to the next level';
+  }
+
+  @override
+  String achievementStreak(String days) {
+    return 'Current streak: $days days';
+  }
+
+  @override
+  String achievementBestStreak(String days) {
+    return 'Best streak: $days days';
+  }
+
+  @override
+  String get achievementCompleted => 'Chores completed';
+
+  @override
+  String get achievementOnTime => 'On time';
+
+  @override
+  String get achievementCovers => 'Covers given';
+
+  @override
+  String get achievementVerified => 'Clean verifications';
+
+  @override
+  String get achievementBadges => 'Badges';
+
+  @override
+  String get achievementEarned => 'Earned';
+
+  @override
+  String get achievementLocked => 'Not yet earned';
+
+  @override
+  String achievementProgressCount(String current, String needed) {
+    return '$current of $needed';
+  }
+
+  @override
+  String achievementProgressPercent(String percent) {
+    return '$percent% on time';
+  }
+
+  @override
+  String get badgeFreshStart => 'Fresh start';
+
+  @override
+  String get badgeFreshStartDescription => 'Complete your first chore.';
+
+  @override
+  String get badgeConsistent => 'Consistent';
+
+  @override
+  String badgeConsistentDescription(String days) {
+    return 'Keep a streak of $days days.';
+  }
+
+  @override
+  String get badgeReliable => 'Reliable';
+
+  @override
+  String badgeReliableDescription(String count) {
+    return 'Finish $count chores on time in a completed month.';
+  }
+
+  @override
+  String get badgeHelper => 'Helpful';
+
+  @override
+  String badgeHelperDescription(String count) {
+    return 'Cover $count chores for someone.';
+  }
+
+  @override
+  String get badgeDetailChampion => 'Detail champion';
+
+  @override
+  String badgeDetailChampionDescription(String count) {
+    return 'Complete $count verified chores without issues.';
+  }
+
+  @override
+  String get engagementPrivacyTitle => 'Share with family';
+
+  @override
+  String get engagementPrivacyExplanation =>
+      'Choose whether family members may see your level and badges.';
+
+  @override
+  String get engagementSharingSwitch => 'Show my level and badges';
+
+  @override
+  String get engagementSharingDescription =>
+      'Only your level and earned badges are shared. Your points and personal stats stay private.';
+
+  @override
+  String get engagementFamilyLevelsTitle => 'Family achievements';
+
+  @override
+  String get engagementFamilyLevelsEmpty =>
+      'No family members have chosen to share yet.';
+
+  @override
+  String engagementSharedLevelAndBadges(String level, String count) {
+    return '$level · $count badges';
+  }
+
+  @override
+  String get engagementPointsNeverShared =>
+      'Points and personal stats are never shared.';
+
+  @override
+  String get engagementHelpersTitle => 'Family helpers this month';
+
+  @override
+  String engagementHelpersCount(String count) {
+    return '$count covers';
+  }
+
+  @override
+  String get engagementSettingsNotAllowed =>
+      'Only family managers can change engagement settings.';
+
+  @override
+  String get engagementSettingsSaved => 'Engagement settings saved.';
+
+  @override
+  String get engagementSettingsSaveFailed =>
+      'Could not save engagement settings.';
+
+  @override
+  String get engagementSettingsOffline =>
+      'Connect to the internet to save these settings.';
+
+  @override
+  String get engagementSettingsDiscardTitle => 'Discard changes?';
+
+  @override
+  String get engagementSettingsDiscardMessage =>
+      'Your unsaved engagement changes will be lost.';
+
+  @override
+  String get engagementSettingsGeneral => 'Engagement';
+
+  @override
+  String get engagementSettingsEnabled => 'Enable levels and badges';
+
+  @override
+  String get engagementSettingsEnabledDescription =>
+      'Show achievement progress to family members.';
+
+  @override
+  String get engagementSettingsCelebrations => 'Celebrate new achievements';
+
+  @override
+  String get engagementSettingsCelebrationsDescription =>
+      'Show a small celebration when a badge or level is earned.';
+
+  @override
+  String get engagementSettingsHelpers => 'Highlight family helpers';
+
+  @override
+  String get engagementSettingsHelpersDescription =>
+      'Show this month\'s helpers on Today and the dashboard.';
+
+  @override
+  String get engagementSettingsScoring => 'Scoring';
+
+  @override
+  String get engagementSettingsEasyPoints => 'Easy chore points';
+
+  @override
+  String get engagementSettingsNormalPoints => 'Normal chore points';
+
+  @override
+  String get engagementSettingsHardPoints => 'Hard chore points';
+
+  @override
+  String get engagementSettingsLateBonusPercent => 'Late completion factor (%)';
+
+  @override
+  String get engagementSettingsVerifiedBonusPercent =>
+      'Verified completion factor (%)';
+
+  @override
+  String get engagementSettingsCoverBonusPercent => 'Cover bonus factor (%)';
+
+  @override
+  String get engagementSettingsLevels => 'Levels';
+
+  @override
+  String get engagementSettingsLevelNameBn => 'Bangla level name';
+
+  @override
+  String get engagementSettingsLevelNameEn => 'English level name';
+
+  @override
+  String get engagementSettingsLevelPoints => 'Points required';
+
+  @override
+  String get engagementSettingsAddLevel => 'Add level';
+
+  @override
+  String engagementSettingsNewLevelName(String number) {
+    return 'Level $number';
+  }
+
+  @override
+  String get engagementSettingsRemoveLevel => 'Remove level';
+
+  @override
+  String get engagementSettingsBadgeThresholds => 'Badge thresholds';
+
+  @override
+  String get engagementSettingsConsistentDays =>
+      'Days for the consistency badge';
+
+  @override
+  String get engagementSettingsReliablePercent =>
+      'On-time percentage for reliable badge';
+
+  @override
+  String get engagementSettingsReliableCount => 'Completed chores required';
+
+  @override
+  String get engagementSettingsHelperCovers => 'Covers for helper badge';
+
+  @override
+  String get engagementSettingsDetailCount =>
+      'Clean verifications for detail badge';
+
+  @override
+  String get engagementSettingsResetSection => 'Reset section';
+
+  @override
+  String get engagementSettingsVisibility => 'Family visibility';
+
+  @override
+  String get engagementSettingsPrivate => 'Private';
+
+  @override
+  String get engagementSettingsLevelsOnly => 'Levels and badges only';
+
+  @override
+  String get engagementSettingsVisibilityConfirmTitle =>
+      'Change family visibility?';
+
+  @override
+  String get engagementSettingsVisibilityConfirmMessage =>
+      'This changes whether members can see opted-in family level and badge cards. Points are never shared.';
+
+  @override
+  String get engagementSettingsVisibilityAdminOnly =>
+      'Only an administrator can change family visibility.';
+
+  @override
+  String get engagementSettingsInvalidValue =>
+      'Enter a valid value within the allowed range.';
+
+  @override
   String get activityNotificationDefaultsUpdated =>
       'Notification defaults were changed';
 

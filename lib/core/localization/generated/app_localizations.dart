@@ -8824,6 +8824,474 @@ abstract class AppLocalizations {
   /// **'শুধু লেভেল ও ব্যাজ'**
   String get engagementVisibilityLevels;
 
+  /// No description provided for @achievementsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'অর্জন'**
+  String get achievementsTitle;
+
+  /// No description provided for @achievementLevel.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেভেল {level}'**
+  String achievementLevel(String level);
+
+  /// No description provided for @achievementMaxLevel.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি সর্বোচ্চ লেভেলে পৌঁছেছেন।'**
+  String get achievementMaxLevel;
+
+  /// No description provided for @achievementsDisabledTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিবারে অর্জন বন্ধ আছে।'**
+  String get achievementsDisabledTitle;
+
+  /// No description provided for @achievementPoints.
+  ///
+  /// In bn, this message translates to:
+  /// **'{points} পয়েন্ট'**
+  String achievementPoints(String points);
+
+  /// No description provided for @achievementProgress.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের লেভেলে যেতে {current}/{needed} পয়েন্ট'**
+  String achievementProgress(String current, String needed);
+
+  /// No description provided for @achievementStreak.
+  ///
+  /// In bn, this message translates to:
+  /// **'বর্তমান ধারাবাহিকতা: {days} দিন'**
+  String achievementStreak(String days);
+
+  /// No description provided for @achievementBestStreak.
+  ///
+  /// In bn, this message translates to:
+  /// **'সেরা ধারাবাহিকতা: {days} দিন'**
+  String achievementBestStreak(String days);
+
+  /// No description provided for @achievementCompleted.
+  ///
+  /// In bn, this message translates to:
+  /// **'সম্পন্ন কাজ'**
+  String get achievementCompleted;
+
+  /// No description provided for @achievementOnTime.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময়মতো'**
+  String get achievementOnTime;
+
+  /// No description provided for @achievementCovers.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যের জন্য কভার'**
+  String get achievementCovers;
+
+  /// No description provided for @achievementVerified.
+  ///
+  /// In bn, this message translates to:
+  /// **'সমস্যাহীন যাচাই'**
+  String get achievementVerified;
+
+  /// No description provided for @achievementBadges.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাজ'**
+  String get achievementBadges;
+
+  /// No description provided for @achievementEarned.
+  ///
+  /// In bn, this message translates to:
+  /// **'অর্জিত'**
+  String get achievementEarned;
+
+  /// No description provided for @achievementLocked.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো অর্জিত হয়নি'**
+  String get achievementLocked;
+
+  /// No description provided for @achievementProgressCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'{current}/{needed}'**
+  String achievementProgressCount(String current, String needed);
+
+  /// No description provided for @achievementProgressPercent.
+  ///
+  /// In bn, this message translates to:
+  /// **'{percent}% সময়মতো'**
+  String achievementProgressPercent(String percent);
+
+  /// No description provided for @badgeFreshStart.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন শুরু'**
+  String get badgeFreshStart;
+
+  /// No description provided for @badgeFreshStartDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রথম কাজটি সম্পন্ন করুন।'**
+  String get badgeFreshStartDescription;
+
+  /// No description provided for @badgeConsistent.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধারাবাহিক'**
+  String get badgeConsistent;
+
+  /// No description provided for @badgeConsistentDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'{days} দিনের ধারাবাহিকতা বজায় রাখুন।'**
+  String badgeConsistentDescription(String days);
+
+  /// No description provided for @badgeReliable.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্ভরযোগ্য'**
+  String get badgeReliable;
+
+  /// No description provided for @badgeReliableDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'একটি সম্পূর্ণ মাসে {count}টি কাজ সময়মতো করুন।'**
+  String badgeReliableDescription(String count);
+
+  /// No description provided for @badgeHelper.
+  ///
+  /// In bn, this message translates to:
+  /// **'সহায়ক'**
+  String get badgeHelper;
+
+  /// No description provided for @badgeHelperDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'অন্যের জন্য {count}টি কাজ কভার করুন।'**
+  String badgeHelperDescription(String count);
+
+  /// No description provided for @badgeDetailChampion.
+  ///
+  /// In bn, this message translates to:
+  /// **'যত্নশীল'**
+  String get badgeDetailChampion;
+
+  /// No description provided for @badgeDetailChampionDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'সমস্যা ছাড়া {count}টি যাচাইকৃত কাজ করুন।'**
+  String badgeDetailChampionDescription(String count);
+
+  /// No description provided for @engagementPrivacyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের সঙ্গে শেয়ার'**
+  String get engagementPrivacyTitle;
+
+  /// No description provided for @engagementPrivacyExplanation.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের সদস্যরা আপনার লেভেল ও ব্যাজ দেখতে পারবেন কি না বেছে নিন।'**
+  String get engagementPrivacyExplanation;
+
+  /// No description provided for @engagementSharingSwitch.
+  ///
+  /// In bn, this message translates to:
+  /// **'আমার লেভেল ও ব্যাজ দেখান'**
+  String get engagementSharingSwitch;
+
+  /// No description provided for @engagementSharingDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু লেভেল ও অর্জিত ব্যাজ শেয়ার হবে। পয়েন্ট ও ব্যক্তিগত পরিসংখ্যান ব্যক্তিগত থাকবে।'**
+  String get engagementSharingDescription;
+
+  /// No description provided for @engagementFamilyLevelsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের অর্জন'**
+  String get engagementFamilyLevelsTitle;
+
+  /// No description provided for @engagementFamilyLevelsEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনো কেউ শেয়ার করার সিদ্ধান্ত নেননি।'**
+  String get engagementFamilyLevelsEmpty;
+
+  /// No description provided for @engagementSharedLevelAndBadges.
+  ///
+  /// In bn, this message translates to:
+  /// **'{level} · {count}টি ব্যাজ'**
+  String engagementSharedLevelAndBadges(String level, String count);
+
+  /// No description provided for @engagementPointsNeverShared.
+  ///
+  /// In bn, this message translates to:
+  /// **'পয়েন্ট ও ব্যক্তিগত পরিসংখ্যান কখনো শেয়ার হয় না।'**
+  String get engagementPointsNeverShared;
+
+  /// No description provided for @engagementHelpersTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসের পারিবারিক সহায়তাকারী'**
+  String get engagementHelpersTitle;
+
+  /// No description provided for @engagementHelpersCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'{count}টি কভার'**
+  String engagementHelpersCount(String count);
+
+  /// No description provided for @engagementSettingsNotAllowed.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু পরিবারের ব্যবস্থাপকেরা এই সেটিং বদলাতে পারবেন।'**
+  String get engagementSettingsNotAllowed;
+
+  /// No description provided for @engagementSettingsSaved.
+  ///
+  /// In bn, this message translates to:
+  /// **'অর্জনের সেটিং সংরক্ষণ করা হয়েছে।'**
+  String get engagementSettingsSaved;
+
+  /// No description provided for @engagementSettingsSaveFailed.
+  ///
+  /// In bn, this message translates to:
+  /// **'অর্জনের সেটিং সংরক্ষণ করা যায়নি।'**
+  String get engagementSettingsSaveFailed;
+
+  /// No description provided for @engagementSettingsOffline.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সেটিং সংরক্ষণ করতে ইন্টারনেটে যুক্ত হন।'**
+  String get engagementSettingsOffline;
+
+  /// No description provided for @engagementSettingsDiscardTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবর্তন বাতিল করবেন?'**
+  String get engagementSettingsDiscardTitle;
+
+  /// No description provided for @engagementSettingsDiscardMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষণ না করা অর্জনের পরিবর্তন হারিয়ে যাবে।'**
+  String get engagementSettingsDiscardMessage;
+
+  /// No description provided for @engagementSettingsGeneral.
+  ///
+  /// In bn, this message translates to:
+  /// **'অর্জন'**
+  String get engagementSettingsGeneral;
+
+  /// No description provided for @engagementSettingsEnabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেভেল ও ব্যাজ চালু করুন'**
+  String get engagementSettingsEnabled;
+
+  /// No description provided for @engagementSettingsEnabledDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের সদস্যদের অর্জনের অগ্রগতি দেখান।'**
+  String get engagementSettingsEnabledDescription;
+
+  /// No description provided for @engagementSettingsCelebrations.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন অর্জন উদযাপন'**
+  String get engagementSettingsCelebrations;
+
+  /// No description provided for @engagementSettingsCelebrationsDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাজ বা লেভেল অর্জনে ছোট উদযাপন দেখান।'**
+  String get engagementSettingsCelebrationsDescription;
+
+  /// No description provided for @engagementSettingsHelpers.
+  ///
+  /// In bn, this message translates to:
+  /// **'পারিবারিক সহায়তাকারী দেখান'**
+  String get engagementSettingsHelpers;
+
+  /// No description provided for @engagementSettingsHelpersDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজ ও ড্যাশবোর্ডে এই মাসের সহায়তাকারীদের দেখান।'**
+  String get engagementSettingsHelpersDescription;
+
+  /// No description provided for @engagementSettingsScoring.
+  ///
+  /// In bn, this message translates to:
+  /// **'পয়েন্ট'**
+  String get engagementSettingsScoring;
+
+  /// No description provided for @engagementSettingsEasyPoints.
+  ///
+  /// In bn, this message translates to:
+  /// **'সহজ কাজের পয়েন্ট'**
+  String get engagementSettingsEasyPoints;
+
+  /// No description provided for @engagementSettingsNormalPoints.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাধারণ কাজের পয়েন্ট'**
+  String get engagementSettingsNormalPoints;
+
+  /// No description provided for @engagementSettingsHardPoints.
+  ///
+  /// In bn, this message translates to:
+  /// **'কঠিন কাজের পয়েন্ট'**
+  String get engagementSettingsHardPoints;
+
+  /// No description provided for @engagementSettingsLateBonusPercent.
+  ///
+  /// In bn, this message translates to:
+  /// **'দেরিতে শেষ করার গুণক (%)'**
+  String get engagementSettingsLateBonusPercent;
+
+  /// No description provided for @engagementSettingsVerifiedBonusPercent.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাইকৃত কাজের গুণক (%)'**
+  String get engagementSettingsVerifiedBonusPercent;
+
+  /// No description provided for @engagementSettingsCoverBonusPercent.
+  ///
+  /// In bn, this message translates to:
+  /// **'কভার বোনাসের গুণক (%)'**
+  String get engagementSettingsCoverBonusPercent;
+
+  /// No description provided for @engagementSettingsLevels.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেভেল'**
+  String get engagementSettingsLevels;
+
+  /// No description provided for @engagementSettingsLevelNameBn.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাংলা লেভেলের নাম'**
+  String get engagementSettingsLevelNameBn;
+
+  /// No description provided for @engagementSettingsLevelNameEn.
+  ///
+  /// In bn, this message translates to:
+  /// **'ইংরেজি লেভেলের নাম'**
+  String get engagementSettingsLevelNameEn;
+
+  /// No description provided for @engagementSettingsLevelPoints.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রয়োজনীয় পয়েন্ট'**
+  String get engagementSettingsLevelPoints;
+
+  /// No description provided for @engagementSettingsAddLevel.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেভেল যোগ করুন'**
+  String get engagementSettingsAddLevel;
+
+  /// No description provided for @engagementSettingsNewLevelName.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেভেল {number}'**
+  String engagementSettingsNewLevelName(String number);
+
+  /// No description provided for @engagementSettingsRemoveLevel.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেভেল সরান'**
+  String get engagementSettingsRemoveLevel;
+
+  /// No description provided for @engagementSettingsBadgeThresholds.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাজের সীমা'**
+  String get engagementSettingsBadgeThresholds;
+
+  /// No description provided for @engagementSettingsConsistentDays.
+  ///
+  /// In bn, this message translates to:
+  /// **'ধারাবাহিক ব্যাজের দিনের সংখ্যা'**
+  String get engagementSettingsConsistentDays;
+
+  /// No description provided for @engagementSettingsReliablePercent.
+  ///
+  /// In bn, this message translates to:
+  /// **'নির্ভরযোগ্য ব্যাজের সময়মতো কাজের হার'**
+  String get engagementSettingsReliablePercent;
+
+  /// No description provided for @engagementSettingsReliableCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রয়োজনীয় সম্পন্ন কাজ'**
+  String get engagementSettingsReliableCount;
+
+  /// No description provided for @engagementSettingsHelperCovers.
+  ///
+  /// In bn, this message translates to:
+  /// **'সহায়ক ব্যাজের কভার সংখ্যা'**
+  String get engagementSettingsHelperCovers;
+
+  /// No description provided for @engagementSettingsDetailCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'যত্নশীল ব্যাজের যাচাইকৃত কাজ'**
+  String get engagementSettingsDetailCount;
+
+  /// No description provided for @engagementSettingsResetSection.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই অংশের ডিফল্ট ফিরিয়ে আনুন'**
+  String get engagementSettingsResetSection;
+
+  /// No description provided for @engagementSettingsVisibility.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারে দৃশ্যমানতা'**
+  String get engagementSettingsVisibility;
+
+  /// No description provided for @engagementSettingsPrivate.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যক্তিগত'**
+  String get engagementSettingsPrivate;
+
+  /// No description provided for @engagementSettingsLevelsOnly.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু লেভেল ও ব্যাজ'**
+  String get engagementSettingsLevelsOnly;
+
+  /// No description provided for @engagementSettingsVisibilityConfirmTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের দৃশ্যমানতা বদলাবেন?'**
+  String get engagementSettingsVisibilityConfirmTitle;
+
+  /// No description provided for @engagementSettingsVisibilityConfirmMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'এর ফলে সদস্যরা শেয়ার করা লেভেল ও ব্যাজ দেখতে পারবেন কি না বদলাবে। পয়েন্ট কখনো শেয়ার হয় না।'**
+  String get engagementSettingsVisibilityConfirmMessage;
+
+  /// No description provided for @engagementSettingsVisibilityAdminOnly.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু প্রশাসক পরিবারের দৃশ্যমানতা বদলাতে পারবেন।'**
+  String get engagementSettingsVisibilityAdminOnly;
+
+  /// No description provided for @engagementSettingsInvalidValue.
+  ///
+  /// In bn, this message translates to:
+  /// **'সঠিক সীমার মধ্যে একটি মান লিখুন।'**
+  String get engagementSettingsInvalidValue;
+
   /// No description provided for @activityNotificationDefaultsUpdated.
   ///
   /// In bn, this message translates to:

@@ -3,7 +3,15 @@ import {
   assertSucceeds,
   initializeTestEnvironment,
 } from '@firebase/rules-unit-testing';
-import { deleteDoc, doc, getDoc, setDoc, writeBatch } from 'firebase/firestore';
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  writeBatch,
+} from 'firebase/firestore';
 import { after, afterEach, before, beforeEach, describe, it } from 'mocha';
 
 import {
@@ -138,6 +146,30 @@ describe('points-free memberStatsPublic', () => {
       deleteDoc(
         doc(asUser(testEnv, CARA, { verified: false }), publicPath(CARA)),
       ),
+    );
+  });
+
+  it('lets family members list public cards only while levels visibility is enabled', async () => {
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      const db = ctx.firestore();
+      await setDoc(
+        doc(db, engagementPath),
+        engagementSettingsDoc(ALICE, { statsVisibility: 'levels' }),
+      );
+      await setDoc(doc(db, statsPath(CARA)), memberStatsDoc(CARA, { sharing: true }));
+      await setDoc(doc(db, publicPath(CARA)), publicStatsDoc(CARA));
+    });
+    await assertSucceeds(
+      getDocs(collection(as(BOB), `families/${FAM_A}/memberStatsPublic`)),
+    );
+    await testEnv.withSecurityRulesDisabled(async (ctx) => {
+      await setDoc(
+        doc(ctx.firestore(), engagementPath),
+        engagementSettingsDoc(ALICE, { statsVisibility: 'private' }),
+      );
+    });
+    await assertFails(
+      getDocs(collection(as(BOB), `families/${FAM_A}/memberStatsPublic`)),
     );
   });
 

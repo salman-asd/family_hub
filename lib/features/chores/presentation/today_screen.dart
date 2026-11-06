@@ -5,6 +5,7 @@ import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
 import 'package:family_hub/features/chores/occurrences/domain/today_sections.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
+import 'package:family_hub/features/chores/achievements/presentation/widgets/helpers_highlight.dart';
 import 'package:family_hub/features/chores/presentation/chores_failure_messages.dart';
 import 'package:family_hub/features/chores/presentation/widgets/day_part_section.dart';
 import 'package:family_hub/features/chores/presentation/widgets/today_header.dart';
@@ -68,6 +69,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
             onScope: (value) => setState(() => _chosen = value),
             formatters: ref.watch(appFormattersProvider),
           ),
+          HelpersHighlight(month: today.monthKey),
+          const SizedBox(height: 8),
           Expanded(child: _list(context, scoped)),
         ],
       );

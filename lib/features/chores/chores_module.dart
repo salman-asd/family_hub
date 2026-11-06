@@ -1,6 +1,9 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/features/chores/availability/presentation/availability_screen.dart';
+import 'package:family_hub/features/chores/achievements/presentation/screens/achievements_screen.dart';
+import 'package:family_hub/features/chores/achievements/presentation/screens/engagement_settings_screen.dart';
+import 'package:family_hub/features/chores/achievements/presentation/widgets/hub_level_card.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_editor_screen.dart';
 import 'package:family_hub/features/chores/rota/presentation/rota_board_screen.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_list_screen.dart';
@@ -9,7 +12,6 @@ import 'package:family_hub/features/chores/presentation/chores_manage_screen.dar
 import 'package:family_hub/features/chores/presentation/dashboard/chores_dashboard_cards.dart';
 import 'package:family_hub/features/chores/presentation/dashboard/chores_week_card.dart';
 import 'package:family_hub/features/dashboard/domain/dashboard_card_spec.dart';
-import 'package:family_hub/features/dashboard/presentation/widgets/hub_level_card.dart';
 import 'package:family_hub/features/chores/presentation/occurrence_detail_screen.dart';
 import 'package:family_hub/features/chores/presentation/today_screen.dart';
 import 'package:family_hub/features/chores/presentation/verify_queue_screen.dart';
@@ -85,6 +87,14 @@ class ChoresModule extends FamilyModule {
         GoRoute(
           path: 'settings',
           builder: (context, state) => const ChoreSettingsScreen(),
+        ),
+        GoRoute(
+          path: 'achievements',
+          builder: (context, state) => const AchievementsScreen(),
+        ),
+        GoRoute(
+          path: 'engagement',
+          builder: (context, state) => const EngagementSettingsScreen(),
         ),
         // P3-19. Reachable from Manage at any time; the use case skips what
         // already exists, so opening it again never duplicates a chore.

@@ -238,6 +238,8 @@ abstract final class FirestorePaths {
   /// family shares levels.
   static String memberStatsPublic(String familyId) =>
       '${familyDoc(familyId)}/$memberStatsPublicSubcollection';
+  static String memberStatsPublicCollection(String familyId) =>
+      memberStatsPublic(familyId);
   static String memberStatsPublicDoc(String familyId, String memberId) =>
       '${memberStatsPublic(familyId)}/$memberId';
 
