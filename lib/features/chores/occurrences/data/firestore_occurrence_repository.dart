@@ -127,6 +127,22 @@ class FirestoreOccurrenceRepository
   );
 
   @override
+  Future<Result<List<ChoreOccurrence>>> listRangeOnce(
+    String familyId, {
+    required DateKey from,
+    required DateKey to,
+    required int limit,
+  }) => guardFirestore(() async {
+    final snapshot = await _rangeQuery(
+      familyId,
+      from: from,
+      to: to,
+      limit: limit,
+    ).get();
+    return _toOccurrences(snapshot);
+  });
+
+  @override
   Future<Result<List<ChoreOccurrence>>> listByTemplate(
     String familyId,
     String templateId, {

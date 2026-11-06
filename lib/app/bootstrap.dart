@@ -38,6 +38,10 @@ import 'package:family_hub/features/bazar/settings/data/firestore_bazar_settings
 import 'package:family_hub/features/bazar/settings/presentation/bazar_settings_providers.dart';
 import 'package:family_hub/features/chores/availability/data/firestore_availability_repository.dart';
 import 'package:family_hub/features/chores/availability/presentation/availability_providers.dart';
+import 'package:family_hub/features/chores/achievements/data/firestore_engagement_settings_repository.dart';
+import 'package:family_hub/features/chores/achievements/data/firestore_member_stats_repository.dart';
+import 'package:family_hub/features/chores/achievements/data/firestore_public_stats_repository.dart';
+import 'package:family_hub/features/chores/achievements/presentation/engagement_providers.dart';
 import 'package:family_hub/features/chores/comments/data/firestore_comment_repository.dart';
 import 'package:family_hub/features/chores/comments/presentation/comment_providers.dart';
 import 'package:family_hub/features/chores/duty_groups/data/firestore_duty_group_repository.dart';
@@ -162,6 +166,12 @@ Future<void> bootstrap(Flavor flavor) async {
     final occurrences = FirestoreOccurrenceRepository(tx: tx, clock: clock);
     final comments = FirestoreCommentRepository(tx: tx);
     final availability = FirestoreAvailabilityRepository(tx: tx);
+    final engagementSettings = FirestoreEngagementSettingsRepository(
+      tx: tx,
+      clock: clock,
+    );
+    final memberStats = FirestoreMemberStatsRepository(tx: tx, clock: clock);
+    final publicStats = FirestorePublicStatsRepository();
     final swaps = FirestoreSwapRepository(tx: tx);
     final inbox = FirestoreInboxRepository(tx: tx);
     final activity = FirestoreActivityRepository();
@@ -229,6 +239,11 @@ Future<void> bootstrap(Flavor flavor) async {
           generationMarkerRepositoryProvider.overrideWithValue(occurrences),
           commentRepositoryProvider.overrideWithValue(comments),
           availabilityRepositoryProvider.overrideWithValue(availability),
+          engagementSettingsRepositoryProvider.overrideWithValue(
+            engagementSettings,
+          ),
+          memberStatsRepositoryProvider.overrideWithValue(memberStats),
+          publicStatsRepositoryProvider.overrideWithValue(publicStats),
           swapRepositoryProvider.overrideWithValue(swaps),
           inboxRepositoryProvider.overrideWithValue(inbox),
           activityRepositoryProvider.overrideWithValue(activity),

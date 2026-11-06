@@ -38,6 +38,12 @@ import 'package:family_hub/features/dashboard/data/dashboard_policy_mappers.dart
 import 'package:family_hub/features/dashboard/domain/card_access.dart';
 import 'package:family_hub/features/dashboard/domain/dashboard_policy.dart';
 import 'package:family_hub/features/dashboard/domain/dashboard_prefs.dart';
+import 'package:family_hub/features/chores/achievements/data/engagement_settings_mappers.dart';
+import 'package:family_hub/features/chores/achievements/data/member_stats_mappers.dart';
+import 'package:family_hub/features/chores/achievements/data/public_stats_mappers.dart';
+import 'package:family_hub/features/chores/achievements/domain/default_engagement_settings.dart';
+import 'package:family_hub/features/chores/achievements/domain/member_stats.dart';
+import 'package:family_hub/features/chores/achievements/domain/public_stats.dart';
 import 'package:family_hub/features/chores/duty_groups/data/duty_group_mappers.dart';
 import 'package:family_hub/features/chores/occurrences/data/occurrence_event_mappers.dart';
 import 'package:family_hub/features/chores/occurrences/data/occurrence_mappers.dart';
@@ -150,6 +156,9 @@ List<Map<String, dynamic>> _fixtures() => <Map<String, dynamic>>[
   _choreOccurrence(),
   _choreOccurrenceReopen(),
   _choreOccurrenceRestore(),
+  _engagementSettings(),
+  _memberStats(),
+  _publicStats(),
 ];
 
 Map<String, dynamic> _fixture(
@@ -1735,5 +1744,58 @@ Map<String, dynamic> _contributionPlan() {
       ContributionMappers.planToMap(plan, _meta(_admin)),
     ),
     ..._eventWrites(event),
+  ]);
+}
+
+Map<String, dynamic> _engagementSettings() {
+  final event = AuditEvent(
+    id: 'evEngagement1',
+    type: AuditEventType.engagementSettingsUpdated,
+    actorId: _admin,
+    refType: AuditRefType.engagementSettings,
+    refId: _familyId,
+    at: _at,
+  );
+  return _fixture('engagement_settings', _admin, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.engagementSettingsDoc(_familyId),
+      EngagementSettingsMappers.toMap(
+        defaultEngagementSettings(startedOn: _day, graceMinutes: 30),
+        _meta(_admin),
+      ),
+    ),
+    ..._eventWrites(event),
+  ]);
+}
+
+Map<String, dynamic> _memberStats() =>
+    _fixture('member_stats', _member, <Map<String, dynamic>>[
+      _write(
+        'set',
+        FirestorePaths.memberStatsDoc(_familyId, _member),
+        MemberStatsMappers.toMap(
+          MemberStats.empty(startedOn: _day),
+          _meta(_member),
+        ),
+      ),
+    ]);
+
+Map<String, dynamic> _publicStats() {
+  final sharing = MemberStats.empty(startedOn: _day).copyWith(sharing: true);
+  return _fixture('public_stats', _member, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.memberStatsDoc(_familyId, _member),
+      MemberStatsMappers.toMap(sharing, _meta(_member)),
+    ),
+    _write(
+      'set',
+      FirestorePaths.memberStatsPublicDoc(_familyId, _member),
+      PublicStatsMappers.toMap(
+        PublicStats(level: 1, badgeIds: <String>['fresh_start']),
+        _meta(_member),
+      ),
+    ),
   ]);
 }

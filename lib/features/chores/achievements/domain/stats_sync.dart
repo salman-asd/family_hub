@@ -27,7 +27,7 @@ abstract final class StatsSync {
         : spec.startedOn;
     final monthly = Map<String, MonthlyStats>.of(previous.monthly);
     final firstMonth = startedOn.monthKey;
-    final lastFinalisable = today.addDays(-1).monthKey;
+    final lastFinalisable = today.monthKey.addMonths(-1);
     final retainedMonths =
         monthly.keys.where((key) => key != kLegacyStatsMonth).toList()..sort();
     final oldestRetainedMonth = retainedMonths.firstOrNull;

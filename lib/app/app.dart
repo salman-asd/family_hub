@@ -9,6 +9,7 @@ import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/notifications/presentation/inbox_foreground_bridge_provider.dart';
 import 'package:family_hub/features/notifications/presentation/reminder_providers.dart';
+import 'package:family_hub/features/chores/achievements/presentation/engagement_providers.dart';
 import 'package:family_hub/modules/module_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,6 +52,7 @@ class FamilyHubApp extends ConsumerWidget {
     ref.watch(reminderLifecycleObserverProvider);
     ref.watch(pushOrchestrationProvider);
     ref.watch(foregroundNotificationBridgeProvider);
+    ref.watch(statsSyncOrchestrationProvider);
     // Side effect only (B-01): start the occurrence generation once the
     // session is active, and show a failure of that run. It runs here, in the
     // widget above the router, which is mounted for the whole app life.

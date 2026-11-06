@@ -1,0 +1,142 @@
+{
+  "scenario": "engagement_settings",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/settings/engagement",
+      "data": {
+        "enabled": true,
+        "startedOn": "2026-10-18",
+        "celebrationEnabled": true,
+        "showHelpersHighlight": false,
+        "statsVisibility": "private",
+        "pointBases": {
+          "easy": 10,
+          "normal": 20,
+          "hard": 30
+        },
+        "latePermille": 600,
+        "verifiedPermille": 1200,
+        "coverBonusPermille": 500,
+        "levels": [
+          {
+            "id": "seed",
+            "minPoints": 0,
+            "nameBn": "বীজ",
+            "nameEn": "Seed"
+          },
+          {
+            "id": "sprout",
+            "minPoints": 100,
+            "nameBn": "অঙ্কুর",
+            "nameEn": "Sprout"
+          },
+          {
+            "id": "seedling",
+            "minPoints": 250,
+            "nameBn": "চারা",
+            "nameEn": "Seedling"
+          },
+          {
+            "id": "sapling",
+            "minPoints": 500,
+            "nameBn": "ছোট গাছ",
+            "nameEn": "Sapling"
+          },
+          {
+            "id": "young_tree",
+            "minPoints": 900,
+            "nameBn": "তরুণ গাছ",
+            "nameEn": "Young tree"
+          },
+          {
+            "id": "flowering",
+            "minPoints": 1400,
+            "nameBn": "ফুলের গাছ",
+            "nameEn": "Flowering"
+          },
+          {
+            "id": "fruiting",
+            "minPoints": 2000,
+            "nameBn": "ফলের গাছ",
+            "nameEn": "Fruiting"
+          },
+          {
+            "id": "grand_tree",
+            "minPoints": 3000,
+            "nameBn": "বড় গাছ",
+            "nameEn": "Grand tree"
+          }
+        ],
+        "badgeThresholds": {
+          "consistentDays": 7,
+          "reliablePercent": 90,
+          "reliableMinDone": 10,
+          "helperCovers": 3,
+          "detailCount": 10
+        },
+        "specVersion": 1,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/activity/evEngagement1",
+      "data": {
+        "type": "engagement.settings_updated",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "engagementSettings",
+        "refId": "fixFam",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/auditLogs/evEngagement1",
+      "data": {
+        "type": "engagement.settings_updated",
+        "actorId": "fixAdmin",
+        "summary": "",
+        "refType": "engagementSettings",
+        "refId": "fixFam",
+        "params": {},
+        "recordedAt": {
+          "__serverTime": true
+        },
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1
+      }
+    }
+  ]
+}

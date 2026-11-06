@@ -29,11 +29,13 @@ import {
   PROJECT_ID,
   asUser,
   categoryDoc,
+  engagementSettingsDoc,
   expenseDoc,
   familyDoc,
   inviteCodeDoc,
   itemDoc,
   memberDoc,
+  memberStatsDoc,
   nowTs,
   occurrenceDoc,
 } from './support.mjs';
@@ -129,6 +131,30 @@ const seeders = {
   },
   dashboard_policy: async (db) => {
     await seedFamilyWithAdmin(db);
+  },
+  engagement_settings: async (db) => {
+    await seedFamilyWithAdmin(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/settings/engagement`),
+      engagementSettingsDoc(ADMIN, { startedOn: '2026-10-18' }),
+    );
+  },
+  member_stats: async (db) => {
+    await seedFamilyWithMember(db);
+  },
+  public_stats: async (db) => {
+    await seedFamilyWithMember(db);
+    await setDoc(
+      doc(db, `families/${FAMILY}/settings/engagement`),
+      engagementSettingsDoc(ADMIN, {
+        startedOn: '2026-10-18',
+        statsVisibility: 'levels',
+      }),
+    );
+    await setDoc(
+      doc(db, `families/${FAMILY}/memberStats/${MEMBER}`),
+      memberStatsDoc(MEMBER, { startedOn: '2026-10-18' }),
+    );
   },
   budget: async (db) => {
     await seedFamilyWithAdmin(db);

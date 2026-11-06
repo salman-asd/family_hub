@@ -1,0 +1,62 @@
+{
+  "scenario": "public_stats",
+  "actor": "fixMember",
+  "writes": [
+    {
+      "op": "set",
+      "path": "families/fixFam/memberStats/fixMember",
+      "data": {
+        "totalPoints": 0,
+        "level": 1,
+        "completedTotal": 0,
+        "onTimeTotal": 0,
+        "coversTotal": 0,
+        "verifiedCleanTotal": 0,
+        "streak": {
+          "current": 0,
+          "best": 0,
+          "asOfDateKey": null,
+          "pausedDays": 0
+        },
+        "badges": {},
+        "monthly": {},
+        "processedThrough": null,
+        "lastCelebratedDateKey": null,
+        "startedOn": "2026-10-18",
+        "sharing": true,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/memberStatsPublic/fixMember",
+      "data": {
+        "level": 1,
+        "badgeIds": [
+          "fresh_start"
+        ],
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixMember",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixMember",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    }
+  ]
+}

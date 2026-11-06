@@ -15,14 +15,9 @@ void main() {
   // a collection extends the rules in the same commit and removes it here).
   //
   // P4-02: the occurrence, availability, swap and inbox collections got their
-  // rules in Phase 3, so they left this list (the "no longer pending" test
-  // below would have failed on them). P4-14 adds device rules; public stats
-  // remain pending until P4-19.
-  const pending = <String>{
-    FirestorePaths.memberStatsSubcollection,
-    FirestorePaths.importBatchesSubcollection,
-    FirestorePaths.memberStatsPublicSubcollection,
-  };
+  // rules in Phase 3, so they left this list. P4-14 added device rules and
+  // P4-19 added private and public member stats.
+  const pending = <String>{FirestorePaths.importBatchesSubcollection};
 
   late Set<String> matched;
 
@@ -54,6 +49,8 @@ void main() {
       FirestorePaths.monthClosingsSubcollection,
       FirestorePaths.contributionsSubcollection,
       FirestorePaths.contributionPlansSubcollection,
+      FirestorePaths.memberStatsSubcollection,
+      FirestorePaths.memberStatsPublicSubcollection,
       FirestorePaths.choreTemplatesSubcollection,
       FirestorePaths.dutyGroupsSubcollection,
     ];

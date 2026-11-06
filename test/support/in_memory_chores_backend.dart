@@ -358,6 +358,16 @@ class InMemoryOccurrenceBackend
   }) async => Success<List<ChoreOccurrence>>(_inRange(familyId, from, to));
 
   @override
+  Future<Result<List<ChoreOccurrence>>> listRangeOnce(
+    String familyId, {
+    required DateKey from,
+    required DateKey to,
+    required int limit,
+  }) async => Success<List<ChoreOccurrence>>(
+    _inRange(familyId, from, to).take(limit).toList(),
+  );
+
+  @override
   Future<Result<List<ChoreOccurrence>>> listByTemplate(
     String familyId,
     String templateId, {

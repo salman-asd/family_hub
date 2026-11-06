@@ -47,6 +47,12 @@ import 'package:family_hub/features/notifications/domain/notification_defaults.d
 import 'package:family_hub/features/notifications/domain/notification_delivery_settings.dart';
 import 'package:family_hub/core/notifications/data/device_token_mappers.dart';
 import 'package:family_hub/core/notifications/domain/device_token.dart';
+import 'package:family_hub/features/chores/achievements/data/engagement_settings_mappers.dart';
+import 'package:family_hub/features/chores/achievements/data/member_stats_mappers.dart';
+import 'package:family_hub/features/chores/achievements/data/public_stats_mappers.dart';
+import 'package:family_hub/features/chores/achievements/domain/default_engagement_settings.dart';
+import 'package:family_hub/features/chores/achievements/domain/member_stats.dart';
+import 'package:family_hub/features/chores/achievements/domain/public_stats.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/rules_source.dart';
@@ -129,6 +135,13 @@ void main() {
               'chores_today': CardAccess.required,
             },
           },
+        ),
+        meta,
+      ).keys,
+      ...EngagementSettingsMappers.toMap(
+        defaultEngagementSettings(
+          startedOn: DateKey(2026, 10, 18),
+          graceMinutes: 30,
         ),
         meta,
       ).keys,
@@ -482,6 +495,39 @@ void main() {
     expect(
       DeviceTokenMappers.toMap('u1', token).keys.toSet(),
       rulesList('deviceKeys'),
+    );
+  });
+
+  test('engagement mapper keys match the private settings rule', () {
+    expect(
+      EngagementSettingsMappers.toMap(
+        defaultEngagementSettings(
+          startedOn: DateKey(2026, 10, 18),
+          graceMinutes: 30,
+        ),
+        meta,
+      ).keys.toSet(),
+      rulesList('engagementSettingsKeys'),
+    );
+  });
+
+  test('member stats mapper keys match the private stats rule', () {
+    expect(
+      MemberStatsMappers.toMap(
+        MemberStats.empty(startedOn: DateKey(2026, 10, 18)),
+        meta,
+      ).keys.toSet(),
+      rulesList('memberStatsKeys'),
+    );
+  });
+
+  test('public stats mapper keys match the points-free card rule', () {
+    expect(
+      PublicStatsMappers.toMap(
+        PublicStats(level: 1, badgeIds: <String>['fresh_start']),
+        meta,
+      ).keys.toSet(),
+      rulesList('publicStatsKeys'),
     );
   });
 }

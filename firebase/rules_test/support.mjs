@@ -40,6 +40,10 @@ export const CODES = {
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 export const nowTs = () => Timestamp.fromDate(new Date());
+export const todayDateKey = () => {
+  const date = new Date(Date.now() + 6 * 60 * 60 * 1000);
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
+};
 export const futureTs = () =>
   Timestamp.fromDate(new Date(Date.now() + 7 * DAY_MS));
 export const pastTs = () =>
@@ -171,6 +175,57 @@ export const dashboardPolicyDoc = (uid, {
   baseDoc(uid, {
     roles,
     version,
+    ...extra,
+  });
+
+export const engagementSettingsDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    enabled: true,
+    startedOn: todayDateKey(),
+    celebrationEnabled: true,
+    showHelpersHighlight: false,
+    statsVisibility: 'private',
+    pointBases: { easy: 10, normal: 20, hard: 30 },
+    latePermille: 600,
+    verifiedPermille: 1200,
+    coverBonusPermille: 500,
+    levels: [
+      { id: 'seed', minPoints: 0, nameBn: 'বীজ', nameEn: 'Seed' },
+      { id: 'sprout', minPoints: 100, nameBn: 'অঙ্কুর', nameEn: 'Sprout' },
+    ],
+    badgeThresholds: {
+      consistentDays: 7,
+      reliablePercent: 90,
+      reliableMinDone: 10,
+      helperCovers: 3,
+      detailCount: 10,
+    },
+    specVersion: 1,
+    ...extra,
+  });
+
+export const memberStatsDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    totalPoints: 0,
+    level: 1,
+    completedTotal: 0,
+    onTimeTotal: 0,
+    coversTotal: 0,
+    verifiedCleanTotal: 0,
+    streak: { current: 0, best: 0, asOfDateKey: null, pausedDays: 0 },
+    badges: {},
+    monthly: {},
+    processedThrough: null,
+    lastCelebratedDateKey: null,
+    startedOn: todayDateKey(),
+    sharing: false,
+    ...extra,
+  });
+
+export const publicStatsDoc = (uid, extra = {}) =>
+  baseDoc(uid, {
+    level: 1,
+    badgeIds: [],
     ...extra,
   });
 

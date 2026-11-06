@@ -2142,3 +2142,30 @@ persisted setting was introduced.
 
 C1 and the full repository gates remain incomplete. P4-18 adds no UI, Firestore
 collection, rules, index, localization entry, or package.
+
+## Phase 4 - P4-19 stats, engagement settings and privacy
+
+Implemented private owner-only `memberStats`, points-free opt-in
+`memberStatsPublic` cards, manager/admin engagement settings, and the settings
+and stats repositories/mappers. `SyncMemberStats` loads bounded prior-month
+ranges, finalizes older months once, preserves the P4-18 scoring rules, and
+atomically mirrors or removes the public card with private stats. App-start,
+resume, and chore-progress synchronization is debounced and serialized.
+Firestore rules enforce owner privacy, opt-in and visibility gates,
+monotonic/bounded stats, immutable engagement start dates, and settings
+permissions. Real mapper fixtures and rule tests cover these documents.
+
+| Check | Result |
+| --- | --- |
+| `dart format` on changed Dart files | Passed; no remaining changes. |
+| `flutter analyze` on all changed Dart files | Passed; zero issues. |
+| Focused P4-19 tests, contract fixtures/key sets, path matching, layer boundaries, and file-size tests | Passed. |
+| `node --check` on changed Firestore test modules | Passed. |
+| `node tools/check_indexes.mjs` | Passed (`firestore.indexes.json OK`; no index change required). |
+| Full `flutter analyze` | Failed with 239 existing issues; none reported in P4-19 files. |
+| `flutter test --exclude-tags golden` | Failed with existing compile/test failures outside P4-19 (2,179 passed, 99 failed); all focused P4-19 tests passed. |
+| Firestore emulator rules suite | Not run: Firebase CLI could not find Java (`java -version`). Install/configure JDK 21+ and rerun the documented emulator command. |
+| Hot restart | Attempted through DTD; no Flutter app was registered. |
+
+C1 and the full repository gates remain incomplete. P4-19 adds no new index,
+localization entry, or package.

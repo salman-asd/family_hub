@@ -64,6 +64,14 @@ abstract interface class OccurrenceRepository {
     required DateKey to,
   });
 
+  /// One bounded query for stats finalisation; it deliberately does not page.
+  Future<Result<List<ChoreOccurrence>>> listRangeOnce(
+    String familyId, {
+    required DateKey from,
+    required DateKey to,
+    required int limit,
+  });
+
   /// Full documents of one template from [from] onwards, bounded by the page
   /// limit (the `templateId + dateKey` index). Used by the replan.
   Future<Result<List<ChoreOccurrence>>> listByTemplate(
