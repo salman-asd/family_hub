@@ -11,6 +11,7 @@ import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/features/auth/domain/app_user.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
+import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/features/onboarding/presentation/profile_providers.dart';
 import 'package:family_hub/modules/module_providers.dart';
@@ -48,6 +49,7 @@ Future<_Harness> _pumpApp(
   AppUser? user,
   bool hasProfile = false,
   MembershipStatus membership = MembershipStatus.none,
+  MemberRole? role,
   Flavor flavor = Flavor.dev,
   Size size = const Size(400, 800),
 }) async {
@@ -63,7 +65,13 @@ Future<_Harness> _pumpApp(
   final session = FakeSessionRepositories(
     profiles: hasProfile && user != null ? {user.uid} : const {},
     memberships: user != null && membership != MembershipStatus.none
-        ? {user.uid: Membership(status: membership, familyId: 'fam-1')}
+        ? {
+            user.uid: Membership(
+              status: membership,
+              familyId: 'fam-1',
+              role: role,
+            ),
+          }
         : const {},
   );
   addTearDown(auth.dispose);
@@ -252,6 +260,21 @@ void main() {
       h.router(tester).go('/bazar');
       await tester.pumpAndSettle();
       expect(h.path(tester), '/bazar');
+    });
+
+    testWidgets('member: dashboard access settings redirect to Home', (
+      tester,
+    ) async {
+      final h = await _pumpApp(
+        tester,
+        user: _verified,
+        hasProfile: true,
+        membership: MembershipStatus.active,
+        role: MemberRole.member,
+      );
+      h.router(tester).go('/settings/dashboard-access');
+      await tester.pumpAndSettle();
+      expect(h.path(tester), '/home');
     });
 
     testWidgets('an unknown path shows the not-found screen', (tester) async {

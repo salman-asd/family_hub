@@ -118,6 +118,23 @@ class FamilyScreen extends ConsumerWidget {
                   ),
                 ),
                 _SettingsTile(
+                  key: const Key('family_dashboard_customize'),
+                  icon: Icons.dashboard_customize_outlined,
+                  label: l10n.dashboardCustomize,
+                  onTap: () => context.push(AppRoutes.customizeDashboard),
+                ),
+                const SizedBox(height: 8),
+                PermissionGate(
+                  allowed: ref.can(Permission.manageDashboardLayout),
+                  child: _SettingsTile(
+                    key: const Key('family_dashboard_access'),
+                    icon: Icons.dashboard_outlined,
+                    label: l10n.dashboardAccess,
+                    onTap: () => context.push(AppRoutes.dashboardAccess),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _SettingsTile(
                   key: const Key('family_settings_theme'),
                   icon: Icons.palette_outlined,
                   label: l10n.settingsThemeTitle,

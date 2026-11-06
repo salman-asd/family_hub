@@ -5195,6 +5195,135 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dashboardAskAiMessage => 'পরিবার সম্পর্কে কোনো প্রশ্ন করুন।';
 
   @override
+  String get dashboardCardBudgetAlert => 'বাজেট সতর্কতা';
+
+  @override
+  String get dashboardCardApprovals => 'অনুমোদনের অপেক্ষায়';
+
+  @override
+  String get dashboardCardChoresToday => 'আজকের কাজ';
+
+  @override
+  String get dashboardCardChoresOverdue => 'বকেয়া কাজ';
+
+  @override
+  String get dashboardCardChoresVerify => 'যাচাইয়ের অপেক্ষায়';
+
+  @override
+  String get dashboardCardBazarMonth => 'মাসিক খরচ';
+
+  @override
+  String get dashboardCardBazarFund => 'তহবিলের স্থিতি';
+
+  @override
+  String get dashboardCardUpcoming => 'আসন্ন কাজ';
+
+  @override
+  String get dashboardCardChoresWeek => 'এই সপ্তাহ';
+
+  @override
+  String get dashboardCardHubLevel => 'হাবের স্তর';
+
+  @override
+  String get dashboardCardRecentActivity => 'সাম্প্রতিক কার্যকলাপ';
+
+  @override
+  String get dashboardPersonalLayoutNote =>
+      'এই ড্যাশবোর্ডের বিন্যাস শুধু আপনি দেখতে পাবেন।';
+
+  @override
+  String get dashboardHiddenCards => 'লুকানো কার্ড';
+
+  @override
+  String get dashboardAddBack => 'আবার যোগ করুন';
+
+  @override
+  String get dashboardMoveUp => 'উপরে সরান';
+
+  @override
+  String get dashboardMoveDown => 'নিচে সরান';
+
+  @override
+  String dashboardDragCard(Object card) {
+    return '$card সাজান';
+  }
+
+  @override
+  String get dashboardRequired => 'অবশ্যক';
+
+  @override
+  String get dashboardReset => 'ডিফল্টে ফিরুন';
+
+  @override
+  String get dashboardResetTitle => 'ড্যাশবোর্ডের বিন্যাস ফিরিয়ে দেবেন?';
+
+  @override
+  String get dashboardResetMessage =>
+      'কার্ডের ক্রম ও দৃশ্যমানতা ডিফল্টে ফিরে যাবে।';
+
+  @override
+  String get dashboardPrefsSyncPending =>
+      'বিন্যাস এই ডিভাইসে সংরক্ষিত হয়েছে; অনলাইনে এলে সিঙ্ক হবে।';
+
+  @override
+  String get dashboardAccessInfo =>
+      'সংসার ব্যবস্থাপক ও সদস্যরা কোন ড্যাশবোর্ড কার্ড দেখবেন তা বেছে নিন। অ্যাডমিন সবসময় সব উপলভ্য কার্ড দেখবেন।';
+
+  @override
+  String get dashboardAdminAlways => 'অ্যাডমিন: সবসময় দৃশ্যমান';
+
+  @override
+  String get dashboardPreviewTitle => 'যেভাবে দেখুন';
+
+  @override
+  String get dashboardPreviewEmpty => 'এই পূর্বরূপে কোনো কার্ড দৃশ্যমান নয়।';
+
+  @override
+  String get dashboardAccessHidden => 'লুকানো';
+
+  @override
+  String get dashboardAccessVisible => 'দৃশ্যমান';
+
+  @override
+  String get dashboardAccessOff => 'ডিফল্টে বন্ধ';
+
+  @override
+  String get dashboardCardPermissionMissing =>
+      'এই ভূমিকা কার্ডটির ফিচার ব্যবহার করতে পারে না।';
+
+  @override
+  String get dashboardAccessOffline =>
+      'ড্যাশবোর্ডে প্রবেশাধিকার সংরক্ষণ করতে ইন্টারনেটে যুক্ত হন।';
+
+  @override
+  String get dashboardSaving => 'সংরক্ষণ হচ্ছে…';
+
+  @override
+  String get dashboardAccessDenied =>
+      'ড্যাশবোর্ডে প্রবেশাধিকার পরিবর্তনের অনুমতি আপনার নেই।';
+
+  @override
+  String get dashboardResetRecommended => 'প্রস্তাবিত বিন্যাসে ফিরুন';
+
+  @override
+  String get dashboardResetRecommendedTitle =>
+      'ড্যাশবোর্ডের প্রবেশাধিকার ফিরিয়ে দেবেন?';
+
+  @override
+  String get dashboardResetRecommendedMessage =>
+      'সব ভূমিকার প্রবেশাধিকার প্রস্তাবিত ডিফল্টে ফিরে যাবে।';
+
+  @override
+  String get dashboardDiscardTitle => 'পরিবর্তন বাতিল করবেন?';
+
+  @override
+  String get dashboardDiscardMessage =>
+      'সংরক্ষণ না করা ড্যাশবোর্ড প্রবেশাধিকারের পরিবর্তন হারিয়ে যাবে।';
+
+  @override
+  String get dashboardDiscard => 'বাতিল করুন';
+
+  @override
   String get activityTitle => 'কার্যকলাপ';
 
   @override

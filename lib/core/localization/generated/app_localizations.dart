@@ -9064,6 +9064,240 @@ abstract class AppLocalizations {
   /// **'পরিবার সম্পর্কে কোনো প্রশ্ন করুন।'**
   String get dashboardAskAiMessage;
 
+  /// No description provided for @dashboardCardBudgetAlert.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট সতর্কতা'**
+  String get dashboardCardBudgetAlert;
+
+  /// No description provided for @dashboardCardApprovals.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদনের অপেক্ষায়'**
+  String get dashboardCardApprovals;
+
+  /// No description provided for @dashboardCardChoresToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজকের কাজ'**
+  String get dashboardCardChoresToday;
+
+  /// No description provided for @dashboardCardChoresOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'বকেয়া কাজ'**
+  String get dashboardCardChoresOverdue;
+
+  /// No description provided for @dashboardCardChoresVerify.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাইয়ের অপেক্ষায়'**
+  String get dashboardCardChoresVerify;
+
+  /// No description provided for @dashboardCardBazarMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাসিক খরচ'**
+  String get dashboardCardBazarMonth;
+
+  /// No description provided for @dashboardCardBazarFund.
+  ///
+  /// In bn, this message translates to:
+  /// **'তহবিলের স্থিতি'**
+  String get dashboardCardBazarFund;
+
+  /// No description provided for @dashboardCardUpcoming.
+  ///
+  /// In bn, this message translates to:
+  /// **'আসন্ন কাজ'**
+  String get dashboardCardUpcoming;
+
+  /// No description provided for @dashboardCardChoresWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সপ্তাহ'**
+  String get dashboardCardChoresWeek;
+
+  /// No description provided for @dashboardCardHubLevel.
+  ///
+  /// In bn, this message translates to:
+  /// **'হাবের স্তর'**
+  String get dashboardCardHubLevel;
+
+  /// No description provided for @dashboardCardRecentActivity.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাম্প্রতিক কার্যকলাপ'**
+  String get dashboardCardRecentActivity;
+
+  /// No description provided for @dashboardPersonalLayoutNote.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ড্যাশবোর্ডের বিন্যাস শুধু আপনি দেখতে পাবেন।'**
+  String get dashboardPersonalLayoutNote;
+
+  /// No description provided for @dashboardHiddenCards.
+  ///
+  /// In bn, this message translates to:
+  /// **'লুকানো কার্ড'**
+  String get dashboardHiddenCards;
+
+  /// No description provided for @dashboardAddBack.
+  ///
+  /// In bn, this message translates to:
+  /// **'আবার যোগ করুন'**
+  String get dashboardAddBack;
+
+  /// No description provided for @dashboardMoveUp.
+  ///
+  /// In bn, this message translates to:
+  /// **'উপরে সরান'**
+  String get dashboardMoveUp;
+
+  /// No description provided for @dashboardMoveDown.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিচে সরান'**
+  String get dashboardMoveDown;
+
+  /// No description provided for @dashboardDragCard.
+  ///
+  /// In bn, this message translates to:
+  /// **'{card} সাজান'**
+  String dashboardDragCard(Object card);
+
+  /// No description provided for @dashboardRequired.
+  ///
+  /// In bn, this message translates to:
+  /// **'অবশ্যক'**
+  String get dashboardRequired;
+
+  /// No description provided for @dashboardReset.
+  ///
+  /// In bn, this message translates to:
+  /// **'ডিফল্টে ফিরুন'**
+  String get dashboardReset;
+
+  /// No description provided for @dashboardResetTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ড্যাশবোর্ডের বিন্যাস ফিরিয়ে দেবেন?'**
+  String get dashboardResetTitle;
+
+  /// No description provided for @dashboardResetMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'কার্ডের ক্রম ও দৃশ্যমানতা ডিফল্টে ফিরে যাবে।'**
+  String get dashboardResetMessage;
+
+  /// No description provided for @dashboardPrefsSyncPending.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিন্যাস এই ডিভাইসে সংরক্ষিত হয়েছে; অনলাইনে এলে সিঙ্ক হবে।'**
+  String get dashboardPrefsSyncPending;
+
+  /// No description provided for @dashboardAccessInfo.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংসার ব্যবস্থাপক ও সদস্যরা কোন ড্যাশবোর্ড কার্ড দেখবেন তা বেছে নিন। অ্যাডমিন সবসময় সব উপলভ্য কার্ড দেখবেন।'**
+  String get dashboardAccessInfo;
+
+  /// No description provided for @dashboardAdminAlways.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাডমিন: সবসময় দৃশ্যমান'**
+  String get dashboardAdminAlways;
+
+  /// No description provided for @dashboardPreviewTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'যেভাবে দেখুন'**
+  String get dashboardPreviewTitle;
+
+  /// No description provided for @dashboardPreviewEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পূর্বরূপে কোনো কার্ড দৃশ্যমান নয়।'**
+  String get dashboardPreviewEmpty;
+
+  /// No description provided for @dashboardAccessHidden.
+  ///
+  /// In bn, this message translates to:
+  /// **'লুকানো'**
+  String get dashboardAccessHidden;
+
+  /// No description provided for @dashboardAccessVisible.
+  ///
+  /// In bn, this message translates to:
+  /// **'দৃশ্যমান'**
+  String get dashboardAccessVisible;
+
+  /// No description provided for @dashboardAccessOff.
+  ///
+  /// In bn, this message translates to:
+  /// **'ডিফল্টে বন্ধ'**
+  String get dashboardAccessOff;
+
+  /// No description provided for @dashboardCardPermissionMissing.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ভূমিকা কার্ডটির ফিচার ব্যবহার করতে পারে না।'**
+  String get dashboardCardPermissionMissing;
+
+  /// No description provided for @dashboardAccessOffline.
+  ///
+  /// In bn, this message translates to:
+  /// **'ড্যাশবোর্ডে প্রবেশাধিকার সংরক্ষণ করতে ইন্টারনেটে যুক্ত হন।'**
+  String get dashboardAccessOffline;
+
+  /// No description provided for @dashboardSaving.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষণ হচ্ছে…'**
+  String get dashboardSaving;
+
+  /// No description provided for @dashboardAccessDenied.
+  ///
+  /// In bn, this message translates to:
+  /// **'ড্যাশবোর্ডে প্রবেশাধিকার পরিবর্তনের অনুমতি আপনার নেই।'**
+  String get dashboardAccessDenied;
+
+  /// No description provided for @dashboardResetRecommended.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রস্তাবিত বিন্যাসে ফিরুন'**
+  String get dashboardResetRecommended;
+
+  /// No description provided for @dashboardResetRecommendedTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ড্যাশবোর্ডের প্রবেশাধিকার ফিরিয়ে দেবেন?'**
+  String get dashboardResetRecommendedTitle;
+
+  /// No description provided for @dashboardResetRecommendedMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব ভূমিকার প্রবেশাধিকার প্রস্তাবিত ডিফল্টে ফিরে যাবে।'**
+  String get dashboardResetRecommendedMessage;
+
+  /// No description provided for @dashboardDiscardTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবর্তন বাতিল করবেন?'**
+  String get dashboardDiscardTitle;
+
+  /// No description provided for @dashboardDiscardMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষণ না করা ড্যাশবোর্ড প্রবেশাধিকারের পরিবর্তন হারিয়ে যাবে।'**
+  String get dashboardDiscardMessage;
+
+  /// No description provided for @dashboardDiscard.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল করুন'**
+  String get dashboardDiscard;
+
   /// No description provided for @activityTitle.
   ///
   /// In bn, this message translates to:

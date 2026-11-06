@@ -10,12 +10,15 @@ import 'package:family_hub/app/routing/splash_screen.dart';
 import 'package:family_hub/app/shell/app_shell.dart';
 import 'package:family_hub/app/theme/dev_tokens_screen.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/activity/presentation/activity_feed_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/login_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/verify_email_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/welcome_screen.dart';
+import 'package:family_hub/features/dashboard/presentation/customize_dashboard_screen.dart';
+import 'package:family_hub/features/dashboard/presentation/dashboard_access_screen.dart';
 import 'package:family_hub/features/dashboard/presentation/home_screen.dart';
 import 'package:family_hub/features/family/presentation/family_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/create_family_screen.dart';
@@ -27,6 +30,7 @@ import 'package:family_hub/features/family/presentation/screens/member_profile_s
 import 'package:family_hub/features/family/presentation/screens/members_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/pending_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/relationships_screen.dart';
+import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/features/family/presentation/screens/roles_screen.dart';
 import 'package:family_hub/features/onboarding/presentation/screens/profile_setup_screen.dart';
 import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
@@ -77,6 +81,10 @@ final routerProvider = Provider<GoRouter>((ref) {
   final memo = ref.read(_locationMemoProvider);
   final refresh = ValueNotifier<int>(0);
   ref.listen<SessionPhase>(sessionPhaseProvider, (_, _) => refresh.value++);
+  ref.listen<bool>(
+    canProvider(const PermissionQuery(Permission.manageDashboardLayout)),
+    (_, _) => refresh.value++,
+  );
 
   final tabs = <_Tab>[
     _Tab(
@@ -159,6 +167,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       // A deep link into a module the family switched off goes home.
       if (phase == SessionPhase.active) {
         final path = state.uri.path;
+        if (path == AppRoutes.dashboardAccess &&
+            !ref.read(
+              canProvider(
+                const PermissionQuery(Permission.manageDashboardLayout),
+              ),
+            )) {
+          return AppRoutes.home;
+        }
         for (final module in disabled) {
           final base = module.basePath;
           if (path == base || path.startsWith('$base/')) return AppRoutes.home;
@@ -242,6 +258,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.settingsSecurity,
         builder: (context, state) => const SecurityScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.customizeDashboard,
+        builder: (context, state) => const CustomizeDashboardScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.dashboardAccess,
+        builder: (context, state) => const DashboardAccessScreen(),
       ),
       if (flavor == Flavor.dev)
         GoRoute(

@@ -5222,6 +5222,134 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboardAskAiMessage => 'Ask a question about your household.';
 
   @override
+  String get dashboardCardBudgetAlert => 'Budget alert';
+
+  @override
+  String get dashboardCardApprovals => 'Approvals';
+
+  @override
+  String get dashboardCardChoresToday => 'Today\'s chores';
+
+  @override
+  String get dashboardCardChoresOverdue => 'Overdue chores';
+
+  @override
+  String get dashboardCardChoresVerify => 'Awaiting verification';
+
+  @override
+  String get dashboardCardBazarMonth => 'Monthly spending';
+
+  @override
+  String get dashboardCardBazarFund => 'Fund balance';
+
+  @override
+  String get dashboardCardUpcoming => 'Coming up';
+
+  @override
+  String get dashboardCardChoresWeek => 'This week';
+
+  @override
+  String get dashboardCardHubLevel => 'Hub Level';
+
+  @override
+  String get dashboardCardRecentActivity => 'Recent activity';
+
+  @override
+  String get dashboardPersonalLayoutNote =>
+      'Only you see this dashboard layout.';
+
+  @override
+  String get dashboardHiddenCards => 'Hidden cards';
+
+  @override
+  String get dashboardAddBack => 'Add back';
+
+  @override
+  String get dashboardMoveUp => 'Move up';
+
+  @override
+  String get dashboardMoveDown => 'Move down';
+
+  @override
+  String dashboardDragCard(Object card) {
+    return 'Reorder $card';
+  }
+
+  @override
+  String get dashboardRequired => 'Required';
+
+  @override
+  String get dashboardReset => 'Reset to default';
+
+  @override
+  String get dashboardResetTitle => 'Reset dashboard layout?';
+
+  @override
+  String get dashboardResetMessage =>
+      'Your card order and visibility will return to the default.';
+
+  @override
+  String get dashboardPrefsSyncPending =>
+      'Your layout is saved on this device and will sync when online.';
+
+  @override
+  String get dashboardAccessInfo =>
+      'Choose which dashboard cards Household Managers and Members can see. Admins always see every available card.';
+
+  @override
+  String get dashboardAdminAlways => 'Admin: Always visible';
+
+  @override
+  String get dashboardPreviewTitle => 'Preview as';
+
+  @override
+  String get dashboardPreviewEmpty => 'No cards are visible in this preview.';
+
+  @override
+  String get dashboardAccessHidden => 'Hidden';
+
+  @override
+  String get dashboardAccessVisible => 'Visible';
+
+  @override
+  String get dashboardAccessOff => 'Off by default';
+
+  @override
+  String get dashboardCardPermissionMissing =>
+      'This role cannot use the card\'s feature.';
+
+  @override
+  String get dashboardAccessOffline =>
+      'Connect to the internet to save dashboard access.';
+
+  @override
+  String get dashboardSaving => 'Saving…';
+
+  @override
+  String get dashboardAccessDenied =>
+      'You do not have permission to change dashboard access.';
+
+  @override
+  String get dashboardResetRecommended => 'Reset to recommended';
+
+  @override
+  String get dashboardResetRecommendedTitle => 'Reset dashboard access?';
+
+  @override
+  String get dashboardResetRecommendedMessage =>
+      'All role access choices will return to the recommended defaults.';
+
+  @override
+  String get dashboardDiscardTitle => 'Discard changes?';
+
+  @override
+  String get dashboardDiscardMessage =>
+      'Your unsaved dashboard access changes will be lost.';
+
+  @override
+  String get dashboardDiscard => 'Discard';
+
+  @override
   String get activityTitle => 'Activity';
 
   @override
