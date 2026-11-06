@@ -1,18 +1,19 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:family_hub/app/theme/theme_controller.dart' hide unawaited;
 import 'package:family_hub/core/localization/locale_controller.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
+import 'package:family_hub/features/dashboard/presentation/dashboard_providers.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_prefs.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Keeps theme and language in step with `users/{uid}.preferences`.
 ///
-/// * At startup the **local** value wins (it is already on screen).
-/// * After sign-in the **remote** value is applied once per sign-in.  If the
-///   account has none yet, the local value is pushed up instead.
-/// * Later local changes are pushed by the controllers themselves.
-///
-/// Watched from `FamilyHubApp` purely for its side effect.
+/// Local preferences are available immediately. After a verified sign-in the
+/// remote value is applied once; if the account has none yet, the local value
+/// is pushed up instead.
 final preferenceSyncProvider = Provider<void>((ref) {
   StreamSubscription<Object?>? themeSub;
   StreamSubscription<Object?>? localeSub;
@@ -62,12 +63,11 @@ final preferenceSyncProvider = Provider<void>((ref) {
     });
   }
 
-  // Only start once the email is verified (H5): every write except the owner's
-  // own profile is denied by the rules until then, so an early push would just
-  // be rejected.
+  // The existing theme/locale adapters require verified email for their
+  // writes. Dashboard preferences use the owner-only users/{uid} rule.
   ref.listen<String?>(
-    authStateProvider.select((v) {
-      final user = v.value;
+    authStateProvider.select((value) {
+      final user = value.value;
       return user != null && user.emailVerified ? user.uid : null;
     }),
     (_, uid) => uid == null ? stop() : start(),
@@ -75,3 +75,76 @@ final preferenceSyncProvider = Provider<void>((ref) {
   );
   ref.onDispose(stop);
 });
+
+/// Applies dashboard preferences once for each signed-in user. Local state is
+/// keyed by uid and therefore remains visible while the first remote snapshot
+/// is loading.
+final dashboardPreferenceSyncProvider = Provider<void>((ref) {
+  StreamSubscription<DashboardPrefs?>? subscription;
+  var disposed = false;
+
+  void stop() {
+    unawaited(subscription?.cancel());
+    subscription = null;
+  }
+
+  void start(String? uid) {
+    stop();
+    if (uid == null) return;
+
+    var applied = false;
+    final sync = ref.read(dashboardPrefsSyncProvider);
+    subscription = sync.watch(uid).listen(
+      (remote) {
+        if (disposed || applied || ref.read(currentUidProvider) != uid) return;
+        applied = true;
+        unawaited(subscription?.cancel());
+        subscription = null;
+
+        if (remote == null) {
+          unawaited(
+            sync.push(uid, ref.read(dashboardPrefsProvider)).then((result) {
+              _logFailure(result.failureOrNull, 'seed');
+            }),
+          );
+        } else {
+          unawaited(
+            ref
+                .read(dashboardPrefsProvider.notifier)
+                .applyRemote(uid, remote)
+                .then((result) {
+                  _logFailure(result.failureOrNull, 'apply remote');
+                }),
+          );
+        }
+      },
+      onError: (Object error, StackTrace stack) => developer.log(
+        'Could not read dashboard preferences',
+        name: 'family_hub',
+        error: error,
+        stackTrace: stack,
+        level: 1000,
+      ),
+    );
+  }
+
+  ref.listen<String?>(
+    currentUidProvider,
+    (_, uid) => start(uid),
+    fireImmediately: true,
+  );
+  ref.onDispose(() {
+    disposed = true;
+    stop();
+  });
+});
+
+void _logFailure(Object? failure, String action) {
+  if (failure == null) return;
+  developer.log(
+    'Could not $action dashboard preferences',
+    name: 'family_hub',
+    error: failure,
+    level: 1000,
+  );
+}

@@ -13,6 +13,20 @@
         "relationship": "other",
         "spouseId": null,
         "avatarKey": null,
+        "preferences": {
+          "dashboard": {
+            "order": [
+              "chores_today",
+              "upcoming"
+            ],
+            "hidden": [
+              "recent_activity"
+            ],
+            "shown": [
+              "chores_week"
+            ]
+          }
+        },
         "updatedAt": {
           "__ts": "2026-10-18T10:00:00.000Z"
         },

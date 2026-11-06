@@ -30,6 +30,7 @@ class FamilyHubApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
     // Side effect only: sync theme/language with the account.
     ref.watch(preferenceSyncProvider);
+    ref.watch(dashboardPreferenceSyncProvider);
     // Side effect only (B-01): start the occurrence generation once the
     // session is active, and show a failure of that run. It runs here, in the
     // widget above the router, which is mounted for the whole app life.

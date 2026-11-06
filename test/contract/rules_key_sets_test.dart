@@ -38,6 +38,9 @@ import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:family_hub/features/family/domain/relationship_catalog.dart';
+import 'package:family_hub/features/dashboard/domain/card_access.dart';
+import 'package:family_hub/features/dashboard/data/dashboard_policy_mappers.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_policy.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/rules_source.dart';
@@ -105,6 +108,16 @@ void main() {
       // P3-06: settings/chores and settings/choreGeneration.
       ...ChoreSettingsMappers.toMap(ChoreSettings.defaults, meta).keys,
       'throughEpochDay',
+      ...DashboardPolicyMappers.policyToMap(
+        DashboardPolicy(
+          roles: <Role, Map<String, CardAccess>>{
+            Role.member: <String, CardAccess>{
+              'chores_today': CardAccess.required,
+            },
+          },
+        ),
+        meta,
+      ).keys,
     };
     expect(produced, rulesList('settingsKeys'));
   });

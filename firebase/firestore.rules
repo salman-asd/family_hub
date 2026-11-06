@@ -122,7 +122,23 @@ service cloud.firestore {
           && data.preferences.get('themeMode', 'system') in ['system', 'light', 'dark']
           && data.preferences.get('language', 'bn') in ['bn', 'en']
           && data.preferences.get('banglaDigits', false) is bool
+          && (!('dashboard' in data.preferences.keys())
+              || dashboardPrefsOk(data.preferences.dashboard))
         );
+    }
+    function dashboardPrefsListOk(value) {
+      return value is list
+        && value.size() <= 24
+        && (value.size() == 0
+            || (str(value[0], 0, 40)
+                && str(value[value.size() - 1], 0, 40)));
+    }
+    function dashboardPrefsOk(value) {
+      return value is map
+        && value.keys().hasOnly(['order', 'hidden', 'shown'])
+        && dashboardPrefsListOk(value.get('order', []))
+        && dashboardPrefsListOk(value.get('hidden', []))
+        && dashboardPrefsListOk(value.get('shown', []));
     }
     // Money is integer paisa (CLAUDE.md rule 1).  Applied to the money
     // collections from Step 13 (`expenses`) onwards; no money field exists yet,
@@ -210,8 +226,37 @@ service cloud.firestore {
               'dueTimePresets', 'groups', 'absenceReasons',
               // P3-06: settings/choreGeneration (the generation marker).
               'throughEpochDay',
+              // P4-06: settings/dashboard.
+              'roles', 'version',
               'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
               'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function dashboardPolicyKeys() {
+      return ['roles', 'version', 'createdAt', 'createdBy', 'updatedAt',
+              'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
+    }
+    function dashboardRoleOk(roles, key) {
+      return !(key in roles.keys())
+        || (roles[key] is map && roles[key].size() <= 16);
+    }
+    function dashboardPolicyOk(d) {
+      return d.keys().hasOnly(dashboardPolicyKeys())
+        && d.roles is map
+        && d.roles.size() <= 2
+        && d.roles.keys().hasOnly(['moderator', 'member'])
+        && dashboardRoleOk(d.roles, 'moderator')
+        && dashboardRoleOk(d.roles, 'member')
+        && d.version is int
+        && d.version >= 1
+        && d.get('createdAt', null) is timestamp
+        && d.get('createdBy', '') is string
+        && d.get('updatedAt', null) is timestamp
+        && d.get('updatedBy', '') is string
+        && d.get('schemaVersion', 0) is int
+        && (!('deletedAt' in d.keys())
+            || d.deletedAt == null || d.deletedAt is timestamp)
+        && (!('deletedBy' in d.keys())
+            || d.deletedBy == null || d.deletedBy is string);
     }
     // P3-06: a catalog row is a map whose `id` is a machine id.  Rules cannot
     // loop, so only the SIZE of a list and the shape of its FIRST and LAST row
@@ -2120,15 +2165,32 @@ service cloud.firestore {
       // ── settings/{s} — general, modules, rotationPolicy, notificationDefaults
       match /settings/{s} {
         allow read: if isActiveMember(f);
-        allow create: if verified()
+        allow create: if s != 'dashboard'
+          && verified()
           && (isAdmin(f) || (s == 'bazar' && financeManager(f))
               || creatingFamily(f))
           && createsAsSelf()
           && settingsOk(request.resource.data);
-        allow update: if verified()
+        allow update: if s != 'dashboard'
+          && verified()
           && (isAdmin(f) || (s == 'bazar' && financeManager(f)))
           && writesAsSelf()
           && settingsOk(request.resource.data);
+        allow delete: if false;
+      }
+
+      // ── settings/dashboard — role-to-card presentation policy (P4-06) ───
+      match /settings/dashboard {
+        allow read: if isActiveMember(f);
+        allow create: if verified()
+          && financeManager(f)
+          && createsAsSelf()
+          && dashboardPolicyOk(request.resource.data);
+        allow update: if verified()
+          && financeManager(f)
+          && writesAsSelf()
+          && dashboardPolicyOk(request.resource.data)
+          && request.resource.data.version == resource.data.version + 1;
         allow delete: if false;
       }
 

@@ -162,6 +162,18 @@ export const permissionsDoc = (uid, extra = {}) =>
     ...extra,
   });
 
+/** `DashboardPolicyMappers.policyToMap` shape (P4-06). */
+export const dashboardPolicyDoc = (uid, {
+  roles = { moderator: {}, member: {} },
+  version = 1,
+  ...extra
+} = {}) =>
+  baseDoc(uid, {
+    roles,
+    version,
+    ...extra,
+  });
+
 /** `BazarSettingsMappers.toMap` shape (P2-07). */
 export const bazarSettingsDoc = (uid, extra = {}) =>
   baseDoc(uid, {

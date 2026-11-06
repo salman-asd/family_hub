@@ -1,6 +1,9 @@
 import 'package:family_hub/features/dashboard/domain/card_access.dart';
 
 final class DashboardPrefs {
+  static const int maxPreferenceIds = 24;
+  static const int maxIdLength = 40;
+
   DashboardPrefs({
     List<String> order = const <String>[],
     Set<String> hidden = const <String>{},

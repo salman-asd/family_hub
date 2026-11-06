@@ -10,6 +10,10 @@ import 'package:family_hub/features/activity/data/firestore_activity_repository.
 import 'package:family_hub/features/activity/presentation/activity_providers.dart';
 import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
+import 'package:family_hub/features/dashboard/data/firestore_dashboard_policy_repository.dart';
+import 'package:family_hub/features/dashboard/data/firestore_dashboard_pref_sync.dart';
+import 'package:family_hub/features/dashboard/data/local_dashboard_prefs_store.dart';
+import 'package:family_hub/features/dashboard/presentation/dashboard_providers.dart';
 import 'package:family_hub/features/bazar/advances/data/firestore_advance_repository.dart';
 import 'package:family_hub/features/bazar/advances/presentation/advance_providers.dart';
 import 'package:family_hub/features/bazar/budgets/data/firestore_budget_repository.dart';
@@ -134,6 +138,12 @@ Future<void> bootstrap(Flavor flavor) async {
     final swaps = FirestoreSwapRepository(tx: tx);
     final inbox = FirestoreInboxRepository(tx: tx);
     final activity = FirestoreActivityRepository();
+    final dashboardPolicies = FirestoreDashboardPolicyRepository(
+      tx: tx,
+      clock: clock,
+    );
+    final dashboardPrefsSync = FirestoreDashboardPrefSync();
+    final dashboardPrefsStore = LocalDashboardPrefsStore(prefs);
 
     runApp(
       ProviderScope(
@@ -174,6 +184,11 @@ Future<void> bootstrap(Flavor flavor) async {
           swapRepositoryProvider.overrideWithValue(swaps),
           inboxRepositoryProvider.overrideWithValue(inbox),
           activityRepositoryProvider.overrideWithValue(activity),
+          dashboardPolicyRepositoryProvider.overrideWithValue(
+            dashboardPolicies,
+          ),
+          dashboardPrefsSyncProvider.overrideWithValue(dashboardPrefsSync),
+          dashboardPrefsStoreProvider.overrideWithValue(dashboardPrefsStore),
           inboxPortProvider.overrideWithValue(const ChoresInboxPort()),
           themePreferenceSyncProvider.overrideWithValue(
             FirestoreThemePreferenceSync(),

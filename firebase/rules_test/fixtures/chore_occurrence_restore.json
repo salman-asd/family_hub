@@ -1,0 +1,43 @@
+{
+  "scenario": "chore_occurrence_restore",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "update",
+      "path": "families/fixFam/choreOccurrences/tpl_fixDishes_20261102",
+      "data": {
+        "templateRev": 4,
+        "dueAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "dueMinutes": 540,
+        "nameBn": "থালা-বাসন ধোয়া",
+        "nameEn": null,
+        "groupId": null,
+        "instructions": "",
+        "subtasks": [
+          {
+            "id": "rinse",
+            "title": "ধোয়া",
+            "required": true,
+            "hint": null
+          }
+        ],
+        "requiredCount": 1,
+        "difficulty": "normal",
+        "estimatedMinutes": null,
+        "verification": "off",
+        "plannedAssigneeId": "fixMember",
+        "assigneeId": "fixMember",
+        "assignmentSource": "rotation",
+        "needsCover": false,
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    }
+  ]
+}

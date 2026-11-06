@@ -34,6 +34,10 @@ import 'package:family_hub/features/bazar/items_categories/domain/item.dart';
 import 'package:family_hub/features/bazar/items_categories/domain/item_usage_bump.dart';
 import 'package:family_hub/features/bazar/settings/data/bazar_settings_mappers.dart';
 import 'package:family_hub/features/bazar/settings/domain/bazar_settings.dart';
+import 'package:family_hub/features/dashboard/data/dashboard_policy_mappers.dart';
+import 'package:family_hub/features/dashboard/domain/card_access.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_policy.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_prefs.dart';
 import 'package:family_hub/features/chores/duty_groups/data/duty_group_mappers.dart';
 import 'package:family_hub/features/chores/occurrences/data/occurrence_event_mappers.dart';
 import 'package:family_hub/features/chores/occurrences/data/occurrence_mappers.dart';
@@ -80,11 +84,16 @@ void main() {
       file.writeAsStringSync('${encoder.convert(fixture)}\n');
     }
 
-    expect(
-      dir.listSync().whereType<File>().length,
-      _fixtures().length,
-      reason: 'one JSON file per scenario',
-    );
+    final actualFiles = dir
+        .listSync()
+        .whereType<File>()
+        .map((file) => file.uri.pathSegments.last)
+        .toSet();
+    final expectedFiles = <String>{
+      for (final fixture in _fixtures()) '${fixture['scenario']}.json',
+      'occurrence_transitions.json',
+    };
+    expect(actualFiles, expectedFiles, reason: 'one JSON file per scenario');
   });
 }
 
@@ -111,6 +120,7 @@ List<Map<String, dynamic>> _fixtures() => <Map<String, dynamic>>[
   _createInvitation(),
   _revokeInvitation(),
   _profile(),
+  _dashboardPolicy(),
   _category(),
   _item(),
   _itemUsage(),
@@ -1425,12 +1435,58 @@ Map<String, dynamic> _profile() {
   return _fixture('profile', _joiner, <Map<String, dynamic>>[
     _write('merge', FirestorePaths.userDoc(_joiner), <String, dynamic>{
       ...FirestoreProfileRepository.profileToMap(profile),
+      'preferences': <String, dynamic>{
+        'dashboard': DashboardPolicyMappers.dashboardPrefsToMap(
+          DashboardPrefs(
+            order: const <String>['chores_today', 'upcoming'],
+            hidden: const <String>{'recent_activity'},
+            shown: const <String>{'chores_week'},
+          ),
+        ),
+      },
       BaseMapper.keyUpdatedAt: stamp,
       BaseMapper.keyUpdatedBy: _joiner,
       BaseMapper.keyCreatedAt: stamp,
       BaseMapper.keyCreatedBy: _joiner,
       BaseMapper.keySchemaVersion: 1,
     }),
+  ]);
+}
+
+Map<String, dynamic> _dashboardPolicy() {
+  final policy = DashboardPolicy(
+    roles: <Role, Map<String, CardAccess>>{
+      Role.moderator: <String, CardAccess>{'budget_alert': CardAccess.on},
+      Role.member: <String, CardAccess>{
+        'chores_today': CardAccess.required,
+        'bazar_fund': CardAccess.on,
+      },
+    },
+  );
+  final event = AuditEvent(
+    id: 'evDashboard',
+    type: AuditEventType.familyDashboardPolicyUpdated,
+    actorId: _admin,
+    refType: AuditRefType.dashboardSettings,
+    refId: _familyId,
+    at: _at,
+  );
+  return _fixture('dashboard_policy', _admin, <Map<String, dynamic>>[
+    _write(
+      'set',
+      FirestorePaths.dashboardSettingsDoc(_familyId),
+      DashboardPolicyMappers.policyToMap(policy, _meta(_admin)),
+    ),
+    _write(
+      'set',
+      FirestorePaths.activityDoc(_familyId, event.id),
+      AuditWriter.toMap(event),
+    ),
+    _write(
+      'set',
+      FirestorePaths.auditLogDoc(_familyId, event.id),
+      AuditWriter.toMap(event),
+    ),
   ]);
 }
 

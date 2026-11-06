@@ -1,0 +1,67 @@
+{
+  "scenario": "chore_occurrence_reopen",
+  "actor": "fixAdmin",
+  "writes": [
+    {
+      "op": "update",
+      "path": "families/fixFam/choreOccurrences/tpl_fixDishes_20261019",
+      "data": {
+        "status": "in_progress",
+        "reopenCount": 1,
+        "lastEventId": "reopened_tokfix02",
+        "completedAt": {
+          "__delete": true
+        },
+        "completedBy": {
+          "__delete": true
+        },
+        "verifiedAt": {
+          "__delete": true
+        },
+        "verifiedBy": {
+          "__delete": true
+        },
+        "subtaskDone.rinse": {
+          "__delete": true
+        },
+        "subtaskDone.dry": {
+          "__delete": true
+        },
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin"
+      }
+    },
+    {
+      "op": "set",
+      "path": "families/fixFam/choreOccurrences/tpl_fixDishes_20261019/events/reopened_tokfix02",
+      "data": {
+        "type": "reopened",
+        "actorId": "fixAdmin",
+        "fromAssigneeId": null,
+        "toAssigneeId": null,
+        "reason": "আবার ধুতে হবে",
+        "prevCompletedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "redoSubtaskIds": [
+          "rinse",
+          "dry"
+        ],
+        "requestId": null,
+        "createdAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "createdBy": "fixAdmin",
+        "updatedAt": {
+          "__ts": "2026-10-18T10:00:00.000Z"
+        },
+        "updatedBy": "fixAdmin",
+        "schemaVersion": 1,
+        "deletedAt": null,
+        "deletedBy": null
+      }
+    }
+  ]
+}
