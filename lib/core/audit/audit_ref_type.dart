@@ -33,6 +33,11 @@ abstract final class AuditRefType {
   static const String swapRequest = 'swapRequest';
 
   /// Every ref type, in the same order as the rules list.
+  // Phase 4 dashboard, notifications, engagement (road map 3.9).
+  static const String notificationSettings = 'notificationSettings';
+  static const String dashboardSettings = 'dashboardSettings';
+  static const String engagementSettings = 'engagementSettings';
+
   static const List<String> all = <String>[
     family,
     member,
@@ -54,5 +59,8 @@ abstract final class AuditRefType {
     comment,
     availability,
     swapRequest,
+    notificationSettings,
+    dashboardSettings,
+    engagementSettings,
   ];
 }

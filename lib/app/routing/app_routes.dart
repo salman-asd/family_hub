@@ -59,6 +59,21 @@ abstract final class AppRoutes {
   /// The module-neutral inbox: a top-level route above the shell (P3-27).
   static const String inbox = '/inbox';
 
+  // ── Phase 4 (road map 3.10) ───────────────────────────────────────────────
+  //
+  // P4-02 declares the constants only. A route is registered by the step that
+  // adds its screen (the step is named on each line), so a link to one cannot
+  // resolve before then.
+
+  /// P4-04. The family activity feed, a top-level route above the shell.
+  static const String activity = '/activity';
+
+  /// P4-20. Achievements and badges of the signed-in member.
+  static const String choresAchievements = '/chores/achievements';
+
+  /// P4-20. Scoring, levels and privacy settings (`manageEngagement`).
+  static const String choresEngagementSettings = '/chores/engagement';
+
   // ── Bazar sub-routes (nested under [bazar]) ───────────────────────────────
   static const String bazarExpenses = '/bazar/expenses';
   static const String bazarExpenseNew = '/bazar/expenses/new';
@@ -96,6 +111,21 @@ abstract final class AppRoutes {
 
   /// Password and account deletion (H9).  Account data: NOT in [alwaysOpen].
   static const String settingsSecurity = '/settings/security';
+
+  /// P4-08. Every member orders, hides and shows their own dashboard cards.
+  static const String customizeDashboard = '/settings/dashboard';
+
+  /// P4-08. Which cards each role sees (`manageDashboardLayout`).
+  static const String dashboardAccess = '/settings/dashboard-access';
+
+  /// P4-16. Reminder switches, timings and quiet hours.
+  static const String notificationSettings = '/settings/notifications';
+
+  /// P4-16. Push or normal delivery per notification type (admin).
+  static const String notificationDelivery = '/settings/notifications/delivery';
+
+  /// P4-16. "Reminders not working?" diagnostics.
+  static const String remindersHelp = '/settings/notifications/help';
 
   // ── Developer tools (dev flavor only) ─────────────────────────────────────
   static const String devTokens = '/dev/tokens';

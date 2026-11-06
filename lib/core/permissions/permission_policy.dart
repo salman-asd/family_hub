@@ -35,6 +35,8 @@ import 'package:family_hub/core/permissions/permission_settings.dart';
 /// | manageAvailability | yes | yes | no |
 /// | manageChoreOccurrences | yes | yes | no |
 /// | moderateChoreComments | yes | yes | no |
+/// | manageEngagement | yes | yes | no |
+/// | manageDashboardLayout | yes | yes (setting: moderatorManagesFinance) | no |
 ///
 /// ("own" means `ownerId` must be the actor; "other" means `ownerId` must be
 /// somebody else — nobody verifies their own chore.)
@@ -134,6 +136,10 @@ abstract final class PermissionPolicy {
       Permission.manageAvailability => actor.isManager,
       Permission.manageChoreOccurrences => actor.isManager,
       Permission.moderateChoreComments => actor.isManager,
+
+      // ── Dashboard, notifications, engagement (Phase 4, road map 3.3) ───
+      Permission.manageEngagement => actor.isManager,
+      Permission.manageDashboardLayout => _managesFinance(actor, settings),
     };
   }
 

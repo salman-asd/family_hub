@@ -4780,4 +4780,223 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get choresMyTodayAction => 'আমার আজ';
+
+  @override
+  String get permissionManageEngagement =>
+      'ব্যাজ, লেভেল ও বিজ্ঞপ্তির ডিফল্ট পরিচালনা';
+
+  @override
+  String get permissionManageDashboardLayout =>
+      'কোন ভূমিকা কোন ড্যাশবোর্ড কার্ড দেখবে তা ঠিক করা';
+
+  @override
+  String get dashModuleCore => 'পরিবার';
+
+  @override
+  String get dashModuleBazar => 'বাজার ও ফান্ড';
+
+  @override
+  String get dashModuleChores => 'কাজ';
+
+  @override
+  String get dashCardBudgetAlert => 'বাজেট সতর্কতা';
+
+  @override
+  String get dashCardApprovals => 'অনুমোদন';
+
+  @override
+  String get dashCardChoresToday => 'আজকের কাজ';
+
+  @override
+  String get dashCardChoresOverdue => 'বিলম্বিত কাজ';
+
+  @override
+  String get dashCardChoresVerify => 'যাচাইয়ের অপেক্ষায়';
+
+  @override
+  String get dashCardBazarMonth => 'এই মাসের খরচ';
+
+  @override
+  String get dashCardBazarFund => 'পারিবারিক ফান্ড';
+
+  @override
+  String get dashCardUpcoming => 'আসছে';
+
+  @override
+  String get dashCardChoresWeek => 'এই সপ্তাহ';
+
+  @override
+  String get dashCardHubLevel => 'হাব লেভেল';
+
+  @override
+  String get dashCardRecentActivity => 'সাম্প্রতিক কার্যক্রম';
+
+  @override
+  String get notifChannelChoresDue => 'কাজের সময়';
+
+  @override
+  String get notifChannelChoresOverdue => 'বিলম্বিত কাজ';
+
+  @override
+  String get notifChannelDailySummary => 'সকালের সারাংশ';
+
+  @override
+  String get notifChannelBazar => 'বাজার ও ফান্ড';
+
+  @override
+  String get notifChannelFamily => 'পরিবার';
+
+  @override
+  String get notifChannelPushEvents => 'জরুরি বিজ্ঞপ্তি';
+
+  @override
+  String get levelNameSeed => 'বীজ';
+
+  @override
+  String get levelNameSprout => 'অঙ্কুর';
+
+  @override
+  String get levelNameSeedling => 'চারা';
+
+  @override
+  String get levelNameSapling => 'ছোট গাছ';
+
+  @override
+  String get levelNameYoungTree => 'তরুণ গাছ';
+
+  @override
+  String get levelNameFlowering => 'ফুলের গাছ';
+
+  @override
+  String get levelNameFruiting => 'ফলবতী গাছ';
+
+  @override
+  String get levelNameGrandTree => 'মহীরুহ';
+
+  @override
+  String get engagementVisibilityPrivate => 'ব্যক্তিগত';
+
+  @override
+  String get engagementVisibilityLevels => 'শুধু লেভেল ও ব্যাজ';
+
+  @override
+  String get activityNotificationDefaultsUpdated =>
+      'বিজ্ঞপ্তির ডিফল্ট বদলানো হয়েছে';
+
+  @override
+  String get activityNotificationDeliveryUpdated =>
+      'পুশ ও সাধারণ বিজ্ঞপ্তির সেটিং বদলানো হয়েছে';
+
+  @override
+  String get activityDashboardPolicyUpdated =>
+      'ড্যাশবোর্ডে কে কী দেখবে তা বদলানো হয়েছে';
+
+  @override
+  String get activityEngagementSettingsUpdated =>
+      'ব্যাজ ও লেভেলের সেটিং বদলানো হয়েছে';
+
+  @override
+  String activityEngagementPrivacyUpdated(String visibility) {
+    return 'পরিসংখ্যান শেয়ারিং: $visibility';
+  }
+
+  @override
+  String get notificationFailure_invalid_minutes =>
+      '১ থেকে ১৪৪০ এর মধ্যে মিনিট লিখুন।';
+
+  @override
+  String get notificationFailure_invalid_offsets =>
+      'রিমাইন্ডারের একটি সময় সঠিক নয়।';
+
+  @override
+  String get notificationFailure_too_many_offsets =>
+      'সর্বোচ্চ ৫টি রিমাইন্ডার দেওয়া যায়।';
+
+  @override
+  String get notificationFailure_invalid_quiet_hours => 'নীরব সময় সঠিক নয়।';
+
+  @override
+  String get notificationFailure_unknown_notification_type =>
+      'এই ধরনের বিজ্ঞপ্তি চেনা যায়নি।';
+
+  @override
+  String get notificationFailure_type_not_push_capable =>
+      'এই বিজ্ঞপ্তি পুশ হিসেবে পাঠানো যায় না।';
+
+  @override
+  String get notificationFailure_permission_denied_by_os =>
+      'ফোনের সেটিংসে এই অ্যাপের বিজ্ঞপ্তি বন্ধ আছে।';
+
+  @override
+  String get notificationFailure_exact_alarm_denied =>
+      'এই ফোনে সঠিক সময়ের রিমাইন্ডার চালু নেই। রিমাইন্ডার কিছুটা দেরিতে আসতে পারে।';
+
+  @override
+  String get notificationFailure_scheduler_unavailable =>
+      'এই ফোনে রিমাইন্ডার ঠিক করা যায়নি।';
+
+  @override
+  String get notificationFailure_push_unavailable =>
+      'এখন পুশ বিজ্ঞপ্তি পাওয়া যাচ্ছে না।';
+
+  @override
+  String get notificationFailure_inboxItem =>
+      'এই বিজ্ঞপ্তিটি খুঁজে পাওয়া যায়নি।';
+
+  @override
+  String get engagementFailure_invalid_levels => 'লেভেলের তালিকা সঠিক নয়।';
+
+  @override
+  String get engagementFailure_levels_not_ascending =>
+      'প্রতিটি লেভেলে আগেরটির চেয়ে বেশি পয়েন্ট লাগবে।';
+
+  @override
+  String get engagementFailure_too_many_levels =>
+      'সর্বোচ্চ ১২টি লেভেল রাখা যায়।';
+
+  @override
+  String get engagementFailure_invalid_threshold =>
+      'ব্যাজের একটি সীমা সঠিক নয়।';
+
+  @override
+  String get engagementFailure_invalid_points => 'পয়েন্টের একটি মান সঠিক নয়।';
+
+  @override
+  String get engagementFailure_invalid_permille => 'শতাংশের একটি মান সঠিক নয়।';
+
+  @override
+  String get engagementFailure_invalid_visibility =>
+      'শেয়ারিংয়ের এই পছন্দটি সঠিক নয়।';
+
+  @override
+  String get engagementFailure_stats_not_owner =>
+      'এই পরিসংখ্যান শুধু এর মালিকই বদলাতে পারেন।';
+
+  @override
+  String get engagementFailure_stats_regression =>
+      'এই পরিসংখ্যান আপডেট করা যায়নি।';
+
+  @override
+  String get engagementFailure_engagement_disabled =>
+      'এই পরিবারে ব্যাজ ও লেভেল বন্ধ আছে।';
+
+  @override
+  String get engagementFailure_already_celebrated =>
+      'আজকের উদযাপন আগেই দেখানো হয়েছে।';
+
+  @override
+  String get engagementFailure_sharing_not_allowed =>
+      'এই পরিবারে শেয়ারিং চালু নেই।';
+
+  @override
+  String get engagementFailure_memberStats =>
+      'এই পরিসংখ্যান খুঁজে পাওয়া যায়নি।';
+
+  @override
+  String get dashboardFailure_unknown_card =>
+      'এই ড্যাশবোর্ড কার্ডটি চেনা যায়নি।';
+
+  @override
+  String get dashboardFailure_invalid_access =>
+      'প্রবেশাধিকারের এই পছন্দটি সঠিক নয়।';
 }

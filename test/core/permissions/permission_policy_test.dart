@@ -37,6 +37,9 @@ const List<(Permission, bool, bool, bool)> _matrix =
       (Permission.manageAvailability, true, true, false),
       (Permission.manageChoreOccurrences, true, true, false),
       (Permission.moderateChoreComments, true, true, false),
+      // Phase 4 (road map 3.3).
+      (Permission.manageEngagement, true, true, false),
+      (Permission.manageDashboardLayout, true, true, false),
     ];
 
 /// A context where only the role can make the answer false.
@@ -249,6 +252,63 @@ void main() {
         isFalse,
       );
       expect(_can(Role.admin, Permission.requestSwap, ownerId: null), isFalse);
+    });
+  });
+
+  group('Phase 4 permissions (P4-02)', () {
+    const financeOff = PermissionSettings(moderatorManagesFinance: false);
+
+    test('manageEngagement is for admin and Household Manager only', () {
+      expect(_can(Role.admin, Permission.manageEngagement), isTrue);
+      expect(_can(Role.moderator, Permission.manageEngagement), isTrue);
+      expect(_can(Role.member, Permission.manageEngagement), isFalse);
+    });
+
+    test('manageEngagement does not depend on the finance switch', () {
+      const e = Permission.manageEngagement;
+      expect(_can(Role.moderator, e, settings: financeOff), isTrue);
+    });
+
+    test('manageDashboardLayout: a manager needs the finance switch', () {
+      const p = Permission.manageDashboardLayout;
+      expect(_can(Role.admin, p), isTrue);
+      expect(_can(Role.admin, p, settings: financeOff), isTrue);
+      expect(_can(Role.moderator, p), isTrue);
+      expect(_can(Role.moderator, p, settings: financeOff), isFalse);
+      expect(_can(Role.member, p), isFalse);
+      expect(_can(Role.member, p, settings: financeOff), isFalse);
+    });
+
+    test('a pending or disabled member may do neither', () {
+      for (final role in Role.values) {
+        for (final p in [
+          Permission.manageEngagement,
+          Permission.manageDashboardLayout,
+        ]) {
+          expect(
+            _can(role, p, isActive: false),
+            isFalse,
+            reason: '${role.name} ${p.name} while not active',
+          );
+        }
+      }
+    });
+
+    test('both stay allowed while a module switch is off (family module)', () {
+      const modulesOff = PermissionSettings(
+        bazarEnabled: false,
+        choresEnabled: false,
+      );
+      for (final p in [
+        Permission.manageEngagement,
+        Permission.manageDashboardLayout,
+      ]) {
+        expect(
+          _can(Role.admin, p, settings: modulesOff),
+          isTrue,
+          reason: p.name,
+        );
+      }
     });
   });
 
@@ -558,6 +618,8 @@ void main() {
         'manageAvailability',
         'manageChoreOccurrences',
         'moderateChoreComments',
+        'manageEngagement',
+        'manageDashboardLayout',
       });
     });
   });

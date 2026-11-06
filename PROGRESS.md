@@ -1902,3 +1902,29 @@ Written without an SDK: **nothing was compiled or run**, and the gate below is N
 
 ### To check when you run it
 Likeliest first failures: `template_editor_controller.dart` (mixin with private abstract members, `Ref` type), `recurrence_picker_parts.dart` (unused-parameter or import lints), `dart format` reflowing a main file (largest is 288, so a split file should not pass 300). Three files this step did not touch sit at 297-300 lines (`apply_starter_pack`, `occurrence_mappers`, `occurrence_write_plan`): if the formatter pushes one over, `file_size_test` fails on it.
+
+## Phase 4 - P4-02 Phase 4 vocabulary
+
+Written without an SDK: **nothing was compiled or run.** Vocabulary only; no behaviour, no screen, no router change. P4-01's gate is still pending, so run it on P4-01 + P4-02 together (same command list as the P4-01 gate).
+
+### Delivered
+| Area | Files |
+| --- | --- |
+| audit vocabulary | EDIT `lib/core/audit/audit_event_type.dart` (5 types: `family.notification_defaults_updated`, `family.notification_delivery_updated`, `family.dashboard_policy_updated`, `engagement.settings_updated`, `engagement.privacy_updated`), `audit_ref_type.dart` (`notificationSettings`, `dashboardSettings`, `engagementSettings`), `firebase/firestore.rules` (`eventTypes()`, `refTypes()`) |
+| permissions | EDIT `permission.dart` + `permission_policy.dart`: `manageEngagement` (admin, Household Manager), `manageDashboardLayout` (admin, or Household Manager while `moderatorManagesFinance`); `docs/permission_matrix.md` hand-edited to the two new rows |
+| paths | EDIT `firestore_paths.dart`: `dashboardSettingsDoc`, `notificationDefaultsDoc`, `notificationDeliveryDoc`, `engagementSettingsDoc`, `memberStatsPublic(Doc)`, `deviceDocs`, `deviceDoc` |
+| limits | EDIT `query_limits.dart`: `kMaxActivityPage` 30, `kMaxDashboardActivity` 5, `kMaxPointsPerSync` 3000, `kMaxPlannedNotifications` 60, `kMaxStatsMonths` 40, `kMaxDashboardPrefIds` 24, `kMaxPushPerHour` 30 |
+| routes and flags | EDIT `lib/app/routing/app_routes.dart` (8 constants of 3.10, none registered); NEW `lib/app/feature_flags.dart` (`askAi = false`) |
+| text | NEW `lib/core/localization/activity_text_phase4.dart`; EDIT `activity_text.dart` (delegates to it); 63 new keys in `app_bn.arb` / `app_en.arb` and the three generated files (permission labels, module labels, 11 card names, 6 channel names, 8 level names, 2 visibility words, 5 audit sentences, 26 failure messages) |
+| tests | EDIT `permission_policy_test`, `permission_matrix_doc_test`, `audit_event_type_test`, `activity_text_test`, `arb_parity_test`, `firestore_paths_test`; NEW `test/core/firebase/query_limits_test.dart`, `test/app/feature_flags_test.dart` |
+
+### Decisions (my recommendations)
+1. **Both permissions are in the `family` module**, so a module switch can never lock a manager out of notification defaults or the dashboard matrix. `UpdateNotificationDefaults` also covers bazar and family notifications.
+2. **Paths differ from the card.** `app_routes.dart` lives in `lib/app/routing/`, not `app/router/`. `test/contract/audit_vocabulary_mirror_test.dart` does not exist: the mirror is `test/core/audit/audit_event_type_test.dart`, which compares the Dart lists with `eventTypes()` / `refTypes()` on its own, so only a Phase 4 test was added there.
+3. **Audit params.** Only `engagement.privacy_updated` has one: `visibility` (`private` or `levels`). The other four sentences have none; later steps must write them that way.
+4. **Pre-existing P3 test fixed.** `test/core/firebase/paths_match_rules_test.dart` still listed `choreOccurrences`, `memberAvailability`, `swapRequests` and `notificationInbox` as "pending", but their `match` blocks exist, so its "no longer pending" assertion would have failed. They left the list; `memberStatsPublic` and `devices` joined it until P4-19 and P4-14.
+5. **Generated l10n is hand-written** in the style of the existing files (long getters wrapped after `=>`). Any `flutter gen-l10n` difference should be cosmetic; if it is more than that, tell me.
+6. **Bangla and English texts are mine** (level names, card names, failure messages, sentences) and need the owner's review in P4-25.
+
+### To check when you run it
+`permission_matrix_doc_test` compares `docs/permission_matrix.md` byte for byte with what the test generates. I edited the file by hand to match; if it fails, run `UPDATE_PERMISSION_MATRIX=1 flutter test test/core/permissions/permission_matrix_doc_test.dart` and tell me what changed. The rest of the rules suite is untouched except the two closed lists in `firestore.rules`.

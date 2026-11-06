@@ -160,5 +160,33 @@ void main() {
         'families/fam_123/memberStats/mem_1',
       );
     });
+
+    test('Phase 4 settings, public stats and device paths (P4-02)', () {
+      expect(
+        FirestorePaths.dashboardSettingsDoc(familyId),
+        'families/fam_123/settings/dashboard',
+      );
+      expect(
+        FirestorePaths.notificationDefaultsDoc(familyId),
+        'families/fam_123/settings/notificationDefaults',
+      );
+      expect(
+        FirestorePaths.notificationDeliveryDoc(familyId),
+        'families/fam_123/settings/notificationDelivery',
+      );
+      expect(
+        FirestorePaths.engagementSettingsDoc(familyId),
+        'families/fam_123/settings/engagement',
+      );
+      expect(
+        FirestorePaths.memberStatsPublicDoc(familyId, 'mem_1'),
+        'families/fam_123/memberStatsPublic/mem_1',
+      );
+      expect(FirestorePaths.deviceDocs(uid), 'users/user_abc/devices');
+      expect(
+        FirestorePaths.deviceDoc(uid, 'dev_1'),
+        'users/user_abc/devices/dev_1',
+      );
+    });
   });
 }

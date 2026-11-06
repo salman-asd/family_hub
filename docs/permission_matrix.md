@@ -32,6 +32,8 @@ Cells show the answer with the DEFAULT family settings for an active member. `ow
 | `manageAvailability` | yes | yes | no | - | (not in spec section 6) | yes |
 | `manageChoreOccurrences` | yes | yes | no | - | (not in spec section 6) | yes |
 | `moderateChoreComments` | yes | yes | no | - | (not in spec section 6) | yes |
+| `manageEngagement` | yes | yes | no | - | (not in spec section 6) | yes |
+| `manageDashboardLayout` | yes | yes | no | `moderatorManagesFinance` (default on) | (not in spec section 6) | yes |
 
 ## Cells the owner must decide
 

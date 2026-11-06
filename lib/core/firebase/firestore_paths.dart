@@ -42,6 +42,8 @@ abstract final class FirestorePaths {
   static const String activitySubcollection = 'activity';
   static const String auditLogsSubcollection = 'auditLogs';
   static const String memberStatsSubcollection = 'memberStats';
+  static const String memberStatsPublicSubcollection = 'memberStatsPublic';
+  static const String devicesSubcollection = 'devices';
   static const String monthClosingsSubcollection = 'monthClosings';
   static const String importBatchesSubcollection = 'importBatches';
 
@@ -73,6 +75,19 @@ abstract final class FirestorePaths {
   /// The absence policy: `settings/rotationPolicy` (D-P3-13).
   static String rotationPolicyDoc(String familyId) =>
       settingsDoc(familyId, 'rotationPolicy');
+
+  // Phase 4 settings documents (road map 3.2).
+  static String dashboardSettingsDoc(String familyId) =>
+      settingsDoc(familyId, 'dashboard');
+
+  static String notificationDefaultsDoc(String familyId) =>
+      settingsDoc(familyId, 'notificationDefaults');
+
+  static String notificationDeliveryDoc(String familyId) =>
+      settingsDoc(familyId, 'notificationDelivery');
+
+  static String engagementSettingsDoc(String familyId) =>
+      settingsDoc(familyId, 'engagement');
 
   static String invitations(String familyId) =>
       '${familyDoc(familyId)}/$invitationsSubcollection';
@@ -218,4 +233,18 @@ abstract final class FirestorePaths {
       '${familyDoc(familyId)}/$memberStatsSubcollection';
   static String memberStatsDoc(String familyId, String memberId) =>
       '${memberStats(familyId)}/$memberId';
+
+  /// The points-free public card of a member (D-P4-26); exists only while the
+  /// family shares levels.
+  static String memberStatsPublic(String familyId) =>
+      '${familyDoc(familyId)}/$memberStatsPublicSubcollection';
+  static String memberStatsPublicDoc(String familyId, String memberId) =>
+      '${memberStatsPublic(familyId)}/$memberId';
+
+  /// Push-token documents of one user (`users/{uid}/devices/{deviceId}`),
+  /// owner-only (road map 3.2).
+  static String deviceDocs(String uid) =>
+      '${userDoc(uid)}/$devicesSubcollection';
+  static String deviceDoc(String uid, String deviceId) =>
+      '${deviceDocs(uid)}/$deviceId';
 }

@@ -102,6 +102,16 @@ abstract final class AuditEventType {
   static const String choresCoverAssigned = 'chores.cover_assigned';
 
   /// Every type, in the same order as the rules list.
+  // ── Dashboard, notifications and engagement (Phase 4, road map 3.9) ──────
+  static const String familyNotificationDefaultsUpdated =
+      'family.notification_defaults_updated';
+  static const String familyNotificationDeliveryUpdated =
+      'family.notification_delivery_updated';
+  static const String familyDashboardPolicyUpdated =
+      'family.dashboard_policy_updated';
+  static const String engagementSettingsUpdated = 'engagement.settings_updated';
+  static const String engagementPrivacyUpdated = 'engagement.privacy_updated';
+
   static const List<String> all = <String>[
     familyCreated,
     memberRequested,
@@ -180,5 +190,10 @@ abstract final class AuditEventType {
     choresSwapCancelled,
     choresSwapExpired,
     choresCoverAssigned,
+    familyNotificationDefaultsUpdated,
+    familyNotificationDeliveryUpdated,
+    familyDashboardPolicyUpdated,
+    engagementSettingsUpdated,
+    engagementPrivacyUpdated,
   ];
 }

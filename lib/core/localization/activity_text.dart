@@ -1,5 +1,6 @@
 ﻿import 'package:family_hub/core/audit/audit_event_type.dart';
 import 'package:family_hub/core/localization/activity_text_chores.dart';
+import 'package:family_hub/core/localization/activity_text_phase4.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/localization/role_labels.dart';
 import 'package:family_hub/core/permissions/role.dart';
@@ -178,7 +179,11 @@ extension ActivityText on AppLocalizations {
       ),
       // Every Phase 3 chore type lives in its own extension so this file stays
       // under the 300-line limit (P3-03/P3-04).
-      _ => activityChoresText(type, params) ?? activityUnknown,
+      // Phase 4 types live in their own extension too (P4-02).
+      _ =>
+        activityChoresText(type, params) ??
+            activityPhase4Text(type, params) ??
+            activityUnknown,
     };
   }
 

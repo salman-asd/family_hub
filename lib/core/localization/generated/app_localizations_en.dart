@@ -4800,4 +4800,225 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get choresMyTodayAction => 'My today';
+
+  @override
+  String get permissionManageEngagement =>
+      'Manage badges, levels and notification defaults';
+
+  @override
+  String get permissionManageDashboardLayout =>
+      'Choose which dashboard cards each role sees';
+
+  @override
+  String get dashModuleCore => 'Family';
+
+  @override
+  String get dashModuleBazar => 'Bazar and fund';
+
+  @override
+  String get dashModuleChores => 'Chores';
+
+  @override
+  String get dashCardBudgetAlert => 'Budget alert';
+
+  @override
+  String get dashCardApprovals => 'Approvals';
+
+  @override
+  String get dashCardChoresToday => 'Chores today';
+
+  @override
+  String get dashCardChoresOverdue => 'Overdue chores';
+
+  @override
+  String get dashCardChoresVerify => 'Waiting for a check';
+
+  @override
+  String get dashCardBazarMonth => 'Spending this month';
+
+  @override
+  String get dashCardBazarFund => 'Family fund';
+
+  @override
+  String get dashCardUpcoming => 'Coming up';
+
+  @override
+  String get dashCardChoresWeek => 'This week';
+
+  @override
+  String get dashCardHubLevel => 'Hub level';
+
+  @override
+  String get dashCardRecentActivity => 'Recent activity';
+
+  @override
+  String get notifChannelChoresDue => 'Chore reminders';
+
+  @override
+  String get notifChannelChoresOverdue => 'Overdue chores';
+
+  @override
+  String get notifChannelDailySummary => 'Morning summary';
+
+  @override
+  String get notifChannelBazar => 'Bazar and fund';
+
+  @override
+  String get notifChannelFamily => 'Family';
+
+  @override
+  String get notifChannelPushEvents => 'Push alerts';
+
+  @override
+  String get levelNameSeed => 'Seed';
+
+  @override
+  String get levelNameSprout => 'Sprout';
+
+  @override
+  String get levelNameSeedling => 'Seedling';
+
+  @override
+  String get levelNameSapling => 'Sapling';
+
+  @override
+  String get levelNameYoungTree => 'Young tree';
+
+  @override
+  String get levelNameFlowering => 'Flowering';
+
+  @override
+  String get levelNameFruiting => 'Fruiting';
+
+  @override
+  String get levelNameGrandTree => 'Grand tree';
+
+  @override
+  String get engagementVisibilityPrivate => 'private';
+
+  @override
+  String get engagementVisibilityLevels => 'levels and badges only';
+
+  @override
+  String get activityNotificationDefaultsUpdated =>
+      'Notification defaults were changed';
+
+  @override
+  String get activityNotificationDeliveryUpdated =>
+      'Push and normal delivery settings were changed';
+
+  @override
+  String get activityDashboardPolicyUpdated =>
+      'Dashboard access for roles was changed';
+
+  @override
+  String get activityEngagementSettingsUpdated =>
+      'Badge and level settings were changed';
+
+  @override
+  String activityEngagementPrivacyUpdated(String visibility) {
+    return 'Stats sharing: $visibility';
+  }
+
+  @override
+  String get notificationFailure_invalid_minutes =>
+      'Enter a number of minutes between 1 and 1440.';
+
+  @override
+  String get notificationFailure_invalid_offsets =>
+      'One of the reminder times is not valid.';
+
+  @override
+  String get notificationFailure_too_many_offsets =>
+      'You can set at most 5 reminders.';
+
+  @override
+  String get notificationFailure_invalid_quiet_hours =>
+      'The quiet hours are not valid.';
+
+  @override
+  String get notificationFailure_unknown_notification_type =>
+      'This notification type is not known.';
+
+  @override
+  String get notificationFailure_type_not_push_capable =>
+      'This notification cannot be sent as a push.';
+
+  @override
+  String get notificationFailure_permission_denied_by_os =>
+      'Notifications are turned off for this app in the phone settings.';
+
+  @override
+  String get notificationFailure_exact_alarm_denied =>
+      'Exact reminder times are not allowed on this phone. Reminders may arrive a little late.';
+
+  @override
+  String get notificationFailure_scheduler_unavailable =>
+      'Reminders could not be scheduled on this phone.';
+
+  @override
+  String get notificationFailure_push_unavailable =>
+      'Push notifications are not available right now.';
+
+  @override
+  String get notificationFailure_inboxItem =>
+      'This notification could not be found.';
+
+  @override
+  String get engagementFailure_invalid_levels => 'The level list is not valid.';
+
+  @override
+  String get engagementFailure_levels_not_ascending =>
+      'Each level needs more points than the one before it.';
+
+  @override
+  String get engagementFailure_too_many_levels =>
+      'You can have at most 12 levels.';
+
+  @override
+  String get engagementFailure_invalid_threshold =>
+      'One of the badge limits is not valid.';
+
+  @override
+  String get engagementFailure_invalid_points =>
+      'One of the point values is not valid.';
+
+  @override
+  String get engagementFailure_invalid_permille =>
+      'One of the percentage values is not valid.';
+
+  @override
+  String get engagementFailure_invalid_visibility =>
+      'This sharing choice is not valid.';
+
+  @override
+  String get engagementFailure_stats_not_owner =>
+      'Only the owner can change these stats.';
+
+  @override
+  String get engagementFailure_stats_regression =>
+      'These stats could not be updated.';
+
+  @override
+  String get engagementFailure_engagement_disabled =>
+      'Badges and levels are switched off for this family.';
+
+  @override
+  String get engagementFailure_already_celebrated =>
+      'Today celebration was already shown.';
+
+  @override
+  String get engagementFailure_sharing_not_allowed =>
+      'Sharing is not turned on for this family.';
+
+  @override
+  String get engagementFailure_memberStats => 'These stats could not be found.';
+
+  @override
+  String get dashboardFailure_unknown_card =>
+      'This dashboard card is not known.';
+
+  @override
+  String get dashboardFailure_invalid_access =>
+      'This access choice is not valid.';
 }

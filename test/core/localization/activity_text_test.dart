@@ -79,4 +79,52 @@ void main() {
       contains('Household Manager'),
     );
   });
+
+  test('the five Phase 4 sentences read in both languages (P4-02)', () {
+    const types = <String>[
+      AuditEventType.familyNotificationDefaultsUpdated,
+      AuditEventType.familyNotificationDeliveryUpdated,
+      AuditEventType.familyDashboardPolicyUpdated,
+      AuditEventType.engagementSettingsUpdated,
+    ];
+    final seen = <String>{};
+    for (final type in types) {
+      for (final l in [en, bn]) {
+        final text = l.activityText(type, const {});
+        expect(text, isNotEmpty, reason: type);
+        expect(text, isNot(l.activityUnknown), reason: type);
+        seen.add(text);
+      }
+    }
+    // Eight different sentences: no type reuses another one's text.
+    expect(seen.length, 8);
+  });
+
+  test('the privacy sentence names the stored visibility', () {
+    expect(
+      en.activityText(AuditEventType.engagementPrivacyUpdated, const {
+        'visibility': 'levels',
+      }),
+      'Stats sharing: levels and badges only',
+    );
+    expect(
+      en.activityText(AuditEventType.engagementPrivacyUpdated, const {
+        'visibility': 'private',
+      }),
+      'Stats sharing: private',
+    );
+    expect(
+      bn.activityText(AuditEventType.engagementPrivacyUpdated, const {
+        'visibility': 'private',
+      }),
+      contains(bn.engagementVisibilityPrivate),
+    );
+    // An unknown value (a newer app version) is shown as stored.
+    expect(
+      en.activityText(AuditEventType.engagementPrivacyUpdated, const {
+        'visibility': 'friends',
+      }),
+      'Stats sharing: friends',
+    );
+  });
 }

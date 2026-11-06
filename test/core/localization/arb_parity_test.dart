@@ -83,6 +83,101 @@ void main() {
       expect(bnKeys, contains(key), reason: '$key (bn)');
     }
   });
+
+  test('the P4-02 vocabulary is present in both languages', () {
+    const cards = <String>[
+      'BudgetAlert',
+      'Approvals',
+      'ChoresToday',
+      'ChoresOverdue',
+      'ChoresVerify',
+      'BazarMonth',
+      'BazarFund',
+      'Upcoming',
+      'ChoresWeek',
+      'HubLevel',
+      'RecentActivity',
+    ];
+    const channels = <String>[
+      'ChoresDue',
+      'ChoresOverdue',
+      'DailySummary',
+      'Bazar',
+      'Family',
+      'PushEvents',
+    ];
+    const levels = <String>[
+      'Seed',
+      'Sprout',
+      'Seedling',
+      'Sapling',
+      'YoungTree',
+      'Flowering',
+      'Fruiting',
+      'GrandTree',
+    ];
+    // The stable failure codes of road map 3.6, by the mapper that shows them.
+    const notification = <String>[
+      'invalid_minutes',
+      'invalid_offsets',
+      'too_many_offsets',
+      'invalid_quiet_hours',
+      'unknown_notification_type',
+      'type_not_push_capable',
+      'permission_denied_by_os',
+      'exact_alarm_denied',
+      'scheduler_unavailable',
+      'push_unavailable',
+      'inboxItem',
+    ];
+    const engagement = <String>[
+      'invalid_levels',
+      'levels_not_ascending',
+      'too_many_levels',
+      'invalid_threshold',
+      'invalid_points',
+      'invalid_permille',
+      'invalid_visibility',
+      'stats_not_owner',
+      'stats_regression',
+      'engagement_disabled',
+      'already_celebrated',
+      'sharing_not_allowed',
+      'memberStats',
+    ];
+    const dashboard = <String>['unknown_card', 'invalid_access'];
+    final required = <String>[
+      'permissionManageEngagement',
+      'permissionManageDashboardLayout',
+      'dashModuleCore',
+      'dashModuleBazar',
+      'dashModuleChores',
+      'engagementVisibilityPrivate',
+      'engagementVisibilityLevels',
+      'activityNotificationDefaultsUpdated',
+      'activityNotificationDeliveryUpdated',
+      'activityDashboardPolicyUpdated',
+      'activityEngagementSettingsUpdated',
+      'activityEngagementPrivacyUpdated',
+      for (final c in cards) 'dashCard$c',
+      for (final c in channels) 'notifChannel$c',
+      for (final l in levels) 'levelName$l',
+      for (final c in notification) 'notificationFailure_$c',
+      for (final c in engagement) 'engagementFailure_$c',
+      for (final c in dashboard) 'dashboardFailure_$c',
+    ];
+    // 26 failure codes: 15 Validation + 9 Conflict + 2 NotFound (road map 3.6).
+    expect(
+      notification.length + engagement.length + dashboard.length,
+      26,
+    );
+    final enKeys = messages(en());
+    final bnKeys = messages(bn());
+    for (final key in required) {
+      expect(enKeys, contains(key), reason: '$key (en)');
+      expect(bnKeys, contains(key), reason: '$key (bn)');
+    }
+  });
 }
 
 /// Reads one ARB file. Called inside the tests on purpose: `expect` may not run

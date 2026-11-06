@@ -53,7 +53,16 @@ enum Permission {
   manageChoreOccurrences(PermissionModule.chores),
 
   /// Hide / unhide a comment (comments are never deleted, D-P3-18).
-  moderateChoreComments(PermissionModule.chores);
+  moderateChoreComments(PermissionModule.chores),
+
+  // Dashboard, notifications and engagement (Phase 4, road map 3.3). Both sit
+  // in the `family` module: they span every module and are never switchable.
+  /// Notification defaults and the badge / level settings (admin or manager).
+  manageEngagement(PermissionModule.family),
+
+  /// Which dashboard cards each role sees (D-P4-28): admin, or a Household
+  /// Manager while `moderatorManagesFinance` is on.
+  manageDashboardLayout(PermissionModule.family);
 
   const Permission(this.module);
 

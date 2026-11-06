@@ -51,3 +51,30 @@ const int kMaxCommentsPerOccurrence = 200;
 
 /// Lifecycle events of one occurrence (append-only, never deleted).
 const int kMaxEventsPerOccurrence = 100;
+
+// ── Dashboard, notifications and engagement (Phase 4, road map 3.2) ──────────
+
+/// One page of the activity feed (P4-04).
+const int kMaxActivityPage = 30;
+
+/// Recent-activity card on Home: the five newest entries (P4-07).
+const int kMaxDashboardActivity = 5;
+
+/// Most points one stats sync may add in one write; the rules bound the same
+/// step so a tampered client cannot jump (ADR 0017).
+const int kMaxPointsPerSync = 3000;
+
+/// Most local notifications scheduled at once: the planner looks at 7 days and
+/// stays far below the iOS limit of about 64 pending (P4-10).
+const int kMaxPlannedNotifications = 60;
+
+/// Months kept in `memberStats.monthly` (D-P4-8).
+const int kMaxStatsMonths = 40;
+
+/// Largest `order`, `hidden` or `shown` list in a member's dashboard
+/// preferences (the rules check the same size).
+const int kMaxDashboardPrefIds = 24;
+
+/// Pushes one recipient may get in one hour; the Cloud Function enforces it
+/// through `pushLedger` (ADR 0020).
+const int kMaxPushPerHour = 30;

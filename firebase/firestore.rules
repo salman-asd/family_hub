@@ -1397,7 +1397,12 @@ service cloud.firestore {
               'chores.availability_decided', 'chores.swap_requested',
               'chores.swap_accepted', 'chores.swap_declined',
               'chores.swap_cancelled', 'chores.swap_expired',
-              'chores.cover_assigned'];
+              'chores.cover_assigned',
+              // Phase 4 dashboard, notifications, engagement (road map 3.9).
+              'family.notification_defaults_updated',
+              'family.notification_delivery_updated',
+              'family.dashboard_policy_updated',
+              'engagement.settings_updated', 'engagement.privacy_updated'];
     }
     function refTypes() {
       return ['family', 'member', 'invitation',
@@ -1407,7 +1412,10 @@ service cloud.firestore {
               'importBatch',
               // Phase 3 chores vocabulary (road map 3.9).
               'choreSettings', 'choreTemplate', 'dutyGroup', 'occurrence',
-              'comment', 'availability', 'swapRequest'];
+              'comment', 'availability', 'swapRequest',
+              // Phase 4 vocabulary (road map 3.9).
+              'notificationSettings', 'dashboardSettings',
+              'engagementSettings'];
     }
     function paramsOk(d) {
       return !('params' in d.keys())

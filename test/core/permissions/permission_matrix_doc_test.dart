@@ -138,6 +138,13 @@ _rows = <(Permission, String, String, String?)>[
   (Permission.manageAvailability, '-', '(not in spec section 6)', null),
   (Permission.manageChoreOccurrences, '-', '(not in spec section 6)', null),
   (Permission.moderateChoreComments, '-', '(not in spec section 6)', null),
+  (Permission.manageEngagement, '-', '(not in spec section 6)', null),
+  (
+    Permission.manageDashboardLayout,
+    '`moderatorManagesFinance` (default on)',
+    '(not in spec section 6)',
+    null,
+  ),
 ];
 
 const PermissionSettings _defaults = PermissionSettings.defaults;

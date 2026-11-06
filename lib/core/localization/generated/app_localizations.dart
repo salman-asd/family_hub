@@ -8373,6 +8373,384 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'আমার আজ'**
   String get choresMyTodayAction;
+
+  /// No description provided for @permissionManageEngagement.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাজ, লেভেল ও বিজ্ঞপ্তির ডিফল্ট পরিচালনা'**
+  String get permissionManageEngagement;
+
+  /// No description provided for @permissionManageDashboardLayout.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোন ভূমিকা কোন ড্যাশবোর্ড কার্ড দেখবে তা ঠিক করা'**
+  String get permissionManageDashboardLayout;
+
+  /// No description provided for @dashModuleCore.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার'**
+  String get dashModuleCore;
+
+  /// No description provided for @dashModuleBazar.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ও ফান্ড'**
+  String get dashModuleBazar;
+
+  /// No description provided for @dashModuleChores.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ'**
+  String get dashModuleChores;
+
+  /// No description provided for @dashCardBudgetAlert.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট সতর্কতা'**
+  String get dashCardBudgetAlert;
+
+  /// No description provided for @dashCardApprovals.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমোদন'**
+  String get dashCardApprovals;
+
+  /// No description provided for @dashCardChoresToday.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজকের কাজ'**
+  String get dashCardChoresToday;
+
+  /// No description provided for @dashCardChoresOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিলম্বিত কাজ'**
+  String get dashCardChoresOverdue;
+
+  /// No description provided for @dashCardChoresVerify.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাইয়ের অপেক্ষায়'**
+  String get dashCardChoresVerify;
+
+  /// No description provided for @dashCardBazarMonth.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসের খরচ'**
+  String get dashCardBazarMonth;
+
+  /// No description provided for @dashCardBazarFund.
+  ///
+  /// In bn, this message translates to:
+  /// **'পারিবারিক ফান্ড'**
+  String get dashCardBazarFund;
+
+  /// No description provided for @dashCardUpcoming.
+  ///
+  /// In bn, this message translates to:
+  /// **'আসছে'**
+  String get dashCardUpcoming;
+
+  /// No description provided for @dashCardChoresWeek.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই সপ্তাহ'**
+  String get dashCardChoresWeek;
+
+  /// No description provided for @dashCardHubLevel.
+  ///
+  /// In bn, this message translates to:
+  /// **'হাব লেভেল'**
+  String get dashCardHubLevel;
+
+  /// No description provided for @dashCardRecentActivity.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাম্প্রতিক কার্যক্রম'**
+  String get dashCardRecentActivity;
+
+  /// No description provided for @notifChannelChoresDue.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের সময়'**
+  String get notifChannelChoresDue;
+
+  /// No description provided for @notifChannelChoresOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিলম্বিত কাজ'**
+  String get notifChannelChoresOverdue;
+
+  /// No description provided for @notifChannelDailySummary.
+  ///
+  /// In bn, this message translates to:
+  /// **'সকালের সারাংশ'**
+  String get notifChannelDailySummary;
+
+  /// No description provided for @notifChannelBazar.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ও ফান্ড'**
+  String get notifChannelBazar;
+
+  /// No description provided for @notifChannelFamily.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার'**
+  String get notifChannelFamily;
+
+  /// No description provided for @notifChannelPushEvents.
+  ///
+  /// In bn, this message translates to:
+  /// **'জরুরি বিজ্ঞপ্তি'**
+  String get notifChannelPushEvents;
+
+  /// No description provided for @levelNameSeed.
+  ///
+  /// In bn, this message translates to:
+  /// **'বীজ'**
+  String get levelNameSeed;
+
+  /// No description provided for @levelNameSprout.
+  ///
+  /// In bn, this message translates to:
+  /// **'অঙ্কুর'**
+  String get levelNameSprout;
+
+  /// No description provided for @levelNameSeedling.
+  ///
+  /// In bn, this message translates to:
+  /// **'চারা'**
+  String get levelNameSeedling;
+
+  /// No description provided for @levelNameSapling.
+  ///
+  /// In bn, this message translates to:
+  /// **'ছোট গাছ'**
+  String get levelNameSapling;
+
+  /// No description provided for @levelNameYoungTree.
+  ///
+  /// In bn, this message translates to:
+  /// **'তরুণ গাছ'**
+  String get levelNameYoungTree;
+
+  /// No description provided for @levelNameFlowering.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফুলের গাছ'**
+  String get levelNameFlowering;
+
+  /// No description provided for @levelNameFruiting.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফলবতী গাছ'**
+  String get levelNameFruiting;
+
+  /// No description provided for @levelNameGrandTree.
+  ///
+  /// In bn, this message translates to:
+  /// **'মহীরুহ'**
+  String get levelNameGrandTree;
+
+  /// No description provided for @engagementVisibilityPrivate.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যক্তিগত'**
+  String get engagementVisibilityPrivate;
+
+  /// No description provided for @engagementVisibilityLevels.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুধু লেভেল ও ব্যাজ'**
+  String get engagementVisibilityLevels;
+
+  /// No description provided for @activityNotificationDefaultsUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিজ্ঞপ্তির ডিফল্ট বদলানো হয়েছে'**
+  String get activityNotificationDefaultsUpdated;
+
+  /// No description provided for @activityNotificationDeliveryUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ ও সাধারণ বিজ্ঞপ্তির সেটিং বদলানো হয়েছে'**
+  String get activityNotificationDeliveryUpdated;
+
+  /// No description provided for @activityDashboardPolicyUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'ড্যাশবোর্ডে কে কী দেখবে তা বদলানো হয়েছে'**
+  String get activityDashboardPolicyUpdated;
+
+  /// No description provided for @activityEngagementSettingsUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাজ ও লেভেলের সেটিং বদলানো হয়েছে'**
+  String get activityEngagementSettingsUpdated;
+
+  /// No description provided for @activityEngagementPrivacyUpdated.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিসংখ্যান শেয়ারিং: {visibility}'**
+  String activityEngagementPrivacyUpdated(String visibility);
+
+  /// No description provided for @notificationFailure_invalid_minutes.
+  ///
+  /// In bn, this message translates to:
+  /// **'১ থেকে ১৪৪০ এর মধ্যে মিনিট লিখুন।'**
+  String get notificationFailure_invalid_minutes;
+
+  /// No description provided for @notificationFailure_invalid_offsets.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিমাইন্ডারের একটি সময় সঠিক নয়।'**
+  String get notificationFailure_invalid_offsets;
+
+  /// No description provided for @notificationFailure_too_many_offsets.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বোচ্চ ৫টি রিমাইন্ডার দেওয়া যায়।'**
+  String get notificationFailure_too_many_offsets;
+
+  /// No description provided for @notificationFailure_invalid_quiet_hours.
+  ///
+  /// In bn, this message translates to:
+  /// **'নীরব সময় সঠিক নয়।'**
+  String get notificationFailure_invalid_quiet_hours;
+
+  /// No description provided for @notificationFailure_unknown_notification_type.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ধরনের বিজ্ঞপ্তি চেনা যায়নি।'**
+  String get notificationFailure_unknown_notification_type;
+
+  /// No description provided for @notificationFailure_type_not_push_capable.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই বিজ্ঞপ্তি পুশ হিসেবে পাঠানো যায় না।'**
+  String get notificationFailure_type_not_push_capable;
+
+  /// No description provided for @notificationFailure_permission_denied_by_os.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফোনের সেটিংসে এই অ্যাপের বিজ্ঞপ্তি বন্ধ আছে।'**
+  String get notificationFailure_permission_denied_by_os;
+
+  /// No description provided for @notificationFailure_exact_alarm_denied.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ফোনে সঠিক সময়ের রিমাইন্ডার চালু নেই। রিমাইন্ডার কিছুটা দেরিতে আসতে পারে।'**
+  String get notificationFailure_exact_alarm_denied;
+
+  /// No description provided for @notificationFailure_scheduler_unavailable.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ফোনে রিমাইন্ডার ঠিক করা যায়নি।'**
+  String get notificationFailure_scheduler_unavailable;
+
+  /// No description provided for @notificationFailure_push_unavailable.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখন পুশ বিজ্ঞপ্তি পাওয়া যাচ্ছে না।'**
+  String get notificationFailure_push_unavailable;
+
+  /// No description provided for @notificationFailure_inboxItem.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই বিজ্ঞপ্তিটি খুঁজে পাওয়া যায়নি।'**
+  String get notificationFailure_inboxItem;
+
+  /// No description provided for @engagementFailure_invalid_levels.
+  ///
+  /// In bn, this message translates to:
+  /// **'লেভেলের তালিকা সঠিক নয়।'**
+  String get engagementFailure_invalid_levels;
+
+  /// No description provided for @engagementFailure_levels_not_ascending.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতিটি লেভেলে আগেরটির চেয়ে বেশি পয়েন্ট লাগবে।'**
+  String get engagementFailure_levels_not_ascending;
+
+  /// No description provided for @engagementFailure_too_many_levels.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বোচ্চ ১২টি লেভেল রাখা যায়।'**
+  String get engagementFailure_too_many_levels;
+
+  /// No description provided for @engagementFailure_invalid_threshold.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাজের একটি সীমা সঠিক নয়।'**
+  String get engagementFailure_invalid_threshold;
+
+  /// No description provided for @engagementFailure_invalid_points.
+  ///
+  /// In bn, this message translates to:
+  /// **'পয়েন্টের একটি মান সঠিক নয়।'**
+  String get engagementFailure_invalid_points;
+
+  /// No description provided for @engagementFailure_invalid_permille.
+  ///
+  /// In bn, this message translates to:
+  /// **'শতাংশের একটি মান সঠিক নয়।'**
+  String get engagementFailure_invalid_permille;
+
+  /// No description provided for @engagementFailure_invalid_visibility.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেয়ারিংয়ের এই পছন্দটি সঠিক নয়।'**
+  String get engagementFailure_invalid_visibility;
+
+  /// No description provided for @engagementFailure_stats_not_owner.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিসংখ্যান শুধু এর মালিকই বদলাতে পারেন।'**
+  String get engagementFailure_stats_not_owner;
+
+  /// No description provided for @engagementFailure_stats_regression.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিসংখ্যান আপডেট করা যায়নি।'**
+  String get engagementFailure_stats_regression;
+
+  /// No description provided for @engagementFailure_engagement_disabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিবারে ব্যাজ ও লেভেল বন্ধ আছে।'**
+  String get engagementFailure_engagement_disabled;
+
+  /// No description provided for @engagementFailure_already_celebrated.
+  ///
+  /// In bn, this message translates to:
+  /// **'আজকের উদযাপন আগেই দেখানো হয়েছে।'**
+  String get engagementFailure_already_celebrated;
+
+  /// No description provided for @engagementFailure_sharing_not_allowed.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিবারে শেয়ারিং চালু নেই।'**
+  String get engagementFailure_sharing_not_allowed;
+
+  /// No description provided for @engagementFailure_memberStats.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিসংখ্যান খুঁজে পাওয়া যায়নি।'**
+  String get engagementFailure_memberStats;
+
+  /// No description provided for @dashboardFailure_unknown_card.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ড্যাশবোর্ড কার্ডটি চেনা যায়নি।'**
+  String get dashboardFailure_unknown_card;
+
+  /// No description provided for @dashboardFailure_invalid_access.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রবেশাধিকারের এই পছন্দটি সঠিক নয়।'**
+  String get dashboardFailure_invalid_access;
 }
 
 class _AppLocalizationsDelegate

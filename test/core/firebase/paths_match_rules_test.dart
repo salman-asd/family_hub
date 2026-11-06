@@ -13,13 +13,16 @@ import '../../support/rules_source.dart';
 void main() {
   // Collections whose rules arrive in Phase 2/3 (CLAUDE.md: the step that adds
   // a collection extends the rules in the same commit and removes it here).
+  //
+  // P4-02: the occurrence, availability, swap and inbox collections got their
+  // rules in Phase 3, so they left this list (the "no longer pending" test
+  // below would have failed on them). The new Phase 4 collections join it until
+  // P4-14 (devices) and P4-19 (public stats) add their rules.
   const pending = <String>{
-    FirestorePaths.choreOccurrencesSubcollection,
-    FirestorePaths.memberAvailabilitySubcollection,
-    FirestorePaths.swapRequestsSubcollection,
-    FirestorePaths.notificationInboxSubcollection,
     FirestorePaths.memberStatsSubcollection,
     FirestorePaths.importBatchesSubcollection,
+    FirestorePaths.memberStatsPublicSubcollection,
+    FirestorePaths.devicesSubcollection,
   };
 
   late Set<String> matched;

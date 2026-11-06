@@ -32,4 +32,23 @@ void main() {
       reason: 'AuditRefType.all must not repeat a type',
     );
   });
+
+  test('the five Phase 4 event types and three ref types exist in both', () {
+    const events = <String>{
+      'family.notification_defaults_updated',
+      'family.notification_delivery_updated',
+      'family.dashboard_policy_updated',
+      'engagement.settings_updated',
+      'engagement.privacy_updated',
+    };
+    const refs = <String>{
+      'notificationSettings',
+      'dashboardSettings',
+      'engagementSettings',
+    };
+    expect(AuditEventType.all.toSet().containsAll(events), isTrue);
+    expect(rulesList('eventTypes').containsAll(events), isTrue);
+    expect(AuditRefType.all.toSet().containsAll(refs), isTrue);
+    expect(rulesList('refTypes').containsAll(refs), isTrue);
+  });
 }
