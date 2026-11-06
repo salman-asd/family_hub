@@ -1,17 +1,29 @@
+import 'dart:developer' as developer;
+
 import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock_provider.dart';
+import 'package:family_hub/features/dashboard/domain/card_catalog.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_card_spec.dart';
 import 'package:family_hub/features/dashboard/domain/dashboard_policy.dart';
 import 'package:family_hub/features/dashboard/domain/dashboard_policy_repository.dart';
 import 'package:family_hub/features/dashboard/domain/dashboard_prefs.dart';
 import 'package:family_hub/features/dashboard/domain/dashboard_prefs_repository.dart';
 import 'package:family_hub/features/dashboard/domain/dashboard_resolver.dart';
+import 'package:family_hub/features/dashboard/domain/greeting.dart';
 import 'package:family_hub/features/dashboard/domain/usecases/save_dashboard_prefs.dart';
 import 'package:family_hub/features/dashboard/domain/usecases/update_dashboard_policy.dart';
+import 'package:family_hub/features/dashboard/presentation/resolved_dashboard_card.dart';
+import 'package:family_hub/features/dashboard/presentation/widgets/approvals_card.dart';
+import 'package:family_hub/features/dashboard/presentation/widgets/recent_activity_card.dart';
+import 'package:family_hub/features/dashboard/presentation/widgets/upcoming_card.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
+import 'package:family_hub/modules/family_module.dart';
 import 'package:family_hub/modules/module_providers.dart';
+import 'package:family_hub/modules/module_visibility_providers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final dashboardPolicyRepositoryProvider = Provider<DashboardPolicyRepository>(
@@ -101,6 +113,71 @@ final dashboardLayoutProvider = Provider<AsyncValue<DashboardLayout>>((ref) {
     ),
   );
 });
+
+final dashboardCardsProvider =
+    Provider<AsyncValue<List<ResolvedDashboardCard>>>((ref) {
+      final layout = ref.watch(dashboardLayoutProvider);
+      final modules = ref.watch(visibleModulesProvider);
+      return layout.whenData((value) {
+        final specs = <DashboardCardSpec<DashboardCardBuilder>>[
+          ..._coreDashboardCardSpecs,
+          for (final module in modules) ...module.dashboardCardSpecs,
+        ];
+        final byId = <String, DashboardCardSpec<DashboardCardBuilder>>{};
+        for (final spec in specs) {
+          if (CardCatalog.find(spec.id) == null) {
+            _logSkippedCard(spec.id, 'not in CardCatalog');
+            continue;
+          }
+          if (byId.containsKey(spec.id)) {
+            _logSkippedCard(spec.id, 'duplicate card spec');
+            continue;
+          }
+          byId[spec.id] = spec;
+        }
+
+        final cards = <ResolvedDashboardCard>[];
+        for (final resolved in value.visible) {
+          final spec = byId[resolved.definition.id];
+          if (spec == null) {
+            _logSkippedCard(resolved.definition.id, 'no card spec');
+            continue;
+          }
+          cards.add(ResolvedDashboardCard(resolved: resolved, spec: spec));
+        }
+        return List<ResolvedDashboardCard>.unmodifiable(cards);
+      });
+    });
+
+final dashboardGreetingProvider = Provider<Greeting>((ref) {
+  final clock = ref.watch(clockProvider);
+  final dateKeys = ref.watch(familyDateKeysProvider);
+  return GreetingForTime.atMinutes(dateKeys.minutesOfDayOf(clock.nowUtc()));
+});
+
+final List<DashboardCardSpec<DashboardCardBuilder>> _coreDashboardCardSpecs =
+    <DashboardCardSpec<DashboardCardBuilder>>[
+      DashboardCardSpec<DashboardCardBuilder>(
+        id: 'approvals',
+        builder: (_, _) => const ApprovalsCard(),
+      ),
+      DashboardCardSpec<DashboardCardBuilder>(
+        id: 'upcoming',
+        builder: (_, _) => const UpcomingCard(),
+      ),
+      DashboardCardSpec<DashboardCardBuilder>(
+        id: 'recent_activity',
+        builder: (_, _) => const RecentActivityCard(),
+      ),
+    ];
+
+void _logSkippedCard(String id, String reason) {
+  if (!kDebugMode) return;
+  developer.log(
+    'Dashboard card "$id" skipped: $reason.',
+    name: 'family_hub.dashboard',
+  );
+}
 
 class DashboardPrefsController extends Notifier<DashboardPrefs> {
   @override

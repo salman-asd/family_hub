@@ -7,6 +7,9 @@ import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_l
 import 'package:family_hub/features/chores/presentation/chores_home_screen.dart';
 import 'package:family_hub/features/chores/presentation/chores_manage_screen.dart';
 import 'package:family_hub/features/chores/presentation/dashboard/chores_dashboard_cards.dart';
+import 'package:family_hub/features/chores/presentation/dashboard/chores_week_card.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_card_spec.dart';
+import 'package:family_hub/features/dashboard/presentation/widgets/hub_level_card.dart';
 import 'package:family_hub/features/chores/presentation/occurrence_detail_screen.dart';
 import 'package:family_hub/features/chores/presentation/today_screen.dart';
 import 'package:family_hub/features/chores/presentation/verify_queue_screen.dart';
@@ -74,9 +77,8 @@ class ChoresModule extends FamilyModule {
             ),
             GoRoute(
               path: ':id',
-              builder: (context, state) => TemplateEditorScreen(
-                templateId: state.pathParameters['id'],
-              ),
+              builder: (context, state) =>
+                  TemplateEditorScreen(templateId: state.pathParameters['id']),
             ),
           ],
         ),
@@ -101,9 +103,8 @@ class ChoresModule extends FamilyModule {
             ),
             GoRoute(
               path: ':id',
-              builder: (context, state) => DutyGroupEditorScreen(
-                groupId: state.pathParameters['id'],
-              ),
+              builder: (context, state) =>
+                  DutyGroupEditorScreen(groupId: state.pathParameters['id']),
             ),
           ],
         ),
@@ -136,4 +137,29 @@ class ChoresModule extends FamilyModule {
   /// settings tile stays in the Family tab (P3-17), so `settingsEntry` is unused.
   @override
   List<WidgetBuilder> get dashboardCards => choresDashboardCards;
+
+  @override
+  List<DashboardCardSpec<DashboardCardBuilder>> get dashboardCardSpecs =>
+      <DashboardCardSpec<DashboardCardBuilder>>[
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: 'chores_today',
+          builder: (_, _) => const ChoresTodayCard(),
+        ),
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: 'chores_overdue',
+          builder: (_, _) => const ChoresOverdueCard(),
+        ),
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: 'chores_verify',
+          builder: (_, _) => const ChoresVerifyCard(),
+        ),
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: 'chores_week',
+          builder: (_, _) => const ChoresWeekCard(),
+        ),
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: 'hub_level',
+          builder: (_, _) => const HubLevelCard(),
+        ),
+      ];
 }

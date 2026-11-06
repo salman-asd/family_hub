@@ -5130,6 +5130,71 @@ class AppLocalizationsBn extends AppLocalizations {
       'প্রবেশাধিকারের এই পছন্দটি সঠিক নয়।';
 
   @override
+  String get greetingMorning => 'সুপ্রভাত';
+
+  @override
+  String get greetingAfternoon => 'শুভ অপরাহ্ণ';
+
+  @override
+  String get greetingEvening => 'শুভ সন্ধ্যা';
+
+  @override
+  String get greetingDefaultName => 'আপনি';
+
+  @override
+  String get dashboardBellOverflow => '৯+';
+
+  @override
+  String get dashboardMenu => 'ড্যাশবোর্ডের বিকল্প';
+
+  @override
+  String get dashboardCustomize => 'ড্যাশবোর্ড সাজান';
+
+  @override
+  String get dashboardAccess => 'ভূমিকা অনুযায়ী ড্যাশবোর্ড';
+
+  @override
+  String get dashboardEmptyTitle => 'আপনার ড্যাশবোর্ড খালি';
+
+  @override
+  String get dashboardEmptyMessage =>
+      'কোন কার্ড দেখাবেন বেছে নিয়ে নিজের মতো সাজিয়ে নিন।';
+
+  @override
+  String get dashboardUpcomingTitle => 'আসন্ন কাজ';
+
+  @override
+  String get dashboardUpcomingEmpty => 'আপনার জন্য সামনে কোনো কাজ নেই।';
+
+  @override
+  String get dashboardApprovalsTitle => 'আপনার মনোযোগ প্রয়োজন';
+
+  @override
+  String dashboardPendingJoinRequests(String count) {
+    return 'যোগদানের অনুরোধ: $count';
+  }
+
+  @override
+  String dashboardPendingContributions(String count) {
+    return 'চাঁদার অনুরোধ: $count';
+  }
+
+  @override
+  String get dashboardRecentActivityTitle => 'সাম্প্রতিক কার্যকলাপ';
+
+  @override
+  String get dashboardHubLevelTitle => 'হাবের স্তর';
+
+  @override
+  String get dashboardHubLevelComingSoon => 'পরিবারের অগ্রগতি এখানে দেখা যাবে।';
+
+  @override
+  String get dashboardAskAiTitle => 'ফ্যামিলি হাবকে জিজ্ঞেস করুন';
+
+  @override
+  String get dashboardAskAiMessage => 'পরিবার সম্পর্কে কোনো প্রশ্ন করুন।';
+
+  @override
   String get activityTitle => 'কার্যকলাপ';
 
   @override

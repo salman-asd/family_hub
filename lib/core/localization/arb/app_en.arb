@@ -4730,6 +4730,58 @@
   "@dashboardFailure_unknown_card": {},
   "dashboardFailure_invalid_access": "This access choice is not valid.",
   "@dashboardFailure_invalid_access": {},
+  "greetingMorning": "Good morning",
+  "@greetingMorning": {},
+  "greetingAfternoon": "Good afternoon",
+  "@greetingAfternoon": {},
+  "greetingEvening": "Good evening",
+  "@greetingEvening": {},
+  "greetingDefaultName": "there",
+  "@greetingDefaultName": {},
+  "dashboardBellOverflow": "9+",
+  "@dashboardBellOverflow": {},
+  "dashboardMenu": "Dashboard options",
+  "@dashboardMenu": {},
+  "dashboardCustomize": "Customize dashboard",
+  "@dashboardCustomize": {},
+  "dashboardAccess": "Dashboard access by role",
+  "@dashboardAccess": {},
+  "dashboardEmptyTitle": "Your dashboard is empty",
+  "@dashboardEmptyTitle": {},
+  "dashboardEmptyMessage": "Choose which cards to show and arrange them for yourself.",
+  "@dashboardEmptyMessage": {},
+  "dashboardUpcomingTitle": "Coming up",
+  "@dashboardUpcomingTitle": {},
+  "dashboardUpcomingEmpty": "You have no upcoming chores assigned to you.",
+  "@dashboardUpcomingEmpty": {},
+  "dashboardApprovalsTitle": "Needs your attention",
+  "@dashboardApprovalsTitle": {},
+  "dashboardPendingJoinRequests": "Join requests: {count}",
+  "@dashboardPendingJoinRequests": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardPendingContributions": "Contribution requests: {count}",
+  "@dashboardPendingContributions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardRecentActivityTitle": "Recent activity",
+  "@dashboardRecentActivityTitle": {},
+  "dashboardHubLevelTitle": "Hub Level",
+  "@dashboardHubLevelTitle": {},
+  "dashboardHubLevelComingSoon": "Your family progress will appear here.",
+  "@dashboardHubLevelComingSoon": {},
+  "dashboardAskAiTitle": "Ask Family Hub",
+  "@dashboardAskAiTitle": {},
+  "dashboardAskAiMessage": "Ask a question about your household.",
+  "@dashboardAskAiMessage": {},
   "activityTitle": "Activity",
   "@activityTitle": {},
   "activityEmpty": "There is no activity yet.",

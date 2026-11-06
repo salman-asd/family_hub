@@ -1,5 +1,6 @@
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/calendar/presentation/calendar_items_providers.dart';
+import 'package:family_hub/features/chores/calendar/presentation/month_items.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:family_hub/features/chores/occurrences/domain/today_sections.dart';
@@ -55,8 +56,7 @@ final dashboardNextItemProvider = Provider<ChoreItem?>((ref) {
 final dashboardOverdueProvider = Provider<List<ChoreItem>>((ref) {
   final month = ref.watch(familyDateKeysProvider).thisMonth();
   final items =
-      ref.watch(monthItemsProvider(month)).value?.items ??
-      const <ChoreItem>[];
+      ref.watch(monthItemsProvider(month)).value?.items ?? const <ChoreItem>[];
   return <ChoreItem>[
     for (final item in _scoped(items, ref))
       if (!item.isProjected && item.status == ChoreStatus.overdue) item,
@@ -96,7 +96,7 @@ final class WeekStripDay {
 
 /// The seven days of the current chore week (the family's week start), each
 /// with its chore count. Reads at most the two month listeners a week can touch.
-final dashboardWeekProvider = Provider<List<WeekStripDay>>((ref) {
+final dashboardWeekMonthsProvider = Provider<List<MonthKey>>((ref) {
   final keys = ref.watch(familyDateKeysProvider);
   final today = keys.today();
   final bounds = rotaBoundsFor(
@@ -106,29 +106,42 @@ final dashboardWeekProvider = Provider<List<WeekStripDay>>((ref) {
       choreSettingsProvider.select((s) => s.weekStartDay),
     ),
   );
-  final months = <MonthKey>{
+  return List<MonthKey>.unmodifiable(<MonthKey>{
     MonthKey(bounds.from.year, bounds.from.month),
     MonthKey(bounds.to.year, bounds.to.month),
-  };
-  final items = <ChoreItem>[
-    for (final month in months)
-      ...(ref.watch(monthItemsProvider(month)).value?.items ??
-          const <ChoreItem>[]),
-  ];
-  final scoped = _scoped(items, ref);
-  final week = <WeekStripDay>[];
-  for (var i = 0; i < 7; i++) {
-    final day = bounds.from.addDays(i);
-    var total = 0;
-    var done = 0;
-    for (final item in scoped) {
-      if (item.dateKey != day || item.status == ChoreStatus.skipped) continue;
-      total++;
-      if (isDoneStatus(item.status)) done++;
+  });
+});
+
+final dashboardWeekProvider = Provider<AsyncValue<List<WeekStripDay>>>((ref) {
+  final keys = ref.watch(familyDateKeysProvider);
+  final today = keys.today();
+  final bounds = rotaBoundsFor(
+    range: RotaRange.week,
+    today: today,
+    weekStartDay: ref.watch(
+      choreSettingsProvider.select((s) => s.weekStartDay),
+    ),
+  );
+  final months = ref.watch(dashboardWeekMonthsProvider);
+  final combined = combineMonths(<AsyncValue<MonthItems>>[
+    for (final month in months) ref.watch(monthItemsProvider(month)),
+  ]);
+  return mapAsync<MonthItems, List<WeekStripDay>>(combined, (month) {
+    final scoped = _scoped(month.items, ref);
+    final week = <WeekStripDay>[];
+    for (var i = 0; i < 7; i++) {
+      final day = bounds.from.addDays(i);
+      var total = 0;
+      var done = 0;
+      for (final item in scoped) {
+        if (item.dateKey != day || item.status == ChoreStatus.skipped) continue;
+        total++;
+        if (isDoneStatus(item.status)) done++;
+      }
+      week.add(
+        WeekStripDay(day: day, total: total, done: done, isToday: day == today),
+      );
     }
-    week.add(
-      WeekStripDay(day: day, total: total, done: done, isToday: day == today),
-    );
-  }
-  return week;
+    return List<WeekStripDay>.unmodifiable(week);
+  });
 });

@@ -10,9 +10,13 @@ import 'package:family_hub/features/bazar/fund/presentation/screens/fund_screen.
 import 'package:family_hub/features/bazar/fund/presentation/screens/month_close_screen.dart';
 import 'package:family_hub/features/bazar/items_categories/presentation/screens/catalog_manager_screen.dart';
 import 'package:family_hub/features/bazar/presentation/bazar_home_screen.dart';
+import 'package:family_hub/features/bazar/presentation/widgets/dashboard/budget_alert_card.dart';
+import 'package:family_hub/features/bazar/presentation/widgets/dashboard/bazar_month_card.dart';
+import 'package:family_hub/features/bazar/presentation/widgets/dashboard/fund_balance_card.dart';
 import 'package:family_hub/features/bazar/presentation/widgets/dashboard/bazar_dashboard_cards.dart';
 import 'package:family_hub/features/bazar/reports/presentation/screens/reports_screen.dart';
 import 'package:family_hub/features/bazar/settings/presentation/screens/bazar_settings_screen.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_card_spec.dart';
 import 'package:family_hub/modules/family_module.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -65,9 +69,8 @@ class BazarModule extends FamilyModule {
           routes: [
             GoRoute(
               path: 'edit',
-              builder: (context, state) => AddExpenseScreen(
-                editingId: state.pathParameters['id'],
-              ),
+              builder: (context, state) =>
+                  AddExpenseScreen(editingId: state.pathParameters['id']),
             ),
           ],
         ),
@@ -112,6 +115,23 @@ class BazarModule extends FamilyModule {
 
   @override
   List<WidgetBuilder> get dashboardCards => bazarDashboardCards;
+
+  @override
+  List<DashboardCardSpec<DashboardCardBuilder>> get dashboardCardSpecs =>
+      <DashboardCardSpec<DashboardCardBuilder>>[
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: 'bazar_month',
+          builder: (_, _) => const BazarMonthCard(),
+        ),
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: 'bazar_fund',
+          builder: (_, _) => const FundBalanceCard(),
+        ),
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: 'budget_alert',
+          builder: (_, _) => const BudgetAlertCard(),
+        ),
+      ];
 
   @override
   List<String> get reports => const ['bazar_month', 'bazar_categories'];

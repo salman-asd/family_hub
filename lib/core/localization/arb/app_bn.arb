@@ -4729,6 +4729,58 @@
   "@dashboardFailure_unknown_card": {},
   "dashboardFailure_invalid_access": "প্রবেশাধিকারের এই পছন্দটি সঠিক নয়।",
   "@dashboardFailure_invalid_access": {},
+  "greetingMorning": "সুপ্রভাত",
+  "@greetingMorning": {},
+  "greetingAfternoon": "শুভ অপরাহ্ণ",
+  "@greetingAfternoon": {},
+  "greetingEvening": "শুভ সন্ধ্যা",
+  "@greetingEvening": {},
+  "greetingDefaultName": "আপনি",
+  "@greetingDefaultName": {},
+  "dashboardBellOverflow": "৯+",
+  "@dashboardBellOverflow": {},
+  "dashboardMenu": "ড্যাশবোর্ডের বিকল্প",
+  "@dashboardMenu": {},
+  "dashboardCustomize": "ড্যাশবোর্ড সাজান",
+  "@dashboardCustomize": {},
+  "dashboardAccess": "ভূমিকা অনুযায়ী ড্যাশবোর্ড",
+  "@dashboardAccess": {},
+  "dashboardEmptyTitle": "আপনার ড্যাশবোর্ড খালি",
+  "@dashboardEmptyTitle": {},
+  "dashboardEmptyMessage": "কোন কার্ড দেখাবেন বেছে নিয়ে নিজের মতো সাজিয়ে নিন।",
+  "@dashboardEmptyMessage": {},
+  "dashboardUpcomingTitle": "আসন্ন কাজ",
+  "@dashboardUpcomingTitle": {},
+  "dashboardUpcomingEmpty": "আপনার জন্য সামনে কোনো কাজ নেই।",
+  "@dashboardUpcomingEmpty": {},
+  "dashboardApprovalsTitle": "আপনার মনোযোগ প্রয়োজন",
+  "@dashboardApprovalsTitle": {},
+  "dashboardPendingJoinRequests": "যোগদানের অনুরোধ: {count}",
+  "@dashboardPendingJoinRequests": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardPendingContributions": "চাঁদার অনুরোধ: {count}",
+  "@dashboardPendingContributions": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dashboardRecentActivityTitle": "সাম্প্রতিক কার্যকলাপ",
+  "@dashboardRecentActivityTitle": {},
+  "dashboardHubLevelTitle": "হাবের স্তর",
+  "@dashboardHubLevelTitle": {},
+  "dashboardHubLevelComingSoon": "পরিবারের অগ্রগতি এখানে দেখা যাবে।",
+  "@dashboardHubLevelComingSoon": {},
+  "dashboardAskAiTitle": "ফ্যামিলি হাবকে জিজ্ঞেস করুন",
+  "@dashboardAskAiTitle": {},
+  "dashboardAskAiMessage": "পরিবার সম্পর্কে কোনো প্রশ্ন করুন।",
+  "@dashboardAskAiMessage": {},
   "activityTitle": "কার্যকলাপ",
   "@activityTitle": {},
   "activityEmpty": "এখনও কোনো কার্যকলাপ নেই।",

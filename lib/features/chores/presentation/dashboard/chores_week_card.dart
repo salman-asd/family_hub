@@ -2,8 +2,8 @@ import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/presentation/dashboard/chores_dashboard_providers.dart';
-import 'package:family_hub/features/chores/presentation/dashboard/dash_card.dart';
-import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
+import 'package:family_hub/shared/widgets/dashboard_card_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,13 +19,28 @@ class ChoresWeekCard extends ConsumerWidget {
     final formatters = ref.watch(appFormattersProvider);
     final week = ref.watch(dashboardWeekProvider);
 
-    return DashCard(
-      cardKey: const Key('chores_card_week'),
+    return DashboardCardFrame(
+      key: const Key('chores_card_week'),
       title: l10n.choresDashWeekTitle,
+      icon: Icons.date_range_rounded,
+      mode: !week.hasValue && week.isLoading
+          ? DashboardCardMode.loading
+          : !week.hasValue && week.hasError
+          ? DashboardCardMode.error
+          : DashboardCardMode.content,
+      errorMessage: !week.hasValue && week.hasError ? l10n.errorNetwork : null,
+      loadingLabel: l10n.loadingSemantics,
+      onRetry: !week.hasValue && week.hasError
+          ? () {
+              for (final month in ref.read(dashboardWeekMonthsProvider)) {
+                ref.invalidate(monthOccurrencesProvider(month));
+              }
+            }
+          : null,
       onTap: () => context.go(AppRoutes.chores),
       child: Row(
         children: [
-          for (final day in week)
+          for (final day in week.value ?? const <WeekStripDay>[])
             Expanded(
               child: Semantics(
                 label: l10n.choresDashWeekDay(
@@ -65,9 +80,7 @@ class ChoresWeekCard extends ConsumerWidget {
                         child: Text(
                           formatters.number(day.total),
                           style: TextStyle(
-                            color: day.isToday
-                                ? t.textOnAccent
-                                : t.textPrimary,
+                            color: day.isToday ? t.textOnAccent : t.textPrimary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

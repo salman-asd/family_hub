@@ -8944,6 +8944,126 @@ abstract class AppLocalizations {
   /// **'প্রবেশাধিকারের এই পছন্দটি সঠিক নয়।'**
   String get dashboardFailure_invalid_access;
 
+  /// No description provided for @greetingMorning.
+  ///
+  /// In bn, this message translates to:
+  /// **'সুপ্রভাত'**
+  String get greetingMorning;
+
+  /// No description provided for @greetingAfternoon.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুভ অপরাহ্ণ'**
+  String get greetingAfternoon;
+
+  /// No description provided for @greetingEvening.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুভ সন্ধ্যা'**
+  String get greetingEvening;
+
+  /// No description provided for @greetingDefaultName.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনি'**
+  String get greetingDefaultName;
+
+  /// No description provided for @dashboardBellOverflow.
+  ///
+  /// In bn, this message translates to:
+  /// **'৯+'**
+  String get dashboardBellOverflow;
+
+  /// No description provided for @dashboardMenu.
+  ///
+  /// In bn, this message translates to:
+  /// **'ড্যাশবোর্ডের বিকল্প'**
+  String get dashboardMenu;
+
+  /// No description provided for @dashboardCustomize.
+  ///
+  /// In bn, this message translates to:
+  /// **'ড্যাশবোর্ড সাজান'**
+  String get dashboardCustomize;
+
+  /// No description provided for @dashboardAccess.
+  ///
+  /// In bn, this message translates to:
+  /// **'ভূমিকা অনুযায়ী ড্যাশবোর্ড'**
+  String get dashboardAccess;
+
+  /// No description provided for @dashboardEmptyTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার ড্যাশবোর্ড খালি'**
+  String get dashboardEmptyTitle;
+
+  /// No description provided for @dashboardEmptyMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'কোন কার্ড দেখাবেন বেছে নিয়ে নিজের মতো সাজিয়ে নিন।'**
+  String get dashboardEmptyMessage;
+
+  /// No description provided for @dashboardUpcomingTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আসন্ন কাজ'**
+  String get dashboardUpcomingTitle;
+
+  /// No description provided for @dashboardUpcomingEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার জন্য সামনে কোনো কাজ নেই।'**
+  String get dashboardUpcomingEmpty;
+
+  /// No description provided for @dashboardApprovalsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার মনোযোগ প্রয়োজন'**
+  String get dashboardApprovalsTitle;
+
+  /// No description provided for @dashboardPendingJoinRequests.
+  ///
+  /// In bn, this message translates to:
+  /// **'যোগদানের অনুরোধ: {count}'**
+  String dashboardPendingJoinRequests(String count);
+
+  /// No description provided for @dashboardPendingContributions.
+  ///
+  /// In bn, this message translates to:
+  /// **'চাঁদার অনুরোধ: {count}'**
+  String dashboardPendingContributions(String count);
+
+  /// No description provided for @dashboardRecentActivityTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাম্প্রতিক কার্যকলাপ'**
+  String get dashboardRecentActivityTitle;
+
+  /// No description provided for @dashboardHubLevelTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'হাবের স্তর'**
+  String get dashboardHubLevelTitle;
+
+  /// No description provided for @dashboardHubLevelComingSoon.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের অগ্রগতি এখানে দেখা যাবে।'**
+  String get dashboardHubLevelComingSoon;
+
+  /// No description provided for @dashboardAskAiTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফ্যামিলি হাবকে জিজ্ঞেস করুন'**
+  String get dashboardAskAiTitle;
+
+  /// No description provided for @dashboardAskAiMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার সম্পর্কে কোনো প্রশ্ন করুন।'**
+  String get dashboardAskAiMessage;
+
   /// No description provided for @activityTitle.
   ///
   /// In bn, this message translates to:

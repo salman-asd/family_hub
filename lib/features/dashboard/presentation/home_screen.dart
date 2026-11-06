@@ -1,51 +1,134 @@
+import 'package:family_hub/app/feature_flags.dart';
 import 'package:family_hub/app/flavor.dart';
-import 'package:family_hub/app/theme/app_tokens.dart';
+import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
-import 'package:family_hub/modules/module_visibility_providers.dart';
+import 'package:family_hub/core/errors/app_failure.dart';
+import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_refresh.dart';
+import 'package:family_hub/features/dashboard/presentation/dashboard_grid.dart';
+import 'package:family_hub/features/dashboard/presentation/dashboard_header.dart';
+import 'package:family_hub/features/dashboard/presentation/dashboard_providers.dart';
+import 'package:family_hub/features/dashboard/presentation/widgets/ask_ai_entry.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/error_view.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-/// The Home tab renders dashboard cards supplied by visible modules.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
+
+  Future<void> _refresh(BuildContext context, WidgetRef ref) async {
+    final l10n = context.l10n;
+    final familyId = ref.read(currentFamilyIdProvider);
+    final uid = ref.read(currentUidProvider);
+    final failure = await const DashboardRefresh().run(
+      ensureOccurrences: () async {
+        if (familyId == null || uid == null) return null;
+        final result = await ref.read(ensureOccurrencesProvider)(
+          familyId: familyId,
+          actorUid: uid,
+          today: ref.read(familyDateKeysProvider).today(),
+        );
+        return result.failureOrNull;
+      },
+      invalidateOneShotProviders: () {
+        ref.invalidate(dashboardGreetingProvider);
+        ref.invalidate(dashboardCardsProvider);
+      },
+    );
+    if (!context.mounted || failure == null) return;
+    final message = failure is Network ? l10n.errorNetwork : l10n.errorUnknown;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
-    final t = context.tokens;
     final flavor = ref.watch(flavorProvider);
-    final cards = [
-      for (final module in ref.watch(visibleModulesProvider))
-        for (final buildCard in module.dashboardCards) buildCard(context),
-    ];
+    final cards = ref.watch(dashboardCardsProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.appName)),
-      body: Column(
-        children: [
-          Expanded(
-            child: cards.isEmpty
-                ? EmptyState(
-                    icon: Icons.home_rounded,
-                    title: l10n.moduleComingSoonTitle,
-                    message: l10n.moduleComingSoonMessage,
-                  )
-                : ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-                    children: cards,
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () => _refresh(context, ref),
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              const SliverPadding(
+                padding: EdgeInsets.fromLTRB(16, 16, 16, 20),
+                sliver: SliverToBoxAdapter(child: DashboardHeader()),
+              ),
+              ...cards.when<List<Widget>>(
+                loading: () => const <Widget>[
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 240,
+                        child: LoadingView(lines: 5),
+                      ),
+                    ),
                   ),
+                ],
+                error: (_, _) => <Widget>[
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    sliver: SliverToBoxAdapter(
+                      child: ErrorView(
+                        message: l10n.errorNetwork,
+                        onRetry: () => ref.invalidate(dashboardCardsProvider),
+                      ),
+                    ),
+                  ),
+                ],
+                data: (visible) => visible.isEmpty
+                    ? <Widget>[
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: EmptyState(
+                            icon: Icons.dashboard_customize_outlined,
+                            title: l10n.dashboardEmptyTitle,
+                            message: l10n.dashboardEmptyMessage,
+                            actionLabel: l10n.dashboardCustomize,
+                            onAction: () =>
+                                context.push(AppRoutes.customizeDashboard),
+                          ),
+                        ),
+                      ]
+                    : <Widget>[
+                        SliverPadding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          sliver: DashboardGrid(
+                            cards: visible,
+                            twoColumns: MediaQuery.sizeOf(context).width >= 600,
+                          ),
+                        ),
+                        if (FeatureFlags.askAi)
+                          const SliverPadding(
+                            padding: EdgeInsets.fromLTRB(16, 0, 16, 12),
+                            sliver: SliverToBoxAdapter(child: AskAiEntry()),
+                          ),
+                      ],
+              ),
+              if (flavor != Flavor.prod)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                    child: Text(
+                      flavor.name,
+                      key: const Key('flavor_name'),
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                  ),
+                ),
+              const SliverPadding(padding: EdgeInsets.only(bottom: 24)),
+            ],
           ),
-          // Flavor marker kept from Step 1 so a build is identifiable.
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Text(
-              flavor.name,
-              key: const Key('flavor_name'),
-              style: Theme.of(context).textTheme.labelMedium
-                  ?.copyWith(color: t.textSecondary),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

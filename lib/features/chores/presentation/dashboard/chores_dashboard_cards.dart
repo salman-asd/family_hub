@@ -1,12 +1,15 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/features/chores/calendar/presentation/calendar_items_providers.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
+import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
 import 'package:family_hub/features/chores/presentation/dashboard/chores_dashboard_providers.dart';
 import 'package:family_hub/features/chores/presentation/dashboard/chores_week_card.dart';
 import 'package:family_hub/features/chores/presentation/dashboard/dash_card.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
+import 'package:family_hub/shared/widgets/dashboard_card_frame.dart';
 import 'package:family_hub/shared/widgets/progress_ring.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,6 +38,8 @@ class ChoresTodayCard extends ConsumerWidget {
     final formatters = ref.watch(appFormattersProvider);
     final progress = ref.watch(dashboardTodayProgressProvider);
     final next = ref.watch(dashboardNextItemProvider);
+    final today = ref.watch(familyDateKeysProvider).today();
+    final source = ref.watch(monthOccurrencesProvider(today.monthKey));
     final textTheme = Theme.of(context).textTheme;
 
     final String headline;
@@ -49,9 +54,22 @@ class ChoresTodayCard extends ConsumerWidget {
       );
     }
 
-    return DashCard(
-      cardKey: const Key('chores_card_today'),
+    return DashboardCardFrame(
+      key: const Key('chores_card_today'),
       title: l10n.todayTitle,
+      icon: Icons.task_alt_rounded,
+      mode: !source.hasValue && source.isLoading
+          ? DashboardCardMode.loading
+          : !source.hasValue && source.hasError
+          ? DashboardCardMode.error
+          : DashboardCardMode.content,
+      errorMessage: !source.hasValue && source.hasError
+          ? l10n.errorNetwork
+          : null,
+      loadingLabel: l10n.loadingSemantics,
+      onRetry: !source.hasValue && source.hasError
+          ? () => ref.invalidate(monthOccurrencesProvider(today.monthKey))
+          : null,
       onTap: () => context.push(AppRoutes.choresToday),
       child: Row(
         children: [
@@ -108,13 +126,28 @@ class ChoresOverdueCard extends ConsumerWidget {
     final l10n = context.l10n;
     final t = context.tokens;
     final formatters = ref.watch(appFormattersProvider);
+    final month = ref.watch(familyDateKeysProvider).thisMonth();
+    final source = ref.watch(monthItemsProvider(month));
     final overdue = ref.watch(dashboardOverdueProvider);
     final textTheme = Theme.of(context).textTheme;
     final has = overdue.isNotEmpty;
 
-    return DashCard(
-      cardKey: const Key('chores_card_overdue'),
+    return DashboardCardFrame(
+      key: const Key('chores_card_overdue'),
       title: l10n.todaySectionOverdue,
+      icon: has ? Icons.warning_amber_rounded : Icons.check_circle_outline,
+      mode: !source.hasValue && source.isLoading
+          ? DashboardCardMode.loading
+          : !source.hasValue && source.hasError
+          ? DashboardCardMode.error
+          : DashboardCardMode.content,
+      errorMessage: !source.hasValue && source.hasError
+          ? l10n.errorNetwork
+          : null,
+      loadingLabel: l10n.loadingSemantics,
+      onRetry: !source.hasValue && source.hasError
+          ? () => ref.invalidate(monthOccurrencesProvider(month))
+          : null,
       onTap: () => context.go(AppRoutes.chores),
       child: Row(
         children: [
@@ -162,15 +195,29 @@ class ChoresVerifyCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (!ref.watch(canVerifyAnyProvider)) return const SizedBox.shrink();
+    final queue = ref.watch(verifyQueueProvider);
     final count = ref.watch(verifyQueueCountProvider);
-    if (count == 0) return const SizedBox.shrink();
+    if (queue.hasValue && count == 0) return const SizedBox.shrink();
     final l10n = context.l10n;
     final t = context.tokens;
     final formatters = ref.watch(appFormattersProvider);
 
-    return DashCard(
-      cardKey: const Key('chores_card_verify'),
+    return DashboardCardFrame(
+      key: const Key('chores_card_verify'),
       title: l10n.verifyTitle,
+      icon: Icons.fact_check_outlined,
+      mode: !queue.hasValue && queue.isLoading
+          ? DashboardCardMode.loading
+          : !queue.hasValue && queue.hasError
+          ? DashboardCardMode.error
+          : DashboardCardMode.content,
+      errorMessage: !queue.hasValue && queue.hasError
+          ? l10n.errorNetwork
+          : null,
+      loadingLabel: l10n.loadingSemantics,
+      onRetry: !queue.hasValue && queue.hasError
+          ? () => ref.invalidate(verifyQueueProvider)
+          : null,
       onTap: () => context.push(AppRoutes.choresVerify),
       child: Row(
         children: [

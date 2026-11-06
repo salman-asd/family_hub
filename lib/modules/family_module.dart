@@ -1,7 +1,15 @@
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
+import 'package:family_hub/features/dashboard/domain/card_catalog.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_card_spec.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
+typedef DashboardCardBuilder = Widget Function(
+  BuildContext context,
+  WidgetRef ref,
+);
 
 /// A self-contained area of the app (roadmap Section 10): Chores, Bazar, and
 /// whatever comes later (Events, ...).
@@ -36,6 +44,25 @@ abstract class FamilyModule {
 
   /// Dashboard cards the module contributes (P2-29).
   List<WidgetBuilder> get dashboardCards => const [];
+
+  /// New catalog-backed cards. Legacy builders are matched to this module's
+  /// catalog entries in declaration order until the module supplies specs.
+  List<DashboardCardSpec<DashboardCardBuilder>> get dashboardCardSpecs {
+    final legacy = dashboardCards;
+    final catalog = CardCatalog.cards
+        .where((card) => card.moduleId == id)
+        .toList(growable: false);
+    final count = legacy.length < catalog.length
+        ? legacy.length
+        : catalog.length;
+    return <DashboardCardSpec<DashboardCardBuilder>>[
+      for (var index = 0; index < count; index++)
+        DashboardCardSpec<DashboardCardBuilder>(
+          id: catalog[index].id,
+          builder: (context, _) => legacy[index](context),
+        ),
+    ];
+  }
 
   /// Settings entry the module contributes to the Family settings hub (P3-17).
   WidgetBuilder? get settingsEntry => null;

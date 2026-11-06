@@ -5155,6 +5155,73 @@ class AppLocalizationsEn extends AppLocalizations {
       'This access choice is not valid.';
 
   @override
+  String get greetingMorning => 'Good morning';
+
+  @override
+  String get greetingAfternoon => 'Good afternoon';
+
+  @override
+  String get greetingEvening => 'Good evening';
+
+  @override
+  String get greetingDefaultName => 'there';
+
+  @override
+  String get dashboardBellOverflow => '9+';
+
+  @override
+  String get dashboardMenu => 'Dashboard options';
+
+  @override
+  String get dashboardCustomize => 'Customize dashboard';
+
+  @override
+  String get dashboardAccess => 'Dashboard access by role';
+
+  @override
+  String get dashboardEmptyTitle => 'Your dashboard is empty';
+
+  @override
+  String get dashboardEmptyMessage =>
+      'Choose which cards to show and arrange them for yourself.';
+
+  @override
+  String get dashboardUpcomingTitle => 'Coming up';
+
+  @override
+  String get dashboardUpcomingEmpty =>
+      'You have no upcoming chores assigned to you.';
+
+  @override
+  String get dashboardApprovalsTitle => 'Needs your attention';
+
+  @override
+  String dashboardPendingJoinRequests(String count) {
+    return 'Join requests: $count';
+  }
+
+  @override
+  String dashboardPendingContributions(String count) {
+    return 'Contribution requests: $count';
+  }
+
+  @override
+  String get dashboardRecentActivityTitle => 'Recent activity';
+
+  @override
+  String get dashboardHubLevelTitle => 'Hub Level';
+
+  @override
+  String get dashboardHubLevelComingSoon =>
+      'Your family progress will appear here.';
+
+  @override
+  String get dashboardAskAiTitle => 'Ask Family Hub';
+
+  @override
+  String get dashboardAskAiMessage => 'Ask a question about your household.';
+
+  @override
   String get activityTitle => 'Activity';
 
   @override
