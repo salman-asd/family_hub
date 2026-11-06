@@ -121,13 +121,13 @@ final class StreakDayFacts {
     final eligibleByDay = <DateKey, int>{};
     final completedByDay = <DateKey, int>{};
     for (final item in items) {
-      if (item.isDeleted ||
-          item.dateKey.isBefore(startedOn) ||
-          item.dateKey.isAfter(today) ||
-          item.assigneeId != viewerId ||
-          item.skipReason != null ||
-          item.status == OccurrenceStatus.skipped ||
-          absenceNeutral(item)) {
+      if (!StreakCalculator.isEligible(
+        item,
+        startedOn: startedOn,
+        today: today,
+        viewerId: viewerId,
+        absenceNeutral: absenceNeutral,
+      )) {
         continue;
       }
 
@@ -158,6 +158,21 @@ final class StreakDayFacts {
 }
 
 abstract final class StreakCalculator {
+  static bool isEligible(
+    ChoreOccurrence item, {
+    required DateKey startedOn,
+    required DateKey today,
+    required String viewerId,
+    bool Function(ChoreOccurrence item) absenceNeutral = _notNeutral,
+  }) =>
+      !item.isDeleted &&
+      !item.dateKey.isBefore(startedOn) &&
+      !item.dateKey.isAfter(today) &&
+      item.assigneeId == viewerId &&
+      item.skipReason == null &&
+      item.status != OccurrenceStatus.skipped &&
+      !absenceNeutral(item);
+
   static StreakState advance(StreakState prev, StreakDayFacts dayFacts) {
     final yesterday = dayFacts.today.addDays(-1);
     var cursor = prev.asOfDateKey?.addDays(1) ?? dayFacts.startedOn;

@@ -38,6 +38,7 @@ final class SyncMemberStats {
     required DateKey today,
     required EngagementSettings settings,
     required List<ChoreOccurrence> currentMonthItems,
+    bool Function(ChoreOccurrence item)? absenceNeutral,
   }) async {
     final active = await requireActiveMember(
       families,
@@ -125,6 +126,7 @@ final class SyncMemberStats {
       spec: settings,
       today: today,
       viewerId: memberId,
+      absenceNeutral: absenceNeutral ?? _notNeutral,
     );
     final publicCard = _publicCard(computed, settings);
     if (computed == previous) {
@@ -158,3 +160,5 @@ final class SyncMemberStats {
         )
       : null;
 }
+
+bool _notNeutral(ChoreOccurrence _) => false;

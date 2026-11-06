@@ -2197,3 +2197,28 @@ change was needed.
 
 C1 and the full repository gates remain incomplete. P4-20 adds no package or
 composite index.
+
+## Phase 4 - P4-21 celebration state and controller
+
+Added the pure `CelebrationEngine` and immutable state types, including 21
+decision-table scenarios; added a Riverpod controller with family/member-scoped
+local celebration dates, same-day repeat suppression, two-session stats
+suppression, and Dhaka-midnight rollover. The orchestration waits for settings,
+the complete month, stats, and active-absence data before evaluating. It uses
+the same eligibility predicate as streak calculation, and the normal stats
+sync path now applies the same absence-neutral callback. `StatsSyncController`
+was moved to its own file to retain the 300-line limit. No collection, rule,
+index, localization, or package changes were needed.
+
+| Check | Result |
+| --- | --- |
+| `dart format` on changed Dart files | Passed. |
+| Focused analyze of P4-21 files and tests | Passed with zero issues. |
+| Celebration, controller, stats sync, scoring/streak, layer-boundary, and file-size tests | Passed (51 tests). |
+| `git diff --check` | Passed. |
+| Full `flutter analyze` | Failed with 239 repository issues outside P4-21. |
+| `flutter test --exclude-tags golden` | 2,191 passed, 100 failed; failures include existing compile errors in app/Chores/Bazar/calendar code and an unrelated rules architecture expectation. |
+| Hot restart | Attempted through DTD; no Flutter app was connected. |
+
+C1 and the full repository gates remain incomplete. P4-21 adds no package,
+localization entry, rule, or composite index.

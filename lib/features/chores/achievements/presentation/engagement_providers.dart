@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer' as developer;
 
 import 'package:family_hub/app/routing/session_phase.dart';
@@ -18,9 +17,12 @@ import 'package:family_hub/features/chores/achievements/domain/usecases/mark_cel
 import 'package:family_hub/features/chores/achievements/domain/usecases/set_stats_sharing.dart';
 import 'package:family_hub/features/chores/achievements/domain/usecases/sync_member_stats.dart';
 import 'package:family_hub/features/chores/achievements/domain/usecases/update_engagement_settings.dart';
+import 'package:family_hub/features/chores/availability/domain/availability_index.dart';
+import 'package:family_hub/features/chores/availability/presentation/availability_providers.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
 import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
+import 'package:family_hub/features/chores/achievements/presentation/stats_sync_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -150,76 +152,6 @@ final updateEngagementSettingsProvider = Provider<UpdateEngagementSettings>(
   ),
 );
 
-const Duration kStatsSyncDebounce = Duration(seconds: 3);
-const Duration kStatsResumeThrottle = Duration(minutes: 10);
-
-final class StatsSyncController {
-  StatsSyncController({
-    required this.sync,
-    required this.onError,
-    this.debounce = kStatsSyncDebounce,
-    this.resumeThrottle = kStatsResumeThrottle,
-  });
-
-  final Future<void> Function() sync;
-  final void Function(Object error, StackTrace stackTrace) onError;
-  final Duration debounce;
-  final Duration resumeThrottle;
-
-  Timer? _timer;
-  DateTime? _lastResume;
-  bool _disposed = false;
-  bool _running = false;
-  bool _rerunRequested = false;
-
-  void schedule() {
-    if (_disposed) return;
-    _timer?.cancel();
-    _timer = Timer(debounce, () {
-      _timer = null;
-      unawaited(_run());
-    });
-  }
-
-  void onResumed(DateTime now) {
-    if (_disposed ||
-        (_lastResume != null &&
-            now.difference(_lastResume!) < resumeThrottle)) {
-      return;
-    }
-    _lastResume = now;
-    _timer?.cancel();
-    _timer = null;
-    unawaited(_run());
-  }
-
-  void dispose() {
-    _disposed = true;
-    _timer?.cancel();
-    _timer = null;
-  }
-
-  Future<void> _run() async {
-    if (_running) {
-      _rerunRequested = true;
-      return;
-    }
-    _running = true;
-    try {
-      do {
-        _rerunRequested = false;
-        try {
-          await sync();
-        } on Object catch (error, stackTrace) {
-          onError(error, stackTrace);
-        }
-      } while (!_disposed && _rerunRequested);
-    } finally {
-      _running = false;
-    }
-  }
-}
-
 final class _StatsLifecycleObserver extends WidgetsBindingObserver {
   _StatsLifecycleObserver(this.onResumed);
 
@@ -244,6 +176,9 @@ final statsSyncControllerProvider = Provider<StatsSyncController>((ref) {
     }
     final settings = ref.read(engagementSettingsProvider(familyId)).value;
     if (settings == null || !settings.enabled) return;
+    final absences = ref.read(availabilityProvider);
+    if (!absences.hasValue) return;
+    final availability = AvailabilityIndex.fromRecords(absences.requireValue);
     final today = ref.read(familyDateKeysProvider).today();
     final month = ref.read(monthOccurrencesProvider(today.monthKey));
     if (!month.hasValue || month.requireValue.truncated) return;
@@ -254,6 +189,9 @@ final statsSyncControllerProvider = Provider<StatsSyncController>((ref) {
       today: today,
       settings: settings,
       currentMonthItems: month.requireValue.items,
+      absenceNeutral: (item) =>
+          item.assigneeId != null &&
+          availability.isUnavailable(item.assigneeId!, item.dateKey),
     );
     final failure = result.failureOrNull;
     if (failure != null) {
@@ -291,6 +229,7 @@ final statsSyncOrchestrationProvider = Provider<void>((ref) {
   if (phase == SessionPhase.active && familyId != null && memberId != null) {
     ref.watch(engagementSettingsProvider(familyId));
     ref.watch(monthOccurrencesProvider(today.monthKey));
+    ref.watch(availabilityProvider);
     controller.schedule();
   }
 });

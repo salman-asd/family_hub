@@ -17,6 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../../support/in_memory_backend.dart';
 import '../../../../../support/in_memory_chores_backend.dart';
+import '../engagement_test_support.dart';
 
 void main() {
   const familyId = 'family';
@@ -143,6 +144,21 @@ void main() {
       currentMonthItems: const <ChoreOccurrence>[],
     );
     expect(result.failureOrNull, isA<Network>());
+  });
+
+  test('absence-neutral eligibility is applied to synced stats', () async {
+    final result = await sync(
+      familyId: familyId,
+      memberId: memberId,
+      today: today,
+      settings: settings,
+      currentMonthItems: <ChoreOccurrence>[engagementOccurrence(day: today)],
+      absenceNeutral: (_) => true,
+    );
+
+    expect(result.failureOrNull, isNull);
+    expect(result.valueOrNull?.completedTotal, 0);
+    expect(result.valueOrNull?.totalPoints, 0);
   });
 }
 
