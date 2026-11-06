@@ -8,7 +8,7 @@ import 'package:family_hub/features/bazar/reports/domain/report_loader.dart';
 import 'package:family_hub/features/bazar/reports/domain/report_query.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../support/in_memory_bazar_backend.dart';
+import '../../../support/in_memory_bazar_backend.dart';
 
 /// P2-24: the paged range loader respects the cap and reports truncation.
 void main() {

@@ -1,6 +1,5 @@
-import 'dart:developer' as developer;
-
 import 'package:family_hub/app/theme/theme_controller.dart';
+import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/achievements/domain/celebration_state.dart';
@@ -9,6 +8,7 @@ import 'package:family_hub/features/chores/achievements/domain/levels/level_tabl
 import 'package:family_hub/features/chores/achievements/domain/member_stats.dart';
 import 'package:family_hub/features/chores/achievements/domain/scoring/score_calculator.dart';
 import 'package:family_hub/features/chores/achievements/domain/scoring/streak_calculator.dart';
+import 'package:family_hub/features/chores/achievements/presentation/celebration_diagnostics.dart';
 import 'package:family_hub/features/chores/achievements/presentation/celebration_prefs.dart';
 import 'package:family_hub/features/chores/achievements/presentation/engagement_providers.dart';
 import 'package:family_hub/features/chores/availability/domain/availability_index.dart';
@@ -187,49 +187,22 @@ final class CelebrationController extends Notifier<CelebrationState> {
         );
         final syncFailure = syncResult.failureOrNull;
         if (syncFailure != null) {
-          developer.log(
+          logCelebrationFailure(
             'Could not synchronize stats before chore celebration',
-            name: 'family_hub',
-            error: syncFailure,
-            level: 1000,
+            syncFailure,
           );
         } else {
           updatedStats = syncResult.valueOrNull ?? updatedStats;
         }
       } on Object catch (error, stackTrace) {
-        developer.log(
+        logCelebrationFailure(
           'Could not synchronize stats before chore celebration',
-          name: 'family_hub',
-          error: error,
+          error,
           stackTrace: stackTrace,
-          level: 1000,
         );
       }
 
-      final prefs = CelebrationPrefs(ref.read(sharedPreferencesProvider));
-      try {
-        final persisted = await prefs.markCelebrated(familyId, memberId, today);
-        if (persisted) {
-          // Persist locally before the server-side marker to guard against a
-          // reopened screen replaying the animation.
-          _localCelebratedDate = today;
-        } else {
-          developer.log(
-            'Could not persist local celebration date',
-            name: 'family_hub',
-            level: 1000,
-          );
-        }
-      } on Object catch (error, stackTrace) {
-        developer.log(
-          'Could not persist local celebration date',
-          name: 'family_hub',
-          error: error,
-          stackTrace: stackTrace,
-          level: 1000,
-        );
-      }
-
+      var claimed = false;
       try {
         final markResult = await ref.read(markCelebratedProvider)(
           familyId: familyId,
@@ -240,20 +213,47 @@ final class CelebrationController extends Notifier<CelebrationState> {
         );
         final markFailure = markResult.failureOrNull;
         if (markFailure != null) {
-          developer.log(
+          claimed = markFailure is Network;
+          logCelebrationFailure(
             'Could not record stats celebration date',
-            name: 'family_hub',
-            error: markFailure,
-            level: 1000,
+            markFailure,
+          );
+        } else {
+          claimed = markResult.valueOrNull == true;
+        }
+      } on Object catch (error, stackTrace) {
+        logCelebrationFailure(
+          'Could not record stats celebration date',
+          error,
+          stackTrace: stackTrace,
+        );
+      }
+
+      if (!claimed) {
+        if (_familyId == familyId &&
+            _memberId == memberId &&
+            _observedDate == today) {
+          state = CelebrationQuietDone(today);
+        }
+        return;
+      }
+
+      final prefs = CelebrationPrefs(ref.read(sharedPreferencesProvider));
+      try {
+        final persisted = await prefs.markCelebrated(familyId, memberId, today);
+        if (persisted) {
+          _localCelebratedDate = today;
+        } else {
+          logCelebrationFailure(
+            'Could not persist local celebration date',
+            null,
           );
         }
       } on Object catch (error, stackTrace) {
-        developer.log(
-          'Could not record stats celebration date',
-          name: 'family_hub',
-          error: error,
+        logCelebrationFailure(
+          'Could not persist local celebration date',
+          error,
           stackTrace: stackTrace,
-          level: 1000,
         );
       }
 

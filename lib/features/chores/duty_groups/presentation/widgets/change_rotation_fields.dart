@@ -107,6 +107,12 @@ class ChangeRotationFields extends ConsumerWidget {
                     name: memberName(index, order[i]),
                     avatarKey: index[order[i]]?.avatarKey,
                     index: i,
+                    onMoveUp: i > 0
+                        ? () => onOrder(draft.moveTo(i, i - 1).members)
+                        : null,
+                    onMoveDown: i < order.length - 1
+                        ? () => onOrder(draft.moveTo(i, i + 1).members)
+                        : null,
                   ),
               ],
             ),

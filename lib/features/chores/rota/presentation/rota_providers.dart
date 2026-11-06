@@ -7,6 +7,7 @@ import 'package:family_hub/features/chores/rota/domain/rota_matrix.dart';
 import 'package:family_hub/features/chores/rota/domain/workload_calculator.dart';
 import 'package:family_hub/features/chores/rota/domain/workload_summary.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
+import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,7 +77,7 @@ final rotaItemsProvider = Provider.autoDispose<List<ChoreItem>>((ref) {
 /// The active members, in the family's order.
 final rotaMemberIdsProvider = Provider.autoDispose<List<String>>(
   (ref) => <String>[
-    for (final member in ref.watch(membersProvider).value ?? const [])
+    for (final member in ref.watch(membersProvider).value ?? const <Member>[])
       if (member.isActive) member.uid,
   ],
 );

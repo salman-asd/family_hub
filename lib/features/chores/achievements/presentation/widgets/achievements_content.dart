@@ -7,6 +7,7 @@ import 'package:family_hub/features/chores/achievements/presentation/widgets/ach
 import 'package:family_hub/features/chores/achievements/presentation/widgets/engagement_plant_view.dart';
 import 'package:family_hub/features/chores/achievements/presentation/widgets/family_levels_strip.dart';
 import 'package:family_hub/shared/widgets/level_ring.dart';
+import 'package:family_hub/shared/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -52,82 +53,138 @@ class AchievementsContent extends ConsumerWidget {
               .clamp(0, 100)
               .toInt();
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
+    final levelCard = Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    EngagementPlantView(
-                      stage: stage.clamp(0, 7).toInt(),
-                      semanticLabel: l10n.achievementLevel(
-                        formatters.number(levelNumber),
-                      ),
-                      size: 112,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            localeName,
-                            style: Theme.of(context).textTheme.titleLarge
-                                ?.copyWith(color: context.tokens.textPrimary),
-                          ),
-                          Text(
-                            l10n.achievementLevel(
-                              formatters.number(levelNumber),
-                            ),
-                            style: TextStyle(
-                              color: context.tokens.textSecondary,
-                            ),
-                          ),
-                          Text(
-                            l10n.achievementPoints(
-                              formatters.number(stats.totalPoints),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(progressLabel),
-                        ],
-                      ),
-                    ),
-                    LevelRing(
-                      level: levelNumber,
-                      levelLabel: localeName,
-                      progress: progress.fraction / 1000,
-                      progressLabel: progressLabel,
-                    ),
-                  ],
+                EngagementPlantView(
+                  stage: stage.clamp(0, 7).toInt(),
+                  semanticLabel: l10n.achievementLevel(
+                    formatters.number(levelNumber),
+                  ),
+                  size: 112,
                 ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        localeName,
+                        style: Theme.of(context).textTheme.titleLarge
+                            ?.copyWith(color: context.tokens.textPrimary),
+                      ),
+                      Text(
+                        l10n.achievementLevel(formatters.number(levelNumber)),
+                        style: TextStyle(color: context.tokens.textSecondary),
+                      ),
+                      Text(
+                        l10n.achievementPoints(
+                          formatters.number(stats.totalPoints),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(progressLabel),
+                    ],
+                  ),
+                ),
+                LevelRing(
+                  level: levelNumber,
+                  levelLabel: localeName,
+                  progress: progress.fraction / 1000,
+                  progressLabel: progressLabel,
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.achievementStreak(
+                      formatters.number(stats.streak.current),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    l10n.achievementBestStreak(
+                      formatters.number(stats.streak.best),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final badgesPane = <Widget>[
+      Text(
+        l10n.achievementBadges,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+      const SizedBox(height: 12),
+      AchievementBadges(
+        stats: stats,
+        settings: settings,
+        number: formatters.number,
+      ),
+      if (settings.statsVisibility == StatsVisibility.levels) ...[
+        const SizedBox(height: 16),
+        SwitchListTile(
+          key: const Key('achievement_share_switch'),
+          contentPadding: EdgeInsets.zero,
+          title: Text(l10n.engagementSharingSwitch),
+          subtitle: Text(l10n.engagementSharingDescription),
+          value: stats.sharing,
+          onChanged: sharingBusy ? null : onSharingChanged,
+        ),
+        const SizedBox(height: 8),
+        FamilyLevelsStrip(settings: settings),
+      ],
+    ];
+
+    // P4-24: the plant and the personal numbers keep the leading side, the
+    // badge shelf gets its own scrolling column beside them.
+    if (context.layoutClass.showsTwoPanes) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 5,
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+              children: [
+                levelCard,
                 const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        l10n.achievementStreak(
-                          formatters.number(stats.streak.current),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        l10n.achievementBestStreak(
-                          formatters.number(stats.streak.best),
-                        ),
-                      ),
-                    ),
-                  ],
+                _PersonalStats(
+                  stats: stats,
+                  onTimePercent: rate,
+                  number: formatters.number,
                 ),
               ],
             ),
           ),
-        ),
+          Expanded(
+            flex: 4,
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(8, 16, 16, 16),
+              children: badgesPane,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        levelCard,
         const SizedBox(height: 12),
         _PersonalStats(
           stats: stats,
@@ -135,29 +192,7 @@ class AchievementsContent extends ConsumerWidget {
           number: formatters.number,
         ),
         const SizedBox(height: 16),
-        Text(
-          l10n.achievementBadges,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        const SizedBox(height: 12),
-        AchievementBadges(
-          stats: stats,
-          settings: settings,
-          number: formatters.number,
-        ),
-        if (settings.statsVisibility == StatsVisibility.levels) ...[
-          const SizedBox(height: 16),
-          SwitchListTile(
-            key: const Key('achievement_share_switch'),
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.engagementSharingSwitch),
-            subtitle: Text(l10n.engagementSharingDescription),
-            value: stats.sharing,
-            onChanged: sharingBusy ? null : onSharingChanged,
-          ),
-          const SizedBox(height: 8),
-          FamilyLevelsStrip(settings: settings),
-        ],
+        ...badgesPane,
       ],
     );
   }

@@ -8,6 +8,8 @@ class _Row extends StatelessWidget {
     required this.onEdit,
     required this.onToggleActive,
     required this.onDelete,
+    this.onMoveUp,
+    this.onMoveDown,
     super.key,
   });
 
@@ -16,6 +18,10 @@ class _Row extends StatelessWidget {
   final bool showHandle;
   final VoidCallback onEdit;
   final VoidCallback onToggleActive;
+
+  /// Rule 71: the non-drag twin of the handle. Null where the row cannot go.
+  final VoidCallback? onMoveUp;
+  final VoidCallback? onMoveDown;
 
   /// Null for a built-in row: built-ins are never deleted.
   final VoidCallback? onDelete;
@@ -48,26 +54,36 @@ class _Row extends StatelessWidget {
               ),
       ),
       subtitle: detail == null ? null : Text(detail),
-      trailing: PopupMenuButton<String>(
-        tooltip: l10n.catalogEditorActions,
-        onSelected: (action) => switch (action) {
-          'edit' => onEdit(),
-          'toggle' => onToggleActive(),
-          'delete' => onDelete?.call(),
-          _ => null,
-        },
-        itemBuilder: (context) => [
-          PopupMenuItem(value: 'edit', child: Text(l10n.actionEdit)),
-          PopupMenuItem(
-            value: 'toggle',
-            child: Text(
-              entry.active
-                  ? l10n.catalogEditorDeactivate
-                  : l10n.catalogEditorActivate,
-            ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ReorderMoveButtons(
+            index: index,
+            onMoveUp: onMoveUp,
+            onMoveDown: onMoveDown,
           ),
-          if (onDelete != null)
-            PopupMenuItem(value: 'delete', child: Text(l10n.actionDelete)),
+          PopupMenuButton<String>(
+            tooltip: l10n.catalogEditorActions,
+            onSelected: (action) => switch (action) {
+              'edit' => onEdit(),
+              'toggle' => onToggleActive(),
+              'delete' => onDelete?.call(),
+              _ => null,
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'edit', child: Text(l10n.actionEdit)),
+              PopupMenuItem(
+                value: 'toggle',
+                child: Text(
+                  entry.active
+                      ? l10n.catalogEditorDeactivate
+                      : l10n.catalogEditorActivate,
+                ),
+              ),
+              if (onDelete != null)
+                PopupMenuItem(value: 'delete', child: Text(l10n.actionDelete)),
+            ],
+          ),
         ],
       ),
     );

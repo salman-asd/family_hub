@@ -9,7 +9,7 @@ import 'package:family_hub/features/bazar/settings/domain/bazar_settings.dart';
 import 'package:family_hub/features/bazar/settings/presentation/bazar_settings_providers.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 
 import '../../bazar_test_helpers.dart';
 
@@ -20,6 +20,7 @@ List<Override> bazarOverrides(
   BazarFixture fx, {
   String uid = 'alice',
   Role role = Role.admin,
+  PermissionSettings? settings,
 }) => [
   clockProvider.overrideWithValue(fx.clock),
   idGeneratorProvider.overrideWithValue(fx.ids.call),
@@ -28,7 +29,9 @@ List<Override> bazarOverrides(
   currentActorProvider.overrideWithValue(
     PermissionActor(uid: uid, role: role, isActive: true),
   ),
-  permissionSettingsProvider.overrideWithValue(PermissionSettings.defaults),
+  permissionSettingsProvider.overrideWithValue(
+    settings ?? PermissionSettings.defaults,
+  ),
   bazarSettingsProvider.overrideWithValue(
     BazarSettings.defaults.copyWith(fundStartMonth: MonthKey(2026, 9)),
   ),

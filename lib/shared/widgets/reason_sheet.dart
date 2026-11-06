@@ -222,7 +222,12 @@ class _ReasonSheetState extends State<_ReasonSheet> {
                   foregroundColor: tokens.textOnAccent,
                 ),
                 onPressed: _valid
-                    ? () => Navigator.of(context).pop<Object?>(_sheetResult())
+                    // P4-23: only the checklist sheet answers with a record; a
+                    // plain reason sheet must pop its String or the typed
+                    // reason is dropped by the route's type check.
+                    ? () => Navigator.of(context).pop<Object?>(
+                        widget.checklist == null ? _trimmed : _sheetResult(),
+                      )
                     : null,
                 child: Text(l10n.actionSave),
               ),

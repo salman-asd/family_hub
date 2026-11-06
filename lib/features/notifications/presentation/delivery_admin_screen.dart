@@ -1,4 +1,5 @@
 import 'package:family_hub/app/feature_flags.dart';
+import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permission.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
@@ -8,6 +9,7 @@ import 'package:family_hub/features/notifications/presentation/notification_prov
 import 'package:family_hub/features/notifications/presentation/widgets/delivery_type_list.dart';
 import 'package:family_hub/features/notifications/presentation/widgets/push_status_card.dart';
 import 'package:family_hub/shared/widgets/busy_button.dart';
+import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:family_hub/shared/widgets/permission_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,12 +107,14 @@ class _DeliveryAdminScreenState extends ConsumerState<DeliveryAdminScreen> {
           allowed: canManage,
           child: delivery.when(
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (_, _) => Center(
-              child: TextButton(
-                onPressed: familyId == null
+            error: (failure, _) => Center(
+              child: ErrorView(
+                message: failure is Network
+                    ? l10n.errorNetwork
+                    : l10n.errorUnknown,
+                onRetry: familyId == null
                     ? null
                     : () => ref.invalidate(deliveryPolicyProvider(familyId)),
-                child: Text(l10n.actionRetry),
               ),
             ),
             data: (initial) {

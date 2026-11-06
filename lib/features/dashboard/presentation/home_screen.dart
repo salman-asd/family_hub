@@ -13,6 +13,7 @@ import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
 import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:family_hub/shared/widgets/loading_view.dart';
+import 'package:family_hub/shared/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -73,12 +74,14 @@ class HomeScreen extends ConsumerWidget {
                     ),
                   ),
                 ],
-                error: (_, _) => <Widget>[
+                error: (failure, _) => <Widget>[
                   SliverPadding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     sliver: SliverToBoxAdapter(
                       child: ErrorView(
-                        message: l10n.errorNetwork,
+                        message: failure is Network
+                            ? l10n.errorNetwork
+                            : l10n.errorUnknown,
                         onRetry: () => ref.invalidate(dashboardCardsProvider),
                       ),
                     ),
@@ -86,8 +89,12 @@ class HomeScreen extends ConsumerWidget {
                 ],
                 data: (visible) => visible.isEmpty
                     ? <Widget>[
-                        SliverFillRemaining(
-                          hasScrollBody: false,
+                        // P4-23: `SliverFillRemaining(hasScrollBody: false)`
+                        // sizes its child through intrinsic heights, and
+                        // [EmptyState] builds on a LayoutBuilder, which refuses
+                        // them - Home threw as soon as the layout had no cards.
+                        // A box adapter lets the empty state size itself.
+                        SliverToBoxAdapter(
                           child: EmptyState(
                             icon: Icons.dashboard_customize_outlined,
                             title: l10n.dashboardEmptyTitle,
@@ -103,7 +110,7 @@ class HomeScreen extends ConsumerWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           sliver: DashboardGrid(
                             cards: visible,
-                            twoColumns: MediaQuery.sizeOf(context).width >= 600,
+                            twoColumns: context.layoutClass.showsTwoPanes,
                           ),
                         ),
                         if (FeatureFlags.askAi)

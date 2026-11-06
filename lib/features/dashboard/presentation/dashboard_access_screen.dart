@@ -140,9 +140,12 @@ class _DashboardAccessScreenState extends ConsumerState<DashboardAccessScreen> {
     final familyId = ref.watch(currentFamilyIdProvider);
     final canManage = ref.can(Permission.manageDashboardLayout);
     if (familyId == null) {
+      // The session guard keeps a family-less user off this screen; getting
+      // here means the membership stream has not landed yet (P4-23: that is
+      // "loading", not "error").
       return Scaffold(
         appBar: AppBar(title: Text(l10n.dashboardAccess)),
-        body: Center(child: Text(l10n.errorUnknown)),
+        body: const Center(child: LoadingView()),
       );
     }
     final policy = ref.watch(dashboardPolicyProvider(familyId));

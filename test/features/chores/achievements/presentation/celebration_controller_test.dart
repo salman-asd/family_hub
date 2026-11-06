@@ -190,22 +190,8 @@ void main() {
     },
   );
 
-  test('another session sees stats celebration as quiet done', () async {
+  test('two sessions racing can celebrate only once', () async {
     final first = container.read(celebrationControllerProvider.notifier);
-    await first.observe(
-      familyId: familyId,
-      memberId: memberId,
-      today: today,
-      settings: settings,
-      monthItems: _items(today),
-      stats: null,
-      availability: AvailabilityIndex.empty,
-    );
-    expect(
-      container.read(celebrationControllerProvider),
-      isA<CelebrationShown>(),
-    );
-
     SharedPreferences.setMockInitialValues(<String, Object>{});
     final otherDevicePreferences = await SharedPreferences.getInstance();
     final second = _container(
@@ -216,20 +202,38 @@ void main() {
       publicStats: _PublicStatsRepository(),
     );
     addTearDown(second.dispose);
-    await second
-        .read(celebrationControllerProvider.notifier)
-        .observe(
-          familyId: familyId,
-          memberId: memberId,
-          today: today,
-          settings: settings,
-          monthItems: _items(today),
-          stats: stats.current,
-          availability: AvailabilityIndex.empty,
-        );
+    await Future.wait<void>([
+      first.observe(
+        familyId: familyId,
+        memberId: memberId,
+        today: today,
+        settings: settings,
+        monthItems: _items(today),
+        stats: null,
+        availability: AvailabilityIndex.empty,
+      ),
+      second
+          .read(celebrationControllerProvider.notifier)
+          .observe(
+            familyId: familyId,
+            memberId: memberId,
+            today: today,
+            settings: settings,
+            monthItems: _items(today),
+            stats: null,
+            availability: AvailabilityIndex.empty,
+          ),
+    ]);
+
+    final firstState = container.read(celebrationControllerProvider);
+    final secondState = second.read(celebrationControllerProvider);
     expect(
-      second.read(celebrationControllerProvider),
-      isA<CelebrationQuietDone>(),
+      [firstState, secondState].whereType<CelebrationShown>(),
+      hasLength(1),
+    );
+    expect(
+      [firstState, secondState].whereType<CelebrationQuietDone>(),
+      hasLength(1),
     );
   });
 
@@ -509,6 +513,23 @@ final class _StatsRepository implements MemberStatsRepository {
     if (failWrites) return const Failure<void>(Network());
     current = stats;
     return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<bool>> claimCelebration(
+    String familyId,
+    String memberId, {
+    required DateKey dateKey,
+    required DateKey defaultStartedOn,
+  }) async {
+    if (failWrites) return const Failure<bool>(Network());
+    final previous = current ?? MemberStats.empty(startedOn: defaultStartedOn);
+    final celebrated = previous.lastCelebratedDateKey;
+    if (celebrated != null && !dateKey.isAfter(celebrated)) {
+      return const Success<bool>(false);
+    }
+    current = previous.copyWith(lastCelebratedDateKey: dateKey);
+    return const Success<bool>(true);
   }
 }
 

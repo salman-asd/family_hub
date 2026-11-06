@@ -24,12 +24,19 @@ class SwitchTileWithReason extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SwitchListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(title),
-          subtitle: subtitle == null ? null : Text(subtitle!),
-          value: value,
-          onChanged: onChanged,
+        // P4-23: the tile paints its ink on the nearest Material, so on a
+        // background that is a plain ColoredBox the splash and the checked
+        // strip disappear. Owning a transparent Material makes the widget safe
+        // wherever it is placed.
+        Material(
+          type: MaterialType.transparency,
+          child: SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(title),
+            subtitle: subtitle == null ? null : Text(subtitle!),
+            value: value,
+            onChanged: onChanged,
+          ),
         ),
         if (disabled && disabledReason != null)
           Padding(

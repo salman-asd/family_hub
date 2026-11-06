@@ -3,6 +3,7 @@ import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
 import 'package:family_hub/features/chores/templates/presentation/widgets/draft_text_field.dart';
+import 'package:family_hub/shared/widgets/reorder_move_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -48,6 +49,15 @@ class SubtasksEditor extends ConsumerWidget {
             if (i == index) value else subtasks[i],
         ]);
 
+    /// [newIndex] is the position the step ends up at, which is what both
+    /// `onReorderItem` and the rule 71 move buttons report.
+    void move(int oldIndex, int newIndex) {
+      final list = <TemplateSubtask>[...subtasks];
+      final moved = list.removeAt(oldIndex);
+      list.insert(newIndex, moved);
+      onChanged(list);
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -68,10 +78,7 @@ class SubtasksEditor extends ConsumerWidget {
             // `onReorderItem` reports the final index of the moved row.
             onReorderItem: (oldIndex, newIndex) {
               if (!enabled) return;
-              final list = <TemplateSubtask>[...subtasks];
-              final moved = list.removeAt(oldIndex);
-              list.insert(newIndex, moved);
-              onChanged(list);
+              move(oldIndex, newIndex);
             },
             children: [
               for (var i = 0; i < subtasks.length; i++)
@@ -82,6 +89,10 @@ class SubtasksEditor extends ConsumerWidget {
                     index: i,
                     subtask: subtasks[i],
                     enabled: enabled,
+                    onMoveUp: enabled && i > 0 ? () => move(i, i - 1) : null,
+                    onMoveDown: enabled && i < subtasks.length - 1
+                        ? () => move(i, i + 1)
+                        : null,
                     onChanged: (value) => replace(i, value),
                     onRemove: () => onChanged(<TemplateSubtask>[
                       for (var j = 0; j < subtasks.length; j++)
@@ -132,6 +143,8 @@ class _SubtaskRow extends StatelessWidget {
     required this.enabled,
     required this.onChanged,
     required this.onRemove,
+    this.onMoveUp,
+    this.onMoveDown,
   });
 
   final int index;
@@ -139,6 +152,10 @@ class _SubtaskRow extends StatelessWidget {
   final bool enabled;
   final ValueChanged<TemplateSubtask> onChanged;
   final VoidCallback onRemove;
+
+  /// Rule 71: the non-drag twin of the handle.
+  final VoidCallback? onMoveUp;
+  final VoidCallback? onMoveDown;
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +181,11 @@ class _SubtaskRow extends StatelessWidget {
                     child: Icon(Icons.drag_handle_rounded, color: t.outline),
                   ),
                 ),
+              ReorderMoveButtons(
+                index: index,
+                onMoveUp: onMoveUp,
+                onMoveDown: onMoveDown,
+              ),
               Expanded(
                 child: DraftTextField(
                   key: ValueKey<String>('subtask_title_${subtask.id}'),

@@ -103,6 +103,46 @@ final class FirestoreMemberStatsRepository implements MemberStatsRepository {
     });
   });
 
+  @override
+  Future<Result<bool>> claimCelebration(
+    String familyId,
+    String memberId, {
+    required DateKey dateKey,
+    required DateKey defaultStartedOn,
+  }) async {
+    var claimed = false;
+    final result = await guardWrite(
+      () async {
+        claimed = await tx.runTransaction<bool>((transaction) async {
+          final path = _statsPath(familyId, memberId);
+          final map = await transaction.get(path);
+          if (map == null) return false;
+          final current = MemberStatsMappers.fromMap(
+            map,
+            defaultStartedOn: defaultStartedOn,
+          );
+          final lastCelebrated = current.lastCelebratedDateKey;
+          if (lastCelebrated != null && !dateKey.isAfter(lastCelebrated)) {
+            return false;
+          }
+          transaction.set(
+            path,
+            MemberStatsMappers.toMap(
+              current.copyWith(lastCelebratedDateKey: dateKey),
+              _updated(_metadata(map, memberId), memberId),
+            ),
+          );
+          return true;
+        });
+      },
+      // The transaction's 30-second deadline must expire before a queued
+      // success can be reported; transactions themselves do not queue offline.
+      ackWait: const Duration(seconds: 35),
+    );
+    final failure = result.failureOrNull;
+    return failure == null ? Success<bool>(claimed) : Failure<bool>(failure);
+  }
+
   String _statsPath(String familyId, String uid) =>
       FirestorePaths.memberStatsDoc(familyId, uid);
 

@@ -83,6 +83,23 @@ void main() {
   });
 
   test(
+    'concurrent settlements recheck the current advance before writing',
+    () async {
+      fx.putAdvance(expenseId: 'e1', amount: const Money.paisa(5000));
+
+      final results = await Future.wait<AppFailure?>([
+        settleIt(3000, settlementId: 's1'),
+        settleIt(3000, settlementId: 's2'),
+      ]);
+
+      expect(results.where((failure) => failure == null), hasLength(1));
+      expect(results.where((failure) => failure != null), hasLength(1));
+      expect(advance('e1').settled, const Money.paisa(3000));
+      expect(fx.backend.settlements[_f], hasLength(1));
+    },
+  );
+
+  test(
     'a second settlement sees the first (fresh state inside the write)',
     () async {
       fx.putAdvance(expenseId: 'e1', amount: const Money.paisa(5000));

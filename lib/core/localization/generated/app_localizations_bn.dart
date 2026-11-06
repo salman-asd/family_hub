@@ -992,6 +992,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get gallerySyncBanner => 'সিঙ্ক ব্যানার';
 
   @override
+  String get galleryReorderMoveButtons => 'উপরে / নিচে সরান';
+
+  @override
   String get famFailureAlreadyInFamily =>
       'আপনি ইতিমধ্যে একটি পরিবারে আছেন। আগে সেটি ছেড়ে দিন।';
 
@@ -1818,6 +1821,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get catalogReorder => 'সাজাতে টেনে আনুন';
 
   @override
+  String get actionMoveUp => 'উপরে নিন';
+
+  @override
+  String get actionMoveDown => 'নিচে নিন';
+
+  @override
   String get catalogReadOnly =>
       'আপনি এটি দেখতে পারবেন, কিন্তু শুধু সংসার ব্যবস্থাপক বা অ্যাডমিন পরিবর্তন করতে পারবেন।';
 
@@ -2270,6 +2279,22 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get reportTitle => 'রিপোর্ট';
+
+  @override
+  String get reportShareText => 'রিপোর্টের লেখা শেয়ার করুন';
+
+  @override
+  String get reportExport => 'রপ্তানি';
+
+  @override
+  String get reportExportCsv => 'CSV ফাইল রপ্তানি করুন';
+
+  @override
+  String get reportExportPdf => 'PDF রপ্তানি করুন';
+
+  @override
+  String get reportExportFailed =>
+      'রিপোর্ট তৈরি বা শেয়ার করা যায়নি। আবার চেষ্টা করুন।';
 
   @override
   String get reportTabSummary => 'সারসংক্ষেপ';

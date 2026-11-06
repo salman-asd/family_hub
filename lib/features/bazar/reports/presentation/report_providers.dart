@@ -1,14 +1,21 @@
+import 'package:family_hub/core/errors/app_failure.dart';
+import 'package:family_hub/core/firebase/query_limits.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/date_ranges.dart';
 import 'package:family_hub/features/bazar/budgets/presentation/budget_providers.dart';
+import 'package:family_hub/features/bazar/contributions/presentation/contribution_providers.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
 import 'package:family_hub/features/bazar/expenses/presentation/expense_providers.dart';
 import 'package:family_hub/features/bazar/presentation/bazar_providers.dart';
 import 'package:family_hub/features/bazar/reports/domain/report_data.dart';
 import 'package:family_hub/features/bazar/reports/domain/report_engine.dart';
+import 'package:family_hub/features/bazar/reports/domain/report_export_rows.dart';
 import 'package:family_hub/features/bazar/reports/domain/report_loader.dart';
 import 'package:family_hub/features/bazar/reports/domain/report_query.dart';
+import 'package:family_hub/features/bazar/reports/domain/usecases/export_report_rows.dart';
 import 'package:family_hub/features/bazar/settings/presentation/bazar_settings_providers.dart';
+import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
+import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,6 +39,7 @@ class ReportQueryController extends Notifier<ReportQuery> {
     DateKeyRange? custom,
     String? categoryId,
     String? memberId,
+    ReportQuery? previous,
   }) => ReportQuery(
     preset: preset,
     range: resolveRange(
@@ -40,15 +48,15 @@ class ReportQueryController extends Notifier<ReportQuery> {
       weekStartDay: ref.watch(bazarSettingsProvider).weekStartDay,
       custom: custom,
     ),
-    categoryId: categoryId ?? state.categoryId,
-    itemId: state.itemId,
-    memberId: memberId ?? state.memberId,
-    funding: state.funding,
+    categoryId: categoryId ?? previous?.categoryId,
+    itemId: previous?.itemId,
+    memberId: memberId ?? previous?.memberId,
+    funding: previous?.funding,
   );
 
   void setPreset(RangePreset preset, {DateKeyRange? custom}) {
     assert(preset != RangePreset.custom || custom != null);
-    state = _resolve(preset, custom: custom);
+    state = _resolve(preset, custom: custom, previous: state);
   }
 
   void setCategory(String? categoryId) => state = ReportQuery(
@@ -134,6 +142,54 @@ final reportTruncatedProvider = Provider.autoDispose<bool>((ref) {
   return ref.watch(reportRowsProvider(query.resolvedRange)).value?.truncated ??
       false;
 });
+
+final exportReportRowsProvider = Provider<ExportReportRows>(
+  (ref) => ExportReportRows(
+    ref.watch(expenseRepositoryProvider),
+    ref.watch(contributionRepositoryProvider),
+    ref.watch(occurrenceRepositoryProvider),
+    ref.watch(familyRepositoryProvider),
+  ),
+);
+
+final reportExportRowsProvider = FutureProvider.autoDispose
+    .family<ReportExportRows, DateKeyRange>((ref, range) async {
+      final familyId = ref.watch(currentFamilyIdProvider);
+      final actorUid = ref.watch(currentUidProvider);
+      if (familyId == null || actorUid == null) {
+        throw const PermissionDenied();
+      }
+      final result = await ref
+          .watch(exportReportRowsProvider)
+          .call(familyId: familyId, actorUid: actorUid, range: range);
+      final failure = result.failureOrNull;
+      if (failure != null) throw failure;
+      return result.valueOrNull!;
+    });
+
+final reportChoreRowsProvider = FutureProvider.autoDispose
+    .family<List<ChoreOccurrence>, DateKeyRange>((ref, range) async {
+      final familyId = ref.watch(currentFamilyIdProvider);
+      if (familyId == null) return const <ChoreOccurrence>[];
+      final result = await ref
+          .watch(occurrenceRepositoryProvider)
+          .listRangeOnce(
+            familyId,
+            from: range.start,
+            to: range.end,
+            limit: kMaxReportDocs + 1,
+          );
+      final failure = result.failureOrNull;
+      if (failure != null) throw failure;
+      final rows = result.valueOrNull!;
+      if (rows.length > kMaxReportDocs) {
+        throw const Validation('range', 'export_limit');
+      }
+      return <ChoreOccurrence>[
+        for (final row in rows)
+          if (!row.isDeleted) row,
+      ];
+    });
 
 /// The month a range lies inside, or `null` when it spans more than one month
 /// (or part of two): only then is the live month listener a correct answer.

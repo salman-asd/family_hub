@@ -17,6 +17,7 @@ import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.d
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:family_hub/features/chores/presentation/chores_failure_messages.dart';
 import 'package:family_hub/features/chores/presentation/occurrence_action_sheets.dart';
+import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/error_view.dart';
@@ -166,7 +167,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
   }
 
   String _name(String uid) {
-    for (final member in ref.read(membersProvider).value ?? const []) {
+    for (final member in ref.read(membersProvider).value ?? const <Member>[]) {
       if (member.uid == uid) return member.displayName;
     }
     return uid;

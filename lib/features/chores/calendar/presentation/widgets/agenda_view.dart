@@ -16,6 +16,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 part 'agenda_view_parts.dart';
 
+const double _kJumpTodayThreshold = 240;
+
 /// The Agenda (P3-23): a list that grows in both directions from today.
 ///
 /// * the Overdue block comes first, then today and the days after it, each day
@@ -46,7 +48,16 @@ class _AgendaViewState extends ConsumerState<AgendaView> {
   }
 
   void _onScroll() {
-    final away = _scroll.hasClients && _scroll.offset.abs() > 240;
+    if (!_scroll.hasClients) return;
+    final position = _scroll.position;
+    final offset = _scroll.offset;
+    // P4-23: far enough from today, OR already at the top of the past. A short
+    // window cannot be scrolled 240 px at all, so with the distance rule alone
+    // the pill never appeared even though the person was at "show earlier
+    // weeks" and wanted to get back to today.
+    final atTopOfPast =
+        position.minScrollExtent < 0 && offset <= position.minScrollExtent + 1;
+    final away = offset.abs() > _kJumpTodayThreshold || atTopOfPast;
     if (away != _away) setState(() => _away = away);
   }
 

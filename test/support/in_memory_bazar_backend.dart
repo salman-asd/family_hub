@@ -556,64 +556,19 @@ class InMemoryBazarBackend extends InMemoryBackend
 
   /// No cache in memory: the server read is the same read (P2-21).
   @override
+  Future<Result<Money?>> getOpeningAmount(
+    String familyId,
+    MonthKey month,
+  ) async =>
+      Success<Money?>(fundTransactions[familyId]?['open_$month']?.amount);
+
+  /// Mirrors the Firestore window query: rows with `monthKey >= from`,
+  /// read fresh (no cache), newest month first.
+  @override
   Future<Result<List<FundTransaction>>> getTransactionsFromServer(
     String familyId,
     MonthKey from,
-  ) async {
-    final rows =
-        <FundTransaction>[
-          for (final row in fundTransactionsOf(familyId))
-            if (row.monthKey.compareTo(from) >= 0) row,
-        ]..sort((a, b) {
-          final byMonth = a.monthKey.compareTo(b.monthKey);
-          if (byMonth != 0) return byMonth;
-          final byDate = a.dateKey.compareTo(b.dateKey);
-          return byDate != 0 ? byDate : a.id.compareTo(b.id);
-        });
-    return Success<List<FundTransaction>>(rows.take(500).toList());
-  }
-
-  @override
-  Future<Result<void>> commitClose(
-    String familyId,
-    MonthClosePlan plan,
-    AuditEvent event,
-  ) async {
-    final failed = _takeWriteFailure();
-    if (failed != null) return failed;
-    (closings[familyId] ??= <MonthKey, MonthClosing>{})[plan.closing.monthKey] =
-        plan.closing;
-    final rows = plan.nextOpening ?? plan.nextAdjustment;
-    if (rows != null) {
-      // The `open_<next>` row is append-only: writing it twice is a bug.
-      final ledger = fundTransactions[familyId] ??= <String, FundTransaction>{};
-      if (plan.nextOpening != null && ledger.containsKey(rows.id)) {
-        throw StateError('ledger row ${rows.id} written twice');
-      }
-      ledger[rows.id] = rows;
-    }
-    _addEventOnce(event);
-    writes++;
-    _expenseChanges.add(null);
-    return const Success<void>(null);
-  }
-
-  @override
-  Future<Result<void>> commitReopen(
-    String familyId,
-    MonthReopenPlan plan,
-    AuditEvent event,
-  ) async {
-    final failed = _takeWriteFailure();
-    if (failed != null) return failed;
-    (closings[familyId] ??=
-            <MonthKey, MonthClosing>{})[plan.reopened.monthKey] =
-        plan.reopened;
-    _addEventOnce(event);
-    writes++;
-    _expenseChanges.add(null);
-    return const Success<void>(null);
-  }
+  ) async => Success<List<FundTransaction>>(_transactionsFrom(familyId, from));
 
   List<FundTransaction> _transactionsFrom(String familyId, MonthKey from) {
     final rows =
@@ -628,21 +583,6 @@ class InMemoryBazarBackend extends InMemoryBackend
         });
     return rows.take(500).toList();
   }
-
-  @override
-  Future<Result<Money?>> getOpeningAmount(
-    String familyId,
-    MonthKey month,
-  ) async =>
-      Success<Money?>(fundTransactions[familyId]?['open_$month']?.amount);
-
-  /// Mirrors the Firestore window query: rows with `monthKey >= from`,
-  /// read fresh (no cache), newest month first.
-  @override
-  Future<Result<List<FundTransaction>>> getTransactionsFromServer(
-    String familyId,
-    MonthKey from,
-  ) async => Success<List<FundTransaction>>(_transactionsFrom(familyId, from));
 
   @override
   Future<Result<void>> commitClose(
@@ -741,7 +681,8 @@ class InMemoryBazarBackend extends InMemoryBackend
     required AuditEvent event,
   }) async {
     final failed = _takeWriteFailure();
-    if (failed != null) return Failure<SettlementPlan>(failed);
+    final writeFailure = failed?.failureOrNull;
+    if (writeFailure != null) return Failure<SettlementPlan>(writeFailure);
     // The plan is built from the CURRENT advance, like the Firestore read.
     final plan = build(advances[familyId]?[advanceId]);
     final planFailure = plan.failureOrNull;

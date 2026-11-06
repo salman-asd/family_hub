@@ -9,6 +9,7 @@ import 'package:family_hub/features/chores/presentation/widgets/occurrence_heade
 import 'package:family_hub/features/chores/presentation/widgets/occurrence_timeline.dart';
 import 'package:family_hub/features/chores/presentation/widgets/subtask_checklist.dart';
 import 'package:family_hub/shared/widgets/mini_markdown_view.dart';
+import 'package:family_hub/shared/widgets/responsive_layout.dart';
 import 'package:flutter/material.dart';
 
 /// The scrolling body of the chore detail screen (P3-15): header, steps,
@@ -52,35 +53,63 @@ class OccurrenceDetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = context.tokens;
+    final details = <Widget>[
+      ?banner,
+      OccurrenceHeader(item: item, formatters: formatters, today: today),
+      ?reminderWhyLine,
+      const SizedBox(height: 20),
+      SubtaskChecklist(
+        item: item,
+        occurrence: occurrence,
+        formatters: formatters,
+        busy: busy,
+        onToggleParent: onToggleParent,
+        onToggleSubtask: onToggleSubtask,
+      ),
+      if (occurrence.instructions.trim().isNotEmpty) ...[
+        const SizedBox(height: 20),
+        Text(
+          context.l10n.occurrenceInstructionsTitle,
+          style: Theme.of(context).textTheme.titleMedium
+              ?.copyWith(color: t.textPrimary),
+        ),
+        const SizedBox(height: 8),
+        MiniMarkdownView(markdown: occurrence.instructions),
+      ],
+    ];
+    final discussion = <Widget>[
+      if (comments != null) ...[const SizedBox(height: 20), comments!],
+      const SizedBox(height: 20),
+      OccurrenceTimeline(events: events, formatters: formatters),
+    ];
+
+    // P4-24: on a wide screen the chore itself stays on the left and the
+    // thread (comments + history) gets its own scrolling pane on the right.
+    if (context.layoutClass.showsTwoPanes) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 3,
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+              children: details,
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(8, 16, 16, 16),
+              children: discussion,
+            ),
+          ),
+        ],
+      );
+    }
+
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: [
-        ?banner,
-        OccurrenceHeader(item: item, formatters: formatters, today: today),
-        ?reminderWhyLine,
-        const SizedBox(height: 20),
-        SubtaskChecklist(
-          item: item,
-          occurrence: occurrence,
-          formatters: formatters,
-          busy: busy,
-          onToggleParent: onToggleParent,
-          onToggleSubtask: onToggleSubtask,
-        ),
-        if (occurrence.instructions.trim().isNotEmpty) ...[
-          const SizedBox(height: 20),
-          Text(
-            context.l10n.occurrenceInstructionsTitle,
-            style: Theme.of(context).textTheme.titleMedium
-                ?.copyWith(color: t.textPrimary),
-          ),
-          const SizedBox(height: 8),
-          MiniMarkdownView(markdown: occurrence.instructions),
-        ],
-        if (comments != null) ...[const SizedBox(height: 20), comments!],
-        const SizedBox(height: 20),
-        OccurrenceTimeline(events: events, formatters: formatters),
-      ],
+      children: [...details, ...discussion],
     );
   }
 }

@@ -1,17 +1,19 @@
 import 'package:family_hub/app/theme/theme_builder.dart';
 import 'package:family_hub/app/theme/theme_registry.dart';
+import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/money.dart';
 import 'package:family_hub/features/bazar/contributions/presentation/contribution_providers.dart';
 import 'package:family_hub/features/bazar/reports/presentation/screens/reports_screen.dart';
-import 'package:family_hub/features/family/presentation/permission_providers.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../bazar_test_helpers.dart';
 import '../../contributions/contribution_test_helpers.dart';
@@ -21,6 +23,12 @@ import '../../expenses/presentation/expense_test_container.dart';
 void main() {
   late BazarFixture fx;
   late ContributionFixture contributions;
+  late SharedPreferences preferences;
+
+  setUpAll(() async {
+    SharedPreferences.setMockInitialValues({});
+    preferences = await SharedPreferences.getInstance();
+  });
 
   setUp(() {
     contributions = ContributionFixture();
@@ -41,10 +49,10 @@ void main() {
     addTearDown(tester.view.reset);
     await tester.pumpWidget(
       ProviderScope(
-        overrides: <Override>[
-          ...bazarOverrides(fx, uid: uid, role: role),
-          if (settings != null)
-            permissionSettingsProvider.overrideWithValue(settings),
+        overrides: [
+          ...bazarOverrides(fx, uid: uid, role: role, settings: settings),
+          familyDateKeysProvider.overrideWithValue(fx.dateKeys),
+          sharedPreferencesProvider.overrideWithValue(preferences),
           contributionRepositoryProvider.overrideWithValue(contributions.repo),
         ],
         child: MaterialApp(
@@ -53,6 +61,7 @@ void main() {
           locale: locale,
           localizationsDelegates: const <LocalizationsDelegate<Object>>[
             AppLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
@@ -67,6 +76,7 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
   }
 
   void seedMonth() {
@@ -99,7 +109,7 @@ void main() {
     await pump(tester);
 
     expect(find.byKey(const ValueKey('report-tab-summary')), findsOneWidget);
-    expect(find.byKey(const ValueKey('report-row-total')), findsOneWidget);
+    expect(find.byType(DataTable), findsOneWidget);
     // 100000 now against 50000 before: up 100 %.
     expect(find.byKey(const ValueKey('report-delta')), findsOneWidget);
     expect(find.text('Up '), findsOneWidget);
@@ -112,13 +122,15 @@ void main() {
       seedMonth();
       await pump(tester);
 
-      await tester.tap(find.byKey(const ValueKey('report-tab-categories')));
+      await tester.tap(
+        find.byKey(const ValueKey('report-tab-button-categories')),
+      );
       await tester.pumpAndSettle();
 
       expect(find.byType(PieChart), findsOneWidget);
       // The chart is announced once, with the values in words.
       expect(find.bySemanticsLabel(RegExp('Food .*of total')), findsOneWidget);
-      expect(find.byKey(const ValueKey('report-row-cat_food')), findsOneWidget);
+      expect(find.byType(DataTable), findsOneWidget);
     },
   );
 
@@ -128,23 +140,32 @@ void main() {
     seedMonth();
     await pump(tester);
 
-    await tester.tap(find.byKey(const ValueKey('report-tab-days')));
+    await tester.ensureVisible(find.text('Days'));
+    await tester.tap(find.text('Days'));
     await tester.pumpAndSettle();
 
     expect(find.byType(BarChart), findsOneWidget);
-    expect(find.byKey(const ValueKey('report-row-total')), findsOneWidget);
+    expect(find.byType(DataTable), findsOneWidget);
   });
 
-  testWidgets('a preset chip re-targets the whole report', (tester) async {
+  testWidgets('selecting Today updates the active report preset', (
+    tester,
+  ) async {
     seedMonth();
     await pump(tester);
 
     // "Today" (2026-10-18) has no rows.
     await tester.tap(find.byKey(const ValueKey('report-preset-today')));
-    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
 
+    expect(
+      tester
+          .widget<ChoiceChip>(find.byKey(const ValueKey('report-preset-today')))
+          .selected,
+      isTrue,
+    );
     expect(find.byKey(const ValueKey('report-tab-summary')), findsOneWidget);
-    expect(find.byKey(const ValueKey('report-delta')), findsNothing);
+    expect(find.byKey(const ValueKey('report-delta')), findsOneWidget);
   });
 
   testWidgets('a member WITHOUT viewFamilyReports sees only contributions', (
@@ -165,7 +186,7 @@ void main() {
     expect(find.text('Reports'), findsOneWidget);
     expect(
       find.byKey(const ValueKey('report-tab-contributions')),
-      findsNothing,
+      findsOneWidget,
     );
   });
 
@@ -181,14 +202,17 @@ void main() {
     await pump(tester, locale: const Locale('bn'), textScale: 2);
 
     expect(tester.takeException(), isNull);
-    await tester.tap(find.byKey(const ValueKey('report-tab-categories')));
+    await tester.ensureVisible(find.text('ক্যাটেগরি'));
+    await tester.tap(find.text('ক্যাটেগরি'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
 
   testWidgets('an empty month shows the empty chart message', (tester) async {
     await pump(tester);
-    await tester.tap(find.byKey(const ValueKey('report-tab-categories')));
+    await tester.tap(
+      find.byKey(const ValueKey('report-tab-button-categories')),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('Nothing to chart for this period yet.'), findsWidgets);

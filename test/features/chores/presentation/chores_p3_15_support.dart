@@ -4,6 +4,7 @@ import 'package:family_hub/app/theme/theme_controller.dart'
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/features/chores/duty_groups/presentation/duty_group_providers.dart';

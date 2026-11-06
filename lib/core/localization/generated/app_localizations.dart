@@ -1922,6 +1922,12 @@ abstract class AppLocalizations {
   /// **'সিঙ্ক ব্যানার'**
   String get gallerySyncBanner;
 
+  /// No description provided for @galleryReorderMoveButtons.
+  ///
+  /// In bn, this message translates to:
+  /// **'উপরে / নিচে সরান'**
+  String get galleryReorderMoveButtons;
+
   /// No description provided for @famFailureAlreadyInFamily.
   ///
   /// In bn, this message translates to:
@@ -3268,6 +3274,18 @@ abstract class AppLocalizations {
   /// **'সাজাতে টেনে আনুন'**
   String get catalogReorder;
 
+  /// No description provided for @actionMoveUp.
+  ///
+  /// In bn, this message translates to:
+  /// **'উপরে নিন'**
+  String get actionMoveUp;
+
+  /// No description provided for @actionMoveDown.
+  ///
+  /// In bn, this message translates to:
+  /// **'নিচে নিন'**
+  String get actionMoveDown;
+
   /// No description provided for @catalogReadOnly.
   ///
   /// In bn, this message translates to:
@@ -4089,6 +4107,36 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'রিপোর্ট'**
   String get reportTitle;
+
+  /// No description provided for @reportShareText.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিপোর্টের লেখা শেয়ার করুন'**
+  String get reportShareText;
+
+  /// No description provided for @reportExport.
+  ///
+  /// In bn, this message translates to:
+  /// **'রপ্তানি'**
+  String get reportExport;
+
+  /// No description provided for @reportExportCsv.
+  ///
+  /// In bn, this message translates to:
+  /// **'CSV ফাইল রপ্তানি করুন'**
+  String get reportExportCsv;
+
+  /// No description provided for @reportExportPdf.
+  ///
+  /// In bn, this message translates to:
+  /// **'PDF রপ্তানি করুন'**
+  String get reportExportPdf;
+
+  /// No description provided for @reportExportFailed.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিপোর্ট তৈরি বা শেয়ার করা যায়নি। আবার চেষ্টা করুন।'**
+  String get reportExportFailed;
 
   /// No description provided for @reportTabSummary.
   ///

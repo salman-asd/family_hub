@@ -34,59 +34,71 @@ class FirestoreAdvanceRepository implements AdvanceRepository {
     required String advanceId,
     required Result<SettlementPlan> Function(MemberAdvance? current) build,
     required AuditEvent event,
-  }) => guardWrite(probe: serverProbeFor(_db, event.actorId), () async {
-    final snapshot = await _db
-        .doc(FirestorePaths.memberAdvanceDoc(familyId, advanceId))
-        .get(const GetOptions(source: Source.server));
-    final data = snapshot.data();
-    final current = snapshot.exists && data != null
+  }) async {
+    final snapshot = await guardFirestore(
+      () => _db
+          .doc(FirestorePaths.memberAdvanceDoc(familyId, advanceId))
+          .get(const GetOptions(source: Source.server)),
+    );
+    final snapshotFailure = snapshot.failureOrNull;
+    if (snapshotFailure != null) {
+      return Failure<SettlementPlan>(snapshotFailure);
+    }
+    final document = snapshot.valueOrNull;
+    final data = document?.data();
+    final current = document != null && document.exists && data != null
         ? AdvanceMappers.advanceFromMap(advanceId, data)
         : null;
     // A failure from `build` (overpayment, voided, missing) writes nothing.
     final plan = build(current);
-    final failure = plan.failureOrNull;
-    if (failure != null) return Failure<SettlementPlan>(failure);
+    final planFailure = plan.failureOrNull;
+    if (planFailure != null) return Failure<SettlementPlan>(planFailure);
     final settlement = plan.valueOrNull!;
 
-    await _tx.runBatch((batch) {
-      batch.set(
-        FirestorePaths.settlementDoc(familyId, settlement.settlement.id),
-        AdvanceMappers.settlementToMap(
-          settlement.settlement,
-          BaseDocumentMetadata(
-            createdAt: event.at,
-            createdBy: event.actorId,
-            updatedAt: event.at,
-            updatedBy: event.actorId,
+    final write = await guardWrite(
+      probe: serverProbeFor(_db, event.actorId),
+      () => _tx.runBatch((batch) {
+        batch.set(
+          FirestorePaths.settlementDoc(familyId, settlement.settlement.id),
+          AdvanceMappers.settlementToMap(
+            settlement.settlement,
+            BaseDocumentMetadata(
+              createdAt: event.at,
+              createdBy: event.actorId,
+              updatedAt: event.at,
+              updatedBy: event.actorId,
+            ),
           ),
-        ),
-      );
-      final row = settlement.reimbursement;
-      batch.set(
-        FirestorePaths.fundTransactionDoc(familyId, row.id),
-        FundMappers.fundTxToMap(
-          row,
-          BaseDocumentMetadata(
-            createdAt: row.createdAt,
-            createdBy: row.createdBy,
-            updatedAt: event.at,
-            updatedBy: event.actorId,
+        );
+        final row = settlement.reimbursement;
+        batch.set(
+          FirestorePaths.fundTransactionDoc(familyId, row.id),
+          FundMappers.fundTxToMap(
+            row,
+            BaseDocumentMetadata(
+              createdAt: row.createdAt,
+              createdBy: row.createdBy,
+              updatedAt: event.at,
+              updatedBy: event.actorId,
+            ),
           ),
-        ),
-      );
-      // Only the settlement progress changes on the advance.
-      batch.update(
-        FirestorePaths.memberAdvanceDoc(familyId, advanceId),
-        AdvanceMappers.advanceChangeMap(
-          settlement.advanceAfter,
-          actorUid: event.actorId,
-          now: event.at,
-        ),
-      );
-      AuditWriter.write(batch, familyId, event);
-    });
+        );
+        // Only the settlement progress changes on the advance.
+        batch.update(
+          FirestorePaths.memberAdvanceDoc(familyId, advanceId),
+          AdvanceMappers.advanceChangeMap(
+            settlement.advanceAfter,
+            actorUid: event.actorId,
+            now: event.at,
+          ),
+        );
+        AuditWriter.write(batch, familyId, event);
+      }),
+    );
+    final writeFailure = write.failureOrNull;
+    if (writeFailure != null) return Failure<SettlementPlan>(writeFailure);
     return Success<SettlementPlan>(settlement);
-  });
+  }
 
   @override
   Stream<List<MemberAdvance>> watchOpenAdvances(

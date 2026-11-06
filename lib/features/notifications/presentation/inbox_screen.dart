@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/audit/audit_ref_type.dart';
+import 'package:family_hub/core/errors/app_failure.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/swaps/presentation/swap_providers.dart';
 import 'package:family_hub/features/chores/swaps/presentation/swap_response_sheet.dart';
@@ -171,8 +172,8 @@ class InboxScreen extends ConsumerWidget {
       ),
       body: inbox.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (_, _) => ErrorView(
-          message: l10n.choresFailure_unknown,
+        error: (failure, _) => ErrorView(
+          message: failure is Network ? l10n.errorNetwork : l10n.errorUnknown,
           onRetry: () => ref.invalidate(inboxProvider),
         ),
         data: (_) {
@@ -184,53 +185,63 @@ class InboxScreen extends ConsumerWidget {
               item,
             );
           }
-          return ListView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.info_outline_rounded,
-                      size: 18,
-                      color: t.textSecondary,
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        l10n.inboxSparkNote,
-                        style: TextStyle(color: t.textSecondary, fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (items.isEmpty)
-                EmptyState(
-                  icon: Icons.notifications_none_rounded,
-                  title: l10n.inboxEmpty,
-                ),
-              for (final group in <(String, List<InboxItem>)>[
-                (l10n.inboxToday, todays),
-                (l10n.inboxEarlier, earlier),
-              ])
-                if (group.$2.isNotEmpty) ...[
+          // P4-24: the list keeps a readable measure on a tablet; the detail
+          // it points at stays a route, so no pane is duplicated here.
+          return Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child: ListView(
+                children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                    child: Text(
-                      group.$1,
-                      style: Theme.of(context).textTheme.titleSmall
-                          ?.copyWith(color: t.textSecondary),
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline_rounded,
+                          size: 18,
+                          color: t.textSecondary,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            l10n.inboxSparkNote,
+                            style: TextStyle(
+                              color: t.textSecondary,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  for (final item in group.$2)
-                    InboxTile(
-                      item: item,
-                      text: inboxTextOf(l10n, formatters, item, members),
-                      onTap: () => unawaited(_open(context, ref, item)),
+                  if (items.isEmpty)
+                    EmptyState(
+                      icon: Icons.notifications_none_rounded,
+                      title: l10n.inboxEmpty,
                     ),
+                  for (final group in <(String, List<InboxItem>)>[
+                    (l10n.inboxToday, todays),
+                    (l10n.inboxEarlier, earlier),
+                  ])
+                    if (group.$2.isNotEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+                        child: Text(
+                          group.$1,
+                          style: Theme.of(context).textTheme.titleSmall
+                              ?.copyWith(color: t.textSecondary),
+                        ),
+                      ),
+                      for (final item in group.$2)
+                        InboxTile(
+                          item: item,
+                          text: inboxTextOf(l10n, formatters, item, members),
+                          onTap: () => unawaited(_open(context, ref, item)),
+                        ),
+                    ],
                 ],
-            ],
+              ),
+            ),
           );
         },
       ),

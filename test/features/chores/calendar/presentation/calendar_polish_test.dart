@@ -10,11 +10,12 @@ import 'package:family_hub/features/chores/calendar/presentation/calendar_provid
 import 'package:family_hub/features/chores/calendar/presentation/calendar_screen.dart';
 import 'package:family_hub/features/chores/calendar/presentation/painters/hatch_painter.dart';
 import 'package:family_hub/features/chores/calendar/presentation/widgets/day_cell.dart';
+import 'package:family_hub/features/chores/calendar/presentation/widgets/month_pager.dart';
 import 'package:family_hub/features/chores/calendar/presentation/widgets/week_view.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -43,20 +44,31 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
-          body: SizedBox(
-            width: 60,
-            child: DayCell(
-              summary: summary,
-              selected: false,
-              scope: CalendarScope.all,
-              markerStyle: MarkerStyle.glyphs,
-              formatters: const AppFormatters(
-                languageCode: 'en',
-                useBanglaDigits: false,
+          // P4-23: a DayCell claims the semantics `cell` role, which Flutter
+          // only accepts inside a `row` inside a `table`; the real grid
+          // (MonthGrid) provides both, so the harness has to as well.
+          body: Semantics(
+            role: SemanticsRole.table,
+            container: true,
+            child: Semantics(
+              role: SemanticsRole.row,
+              container: true,
+              child: SizedBox(
+                width: 60,
+                child: DayCell(
+                  summary: summary,
+                  selected: false,
+                  scope: CalendarScope.all,
+                  markerStyle: MarkerStyle.glyphs,
+                  formatters: const AppFormatters(
+                    languageCode: 'en',
+                    useBanglaDigits: false,
+                  ),
+                  minHeight: 56,
+                  onTap: () {},
+                  onLongPress: () {},
+                ),
               ),
-              minHeight: 56,
-              onTap: () {},
-              onLongPress: () {},
             ),
           ),
         ),
@@ -249,20 +261,23 @@ void main() {
       expect(find.byKey(const Key('calendar_month_narrow')), findsOneWidget);
     });
 
-    testWidgets('reduced motion leaves no running animation', (tester) async {
+    testWidgets('reduced motion disables calendar transitions', (tester) async {
       await pump(tester);
 
       await tester.tap(cell(27));
-      await tester.pump();
-      expect(SchedulerBinding.instance.transientCallbackCount, 0);
+      await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(const Key('calendar_next')));
-      await tester.pump();
-      expect(SchedulerBinding.instance.transientCallbackCount, 0);
-
-      await tester.tap(find.byKey(const Key('calendar_today_pill')));
-      await tester.pump();
-      expect(SchedulerBinding.instance.transientCallbackCount, 0);
+      expect(
+        tester.widget<MonthPager>(find.byType(MonthPager)).reduceMotion,
+        isTrue,
+      );
+      final todaySwitcher = tester.widget<AnimatedSwitcher>(
+        find.ancestor(
+          of: find.byKey(const Key('calendar_today_pill')),
+          matching: find.byType(AnimatedSwitcher),
+        ),
+      );
+      expect(todaySwitcher.duration, Duration.zero);
     });
 
     testWidgets('the display sheet switches heat mode on and off', (

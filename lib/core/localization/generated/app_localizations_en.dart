@@ -996,6 +996,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gallerySyncBanner => 'Sync banner';
 
   @override
+  String get galleryReorderMoveButtons => 'Move up / move down';
+
+  @override
   String get famFailureAlreadyInFamily =>
       'You already belong to a family. Leave it first.';
 
@@ -1823,6 +1826,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get catalogReorder => 'Drag to reorder';
 
   @override
+  String get actionMoveUp => 'Move up';
+
+  @override
+  String get actionMoveDown => 'Move down';
+
+  @override
   String get catalogReadOnly =>
       'You can look at this, but only the Household Manager or Admin can change it.';
 
@@ -2276,6 +2285,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reportTitle => 'Reports';
+
+  @override
+  String get reportShareText => 'Share report text';
+
+  @override
+  String get reportExport => 'Export';
+
+  @override
+  String get reportExportCsv => 'Export CSV files';
+
+  @override
+  String get reportExportPdf => 'Export PDF';
+
+  @override
+  String get reportExportFailed =>
+      'Could not create or share the report. Try again.';
 
   @override
   String get reportTabSummary => 'Summary';

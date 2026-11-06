@@ -41,7 +41,7 @@ class ComparisonRow extends ConsumerWidget {
     final percent = comparison.deltaBp;
     final percentText = percent == null
         ? l10n.reportNoPreviousData
-        : l10n.reportPercent('${(percent / 100).abs().toStringAsFixed(0)}');
+        : l10n.reportPercent((percent / 100).abs().toStringAsFixed(0));
 
     return AppCard(
       child: Semantics(
@@ -61,7 +61,10 @@ class ComparisonRow extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
+                  Wrap(
+                    spacing: 4,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
                         '$word ',

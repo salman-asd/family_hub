@@ -27,10 +27,11 @@ Future<void> pumpEngagementApp(
   Role role = Role.member,
   String languageCode = 'en',
   double textScale = 1,
+  Size size = const Size(320, 900),
   List<Override> overrides = const <Override>[],
 }) async {
   tester.view
-    ..physicalSize = const Size(320, 900)
+    ..physicalSize = size
     ..devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   SharedPreferences.setMockInitialValues({});

@@ -44,3 +44,17 @@ flutter build appbundle --flavor prod -t lib/main_prod.dart --release
 
 Sign up, create a family, join with a code from a second account, add data offline,
 reconnect and confirm it syncs.
+
+## 7. Closed beta and go/no-go
+
+- Distribute privately to named testers only; keep signing material out of Git.
+- Verify account deletion, admin transfer, report CSV/PDF sharing, and offline
+  queue/sync on physical Android devices.
+- Follow `docs/ACCOUNT_LIFECYCLE.md` for the last-admin transfer procedure.
+- Verify offline/conflict behavior against `docs/OFFLINE_SYNC.md`.
+- Complete the per-screen read measurements in `docs/QUOTA_AUDIT.md` and have
+  the project owner verify current Spark quotas in Firebase Console.
+- Record a crash-reporting decision only after the owner reviews current
+  Firebase options, costs, privacy disclosures, and consent requirements.
+- Run a real-family beta for a full month and keep a dated fix list. Do not
+  mark Phase 5 complete until the month finishes without developer data fixes.

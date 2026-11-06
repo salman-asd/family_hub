@@ -83,14 +83,15 @@ final virtualInboxProvider = Provider<List<InboxItem>>((ref) {
     final month = today.monthKey;
     final settings = ref.watch(bazarSettingsProvider);
     if (canReviewContributions) {
-      pendingContributions = ref.watch(pendingContributionsProvider(month)).length;
+      pendingContributions = ref
+          .watch(pendingContributionsProvider(month))
+          .length;
     }
     if (today.day >= settings.contributionDueDay) {
       contributionDue = ref
           .watch(contributionStatusProvider(month))
           .any(
-            (status) =>
-                status.memberId == uid && status.remaining.paisa > 0,
+            (status) => status.memberId == uid && status.remaining.paisa > 0,
           );
     }
   }
@@ -129,7 +130,10 @@ final visibleInboxItemsProvider = Provider<List<InboxItem>>((ref) {
 
 /// Stored unread plus unacknowledged virtual items, for the bell and badges.
 final unreadInboxCountProvider = Provider<int>(
-  (ref) => ref.watch(visibleInboxItemsProvider).where((item) => item.isUnread).length,
+  (ref) => ref
+      .watch(visibleInboxItemsProvider)
+      .where((item) => item.isUnread)
+      .length,
 );
 
 final markInboxReadProvider = Provider<MarkInboxRead>(
@@ -144,21 +148,26 @@ final markAllReadProvider = Provider<MarkAllRead>(
   (ref) => MarkAllRead(ref.watch(markInboxReadProvider)),
 );
 
-final markVirtualInboxReadProvider = Provider<Future<bool> Function(List<String>)>(
-  (ref) => (ids) async {
-    final uid = ref.read(currentUidProvider);
-    if (uid == null || ids.isEmpty) return true;
-    final month = ref.read(familyDateKeysProvider).today().monthKey.toString();
-    final prefs = ref.read(sharedPreferencesProvider);
-    final key = _virtualReadKey(uid, month);
-    final readIds = prefs.getStringList(key)?.toSet() ?? <String>{};
-    readIds.addAll(ids.where((id) => id.startsWith('v:')));
-    final saved = await prefs.setStringList(key, readIds.toList()..sort());
-    if (!saved) return false;
-    ref.invalidate(virtualInboxProvider);
-    return true;
-  },
-);
+final markVirtualInboxReadProvider =
+    Provider<Future<bool> Function(List<String>)>(
+      (ref) => (ids) async {
+        final uid = ref.read(currentUidProvider);
+        if (uid == null || ids.isEmpty) return true;
+        final month = ref
+            .read(familyDateKeysProvider)
+            .today()
+            .monthKey
+            .toString();
+        final prefs = ref.read(sharedPreferencesProvider);
+        final key = _virtualReadKey(uid, month);
+        final readIds = prefs.getStringList(key)?.toSet() ?? <String>{};
+        readIds.addAll(ids.where((id) => id.startsWith('v:')));
+        final saved = await prefs.setStringList(key, readIds.toList()..sort());
+        if (!saved) return false;
+        ref.invalidate(virtualInboxProvider);
+        return true;
+      },
+    );
 
 final archiveInboxItemProvider = Provider<ArchiveInboxItem>(
   (ref) => ArchiveInboxItem(

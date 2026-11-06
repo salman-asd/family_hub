@@ -4,6 +4,7 @@ import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/features/chores/availability/presentation/availability_index_provider.dart';
 import 'package:family_hub/features/chores/calendar/presentation/calendar_items_providers.dart';
+import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/chores/presentation/chores_failure_messages.dart';
 import 'package:family_hub/features/chores/presentation/date_of_key.dart';
@@ -93,7 +94,7 @@ class _SwapSheetState extends ConsumerState<_SwapSheet> {
     final formatters = ref.watch(appFormattersProvider);
     final month = ref.watch(monthItemsProvider(widget.occurrence.monthKey));
     final load = <String, int>{};
-    for (final item in month.value?.items ?? const []) {
+    for (final item in month.value?.items ?? const <ChoreItem>[]) {
       final who = item.assigneeId;
       if (who != null) load[who] = (load[who] ?? 0) + 1;
     }

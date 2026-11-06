@@ -34,7 +34,7 @@ void main() {
           ScreenState.loading => StreamController<RelationshipCatalog>().stream,
           ScreenState.error => Stream<RelationshipCatalog>.error('boom'),
           ScreenState.empty => Stream.value(RelationshipCatalog.defaults),
-          ScreenState.data => Stream.value(
+          ScreenState.data || ScreenState.offline => Stream.value(
             RelationshipCatalog.defaults
                 .add(id: 'uncle', labelBn: 'চাচা', labelEn: 'Uncle')
                 .valueOrNull!,

@@ -65,6 +65,12 @@ class RotationEditor extends ConsumerWidget {
                 name: memberName(index, draft.members[i]),
                 avatarKey: index[draft.members[i]]?.avatarKey,
                 index: enabled ? i : null,
+                onMoveUp: enabled && i > 0
+                    ? () => onChanged(draft.moveTo(i, i - 1))
+                    : null,
+                onMoveDown: enabled && i < draft.members.length - 1
+                    ? () => onChanged(draft.moveTo(i, i + 1))
+                    : null,
                 gone:
                     index.isNotEmpty &&
                     !(index[draft.members[i]]?.isActive ?? false),

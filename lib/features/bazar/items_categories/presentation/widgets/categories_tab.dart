@@ -8,6 +8,7 @@ import 'package:family_hub/features/bazar/presentation/bazar_failure_messages.da
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/shared/widgets/category_badge.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
+import 'package:family_hub/shared/widgets/reorder_move_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -43,16 +44,16 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
     ];
   }
 
-  Future<void> _reorder(
-    List<Category> current,
-    int oldIndex,
-    int newIndex,
-  ) async {
+  /// The deprecated `onReorder` reports the index in the list before the row
+  /// was removed, so a downward move counts one extra.
+  Future<void> _reorder(List<Category> current, int oldIndex, int newIndex) =>
+      _moveTo(current, oldIndex, newIndex > oldIndex ? newIndex - 1 : newIndex);
+
+  Future<void> _moveTo(List<Category> current, int oldIndex, int target) async {
     final familyId = ref.read(currentFamilyIdProvider);
     final uid = ref.read(currentUidProvider);
     if (familyId == null || uid == null) return;
     final ids = <String>[for (final c in current) c.id];
-    final target = newIndex > oldIndex ? newIndex - 1 : newIndex;
     ids.insert(target, ids.removeAt(oldIndex));
     setState(() => _pending = ids);
     await ref
@@ -132,16 +133,32 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
                           ],
                         ),
                   trailing: widget.canManage
-                      ? ReorderableDragStartListener(
-                          index: i,
-                          child: SizedBox(
-                            width: 48,
-                            height: 48,
-                            child: Tooltip(
-                              message: l10n.catalogReorder,
-                              child: const Icon(Icons.drag_handle),
+                      ? Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Rule 71: TalkBack cannot drag, so each row also
+                            // moves by a tap.
+                            ReorderMoveButtons(
+                              index: i,
+                              onMoveUp: i > 0
+                                  ? () => _moveTo(categories, i, i - 1)
+                                  : null,
+                              onMoveDown: i < categories.length - 1
+                                  ? () => _moveTo(categories, i, i + 1)
+                                  : null,
                             ),
-                          ),
+                            ReorderableDragStartListener(
+                              index: i,
+                              child: SizedBox(
+                                width: 48,
+                                height: 48,
+                                child: Tooltip(
+                                  message: l10n.catalogReorder,
+                                  child: const Icon(Icons.drag_handle),
+                                ),
+                              ),
+                            ),
+                          ],
                         )
                       : null,
                 ),

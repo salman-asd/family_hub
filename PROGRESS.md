@@ -1968,8 +1968,9 @@ Firestore rules suites; see C1.
 Delivered card specs, dashboard header/grid/cards, refresh behavior, and the
 Family/Bazar/Chores module card registrations. Hub Level remains a stub until
 P4-20; Ask AI remains behind `FeatureFlags.askAi = false`. Verification:
-dashboard widget, visibility, listener-count, localization, and overflow tests
-are part of the aggregate Flutter suite; see C1.
+Dashboard widget, visibility, localization, and overflow tests are part of the
+aggregate Flutter suite; see C1. A dedicated test for the seven-listener
+ceiling and tab-switch behavior was not found and remains a P4-25 gap.
 
 ### P4-08 - Dashboard customization and access
 Delivered member dashboard customization and the role access matrix, their
@@ -2244,3 +2245,37 @@ quiet all-done state, so no change there was needed.
 | Architecture/file-size/ARB parity/no-raw-color guards | Passed. The hard-coded-string guard still reports 12 pre-existing findings in unrelated files. |
 | Hot restart | Attempted through DTD; no Flutter app was connected. |
 | Golden capture | Not generated on Windows; project goldens are generated on Linux. |
+
+## Wave E review - P4-23 … P4-25 (partial; not sign-off)
+
+Added the P4-23 audit, P4-25 acceptance record, Firestore read-budget
+measurement template, and Phase 5 data contract. Corrected the stale collection
+checklist statement that `memberStats` was still deny-all. The P4-23 harness
+covers eight Phase 4 screens, not every application screen.
+
+The review fixed the missing agenda jump threshold and two calendar test
+assumptions. Celebration marking now uses a Firestore transaction for an
+online cross-session claim; on `Network`, it falls back to the existing local
+once-per-device guard so an offline completion can still celebrate. This
+fallback is device-local: it cannot coordinate two offline devices, and a
+network error can leave the transaction acknowledgement indeterminate, so a
+duplicate on another device cannot be ruled out.
+
+| Focused check | Result |
+| --- | --- |
+| Celebration controller | Passed (7 tests). |
+| Stats actions and sync | Passed (7 tests). |
+| Phase 4 state matrix | Passed (180 tests). |
+| Phase 4 accessibility audit | Passed (19 tests). |
+| Dashboard grid, tablet shell, achievements and occurrence responsive layouts | Passed (18 tests). |
+| Calendar polish and views | Passed (32 tests). |
+| Architecture file-size guard | Passed (1 test); celebration controller is below 300 lines. |
+| Dashboard ≤ 7 listener-count test | Missing; not verified. |
+| Full `flutter analyze` | Failed (162 repository issues; none reported in the celebration files). |
+| Full `flutter test --exclude-tags golden` | Failed; reported app/router failures include the missing `reminderSchedulerProvider` test override. The first run also caught the now-fixed celebration-controller file-size violation; the full suite was not rerun after that fix. |
+| Firestore emulator rules | Could not run; Java is not installed/on PATH. |
+| Firestore transaction race and read-budget measurements | Not run. |
+| Android device tests, family UAT, copy review, Linux goldens | Not run. |
+
+P4-25 remains incomplete until the open rows in `docs/phase4_acceptance.md`
+have evidence. P4-26 is optional and deferred on Spark.

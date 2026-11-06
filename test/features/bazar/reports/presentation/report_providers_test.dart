@@ -27,7 +27,7 @@ void main() {
     PermissionSettings? settings,
   }) {
     final container = ProviderContainer(
-      overrides: <Override>[
+      overrides: [
         clockProvider.overrideWithValue(fx.clock),
         currentFamilyIdProvider.overrideWithValue(BazarFixture.familyId),
         currentUidProvider.overrideWithValue(uid),

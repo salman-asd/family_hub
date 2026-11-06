@@ -17,16 +17,13 @@ void main() {
       awaitingVerification: 4,
     );
 
-    expect(
-      items.map((item) => item.id),
-      <String>[
-        'v:budget:2026-11',
-        'v:join:2026-11',
-        'v:contribution-requests:2026-11',
-        'v:contribution-due:2026-11:member-1',
-        'v:verification:2026-11',
-      ],
-    );
+    expect(items.map((item) => item.id), <String>[
+      'v:budget:2026-11',
+      'v:join:2026-11',
+      'v:contribution-requests:2026-11',
+      'v:contribution-due:2026-11:member-1',
+      'v:verification:2026-11',
+    ]);
     expect(items.every((item) => item.isUnread), isTrue);
     expect(items.every((item) => item.id.startsWith('v:')), isTrue);
   });
@@ -55,55 +52,58 @@ void main() {
   });
 
   test('each cause is independently visible and disappears when cleared', () {
-    final inputs = <({
-      int? budgetPercent,
-      int pendingJoinRequests,
-      int pendingContributionRequests,
-      bool contributionDue,
-      int awaitingVerification,
-      String type,
-    })>[
-      (
-        budgetPercent: 85,
-        pendingJoinRequests: 0,
-        pendingContributionRequests: 0,
-        contributionDue: false,
-        awaitingVerification: 0,
-        type: VirtualInboxType.budgetAlert,
-      ),
-      (
-        budgetPercent: null,
-        pendingJoinRequests: 2,
-        pendingContributionRequests: 0,
-        contributionDue: false,
-        awaitingVerification: 0,
-        type: VirtualInboxType.pendingJoinRequests,
-      ),
-      (
-        budgetPercent: null,
-        pendingJoinRequests: 0,
-        pendingContributionRequests: 3,
-        contributionDue: false,
-        awaitingVerification: 0,
-        type: VirtualInboxType.pendingContributionRequests,
-      ),
-      (
-        budgetPercent: null,
-        pendingJoinRequests: 0,
-        pendingContributionRequests: 0,
-        contributionDue: true,
-        awaitingVerification: 0,
-        type: VirtualInboxType.contributionDue,
-      ),
-      (
-        budgetPercent: null,
-        pendingJoinRequests: 0,
-        pendingContributionRequests: 0,
-        contributionDue: false,
-        awaitingVerification: 4,
-        type: VirtualInboxType.awaitingVerification,
-      ),
-    ];
+    final inputs =
+        <
+          ({
+            int? budgetPercent,
+            int pendingJoinRequests,
+            int pendingContributionRequests,
+            bool contributionDue,
+            int awaitingVerification,
+            String type,
+          })
+        >[
+          (
+            budgetPercent: 85,
+            pendingJoinRequests: 0,
+            pendingContributionRequests: 0,
+            contributionDue: false,
+            awaitingVerification: 0,
+            type: VirtualInboxType.budgetAlert,
+          ),
+          (
+            budgetPercent: null,
+            pendingJoinRequests: 2,
+            pendingContributionRequests: 0,
+            contributionDue: false,
+            awaitingVerification: 0,
+            type: VirtualInboxType.pendingJoinRequests,
+          ),
+          (
+            budgetPercent: null,
+            pendingJoinRequests: 0,
+            pendingContributionRequests: 3,
+            contributionDue: false,
+            awaitingVerification: 0,
+            type: VirtualInboxType.pendingContributionRequests,
+          ),
+          (
+            budgetPercent: null,
+            pendingJoinRequests: 0,
+            pendingContributionRequests: 0,
+            contributionDue: true,
+            awaitingVerification: 0,
+            type: VirtualInboxType.contributionDue,
+          ),
+          (
+            budgetPercent: null,
+            pendingJoinRequests: 0,
+            pendingContributionRequests: 0,
+            contributionDue: false,
+            awaitingVerification: 4,
+            type: VirtualInboxType.awaitingVerification,
+          ),
+        ];
 
     for (final input in inputs) {
       final item = VirtualInbox.build(

@@ -1,5 +1,6 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/core/utils/bangla_numerals.dart';
 import 'package:family_hub/features/chores/occurrences/domain/day_part.dart';
 import 'package:family_hub/shared/widgets/section_header.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,10 @@ class DayPartSection extends StatelessWidget {
           const SizedBox(width: 6),
           Expanded(child: SectionHeader(title: dayPartLabel(context, part))),
           Text(
-            '$count',
+            // P4-23: counts use Bangla digits when the app is in Bangla.
+            Localizations.localeOf(context).languageCode == 'bn'
+                ? toBanglaDigits('$count')
+                : '$count',
             style: TextStyle(color: t.textSecondary, fontSize: 12),
           ),
         ],

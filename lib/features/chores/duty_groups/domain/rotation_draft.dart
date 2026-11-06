@@ -75,12 +75,15 @@ final class RotationDraft {
 
   /// Moves a member the way `ReorderableListView.onReorder` reports it
   /// ([newIndex] is counted before the removal).
-  RotationDraft moved(int oldIndex, int newIndex) {
+  RotationDraft moved(int oldIndex, int newIndex) =>
+      moveTo(oldIndex, newIndex > oldIndex ? newIndex - 1 : newIndex);
+
+  /// Moves a member to [target], the index it ends up at - what the rule 71
+  /// move buttons use, so a caller never has to know the drag convention.
+  RotationDraft moveTo(int oldIndex, int target) {
     if (oldIndex < 0 || oldIndex >= members.length) return this;
     final list = <String>[...members];
     final item = list.removeAt(oldIndex);
-    var target = newIndex;
-    if (target > oldIndex) target -= 1;
     list.insert(target.clamp(0, list.length), item);
     return copyWith(members: list);
   }

@@ -14,6 +14,7 @@ import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:family_hub/shared/widgets/money_text.dart';
 import 'package:family_hub/shared/widgets/pill_bottom_bar.dart';
 import 'package:family_hub/shared/widgets/progress_ring.dart';
+import 'package:family_hub/shared/widgets/reorder_move_buttons.dart';
 import 'package:family_hub/shared/widgets/section_header.dart';
 import 'package:family_hub/shared/widgets/status_chip.dart';
 import 'package:family_hub/shared/widgets/sync_banner.dart';
@@ -62,6 +63,7 @@ List<GallerySection> gallerySections() => <GallerySection>[
   _progress,
   _pillBar,
   _syncBanner,
+  _reorderMoveButtons,
   ...phase2GallerySections(),
   ...phase3GallerySections(),
   ...phase4GallerySections(),
@@ -376,6 +378,19 @@ final GallerySection _syncBanner = GallerySection(
       SizedBox(height: 12),
       // Zero pending writes renders nothing.
       SyncBanner(pendingWrites: 0),
+    ],
+  ),
+);
+
+final GallerySection _reorderMoveButtons = GallerySection(
+  id: 'reorder_move_buttons',
+  label: (l10n) => l10n.galleryReorderMoveButtons,
+  build: (context) => Column(
+    children: [
+      ReorderMoveButtons(index: 1, onMoveUp: () {}, onMoveDown: () {}),
+      const SizedBox(height: 12),
+      // The last row of a list: "move down" stays visible and disabled.
+      ReorderMoveButtons(index: 3, onMoveUp: () {}),
     ],
   ),
 );

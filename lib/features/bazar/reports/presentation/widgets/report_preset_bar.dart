@@ -45,7 +45,7 @@ String rangeLabel(AppLocalizations l10n, RangePreset preset) =>
     switch (preset) {
       RangePreset.today => l10n.expenseRangeToday,
       RangePreset.yesterday => l10n.expenseRangeYesterday,
-      RangePreset.last7Days => l10n.expenseRangeLast7Days,
+      RangePreset.last7Days => l10n.expenseRangeLast7,
       RangePreset.thisWeek => l10n.expenseRangeThisWeek,
       RangePreset.thisMonth => l10n.expenseRangeThisMonth,
       RangePreset.lastMonth => l10n.expenseRangeLastMonth,

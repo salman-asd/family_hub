@@ -85,6 +85,7 @@ void main() {
       settings: settings,
     );
     expect(marked.failureOrNull, isNull);
+    expect(marked.valueOrNull, isTrue);
     expect(stats.current?.lastCelebratedDateKey, today);
     final writes = stats.writes;
 
@@ -96,6 +97,7 @@ void main() {
       settings: settings,
     );
     expect(repeated.failureOrNull, isNull);
+    expect(repeated.valueOrNull, isFalse);
     expect(stats.writes, writes);
   });
 }
@@ -134,5 +136,22 @@ final class _StatsRepository implements MemberStatsRepository {
     current = stats;
     publicCards.add(publicStats);
     return const Success<void>(null);
+  }
+
+  @override
+  Future<Result<bool>> claimCelebration(
+    String familyId,
+    String memberId, {
+    required DateKey dateKey,
+    required DateKey defaultStartedOn,
+  }) async {
+    final previous = current ?? MemberStats.empty(startedOn: defaultStartedOn);
+    final celebrated = previous.lastCelebratedDateKey;
+    if (celebrated != null && !dateKey.isAfter(celebrated)) {
+      return const Success<bool>(false);
+    }
+    current = previous.copyWith(lastCelebratedDateKey: dateKey);
+    writes++;
+    return const Success<bool>(true);
   }
 }

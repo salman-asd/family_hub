@@ -3,6 +3,7 @@ import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/chores/achievements/domain/celebration_state.dart';
 import 'package:family_hub/features/chores/achievements/domain/engagement_settings.dart';
 import 'package:family_hub/features/chores/achievements/domain/levels/level_table.dart';
+import 'package:family_hub/features/chores/achievements/presentation/engagement_motion.dart';
 import 'package:family_hub/features/chores/achievements/presentation/painters/confetti_painter.dart';
 import 'package:family_hub/features/chores/achievements/presentation/widgets/achievement_badges.dart';
 import 'package:family_hub/features/chores/achievements/presentation/widgets/engagement_plant_view.dart';
@@ -66,7 +67,7 @@ final class CelebrationOverlay extends StatelessWidget {
                     children: [
                       if (!reducedMotion)
                         TweenAnimationBuilder<double>(
-                          duration: const Duration(milliseconds: 1800),
+                          duration: engagementMotionConfetti(context),
                           tween: Tween<double>(begin: 0, end: 1),
                           builder: (context, progress, _) => CustomPaint(
                             painter: ConfettiPainter(

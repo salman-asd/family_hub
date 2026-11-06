@@ -196,22 +196,35 @@ class _CustomizeDashboardScreenState
           ),
           const SizedBox(height: 8),
           for (final card in hidden)
-            ListTile(
+            // P4-23: `ListTile` reserves a fixed slot for `trailing`, so a
+            // long Bangla label at 200% text leaves the title no room and the
+            // tile asserts mid-layout. A row lets the title wrap instead.
+            Padding(
               key: Key('dashboard_hidden_${card.definition.id}'),
-              title: Text(dashboardCardTitle(l10n, card.definition.id)),
-              trailing: TextButton.icon(
-                onPressed: _saving
-                    ? null
-                    : () => _save(
-                        controller.setVisibility(
-                          prefs,
-                          card.definition.id,
-                          true,
-                          card.access,
-                        ),
-                      ),
-                icon: const Icon(Icons.add_rounded),
-                label: Text(l10n.dashboardAddBack),
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(dashboardCardTitle(l10n, card.definition.id)),
+                  ),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: TextButton.icon(
+                      onPressed: _saving
+                          ? null
+                          : () => _save(
+                              controller.setVisibility(
+                                prefs,
+                                card.definition.id,
+                                true,
+                                card.access,
+                              ),
+                            ),
+                      icon: const Icon(Icons.add_rounded),
+                      label: Text(l10n.dashboardAddBack),
+                    ),
+                  ),
+                ],
               ),
             ),
         ],

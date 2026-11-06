@@ -107,7 +107,7 @@ class SummaryTab extends ConsumerWidget {
           const SizedBox(height: 12),
           ComparisonRow(
             comparison: comparison,
-            previousLabel: l10n.previousPeriodName(query.preset),
+            previousLabel: previousPeriodName(l10n, query.preset),
           ),
         ],
       ],

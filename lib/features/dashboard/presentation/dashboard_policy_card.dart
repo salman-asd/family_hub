@@ -28,7 +28,13 @@ class DashboardPolicyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final card = CardCatalog.find(cardId)!;
+    final card = CardCatalog.find(cardId);
+    if (card == null) {
+      // A saved policy can name a card the catalog no longer has (a module
+      // was switched off); there is nothing to configure, so this row draws
+      // nothing instead of taking the whole matrix down (P4-23).
+      return const SizedBox.shrink();
+    }
     final managerCanSee = DashboardAccessPreview.canRoleSeeCard(
       Role.moderator,
       card,

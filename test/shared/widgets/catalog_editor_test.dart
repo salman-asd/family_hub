@@ -73,6 +73,45 @@ void main() {
     ]);
   });
 
+  testWidgets('every drag has a Move up / Move down twin (rule 71)', (
+    tester,
+  ) async {
+    final states = await pumpEditor(tester);
+
+    bool enabled(String key) =>
+        tester
+            .widget<IconButton>(find.byKey(ValueKey<String>(key)))
+            .onPressed !=
+        null;
+
+    // The edge rows keep their disabled twin so the rows do not jump sideways.
+    expect(enabled('move_up_0'), isFalse);
+    expect(enabled('move_down_0'), isTrue);
+    expect(enabled('move_up_2'), isTrue);
+    expect(enabled('move_down_2'), isFalse);
+    expect(
+      find.byTooltip('উপরে নিন'),
+      findsNWidgets(3),
+      reason: 'a screen reader needs the label, not only the arrow',
+    );
+
+    await tester.tap(find.byKey(const ValueKey<String>('move_down_0')));
+    await tester.pumpAndSettle();
+    expect(states.last.map((e) => e.id).toList(), [
+      'bathroom',
+      'kitchen',
+      'custom_1',
+    ]);
+
+    await tester.tap(find.byKey(const ValueKey<String>('move_up_2')));
+    await tester.pumpAndSettle();
+    expect(states.last.map((e) => e.id).toList(), [
+      'bathroom',
+      'custom_1',
+      'kitchen',
+    ]);
+  });
+
   testWidgets('deactivating keeps the row but marks it off', (tester) async {
     final states = await pumpEditor(tester);
     await openMenu(tester, 0);

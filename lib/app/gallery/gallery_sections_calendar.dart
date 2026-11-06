@@ -1,5 +1,6 @@
 import 'package:family_hub/app/gallery/gallery_sections.dart';
 import 'package:family_hub/core/localization/app_formatters.dart';
+import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/calendar/domain/calendar_enums.dart';
 import 'package:family_hub/features/chores/calendar/domain/day_summary.dart';
@@ -8,6 +9,7 @@ import 'package:family_hub/features/chores/calendar/presentation/widgets/day_cel
 import 'package:family_hub/features/chores/calendar/presentation/widgets/hatch_swatch.dart';
 import 'package:family_hub/features/chores/calendar/presentation/widgets/heat_legend.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 
 /// P3-24: the heat key, the two hatches and day cells in each decoration.
 GallerySection calendarPolishSection = GallerySection(
@@ -55,22 +57,34 @@ GallerySection calendarPolishSection = GallerySection(
           ],
         ),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            for (final summary in cells)
-              Expanded(
-                child: DayCell(
-                  summary: summary,
-                  selected: summary.dateKey.day == 3,
-                  scope: CalendarScope.all,
-                  markerStyle: MarkerStyle.glyphs,
-                  formatters: f,
-                  minHeight: 56,
-                  onTap: () {},
-                  onLongPress: () {},
-                ),
-              ),
-          ],
+        // P4-23: a `cell` is only legal under a `row`, and a `row` only under a
+        // `table` - the same nesting `MonthBody` builds, or the demo trips the
+        // semantics assertion instead of showing what a screen reader gets.
+        Semantics(
+          role: SemanticsRole.table,
+          container: true,
+          label: context.l10n.calendarGridLabel,
+          child: Semantics(
+            role: SemanticsRole.row,
+            container: true,
+            child: Row(
+              children: [
+                for (final summary in cells)
+                  Expanded(
+                    child: DayCell(
+                      summary: summary,
+                      selected: summary.dateKey.day == 3,
+                      scope: CalendarScope.all,
+                      markerStyle: MarkerStyle.glyphs,
+                      formatters: f,
+                      minHeight: 56,
+                      onTap: () {},
+                      onLongPress: () {},
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ],
     );

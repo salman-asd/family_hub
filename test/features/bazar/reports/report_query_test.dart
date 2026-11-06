@@ -53,11 +53,11 @@ void main() {
     });
 
     test('equality compares every field', () {
-      const a = ReportQuery(
+      final a = ReportQuery(
         preset: RangePreset.thisMonth,
         range: DateKeyRange(DateKey(2026, 10, 1), DateKey(2026, 10, 31)),
       );
-      const b = ReportQuery(
+      final b = ReportQuery(
         preset: RangePreset.thisMonth,
         range: DateKeyRange(DateKey(2026, 10, 1), DateKey(2026, 10, 31)),
       );

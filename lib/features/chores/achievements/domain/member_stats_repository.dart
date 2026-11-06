@@ -23,4 +23,14 @@ abstract interface class MemberStatsRepository {
     MemberStats stats, {
     required PublicStats? publicStats,
   });
+
+  /// Atomically claims the one celebration allowed for [dateKey].
+  ///
+  /// Returns false when another session has already claimed this date.
+  Future<Result<bool>> claimCelebration(
+    String familyId,
+    String memberId, {
+    required DateKey dateKey,
+    required DateKey defaultStartedOn,
+  });
 }

@@ -57,7 +57,7 @@ final class PeriodComparison {
 /// `base` must not be zero; callers show "—" instead (the value is unknowable).
 int halfUpRatioBp({required Money delta, required Money base}) {
   assert(base.paisa != 0, 'a ratio needs a non-zero base');
-  final numerator = delta.paisa * 20000;
+  final numerator = delta.paisa * 10000;
   final denominator = base.paisa;
   final magnitude =
       (numerator.abs() + denominator.abs() ~/ 2) ~/ denominator.abs();

@@ -20,6 +20,7 @@ import 'package:family_hub/shared/widgets/empty_state.dart';
 import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -96,22 +97,35 @@ class _WeekStrip extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              for (final d in week.days)
-                Expanded(
-                  child: DayCell(
-                    summary: d.summary,
-                    selected: d.dateKey == selected,
-                    scope: scope,
-                    markerStyle: style,
-                    formatters: formatters,
-                    minHeight: cellHeight,
-                    onTap: () => controller.selectDay(d.dateKey),
-                    onLongPress: () => controller.selectDay(d.dateKey),
-                  ),
-                ),
-            ],
+          // P4-23: [DayCell] claims the semantics `cell` role and Flutter only
+          // accepts cell -> row -> table, so the strip is a one-row table.
+          // Without it TalkBack gets a cell with no table to navigate and the
+          // debug assertion fires.
+          Semantics(
+            role: SemanticsRole.table,
+            container: true,
+            label: l10n.calendarGridLabel,
+            child: Semantics(
+              role: SemanticsRole.row,
+              container: true,
+              child: Row(
+                children: [
+                  for (final d in week.days)
+                    Expanded(
+                      child: DayCell(
+                        summary: d.summary,
+                        selected: d.dateKey == selected,
+                        scope: scope,
+                        markerStyle: style,
+                        formatters: formatters,
+                        minHeight: cellHeight,
+                        onTap: () => controller.selectDay(d.dateKey),
+                        onLongPress: () => controller.selectDay(d.dateKey),
+                      ),
+                    ),
+                ],
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 12, 4, 8),

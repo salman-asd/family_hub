@@ -34,46 +34,49 @@ class ReportTabBodies extends ConsumerWidget {
         actionLabel: l10n.actionRetry,
         onAction: () => ref.invalidate(reportDataProvider),
       ),
-      data: (report) {
-        final index = DefaultTabController.of(context).index;
-        final tab = ReportTab.values[index];
-        return Column(
-          children: [
-            if (ref.watch(reportTruncatedProvider))
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                child: FormBanner(
-                  icon: Icons.filter_alt_off_outlined,
-                  text: l10n.reportTruncated,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-              ),
-            Expanded(
-              child: switch (tab) {
-                ReportTab.summary => SummaryTab(data: report, query: query),
-                ReportTab.categories => CategoriesTab(
-                  data: report,
-                  byCategory: ref.watch(catalogIndexProvider).categoriesById,
-                ),
-                ReportTab.items => ItemsTab(data: report),
-                ReportTab.days => DaysTab(data: report),
-                ReportTab.members => MembersTab(
-                  data: report,
-                  memberNames: memberNames(ref),
-                ),
-                ReportTab.dryGroceries => DryGroceriesTab(data: report),
-                ReportTab.contributions => ContributionsTab(
-                  month: contributionMonthFor(
-                    query.resolvedRange,
-                    ref.watch(familyDateKeysProvider).thisMonth(),
+      data: (report) => AnimatedBuilder(
+        animation: DefaultTabController.of(context),
+        builder: (context, _) {
+          final index = DefaultTabController.of(context).index;
+          final tab = ReportTab.values[index];
+          return Column(
+            children: [
+              if (ref.watch(reportTruncatedProvider))
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  child: FormBanner(
+                    icon: Icons.filter_alt_off_outlined,
+                    text: l10n.reportTruncated,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
-                  memberNames: memberNames(ref),
                 ),
-              },
-            ),
-          ],
-        );
-      },
+              Expanded(
+                child: switch (tab) {
+                  ReportTab.summary => SummaryTab(data: report, query: query),
+                  ReportTab.categories => CategoriesTab(
+                    data: report,
+                    byCategory: ref.watch(catalogIndexProvider).categoriesById,
+                  ),
+                  ReportTab.items => ItemsTab(data: report),
+                  ReportTab.days => DaysTab(data: report),
+                  ReportTab.members => MembersTab(
+                    data: report,
+                    memberNames: memberNames(ref),
+                  ),
+                  ReportTab.dryGroceries => DryGroceriesTab(data: report),
+                  ReportTab.contributions => ContributionsTab(
+                    month: contributionMonthFor(
+                      query.resolvedRange,
+                      ref.watch(familyDateKeysProvider).thisMonth(),
+                    ),
+                    memberNames: memberNames(ref),
+                  ),
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }

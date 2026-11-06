@@ -1,8 +1,13 @@
+import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/core/permissions/permission.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart'
     as domain;
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/flag_chip.dart' as chips;
 import 'package:family_hub/shared/widgets/status_chip.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The domain's flag set mapped onto the shared widget's enum.
 chips.ChoreFlag sharedFlag(domain.ChoreFlag flag) => switch (flag) {

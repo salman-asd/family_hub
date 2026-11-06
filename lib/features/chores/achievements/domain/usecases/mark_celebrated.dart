@@ -4,7 +4,6 @@ import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/achievements/domain/engagement_settings.dart';
 import 'package:family_hub/features/chores/achievements/domain/member_stats.dart';
 import 'package:family_hub/features/chores/achievements/domain/member_stats_repository.dart';
-import 'package:family_hub/features/chores/achievements/domain/public_stats.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/permission_access.dart';
 
@@ -14,7 +13,7 @@ final class MarkCelebrated {
   final FamilyRepository families;
   final MemberStatsRepository stats;
 
-  Future<Result<void>> call({
+  Future<Result<bool>> call({
     required String familyId,
     required String memberId,
     required DateKey dateKey,
@@ -27,9 +26,9 @@ final class MarkCelebrated {
       actorUid: memberId,
     );
     final activeFailure = active.failureOrNull;
-    if (activeFailure != null) return Failure<void>(activeFailure);
+    if (activeFailure != null) return Failure<bool>(activeFailure);
     if (dateKey.isAfter(today)) {
-      return const Failure<void>(Validation('dateKey', 'future_date'));
+      return const Failure<bool>(Validation('dateKey', 'future_date'));
     }
 
     final loaded = await stats.get(
@@ -38,7 +37,7 @@ final class MarkCelebrated {
       defaultStartedOn: settings.startedOn,
     );
     final loadFailure = loaded.failureOrNull;
-    if (loadFailure != null) return Failure<void>(loadFailure);
+    if (loadFailure != null) return Failure<bool>(loadFailure);
     final previous =
         loaded.valueOrNull ?? MemberStats.empty(startedOn: settings.startedOn);
     if (loaded.valueOrNull == null) {
@@ -49,20 +48,13 @@ final class MarkCelebrated {
         publicStats: null,
       );
       final initializeFailure = initialized.failureOrNull;
-      if (initializeFailure != null) return Failure<void>(initializeFailure);
+      if (initializeFailure != null) return Failure<bool>(initializeFailure);
     }
-    final celebrated = previous.lastCelebratedDateKey;
-    if (celebrated != null && !dateKey.isAfter(celebrated)) {
-      return const Success<void>(null);
-    }
-    final updated = previous.copyWith(lastCelebratedDateKey: dateKey);
-    final publicCard =
-        settings.statsVisibility == StatsVisibility.levels && updated.sharing
-        ? PublicStats(
-            level: updated.level,
-            badgeIds: List<String>.unmodifiable(updated.badges.keys),
-          )
-        : null;
-    return stats.save(familyId, memberId, updated, publicStats: publicCard);
+    return stats.claimCelebration(
+      familyId,
+      memberId,
+      dateKey: dateKey,
+      defaultStartedOn: settings.startedOn,
+    );
   }
 }

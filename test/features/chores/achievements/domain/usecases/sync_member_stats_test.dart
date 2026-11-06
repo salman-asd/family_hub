@@ -205,6 +205,23 @@ final class _StatsRepository implements MemberStatsRepository {
     onPublicSave?.call(publicStats);
     return const Success<void>(null);
   }
+
+  @override
+  Future<Result<bool>> claimCelebration(
+    String familyId,
+    String memberId, {
+    required DateKey dateKey,
+    required DateKey defaultStartedOn,
+  }) async {
+    final previous = current ?? MemberStats.empty(startedOn: defaultStartedOn);
+    final celebrated = previous.lastCelebratedDateKey;
+    if (celebrated != null && !dateKey.isAfter(celebrated)) {
+      return const Success<bool>(false);
+    }
+    current = previous.copyWith(lastCelebratedDateKey: dateKey);
+    writes++;
+    return const Success<bool>(true);
+  }
 }
 
 final class _PublicStatsRepository implements PublicStatsRepository {

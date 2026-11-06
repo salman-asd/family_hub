@@ -1,6 +1,7 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
+import 'package:family_hub/shared/widgets/reorder_move_buttons.dart';
 import 'package:flutter/material.dart';
 
 /// One member in a rotation list: drag handle, avatar, name and, for somebody
@@ -16,6 +17,8 @@ class RotationMemberRow extends StatelessWidget {
     this.avatarKey,
     this.gone = false,
     this.onRemove,
+    this.onMoveUp,
+    this.onMoveDown,
     super.key,
   });
 
@@ -31,6 +34,10 @@ class RotationMemberRow extends StatelessWidget {
 
   /// Null hides the remove button.
   final VoidCallback? onRemove;
+
+  /// Rule 71: the non-drag twin of the handle, null where the row cannot move.
+  final VoidCallback? onMoveUp;
+  final VoidCallback? onMoveDown;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +94,11 @@ class RotationMemberRow extends StatelessWidget {
                   ),
               ],
             ),
+          ),
+          ReorderMoveButtons(
+            index: position ?? 0,
+            onMoveUp: onMoveUp,
+            onMoveDown: onMoveDown,
           ),
           if (remove != null)
             IconButton(

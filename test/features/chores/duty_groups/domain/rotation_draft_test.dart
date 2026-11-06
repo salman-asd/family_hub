@@ -38,6 +38,16 @@ void main() {
       expect(draft.moved(1, 1).members, ['a', 'b', 'c']);
     });
 
+    test('moveTo takes the row a Move up / Move down button reports', () {
+      final draft = _draft(<String>['a', 'b', 'c']);
+      // The rule 71 buttons say "end up at index n", with no drag shift.
+      expect(draft.moveTo(0, 1).members, ['b', 'a', 'c']);
+      expect(draft.moveTo(2, 1).members, ['a', 'c', 'b']);
+      expect(draft.moveTo(1, 1).members, ['a', 'b', 'c']);
+      // One step down for a row is the same list as its drag equivalent.
+      expect(draft.moveTo(0, 2).members, draft.moved(0, 3).members);
+    });
+
     test('one member is not a rotation', () {
       final failure = _draft(<String>['a']).toRotation().failureOrNull;
       expect(failure, const Validation('members', 'too_few_members'));

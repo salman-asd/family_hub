@@ -2,10 +2,11 @@ import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/core/utils/date_ranges.dart';
-import 'package:family_hub/features/bazar/reports/domain/report_query.dart';
+import 'package:family_hub/features/bazar/presentation/bazar_providers.dart';
 import 'package:family_hub/features/bazar/reports/presentation/report_providers.dart';
 import 'package:family_hub/features/bazar/reports/presentation/widgets/contributions_tab.dart';
 import 'package:family_hub/features/bazar/reports/presentation/widgets/report_preset_bar.dart';
+import 'package:family_hub/features/bazar/reports/presentation/widgets/report_share_actions.dart';
 import 'package:family_hub/features/bazar/reports/presentation/widgets/report_tab_bodies.dart';
 import 'package:family_hub/features/bazar/reports/presentation/widgets/report_tabs.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
@@ -35,12 +36,13 @@ class ReportsScreen extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.reportTitle),
+          actions: [ReportShareActions(query: query)],
           bottom: TabBar(
             isScrollable: true,
             tabs: <Widget>[
               for (final tab in ReportTab.values)
                 Tab(
-                  key: ValueKey('report-tab-${tab.name}'),
+                  key: ValueKey('report-tab-button-${tab.name}'),
                   text: tabLabel(l10n, tab),
                 ),
             ],

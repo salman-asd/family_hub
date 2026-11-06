@@ -42,6 +42,32 @@ void main() {
   );
 
   test(
+    'two concurrent expense writes both persist their own ledger rows',
+    () async {
+      final results = await Future.wait([
+        f.addExpense(
+          actorUid: 'alice',
+          familyId: BazarFixture.familyId,
+          draft: f.draft(itemName: 'rice'),
+          id: 'e1',
+          eventId: 'ev1',
+        ),
+        f.addExpense(
+          actorUid: 'bob',
+          familyId: BazarFixture.familyId,
+          draft: f.draft(itemName: 'lentils'),
+          id: 'e2',
+          eventId: 'ev2',
+        ),
+      ]);
+
+      expect(results.every((result) => result.isSuccess), isTrue);
+      expect(f.backend.expensesOf(BazarFixture.familyId), hasLength(2));
+      expect(f.backend.fundTransactionsOf(BazarFixture.familyId), hasLength(2));
+    },
+  );
+
+  test(
     'a reimbursable member expense writes a pending advance, no fund row',
     () async {
       final result = await f.addExpense(

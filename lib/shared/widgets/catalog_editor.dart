@@ -1,6 +1,7 @@
 import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/shared/widgets/catalog_entry_dialog.dart';
+import 'package:family_hub/shared/widgets/reorder_move_buttons.dart';
 import 'package:flutter/material.dart';
 
 part 'catalog_editor_parts.dart';
@@ -138,12 +139,7 @@ class CatalogEditor extends StatelessWidget {
             itemCount: entries.length,
             // `onReorderItem` already reports the final index of the moved row
             // (the deprecated `onReorder` did not), so no off-by-one shift.
-            onReorderItem: (oldIndex, newIndex) {
-              final next = <CatalogEntry>[...entries];
-              final moved = next.removeAt(oldIndex);
-              next.insert(newIndex, moved);
-              onChanged(next);
-            },
+            onReorderItem: _move,
             itemBuilder: (context, index) {
               final entry = entries[index];
               return _Row(
@@ -151,6 +147,14 @@ class CatalogEditor extends StatelessWidget {
                 entry: entry,
                 index: index,
                 showHandle: canReorder,
+                // Rule 71: the drag handle needs a non-drag twin, and a
+                // screen reader can only use the buttons.
+                onMoveUp: canReorder && index > 0
+                    ? () => _move(index, index - 1)
+                    : null,
+                onMoveDown: canReorder && index < entries.length - 1
+                    ? () => _move(index, index + 1)
+                    : null,
                 onEdit: () => _edit(context, entry),
                 onToggleActive: () => _handleToggle(context, entry),
                 onDelete: entry.builtIn ? null : () => _remove(entry),
@@ -169,6 +173,15 @@ class CatalogEditor extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  /// Moves a row to [newIndex], the index it ends up at - what both
+  /// `onReorderItem` and the move buttons report.
+  void _move(int oldIndex, int newIndex) {
+    final next = <CatalogEntry>[...entries];
+    final moved = next.removeAt(oldIndex);
+    next.insert(newIndex, moved);
+    onChanged(next);
   }
 
   void _replace(CatalogEntry before, CatalogEntry after) => onChanged([

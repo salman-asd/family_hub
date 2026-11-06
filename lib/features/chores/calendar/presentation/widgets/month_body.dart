@@ -19,7 +19,6 @@ import 'package:family_hub/features/chores/presentation/chores_failure_messages.
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_providers.dart';
 import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -93,29 +92,24 @@ class _GridColumn extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           WeekdayHeaderRow(weekStartDay: weekStart, formatters: formatters),
-          Semantics(
-            role: SemanticsRole.table,
-            container: true,
-            label: context.l10n.calendarGridLabel,
-            child: SizedBox(
-              height: rows * cellHeight,
-              child: MonthPager(
-                epoch: epoch,
-                month: focus.month,
-                reduceMotion: reduce,
-                onMonthChanged: controller.showMonth,
-                pageBuilder: (context, month) => MonthPage(
-                  month: month,
-                  weekStartDay: weekStart,
-                  cellHeight: cellHeight,
-                  selectedDay: focus.day,
-                  scope: scope,
-                  markerStyle: style,
-                  onSelect: (day) {
-                    unawaited(HapticFeedback.selectionClick());
-                    controller.selectDay(day);
-                  },
-                ),
+          SizedBox(
+            height: rows * cellHeight,
+            child: MonthPager(
+              epoch: epoch,
+              month: focus.month,
+              reduceMotion: reduce,
+              onMonthChanged: controller.showMonth,
+              pageBuilder: (context, month) => MonthPage(
+                month: month,
+                weekStartDay: weekStart,
+                cellHeight: cellHeight,
+                selectedDay: focus.day,
+                scope: scope,
+                markerStyle: style,
+                onSelect: (day) {
+                  unawaited(HapticFeedback.selectionClick());
+                  controller.selectDay(day);
+                },
               ),
             ),
           ),
@@ -161,11 +155,21 @@ class MonthPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final formatters = ref.watch(appFormattersProvider);
     final model = ref.watch(calendarMonthModelProvider(month));
+    // P4-23: the pager gives every page the height of the FOCUSED month, so a
+    // neighbour with one more week (October 2026 -> November 2026) overflowed
+    // that box by the extra row while the finger moved. A page is now laid out
+    // at its own height and the viewport clips the last row during the swipe;
+    // once a month settles the box matches its rows, so nothing stays hidden.
+    Widget grid(Widget child) => OverflowBox(
+      alignment: Alignment.topCenter,
+      minHeight: 0,
+      maxHeight: double.infinity,
+      child: child,
+    );
     if (model.hasValue) {
       final CalendarMonthModel value = model.requireValue;
-      return Align(
-        alignment: Alignment.topCenter,
-        child: MonthGrid(
+      return grid(
+        MonthGrid(
           model: value,
           selectedDay: selectedDay,
           scope: scope,
@@ -186,9 +190,8 @@ class MonthPage extends ConsumerWidget {
         onRetry: () => ref.invalidate(monthOccurrencesProvider(month)),
       );
     }
-    return Align(
-      alignment: Alignment.topCenter,
-      child: MonthGridPlaceholder(
+    return grid(
+      MonthGridPlaceholder(
         month: month,
         weekStartDay: weekStartDay,
         formatters: formatters,

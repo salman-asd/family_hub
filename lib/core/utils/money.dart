@@ -33,6 +33,9 @@ final class Money implements Comparable<Money> {
 
   Money operator -() => Money.paisa(-paisa);
 
+  /// The same distance from zero with the sign dropped, like `int.abs()`.
+  Money abs() => isNegative ? -this : this;
+
   Money operator *(int factor) => Money.paisa(paisa * factor);
 
   bool operator <(Money other) => paisa < other.paisa;

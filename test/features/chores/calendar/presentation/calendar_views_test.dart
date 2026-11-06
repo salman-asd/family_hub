@@ -2,6 +2,7 @@ import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:family_hub/features/chores/calendar/domain/calendar_enums.dart';
 import 'package:family_hub/features/chores/calendar/presentation/calendar_screen.dart';
+import 'package:family_hub/features/chores/calendar/presentation/widgets/calendar_filter_sheet.dart';
 import 'package:family_hub/features/chores/calendar/presentation/widgets/day_cell.dart';
 import 'package:family_hub/features/chores/calendar/presentation/widgets/quick_actions_sheet.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_item.dart';
@@ -193,9 +194,13 @@ void main() {
 
       final chip = find.byKey(const Key('calendar_chip_status_overdue'));
       expect(chip, findsOneWidget);
+      Navigator.of(tester.element(find.byType(CalendarFilterSheet))).pop();
+      await tester.pumpAndSettle();
 
+      // Material 3 chips delete with `Icons.clear`; `Icons.cancel` was the
+      // Material 2 default, so this finder used to match nothing.
       await tester.tap(
-        find.descendant(of: chip, matching: find.byIcon(Icons.cancel)),
+        find.descendant(of: chip, matching: find.byIcon(Icons.clear)),
       );
       await tester.pumpAndSettle();
       expect(chip, findsNothing);
