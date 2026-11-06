@@ -112,7 +112,8 @@ class FirestoreAdvanceRepository implements AdvanceRepository {
             AdvanceStatus.pending.name,
             AdvanceStatus.partial.name,
           ],
-        );
+        )
+        .limit(100);
     if (memberId != null) {
       query = query.where('memberId', isEqualTo: memberId);
     }

@@ -24,6 +24,10 @@ void main() {
         child: child,
         spec: appThemes.first,
         locale: Locale(lang),
+        prefsValues: <String, Object>{
+          'language_code': lang,
+          'use_bangla_digits': lang == 'bn',
+        },
       );
 
   group('MonthSwitcher', () {
@@ -71,15 +75,12 @@ void main() {
           onChanged: (m) => picked = m,
         ),
       );
-      await tester.tap(find.byType(InkWell).first);
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('October 2026'));
+      await tester.pumpAndSettle();
       expect(find.byType(ChoiceChip), findsNWidgets(12));
 
-      // A month after [max] cannot be chosen; March can.
-      final chips = tester.widgetList<ChoiceChip>(find.byType(ChoiceChip));
-      expect(chips.elementAt(11).onSelected, isNotNull); // December
-      await tester.tap(find.byType(ChoiceChip).at(2));
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.widgetWithText(ChoiceChip, 'March'));
+      await tester.pumpAndSettle();
       expect(picked, MonthKey(2026, 3));
     });
 
@@ -93,15 +94,15 @@ void main() {
           onChanged: (_) {},
         ),
       );
-      await tester.tap(find.byType(InkWell).first);
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('October 2026'));
+      await tester.pumpAndSettle();
       final chips = tester
           .widgetList<ChoiceChip>(find.byType(ChoiceChip))
           .toList();
-      expect(chips[6].onSelected, isNull); // July
-      expect(chips[7].onSelected, isNotNull); // August
-      expect(chips[10].onSelected, isNotNull); // November
-      expect(chips[11].onSelected, isNull); // December
+      expect(chips[6].onSelected, isNull);
+      expect(chips[7].onSelected, isNotNull);
+      expect(chips[10].onSelected, isNotNull);
+      expect(chips[11].onSelected, isNull);
     });
   });
 

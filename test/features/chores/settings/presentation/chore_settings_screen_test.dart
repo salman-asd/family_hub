@@ -1,7 +1,9 @@
 import 'package:family_hub/core/errors/app_failure.dart';
-import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/core/localization/generated/app_localizations_en.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_catalog_entries.dart';
+import 'package:family_hub/shared/widgets/catalog_editor.dart'
+    show CatalogEntry;
 import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 import 'package:family_hub/features/chores/settings/presentation/chore_settings_screen.dart';

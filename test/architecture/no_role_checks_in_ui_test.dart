@@ -8,7 +8,9 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final forbidden = RegExp(
     r'\.isAdmin\b|\.isModerator\b|canManageMembers|'
-    r'MemberRole\.(admin|moderator)\b|Role\.(admin|moderator)\b',
+    r'MemberRole\.(admin|moderator)\b|'
+    r'(?:==|!=)\s*Role\.(admin|moderator)\b|'
+    r'Role\.(admin|moderator)\s*(?:==|!=)',
   );
 
   test('the detector recognises each banned form', () {
@@ -19,7 +21,7 @@ void main() {
       'role == MemberRole.admin',
       'role == MemberRole.moderator',
       'role == Role.admin',
-      'Role.moderator',
+      'Role.admin == role',
     ]) {
       expect(forbidden.hasMatch(bad), isTrue, reason: bad);
     }

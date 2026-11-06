@@ -83,7 +83,7 @@ final _pending = Contribution(
 void main() {
   screenStateTests(
     'Bazar dashboard cards',
-    () => const Column(
+    () => ListView(
       children: [BazarMonthCard(), FundBalanceCard(), BudgetAlertCard()],
     ),
     overrides: (_) => _readyOverrides(),
@@ -349,6 +349,7 @@ Future<void> _pump(
 
   await tester.pumpWidget(
     ProviderScope(
+      key: UniqueKey(),
       overrides: [
         sharedPreferencesProvider.overrideWithValue(prefs),
         ...overrides,

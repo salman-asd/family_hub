@@ -54,8 +54,8 @@ class RotationEditor extends ConsumerWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           buildDefaultDragHandles: false,
-          onReorder: (oldIndex, newIndex) {
-            if (enabled) onChanged(draft.moved(oldIndex, newIndex));
+          onReorderItem: (oldIndex, newIndex) {
+            if (enabled) onChanged(draft.moveTo(oldIndex, newIndex));
           },
           children: [
             for (var i = 0; i < draft.members.length; i++)

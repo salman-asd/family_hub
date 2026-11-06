@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:family_hub/core/firebase/base_mapper.dart';
@@ -37,15 +37,22 @@ void main() {
       r'^ {4}([A-Za-z][A-Za-z0-9]*):',
       multiLine: true,
     ).allMatches(body).map((match) => match.group(1)!).toSet();
-    // The fixture wraps its map in `...baseDoc(uid, { … })`, whose keys sit one
-    // level deeper; `metadataToMap` writes exactly those.
-    final spread = RegExp(
-      r'^ {6}([A-Za-z][A-Za-z0-9]*):',
+    final baseStart = source.indexOf('export const baseDoc');
+    final baseEnd = source.indexOf('export const familyDoc', baseStart);
+    expect(baseStart, greaterThan(-1), reason: 'baseDoc not found');
+    expect(baseEnd, greaterThan(baseStart), reason: 'baseDoc never closes');
+    final baseBody = source.substring(baseStart, baseEnd);
+    final metadataKeys = RegExp(
+      r'^ {2}([A-Za-z][A-Za-z0-9]*):',
       multiLine: true,
-    ).allMatches(body).map((match) => match.group(1)!).toSet();
+    ).allMatches(baseBody).map((match) => match.group(1)!).toSet();
     expect(jsKeys, isNotEmpty, reason: 'the parser found no keys');
-    expect(spread, isNotEmpty, reason: 'the parser found no metadata keys');
-    jsKeys.addAll(spread);
+    expect(
+      metadataKeys,
+      isNotEmpty,
+      reason: 'the parser found no metadata keys',
+    );
+    jsKeys.addAll(metadataKeys);
 
     final dartKeys = ChoreTemplateMappers.toMap(
       ChoreTemplate(id: 'tpl_1', draft: aTemplate()),
@@ -63,9 +70,9 @@ void main() {
       reason: 'the mapper writes keys the JS fixture lacks',
     );
     expect(
-      spread.difference(jsKeys),
+      metadataKeys.difference(jsKeys),
       isEmpty,
-      reason: 'the metadata spread must stay inside the fixture',
+      reason: 'metadata keys must stay inside the fixture',
     );
   });
 

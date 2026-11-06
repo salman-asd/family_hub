@@ -12,6 +12,7 @@ import 'package:family_hub/features/family/presentation/permission_providers.dar
 import 'package:flutter_riverpod/misc.dart' show Override;
 
 import '../../bazar_test_helpers.dart';
+import '../../settings/bazar_settings_test_helpers.dart';
 
 /// The provider overrides that point every Bazar port at one in-memory
 /// backend, signed in as [uid] with [role].  Shared by the controller tests
@@ -34,6 +35,9 @@ List<Override> bazarOverrides(
   ),
   bazarSettingsProvider.overrideWithValue(
     BazarSettings.defaults.copyWith(fundStartMonth: MonthKey(2026, 9)),
+  ),
+  bazarSettingsRepositoryProvider.overrideWithValue(
+    FakeBazarSettingsRepository(),
   ),
   familyRepositoryProvider.overrideWithValue(fx.backend),
   catalogRepositoryProvider.overrideWithValue(fx.backend),

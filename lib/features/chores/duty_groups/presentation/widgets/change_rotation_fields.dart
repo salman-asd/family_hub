@@ -97,8 +97,8 @@ class ChangeRotationFields extends ConsumerWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               buildDefaultDragHandles: false,
-              onReorder: (oldIndex, newIndex) =>
-                  onOrder(draft.moved(oldIndex, newIndex).members),
+              onReorderItem: (oldIndex, newIndex) =>
+                  onOrder(draft.moveTo(oldIndex, newIndex).members),
               children: [
                 for (var i = 0; i < order.length; i++)
                   RotationMemberRow(

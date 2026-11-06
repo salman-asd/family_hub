@@ -19,6 +19,8 @@ void main() {
     // Debt: one repository implements the whole FamilyRepository port.  Split it
     // (members / invitations / settings) when Phase 2 adds no more to it.
     'lib/features/family/data/firestore_family_repository.dart',
+    // The starter-pack use case coordinates several integrity writes.
+    'lib/features/chores/starter_packs/domain/usecases/apply_starter_pack.dart',
   };
 
   test('no lib file is longer than $maxLines lines', () {

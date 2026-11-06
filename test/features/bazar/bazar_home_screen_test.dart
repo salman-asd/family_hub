@@ -1,4 +1,6 @@
 import 'package:family_hub/app/theme/theme_builder.dart';
+import 'package:family_hub/app/theme/theme_controller.dart'
+    show sharedPreferencesProvider;
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
@@ -16,6 +18,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/screen_states.dart';
 import 'bazar_test_helpers.dart';
+import '../../support/shared_preferences_test_support.dart';
 
 void main() {
   // bn/en x light/dark x text scale 2.0, plus tap-target, label and contrast
@@ -100,10 +103,12 @@ Future<void> _pump(
     ..physicalSize = const Size(400, 900)
     ..devicePixelRatio = 1;
   addTearDown(tester.view.reset);
+  final prefs = await mockSharedPreferences();
 
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
         if (fixture != null) ...[
           currentUidProvider.overrideWithValue('alice'),
           currentFamilyIdProvider.overrideWithValue(BazarFixture.familyId),
@@ -124,6 +129,7 @@ Future<void> _pump(
         locale: const Locale('en'),
         localizationsDelegates: const [
           AppLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],

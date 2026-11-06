@@ -21,6 +21,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../support/app_test_side_effect_overrides.dart';
 import '../../../support/fake_auth_repository.dart';
 import '../../../support/in_memory_backend.dart';
 import '../family_test_helpers.dart';
@@ -60,7 +61,7 @@ Future<void> _pumpApp(WidgetTester tester, Fixture f) async {
         clockProvider.overrideWithValue(f.clock),
         idGeneratorProvider.overrideWithValue(f.ids.call),
       ],
-      child: const FamilyHubApp(),
+      child: appTestSideEffectScope(child: const FamilyHubApp()),
     ),
   );
   await tester.pumpAndSettle();

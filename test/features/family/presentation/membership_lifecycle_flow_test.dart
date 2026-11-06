@@ -18,6 +18,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../support/app_test_side_effect_overrides.dart';
 import '../../../support/fake_auth_repository.dart';
 import '../family_test_helpers.dart';
 
@@ -55,7 +56,7 @@ Future<void> _pumpApp(WidgetTester tester, Fixture f) async {
         clockProvider.overrideWithValue(f.clock),
         idGeneratorProvider.overrideWithValue(f.ids.call),
       ],
-      child: const FamilyHubApp(),
+      child: appTestSideEffectScope(child: const FamilyHubApp()),
     ),
   );
   await tester.pumpAndSettle();
@@ -133,7 +134,16 @@ void main() {
 
       await tester.tap(find.byKey(const Key('tab_family')));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.byKey(const Key('family_leave')));
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('family_leave')),
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const PageStorageKey<String>('family_tab_list')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
       await tester.pumpAndSettle();
 
       expect(find.textContaining('একমাত্র অ্যাডমিন'), findsWidgets);

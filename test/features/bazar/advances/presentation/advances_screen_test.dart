@@ -1,4 +1,6 @@
 import 'package:family_hub/app/theme/theme_builder.dart';
+import 'package:family_hub/app/theme/theme_controller.dart'
+    show sharedPreferencesProvider;
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../bazar_test_helpers.dart';
 import '../../expenses/presentation/expense_test_container.dart';
+import '../../../../support/shared_preferences_test_support.dart';
 
 /// P2-23: the Advances screen over the real providers and in-memory ports.
 void main() {
@@ -29,15 +32,20 @@ void main() {
       ..physicalSize = const Size(420, 1400)
       ..devicePixelRatio = 1;
     addTearDown(tester.view.reset);
+    final prefs = await mockSharedPreferences();
     await tester.pumpWidget(
       ProviderScope(
-        overrides: bazarOverrides(fx, uid: uid, role: role),
+        overrides: [
+          ...bazarOverrides(fx, uid: uid, role: role),
+          sharedPreferencesProvider.overrideWithValue(prefs),
+        ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: buildThemeData(modernLightSpec),
           locale: locale,
           localizationsDelegates: const <LocalizationsDelegate<Object>>[
             AppLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
@@ -110,7 +118,9 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('advance-settle-e1')));
     await tester.pump(const Duration(milliseconds: 300));
-    await tester.enterText(find.byKey(const ValueKey('settle-amount')), '4000');
+    await tester.enterText(find.byKey(const ValueKey('settle-amount')), '40');
+    await tester.ensureVisible(find.byKey(const ValueKey('settle-save')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('settle-save')));
     await tester.pump(const Duration(milliseconds: 400));
 
@@ -130,7 +140,9 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('advance-settle-e1')));
     await tester.pump(const Duration(milliseconds: 300));
-    await tester.enterText(find.byKey(const ValueKey('settle-amount')), '9000');
+    await tester.enterText(find.byKey(const ValueKey('settle-amount')), '90');
+    await tester.ensureVisible(find.byKey(const ValueKey('settle-save')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('settle-save')));
     await tester.pump(const Duration(milliseconds: 400));
 

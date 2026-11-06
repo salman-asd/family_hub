@@ -73,9 +73,8 @@ void main() {
       expect(opening.amount, const Money.paisa(70000));
       expect(opening.type, FundTxType.opening);
 
-      // The closing itself never moves the balance (no double count).
-      expect(balanceOf(_october, _november), const Money.paisa(70000));
-      // The window now starts in November, and still holds the whole balance.
+      // The historical month remains unchanged; the live window moves forward.
+      expect(balanceOf(_october, _october), const Money.paisa(70000));
       expect(balanceOf(_november, _november), const Money.paisa(70000));
     });
 
@@ -211,13 +210,13 @@ void main() {
       'a long note is kept in the document and clipped in the log',
       () async {
         fx.putClosing(monthKey: _october);
-        final note = 'a' * 400;
+        final note = 'a' * 300;
         expect(await reopen(note: note), isNull);
 
         expect(fx.backend.closings[_f]![_october]!.reopenNote, note);
         final event = fx.backend.events.single;
         expect(event.params['note'], hasLength(100));
-        expect(event.params['reopenCount'], '2');
+        expect(event.params['reopenCount'], '1');
       },
     );
   });

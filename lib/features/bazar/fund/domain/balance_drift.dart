@@ -41,10 +41,9 @@ final class BalanceDrift {
 /// or the two agree — so the screen only warns when something is really off.
 ///
 /// [window] is the live ledger window (`fundTransactionsProvider`): every row
-/// with `monthKey >= fundWindowStart`.  It only reaches the closed month itself
-/// while that month is still open; after a close the window starts in the next
-/// month and the comparison uses the carry-forward rows, which must add up to
-/// the same balance — that is what makes this check work.
+/// with `monthKey >= fundWindowStart`. After a close, the window begins in the
+/// next month, so compare through that first open month against the stored
+/// closing balance.
 BalanceDrift? detectBalanceDrift({
   required Map<MonthKey, MonthClosing> closings,
   required Iterable<FundTransaction> window,
@@ -61,10 +60,11 @@ BalanceDrift? detectBalanceDrift({
   }
   if (lastClosed == null) return null;
   final month = lastClosed;
+  final firstOpenMonth = month.addMonths(1);
   final stored = closings[month]!.closingBalance!;
   final ledger = Money.sum(
     window
-        .where((row) => row.monthKey.compareTo(month) <= 0)
+        .where((row) => row.monthKey.compareTo(firstOpenMonth) <= 0)
         .map((row) => row.amount),
   );
   return ledger == stored

@@ -22,6 +22,12 @@ exist", and becomes "verified" only when `tools/phase1_evidence.sh` reports the 
 | 10 | Roles cannot be self-promoted; last admin cannot be removed | **Pass** | `memberKeys` + role/status checks `:566-672`; `adminSetChanges`/`adminIdsRewritten` `:341-349`. Tests: `H6 active-admin set`, "member cannot make themselves admin". |
 | 11 | Account deletion is a soft delete | **Pass** | `accountDeletionOk` `:458-464`, no hard delete `:487`. Tests: `H9 account soft-delete`. |
 
+Subsequent phases added the `devices`, `budgets`, `contributionPlans`,
+`contributions`, `comments`, `memberAvailability`, `swapRequests`,
+`notificationInbox`, `memberStats`, and `memberStatsPublic` collections. Their
+per-operation permissions and validation are defined in the corresponding
+Firestore match blocks and exercised by the Phase 2-4 rules tests.
+
 ## Phase 2 additions (P2-05)
 
 `bazarCategories` and `bazarItems` have closed key sets (`categoryKeys`, `itemKeys`)

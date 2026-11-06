@@ -4,7 +4,7 @@ import 'package:family_hub/core/utils/money.dart';
 import 'package:family_hub/features/bazar/contributions/domain/contribution.dart';
 import 'package:family_hub/features/bazar/expenses/domain/expense.dart';
 import 'package:family_hub/features/bazar/expenses/domain/funding.dart';
-import 'package:family_hub/features/bazar/reports/data/report_csv_builder.dart';
+import 'package:family_hub/features/bazar/reports/presentation/report_csv_builder.dart';
 import 'package:family_hub/features/chores/occurrences/domain/chore_occurrence.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.dart';
 import 'package:flutter_test/flutter_test.dart';

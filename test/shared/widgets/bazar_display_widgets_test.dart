@@ -31,10 +31,19 @@ void main() {
       tester,
     ) async {
       final l10n = await AppLocalizations.delegate.load(const Locale('bn'));
+      final semantics = tester.ensureSemantics();
 
-      await pumpWidgetUnderTest(tester, const TotalDisplay(label: 'মোট'));
+      await pumpWidgetUnderTest(
+        tester,
+        const TotalDisplay(label: 'মোট', total: null),
+      );
 
-      expect(find.text(l10n.totalEmpty), findsOneWidget);
+      expect(find.text('—'), findsOneWidget);
+      expect(
+        find.bySemanticsLabel(RegExp(RegExp.escape(l10n.totalDisplayEmpty))),
+        findsOneWidget,
+      );
+      semantics.dispose();
     });
 
     testWidgets('shows the money and only explains a calculated value', (
@@ -47,7 +56,7 @@ void main() {
         const TotalDisplay(label: 'মোট', total: Money.paisa(125050)),
       );
       expect(find.text('৳১,২৫০.৫০'), findsOneWidget);
-      expect(find.text(l10n.totalCalculated), findsNothing);
+      expect(find.text(l10n.totalDisplayCalculated), findsNothing);
 
       await pumpWidgetUnderTest(
         tester,
@@ -57,16 +66,32 @@ void main() {
           calculated: true,
         ),
       );
-      expect(find.text(l10n.totalCalculated), findsOneWidget);
+      expect(find.text(l10n.totalDisplayCalculated), findsOneWidget);
     });
   });
 
   group('ProgressBarStatus', () {
-    test('clamps basis points into 0…1', () {
-      expect(ProgressBarStatus.fractionFor(14000), 1.0);
-      expect(ProgressBarStatus.fractionFor(-100), 0.0);
-      expect(ProgressBarStatus.fractionFor(null), 0.0);
-      expect(ProgressBarStatus.fractionFor(8000), 0.8);
+    testWidgets('clamps basis points into the rendered fraction', (
+      tester,
+    ) async {
+      Future<double> fillFor(int? basisPoints) async {
+        await pumpWidgetUnderTest(
+          tester,
+          ProgressBarStatus(
+            level: ProgressLevel.ok,
+            basisPoints: basisPoints,
+            label: 'মাসিক বাজেট',
+          ),
+        );
+        return tester
+            .widget<FractionallySizedBox>(find.byType(FractionallySizedBox))
+            .widthFactor!;
+      }
+
+      expect(await fillFor(14000), 1.0);
+      expect(await fillFor(-100), 0.0);
+      expect(await fillFor(null), 0.0);
+      expect(await fillFor(8000), 0.8);
     });
 
     testWidgets('clamps the fill at 100% and marks the overflow', (
@@ -82,10 +107,11 @@ void main() {
         ),
       );
 
-      final width = tester.getSize(find.byType(ProgressBarStatus)).width;
-      final fill = tester.getSize(find.byKey(ProgressBarStatus.fillKey));
-      expect(fill.width, width);
-      expect(find.byKey(ProgressBarStatus.overflowKey), findsOneWidget);
+      final fill = tester
+          .widget<FractionallySizedBox>(find.byType(FractionallySizedBox))
+          .widthFactor;
+      expect(fill, 1.0);
+      expect(find.byType(PositionedDirectional), findsOneWidget);
       expect(find.byIcon(Icons.error_outline_rounded), findsOneWidget);
     });
 
@@ -94,12 +120,20 @@ void main() {
         tester,
         const ProgressBarStatus(
           level: ProgressLevel.ok,
+          basisPoints: null,
           label: 'কোনো সীমা নেই',
         ),
       );
 
-      expect(find.byKey(ProgressBarStatus.fillKey), findsNothing);
-      expect(find.byIcon(Icons.check_circle_outline_rounded), findsOneWidget);
+      expect(
+        tester
+            .widget<FractionallySizedBox>(find.byType(FractionallySizedBox))
+            .widthFactor,
+        0,
+      );
+      expect(find.byIcon(Icons.remove_circle_outline_rounded), findsOneWidget);
+      final l10n = await AppLocalizations.delegate.load(const Locale('bn'));
+      expect(find.text(l10n.progressLevelNoLimit), findsOneWidget);
     });
 
     testWidgets('uses the icon of its level', (tester) async {
@@ -139,6 +173,7 @@ void main() {
         tester,
         PersonPicker(
           label: 'কে টাকা দিয়েছে',
+          selectedId: null,
           options: const [
             PersonOption(id: 'usr_a', name: 'Ayesha'),
             PersonOption(id: 'usr_b', name: 'Bashir'),
@@ -186,6 +221,7 @@ void main() {
         tester,
         PersonPicker(
           label: 'কে টাকা দিয়েছে',
+          selectedId: null,
           options: const [PersonOption(id: 'usr_a', name: 'Ayesha')],
           onChanged: (id) {},
         ),

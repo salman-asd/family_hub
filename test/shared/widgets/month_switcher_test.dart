@@ -114,7 +114,6 @@ void main() {
   });
 
   testWidgets('opens a picker and reports the chosen month', (tester) async {
-    final l10n = await AppLocalizations.delegate.load(const Locale('bn'));
     MonthKey? picked;
 
     await pumpSwitcher(
@@ -128,7 +127,7 @@ void main() {
     await tester.tap(find.text('অক্টোবর ২০২৬'));
     await tester.pumpAndSettle();
 
-    expect(find.text(l10n.monthSwitcherSelectTitle), findsOneWidget);
+    expect(find.byType(ChoiceChip), findsNWidgets(12));
 
     await tester.tap(find.widgetWithText(ChoiceChip, 'নভেম্বর'));
     await tester.pumpAndSettle();

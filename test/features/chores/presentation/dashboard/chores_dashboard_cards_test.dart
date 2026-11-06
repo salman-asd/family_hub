@@ -5,6 +5,7 @@ import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.
 import 'package:family_hub/features/chores/occurrences/presentation/today_providers.dart';
 import 'package:family_hub/features/chores/presentation/dashboard/chores_dashboard_cards.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
+import 'package:family_hub/features/chores/settings/domain/chore_catalog_entries.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

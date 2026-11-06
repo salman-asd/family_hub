@@ -22,9 +22,11 @@ void main() {
     // Guard against a vacuous pass: the regex must match known-bad lines.
     expect(_literalText.hasMatch("Text('Save')"), isTrue);
     expect(_literalText.hasMatch('Text("Save")'), isTrue);
-    expect(_constLiteralText.hasMatch("Text(const 'Save')"), isTrue);
+    expect(_literalText.hasMatch("Text(const 'Save')"), isTrue);
     expect(_literalText.hasMatch('Text(l10n.actionSave)'), isFalse);
     expect(_literalText.hasMatch('Text(someVariable)'), isFalse);
+    expect(_containsCopy(r"'${l10n.actionSave}: '"), isFalse);
+    expect(_containsCopy(r"'Save: ${l10n.actionSave}'"), isTrue);
   });
 
   test('no hard-coded string literals inside Text( widgets in lib/', () {
@@ -39,15 +41,10 @@ void main() {
         final line = lines[i];
         if (line.contains('// i18n-exempt')) continue;
 
-        // Text('...')  or  Text("...")  — a literal first argument.
+        // Text('...') — flag copy, but allow localized interpolations and
+        // punctuation-only separators.
         final match = _literalText.firstMatch(line);
-        if (match != null) {
-          offenders.add('$path:${i + 1}: ${line.trim()}');
-        }
-
-        // Also catch const Text('...').
-        final constMatch = _constLiteralText.firstMatch(line);
-        if (constMatch != null) {
+        if (match != null && _containsCopy(match.group(1)!)) {
           offenders.add('$path:${i + 1}: ${line.trim()}');
         }
       }
@@ -64,10 +61,15 @@ void main() {
 }
 
 /// `Text('literal'` or `Text("literal"` (optionally with named args after).
-final RegExp _literalText = RegExp(r"""\bText\(\s*['"]""");
+final RegExp _literalText = RegExp(
+  r"""\bText\(\s*(?:const\s+)?(['"])(.*?)\1""",
+);
 
-/// `const Text('literal'` / `Text.rich('literal'`-style const literals.
-final RegExp _constLiteralText = RegExp(r"""\bText\(\s*const\s+['"]""");
+final RegExp _interpolation = RegExp(r'\$\{[^}]*\}|\$[A-Za-z_]\w*');
+final RegExp _copyCharacters = RegExp(r'[A-Za-z\u0980-\u09FF]');
+
+bool _containsCopy(String literal) =>
+    _copyCharacters.hasMatch(literal.replaceAll(_interpolation, ''));
 
 /// Files allowed to contain literal labels because they render developer token
 /// names or non-translatable identifiers rather than user copy.

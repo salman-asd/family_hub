@@ -1,6 +1,6 @@
 import 'package:family_hub/core/permissions/permission_settings.dart';
 import 'package:family_hub/features/chores/occurrences/domain/usecases/occurrence_action.dart';
-import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../chores_test_helpers.dart';

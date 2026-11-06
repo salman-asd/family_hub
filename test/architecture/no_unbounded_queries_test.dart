@@ -19,7 +19,12 @@ void main() {
         if (i < 0) break;
         final end = text.indexOf(';', i);
         final expression = text.substring(i, end < 0 ? text.length : end);
-        if (!expression.contains('.limit(')) {
+        final isQuery =
+            expression.contains('.where(') ||
+            expression.contains('.orderBy(') ||
+            expression.contains('.snapshots(') ||
+            expression.contains('.get(');
+        if (isQuery && !expression.contains('.limit(')) {
           final line = '\n'.allMatches(text.substring(0, i)).length + 1;
           offenders.add('$path:$line');
         }

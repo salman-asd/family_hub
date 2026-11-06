@@ -1,5 +1,7 @@
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/theme/theme_builder.dart';
+import 'package:family_hub/app/theme/theme_controller.dart'
+    show sharedPreferencesProvider;
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/utils/money.dart';
@@ -13,12 +15,14 @@ import 'package:go_router/go_router.dart';
 
 import '../../bazar_test_helpers.dart';
 import 'expense_test_container.dart';
+import '../../../../support/shared_preferences_test_support.dart';
 
 Future<void> _pump(WidgetTester tester, BazarFixture fx, Widget screen) async {
   tester.view
     ..physicalSize = const Size(400, 1000)
     ..devicePixelRatio = 1;
   addTearDown(tester.view.reset);
+  final prefs = await mockSharedPreferences();
   final router = GoRouter(
     routes: [
       GoRoute(path: '/', builder: (_, _) => screen),
@@ -30,7 +34,10 @@ Future<void> _pump(WidgetTester tester, BazarFixture fx, Widget screen) async {
   );
   await tester.pumpWidget(
     ProviderScope(
-      overrides: bazarOverrides(fx),
+      overrides: [
+        ...bazarOverrides(fx),
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
       child: MaterialApp.router(
         routerConfig: router,
         debugShowCheckedModeBanner: false,
@@ -38,6 +45,7 @@ Future<void> _pump(WidgetTester tester, BazarFixture fx, Widget screen) async {
         locale: const Locale('en'),
         localizationsDelegates: const [
           AppLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],

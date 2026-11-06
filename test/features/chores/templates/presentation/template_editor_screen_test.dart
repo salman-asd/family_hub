@@ -1,6 +1,8 @@
 import 'package:family_hub/core/localization/app_formatters.dart';
-import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/core/localization/generated/app_localizations_bn.dart';
+import 'package:family_hub/core/localization/generated/app_localizations_en.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
+import 'package:family_hub/features/chores/settings/domain/chore_catalog_entries.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
 import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
 import 'package:family_hub/features/chores/templates/domain/recurrence/recurrence.dart';

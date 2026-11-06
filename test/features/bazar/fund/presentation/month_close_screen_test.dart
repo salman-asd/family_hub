@@ -1,4 +1,6 @@
 import 'package:family_hub/app/theme/theme_builder.dart';
+import 'package:family_hub/app/theme/theme_controller.dart'
+    show sharedPreferencesProvider;
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
@@ -11,11 +13,13 @@ import 'package:family_hub/features/bazar/fund/presentation/screens/month_close_
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../bazar_test_helpers.dart';
 import '../../contributions/contribution_test_helpers.dart';
 import '../../expenses/presentation/expense_test_container.dart';
+import '../../../../support/shared_preferences_test_support.dart';
 
 /// P2-23: closing and reopening a month from the screen.
 void main() {
@@ -34,10 +38,12 @@ void main() {
       ..physicalSize = const Size(420, 1800)
       ..devicePixelRatio = 1;
     addTearDown(tester.view.reset);
+    final prefs = await mockSharedPreferences();
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[
-          ...bazarOverrides(fx, uid: uid, role: role),
+          sharedPreferencesProvider.overrideWithValue(prefs),
+          ...bazarOverrides(fixture.fx, uid: uid, role: role),
           contributionRepositoryProvider.overrideWithValue(fixture.repo),
         ],
         child: MaterialApp(
@@ -46,6 +52,7 @@ void main() {
           locale: locale,
           localizationsDelegates: const <LocalizationsDelegate<Object>>[
             AppLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
@@ -60,6 +67,7 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
   }
 
   FundTransaction contribution(String id, int paisa) =>

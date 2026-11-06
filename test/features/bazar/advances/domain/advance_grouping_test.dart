@@ -72,20 +72,14 @@ void main() {
 
     test('an older closed month is still offered', () {
       final months = monthChoices(thisMonth, <MonthClosing>[
-        const MonthClosing(
-          monthKey: MonthKey(2025, 1),
-          status: MonthStatus.closed,
-        ),
+        MonthClosing(monthKey: MonthKey(2025, 1), status: MonthStatus.closed),
       ]);
       expect(months.last, MonthKey(2025, 1));
     });
 
     test('closingOf returns the closing of exactly that month', () {
       final closings = <MonthClosing>[
-        const MonthClosing(
-          monthKey: MonthKey(2026, 9),
-          status: MonthStatus.closed,
-        ),
+        MonthClosing(monthKey: MonthKey(2026, 9), status: MonthStatus.closed),
       ];
       expect(
         closingOf(closings, MonthKey(2026, 9))!.status,

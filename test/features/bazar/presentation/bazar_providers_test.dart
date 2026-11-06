@@ -14,6 +14,7 @@ import 'package:family_hub/features/bazar/settings/presentation/bazar_settings_p
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show ProviderListenable;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../bazar_test_helpers.dart';

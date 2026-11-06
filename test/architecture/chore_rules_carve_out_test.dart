@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// P3-30 (acceptance 10): every Phase 3 collection has its own `match` block in
 /// the rules, so none of them still falls through to the generic deny-only
-/// block at the bottom. Only `memberStats` (Phase 4) may stay there.
+/// block at the bottom.
 void main() {
   const carved = <String>[
     'choreTemplates',
@@ -32,8 +32,13 @@ void main() {
     );
   });
 
-  test('memberStats is the only chore collection left deny-only', () {
+  test('memberStats reads are owner-only', () {
     final rules = File('firebase/firestore.rules').readAsStringSync();
-    expect(RegExp(r'match\s+/memberStats/\{').hasMatch(rules), isFalse);
+    final block = rules.split(RegExp(r'match\s+/memberStats/\{')).last;
+    expect(
+      RegExp(r'allow read:\s*if isSelf\(uid\) && isActiveMember\(f\);')
+          .hasMatch(block),
+      isTrue,
+    );
   });
 }

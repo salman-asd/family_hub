@@ -9,11 +9,17 @@ import 'package:family_hub/app/theme/theme_builder.dart';
 import 'package:family_hub/app/theme/theme_controller.dart'
     show sharedPreferencesProvider;
 import 'package:family_hub/app/theme/theme_registry.dart';
+import 'package:family_hub/core/permissions/permissions.dart'
+    show PermissionSettings;
 import 'package:family_hub/features/auth/domain/app_user.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart'
+    show soleAdminProvider;
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
+import 'package:family_hub/features/family/presentation/permission_providers.dart'
+    show permissionSettingsProvider;
 import 'package:family_hub/features/onboarding/presentation/profile_providers.dart';
 import 'package:family_hub/modules/module_providers.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +28,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../support/app_test_side_effect_overrides.dart';
 import '../support/fake_auth_repository.dart';
 import '../support/fake_session_repositories.dart';
 
@@ -83,12 +90,16 @@ Future<_Harness> _pumpApp(
       overrides: [
         flavorProvider.overrideWithValue(flavor),
         sharedPreferencesProvider.overrideWithValue(prefs),
+        permissionSettingsProvider.overrideWithValue(
+          PermissionSettings.defaults,
+        ),
+        soleAdminProvider.overrideWithValue(false),
         authRepositoryProvider.overrideWithValue(auth),
         profileRepositoryProvider.overrideWithValue(session),
         membershipRepositoryProvider.overrideWithValue(session),
         moduleFlagsRepositoryProvider.overrideWithValue(session),
       ],
-      child: const FamilyHubApp(),
+      child: appTestSideEffectScope(child: const FamilyHubApp()),
     ),
   );
   await tester.pumpAndSettle();
@@ -243,8 +254,24 @@ void main() {
         membership: MembershipStatus.active,
       );
       await _openTab(tester, 'family');
-      await tester.tap(find.byKey(const Key('family_sign_out')));
+      final signOutTile = find.byKey(const Key('family_sign_out'));
+      await tester.scrollUntilVisible(
+        signOutTile,
+        200,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const PageStorageKey<String>('family_tab_list')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      tester
+          .state<ScaffoldMessengerState>(find.byType(ScaffoldMessenger))
+          .hideCurrentSnackBar();
       await tester.pumpAndSettle();
+      await tester.tap(signOutTile);
+      await tester.pumpAndSettle();
+      expect(h.auth.calls, contains('signOut'));
       expect(h.path(tester), '/welcome');
     });
   });

@@ -42,7 +42,7 @@ class AppCard extends StatelessWidget {
           boxShadow: onTap == null ? shadows : null,
         ),
         child: onTap == null
-            ? content
+            ? Material(type: MaterialType.transparency, child: content)
             : Material(
                 color: surface,
                 borderRadius: BorderRadius.circular(t.radiusMd),

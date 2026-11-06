@@ -13,9 +13,11 @@ import '../settings/bazar_settings_test_helpers.dart';
 /// Fixture for the P2-21 close/reopen tests: the standard Bazar family, the
 /// in-memory ledger, a fake settings port and both use cases.
 class MonthFixture {
-  MonthFixture({MonthKey? fundStartMonth = const MonthKey(2026, 9)})
+  MonthFixture({MonthKey? fundStartMonth})
     : settings = FakeBazarSettingsRepository(
-        BazarSettings.defaults.copyWith(fundStartMonth: fundStartMonth),
+        BazarSettings.defaults.copyWith(
+          fundStartMonth: fundStartMonth ?? MonthKey(2026, 9),
+        ),
       );
 
   static const String familyId = BazarFixture.familyId;
@@ -69,6 +71,7 @@ class MonthFixture {
 
   CloseMonth get close => CloseMonth(
     funds: fx.backend,
+    openingRows: fx.backend,
     settings: settings,
     families: fx.backend,
     clock: fx.clock,

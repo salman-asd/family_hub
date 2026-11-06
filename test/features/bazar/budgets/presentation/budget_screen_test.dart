@@ -1,10 +1,13 @@
 import 'package:family_hub/app/theme/theme_builder.dart';
+import 'package:family_hub/app/theme/theme_controller.dart'
+    show sharedPreferencesProvider;
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/core/utils/money.dart';
 import 'package:family_hub/features/bazar/budgets/presentation/budget_providers.dart';
 import 'package:family_hub/features/bazar/budgets/presentation/screens/budget_screen.dart';
+import 'package:family_hub/shared/widgets/progress_bar_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +15,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../expenses/presentation/expense_test_container.dart';
 import '../budget_test_helpers.dart';
+import '../../../../support/shared_preferences_test_support.dart';
 
 Future<void> _pump(
   WidgetTester tester,
@@ -25,9 +29,11 @@ Future<void> _pump(
     ..physicalSize = const Size(400, 1400)
     ..devicePixelRatio = 1;
   addTearDown(tester.view.reset);
+  final prefs = await mockSharedPreferences();
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
         ...bazarOverrides(f.fx, uid: uid, role: role),
         budgetRepositoryProvider.overrideWithValue(f.repository),
       ],
@@ -37,6 +43,7 @@ Future<void> _pump(
         locale: locale,
         localizationsDelegates: const [
           AppLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
         ],
@@ -51,6 +58,7 @@ Future<void> _pump(
     ),
   );
   await tester.pump(const Duration(milliseconds: 300));
+  await tester.pumpAndSettle();
 }
 
 void main() {
@@ -120,12 +128,23 @@ void main() {
       categories: const {'cat_food': Money.paisa(10000)},
     );
     await _pump(tester, f);
-    expect(find.textContaining('0% · On track'), findsWidgets);
+    final totalBar = tester.widget<ProgressBarStatus>(
+      find.byKey(const ValueKey('budget-bar-total')),
+    );
+    expect(totalBar.basisPoints, 0);
+    expect(find.textContaining('On track'), findsWidgets);
 
     f.fx.putExpense(id: 'e1', total: const Money.paisa(8500));
     f.fx.backend.expenseNotify();
     await tester.pump(const Duration(milliseconds: 300));
-    expect(find.textContaining('85% ·'), findsWidgets);
+    expect(
+      tester
+          .widget<ProgressBarStatus>(
+            find.byKey(const ValueKey('budget-bar-total')),
+          )
+          .basisPoints,
+      8500,
+    );
     expect(find.byIcon(Icons.warning_amber_rounded), findsWidgets);
 
     f.fx.putExpense(id: 'e2', total: const Money.paisa(3000));
@@ -197,6 +216,11 @@ void main() {
     f.fx.putExpense(id: 'e1', total: const Money.paisa(9000));
     await _pump(tester, f, locale: const Locale('bn'), textScale: 2);
     expect(tester.takeException(), isNull);
+    await tester.scrollUntilVisible(
+      find.byKey(const ValueKey('budget-edit')),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
     await tester.tap(find.byKey(const ValueKey('budget-edit')));
     await tester.pump(const Duration(milliseconds: 300));
     expect(tester.takeException(), isNull);

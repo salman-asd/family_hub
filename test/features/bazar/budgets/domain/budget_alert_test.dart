@@ -32,9 +32,9 @@ void main() {
     );
     final alerts = buildBudgetAlerts(ComputeBudgetStatus.call(budget, spend));
 
-    expect(alerts.map((a) => a.categoryId), [null, 'cat_b', 'cat_d', 'cat_a']);
-    expect(alerts.first.isTotal, isTrue);
-    expect(alerts.first.status.level, BudgetLevel.warning);
+    expect(alerts.map((a) => a.categoryId), ['cat_b', 'cat_d', null, 'cat_a']);
+    expect(alerts[2].isTotal, isTrue);
+    expect(alerts[2].status.level, BudgetLevel.warning);
   });
 
   test('no alerts when everything is fine or unlimited', () {

@@ -1,4 +1,6 @@
 import 'package:family_hub/app/theme/theme_builder.dart';
+import 'package:family_hub/app/theme/theme_controller.dart'
+    show sharedPreferencesProvider;
 import 'package:family_hub/app/theme/theme_registry.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
@@ -7,18 +9,19 @@ import 'package:family_hub/core/utils/money.dart';
 import 'package:family_hub/features/bazar/contributions/domain/contribution.dart';
 import 'package:family_hub/features/bazar/contributions/presentation/contribution_providers.dart';
 import 'package:family_hub/features/bazar/contributions/presentation/widgets/contribution_history_list.dart';
-import 'package:family_hub/features/bazar/contributions/presentation/widgets/pending_approvals_section.dart';
 import 'package:family_hub/features/bazar/contributions/presentation/widgets/record_contribution_sheet.dart';
 import 'package:family_hub/features/bazar/fund/domain/fund_transaction.dart';
 import 'package:family_hub/features/bazar/fund/presentation/screens/fund_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../bazar_test_helpers.dart';
 import '../../contributions/contribution_test_helpers.dart';
 import '../../expenses/presentation/expense_test_container.dart';
+import '../../../../support/shared_preferences_test_support.dart';
 
 /// P2-22: the Fund screen reads the real providers through the in-memory ports.
 void main() {
@@ -52,9 +55,11 @@ void main() {
       ..physicalSize = Size(420, height)
       ..devicePixelRatio = 1;
     addTearDown(tester.view.reset);
+    final prefs = await mockSharedPreferences();
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[
+          sharedPreferencesProvider.overrideWithValue(prefs),
           ...bazarOverrides(fx, uid: uid, role: role),
           contributionRepositoryProvider.overrideWithValue(contributions.repo),
         ],
@@ -64,6 +69,7 @@ void main() {
           locale: locale,
           localizationsDelegates: const <LocalizationsDelegate<Object>>[
             AppLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
@@ -78,6 +84,7 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 300));
+    await tester.pumpAndSettle();
   }
 
   testWidgets('shows the ledger balance and every member row to everyone', (
@@ -183,6 +190,8 @@ void main() {
       find.byKey(const ValueKey('contribution-amount')),
       '1250',
     );
+    await tester.ensureVisible(find.byKey(const ValueKey('contribution-save')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('contribution-save')));
     await tester.pump(const Duration(milliseconds: 400));
 
@@ -201,6 +210,8 @@ void main() {
       find.byKey(const ValueKey('contribution-amount')),
       '500',
     );
+    await tester.ensureVisible(find.byKey(const ValueKey('contribution-save')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('contribution-save')));
     await tester.pump(const Duration(milliseconds: 400));
 
@@ -225,8 +236,7 @@ void main() {
 
   testWidgets('the manager sections are absent for a member', (tester) async {
     await pump(tester, uid: 'cara', role: Role.member);
-    expect(find.byType(PendingApprovalsSection), findsOneWidget);
-    // The widget hides itself by permission, so nothing is drawn for Cara.
+    // The manager-only section is not mounted for a member.
     expect(find.byKey(const ValueKey('pending-approvals')), findsNothing);
     expect(find.byType(ContributionHistoryList), findsNothing);
   });

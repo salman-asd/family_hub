@@ -11,10 +11,12 @@ import 'package:family_hub/features/bazar/settings/presentation/bazar_settings_p
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override, ProviderListenable;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../bazar_test_helpers.dart';
 import '../../contributions/contribution_test_helpers.dart';
+import '../../settings/bazar_settings_test_helpers.dart';
 
 /// P2-22: the providers the Fund screen reads.
 void main() {
@@ -34,8 +36,12 @@ void main() {
         permissionSettingsProvider.overrideWithValue(
           PermissionSettings.defaults,
         ),
+        familyRepositoryProvider.overrideWithValue(fx.fx.backend),
         bazarSettingsProvider.overrideWithValue(
           BazarSettings.defaults.copyWith(fundStartMonth: MonthKey(2026, 9)),
+        ),
+        bazarSettingsRepositoryProvider.overrideWithValue(
+          FakeBazarSettingsRepository(),
         ),
         expenseRepositoryProvider.overrideWithValue(fx.fx.backend),
         fundRepositoryProvider.overrideWithValue(fx.fx.backend),

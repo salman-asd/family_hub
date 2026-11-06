@@ -5,9 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'shared_widgets_test_support.dart';
 
-/// Behaviour of the P2-12 [AmountField]: both digit scripts, one decimal
-/// separator, the scale limit and the money prefix.  Parsing itself is tested
-/// where it lives (`Money` / `Quantity`).
+/// Behaviour of [AmountField]: both digit scripts, the scale limit and the
+/// money prefix. Parsing itself is tested where it lives (`Money` / `Quantity`).
 void main() {
   setUpAll(loadBundledFonts);
 
@@ -41,7 +40,7 @@ void main() {
     expect(changes, ['১২৩.৫০']);
   });
 
-  testWidgets('drops letters, a second separator and extra decimals', (
+  testWidgets('rejects invalid edits without changing the prior value', (
     tester,
   ) async {
     final controller = TextEditingController();
@@ -52,17 +51,23 @@ void main() {
       AmountField(controller: controller, label: 'Amount'),
     );
 
-    await tester.enterText(find.byType(TextField), '12a3.456');
+    await tester.enterText(find.byType(TextField), '12');
     await tester.pump();
-    expect(controller.text, '123.45');
+    expect(controller.text, '12');
 
-    await tester.enterText(find.byType(TextField), '1.2.3');
+    await tester.enterText(find.byType(TextField), '12a');
     await tester.pump();
-    expect(controller.text, '1.23');
+    expect(controller.text, '12');
 
-    await tester.enterText(find.byType(TextField), '৳১২');
+    await tester.enterText(find.byType(TextField), '12.3');
     await tester.pump();
-    expect(controller.text, '১২');
+    expect(controller.text, '12.3');
+    await tester.enterText(find.byType(TextField), '12.3.4');
+    await tester.pump();
+    expect(controller.text, '12.3');
+    await tester.enterText(find.byType(TextField), '12.345');
+    await tester.pump();
+    expect(controller.text, '12.3');
   });
 
   testWidgets('scale 3 keeps three decimals and shows no money prefix', (
@@ -75,11 +80,13 @@ void main() {
       tester,
       AmountField(controller: controller, label: 'Quantity', scale: 3),
     );
+    await tester.enterText(find.byType(TextField), '1.234');
+    await tester.pump();
+    expect(controller.text, '1.234');
     await tester.enterText(find.byType(TextField), '1.2345');
     await tester.pump();
-
     expect(controller.text, '1.234');
-    expect(find.text(AmountField.moneyPrefix), findsNothing);
+    expect(find.textContaining('৳'), findsNothing);
   });
 
   testWidgets('a money field shows the taka prefix', (tester) async {
@@ -91,7 +98,7 @@ void main() {
       AmountField(controller: controller, label: 'Amount'),
     );
 
-    expect(find.text(AmountField.moneyPrefix), findsOneWidget);
+    expect(find.textContaining('৳'), findsOneWidget);
   });
 
   testWidgets('renders an error and a disabled state', (tester) async {
@@ -115,23 +122,21 @@ void main() {
     expect(tester.widget<TextField>(find.byType(TextField)).enabled, isFalse);
   });
 
-  test('the formatter clamps decimals to its scale', () {
-    const two = AmountInputFormatter(scale: 2);
+  test('the formatter rejects edits with too many decimals', () {
+    const two = AmountInputFormatter(2);
     final value = two.formatEditUpdate(
       TextEditingValue.empty,
       const TextEditingValue(text: '১০.৫০০'),
     );
-    expect(value.text, '১০.৫০');
+    expect(value, TextEditingValue.empty);
 
-    const three = AmountInputFormatter(scale: 3);
+    const three = AmountInputFormatter(3);
     expect(
-      three
-          .formatEditUpdate(
-            TextEditingValue.empty,
-            const TextEditingValue(text: '2.5000'),
-          )
-          .text,
-      '2.500',
+      three.formatEditUpdate(
+        TextEditingValue.empty,
+        const TextEditingValue(text: '2.5000'),
+      ),
+      TextEditingValue.empty,
     );
   });
 }
