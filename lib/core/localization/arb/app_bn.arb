@@ -4651,6 +4651,8 @@
   "@notifChannelFamilyDescription": {},
   "notifChannelPushEvents": "জরুরি বিজ্ঞপ্তি",
   "@notifChannelPushEvents": {},
+  "notifChannelPushEventsDescription": "পরিবারের গুরুত্বপূর্ণ আপডেট",
+  "@notifChannelPushEventsDescription": {},
   "levelNameSeed": "বীজ",
   "@levelNameSeed": {},
   "levelNameSprout": "অঙ্কুর",

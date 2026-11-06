@@ -12,9 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// * `android_intent_plus` in at most ONE file, inside
 ///   `lib/core/notifications/data/`.
 ///
-/// The adapters do not exist yet (P4-13 and P4-14), so today the test passes
-/// because nothing imports the plugins; it starts to bite with the first
-/// import. It scans `lib/` only: a test may import a plugin to mock it.
+/// The test scans `lib/` only: a test may import a plugin to mock it.
 void main() {
   const adapterDir = 'lib/core/notifications/data/';
   const localAdapters = <String>{
@@ -119,9 +117,9 @@ void main() {
   });
 
   test('android_intent_plus is imported by at most one adapter file', () {
-    final files = (importers(readLib())['android_intent_plus'] ?? <String>{})
-        .toList()
-      ..sort();
+    final files =
+        (importers(readLib())['android_intent_plus'] ?? <String>{}).toList()
+          ..sort();
     expect(
       files.length,
       lessThanOrEqualTo(1),

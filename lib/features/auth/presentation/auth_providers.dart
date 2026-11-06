@@ -53,9 +53,17 @@ final afterSignOutProvider = Provider<Future<void> Function()>(
   (ref) => () async {},
 );
 
+/// Removes the current installation's push token before auth credentials are
+/// cleared. The app overrides this with the notification controller.
+final beforeSignOutProvider = Provider<Future<Result<void>> Function()>(
+  (ref) =>
+      () async => const Success<void>(null),
+);
+
 final signOutProvider = Provider<SignOut>(
   (ref) => SignOut(
     ref.watch(authRepositoryProvider),
+    beforeSignOut: ref.watch(beforeSignOutProvider),
     afterSignOut: ref.watch(afterSignOutProvider),
   ),
 );

@@ -24,10 +24,15 @@ void main() {
       'daily_summary',
       'bazar',
       'family',
+      'push_events',
     ]);
     expect(driver.channels.first.highImportance, isTrue);
+    expect(driver.channels.last.highImportance, isTrue);
     expect(
-      driver.channels.skip(1).every((channel) => !channel.highImportance),
+      driver.channels
+          .where((channel) => channel.id.id != 'push_events')
+          .skip(1)
+          .every((channel) => !channel.highImportance),
       isTrue,
     );
     expect(driver.permissionRequests, 0);

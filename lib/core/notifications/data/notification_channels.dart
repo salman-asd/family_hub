@@ -44,6 +44,12 @@ List<NotificationChannelDefinition> notificationChannels(
     description: localizations.notifChannelFamilyDescription,
     highImportance: false,
   ),
+  NotificationChannelDefinition(
+    id: NotificationChannelId.pushEvents,
+    name: localizations.notifChannelPushEvents,
+    description: localizations.notifChannelPushEventsDescription,
+    highImportance: true,
+  ),
 ];
 
 NotificationChannelDefinition notificationChannelFor(

@@ -1945,3 +1945,20 @@ Validation: pending.
 
 ### To check when you run it
 `permission_matrix_doc_test` compares `docs/permission_matrix.md` byte for byte with what the test generates. I edited the file by hand to match; if it fails, run `UPDATE_PERMISSION_MATRIX=1 flutter test test/core/permissions/permission_matrix_doc_test.dart` and tell me what changed. The rest of the rules suite is untouched except the two closed lists in `firestore.rules`.
+
+## Phase 4 - P4-14 FCM push client
+
+Implemented the Android FCM adapter, stable per-installation device identity,
+verified-owner device-token documents, session/sign-out cleanup, diagnostics,
+and allow-listed push-tap routing. `firebase_messaging 17.0.0` resolved with
+`firebase_core 5.0.0`. The app uses FCM registration tokens because P4-15 sends
+to those tokens; the deprecated token APIs remain intentionally isolated in
+the single Firebase Messaging adapter. Push permission is checked without
+prompting at startup; the explicit permission action is the only prompt.
+Foreground messages are exposed for the P4-17 bridge.
+
+Device tests and the Android manual checklist are in
+`docs/push_manual_test.md`. Physical-device delivery and permission behavior
+remain unverified.
+
+Validation: pending.

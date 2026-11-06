@@ -15,7 +15,8 @@ enum NotificationChannelId {
   choresOverdue('chores_overdue'),
   dailySummary('daily_summary'),
   bazar('bazar'),
-  family('family');
+  family('family'),
+  pushEvents('push_events');
 
   const NotificationChannelId(this.id);
 

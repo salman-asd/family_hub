@@ -8,7 +8,11 @@ import 'package:family_hub/core/firebase/cache_wipe.dart';
 import 'package:family_hub/core/firebase/firebase_bootstrap.dart';
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
 import 'package:family_hub/core/notifications/data/local_notifications_scheduler.dart';
+import 'package:family_hub/core/notifications/data/device_installation_store.dart';
+import 'package:family_hub/core/notifications/data/device_token_repository.dart';
+import 'package:family_hub/core/notifications/data/push_messaging_service.dart';
 import 'package:family_hub/core/notifications/domain/notification_tap_router.dart';
+import 'package:family_hub/core/notifications/presentation/push_providers.dart';
 import 'package:family_hub/features/activity/data/firestore_activity_repository.dart';
 import 'package:family_hub/features/activity/presentation/activity_providers.dart';
 import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
@@ -127,6 +131,9 @@ Future<void> bootstrap(Flavor flavor) async {
     // clears the previous user's cached data when a sign-out asked for it.
     await initializeFirebase(flavor: flavor, prefs: prefs);
 
+    final pushMessagingService = FirebasePushMessagingService();
+    await pushMessagingService.initialize(notificationTapRouter);
+
     // Built once and shared: the repository is stateless apart from the
     // FirebaseAuth handle, and one instance keeps the auth stream single.
     final authRepository = FirebaseAuthRepository();
@@ -182,6 +189,17 @@ Future<void> bootstrap(Flavor flavor) async {
           pendingWriteCounterProvider.overrideWithValue(tx.pendingWrites),
           sharedPreferencesProvider.overrideWithValue(prefs),
           authRepositoryProvider.overrideWithValue(authRepository),
+          pushMessagingServiceProvider.overrideWithValue(pushMessagingService),
+          deviceInstallationStoreProvider.overrideWithValue(
+            SharedPreferencesDeviceInstallationStore(prefs),
+          ),
+          deviceTokenRepositoryProvider.overrideWithValue(
+            FirestoreDeviceTokenRepository(),
+          ),
+          beforeSignOutProvider.overrideWith(
+            (ref) =>
+                () => ref.read(pushControllerProvider).unregisterForSignOut(),
+          ),
           afterSignOutProvider.overrideWithValue(
             () => CacheWipe.request(prefs),
           ),

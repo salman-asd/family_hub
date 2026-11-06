@@ -1,4 +1,5 @@
 import 'package:family_hub/core/errors/app_failure.dart';
+import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/features/auth/domain/app_user.dart';
 import 'package:family_hub/features/auth/domain/usecases/auth_use_cases.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -95,6 +96,18 @@ void main() {
       final bad = await SignOut(repo, afterSignOut: () async => ran++)();
       expect(bad.isFailure, isTrue);
       expect(ran, 1);
+    });
+
+    test('does not sign out when device cleanup fails', () async {
+      final repository = FakeAuthRepository();
+      final result = await SignOut(
+        repository,
+        beforeSignOut: () async => const Failure<void>(Network()),
+      )();
+
+      expect(result.isFailure, isTrue);
+      expect(repository.calls, isNot(contains('signOut')));
+      await repository.dispose();
     });
   });
 }

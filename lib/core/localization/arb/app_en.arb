@@ -4652,6 +4652,8 @@
   "@notifChannelFamilyDescription": {},
   "notifChannelPushEvents": "Push alerts",
   "@notifChannelPushEvents": {},
+  "notifChannelPushEventsDescription": "Important family updates",
+  "@notifChannelPushEventsDescription": {},
   "levelNameSeed": "Seed",
   "@levelNameSeed": {},
   "levelNameSprout": "Sprout",

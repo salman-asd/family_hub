@@ -3,6 +3,9 @@ import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/theme/theme_controller.dart'
     show sharedPreferencesProvider;
 import 'package:family_hub/core/localization/generated/app_localizations.dart';
+import 'package:family_hub/core/errors/result.dart';
+import 'package:family_hub/core/notifications/domain/device_token.dart';
+import 'package:family_hub/core/notifications/presentation/push_providers.dart';
 import 'package:family_hub/features/auth/domain/app_user.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
@@ -15,7 +18,37 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../support/fake_auth_repository.dart';
+import '../support/fake_push_service.dart';
 import '../support/fake_session_repositories.dart';
+
+final class _FakeDeviceTokenRepository implements DeviceTokenRepository {
+  @override
+  Future<Result<void>> register({
+    required String uid,
+    required String deviceId,
+    required DeviceTokenRegistration registration,
+  }) async => const Success<void>(null);
+
+  @override
+  Future<Result<void>> remove({
+    required String uid,
+    required String deviceId,
+  }) async => const Success<void>(null);
+}
+
+final class _FakeDeviceInstallationStore implements DeviceInstallationStore {
+  DeviceInstallation? installation;
+
+  @override
+  Future<DeviceInstallation?> read() async => installation;
+
+  @override
+  Future<DeviceInstallation> getOrCreate({
+    required String Function() newId,
+    required DateTime nowUtc,
+  }) async =>
+      installation ??= DeviceInstallation(id: newId(), createdAt: nowUtc);
+}
 
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
@@ -36,8 +69,10 @@ void main() {
           ),
         },
       );
+      final pushService = FakePushService();
       addTearDown(auth.dispose);
       addTearDown(session.dispose);
+      addTearDown(pushService.close);
 
       await tester.pumpWidget(
         ProviderScope(
@@ -45,6 +80,13 @@ void main() {
             flavorProvider.overrideWithValue(flavor),
             sharedPreferencesProvider.overrideWithValue(prefs),
             authRepositoryProvider.overrideWithValue(auth),
+            pushMessagingServiceProvider.overrideWithValue(pushService),
+            deviceInstallationStoreProvider.overrideWithValue(
+              _FakeDeviceInstallationStore(),
+            ),
+            deviceTokenRepositoryProvider.overrideWithValue(
+              _FakeDeviceTokenRepository(),
+            ),
             profileRepositoryProvider.overrideWithValue(session),
             membershipRepositoryProvider.overrideWithValue(session),
             moduleFlagsRepositoryProvider.overrideWithValue(session),

@@ -4997,6 +4997,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get notifChannelPushEvents => 'জরুরি বিজ্ঞপ্তি';
 
   @override
+  String get notifChannelPushEventsDescription => 'পরিবারের গুরুত্বপূর্ণ আপডেট';
+
+  @override
   String get levelNameSeed => 'বীজ';
 
   @override

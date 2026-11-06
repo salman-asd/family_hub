@@ -9,6 +9,7 @@ rules_version = '2';
 //
 // Collections covered today (roadmap Steps 6-9, hardening H4-H7):
 //   users/{uid}
+//   users/{uid}/devices/{deviceId} (P4-14)
 //   inviteCodes/{code}
 //   families/{f}
 //   families/{f}/members/{m}
@@ -1849,6 +1850,44 @@ service cloud.firestore {
       // H9: an account is closed by a SOFT delete (`deletedAt`, `deletedBy`);
       // the document itself is never removed, so history stays attributable.
       allow delete: if false;
+
+      // FCM registration tokens are private to the account owner. A token is
+      // scoped to one app installation and may be removed on sign-out.
+      match /devices/{deviceId} {
+        function deviceKeys() {
+          return [
+            'token', 'platform', 'lang', 'appVersion', 'flavor', 'lastSeenAt',
+            'createdAt', 'createdBy', 'updatedAt', 'updatedBy', 'schemaVersion'
+          ];
+        }
+
+        function deviceDocOk() {
+          let d = request.resource.data;
+          return d.keys().hasOnly(deviceKeys())
+            && d.keys().hasAll(deviceKeys())
+            && str(d.get('token', ''), 1, 4096)
+            && d.get('platform', '') == 'android'
+            && inList(d.get('lang', ''), ['bn', 'en'])
+            && str(d.get('appVersion', ''), 1, 32)
+            && inList(d.get('flavor', ''), ['dev', 'prod'])
+            && d.get('lastSeenAt', null) is timestamp
+            && d.get('createdAt', null) is timestamp
+            && d.get('createdBy', '') == uid
+            && d.get('updatedAt', null) is timestamp
+            && d.get('updatedBy', '') == uid
+            && d.get('schemaVersion', 0) == 1
+            && deviceId.matches('^[A-Za-z0-9_-]{1,64}$');
+        }
+
+        allow read: if isSelf(uid);
+        allow create: if verified() && isSelf(uid) && deviceDocOk();
+        allow update: if verified()
+          && isSelf(uid)
+          && deviceDocOk()
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.createdBy == resource.data.createdBy;
+        allow delete: if verified() && isSelf(uid);
+      }
     }
 
     // ══════════════════════════════════════════════════════════════════════

@@ -14,6 +14,13 @@ void main() {
         currentFamilyIdProvider.overrideWithValue(null),
         currentUidProvider.overrideWithValue(null),
         memberNotificationPrefsStoreProvider.overrideWithValue(_Store()),
+        pushCapabilityProvider.overrideWithValue(
+          const DeliveryCapability(
+            tokenRegistered: false,
+            osPermissionGranted: false,
+            memberPushEnabled: false,
+          ),
+        ),
       ],
     );
     addTearDown(container.dispose);

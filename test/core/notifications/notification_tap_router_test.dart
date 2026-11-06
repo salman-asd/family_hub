@@ -72,4 +72,18 @@ void main() {
 
     expect(routes, <String>['/chores/today', '/bazar/fund']);
   });
+
+  test('push taps fall back home for unknown routes and disabled modules', () {
+    final router = NotificationTapRouter();
+    final routes = <String>[];
+    router.routePush('/unknown/route');
+    router.attach(
+      navigate: routes.add,
+      choresEnabled: false,
+      bazarEnabled: true,
+    );
+    router.routePush('/chores/today');
+
+    expect(routes, <String>['/home', '/home']);
+  });
 }

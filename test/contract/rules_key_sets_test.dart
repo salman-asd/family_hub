@@ -45,6 +45,8 @@ import 'package:family_hub/features/notifications/data/delivery_mappers.dart';
 import 'package:family_hub/features/notifications/data/notification_defaults_mappers.dart';
 import 'package:family_hub/features/notifications/domain/notification_defaults.dart';
 import 'package:family_hub/features/notifications/domain/notification_delivery_settings.dart';
+import 'package:family_hub/core/notifications/data/device_token_mappers.dart';
+import 'package:family_hub/core/notifications/domain/device_token.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../support/rules_source.dart';
@@ -465,6 +467,21 @@ void main() {
     expect(
       ContributionMappers.planToMap(plan, meta).keys.toSet(),
       rulesList('contributionPlanKeys'),
+    );
+  });
+
+  test('device token toMap keys == deviceKeys()', () {
+    final token = DeviceTokenRegistration(
+      token: 'test-token',
+      languageCode: 'bn',
+      appVersion: '0.1.0',
+      flavor: 'dev',
+      createdAt: DateTime.utc(2026, 10, 18),
+      lastSeenAt: DateTime.utc(2026, 10, 19),
+    );
+    expect(
+      DeviceTokenMappers.toMap('u1', token).keys.toSet(),
+      rulesList('deviceKeys'),
     );
   });
 }

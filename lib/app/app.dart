@@ -1,5 +1,6 @@
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/preference_sync.dart';
+import 'package:family_hub/app/push_hook.dart';
 import 'package:family_hub/app/router.dart';
 import 'package:family_hub/app/session_hook.dart';
 import 'package:family_hub/app/theme/theme_builder.dart';
@@ -47,6 +48,7 @@ class FamilyHubApp extends ConsumerWidget {
     ref.watch(dashboardPreferenceSyncProvider);
     ref.watch(reminderOrchestrationProvider);
     ref.watch(reminderLifecycleObserverProvider);
+    ref.watch(pushOrchestrationProvider);
     // Side effect only (B-01): start the occurrence generation once the
     // session is active, and show a failure of that run. It runs here, in the
     // widget above the router, which is mounted for the whole app life.

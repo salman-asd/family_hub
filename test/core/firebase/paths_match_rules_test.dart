@@ -16,13 +16,12 @@ void main() {
   //
   // P4-02: the occurrence, availability, swap and inbox collections got their
   // rules in Phase 3, so they left this list (the "no longer pending" test
-  // below would have failed on them). The new Phase 4 collections join it until
-  // P4-14 (devices) and P4-19 (public stats) add their rules.
+  // below would have failed on them). P4-14 adds device rules; public stats
+  // remain pending until P4-19.
   const pending = <String>{
     FirestorePaths.memberStatsSubcollection,
     FirestorePaths.importBatchesSubcollection,
     FirestorePaths.memberStatsPublicSubcollection,
-    FirestorePaths.devicesSubcollection,
   };
 
   late Set<String> matched;

@@ -5020,6 +5020,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notifChannelPushEvents => 'Push alerts';
 
   @override
+  String get notifChannelPushEventsDescription => 'Important family updates';
+
+  @override
   String get levelNameSeed => 'Seed';
 
   @override

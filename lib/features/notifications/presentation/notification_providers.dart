@@ -11,6 +11,7 @@ import 'package:family_hub/features/notifications/domain/notification_delivery_s
 import 'package:family_hub/features/notifications/domain/usecases/save_member_notification_prefs.dart';
 import 'package:family_hub/features/notifications/domain/usecases/update_notification_defaults.dart';
 import 'package:family_hub/features/notifications/domain/usecases/update_notification_delivery.dart';
+import 'package:family_hub/core/notifications/presentation/push_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final notificationDeliveryRepositoryProvider =
@@ -97,12 +98,17 @@ final reminderSettingsProvider = Provider<AsyncValue<ReminderSettings>>((ref) {
       .whenData((defaults) => prefs.resolve(defaults));
 });
 
-final notificationDeliveryCapabilityProvider = Provider<DeliveryCapability>(
-  (ref) => DeliveryCapability(
-    tokenRegistered: false,
-    osPermissionGranted: false,
+final pushCapabilityProvider = Provider<DeliveryCapability>((ref) {
+  final diagnostics = ref.watch(pushDiagnosticsProvider).value;
+  return DeliveryCapability(
+    tokenRegistered: diagnostics?.tokenRegistered ?? false,
+    osPermissionGranted: diagnostics?.notificationsGranted ?? false,
     memberPushEnabled: ref.watch(memberPrefsProvider).pushEnabled,
-  ),
+  );
+});
+
+final notificationDeliveryCapabilityProvider = Provider<DeliveryCapability>(
+  (ref) => ref.watch(pushCapabilityProvider),
 );
 
 final effectiveModeProvider =

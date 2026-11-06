@@ -8728,6 +8728,12 @@ abstract class AppLocalizations {
   /// **'জরুরি বিজ্ঞপ্তি'**
   String get notifChannelPushEvents;
 
+  /// No description provided for @notifChannelPushEventsDescription.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের গুরুত্বপূর্ণ আপডেট'**
+  String get notifChannelPushEventsDescription;
+
   /// No description provided for @levelNameSeed.
   ///
   /// In bn, this message translates to:
