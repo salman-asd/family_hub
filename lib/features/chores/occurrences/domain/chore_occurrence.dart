@@ -5,11 +5,7 @@ import 'package:family_hub/features/chores/templates/domain/template_parts.dart'
 
 export 'package:family_hub/features/chores/occurrences/domain/occurrence_parts.dart';
 
-const Object _unset = Object();
-
-/// `copyWith`'s nullable fields: no argument keeps the value, `null` clears it.
-T? _pick<T>(Object? value, T? current) =>
-    identical(value, _unset) ? current : value as T?;
+part 'chore_occurrence_parts.dart';
 
 /// One stored occurrence (`choreOccurrences/{id}`), road map 3.2.
 ///
@@ -284,22 +280,6 @@ final class ChoreOccurrence {
     deletedAt,
     deletedBy,
   ]);
-
-  static bool _sameList<T>(List<T> a, List<T> b) {
-    if (a.length != b.length) return false;
-    for (var i = 0; i < a.length; i++) {
-      if (a[i] != b[i]) return false;
-    }
-    return true;
-  }
-
-  static bool _sameMap(Map<String, SubtaskDone> a, Map<String, SubtaskDone> b) {
-    if (a.length != b.length) return false;
-    for (final entry in a.entries) {
-      if (b[entry.key] != entry.value) return false;
-    }
-    return true;
-  }
 
   @override
   String toString() =>

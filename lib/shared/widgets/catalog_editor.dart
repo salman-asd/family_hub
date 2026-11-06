@@ -3,6 +3,8 @@ import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/shared/widgets/catalog_entry_dialog.dart';
 import 'package:flutter/material.dart';
 
+part 'catalog_editor_parts.dart';
+
 /// One editable row of a [CatalogEditor].
 ///
 /// The same shape serves chore groups, due-time presets and absence reasons
@@ -225,79 +227,5 @@ class CatalogEditor extends StatelessWidget {
       n++;
     }
     return 'custom_$n';
-  }
-}
-
-class _Row extends StatelessWidget {
-  const _Row({
-    required this.entry,
-    required this.index,
-    required this.showHandle,
-    required this.onEdit,
-    required this.onToggleActive,
-    required this.onDelete,
-    super.key,
-  });
-
-  final CatalogEntry entry;
-  final int index;
-  final bool showHandle;
-  final VoidCallback onEdit;
-  final VoidCallback onToggleActive;
-
-  /// Null for a built-in row: built-ins are never deleted.
-  final VoidCallback? onDelete;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final tokens = context.tokens;
-    final label = entry.labelBn;
-    final detail = entry.detail;
-
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: showHandle
-          ? ReorderableDragStartListener(
-              index: index,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Icon(Icons.drag_handle_rounded, color: tokens.outline),
-              ),
-            )
-          : null,
-      title: Text(
-        label,
-        style: entry.active
-            ? null
-            : TextStyle(
-                color: tokens.textDisabled,
-                decoration: TextDecoration.lineThrough,
-              ),
-      ),
-      subtitle: detail == null ? null : Text(detail),
-      trailing: PopupMenuButton<String>(
-        tooltip: l10n.catalogEditorActions,
-        onSelected: (action) => switch (action) {
-          'edit' => onEdit(),
-          'toggle' => onToggleActive(),
-          'delete' => onDelete?.call(),
-          _ => null,
-        },
-        itemBuilder: (context) => [
-          PopupMenuItem(value: 'edit', child: Text(l10n.actionEdit)),
-          PopupMenuItem(
-            value: 'toggle',
-            child: Text(
-              entry.active
-                  ? l10n.catalogEditorDeactivate
-                  : l10n.catalogEditorActivate,
-            ),
-          ),
-          if (onDelete != null)
-            PopupMenuItem(value: 'delete', child: Text(l10n.actionDelete)),
-        ],
-      ),
-    );
   }
 }

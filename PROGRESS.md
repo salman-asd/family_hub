@@ -1869,3 +1869,36 @@ Written without an SDK: **nothing was compiled or run**, and P3-30 is by nature 
 
 ### To check when you run it
 `aChoreItem` ids in the perf test, `SubtaskDone` import path in the concurrency test, and the regex in `chore_rules_carve_out_test` against the real `match` lines.
+
+## Phase 4 - P4-01 Preflight gate, ADRs, split oversize files
+
+Written without an SDK: **nothing was compiled or run**, and the gate below is NOT run. **Phase 3 is still not signed off and `phase-3` must not be tagged.** Run, in this order: `dart format .`, `flutter pub get`, `flutter gen-l10n` (no diff expected: no ARB change), `flutter analyze`, `flutter test --exclude-tags golden`, the rules suite (`npm run test:emulator` in `firebase/rules_test`), `node tools/check_indexes.mjs`. Paste the first errors back; compile fixes go in `P4-00: repair base`, anything broken in Phase 3 behaviour becomes `P3-fix-xx`.
+
+### Delivered
+| Area | Files |
+| --- | --- |
+| split (no logic change) | ten files, each into a `part` file next to it: `agenda_view` -> `agenda_view_parts`; `recurrence_picker_sheet` -> `recurrence_picker_parts`; `template_list_screen` -> `template_list_screen_parts`; `template_editor_controller` -> `template_editor_controller_parts`; `template_editor_screen` -> `template_editor_screen_parts`; `chore_item` -> `chore_item_parts`; `occurrence_action` -> `occurrence_action_parts`; `chore_occurrence` -> `chore_occurrence_parts`; `chore_settings_screen` -> `chore_settings_screen_parts`; `catalog_editor` -> `catalog_editor_parts`. Import paths and public names are unchanged. Largest main file now 288 lines |
+| tests | NEW `test/architecture/notification_plugin_boundary_test.dart` (passes today: no adapter exists yet); EDIT `file_size_test.dart` (the ten Phase 3 entries removed) |
+| ADRs | `docs/decisions/0015` to `0020` |
+| docs | NEW `docs/phase3_state.md`; EDIT `docs/ROADMAP.md` (Steps 27-31 "re-cut as P4-xx"); `docs/PHASE4_DASHBOARD_ENGAGEMENT_ROADMAP.md` was already in the tree and is byte-identical to the uploaded file, so it is not in the zip |
+| CLAUDE.md | header line (optional push backend exception) and a Phase 4 section with rules **61-77** |
+
+### Decisions (my recommendations)
+1. **Rule numbers shifted by five.** The card says "rules 56-72", but CLAUDE.md rules 56-60 already exist (Phase 3, and code comments cite them). The Phase 4 rules are 61-77 in the card's order (card N = rule N + 5). The roadmap text still says "rule 68" and so on; CLAUDE.md states the mapping.
+2. **`part` files, not new public widgets.** Keeps private names and every import path, which is the safest split with no compiler. Two structural edits go beyond moving a block (see `docs/phase3_state.md`): the recurrence picker's two field builders and the editor controller's setters (`TemplateDraftSetters` mixin with abstract `_draft` / `_edit` hooks, so the mixin never touches Riverpod's `@protected` `state`) and `_plan` (now `_planAfterSave(Ref ref, ...)`).
+3. **The allow-list is not empty.** Four older entries stay (`gallery_sections`, `app_tokens`, `theme_builder`, `firestore_family_repository`): they are not in F-2 and have their own documented reasons. The card's "empty" is met for the ten Phase 3 files only. Say so if you want them split in a `P4-01b`.
+4. **ADR 0020** is accepted as the default design; deployment awaits your Blaze go/no-go.
+
+### P4-01 gate (paste outputs here)
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | NOT RUN |
+| `flutter pub get` | NOT RUN |
+| `flutter gen-l10n` (no diff) | NOT RUN |
+| `flutter analyze` | NOT RUN |
+| `flutter test --exclude-tags golden` | NOT RUN |
+| rules suite | NOT RUN |
+| `node tools/check_indexes.mjs` | NOT RUN |
+
+### To check when you run it
+Likeliest first failures: `template_editor_controller.dart` (mixin with private abstract members, `Ref` type), `recurrence_picker_parts.dart` (unused-parameter or import lints), `dart format` reflowing a main file (largest is 288, so a split file should not pass 300). Three files this step did not touch sit at 297-300 lines (`apply_starter_pack`, `occurrence_mappers`, `occurrence_write_plan`): if the formatter pushes one over, `file_size_test` fails on it.

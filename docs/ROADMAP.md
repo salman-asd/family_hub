@@ -616,6 +616,8 @@ TESTS: 28/30/31-day months and a leap February; Bangla weekday and month names; 
 
 ### Step 27 — Dashboard from real data
 
+> **Re-cut as P4-04 (activity feed), P4-05 to P4-08 (dashboard domain, data, Home, customize and access screens).** See `docs/PHASE4_DASHBOARD_ENGAGEMENT_ROADMAP.md`; the prompt below is kept for history and is not used for Phase 4.
+
 ```text
 Build features/dashboard on top of the module registry.
 
@@ -627,6 +629,8 @@ TESTS: card visibility by role and module flag; a listener-count test; goldens i
 ```
 
 ### Step 28 — Reminders (local notifications) and notification settings
+
+> **Re-cut as P4-09 to P4-13 (catalog, reminder domain, data, orchestration, platform adapter), P4-14 to P4-15 (push client and optional Cloud Functions backend, new in v2) and P4-16 (settings screens).** See `docs/PHASE4_DASHBOARD_ENGAGEMENT_ROADMAP.md`; the prompt below is kept for history and is not used for Phase 4.
 
 **Goal:** reminders fire on the real phone with the app closed (roadmap Section 7).
 
@@ -645,6 +649,8 @@ TESTS: planner tests for quiet hours, multiple reminders, overdue reminder, a di
 **Done when:** a reminder fires at the configured offset on a real Android device with the app closed; disabling one template's reminders suppresses only that template.
 
 ### Step 29 — Badges, Hub Level and the daily celebration
+
+> **Re-cut as P4-18 to P4-22 (engagement domain, stats data and privacy, achievements UI, celebration domain and overlay).** See `docs/PHASE4_DASHBOARD_ENGAGEMENT_ROADMAP.md`; the prompt below is kept for history and is not used for Phase 4.
 
 **Goal:** encouragement without star ratings or public ranking (roadmap Section 8).
 
@@ -665,6 +671,8 @@ TESTS: the points table, late vs on time, verified multiplier, cover bonus, abse
 
 ### Step 30 — Activity feed and inbox screens
 
+> **Re-cut as P4-04 (activity feed) and P4-17 (inbox: derived items, bell, foreground bridge).** See `docs/PHASE4_DASHBOARD_ENGAGEMENT_ROADMAP.md`; the prompt below is kept for history and is not used for Phase 4.
+
 ```text
 Finish the activity feed and the in-app inbox.
 
@@ -674,6 +682,8 @@ Finish the activity feed and the in-app inbox.
 ```
 
 ### Step 31 — Polish, accessibility, tablet layouts
+
+> **Re-cut as P4-23 (accessibility and states audit) and P4-24 (tablet layouts); sign-off in P4-25.** See `docs/PHASE4_DASHBOARD_ENGAGEMENT_ROADMAP.md`; the prompt below is kept for history and is not used for Phase 4.
 
 ```text
 Audit the whole app, then fix. FIRST produce a written list of issues with file and line references, grouped by category; then fix them in small commits.

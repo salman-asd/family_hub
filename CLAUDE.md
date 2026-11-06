@@ -1,6 +1,6 @@
 # Family Hub - project context (read before every task)
 
-You are a senior Flutter engineer building 'Family Hub', a Bangla-first household app (bazar and family finance + family chores) for one family. Android first, iOS-ready. Backend: Firebase Auth + Cloud Firestore on the free Spark plan. No Cloud Functions, and no hard dependency on Cloud Storage.
+You are a senior Flutter engineer building 'Family Hub', a Bangla-first household app (bazar and family finance + family chores) for one family. Android first, iOS-ready. Backend: Firebase Auth + Cloud Firestore on the free Spark plan. No Cloud Functions (the one exception is the optional Phase 4 push backend in `functions/`, deployed only if the owner moves to Blaze; ADR 0020, rule 74), and no hard dependency on Cloud Storage.
 
 ARCHITECTURE: feature-first Clean Architecture. Each feature has data/, domain/, presentation/. domain is pure Dart (no flutter or firebase imports). presentation never touches Firestore: screen -> Riverpod controller -> use case -> repository interface. data implements repositories and maps Firestore documents to domain entities through mappers.
 
@@ -231,3 +231,25 @@ Source of truth: `docs/PHASE3_CHORES_ROADMAP.md` (sections 1-3 and the step card
 58. Absence, swap and inbox screens (P3-27): screens never call a repository; sheets are `WidgetRef` extensions (`requestSwapWithSheet`, `respondToSwapWithSheet`, `addAvailabilityWithSheet`) that collect input with shared widgets and hand it to the use case providers. Eligible swap recipients come from the pure `eligibleRecipients` (active, not the requester, not away that day); the "affected chores" preview is `affectedChoresCount` over at most three month listeners. Accept/decline are INTEGRITY writes and show "needs internet" offline. The default `swapRepositoryProvider`, `availabilityRepositoryProvider` and `inboxRepositoryProvider` are empty (no requests, no absences, no rows), so screen tests need no wiring; `bootstrap.dart` overrides them. `expireSwapsOnOpenProvider` runs once per start from `ChoresGenerationHook`, best effort. The inbox is a top-level route (`AppRoutes.inbox`); the bell sits in the calendar header and the Manage hub shows the count.
 59. Rota board (P3-28): read-only. `WorkloadCalculator` (difficulty weights 1/2/3, skipped chores count for nobody, a cover counts for whoever does the work, `coversReceived` = planned for me but done by somebody else) and `RotaMatrix` are pure Dart over the items the calendar already listens to; `rotaItemsProvider` reuses at most two `monthItemsProvider` listeners, so the board adds no new query. A week starts on `ChoreSettings.weekStartDay` (0 = Sunday ... 6 = Saturday). Visibility: managers always, members only when `workloadVisibleToMembers` (`rotaVisibleProvider`, also the Manage tile's gate). Every bar has its number beside it and a grid cell is a count plus a check icon, never colour alone.
 60. Dashboard cards (P3-29): the Chores Home cards (`choresDashboardCards`) read ONLY `chores_dashboard_providers.dart`, which derives from `todayItemsProvider`, `monthItemsProvider` and `verifyQueueCountProvider`; a card never opens its own listener. The viewer's scope follows `settings/chores.defaultScope`, like Today. Chore audit params hold uids; the feed passes them through `resolveChoreActivityNames` before `activityText`. `isOverdueItem` accepts an item whose status is already `overdue` (the providers apply the clock first).
+
+## Phase 4 rules (Dashboard, Notifications, Engagement) - binding from P4-01
+
+Source of truth: `docs/PHASE4_DASHBOARD_ENGAGEMENT_ROADMAP.md` (sections 1-3 and the step card); the decisions are restated in `docs/decisions/0015`-`0020`. **Numbering:** rules 56-60 already belong to Phase 3, so the roadmap's "rules 56-72" (P4-01 card, D-P4-3, P4-14, P4-15, P4-23) are CLAUDE.md rules **61-77**, in the same order (roadmap N = CLAUDE.md N + 5). Say "CLAUDE.md rule 73" in new code comments and tests; if the roadmap says "rule 68" it means rule 73 here.
+
+61. Reminders are produced only by `ReminderPlanner` and scheduled only through `ReminderScheduler`; widgets never call a plugin.
+62. Notification text is built from ARB keys at planning time (local) or from the Cloud Function's bn/en table (push).
+63. The three reminder switches (global master, category, template) are resolved only by `ReminderPrecedence`.
+64. `memberStats` is owner-only, always (admins included). Sharing goes only through the points-free `memberStatsPublic`. No audit or activity entry is written for stats (ADR 0017).
+65. Scoring numbers (point bases, factors, levels, badge thresholds) come from `settings/engagement`, never from a constant in a widget or a use case.
+66. Painters take colours as arguments (from `context.tokens`); animation lengths come from `engagementMotion` and are zero under reduced motion (ADR 0018).
+67. Only `flutter_local_notifications`, `android_intent_plus` and `firebase_messaging` may be added to `pubspec.yaml` in Phase 4 (the `functions/` project has its own `package.json`). Anything else needs an ADR. `test/architecture/notification_plugin_boundary_test.dart` also confines each plugin to its one adapter file.
+68. Dashboard visibility and order are decided only by `DashboardResolver`; a card never opens its own listener (rule 60 for the chores cards, generalised to every module).
+69. Derived (virtual) inbox items are never written (ADR 0016).
+70. The celebration shows at most once per day per member.
+71. Every user-visible Phase 4 string has bn + en ARB keys.
+72. Hiding a dashboard card is presentation only; access is always `PermissionPolicy` + the Firestore rules (ADR 0019).
+73. Push vs Normal is decided only by `DeliveryPolicy`; a notification type has exactly one effective mode (ADR 0015).
+74. The client never sends push and never holds a service account; push is sent only by the Cloud Function (ADR 0020).
+75. A push carries no names, amounts or ids of people: a generic title and body, and a route in `data`.
+76. Drag and drop must have a non-drag alternative (Move up / Move down, also as TalkBack semantic actions).
+77. Stats are never exported, and never shown to another member except the points-free public card (D-P4-26, ADR 0017).

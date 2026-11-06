@@ -9,6 +9,8 @@ import 'package:family_hub/shared/widgets/weekday_chips.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+part 'recurrence_picker_parts.dart';
+
 /// Opens the recurrence picker and returns the chosen rule (or null on cancel).
 Future<Recurrence?> showRecurrencePicker(
   BuildContext context, {
@@ -134,7 +136,6 @@ class _RecurrencePickerSheetState extends State<_RecurrencePickerSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final t = context.tokens;
 
     return ConstrainedBox(
       constraints: BoxConstraints(
@@ -169,24 +170,11 @@ class _RecurrencePickerSheetState extends State<_RecurrencePickerSheet> {
                 ],
               ),
               const SizedBox(height: 16),
-              ..._fields(context, l10n, t),
+              ..._fields(context, l10n),
               const SizedBox(height: 24),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(l10n.actionCancel),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () => Navigator.of(context).pop(_result),
-                      child: Text(l10n.actionDone),
-                    ),
-                  ),
-                ],
+              _PickerActions(
+                onCancel: () => Navigator.of(context).pop(),
+                onDone: () => Navigator.of(context).pop(_result),
               ),
             ],
           ),
@@ -195,11 +183,7 @@ class _RecurrencePickerSheetState extends State<_RecurrencePickerSheet> {
     );
   }
 
-  List<Widget> _fields(
-    BuildContext context,
-    AppLocalizations l10n,
-    AppTokens t,
-  ) {
+  List<Widget> _fields(BuildContext context, AppLocalizations l10n) {
     switch (_kind) {
       case RecurrenceKind.once:
         return [
@@ -233,90 +217,26 @@ class _RecurrencePickerSheetState extends State<_RecurrencePickerSheet> {
           _weekdayField(l10n),
         ];
       case RecurrenceKind.daysOfMonth:
-        return [
-          Text(
-            l10n.recurrencePickerDaysOfMonth,
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (var day = 1; day <= 31; day++)
-                FilterChip(
-                  key: ValueKey<String>('recurrence_day_$day'),
-                  label: Text(widget.formatters.number(day)),
-                  selected: _days.contains(day),
-                  showCheckmark: true,
-                  onSelected: (_) => setState(() {
-                    if (!_days.remove(day)) _days.add(day);
-                  }),
-                ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.recurrencePickerMonthEnd,
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
-          ),
-          const SizedBox(height: 8),
-          ChoiceWrap<MonthEndMode>(
-            selected: _monthEnd,
-            onChanged: (mode) => setState(() => _monthEnd = mode),
-            options: [
-              ChoiceOption(
-                MonthEndMode.clamp,
-                l10n.recurrencePickerMonthEndClamp,
-              ),
-              ChoiceOption(
-                MonthEndMode.skip,
-                l10n.recurrencePickerMonthEndSkip,
-              ),
-            ],
-          ),
-        ];
+        return _daysOfMonthFields(
+          context,
+          days: _days,
+          monthEnd: _monthEnd,
+          formatters: widget.formatters,
+          onToggleDay: (day) => setState(() {
+            if (!_days.remove(day)) _days.add(day);
+          }),
+          onMonthEndChanged: (mode) => setState(() => _monthEnd = mode),
+        );
       case RecurrenceKind.nthWeekday:
-        return [
-          Text(
-            l10n.recurrencePickerNth,
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
-          ),
-          const SizedBox(height: 8),
-          ChoiceWrap<int>(
-            selected: _nth,
-            onChanged: (value) => setState(() => _nth = value),
-            options: [
-              ChoiceOption(1, l10n.recurrenceNthFirst),
-              ChoiceOption(2, l10n.recurrenceNthSecond),
-              ChoiceOption(3, l10n.recurrenceNthThird),
-              ChoiceOption(4, l10n.recurrenceNthFourth),
-              ChoiceOption(-1, l10n.recurrenceNthLast),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.recurrencePickerWeekday,
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
-          ),
-          const SizedBox(height: 8),
-          ChoiceWrap<int>(
-            selected: _weekday,
-            onChanged: (value) => setState(() => _weekday = value),
-            options: [
-              for (final day in WeekdayChips.order(widget.weekStart))
-                ChoiceOption(day, widget.formatters.weekdayName(day)),
-            ],
-          ),
-        ];
+        return _nthWeekdayFields(
+          context,
+          nth: _nth,
+          weekday: _weekday,
+          weekStart: widget.weekStart,
+          formatters: widget.formatters,
+          onNthChanged: (value) => setState(() => _nth = value),
+          onWeekdayChanged: (value) => setState(() => _weekday = value),
+        );
       case RecurrenceKind.lastDay:
         return const [];
     }
@@ -348,84 +268,4 @@ class _RecurrencePickerSheetState extends State<_RecurrencePickerSheet> {
       () => _n = parsed.clamp(RecurrenceLimits.minN, RecurrenceLimits.maxN),
     );
   }
-
-  static String _kindLabel(AppLocalizations l10n, RecurrenceKind kind) =>
-      switch (kind) {
-        RecurrenceKind.once => l10n.recurrenceKindOnce,
-        RecurrenceKind.daily => l10n.recurrenceKindDaily,
-        RecurrenceKind.everyNDays => l10n.recurrenceKindEveryNDays,
-        RecurrenceKind.weekdays => l10n.recurrenceKindWeekdays,
-        RecurrenceKind.everyNWeeks => l10n.recurrenceKindEveryNWeeks,
-        RecurrenceKind.daysOfMonth => l10n.recurrenceKindDaysOfMonth,
-        RecurrenceKind.nthWeekday => l10n.recurrenceKindNthWeekday,
-        RecurrenceKind.lastDay => l10n.recurrenceKindLastDay,
-      };
-}
-
-class _NumberField extends StatelessWidget {
-  const _NumberField({
-    required this.label,
-    required this.controller,
-    required this.onChanged,
-  });
-
-  final String label;
-  final TextEditingController controller;
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      keyboardType: TextInputType.number,
-      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
-      ),
-    );
-  }
-}
-
-class _DateRow extends StatelessWidget {
-  const _DateRow({
-    required this.label,
-    required this.date,
-    required this.formatters,
-    required this.onChanged,
-  });
-
-  final String label;
-  final DateKey date;
-  final AppFormatters formatters;
-  final ValueChanged<DateKey> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      button: true,
-      label: '$label, ${formatters.fullDate(_asDate(date))}',
-      excludeSemantics: true,
-      child: OutlinedButton.icon(
-        onPressed: () => _pick(context),
-        icon: const Icon(Icons.event_outlined),
-        label: Text('$label: ${formatters.fullDate(_asDate(date))}'),
-      ),
-    );
-  }
-
-  Future<void> _pick(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: _asDate(date),
-      firstDate: DateTime.utc(2000),
-      lastDate: DateTime.utc(2100),
-    );
-    if (picked == null) return;
-    onChanged(DateKey(picked.year, picked.month, picked.day));
-  }
-
-  static DateTime _asDate(DateKey key) =>
-      DateTime.utc(key.year, key.month, key.day);
 }
