@@ -12,13 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Add (`existing == null`) or edit a category.
-Future<void> showCategoryEditSheet(BuildContext context, {Category? existing}) =>
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (_) => CategoryEditSheet(existing: existing),
-    );
+Future<void> showCategoryEditSheet(
+  BuildContext context, {
+  Category? existing,
+}) => showModalBottomSheet<void>(
+  context: context,
+  isScrollControlled: true,
+  showDragHandle: true,
+  builder: (_) => CategoryEditSheet(existing: existing),
+);
 
 /// Names, palette colour, emoji and the active switch of one category.
 class CategoryEditSheet extends ConsumerStatefulWidget {
@@ -66,42 +68,44 @@ class _CategoryEditSheetState extends ConsumerState<CategoryEditSheet> {
     final uid = ref.read(currentUidProvider);
     if (familyId == null || uid == null) return;
     final existing = widget.existing;
-    final saved = await ref.read(categorySheetActionProvider.notifier).run<Category>(() async {
-      if (existing == null) {
-        return ref.read(addCategoryProvider)(
-          actorUid: uid,
-          familyId: familyId,
-          nameBn: _nameBn.text,
-          nameEn: _nameEn.text,
-          colorIndex: _color,
-          emoji: _emoji.text,
-        );
-      }
-      final updated = await ref.read(updateCategoryProvider)(
-        actorUid: uid,
-        familyId: familyId,
-        categoryId: existing.id,
-        nameBn: _nameBn.text,
-        nameEn: _nameEn.text,
-        colorIndex: _color,
-        emoji: _emoji.text,
-        imageData: existing.imageData,
-      );
-      if (updated.failureOrNull != null || _active == existing.active) {
-        return updated;
-      }
-      return _active
-          ? ref.read(reactivateCategoryProvider)(
+    final saved = await ref
+        .read(categorySheetActionProvider.notifier)
+        .run<Category>(() async {
+          if (existing == null) {
+            return ref.read(addCategoryProvider)(
               actorUid: uid,
               familyId: familyId,
-              categoryId: existing.id,
-            )
-          : ref.read(deactivateCategoryProvider)(
-              actorUid: uid,
-              familyId: familyId,
-              categoryId: existing.id,
+              nameBn: _nameBn.text,
+              nameEn: _nameEn.text,
+              colorIndex: _color,
+              emoji: _emoji.text,
             );
-    });
+          }
+          final updated = await ref.read(updateCategoryProvider)(
+            actorUid: uid,
+            familyId: familyId,
+            categoryId: existing.id,
+            nameBn: _nameBn.text,
+            nameEn: _nameEn.text,
+            colorIndex: _color,
+            emoji: _emoji.text,
+            imageData: existing.imageData,
+          );
+          if (updated.failureOrNull != null || _active == existing.active) {
+            return updated;
+          }
+          return _active
+              ? ref.read(reactivateCategoryProvider)(
+                  actorUid: uid,
+                  familyId: familyId,
+                  categoryId: existing.id,
+                )
+              : ref.read(deactivateCategoryProvider)(
+                  actorUid: uid,
+                  familyId: familyId,
+                  categoryId: existing.id,
+                );
+        });
     if (saved != null && mounted) Navigator.of(context).pop();
   }
 
@@ -157,9 +161,8 @@ class _CategoryEditSheetState extends ConsumerState<CategoryEditSheet> {
             const SizedBox(height: 16),
             Text(
               l10n.catalogColour,
-              style: Theme.of(
-                context,
-              ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
+              style: Theme.of(context).textTheme.labelLarge
+                  ?.copyWith(color: t.textSecondary),
             ),
             ColorSwatchGrid(
               selected: _color,
@@ -189,9 +192,8 @@ class _CategoryEditSheetState extends ConsumerState<CategoryEditSheet> {
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   l10n.bazarFailureMessage(failure),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: t.danger),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: t.danger),
                 ),
               ),
             const SizedBox(height: 16),

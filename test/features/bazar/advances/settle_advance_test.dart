@@ -53,20 +53,27 @@ void main() {
     return result.failureOrNull;
   }
 
-  test('a partial then a full settlement move pending -> partial -> settled', () async {
-    fx.putAdvance(expenseId: 'e1', memberId: 'cara', amount: const Money.paisa(10000));
+  test(
+    'a partial then a full settlement move pending -> partial -> settled',
+    () async {
+      fx.putAdvance(
+        expenseId: 'e1',
+        memberId: 'cara',
+        amount: const Money.paisa(10000),
+      );
 
-    expect(await settleIt(4000, settlementId: 's1'), isNull);
-    expect(advance('e1').status, AdvanceStatus.partial);
-    expect(advance('e1').settled, const Money.paisa(4000));
-    expect(balance(), const Money.paisa(-4000));
+      expect(await settleIt(4000, settlementId: 's1'), isNull);
+      expect(advance('e1').status, AdvanceStatus.partial);
+      expect(advance('e1').settled, const Money.paisa(4000));
+      expect(balance(), const Money.paisa(-4000));
 
-    expect(await settleIt(6000, settlementId: 's2'), isNull);
-    expect(advance('e1').status, AdvanceStatus.settled);
-    expect(advance('e1').remaining, Money.zero);
-    expect(balance(), const Money.paisa(-10000));
-    expect(fx.backend.settlements[_f]!.keys, <String>['s1', 's2']);
-  });
+      expect(await settleIt(6000, settlementId: 's2'), isNull);
+      expect(advance('e1').status, AdvanceStatus.settled);
+      expect(advance('e1').remaining, Money.zero);
+      expect(balance(), const Money.paisa(-10000));
+      expect(fx.backend.settlements[_f]!.keys, <String>['s1', 's2']);
+    },
+  );
 
   test('an overpayment is refused and writes nothing', () async {
     fx.putAdvance(expenseId: 'e1', amount: const Money.paisa(5000));
@@ -75,12 +82,18 @@ void main() {
     expect(balance(), Money.zero);
   });
 
-  test('a second settlement sees the first (fresh state inside the write)', () async {
-    fx.putAdvance(expenseId: 'e1', amount: const Money.paisa(5000));
-    await settleIt(3000, settlementId: 's1');
-    expect(await settleIt(3000, settlementId: 's2'), const Conflict(code: 'overpayment'));
-    expect(advance('e1').settled, const Money.paisa(3000));
-  });
+  test(
+    'a second settlement sees the first (fresh state inside the write)',
+    () async {
+      fx.putAdvance(expenseId: 'e1', amount: const Money.paisa(5000));
+      await settleIt(3000, settlementId: 's1');
+      expect(
+        await settleIt(3000, settlementId: 's2'),
+        const Conflict(code: 'overpayment'),
+      );
+      expect(advance('e1').settled, const Money.paisa(3000));
+    },
+  );
 
   test('a voided advance and a missing one are refused', () async {
     fx.putAdvance(
@@ -110,19 +123,25 @@ void main() {
     expect(fx.backend.expensesOf(_f), hasLength(1));
   });
 
-  test('a locked month, a future date and a plain member are refused', () async {
-    fx.putAdvance(expenseId: 'e1', amount: const Money.paisa(5000));
-    expect(
-      await settleIt(100, date: DateKey(2026, 10, 19)),
-      const Validation('dateKey', 'future_date'),
-    );
-    fx.putClosing(monthKey: MonthKey(2026, 10));
-    expect(await settleIt(100), const Conflict(code: 'month_locked'));
-    expect(await settleIt(100, actor: 'cara'), isA<PermissionDenied>());
-  });
+  test(
+    'a locked month, a future date and a plain member are refused',
+    () async {
+      fx.putAdvance(expenseId: 'e1', amount: const Money.paisa(5000));
+      expect(
+        await settleIt(100, date: DateKey(2026, 10, 19)),
+        const Validation('dateKey', 'future_date'),
+      );
+      fx.putClosing(monthKey: MonthKey(2026, 10));
+      expect(await settleIt(100), const Conflict(code: 'month_locked'));
+      expect(await settleIt(100, actor: 'cara'), isA<PermissionDenied>());
+    },
+  );
 
   test('the plan builder is pure and checks the current amount', () {
-    final current = fx.putAdvance(expenseId: 'e1', amount: const Money.paisa(5000));
+    final current = fx.putAdvance(
+      expenseId: 'e1',
+      amount: const Money.paisa(5000),
+    );
     final plan = buildSettlementPlan(
       current: current,
       amount: const Money.paisa(2000),

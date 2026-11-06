@@ -141,7 +141,7 @@ MonthKey? _singleMonth(DateKeyRange range) {
   final startMonth = range.start.monthKey;
   final endMonth = range.end.monthKey;
   if (startMonth != endMonth) return null;
-  final wholeMonth = range.start.day == 1 &&
-      range.end.day == startMonth.daysInMonth;
+  final wholeMonth =
+      range.start.day == 1 && range.end.day == startMonth.daysInMonth;
   return wholeMonth ? startMonth : null;
 }

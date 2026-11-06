@@ -26,7 +26,10 @@ class MemberShareRow extends ConsumerWidget {
     final f = ref.watch(appFormattersProvider);
     final percent = f.number((workload.share * 100).round());
     final lines = <String>[
-      l10n.rotaMemberStats(f.number(workload.assigned), f.number(workload.done)),
+      l10n.rotaMemberStats(
+        f.number(workload.assigned),
+        f.number(workload.done),
+      ),
       if (workload.coversGiven > 0 || workload.coversReceived > 0)
         l10n.rotaCovers(
           f.number(workload.coversGiven),
@@ -43,7 +46,12 @@ class MemberShareRow extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
           children: [
-            AppAvatar(id: workload.memberId, name: name, avatarKey: avatarKey, size: 40),
+            AppAvatar(
+              id: workload.memberId,
+              name: name,
+              avatarKey: avatarKey,
+              size: 40,
+            ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(

@@ -1887,25 +1887,27 @@ Written without an SDK: **nothing was compiled or run**, and the gate below is N
 1. **Rule numbers shifted by five.** The card says "rules 56-72", but CLAUDE.md rules 56-60 already exist (Phase 3, and code comments cite them). The Phase 4 rules are 61-77 in the card's order (card N = rule N + 5). The roadmap text still says "rule 68" and so on; CLAUDE.md states the mapping.
 2. **`part` files, not new public widgets.** Keeps private names and every import path, which is the safest split with no compiler. Two structural edits go beyond moving a block (see `docs/phase3_state.md`): the recurrence picker's two field builders and the editor controller's setters (`TemplateDraftSetters` mixin with abstract `_draft` / `_edit` hooks, so the mixin never touches Riverpod's `@protected` `state`) and `_plan` (now `_planAfterSave(Ref ref, ...)`).
 3. **The allow-list is not empty.** Four older entries stay (`gallery_sections`, `app_tokens`, `theme_builder`, `firestore_family_repository`): they are not in F-2 and have their own documented reasons. The card's "empty" is met for the ten Phase 3 files only. Say so if you want them split in a `P4-01b`.
-4. **ADR 0020** is accepted as the default design; deployment awaits your Blaze go/no-go.
+4. **ADR 0020** now records the Spark decision: no sender is selected or deployed; see the C1 update and Appendix I.
 
-### P4-01 gate (paste outputs here)
+### P4-01 … P4-14 aggregate gate (C1)
 | Command | Result |
 | --- | --- |
-| `dart format --set-exit-if-changed .` | NOT RUN |
-| `flutter pub get` | NOT RUN |
-| `flutter gen-l10n` (no diff) | NOT RUN |
-| `flutter analyze` | NOT RUN |
-| `flutter test --exclude-tags golden` | NOT RUN |
-| rules suite | NOT RUN |
-| `node tools/check_indexes.mjs` | NOT RUN |
+| `dart format --set-exit-if-changed .` | Passed on rerun after formatting: 1,214 files, 0 changed. |
+| `flutter pub get` | Passed. |
+| `flutter gen-l10n` (no diff) | Passed; no generated localization changes. |
+| `flutter analyze` | Failed with 235 issues across the existing tree; see C1 summary below. |
+| `flutter test --exclude-tags golden` | Failed at compilation before tests ran; see C1 summary below. |
+| rules suite | Failed before tests ran because `firebase/firestore.rules` does not compile; see C1 summary below. |
+| `node tools/check_indexes.mjs` | Passed (`firestore.indexes.json OK`). |
 
 ### To check when you run it
 Likeliest first failures: `template_editor_controller.dart` (mixin with private abstract members, `Ref` type), `recurrence_picker_parts.dart` (unused-parameter or import lints), `dart format` reflowing a main file (largest is 288, so a split file should not pass 300). Three files this step did not touch sit at 297-300 lines (`apply_starter_pack`, `occurrence_mappers`, `occurrence_write_plan`): if the formatter pushes one over, `file_size_test` fails on it.
 
 ## Phase 4 - P4-02 Phase 4 vocabulary
 
-Written without an SDK: **nothing was compiled or run.** Vocabulary only; no behaviour, no screen, no router change. P4-01's gate is still pending, so run it on P4-01 + P4-02 together (same command list as the P4-01 gate).
+At implementation time, this vocabulary-only step was written without an SDK:
+no behavior, screen, or router change. The aggregate P4-01…14 gate has since
+been run; see its results above and the C1 record below.
 
 ### Delivered
 | Area | Files |
@@ -1926,6 +1928,84 @@ Written without an SDK: **nothing was compiled or run.** Vocabulary only; no beh
 5. **Generated l10n is hand-written** in the style of the existing files (long getters wrapped after `=>`). Any `flutter gen-l10n` difference should be cosmetic; if it is more than that, tell me.
 6. **Bangla and English texts are mine** (level names, card names, failure messages, sentences) and need the owner's review in P4-25.
 
+## Phase 4 - P4-03 … P4-12 implementation record
+
+These steps were marked implemented in the revised roadmap but had no
+PROGRESS.md entries. Their implementation surfaces and deviations are recorded
+below. **Verification is the aggregate C1 gate, not separate passing claims**;
+see the gate results following P4-14.
+
+### P4-03 - Shared widgets and gallery
+Delivered the Phase 4 shared widgets in `lib/shared/widgets/`, their gallery
+section in `lib/app/gallery/gallery_sections_p4.dart`, and the gallery index
+entry. Widgets accept plain values/callbacks rather than providers. Verification:
+shared-widget gallery, semantics, golden, and overflow tests are included in the
+aggregate Flutter suite; see C1 for its result.
+
+### P4-04 - Activity feed
+Delivered the read-only activity domain, Firestore mapper/repository, providers,
+feed screen, filters, and `ActivityTarget` routing under
+`lib/features/activity/`, plus the activity index and localization. The actual
+route and audit mirror test locations are `lib/app/routing/` and
+`test/core/audit/audit_event_type_test.dart`. Verification: aggregate Flutter,
+rules, and index checks; see C1.
+
+### P4-05 - Dashboard domain
+Delivered the pure card catalog, access policy, user preferences, defaults, and
+resolver under `lib/features/dashboard/domain/`, with domain tests. The
+dashboard decisions are resolved here rather than in widgets. Verification:
+dashboard domain tests and layer-boundary checks are part of the aggregate
+Flutter suite; see C1.
+
+### P4-06 - Dashboard data and sync
+Delivered dashboard policy and preference mappers, Firestore/local
+repositories, sync, providers, use cases, and rules/tests for
+`settings/dashboard` and user preferences. `settings/dashboard` is policy;
+user layout preferences remain per-user. Verification: aggregate Flutter and
+Firestore rules suites; see C1.
+
+### P4-07 - Home dashboard
+Delivered card specs, dashboard header/grid/cards, refresh behavior, and the
+Family/Bazar/Chores module card registrations. Hub Level remains a stub until
+P4-20; Ask AI remains behind `FeatureFlags.askAi = false`. Verification:
+dashboard widget, visibility, listener-count, localization, and overflow tests
+are part of the aggregate Flutter suite; see C1.
+
+### P4-08 - Dashboard customization and access
+Delivered member dashboard customization and the role access matrix, their
+controllers, routes, Family settings entries, and localization. Move-up/down
+actions are available in addition to drag-and-drop. Verification: dashboard
+screen/controller, permission, and semantics tests are part of the aggregate
+Flutter suite; see C1.
+
+### P4-09 - Notification catalog and delivery policy
+Delivered the closed notification catalog and pure effective-delivery policy
+under `lib/core/notifications/domain/`, with table-driven tests. The effective
+mode remains Normal when the backend is unavailable. Verification: notification
+domain tests are part of the aggregate Flutter suite; see C1.
+
+### P4-10 - Reminder domain
+Delivered reminder settings/precedence, planner, explainer, deterministic
+notification ids, planned-notification model, and scheduler port under
+`lib/core/notifications/domain/`, plus a fake scheduler. The domain takes
+neutral chore inputs and has no feature-layer dependency. Verification: planner
+and precedence tests are part of the aggregate Flutter suite; see C1.
+
+### P4-11 - Notification data
+Delivered delivery/default/member-preference models, repositories, mappers,
+sync, use cases, and providers under `lib/features/notifications/`, with rules
+and tests for notification settings. The delivery settings are admin-only;
+defaults and member preferences follow their separate permissions/ownership.
+Verification: aggregate Flutter and Firestore rules suites; see C1.
+
+### P4-12 - Reminder orchestration
+Delivered the reminder plan providers, `ReminderSyncController`, lifecycle
+observer, and chore/Bazar input mappers. **Path deviation:** providers and the
+sync controller are in `lib/features/notifications/presentation/`, not
+`lib/core/notifications/presentation/`. Verification: fake-scheduler
+orchestration tests and layer checks are part of the aggregate Flutter suite;
+see C1.
+
 ## Phase 4 - P4-13 Android notification adapter
 
 Implemented the Android local notification adapter and bootstrap wiring.
@@ -1941,7 +2021,7 @@ The adapter uses `SCHEDULE_EXACT_ALARM` and falls back to inexact scheduling
 when access is unavailable. Before store release, confirm current Google Play
 exact-alarm policy eligibility. Device checklist: `docs/reminders_manual_test.md`.
 
-Validation: pending.
+Validation: pending C1 aggregate gate and physical-device checklist.
 
 ### To check when you run it
 `permission_matrix_doc_test` compares `docs/permission_matrix.md` byte for byte with what the test generates. I edited the file by hand to match; if it fails, run `UPDATE_PERMISSION_MATRIX=1 flutter test test/core/permissions/permission_matrix_doc_test.dart` and tell me what changed. The rest of the rules suite is untouched except the two closed lists in `firestore.rules`.
@@ -1961,4 +2041,54 @@ Device tests and the Android manual checklist are in
 `docs/push_manual_test.md`. Physical-device delivery and permission behavior
 remain unverified.
 
-Validation: pending.
+Validation: pending C1 aggregate gate and physical-device checklist. The
+Firebase-console test-message, closed-app tap, and sign-out checks have not
+been completed on a physical Android device.
+
+## Phase 4 - C1 catch-up gate
+
+Owner decision: remain on Spark; P4-15 is deferred. C1 is still incomplete.
+After explicitly being asked to proceed, P4-16 was started despite that gate.
+The flag is intentionally false, and a physical device is still needed for the
+P4-14 receive-path checks.
+
+| Command | Result |
+| --- | --- |
+| `dart format --set-exit-if-changed .` | First run formatted 280 Dart files and returned 1; rerun after formatting and C1 edits passed (`1214 files (0 changed)`). |
+| `flutter pub get` | Passed. |
+| `flutter gen-l10n` | Passed; no generated localization changes. |
+| `flutter analyze` | Failed: 235 issues in the existing tree, including compile errors across Bazar, chores, reports, and session hooks. |
+| `flutter test --exclude-tags golden` | Failed during compilation before tests ran; examples include missing imports/types in `chore_tile_mapping.dart`, undefined providers in `session_hook.dart`, `CalendarViewKind` and const-expression errors in calendar screens, and missing `Money.abs` in reports. |
+| Firestore emulator rules suite | Failed before test cases: `firestore.rules` does not compile (duplicate/unused helpers and invalid function names, among reported errors). |
+| `node tools/check_indexes.mjs` | Passed (`firestore.indexes.json OK`). |
+
+C1 changes delivered: missing P4-03…12 records, the Spark/deferred-sender ADR
+updates, and `FeatureFlags.pushBackend = false` with a focused passing test.
+C1 is **not complete**: the aggregate analyzer, test, and rules gates are red,
+and P4-14's physical-device checks are outstanding. P4-16 is recorded below as
+implemented with focused validation, not as evidence that C1 passed.
+
+## Phase 4 - P4-16 notification settings and diagnostics
+
+Implemented member notification settings, family defaults, Spark-aware admin
+delivery controls, reminder diagnostics/help, and the reminder explanation on
+chore details. Notification routes are registered with the existing router
+guards. The delivery choices remain editable while push is unavailable, but the
+master is forced off and saved Push choices are identified as inactive. No
+Firestore schema, rules, or indexes changed.
+
+| Check | Result |
+| --- | --- |
+| `flutter gen-l10n` | Passed. |
+| `dart format` on changed Dart files | Passed; no formatting changes remained. |
+| Focused `flutter analyze` on changed notification, route, family, and chore files | Passed; zero issues. |
+| `flutter test test/features/notifications/presentation/notification_providers_test.dart test/features/notifications/presentation/delivery_type_list_test.dart` | Passed (4 tests). |
+| `flutter test test/architecture/file_size_test.dart` | Passed after splitting settings routes and the Family settings tile. |
+| `flutter test test/architecture/layer_boundaries_test.dart` | Passed. |
+| `flutter test test/architecture/no_role_checks_in_ui_test.dart` | Fails on existing `Role.moderator` checks in dashboard screens; no reported P4-16 files. |
+| `flutter test test/app/router_test.dart` | Blocked before tests by existing compile errors in `chores/presentation/widgets/chore_tile_mapping.dart` (`AppLocalizations` and `WidgetRef` unresolved). |
+| Hot reload/restart | Not possible: the project has no configured Windows/web target and no Android device or connected debug app. |
+
+The full analyzer/test gate and physical-device checks remain outstanding under
+C1. Cross-device delivery-setting persistence and the local test-notification
+flow have not been verified on a device.

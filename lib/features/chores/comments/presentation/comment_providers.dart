@@ -134,8 +134,7 @@ final unreadCommentsProvider = Provider.autoDispose.family<int, String>((
   final thread = ref.watch(commentsProvider(occurrenceId)).value ?? const [];
   return thread
       .where(
-        (c) =>
-            c.authorId != uid && (seen == null || c.createdAt.isAfter(seen)),
+        (c) => c.authorId != uid && (seen == null || c.createdAt.isAfter(seen)),
       )
       .length;
 });

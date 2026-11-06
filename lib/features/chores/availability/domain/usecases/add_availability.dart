@@ -70,10 +70,14 @@ class AddAvailability {
     if (invalid != null) return Failure<MemberAvailability>(invalid);
     final note = validated.valueOrNull!;
     if (endDate.isBefore(startDate)) {
-      return const Failure<MemberAvailability>(Validation('range', 'invalid_range'));
+      return const Failure<MemberAvailability>(
+        Validation('range', 'invalid_range'),
+      );
     }
     if (availabilityDays(startDate, endDate) > AvailabilityLimits.maxDays) {
-      return const Failure<MemberAvailability>(Conflict(code: 'range_too_large'));
+      return const Failure<MemberAvailability>(
+        Conflict(code: 'range_too_large'),
+      );
     }
 
     final target = (await families.getMember(familyId, memberId)).valueOrNull;
@@ -81,14 +85,21 @@ class AddAvailability {
       return const Failure<MemberAvailability>(NotFound(entity: 'member'));
     }
     final settings = (await choreSettings.get(familyId)).valueOrNull;
-    if (settings == null || !settings.absenceReasons.any((r) => r.id == typeId)) {
-      return const Failure<MemberAvailability>(Validation('typeId', 'required'));
+    if (settings == null ||
+        !settings.absenceReasons.any((r) => r.id == typeId)) {
+      return const Failure<MemberAvailability>(
+        Validation('typeId', 'required'),
+      );
     }
     final live = await availability.listLiveFor(familyId, memberId);
     final liveFailure = live.failureOrNull;
     if (liveFailure != null) return Failure<MemberAvailability>(liveFailure);
-    if (live.valueOrNull!.any((r) => r.id != availabilityId && r.overlaps(startDate, endDate))) {
-      return const Failure<MemberAvailability>(Conflict(code: 'availability_overlap'));
+    if (live.valueOrNull!.any(
+      (r) => r.id != availabilityId && r.overlaps(startDate, endDate),
+    )) {
+      return const Failure<MemberAvailability>(
+        Conflict(code: 'availability_overlap'),
+      );
     }
 
     final status =

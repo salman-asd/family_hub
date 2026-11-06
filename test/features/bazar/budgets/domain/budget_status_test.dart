@@ -9,9 +9,7 @@ import '../budget_test_helpers.dart';
 
 MonthSpend _spend(Map<String, int> byCategory) => MonthSpend(
   total: Money.paisa(byCategory.values.fold(0, (a, b) => a + b)),
-  byCategory: {
-    for (final e in byCategory.entries) e.key: Money.paisa(e.value),
-  },
+  byCategory: {for (final e in byCategory.entries) e.key: Money.paisa(e.value)},
   byDay: const {},
   count: byCategory.length,
 );

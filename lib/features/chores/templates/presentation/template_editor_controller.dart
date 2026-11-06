@@ -156,12 +156,7 @@ class TemplateEditorController extends Notifier<TemplateEditorState>
 
       final postFailure =
           await _applyActiveSwitch(uid: uid, familyId: familyId) ??
-          await _planAfterSave(
-            ref,
-            uid: uid,
-            familyId: familyId,
-            saved: saved,
-          );
+          await _planAfterSave(ref, uid: uid, familyId: familyId, saved: saved);
       if (postFailure != null) {
         state = state.copyWith(
           planningFailure: postFailure,

@@ -59,7 +59,9 @@ void main() {
     final sweep = find.byKey(const ValueKey<String>('starter_template_sweep'));
     expect(tester.widget<Checkbox>(sweep).value, isTrue);
 
-    final dinner = find.byKey(const ValueKey<String>('starter_template_dinner'));
+    final dinner = find.byKey(
+      const ValueKey<String>('starter_template_dinner'),
+    );
     await tester.scrollUntilVisible(
       dinner,
       200,
@@ -85,10 +87,7 @@ void main() {
     final templates = fixture.chores.templates[ChoresFixture.familyId]!;
     expect(templates.keys, contains('tpl_sweep'));
     expect(templates['tpl_dinner'], isNull);
-    expect(
-      fixture.chores.dutyGroups.groups[ChoresFixture.familyId],
-      isNotNull,
-    );
+    expect(fixture.chores.dutyGroups.groups[ChoresFixture.familyId], isNotNull);
   });
 
   testWidgets('turning the rotation off applies with no duty group', (

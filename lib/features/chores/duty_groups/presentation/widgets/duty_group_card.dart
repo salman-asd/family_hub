@@ -61,7 +61,11 @@ class DutyGroupCard extends ConsumerWidget {
                 ),
                 if (!group.active) ...[
                   const SizedBox(width: 8),
-                  Icon(Icons.pause_circle_outline, size: 18, color: t.statusSkipped),
+                  Icon(
+                    Icons.pause_circle_outline,
+                    size: 18,
+                    color: t.statusSkipped,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     l10n.dutyGroupSwitchedOff,

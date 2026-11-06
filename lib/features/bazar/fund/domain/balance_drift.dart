@@ -51,7 +51,8 @@ BalanceDrift? detectBalanceDrift({
 }) {
   MonthKey? lastClosed;
   for (final closing in closings.values) {
-    if (closing.status != MonthStatus.closed || closing.closingBalance == null) {
+    if (closing.status != MonthStatus.closed ||
+        closing.closingBalance == null) {
       continue;
     }
     if (lastClosed == null || closing.monthKey.compareTo(lastClosed) > 0) {

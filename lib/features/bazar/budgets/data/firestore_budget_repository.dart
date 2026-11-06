@@ -19,10 +19,7 @@ import 'package:family_hub/features/bazar/budgets/domain/budget_repository.dart'
 /// author and creation time come from the [Budget] itself, which means a
 /// re-save needs no read first.
 class FirestoreBudgetRepository implements BudgetRepository {
-  FirestoreBudgetRepository({
-    required this._tx,
-    this._firestore,
-  });
+  FirestoreBudgetRepository({required this._tx, this._firestore});
 
   final TxRunner _tx;
   final FirebaseFirestore? _firestore;
@@ -61,7 +58,10 @@ class FirestoreBudgetRepository implements BudgetRepository {
         updatedAt: event.at,
         updatedBy: event.actorId,
       );
-      batch.set(_path(familyId, budget.month), BudgetMappers.toMap(budget, meta));
+      batch.set(
+        _path(familyId, budget.month),
+        BudgetMappers.toMap(budget, meta),
+      );
       AuditWriter.write(batch, familyId, event);
     }),
   );

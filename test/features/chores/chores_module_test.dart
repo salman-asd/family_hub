@@ -18,7 +18,10 @@ void main() {
 
       final root = routes.single as GoRoute;
       expect(root.path, AppRoutes.chores);
-      final paths = root.routes.whereType<GoRoute>().map((r) => r.path).toList();
+      final paths = root.routes
+          .whereType<GoRoute>()
+          .map((r) => r.path)
+          .toList();
       expect(paths, contains('manage'));
       expect(paths.toSet(), hasLength(paths.length));
     });

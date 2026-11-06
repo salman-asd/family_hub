@@ -41,9 +41,8 @@ class StarterPackReviewStep extends StatelessWidget {
       children: <Widget>[
         Text(
           l10n.starterPackReviewBody,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+          style: Theme.of(context).textTheme.bodyMedium
+              ?.copyWith(color: t.textSecondary),
         ),
         const SizedBox(height: 12),
         const ConfidenceLegend(),
@@ -70,9 +69,8 @@ class StarterPackReviewStep extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   l10n.starterPackHouseRulesHint,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: t.textSecondary),
                 ),
                 SwitchListTile(
                   key: const ValueKey<String>('starter_add_house_rules'),

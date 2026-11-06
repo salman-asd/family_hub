@@ -38,7 +38,9 @@ class FirestoreInboxRepository implements InboxRepository {
   @override
   Future<Result<InboxItem?>> get(String familyId, String itemId) =>
       guardFirestore(() async {
-        final doc = await _db.doc(FirestorePaths.inboxDoc(familyId, itemId)).get();
+        final doc = await _db
+            .doc(FirestorePaths.inboxDoc(familyId, itemId))
+            .get();
         return InboxMappers.fromDoc(doc.id, doc.data());
       });
 

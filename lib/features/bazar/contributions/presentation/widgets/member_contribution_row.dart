@@ -35,7 +35,8 @@ class MemberContributionRow extends ConsumerWidget {
     final style = Theme.of(context).textTheme;
     final muted = style.bodySmall?.copyWith(color: t.textSecondary);
     final formatters = ref.watch(appFormattersProvider);
-    String money(Money value) => formatters.money(value, hideZeroFraction: true);
+    String money(Money value) =>
+        formatters.money(value, hideZeroFraction: true);
 
     final String detail;
     if (status.expected.isZero && status.received.isZero) {

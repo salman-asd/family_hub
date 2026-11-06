@@ -31,8 +31,10 @@ void main() {
     }
   }
 
-  ExpenseFormController formOf(ProviderContainer c, [ExpenseFormArgs a = args]) =>
-      c.read(expenseFormProvider(a).notifier);
+  ExpenseFormController formOf(
+    ProviderContainer c, [
+    ExpenseFormArgs a = args,
+  ]) => c.read(expenseFormProvider(a).notifier);
   ExpenseFormState stateOf(ProviderContainer c, [ExpenseFormArgs a = args]) =>
       c.read(expenseFormProvider(a));
 
@@ -195,35 +197,37 @@ void main() {
   });
 
   group('edit mode', () {
-    test('loads the expense, saves a change and keeps the old total in history',
-        () async {
-      await fx.addExpense(
-        actorUid: 'alice',
-        familyId: BazarFixture.familyId,
-        draft: fx.draft(typedTotal: const Money.paisa(10000)),
-        id: 'e1',
-        eventId: 'ev1',
-      );
-      const editArgs = ExpenseFormArgs(editingId: 'e1');
-      final c = make(a: editArgs);
-      expect(stateOf(c, editArgs).load, ExpenseFormLoad.loading);
-      await pump();
+    test(
+      'loads the expense, saves a change and keeps the old total in history',
+      () async {
+        await fx.addExpense(
+          actorUid: 'alice',
+          familyId: BazarFixture.familyId,
+          draft: fx.draft(typedTotal: const Money.paisa(10000)),
+          id: 'e1',
+          eventId: 'ev1',
+        );
+        const editArgs = ExpenseFormArgs(editingId: 'e1');
+        final c = make(a: editArgs);
+        expect(stateOf(c, editArgs).load, ExpenseFormLoad.loading);
+        await pump();
 
-      final loaded = stateOf(c, editArgs);
-      expect(loaded.load, ExpenseFormLoad.ready);
-      expect(loaded.editing, isTrue);
-      expect(loaded.totalText, '100');
-      expect(loaded.itemName, 'চাল');
+        final loaded = stateOf(c, editArgs);
+        expect(loaded.load, ExpenseFormLoad.ready);
+        expect(loaded.editing, isTrue);
+        expect(loaded.totalText, '100');
+        expect(loaded.itemName, 'চাল');
 
-      formOf(c, editArgs).setTotal('150');
-      final outcome = await formOf(c, editArgs).save(addAnother: false);
+        formOf(c, editArgs).setTotal('150');
+        final outcome = await formOf(c, editArgs).save(addAnother: false);
 
-      expect(outcome?.expense.total, const Money.paisa(15000));
-      expect(
-        fx.backend.expensesOf(BazarFixture.familyId).single.total,
-        const Money.paisa(15000),
-      );
-    });
+        expect(outcome?.expense.total, const Money.paisa(15000));
+        expect(
+          fx.backend.expensesOf(BazarFixture.familyId).single.total,
+          const Money.paisa(15000),
+        );
+      },
+    );
 
     test('a missing expense fails to load with NotFound', () async {
       const editArgs = ExpenseFormArgs(editingId: 'nope');

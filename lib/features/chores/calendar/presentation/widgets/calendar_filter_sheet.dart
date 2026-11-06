@@ -93,11 +93,17 @@ class _CalendarFilterSheetState extends ConsumerState<CalendarFilterSheet> {
                   for (final group in groups)
                     FilterChip(
                       key: Key('calendar_filter_group_${group.id}'),
-                      label: Text(bn ? group.nameBn : (group.nameEn ?? group.nameBn)),
+                      label: Text(
+                        bn ? group.nameBn : (group.nameEn ?? group.nameBn),
+                      ),
                       selected: filters.groupIds.contains(group.id),
                       onSelected: (on) => _write(
                         filters.copyWith(
-                          groupIds: _toggled(filters.groupIds, group.id, on: on),
+                          groupIds: _toggled(
+                            filters.groupIds,
+                            group.id,
+                            on: on,
+                          ),
                           query: '',
                         ),
                       ),
@@ -158,9 +164,8 @@ class _CalendarFilterSheetState extends ConsumerState<CalendarFilterSheet> {
               contentPadding: EdgeInsets.zero,
               title: Text(l10n.calendarFilterNeedsAttention),
               value: filters.onlyNeedsAttention,
-              onChanged: (on) => _write(
-                filters.copyWith(onlyNeedsAttention: on, query: ''),
-              ),
+              onChanged: (on) =>
+                  _write(filters.copyWith(onlyNeedsAttention: on, query: '')),
             ),
             if (filters.activeCount > 0)
               Align(

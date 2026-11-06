@@ -102,14 +102,8 @@ final class ReportQuery {
       other.funding == funding;
 
   @override
-  int get hashCode => Object.hash(
-    preset,
-    range,
-    categoryId,
-    itemId,
-    memberId,
-    funding,
-  );
+  int get hashCode =>
+      Object.hash(preset, range, categoryId, itemId, memberId, funding);
 
   @override
   String toString() => 'ReportQuery(${preset.name}, $range)';

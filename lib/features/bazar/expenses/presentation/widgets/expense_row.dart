@@ -23,7 +23,9 @@ class ExpenseRow extends ConsumerWidget {
     final t = context.tokens;
     final theme = Theme.of(context).textTheme;
     final bangla = Localizations.localeOf(context).languageCode == 'bn';
-    final category = ref.watch(catalogIndexProvider).categoriesById[expense.categoryId];
+    final category = ref
+        .watch(catalogIndexProvider)
+        .categoriesById[expense.categoryId];
     final deleted = expense.isDeleted;
     final fundLabel = expense.funding == FundingSource.fund
         ? l10n.expenseFundingFund
@@ -45,7 +47,10 @@ class ExpenseRow extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
-                ItemThumb(id: expense.itemId ?? expense.id, name: expense.itemName),
+                ItemThumb(
+                  id: expense.itemId ?? expense.id,
+                  name: expense.itemName,
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
@@ -89,10 +94,7 @@ class ExpenseRow extends ConsumerWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    MoneyText(
-                      value: expense.total,
-                      style: nameStyle,
-                    ),
+                    MoneyText(value: expense.total, style: nameStyle),
                     const SizedBox(height: 4),
                     Tooltip(
                       message: fundLabel,
@@ -132,9 +134,8 @@ class _Tag extends StatelessWidget {
         const SizedBox(width: 2),
         Text(
           text,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(color: t.textSecondary),
         ),
       ],
     );

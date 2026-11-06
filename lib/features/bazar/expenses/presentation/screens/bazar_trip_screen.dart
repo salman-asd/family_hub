@@ -71,9 +71,8 @@ class _BazarTripScreenState extends ConsumerState<BazarTripScreen> {
   Future<void> _save() async {
     final trip = await ref.read(tripFormProvider.notifier).save();
     if (trip == null || !mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(context.l10n.tripSaved)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(context.l10n.tripSaved)));
     if (context.canPop()) {
       context.pop();
     } else {
@@ -129,24 +128,26 @@ class _BazarTripScreenState extends ConsumerState<BazarTripScreen> {
             members: members,
             paidById: state.paidByMemberId,
             onPaidByChanged: form.setPaidBy,
-            errorText: fieldErrorText(l10n, state.fieldErrors, 'paidByMemberId'),
+            errorText: fieldErrorText(
+              l10n,
+              state.fieldErrors,
+              'paidByMemberId',
+            ),
             enabled: !state.saving,
           ),
           const SizedBox(height: 16),
           Text(
             l10n.tripLinesCount(state.lines.length.toString()),
-            style: Theme.of(
-              context,
-            ).textTheme.titleSmall?.copyWith(color: t.textSecondary),
+            style: Theme.of(context).textTheme.titleSmall
+                ?.copyWith(color: t.textSecondary),
           ),
           if (state.lines.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Text(
                 l10n.tripEmpty,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+                style: Theme.of(context).textTheme.bodyMedium
+                    ?.copyWith(color: t.textSecondary),
               ),
             ),
           for (var i = 0; i < state.lines.length; i++)
@@ -168,9 +169,8 @@ class _BazarTripScreenState extends ConsumerState<BazarTripScreen> {
               padding: const EdgeInsets.only(top: 4),
               child: Text(
                 l10n.tripLimitReached,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: t.warning),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: t.warning),
               ),
             ),
           const SizedBox(height: 16),

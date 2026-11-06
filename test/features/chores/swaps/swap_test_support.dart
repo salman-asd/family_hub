@@ -136,7 +136,9 @@ class SwapKit {
       dueAt: DateTime.utc(2026, 10, day, 17),
       assigneeId: assignee,
       plannedAssigneeId: assignee,
-      status: started ? OccurrenceStatus.inProgress : OccurrenceStatus.scheduled,
+      status: started
+          ? OccurrenceStatus.inProgress
+          : OccurrenceStatus.scheduled,
     ),
   );
 

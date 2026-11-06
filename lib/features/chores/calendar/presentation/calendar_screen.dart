@@ -136,12 +136,14 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
                   FilterButton(
                     activeCount: filters.activeCount,
                     formatters: formatters,
-                    onPressed: () => unawaited(showCalendarFilterSheet(context)),
+                    onPressed: () =>
+                        unawaited(showCalendarFilterSheet(context)),
                   ),
                   IconButton(
                     key: const Key('calendar_display_button'),
                     tooltip: l10n.calendarDisplayOptions,
-                    onPressed: () => unawaited(showCalendarDisplaySheet(context)),
+                    onPressed: () =>
+                        unawaited(showCalendarDisplaySheet(context)),
                     icon: const Icon(Icons.tune_rounded),
                   ),
                   IconButton(

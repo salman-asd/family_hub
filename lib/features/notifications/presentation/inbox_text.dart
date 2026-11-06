@@ -19,15 +19,14 @@ String inboxTextOf(
   InboxItem item,
   List<Member> members,
 ) {
-  String who(String key) => memberNameOf(
-    members,
-    item.params[key],
-    fallback: l10n.inboxSomeone,
-  );
+  String who(String key) =>
+      memberNameOf(members, item.params[key], fallback: l10n.inboxSomeone);
   final chore = item.params['name'] ?? '';
   final raw = item.params['date'];
   final parsed = raw == null ? null : DateKey.parse(raw).valueOrNull;
-  final date = parsed == null ? (raw ?? '') : formatters.fullDate(dateOfKey(parsed));
+  final date = parsed == null
+      ? (raw ?? '')
+      : formatters.fullDate(dateOfKey(parsed));
 
   switch (item.type) {
     case InboxType.swapRequest:

@@ -59,6 +59,7 @@ int halfUpRatioBp({required Money delta, required Money base}) {
   assert(base.paisa != 0, 'a ratio needs a non-zero base');
   final numerator = delta.paisa * 20000;
   final denominator = base.paisa;
-  final magnitude = (numerator.abs() + denominator.abs() ~/ 2) ~/ denominator.abs();
+  final magnitude =
+      (numerator.abs() + denominator.abs() ~/ 2) ~/ denominator.abs();
   return numerator.isNegative ? -magnitude : magnitude;
 }

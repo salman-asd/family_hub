@@ -11,12 +11,13 @@ import 'package:flutter/material.dart';
 
 /// "What the symbols mean": every status shape, the hatch and corner marks of
 /// a day cell, and the heat key (B.3, B.7).
-Future<void> showLegendSheet(BuildContext context) => showModalBottomSheet<void>(
-  context: context,
-  showDragHandle: true,
-  isScrollControlled: true,
-  builder: (context) => const LegendSheet(),
-);
+Future<void> showLegendSheet(BuildContext context) =>
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (context) => const LegendSheet(),
+    );
 
 class LegendSheet extends StatelessWidget {
   const LegendSheet({super.key});
@@ -44,7 +45,10 @@ class LegendSheet extends StatelessWidget {
             const SizedBox(height: 8),
             Semantics(
               header: true,
-              child: Text(l10n.calendarLegendMarks, style: textTheme.titleSmall),
+              child: Text(
+                l10n.calendarLegendMarks,
+                style: textTheme.titleSmall,
+              ),
             ),
             _LegendRow(
               leading: const HatchSwatch(

@@ -52,20 +52,23 @@ void main() {
   Iterable<String> keys(FakeTxRunner runner, String collection) =>
       runner.store.keys.where((path) => path.startsWith('$collection/'));
 
-  test('the same intent applied twice writes ONE inbox row and ONE audit', () async {
-    final same = plan(inboxId: 'inbox_1', auditId: 'audit_1');
-    final runner = await stageAll(<OccurrenceWritePlan>[same, same]);
+  test(
+    'the same intent applied twice writes ONE inbox row and ONE audit',
+    () async {
+      final same = plan(inboxId: 'inbox_1', auditId: 'audit_1');
+      final runner = await stageAll(<OccurrenceWritePlan>[same, same]);
 
-    expect(keys(runner, FirestorePaths.inbox(familyId)), <String>[
-      FirestorePaths.inboxDoc(familyId, 'inbox_1'),
-    ]);
-    expect(keys(runner, FirestorePaths.activity(familyId)), <String>[
-      FirestorePaths.activityDoc(familyId, 'audit_1'),
-    ]);
-    expect(keys(runner, FirestorePaths.auditLogs(familyId)), <String>[
-      FirestorePaths.auditLogDoc(familyId, 'audit_1'),
-    ]);
-  });
+      expect(keys(runner, FirestorePaths.inbox(familyId)), <String>[
+        FirestorePaths.inboxDoc(familyId, 'inbox_1'),
+      ]);
+      expect(keys(runner, FirestorePaths.activity(familyId)), <String>[
+        FirestorePaths.activityDoc(familyId, 'audit_1'),
+      ]);
+      expect(keys(runner, FirestorePaths.auditLogs(familyId)), <String>[
+        FirestorePaths.auditLogDoc(familyId, 'audit_1'),
+      ]);
+    },
+  );
 
   test('a rebuilt plan with the same ids is the same row', () async {
     final runner = await stageAll(<OccurrenceWritePlan>[

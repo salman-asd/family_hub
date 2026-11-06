@@ -105,7 +105,8 @@ class _AddExpenseScreenState extends ConsumerState<AddExpenseScreen> {
           if (!editing)
             PopupMenuButton<String>(
               key: const ValueKey('expense-menu'),
-              onSelected: (_) => context.pushReplacement(AppRoutes.bazarTripNew),
+              onSelected: (_) =>
+                  context.pushReplacement(AppRoutes.bazarTripNew),
               itemBuilder: (context) => [
                 PopupMenuItem<String>(
                   value: 'trip',

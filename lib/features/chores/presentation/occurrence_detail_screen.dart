@@ -17,6 +17,7 @@ import 'package:family_hub/features/chores/presentation/occurrence_action_sheets
 import 'package:family_hub/features/chores/presentation/widgets/occurrence_actions_bar.dart';
 import 'package:family_hub/features/chores/presentation/widgets/occurrence_detail_body.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:family_hub/features/notifications/presentation/reminder_why_line.dart';
 import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
@@ -153,6 +154,7 @@ class _OccurrenceDetailScreenState
                     item: found,
                     formatters: ref.watch(appFormattersProvider),
                   ),
+                  reminderWhyLine: ReminderWhyLine(item: found),
                   onToggleParent: () => _run(
                     (s) => ref.read(toggleParentProvider)(
                       familyId: s.familyId,

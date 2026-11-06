@@ -70,9 +70,7 @@ class CompleteOccurrence {
     final assignee = context.occurrence.assigneeId;
     final own = assignee != null && assignee == actorUid;
     final permitted = context.require(
-      own
-          ? Permission.completeOwnChore
-          : Permission.completeChoreForOthers,
+      own ? Permission.completeOwnChore : Permission.completeChoreForOthers,
       ownerId: assignee,
     );
     final denied = permitted.failureOrNull;

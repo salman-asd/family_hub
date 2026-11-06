@@ -42,10 +42,7 @@ void main() {
     expect(c.read(tripFormProvider).total, const Money.paisa(1500));
 
     form.insertLine(1, removed);
-    expect(
-      c.read(tripFormProvider).lines.map((l) => l.id),
-      ['l1', 'l2', 'l3'],
-    );
+    expect(c.read(tripFormProvider).lines.map((l) => l.id), ['l1', 'l2', 'l3']);
   });
 
   test('a trip stops at the line cap', () {
@@ -72,10 +69,7 @@ void main() {
     expect(rows, hasLength(2));
     expect(rows.map((e) => e.tripId).toSet(), hasLength(1));
     expect(rows.every((e) => e.shop == 'Karwan Bazar'), isTrue);
-    expect(
-      fx.backend.fundTransactionsOf(BazarFixture.familyId),
-      hasLength(2),
-    );
+    expect(fx.backend.fundTransactionsOf(BazarFixture.familyId), hasLength(2));
   });
 
   test('an empty trip is not saved; a member-paid one needs a payer', () async {

@@ -29,21 +29,29 @@ extension SwapResponseSheets on WidgetRef {
     final familyId = read(currentFamilyIdProvider);
     final uid = read(currentUidProvider);
     if (familyId == null || uid == null) return null;
-    final occurrence =
-        (await read(occurrenceRepositoryProvider).get(familyId, request.occurrenceId))
-            .valueOrNull;
+    final occurrence = (await read(
+      occurrenceRepositoryProvider,
+    ).get(familyId, request.occurrenceId)).valueOrNull;
     if (!context.mounted) return null;
     final members = read(membersProvider).value ?? const [];
     final l10n = context.l10n;
     final formatters = read(appFormattersProvider);
     final line = request.kind == SwapKind.cover
         ? l10n.inboxCoverRequest(
-            memberNameOf(members, request.fromMemberId, fallback: l10n.inboxSomeone),
+            memberNameOf(
+              members,
+              request.fromMemberId,
+              fallback: l10n.inboxSomeone,
+            ),
             occurrence?.nameBn ?? '',
             formatters.fullDate(dateOfKey(request.occurrenceDateKey)),
           )
         : l10n.inboxSwapRequest(
-            memberNameOf(members, request.fromMemberId, fallback: l10n.inboxSomeone),
+            memberNameOf(
+              members,
+              request.fromMemberId,
+              fallback: l10n.inboxSomeone,
+            ),
             occurrence?.nameBn ?? '',
             formatters.fullDate(dateOfKey(request.occurrenceDateKey)),
           );
@@ -51,7 +59,8 @@ extension SwapResponseSheets on WidgetRef {
     final accept = await showModalBottomSheet<bool>(
       context: context,
       useSafeArea: true,
-      builder: (sheetContext) => _ResponseSheet(line: line, reason: request.reason),
+      builder: (sheetContext) =>
+          _ResponseSheet(line: line, reason: request.reason),
     );
     if (accept == null || !context.mounted) return null;
     String? declineReason;
@@ -81,7 +90,9 @@ extension SwapResponseSheets on WidgetRef {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            failure is Network ? l10n.swapNeedsInternet : l10n.choresFailureMessage(failure),
+            failure is Network
+                ? l10n.swapNeedsInternet
+                : l10n.choresFailureMessage(failure),
           ),
         ),
       );
@@ -106,7 +117,10 @@ class _ResponseSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(l10n.swapResponseTitle, style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            l10n.swapResponseTitle,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 12),
           Text(line, style: TextStyle(color: t.textPrimary, fontSize: 15)),
           const SizedBox(height: 8),
@@ -117,7 +131,9 @@ class _ResponseSheet extends StatelessWidget {
           const SizedBox(height: 20),
           FilledButton.icon(
             key: const Key('swap_accept'),
-            style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+            style: FilledButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+            ),
             onPressed: () => Navigator.of(context).pop(true),
             icon: const Icon(Icons.check_rounded),
             label: Text(l10n.swapAccept),
@@ -125,7 +141,9 @@ class _ResponseSheet extends StatelessWidget {
           const SizedBox(height: 8),
           OutlinedButton.icon(
             key: const Key('swap_decline'),
-            style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size.fromHeight(48),
+            ),
             onPressed: () => Navigator.of(context).pop(false),
             icon: const Icon(Icons.close_rounded),
             label: Text(l10n.swapDecline),

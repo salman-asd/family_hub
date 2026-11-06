@@ -54,20 +54,21 @@ final class BudgetLineDraft {
   );
 
   /// The draft of an existing line.
-  static BudgetLineDraft fromLine(String id, BudgetLine line) => BudgetLineDraft(
-    id: id,
-    itemId: line.itemId,
-    name: line.name,
-    qtyText: line.plannedQty?.toDecimalString() ?? '',
-    unit: line.unit,
-    rateText: line.estimatedRate == null
-        ? ''
-        : moneyEditText(line.estimatedRate!),
-    totalText: line.plannedQty != null && line.estimatedRate != null
-        ? ''
-        : moneyEditText(line.estimatedTotal),
-    stockText: line.stock?.toDecimalString() ?? '',
-  );
+  static BudgetLineDraft fromLine(String id, BudgetLine line) =>
+      BudgetLineDraft(
+        id: id,
+        itemId: line.itemId,
+        name: line.name,
+        qtyText: line.plannedQty?.toDecimalString() ?? '',
+        unit: line.unit,
+        rateText: line.estimatedRate == null
+            ? ''
+            : moneyEditText(line.estimatedRate!),
+        totalText: line.plannedQty != null && line.estimatedRate != null
+            ? ''
+            : moneyEditText(line.estimatedTotal),
+        stockText: line.stock?.toDecimalString() ?? '',
+      );
 }
 
 /// The lines that can be saved plus, per row id, `field -> stable code`.

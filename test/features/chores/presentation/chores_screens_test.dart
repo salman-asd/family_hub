@@ -175,12 +175,7 @@ void main() {
       testWidgets('no overflow at text scale 2.0 (${locale.languageCode})', (
         tester,
       ) async {
-        await _pump(
-          tester,
-          role: Role.admin,
-          locale: locale,
-          textScale: 2,
-        );
+        await _pump(tester, role: Role.admin, locale: locale, textScale: 2);
 
         expect(tester.takeException(), isNull);
       });

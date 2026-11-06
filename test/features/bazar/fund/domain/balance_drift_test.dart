@@ -18,13 +18,12 @@ void main() {
     closingBalance: Money.paisa(balance),
   );
 
-  FundTransaction opening(MonthKey month, int paisa) =>
-      FundTransaction.opening(
-        monthKey: month,
-        amount: Money.paisa(paisa),
-        createdBy: 'alice',
-        createdAt: at,
-      );
+  FundTransaction opening(MonthKey month, int paisa) => FundTransaction.opening(
+    monthKey: month,
+    amount: Money.paisa(paisa),
+    createdBy: 'alice',
+    createdAt: at,
+  );
 
   test('no closing at all means no warning', () {
     expect(

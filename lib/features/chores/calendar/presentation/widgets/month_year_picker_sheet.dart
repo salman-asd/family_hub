@@ -94,12 +94,10 @@ class _MonthYearPickerSheetState extends State<MonthYearPickerSheet> {
                     key: Key('calendar_picker_month_$month'),
                     showCheckmark: true,
                     label: Text(f.monthName(month)),
-                    selected:
-                        widget.current == MonthKey(_year, month),
+                    selected: widget.current == MonthKey(_year, month),
                     onSelected: _allowed(_year, month)
-                        ? (_) => Navigator.of(context).pop(
-                            MonthKey(_year, month),
-                          )
+                        ? (_) =>
+                              Navigator.of(context).pop(MonthKey(_year, month))
                         : null,
                   ),
               ],

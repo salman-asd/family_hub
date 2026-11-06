@@ -185,18 +185,19 @@ void main() {
   });
 
   group('Q-05: stateFailure names the real reason', () {
-    OccurrenceContext ctx(
-      ChoreOccurrence occurrence, {
-      String uid = 'cara',
-    }) => OccurrenceContext.build(
-      occurrence: occurrence,
-      member: fixture.backend.members[f]![uid]!,
-      settings: fixture.backend.permissionSettings[f]!,
-    );
+    OccurrenceContext ctx(ChoreOccurrence occurrence, {String uid = 'cara'}) =>
+        OccurrenceContext.build(
+          occurrence: occurrence,
+          member: fixture.backend.members[f]![uid]!,
+          settings: fixture.backend.permissionSettings[f]!,
+        );
 
     test('a member acting on another member\'s chore', () {
       expect(
-        stateFailure(ctx(anOccurrence(), uid: 'dave'), OccurrenceAction.tickSubtask),
+        stateFailure(
+          ctx(anOccurrence(), uid: 'dave'),
+          OccurrenceAction.tickSubtask,
+        ),
         const Conflict(code: 'not_assigned_to_you'),
       );
     });
@@ -233,7 +234,10 @@ void main() {
         const Conflict(code: 'already_completed'),
       );
       expect(
-        stateFailure(ctx(anOccurrence(), uid: manager), OccurrenceAction.uncheckParent),
+        stateFailure(
+          ctx(anOccurrence(), uid: manager),
+          OccurrenceAction.uncheckParent,
+        ),
         const Conflict(code: 'not_completed'),
       );
       expect(

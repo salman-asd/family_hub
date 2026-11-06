@@ -45,13 +45,10 @@ void main() {
   });
 
   test('a week across a month border keeps every day real', () {
-    final model = build(
-      [
-        aChoreItem('a', DateKey(2026, 10, 31)),
-        aChoreItem('b', DateKey(2026, 11, 1)),
-      ],
-      anchor: DateKey(2026, 10, 31),
-    );
+    final model = build([
+      aChoreItem('a', DateKey(2026, 10, 31)),
+      aChoreItem('b', DateKey(2026, 11, 1)),
+    ], anchor: DateKey(2026, 10, 31));
     expect(model.dayOf(DateKey(2026, 10, 31))!.summary.total, 1);
     expect(model.dayOf(DateKey(2026, 11, 1))!.summary.total, 1);
     expect(model.days.any((d) => d.summary.isOutsideMonth), isFalse);
@@ -60,15 +57,21 @@ void main() {
   test('items are in deadline order and grouped by day part', () {
     final day = DateKey(2026, 10, 25);
     final model = build([
-      aChoreItem('late', day, dueMinutes: 1200).copyWith(
-        dueAt: DateTime.utc(2026, 10, 25, 14),
-      ),
-      aChoreItem('early', day, dueMinutes: 540).copyWith(
-        dueAt: DateTime.utc(2026, 10, 25, 3),
-      ),
-      aChoreItem('none', day, dueMinutes: null).copyWith(
-        dueAt: DateTime.utc(2026, 10, 25, 17, 59),
-      ),
+      aChoreItem(
+        'late',
+        day,
+        dueMinutes: 1200,
+      ).copyWith(dueAt: DateTime.utc(2026, 10, 25, 14)),
+      aChoreItem(
+        'early',
+        day,
+        dueMinutes: 540,
+      ).copyWith(dueAt: DateTime.utc(2026, 10, 25, 3)),
+      aChoreItem(
+        'none',
+        day,
+        dueMinutes: null,
+      ).copyWith(dueAt: DateTime.utc(2026, 10, 25, 17, 59)),
     ]);
     final entry = model.dayOf(day)!;
     expect(entry.items.map((i) => i.id), ['early', 'late', 'none']);

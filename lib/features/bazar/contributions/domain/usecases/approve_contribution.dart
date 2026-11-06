@@ -66,9 +66,7 @@ class ApproveContribution {
         Conflict(code: 'contribution_not_pending'),
       );
     }
-    final locked = await monthLockFailure(_funds, familyId, [
-      current.monthKey,
-    ]);
+    final locked = await monthLockFailure(_funds, familyId, [current.monthKey]);
     if (locked != null) return Failure<Contribution>(locked);
 
     final now = _clock.nowUtc();

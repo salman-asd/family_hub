@@ -3,6 +3,7 @@ import 'package:family_hub/features/settings/presentation/theme_settings_screen.
 import 'package:family_hub/app/app.dart';
 import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/router.dart';
+import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/shell/app_shell.dart';
 import 'package:family_hub/app/theme/theme_builder.dart';
 import 'package:family_hub/app/theme/theme_controller.dart'
@@ -106,6 +107,36 @@ void main() {
     testWidgets('signed out -> /welcome', (tester) async {
       final h = await _pumpApp(tester);
       expect(h.path(tester), '/welcome');
+    });
+
+    group('notification delivery settings permission', () {
+      testWidgets('a member is redirected away from delivery settings', (
+        tester,
+      ) async {
+        final h = await _pumpApp(
+          tester,
+          user: _verified,
+          hasProfile: true,
+          membership: MembershipStatus.active,
+          role: MemberRole.member,
+        );
+        h.router(tester).go(AppRoutes.notificationDelivery);
+        await tester.pumpAndSettle();
+        expect(h.path(tester), AppRoutes.home);
+      });
+
+      testWidgets('an admin can open delivery settings', (tester) async {
+        final h = await _pumpApp(
+          tester,
+          user: _verified,
+          hasProfile: true,
+          membership: MembershipStatus.active,
+          role: MemberRole.admin,
+        );
+        h.router(tester).go(AppRoutes.notificationDelivery);
+        await tester.pumpAndSettle();
+        expect(h.path(tester), AppRoutes.notificationDelivery);
+      });
     });
 
     testWidgets('signed in but unverified -> /verify-email', (tester) async {

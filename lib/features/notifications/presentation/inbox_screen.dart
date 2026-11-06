@@ -25,7 +25,11 @@ import 'package:go_router/go_router.dart';
 class InboxScreen extends ConsumerWidget {
   const InboxScreen({super.key});
 
-  Future<void> _open(BuildContext context, WidgetRef ref, InboxItem item) async {
+  Future<void> _open(
+    BuildContext context,
+    WidgetRef ref,
+    InboxItem item,
+  ) async {
     final familyId = ref.read(currentFamilyIdProvider);
     final uid = ref.read(currentUidProvider);
     if (item.isUnread && familyId != null && uid != null) {
@@ -47,7 +51,8 @@ class InboxScreen extends ConsumerWidget {
           }
         }
       case AuditRefType.availability:
-        if (context.mounted) unawaited(context.push(AppRoutes.choresAvailability));
+        if (context.mounted)
+          unawaited(context.push(AppRoutes.choresAvailability));
       case AuditRefType.occurrence:
         if (context.mounted) {
           unawaited(context.push(AppRoutes.choresOccurrence(item.refId)));
@@ -107,7 +112,9 @@ class InboxScreen extends ConsumerWidget {
           final todays = <InboxItem>[];
           final earlier = <InboxItem>[];
           for (final item in items) {
-            (today.dateKeyOf(item.createdAt) == now ? todays : earlier).add(item);
+            (today.dateKeyOf(item.createdAt) == now ? todays : earlier).add(
+              item,
+            );
           }
           return ListView(
             children: [
@@ -115,7 +122,11 @@ class InboxScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline_rounded, size: 18, color: t.textSecondary),
+                    Icon(
+                      Icons.info_outline_rounded,
+                      size: 18,
+                      color: t.textSecondary,
+                    ),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -140,9 +151,8 @@ class InboxScreen extends ConsumerWidget {
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
                     child: Text(
                       group.$1,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: t.textSecondary,
-                      ),
+                      style: Theme.of(context).textTheme.titleSmall
+                          ?.copyWith(color: t.textSecondary),
                     ),
                   ),
                   for (final item in group.$2)

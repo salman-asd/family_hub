@@ -45,7 +45,10 @@ List<ExpenseListItem> buildExpenseListItems(
     if (current != row.dateKey) {
       current = row.dateKey;
       items.add(
-        DayHeaderItem(date: row.dateKey, total: totals[row.dateKey] ?? Money.zero),
+        DayHeaderItem(
+          date: row.dateKey,
+          total: totals[row.dateKey] ?? Money.zero,
+        ),
       );
     }
     items.add(ExpenseRowItem(row));

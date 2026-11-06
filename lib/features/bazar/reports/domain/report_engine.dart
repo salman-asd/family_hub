@@ -93,10 +93,7 @@ abstract final class ReportEngine {
     ),
   );
 
-  static List<CategoryTotal> _categories(
-    List<Expense> rows,
-    Money total,
-  ) {
+  static List<CategoryTotal> _categories(List<Expense> rows, Money total) {
     final sums = <String, Money>{};
     final counts = <String, int>{};
     for (final expense in rows) {
@@ -152,9 +149,7 @@ abstract final class ReportEngine {
     return <MemberTotal>[
       for (final entry in sums.entries)
         MemberTotal(memberId: entry.key, total: entry.value),
-    ]..sort(
-        _largestFirst<MemberTotal>((m) => m.total, (m) => m.memberId),
-      );
+    ]..sort(_largestFirst<MemberTotal>((m) => m.total, (m) => m.memberId));
   }
 
   /// The budget's dry-grocery lines against the actual spend.
@@ -165,10 +160,7 @@ abstract final class ReportEngine {
   /// matches, else the first line with the same name.  Spending the plan never
   /// named is listed with a zero estimate, so [DryGroceryComparison.actual] is
   /// exactly the plan's real spend and nothing is counted twice.
-  static DryGroceryComparison _dryGrocery(
-    List<Expense> rows,
-    Budget? budget,
-  ) {
+  static DryGroceryComparison _dryGrocery(List<Expense> rows, Budget? budget) {
     if (budget == null || budget.lines.isEmpty) {
       return DryGroceryComparison.empty;
     }
@@ -180,9 +172,7 @@ abstract final class ReportEngine {
           ? -1
           : budget.lines.indexWhere((l) => l.itemId == expense.itemId);
       if (index < 0) {
-        index = budget.lines.indexWhere(
-          (l) => normalizeSearch(l.name) == name,
-        );
+        index = budget.lines.indexWhere((l) => normalizeSearch(l.name) == name);
       }
       if (index < 0) continue; // unplanned: handled below
       spent[index] += expense.total;
@@ -232,10 +222,7 @@ abstract final class ReportEngine {
   /// Spending on items no budget line names, keyed `item:<id>` or
   /// `name:<normalized>` so the list order is stable.
   /// Item spend is keyed `item:<id>`, free-text spend `name:<normalized>`.
-  static Map<String, Money> _unplannedSpend(
-    List<Expense> rows,
-    Budget budget,
-  ) {
+  static Map<String, Money> _unplannedSpend(List<Expense> rows, Budget budget) {
     final plannedIds = <String>{
       for (final line in budget.lines)
         if (line.itemId != null) line.itemId!,
@@ -285,6 +272,11 @@ final class _ItemAccumulator {
     count++;
   }
 
-  ItemTotal toTotal(String key) =>
-      ItemTotal(key: key, name: name, total: total, count: count, itemId: itemId);
+  ItemTotal toTotal(String key) => ItemTotal(
+    key: key,
+    name: name,
+    total: total,
+    count: count,
+    itemId: itemId,
+  );
 }

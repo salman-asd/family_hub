@@ -28,7 +28,8 @@ import '../../presentation/chores_p3_15_support.dart';
 void main() {
   setUpAll(loadBundledFonts);
   final generated =
-      autoUpdateGoldenFiles || Directory('test/features/chores/calendar/goldens').existsSync();
+      autoUpdateGoldenFiles ||
+      Directory('test/features/chores/calendar/goldens').existsSync();
 
   const shotKey = Key('calendar_golden');
 

@@ -102,8 +102,7 @@ class _MonthPickerSheetState extends ConsumerState<_MonthPickerSheet> {
       (widget.min == null || m.compareTo(widget.min!) >= 0) &&
       (widget.max == null || m.compareTo(widget.max!) <= 0);
 
-  bool get _canPreviousYear =>
-      widget.min == null || _year > widget.min!.year;
+  bool get _canPreviousYear => widget.min == null || _year > widget.min!.year;
 
   bool get _canNextYear => widget.max == null || _year < widget.max!.year;
 

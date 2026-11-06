@@ -67,81 +67,96 @@ void main() {
     return result.valueOrNull!;
   }
 
-  test('creates the high-confidence lines, the duty group and the audit', () async {
-    final outcome = await run();
+  test(
+    'creates the high-confidence lines, the duty group and the audit',
+    () async {
+      final outcome = await run();
 
-    expect(outcome.templatesCreated, high.length);
-    expect(outcome.templatesSkipped, 0);
-    expect(outcome.dutyGroupsCreated, 1);
-    expect(outcome.houseRulesAdded, isTrue);
-    expect(outcome.generationFailure, isNull);
-    expect(outcome.generation!.created, greaterThan(0));
+      expect(outcome.templatesCreated, high.length);
+      expect(outcome.templatesSkipped, 0);
+      expect(outcome.dutyGroupsCreated, 1);
+      expect(outcome.houseRulesAdded, isTrue);
+      expect(outcome.generationFailure, isNull);
+      expect(outcome.generation!.created, greaterThan(0));
 
-    final templates = fixture.chores.templates[familyId]!;
-    expect(templates.keys, containsAll(<String>['tpl_sweep', 'tpl_fridge_weekly']));
-    expect(templates['tpl_dinner'], isNull, reason: 'Medium is unticked');
-    final sweep = templates['tpl_sweep']!;
-    expect(sweep.builtIn, isTrue);
-    expect(sweep.seedKey, 'sweep');
-    expect(sweep.draft.assignee.strategy, AssigneeStrategy.rotation);
-    expect(sweep.draft.assignee.dutyGroupId, 'duty_family_pdf');
+      final templates = fixture.chores.templates[familyId]!;
+      expect(
+        templates.keys,
+        containsAll(<String>['tpl_sweep', 'tpl_fridge_weekly']),
+      );
+      expect(templates['tpl_dinner'], isNull, reason: 'Medium is unticked');
+      final sweep = templates['tpl_sweep']!;
+      expect(sweep.builtIn, isTrue);
+      expect(sweep.seedKey, 'sweep');
+      expect(sweep.draft.assignee.strategy, AssigneeStrategy.rotation);
+      expect(sweep.draft.assignee.dutyGroupId, 'duty_family_pdf');
 
-    final groups = fixture.chores.dutyGroups.groups[familyId]!;
-    expect(groups['duty_family_pdf']!.members, rotation.memberIds);
+      final groups = fixture.chores.dutyGroups.groups[familyId]!;
+      expect(groups['duty_family_pdf']!.members, rotation.memberIds);
 
-    expect(
-      fixture.settings.events.single.type,
-      AuditEventType.choresStarterPackApplied,
-    );
-    expect(fixture.settings.settings.houseRules, familyPdfPack.houseRulesBn);
-    expect(fixture.chores.events, hasLength(high.length));
-    expect(fixture.occurrences.occurrences[familyId], isNotEmpty);
-  });
+      expect(
+        fixture.settings.events.single.type,
+        AuditEventType.choresStarterPackApplied,
+      );
+      expect(fixture.settings.settings.houseRules, familyPdfPack.houseRulesBn);
+      expect(fixture.chores.events, hasLength(high.length));
+      expect(fixture.occurrences.occurrences[familyId], isNotEmpty);
+    },
+  );
 
-  test('a second apply creates nothing and reports starter_pack_applied', () async {
-    await run();
-    final writes = fixture.chores.writes;
-    final saves = fixture.settings.saves;
-    final occurrences = fixture.occurrences.occurrences[familyId]!.length;
-    final again = await apply(
-      actorUid: 'bob',
-      familyId: familyId,
-      selectedSeedKeys: high,
-      rotation: rotation,
-    );
+  test(
+    'a second apply creates nothing and reports starter_pack_applied',
+    () async {
+      await run();
+      final writes = fixture.chores.writes;
+      final saves = fixture.settings.saves;
+      final occurrences = fixture.occurrences.occurrences[familyId]!.length;
+      final again = await apply(
+        actorUid: 'bob',
+        familyId: familyId,
+        selectedSeedKeys: high,
+        rotation: rotation,
+      );
 
-    expect(again.failureOrNull, const Conflict(code: 'starter_pack_applied'));
-    expect(fixture.chores.writes, writes);
-    expect(fixture.settings.saves, saves);
-    expect(fixture.occurrences.occurrences[familyId], hasLength(occurrences));
-  });
+      expect(again.failureOrNull, const Conflict(code: 'starter_pack_applied'));
+      expect(fixture.chores.writes, writes);
+      expect(fixture.settings.saves, saves);
+      expect(fixture.occurrences.occurrences[familyId], hasLength(occurrences));
+    },
+  );
 
-  test('only the selected lines are created; a Medium line stays unticked', () async {
-    expect(high, isNot(contains('dinner')));
-    final outcome = await run(selection: <String>{'sweep'});
+  test(
+    'only the selected lines are created; a Medium line stays unticked',
+    () async {
+      expect(high, isNot(contains('dinner')));
+      final outcome = await run(selection: <String>{'sweep'});
 
-    expect(outcome.templatesCreated, 1);
-    expect(fixture.chores.templates[familyId]!.keys, <String>['tpl_sweep']);
-    expect(fixture.chores.templates[familyId]!['tpl_dinner'], isNull);
-    expect(fixture.chores.templates[familyId]!['tpl_doormat'], isNull);
-  });
+      expect(outcome.templatesCreated, 1);
+      expect(fixture.chores.templates[familyId]!.keys, <String>['tpl_sweep']);
+      expect(fixture.chores.templates[familyId]!['tpl_dinner'], isNull);
+      expect(fixture.chores.templates[familyId]!['tpl_doormat'], isNull);
+    },
+  );
 
-  test('a family-edited group keeps its name while missing groups are added', () async {
-    fixture.settings.settings = ChoreSettings.defaults.copyWith(
-      groups: <ChoreGroup>[
-        const ChoreGroup(id: 'cleaning', nameBn: 'আমাদের ঝাড়ু দল'),
-      ],
-    );
+  test(
+    'a family-edited group keeps its name while missing groups are added',
+    () async {
+      fixture.settings.settings = ChoreSettings.defaults.copyWith(
+        groups: <ChoreGroup>[
+          const ChoreGroup(id: 'cleaning', nameBn: 'আমাদের ঝাড়ু দল'),
+        ],
+      );
 
-    final outcome = await run();
+      final outcome = await run();
 
-    final groups = fixture.settings.settings.groups;
-    expect(
-      groups.singleWhere((group) => group.id == 'cleaning').nameBn,
-      'আমাদের ঝাড়ু দল',
-    );
-    expect(outcome.catalogGroupsAdded, greaterThan(0));
-  });
+      final groups = fixture.settings.settings.groups;
+      expect(
+        groups.singleWhere((group) => group.id == 'cleaning').nameBn,
+        'আমাদের ঝাড়ু দল',
+      );
+      expect(outcome.catalogGroupsAdded, greaterThan(0));
+    },
+  );
 
   test('without a rotation the duty group is skipped and chores wait for an assignee', () async {
     final outcome = await run(rotationConfig: null);
@@ -190,21 +205,24 @@ void main() {
     expect(fixture.chores.dutyGroups.groups, isEmpty);
   });
 
-  test('a one-member rotation is rejected before anything is written', () async {
-    final result = await apply(
-      actorUid: 'bob',
-      familyId: familyId,
-      selectedSeedKeys: high,
-      rotation: const StarterRotationConfig(
-        memberIds: <String>['alice'],
-        firstMemberId: 'alice',
-      ),
-    );
+  test(
+    'a one-member rotation is rejected before anything is written',
+    () async {
+      final result = await apply(
+        actorUid: 'bob',
+        familyId: familyId,
+        selectedSeedKeys: high,
+        rotation: const StarterRotationConfig(
+          memberIds: <String>['alice'],
+          firstMemberId: 'alice',
+        ),
+      );
 
-    expect(
-      result.failureOrNull,
-      const Validation('members', 'too_few_members'),
-    );
-    expect(fixture.settings.saves, 0);
-  });
+      expect(
+        result.failureOrNull,
+        const Validation('members', 'too_few_members'),
+      );
+      expect(fixture.settings.saves, 0);
+    },
+  );
 }

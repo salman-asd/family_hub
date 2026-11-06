@@ -185,9 +185,7 @@ class FakeContributionRepository implements ContributionRepository {
     final failed = _fail();
     if (failed != null) return failed;
     _ledger(familyId, <FundTransaction?>[plan.opening]);
-    settings.stored = settings.stored.copyWith(
-      fundStartMonth: plan.startMonth,
-    );
+    settings.stored = settings.stored.copyWith(fundStartMonth: plan.startMonth);
     events.add(event);
     writes++;
     return const Success<void>(null);

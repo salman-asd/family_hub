@@ -25,7 +25,10 @@ final class NewAvailability {
 
 /// A status change (approve, reject, cancel).
 final class AvailabilityChange {
-  const AvailabilityChange({required this.availabilityId, required this.status});
+  const AvailabilityChange({
+    required this.availabilityId,
+    required this.status,
+  });
 
   final String availabilityId;
   final AvailabilityStatus status;

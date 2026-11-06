@@ -249,10 +249,9 @@ class BazarFixture {
   BazarSettingsRepository? settings;
 
   /// Sets the fund window start `CloseMonth` should use.
-  void setFundStart(MonthKey month) =>
-      settings = _ReadOnlySettings(
-        BazarSettings.defaults.copyWith(fundStartMonth: month),
-      );
+  void setFundStart(MonthKey month) => settings = _ReadOnlySettings(
+    BazarSettings.defaults.copyWith(fundStartMonth: month),
+  );
 
   /// A valid draft with sensible defaults for the fixed test clock.
   ExpenseDraft draft({

@@ -67,16 +67,19 @@ abstract final class OccurrenceWriteStager {
       );
     }
     for (final item in plan.inbox) {
-      batch.set(docs.inbox(_requireId(item.id, 'inbox row $item')), <String, dynamic>{
-        'toMemberId': item.toMemberId,
-        'type': item.type,
-        'refType': item.refType,
-        'refId': item.refId,
-        'params': item.params,
-        'readAt': null,
-        'archivedAt': null,
-        ...BaseMapper.metadataToMap(meta),
-      });
+      batch.set(
+        docs.inbox(_requireId(item.id, 'inbox row $item')),
+        <String, dynamic>{
+          'toMemberId': item.toMemberId,
+          'type': item.type,
+          'refType': item.refType,
+          'refId': item.refId,
+          'params': item.params,
+          'readAt': null,
+          'archivedAt': null,
+          ...BaseMapper.metadataToMap(meta),
+        },
+      );
     }
     for (final audit in plan.audits) {
       AuditWriter.write(

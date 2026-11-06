@@ -80,13 +80,12 @@ void main() {
   test('the month rows only include the selected month', () async {
     final backend = fx.fx.backend;
     (backend.fundTransactions[BazarFixture.familyId] ??=
-            <String, FundTransaction>{})['open_2026-09'] =
-        FundTransaction.opening(
-          monthKey: MonthKey(2026, 9),
-          amount: const Money.paisa(5000),
-          createdBy: 'alice',
-          createdAt: fx.fx.clock.nowUtc(),
-        );
+        <String, FundTransaction>{})['open_2026-09'] = FundTransaction.opening(
+      monthKey: MonthKey(2026, 9),
+      amount: const Money.paisa(5000),
+      createdBy: 'alice',
+      createdAt: fx.fx.clock.nowUtc(),
+    );
     backend.expenseNotify();
     final c = makeContainer();
     keep(c, fundTransactionsProvider);

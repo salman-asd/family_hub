@@ -98,7 +98,9 @@ class _ContributionFormFieldsState
           enabled: !widget.locked && !state.saving,
           onPicked: controller.setDate,
           // A use-case date rejection belongs on the date, not as a banner.
-          errorText: _isFutureDate(state.failure) ? l10n.bazarErrFutureDate : null,
+          errorText: _isFutureDate(state.failure)
+              ? l10n.bazarErrFutureDate
+              : null,
         ),
         const SizedBox(height: 16),
         Text(
@@ -111,7 +113,11 @@ class _ContributionFormFieldsState
           onChanged: (method) => controller.setMethod(method),
           options: <ChoiceOption<ContributionMethod>>[
             for (final method in ContributionMethod.values)
-              ChoiceOption(method, _methodLabel(l10n, method), key: ValueKey('method-${method.name}')),
+              ChoiceOption(
+                method,
+                _methodLabel(l10n, method),
+                key: ValueKey('method-${method.name}'),
+              ),
           ],
         ),
         const SizedBox(height: 16),

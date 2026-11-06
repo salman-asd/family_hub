@@ -40,8 +40,7 @@ FundTransaction _row(
   MonthKey? month,
 }) => FundTransaction(
   id: id,
-  type: type ??
-      (paisa < 0 ? FundTxType.expense : FundTxType.adjustment),
+  type: type ?? (paisa < 0 ? FundTxType.expense : FundTxType.adjustment),
   amount: Money.paisa(paisa),
   dateKey: (month ?? _october).startOfMonth,
   monthKey: month ?? _october,
@@ -180,9 +179,7 @@ void main() {
       expect(
         checkLedger(
           expenses: const <Expense>[],
-          txs: <FundTransaction>[
-            _row('e1', -12000, month: MonthKey(2026, 11)),
-          ],
+          txs: <FundTransaction>[_row('e1', -12000, month: MonthKey(2026, 11))],
           month: _october,
         ),
         isEmpty,

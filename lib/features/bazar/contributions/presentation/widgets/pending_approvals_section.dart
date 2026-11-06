@@ -90,9 +90,8 @@ class _PendingApprovalsSectionState
         if (pending.isEmpty)
           Text(
             l10n.fundPendingEmpty,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: context.tokens.textSecondary,
-            ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: context.tokens.textSecondary),
           ),
         for (final row in pending)
           _PendingRow(

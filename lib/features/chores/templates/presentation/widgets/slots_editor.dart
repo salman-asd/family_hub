@@ -96,9 +96,8 @@ class SlotsEditor extends ConsumerWidget {
         else if (slots.length >= TemplateLimits.maxSlots)
           Text(
             l10n.choreSlotLimit(formatters.number(TemplateLimits.maxSlots)),
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: t.textSecondary),
           ),
       ],
     );

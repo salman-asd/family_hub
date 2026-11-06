@@ -67,9 +67,7 @@ class RecurrenceSummaryText extends StatelessWidget {
     AppLocalizations l10n,
     AppFormatters formatters,
     List<int> weekdays,
-  ) => weekdays
-      .map(formatters.weekdayName)
-      .join(l10n.recurrenceListSeparator);
+  ) => weekdays.map(formatters.weekdayName).join(l10n.recurrenceListSeparator);
 
   static String _numbers(
     AppLocalizations l10n,

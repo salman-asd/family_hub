@@ -52,5 +52,3 @@ String rangeLabel(AppLocalizations l10n, RangePreset preset) =>
       RangePreset.thisYear => l10n.expenseRangeThisYear,
       RangePreset.custom => l10n.expenseRangeCustom,
     };
-
-

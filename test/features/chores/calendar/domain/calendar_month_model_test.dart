@@ -38,14 +38,16 @@ void main() {
   );
 
   group('grid shape', () {
-    test('Saturday start: October 2026 has 6 rows starting Saturday 26 Sep',
-        () {
-      final model = build(const []);
-      expect(model.weeks.length, 6);
-      expect(model.weeks.first.first.dateKey, DateKey(2026, 9, 26));
-      expect(model.weeks.last.last.dateKey, DateKey(2026, 11, 6));
-      expect(model.weeks.every((week) => week.length == 7), isTrue);
-    });
+    test(
+      'Saturday start: October 2026 has 6 rows starting Saturday 26 Sep',
+      () {
+        final model = build(const []);
+        expect(model.weeks.length, 6);
+        expect(model.weeks.first.first.dateKey, DateKey(2026, 9, 26));
+        expect(model.weeks.last.last.dateKey, DateKey(2026, 11, 6));
+        expect(model.weeks.every((week) => week.length == 7), isTrue);
+      },
+    );
 
     test('Sunday and Monday starts give 5 rows', () {
       expect(build(const [], weekStart: 7).weeks.length, 5);
@@ -112,7 +114,12 @@ void main() {
       final model = build([
         aChoreItem('a', day),
         aChoreItem('b', day, status: ChoreStatus.overdue, needsCover: true),
-        aChoreItem('c', day, status: ChoreStatus.completed, needsAttention: true),
+        aChoreItem(
+          'c',
+          day,
+          status: ChoreStatus.completed,
+          needsAttention: true,
+        ),
       ]);
       final summary = model.summaryOf(day)!;
       expect(summary.total, 3);
@@ -175,10 +182,7 @@ void main() {
     ];
 
     test('mine counts only the viewer; family counts everyone', () {
-      expect(
-        build(items, scope: CalendarScope.mine).summaryOf(day)!.total,
-        1,
-      );
+      expect(build(items, scope: CalendarScope.mine).summaryOf(day)!.total, 1);
       expect(build(items).summaryOf(day)!.total, 2);
     });
 
@@ -203,10 +207,9 @@ void main() {
     });
 
     test('filters never change an outside day', () {
-      final model = build(
-        [aChoreItem('sep', DateKey(2026, 9, 28))],
-        filters: const CalendarFilters(groupIds: {'kitchen'}),
-      );
+      final model = build([
+        aChoreItem('sep', DateKey(2026, 9, 28)),
+      ], filters: const CalendarFilters(groupIds: {'kitchen'}));
       expect(model.summaryOf(DateKey(2026, 9, 28))!.total, 0);
     });
   });

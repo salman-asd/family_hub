@@ -9,20 +9,23 @@ void main() {
     SharedPreferences.setMockInitialValues(<String, Object>{});
   });
 
-  test('stores the initial device timezone without reporting a change', () async {
-    final preferences = await SharedPreferences.getInstance();
+  test(
+    'stores the initial device timezone without reporting a change',
+    () async {
+      final preferences = await SharedPreferences.getInstance();
 
-    final changed = await updateReminderDeviceTimezone(
-      preferences: preferences,
-      readTimezone: () async => 'Asia/Dhaka',
-    );
+      final changed = await updateReminderDeviceTimezone(
+        preferences: preferences,
+        readTimezone: () async => 'Asia/Dhaka',
+      );
 
-    expect(changed, isFalse);
-    expect(
-      preferences.getString(kReminderDeviceTimezonePreferenceKey),
-      'Asia/Dhaka',
-    );
-  });
+      expect(changed, isFalse);
+      expect(
+        preferences.getString(kReminderDeviceTimezonePreferenceKey),
+        'Asia/Dhaka',
+      );
+    },
+  );
 
   test('reports and stores a changed device timezone', () async {
     final preferences = await SharedPreferences.getInstance();

@@ -96,7 +96,11 @@ class _DetailBody extends ConsumerWidget {
           ),
           Expanded(
             flex: 3,
-            child: Text(value, style: theme.bodyMedium, textAlign: TextAlign.end),
+            child: Text(
+              value,
+              style: theme.bodyMedium,
+              textAlign: TextAlign.end,
+            ),
           ),
         ],
       ),
@@ -232,7 +236,9 @@ class _Actions extends ConsumerWidget {
               onPressed: locked
                   ? null
                   : () async {
-                      await context.push(AppRoutes.bazarExpenseEdit(expense.id));
+                      await context.push(
+                        AppRoutes.bazarExpenseEdit(expense.id),
+                      );
                       if (!context.mounted) return;
                       ref.invalidate(expenseDetailProvider(expense.id));
                     },

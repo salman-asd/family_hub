@@ -36,7 +36,9 @@ class ExpenseHistorySection extends ConsumerWidget {
         return raw is int ? formatters.money(Money.paisa(raw)) : '$raw';
       }
       if (field == 'fundingSource') {
-        return raw == 'fund' ? l10n.expenseFundingFund : l10n.bazarFundingMember;
+        return raw == 'fund'
+            ? l10n.expenseFundingFund
+            : l10n.bazarFundingMember;
       }
       return '$raw';
     }
@@ -47,9 +49,8 @@ class ExpenseHistorySection extends ConsumerWidget {
       children: [
         Text(
           l10n.expenseHistoryTitle,
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(color: t.textPrimary),
+          style: Theme.of(context).textTheme.titleMedium
+              ?.copyWith(color: t.textPrimary),
         ),
         const SizedBox(height: 8),
         if (revisions.hasError)
@@ -57,9 +58,8 @@ class ExpenseHistorySection extends ConsumerWidget {
         else if (rows.isEmpty)
           Text(
             l10n.expenseHistoryEmpty,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: t.textSecondary),
           ),
         for (final revision in rows)
           Padding(
@@ -81,9 +81,8 @@ class ExpenseHistorySection extends ConsumerWidget {
                         fieldLabel(l10n, field),
                         value(field, revision.before[field]),
                       ),
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(color: t.textSecondary),
                     ),
               ],
             ),
@@ -102,8 +101,9 @@ String fieldLabel(AppLocalizations l10n, String field) => switch (field) {
   'unit' => l10n.expenseUnitLabel,
   'unitPricePaisa' => l10n.expenseUnitPriceField,
   'totalPaisa' => l10n.expenseTotalLabel,
-  'fundingSource' || 'paidByMemberId' || 'reimbursable' =>
-    l10n.expenseFundingLabel,
+  'fundingSource' ||
+  'paidByMemberId' ||
+  'reimbursable' => l10n.expenseFundingLabel,
   'purchaserId' => l10n.expensePurchaserLabel,
   'shop' => l10n.expenseShopField,
   'note' => l10n.expenseNoteField,

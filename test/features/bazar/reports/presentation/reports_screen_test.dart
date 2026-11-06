@@ -58,9 +58,8 @@ void main() {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(textScale)),
             child: child!,
           ),
           home: const ReportsScreen(),
@@ -107,23 +106,21 @@ void main() {
     expect(find.text(' 100%'), findsOneWidget);
   });
 
-  testWidgets('the categories tab draws a pie and announces a text alternative', (
-    tester,
-  ) async {
-    seedMonth();
-    await pump(tester);
+  testWidgets(
+    'the categories tab draws a pie and announces a text alternative',
+    (tester) async {
+      seedMonth();
+      await pump(tester);
 
-    await tester.tap(find.byKey(const ValueKey('report-tab-categories')));
-    await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('report-tab-categories')));
+      await tester.pumpAndSettle();
 
-    expect(find.byType(PieChart), findsOneWidget);
-    // The chart is announced once, with the values in words.
-    expect(
-      find.bySemanticsLabel(RegExp('Food .*of total')),
-      findsOneWidget,
-    );
-    expect(find.byKey(const ValueKey('report-row-cat_food')), findsOneWidget);
-  });
+      expect(find.byType(PieChart), findsOneWidget);
+      // The chart is announced once, with the values in words.
+      expect(find.bySemanticsLabel(RegExp('Food .*of total')), findsOneWidget);
+      expect(find.byKey(const ValueKey('report-row-cat_food')), findsOneWidget);
+    },
+  );
 
   testWidgets('the days tab draws a bar chart and lists zero days', (
     tester,
@@ -166,7 +163,10 @@ void main() {
     expect(find.byKey(const ValueKey('report-tab-categories')), findsNothing);
     // The report title is there, and the contributions content with it.
     expect(find.text('Reports'), findsOneWidget);
-    expect(find.byKey(const ValueKey('report-tab-contributions')), findsNothing);
+    expect(
+      find.byKey(const ValueKey('report-tab-contributions')),
+      findsNothing,
+    );
   });
 
   testWidgets('a member WITH the default switch sees every tab', (

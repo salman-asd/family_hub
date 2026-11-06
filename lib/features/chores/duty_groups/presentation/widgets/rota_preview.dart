@@ -136,7 +136,12 @@ class _Cell extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: Row(
             children: [
-              AppAvatar(id: memberId ?? '-', name: name, avatarKey: avatarKey, size: 32),
+              AppAvatar(
+                id: memberId ?? '-',
+                name: name,
+                avatarKey: avatarKey,
+                size: 32,
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(

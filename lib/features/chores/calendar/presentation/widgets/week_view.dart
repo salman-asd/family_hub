@@ -120,7 +120,7 @@ class _WeekStrip extends ConsumerWidget {
               child: Text(
                 l10n.calendarDayHeader(
                   '${formatters.fullDate(date)}, '
-                      '${formatters.weekdayName(day.dateKey.isoWeekday)}',
+                  '${formatters.weekdayName(day.dateKey.isoWeekday)}',
                   formatters.number(day.items.length),
                 ),
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(

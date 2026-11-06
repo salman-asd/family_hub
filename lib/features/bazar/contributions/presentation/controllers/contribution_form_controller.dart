@@ -14,8 +14,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The open contribution sheet (`add`, `edit` or `request a change`).
 final contributionFormProvider = NotifierProvider.autoDispose
-    .family<ContributionFormController, ContributionFormState,
-        ContributionFormArgs>(ContributionFormController.new);
+    .family<
+      ContributionFormController,
+      ContributionFormState,
+      ContributionFormArgs
+    >(ContributionFormController.new);
 
 /// Drives one contribution sheet: record, request, edit or ask for a change.
 ///
@@ -35,7 +38,8 @@ class ContributionFormController extends Notifier<ContributionFormState> {
       mode: _modeFor(existing, canRecord),
       // Generated once per sheet: a failed save keeps it.
       eventId: ref.read(idGeneratorProvider)(),
-      date: existing?.pendingChange?.date ??
+      date:
+          existing?.pendingChange?.date ??
           existing?.dateKey ??
           ref.read(currentDateKeyProvider),
       memberId: existing?.memberId ?? actor,

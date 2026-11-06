@@ -52,9 +52,8 @@ class AmountBlock extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final t = context.tokens;
-    final label = Theme.of(
-      context,
-    ).textTheme.labelLarge?.copyWith(color: t.textSecondary);
+    final label = Theme.of(context).textTheme.labelLarge
+        ?.copyWith(color: t.textSecondary);
     final hint = unitPriceHint;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,12 +104,9 @@ class AmountBlock extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(
-              l10n.expenseUnitPriceHint(
-                moneyEditText(hint),
-              ),
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+              l10n.expenseUnitPriceHint(moneyEditText(hint)),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: t.textSecondary),
             ),
           ),
         if (qty.text.trim().isNotEmpty) ...[
@@ -128,9 +124,8 @@ class AmountBlock extends StatelessWidget {
           if (errors['unit'] != null)
             Text(
               fieldErrorText(l10n, errors, 'unit')!,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: t.danger),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: t.danger),
             ),
         ],
         const SizedBox(height: 16),

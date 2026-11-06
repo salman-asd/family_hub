@@ -3616,9 +3616,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dutyChoreAdded => 'Chore added to the group';
 
   @override
-  String get actionDiscard => 'Discard';
-
-  @override
   String get choresSettingsNeedsInternet =>
       'Saving chore settings needs an internet connection. Your changes are kept here; try again when you are online.';
 
@@ -5116,6 +5113,367 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationFailure_inboxItem =>
       'This notification could not be found.';
+
+  @override
+  String get notificationSettingsTitle => 'Notifications and reminders';
+
+  @override
+  String get notificationHelpTitle => 'Reminders not working?';
+
+  @override
+  String get notificationDeliveryTitle => 'Push or normal delivery';
+
+  @override
+  String get notificationCategoryChores => 'Chores';
+
+  @override
+  String get notificationCategoryBazar => 'Bazar and finance';
+
+  @override
+  String get notificationCategoryFamily => 'Family';
+
+  @override
+  String get notificationTemplateHint =>
+      'Each chore\'s reminder can also be changed in its template.';
+
+  @override
+  String get notificationDefaultOffsets => 'Remind me before a chore is due';
+
+  @override
+  String get notificationCustomOffset => 'Minutes (1–1440)';
+
+  @override
+  String get notificationAddOffset => 'Add time';
+
+  @override
+  String get notificationInvalidOffset =>
+      'Enter a new time between 1 and 1440.';
+
+  @override
+  String get notificationOverdue => 'Remind me again if a chore is overdue';
+
+  @override
+  String get notificationQuietHours => 'Quiet hours';
+
+  @override
+  String get notificationQuietStarts => 'Starts';
+
+  @override
+  String get notificationQuietEnds => 'Ends';
+
+  @override
+  String get notificationMorningSummary => 'Morning chore summary';
+
+  @override
+  String notificationSummaryTime(String time) {
+    return 'Time: $time';
+  }
+
+  @override
+  String get notificationAllEnabled => 'Reminders enabled';
+
+  @override
+  String get notificationMasterExplanation =>
+      'Turning this off pauses all reminder categories but keeps their schedules.';
+
+  @override
+  String get notificationMasterOffReason =>
+      'This category is paused because all reminders are off.';
+
+  @override
+  String get notificationCategoryOffReason =>
+      'Reminders for this category are turned off.';
+
+  @override
+  String get notificationPushOnPhone =>
+      'Receive push notifications on this phone';
+
+  @override
+  String get notificationSenderSparkHint =>
+      'Push sending is not set up (free plan); reminders on this phone still work.';
+
+  @override
+  String get notificationPushAdminOff =>
+      'The family admin has turned push off.';
+
+  @override
+  String get notificationPushSavedInactive =>
+      'Push is saved but will not be used until push delivery is enabled.';
+
+  @override
+  String get notificationPushDisabledHere => 'Push is disabled on this phone.';
+
+  @override
+  String get notificationPush => 'Push';
+
+  @override
+  String get notificationNormal => 'Normal';
+
+  @override
+  String get notificationFamilyDefaults => 'Family defaults';
+
+  @override
+  String get notificationPermissionChecking =>
+      'Checking notification permission…';
+
+  @override
+  String get notificationPermissionUnavailable =>
+      'Phone permission status is unavailable.';
+
+  @override
+  String get notificationPermissionDenied =>
+      'Notifications are blocked for this app.';
+
+  @override
+  String get notificationExactAlarmMissing =>
+      'Exact alarms are off; reminders may arrive late.';
+
+  @override
+  String get notificationPermissionGranted => 'Enabled';
+
+  @override
+  String get notificationAllow => 'Allow';
+
+  @override
+  String get notificationAllowExactAlarms => 'Allow exact alarms';
+
+  @override
+  String get notificationSaveFailed =>
+      'Could not save. Check your connection and try again.';
+
+  @override
+  String get notificationTestTitle => 'Family Hub test';
+
+  @override
+  String get notificationTestBody => 'This is your test reminder.';
+
+  @override
+  String get notificationTestScheduled =>
+      'A test notification will arrive in 10 seconds.';
+
+  @override
+  String get notificationTestFailed =>
+      'Could not schedule the test notification.';
+
+  @override
+  String get notificationTestButton => 'Send a test notification in 10 seconds';
+
+  @override
+  String get notificationUseFamilyDefaults => 'Use family defaults';
+
+  @override
+  String get notificationAllowPush => 'Allow push notifications';
+
+  @override
+  String get notificationSenderUnavailable => 'Push sender is not set up';
+
+  @override
+  String get notificationSenderChecking => 'Checking push status…';
+
+  @override
+  String get notificationSenderError => 'Push status is unavailable';
+
+  @override
+  String get notificationSenderReady => 'Push sender is ready';
+
+  @override
+  String get notificationSenderLastFailed => 'The last push failed';
+
+  @override
+  String notificationRecommended(String recommended) {
+    return 'Recommended: $recommended';
+  }
+
+  @override
+  String get notificationTypeLocked =>
+      'Computed on each phone; no server event.';
+
+  @override
+  String get notificationDiscardTitle => 'Discard changes?';
+
+  @override
+  String get notificationDiscardMessage => 'Unsaved changes will be lost.';
+
+  @override
+  String get actionDiscard => 'Discard';
+
+  @override
+  String get notificationDiagnosticsLoading => 'Loading diagnostics…';
+
+  @override
+  String get notificationPushUnavailable => 'Push diagnostics are unavailable.';
+
+  @override
+  String get notificationPermissionLabel => 'Notification permission';
+
+  @override
+  String get notificationExactAlarmLabel => 'Exact alarm permission';
+
+  @override
+  String get notificationBatteryLabel => 'Battery restrictions';
+
+  @override
+  String get notificationOpenSettings => 'Open phone settings';
+
+  @override
+  String get notificationPendingCount => 'Pending reminders';
+
+  @override
+  String get notificationNextScheduled => 'Next scheduled reminder';
+
+  @override
+  String get notificationAndroidVersion => 'Android version';
+
+  @override
+  String get notificationPushToken => 'Push token';
+
+  @override
+  String get notificationPushTokenPresent =>
+      'A token is registered on this phone';
+
+  @override
+  String get notificationPushTokenMissing =>
+      'No push token is registered on this phone';
+
+  @override
+  String get notificationLastPushReceived => 'Last push received';
+
+  @override
+  String get notificationNever => 'Never';
+
+  @override
+  String get notificationTimezone => 'Family timezone';
+
+  @override
+  String get notificationLastError => 'Last error';
+
+  @override
+  String get notificationReminderError => 'Reminder scheduling error';
+
+  @override
+  String get notificationHelpIntro =>
+      'Check phone permissions and scheduled reminders.';
+
+  @override
+  String get notificationChecklistTitle => 'Things to check';
+
+  @override
+  String get notificationChecklistAllow =>
+      'Allow notifications for Family Hub.';
+
+  @override
+  String get notificationChecklistAlarms => 'Allow exact alarms.';
+
+  @override
+  String get notificationChecklistBattery =>
+      'Remove battery restrictions for Family Hub.';
+
+  @override
+  String get notificationChecklistForceStop => 'Do not force-stop the app.';
+
+  @override
+  String get notificationChecklistOpen =>
+      'Open the app at least once a day to load new data.';
+
+  @override
+  String get notificationNoSenderHonesty =>
+      'Reminders are scheduled on this phone from data it has loaded. If someone assigns a chore or requests a swap while the app is closed, you will see it when you open the app. Push sending is not set up on the free plan.';
+
+  @override
+  String get notificationResetRecommended => 'Reset to recommended';
+
+  @override
+  String get notificationTypeSwapRequest => 'Chore swap request';
+
+  @override
+  String get notificationTypeSwapResult => 'Swap decision';
+
+  @override
+  String get notificationTypeNeedsCover => 'Chore needs cover';
+
+  @override
+  String get notificationTypeChoreAssigned => 'Chore assigned';
+
+  @override
+  String get notificationTypeChoreReopened => 'Chore reopened';
+
+  @override
+  String get notificationTypeCommentAttention => 'Comment needs attention';
+
+  @override
+  String get notificationTypeVerificationNeeded => 'Chore needs verification';
+
+  @override
+  String get notificationTypeAbsenceDecision => 'Absence decision';
+
+  @override
+  String get notificationTypeMemberJoinRequest => 'Family join request';
+
+  @override
+  String get notificationTypeMemberApproved => 'Family membership approved';
+
+  @override
+  String get notificationTypeChoreDue => 'Chore due';
+
+  @override
+  String get notificationTypeChoreOverdue => 'Chore overdue';
+
+  @override
+  String get notificationTypeEveningNudge => 'Evening reminder';
+
+  @override
+  String get notificationTypeMorningSummary => 'Morning summary';
+
+  @override
+  String get notificationTypeContributionDue => 'Contribution due';
+
+  @override
+  String get notificationTypeMonthEnd => 'Month-end reminder';
+
+  @override
+  String get notificationTypeBudgetAlert => 'Budget alert';
+
+  @override
+  String get notificationTypeAchievement => 'Achievement';
+
+  @override
+  String reminderWhyNext(String time) {
+    return 'Next reminder: $time';
+  }
+
+  @override
+  String get reminderWhyPush => 'This will be delivered as push.';
+
+  @override
+  String get reminderWhyGlobalOff => 'All reminders are turned off.';
+
+  @override
+  String get reminderWhyCategoryOff =>
+      'Reminders for this category are turned off.';
+
+  @override
+  String get reminderWhyTemplateOff =>
+      'Reminders are turned off for this chore template.';
+
+  @override
+  String get reminderWhyTemplateNoTimings =>
+      'No reminder times are set for this chore.';
+
+  @override
+  String get reminderWhyNotAssigned => 'This chore is not assigned to you.';
+
+  @override
+  String get reminderWhyNotOpen => 'This chore is no longer open.';
+
+  @override
+  String get reminderWhyUnavailable => 'This chore needs cover.';
+
+  @override
+  String get reminderWhyProjectedPast => 'This planned chore is in the past.';
+
+  @override
+  String get reminderWhyNoUpcoming =>
+      'There is no upcoming reminder for this chore.';
 
   @override
   String reminderDueTitle(String choreName) {

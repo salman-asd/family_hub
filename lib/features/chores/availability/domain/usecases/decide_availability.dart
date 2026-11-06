@@ -54,13 +54,19 @@ class DecideAvailability {
     if (readFailure != null) return Failure<MemberAvailability>(readFailure);
     final record = found.valueOrNull;
     if (record == null) {
-      return const Failure<MemberAvailability>(NotFound(entity: 'availability'));
+      return const Failure<MemberAvailability>(
+        NotFound(entity: 'availability'),
+      );
     }
     if (record.status != AvailabilityStatus.pending) {
-      return const Failure<MemberAvailability>(Conflict(code: 'concurrent_edit'));
+      return const Failure<MemberAvailability>(
+        Conflict(code: 'concurrent_edit'),
+      );
     }
 
-    final next = approve ? AvailabilityStatus.active : AvailabilityStatus.rejected;
+    final next = approve
+        ? AvailabilityStatus.active
+        : AvailabilityStatus.rejected;
     final at = clock.nowUtc();
     final row = inbox.absenceDecision(
       availabilityId: availabilityId,
@@ -98,6 +104,8 @@ class DecideAvailability {
     );
     final writeFailure = staged.failureOrNull;
     if (writeFailure != null) return Failure<MemberAvailability>(writeFailure);
-    return Success<MemberAvailability>(record.withStatus(next, by: actorUid, at: at));
+    return Success<MemberAvailability>(
+      record.withStatus(next, by: actorUid, at: at),
+    );
   }
 }

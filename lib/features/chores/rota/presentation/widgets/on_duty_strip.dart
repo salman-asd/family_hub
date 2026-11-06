@@ -51,7 +51,11 @@ class OnDutyStrip extends ConsumerWidget {
                       const SizedBox(width: 6),
                       Text(
                         l10n.rotaOnDutyCount(
-                          memberNameOf(members, id, fallback: l10n.inboxSomeone),
+                          memberNameOf(
+                            members,
+                            id,
+                            fallback: l10n.inboxSomeone,
+                          ),
                           ref
                               .watch(appFormattersProvider)
                               .number(matrix.cell(id, today).length),

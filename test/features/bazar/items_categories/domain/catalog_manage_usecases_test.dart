@@ -93,7 +93,10 @@ void main() {
         categoryId: 'a',
       );
       expect(result.valueOrNull?.active, isTrue);
-      expect(f.backend.categoriesOf(BazarFixture.familyId).single.active, isTrue);
+      expect(
+        f.backend.categoriesOf(BazarFixture.familyId).single.active,
+        isTrue,
+      );
     });
 
     test('a hidden item comes back; an active one is a no-op', () async {

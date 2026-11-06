@@ -45,8 +45,7 @@ AppFailure? stateFailure(OccurrenceContext context, OccurrenceAction action) {
       !actor.hasAcceptedSwap
           ? const Conflict(code: 'not_a_recipient')
           : _closedFailure(status) ?? const Conflict(code: 'concurrent_edit'),
-    OccurrenceAction.softDelete ||
-    OccurrenceAction.replan =>
+    OccurrenceAction.softDelete || OccurrenceAction.replan =>
       !actor.isManager
           ? const PermissionDenied()
           : const Conflict(code: 'occurrence_started'),

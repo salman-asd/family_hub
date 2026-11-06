@@ -66,7 +66,9 @@ class ContributionHistoryList extends ConsumerWidget {
                       Text(
                         '${row.dateKey} · '
                         '${contributionMethodLabel(l10n, row.method)}',
-                        style: style.bodySmall?.copyWith(color: t.textSecondary),
+                        style: style.bodySmall?.copyWith(
+                          color: t.textSecondary,
+                        ),
                       ),
                       if (row.status == ContributionApproval.rejected &&
                           row.memberId == myId &&

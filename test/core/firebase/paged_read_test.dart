@@ -6,17 +6,19 @@ import 'package:flutter_test/flutter_test.dart';
 /// dateKey".
 void main() {
   /// 1,000 documents, three per day, ordered by (dateKey, id) like the query.
-  final docs = <({String id, String dateKey})>[
-    for (var i = 0; i < 1000; i++)
-      (
-        id: 'tpl_${(i % 3)}_${(i ~/ 3).toString().padLeft(4, '0')}',
-        dateKey: '2026-${(i ~/ 90 + 1).toString().padLeft(2, '0')}-'
-            '${((i ~/ 3) % 30 + 1).toString().padLeft(2, '0')}',
-      ),
-  ]..sort((a, b) {
-      final byDay = a.dateKey.compareTo(b.dateKey);
-      return byDay != 0 ? byDay : a.id.compareTo(b.id);
-    });
+  final docs =
+      <({String id, String dateKey})>[
+        for (var i = 0; i < 1000; i++)
+          (
+            id: 'tpl_${(i % 3)}_${(i ~/ 3).toString().padLeft(4, '0')}',
+            dateKey:
+                '2026-${(i ~/ 90 + 1).toString().padLeft(2, '0')}-'
+                '${((i ~/ 3) % 30 + 1).toString().padLeft(2, '0')}',
+          ),
+      ]..sort((a, b) {
+        final byDay = a.dateKey.compareTo(b.dateKey);
+        return byDay != 0 ? byDay : a.id.compareTo(b.id);
+      });
 
   var fetches = 0;
 
@@ -52,16 +54,18 @@ void main() {
     expect(docs[399].dateKey, docs[400].dateKey);
   });
 
-  test('a result that is an exact multiple of the page size stops cleanly',
-      () async {
-    final ids = await readAllPages<String, int>(
-      pageSize: 400,
-      fetch: fakeFetch(docs.take(800).toList(), 400),
-    );
+  test(
+    'a result that is an exact multiple of the page size stops cleanly',
+    () async {
+      final ids = await readAllPages<String, int>(
+        pageSize: 400,
+        fetch: fakeFetch(docs.take(800).toList(), 400),
+      );
 
-    expect(ids, hasLength(800));
-    expect(fetches, 3, reason: 'the third page is empty and ends the loop');
-  });
+      expect(ids, hasLength(800));
+      expect(fetches, 3, reason: 'the third page is empty and ends the loop');
+    },
+  );
 
   test('an empty and a short result need one fetch', () async {
     expect(

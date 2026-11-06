@@ -38,9 +38,8 @@ class BazarMonthCard extends ConsumerWidget {
           const SizedBox(height: 4),
           Text(
             ref.watch(appFormattersProvider).monthLabel(month),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: context.tokens.textSecondary,
-            ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: context.tokens.textSecondary),
           ),
           const SizedBox(height: 12),
           if (expenses.isLoading || categories.isLoading)

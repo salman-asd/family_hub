@@ -39,7 +39,8 @@ class ContributionsTab extends ConsumerWidget {
             key: status.memberId,
             label: memberNames[status.memberId] ?? status.memberId,
             amount: status.received,
-            trailing: '${l10n.reportExpected}: '
+            trailing:
+                '${l10n.reportExpected}: '
                 '${_money(context, ref, status.expected)}',
           ),
     ];
@@ -98,7 +99,6 @@ class ContributionsTab extends ConsumerWidget {
 MonthKey contributionMonthFor(DateKeyRange range, MonthKey fallback) {
   final start = range.start.monthKey;
   if (start != range.end.monthKey) return fallback;
-  final wholeMonth =
-      range.start.day == 1 && range.end.day == start.daysInMonth;
+  final wholeMonth = range.start.day == 1 && range.end.day == start.daysInMonth;
   return wholeMonth ? start : fallback;
 }

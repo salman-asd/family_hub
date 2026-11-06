@@ -12,11 +12,7 @@ import 'package:flutter/material.dart';
 /// number (ADR 0007).  A closed month adds a lock line with its closing balance,
 /// so a viewer understands why the number no longer moves.
 class FundBalanceCard extends StatelessWidget {
-  const FundBalanceCard({
-    required this.summary,
-    this.closedLabel,
-    super.key,
-  });
+  const FundBalanceCard({required this.summary, this.closedLabel, super.key});
 
   final FundSummary summary;
 
@@ -115,15 +111,11 @@ class _Chip extends StatelessWidget {
         Flexible(
           child: Text(
             '$label: ',
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: t.textSecondary),
           ),
         ),
-        MoneyText(
-          value: value,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        MoneyText(value: value, style: Theme.of(context).textTheme.bodyMedium),
       ],
     );
   }

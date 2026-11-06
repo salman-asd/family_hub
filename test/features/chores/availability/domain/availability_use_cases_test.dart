@@ -39,7 +39,8 @@ void main() {
     reason: text,
   )).failureOrNull;
 
-  MemberAvailability absence([String id = 'a1']) => kit.fixture.swapWorld.absences[id]!;
+  MemberAvailability absence([String id = 'a1']) =>
+      kit.fixture.swapWorld.absences[id]!;
 
   group('AddAvailability', () {
     test('a member records their own absence; it is active', () async {
@@ -52,7 +53,9 @@ void main() {
     });
 
     test('it is pending when approval is on, except for a manager', () async {
-      kit.fixture.settings.settings = ChoreSettings.defaults.copyWith(absenceNeedsApproval: true);
+      kit.fixture.settings.settings = ChoreSettings.defaults.copyWith(
+        absenceNeedsApproval: true,
+      );
       expect(await add('cara', 'cara'), isNull);
       expect(absence().status, AvailabilityStatus.pending);
       expect(await add('bob', 'bob', id: 'a2'), isNull);
@@ -70,7 +73,10 @@ void main() {
       expect(await add('cara', 'cara', text: 'x'), isA<Validation>());
       expect(await add('cara', 'cara', type: 'nonsense'), isA<Validation>());
       expect(await add('cara', 'cara'), isNull);
-      expect(await add('cara', 'cara', id: 'a2', from: 25, to: 28), const Conflict(code: 'availability_overlap'));
+      expect(
+        await add('cara', 'cara', id: 'a2', from: 25, to: 28),
+        const Conflict(code: 'availability_overlap'),
+      );
       expect(await add('cara', 'cara', id: 'a3', from: 27, to: 28), isNull);
     });
 
@@ -92,34 +98,60 @@ void main() {
   group('CancelAvailability / DecideAvailability', () {
     test('the owner or a manager cancels; others cannot', () async {
       await add('cara', 'cara');
-      final denied = await kit.cancelAvailability(familyId: familyId, actorUid: 'dave', availabilityId: 'a1');
+      final denied = await kit.cancelAvailability(
+        familyId: familyId,
+        actorUid: 'dave',
+        availabilityId: 'a1',
+      );
       expect(denied.failureOrNull, isA<PermissionDenied>());
-      final ok = await kit.cancelAvailability(familyId: familyId, actorUid: 'cara', availabilityId: 'a1');
+      final ok = await kit.cancelAvailability(
+        familyId: familyId,
+        actorUid: 'cara',
+        availabilityId: 'a1',
+      );
       expect(ok.failureOrNull, isNull);
       expect(absence().status, AvailabilityStatus.cancelled);
-      final again = await kit.cancelAvailability(familyId: familyId, actorUid: 'bob', availabilityId: 'a1');
+      final again = await kit.cancelAvailability(
+        familyId: familyId,
+        actorUid: 'bob',
+        availabilityId: 'a1',
+      );
       expect(again.failureOrNull, const Conflict(code: 'concurrent_edit'));
     });
 
     test('only a manager decides a pending absence', () async {
       kit.seedAbsence('a1', 'cara', status: AvailabilityStatus.pending);
       final denied = await kit.decideAvailability(
-        familyId: familyId, actorUid: 'cara', availabilityId: 'a1', approve: true);
+        familyId: familyId,
+        actorUid: 'cara',
+        availabilityId: 'a1',
+        approve: true,
+      );
       expect(denied.failureOrNull, isA<PermissionDenied>());
       final ok = await kit.decideAvailability(
-        familyId: familyId, actorUid: 'bob', availabilityId: 'a1', approve: true);
+        familyId: familyId,
+        actorUid: 'bob',
+        availabilityId: 'a1',
+        approve: true,
+      );
       expect(ok.failureOrNull, isNull);
       expect(absence().status, AvailabilityStatus.active);
       expect(kit.inbox.sent.last, 'absence_decision -> cara');
       final twice = await kit.decideAvailability(
-        familyId: familyId, actorUid: 'bob', availabilityId: 'a1', approve: false);
+        familyId: familyId,
+        actorUid: 'bob',
+        availabilityId: 'a1',
+        approve: false,
+      );
       expect(twice.failureOrNull, const Conflict(code: 'concurrent_edit'));
     });
 
     test('the index counts ACTIVE absences only', () {
       kit.seedAbsence('a1', 'cara', status: AvailabilityStatus.pending);
       kit.seedAbsence('a2', 'dave');
-      final index = AvailabilityIndex.fromRecords(kit.fixture.swapWorld.absences.values);
+      final index = AvailabilityIndex.fromRecords(
+        kit.fixture.swapWorld.absences.values,
+      );
       expect(index.isUnavailable('cara', DateKey(2026, 10, 25)), isFalse);
       expect(index.isUnavailable('dave', DateKey(2026, 10, 25)), isTrue);
     });
@@ -133,43 +165,81 @@ void main() {
       kit.seedAbsence('a1', 'cara');
     });
 
-    Future<Object?> apply({String actor = 'cara'}) async => (await kit.applyPolicy(
-      familyId: familyId, actorUid: actor, availabilityId: 'a1')).valueOrNull;
+    Future<Object?> apply({String actor = 'cara'}) async =>
+        (await kit.applyPolicy(
+          familyId: familyId,
+          actorUid: actor,
+          availabilityId: 'a1',
+        )).valueOrNull;
 
-    test('A: the member and the managers learn how many need a cover', () async {
-      kit.fixture.settings.policy = AbsencePolicy.askCover;
-      final outcome = await kit.applyPolicy(familyId: familyId, actorUid: 'cara', availabilityId: 'a1');
+    test(
+      'A: the member and the managers learn how many need a cover',
+      () async {
+        kit.fixture.settings.policy = AbsencePolicy.askCover;
+        final outcome = await kit.applyPolicy(
+          familyId: familyId,
+          actorUid: 'cara',
+          availabilityId: 'a1',
+        );
 
-      expect(outcome.valueOrNull!.affected.map((o) => o.id), ['tpl_1_20261024', 'tpl_1_20261025']);
-      expect(kit.inbox.sent.toSet(), {
-        'needs_cover -> cara',
-        'needs_cover -> alice',
-        'needs_cover -> bob',
-      });
-      expect(kit.fixture.swapWorld.swapRequests, isEmpty);
-      expect(kit.stored().assigneeId, 'cara', reason: 'no silent reassignment');
-    });
+        expect(outcome.valueOrNull!.affected.map((o) => o.id), [
+          'tpl_1_20261024',
+          'tpl_1_20261025',
+        ]);
+        expect(kit.inbox.sent.toSet(), {
+          'needs_cover -> cara',
+          'needs_cover -> alice',
+          'needs_cover -> bob',
+        });
+        expect(kit.fixture.swapWorld.swapRequests, isEmpty);
+        expect(
+          kit.stored().assigneeId,
+          'cara',
+          reason: 'no silent reassignment',
+        );
+      },
+    );
 
     test('B: one cover request per chore, the chore is not touched', () async {
       kit.fixture.settings.policy = AbsencePolicy.autoCover;
       final outcome = (await kit.applyPolicy(
-        familyId: familyId, actorUid: 'cara', availabilityId: 'a1')).valueOrNull!;
+        familyId: familyId,
+        actorUid: 'cara',
+        availabilityId: 'a1',
+      )).valueOrNull!;
 
       expect(outcome.requested, 2);
       expect(outcome.uncovered, 0);
       final requests = kit.fixture.swapWorld.swapRequests.values.toList();
-      expect(requests.every((r) => r.kind == SwapKind.cover && r.fromMemberId == 'cara'), isTrue);
-      expect(requests.map((r) => r.toMemberId).toSet(), {'alice', 'bob'}, reason: 'spread by workload');
-      expect(requests.first.id, coverRequestId('a1', requests.first.occurrenceId));
+      expect(
+        requests.every(
+          (r) => r.kind == SwapKind.cover && r.fromMemberId == 'cara',
+        ),
+        isTrue,
+      );
+      expect(requests.map((r) => r.toMemberId).toSet(), {
+        'alice',
+        'bob',
+      }, reason: 'spread by workload');
+      expect(
+        requests.first.id,
+        coverRequestId('a1', requests.first.occurrenceId),
+      );
       expect(kit.stored().assigneeId, 'cara');
-      expect(kit.inbox.sent.where((e) => e.startsWith('swap_request')), hasLength(2));
+      expect(
+        kit.inbox.sent.where((e) => e.startsWith('swap_request')),
+        hasLength(2),
+      );
     });
 
     test('B: running it again adds nothing', () async {
       kit.fixture.settings.policy = AbsencePolicy.autoCover;
       await apply();
       final again = (await kit.applyPolicy(
-        familyId: familyId, actorUid: 'cara', availabilityId: 'a1')).valueOrNull!;
+        familyId: familyId,
+        actorUid: 'cara',
+        availabilityId: 'a1',
+      )).valueOrNull!;
       expect(again.requested, 0);
       expect(kit.fixture.swapWorld.swapRequests, hasLength(2));
     });
@@ -180,39 +250,62 @@ void main() {
         kit.seedAbsence('x_$m', m);
       }
       final outcome = (await kit.applyPolicy(
-        familyId: familyId, actorUid: 'cara', availabilityId: 'a1')).valueOrNull!;
+        familyId: familyId,
+        actorUid: 'cara',
+        availabilityId: 'a1',
+      )).valueOrNull!;
       expect(outcome.requested, 0);
       expect(outcome.uncovered, 2);
       expect(kit.inbox.sent, contains('needs_cover -> cara'));
     });
 
-    test('B: a declined cover goes to the next candidate once, then to A', () async {
-      kit.fixture.settings.policy = AbsencePolicy.autoCover;
-      await apply();
-      final first = kit.fixture.swapWorld.swapRequests.values
-          .firstWhere((r) => r.occurrenceId == 'tpl_1_20261024');
-      final declined = await kit.decline(
-        familyId: familyId, actorUid: first.toMemberId, requestId: first.id);
-      expect(declined.failureOrNull, isNull);
-      final second = kit.fixture.swapWorld.swapRequests.values
-          .firstWhere((r) => r.id.startsWith('cv2_'));
-      expect(second.toMemberId, isNot(first.toMemberId));
-      expect(second.toMemberId, isNot('cara'));
+    test(
+      'B: a declined cover goes to the next candidate once, then to A',
+      () async {
+        kit.fixture.settings.policy = AbsencePolicy.autoCover;
+        await apply();
+        final first = kit.fixture.swapWorld.swapRequests.values.firstWhere(
+          (r) => r.occurrenceId == 'tpl_1_20261024',
+        );
+        final declined = await kit.decline(
+          familyId: familyId,
+          actorUid: first.toMemberId,
+          requestId: first.id,
+        );
+        expect(declined.failureOrNull, isNull);
+        final second = kit.fixture.swapWorld.swapRequests.values.firstWhere(
+          (r) => r.id.startsWith('cv2_'),
+        );
+        expect(second.toMemberId, isNot(first.toMemberId));
+        expect(second.toMemberId, isNot('cara'));
 
-      final again = await kit.decline(
-        familyId: familyId, actorUid: second.toMemberId, requestId: second.id);
-      expect(again.failureOrNull, isNull);
-      expect(kit.fixture.swapWorld.swapRequests.values.where((r) => r.id.startsWith('cv2_')), hasLength(1));
-      expect(kit.inbox.sent, contains('needs_cover -> cara'));
-    });
+        final again = await kit.decline(
+          familyId: familyId,
+          actorUid: second.toMemberId,
+          requestId: second.id,
+        );
+        expect(again.failureOrNull, isNull);
+        expect(
+          kit.fixture.swapWorld.swapRequests.values.where(
+            (r) => r.id.startsWith('cv2_'),
+          ),
+          hasLength(1),
+        );
+        expect(kit.inbox.sent, contains('needs_cover -> cara'));
+      },
+    );
 
     test('B: an accepted cover moves only that chore', () async {
       kit.fixture.settings.policy = AbsencePolicy.autoCover;
       await apply();
-      final cover = kit.fixture.swapWorld.swapRequests.values
-          .firstWhere((r) => r.occurrenceId == 'tpl_1_20261024');
+      final cover = kit.fixture.swapWorld.swapRequests.values.firstWhere(
+        (r) => r.occurrenceId == 'tpl_1_20261024',
+      );
       final accepted = await kit.accept(
-        familyId: familyId, actorUid: cover.toMemberId, requestId: cover.id);
+        familyId: familyId,
+        actorUid: cover.toMemberId,
+        requestId: cover.id,
+      );
       expect(accepted.failureOrNull, isNull);
       expect(kit.stored().assigneeId, cover.toMemberId);
       expect(kit.stored().coverForId, 'cara');
@@ -222,17 +315,31 @@ void main() {
     test('C: nothing is written', () async {
       kit.fixture.settings.policy = AbsencePolicy.skip;
       final outcome = (await kit.applyPolicy(
-        familyId: familyId, actorUid: 'cara', availabilityId: 'a1')).valueOrNull!;
+        familyId: familyId,
+        actorUid: 'cara',
+        availabilityId: 'a1',
+      )).valueOrNull!;
       expect(outcome.affected, hasLength(2));
       expect(kit.fixture.availability.plans, isEmpty);
     });
 
-    test('only the member or a manager applies it, and only to an active absence', () async {
-      final denied = await kit.applyPolicy(familyId: familyId, actorUid: 'dave', availabilityId: 'a1');
-      expect(denied.failureOrNull, isA<PermissionDenied>());
-      kit.seedAbsence('p1', 'cara', status: AvailabilityStatus.pending);
-      final pending = await kit.applyPolicy(familyId: familyId, actorUid: 'cara', availabilityId: 'p1');
-      expect(pending.failureOrNull, const Conflict(code: 'concurrent_edit'));
-    });
+    test(
+      'only the member or a manager applies it, and only to an active absence',
+      () async {
+        final denied = await kit.applyPolicy(
+          familyId: familyId,
+          actorUid: 'dave',
+          availabilityId: 'a1',
+        );
+        expect(denied.failureOrNull, isA<PermissionDenied>());
+        kit.seedAbsence('p1', 'cara', status: AvailabilityStatus.pending);
+        final pending = await kit.applyPolicy(
+          familyId: familyId,
+          actorUid: 'cara',
+          availabilityId: 'p1',
+        );
+        expect(pending.failureOrNull, const Conflict(code: 'concurrent_edit'));
+      },
+    );
   });
 }

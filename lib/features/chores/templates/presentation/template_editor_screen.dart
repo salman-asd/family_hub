@@ -138,7 +138,12 @@ class _EditorBody extends ConsumerWidget {
               ),
             EditorSectionCard(
               title: l10n.choreEditorSectionBasics,
-              error: errorFor(const {'nameBn', 'nameEn', 'colorIndex', 'iconKey'}),
+              error: errorFor(const {
+                'nameBn',
+                'nameEn',
+                'colorIndex',
+                'iconKey',
+              }),
               child: EditorBasicsSection(
                 draft: state.draft,
                 controller: controller,

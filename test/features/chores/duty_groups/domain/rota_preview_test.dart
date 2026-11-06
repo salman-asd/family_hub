@@ -55,14 +55,8 @@ void main() {
 
     test('an occurrence rotation without a schedule cannot be previewed', () {
       final byChore = aRotation(cycleUnit: CycleUnit.occurrence);
-      expect(
-        RotaPreview.needsSchedule(byChore, DateKey(2026, 10, 24)),
-        isTrue,
-      );
-      expect(
-        RotaPreview.build(byChore, from: DateKey(2026, 10, 24)),
-        isEmpty,
-      );
+      expect(RotaPreview.needsSchedule(byChore, DateKey(2026, 10, 24)), isTrue);
+      expect(RotaPreview.build(byChore, from: DateKey(2026, 10, 24)), isEmpty);
     });
 
     test('before the first version the preview starts at that version', () {

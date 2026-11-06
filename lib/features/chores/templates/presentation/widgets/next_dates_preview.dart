@@ -70,17 +70,15 @@ class NextDatesPreview extends StatelessWidget {
       children: [
         Text(
           l10n.choreEditorNextDates,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-            color: Theme.of(context).hintColor,
-          ),
+          style: Theme.of(context).textTheme.labelLarge
+              ?.copyWith(color: Theme.of(context).hintColor),
         ),
         const SizedBox(height: 8),
         if (dates.isEmpty)
           Text(
             l10n.choreEditorNoNextDates,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: Theme.of(context).hintColor),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: Theme.of(context).hintColor),
           )
         else
           Wrap(

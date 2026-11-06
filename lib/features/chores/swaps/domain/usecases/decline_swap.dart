@@ -69,8 +69,10 @@ class DeclineSwap {
     }
 
     final at = clock.nowUtc();
-    final occurrence =
-        (await occurrences.get(familyId, request.occurrenceId)).valueOrNull;
+    final occurrence = (await occurrences.get(
+      familyId,
+      request.occurrenceId,
+    )).valueOrNull;
     final name = occurrence?.nameBn ?? request.occurrenceId;
     final date = request.occurrenceDateKey.toString();
 
@@ -78,10 +80,13 @@ class DeclineSwap {
     final absenceId = request.availabilityId;
     if (request.kind == SwapKind.cover && absenceId != null) {
       final absence = (await availability.get(familyId, absenceId)).valueOrNull;
-      final members = (await families.getMembers(familyId)).valueOrNull ?? const [];
+      final members =
+          (await families.getMembers(familyId)).valueOrNull ?? const [];
       final records =
-          (await availability.listActive(familyId, request.occurrenceDateKey))
-              .valueOrNull ??
+          (await availability.listActive(
+            familyId,
+            request.occurrenceDateKey,
+          )).valueOrNull ??
           const [];
       final settings = (await choreSettings.get(familyId)).valueOrNull;
       fallback = CoverFallback.next(
@@ -142,7 +147,12 @@ class DeclineSwap {
     final writeFailure = staged.failureOrNull;
     if (writeFailure != null) return Failure<SwapRequest>(writeFailure);
     return Success<SwapRequest>(
-      request.withStatus(SwapStatus.declined, by: actorUid, at: at, responseReason: text),
+      request.withStatus(
+        SwapStatus.declined,
+        by: actorUid,
+        at: at,
+        responseReason: text,
+      ),
     );
   }
 }

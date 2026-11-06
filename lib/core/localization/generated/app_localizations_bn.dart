@@ -3596,9 +3596,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get dutyChoreAdded => 'কাজটি গ্রুপে যোগ হয়েছে';
 
   @override
-  String get actionDiscard => 'বাতিল করুন';
-
-  @override
   String get choresSettingsNeedsInternet =>
       'কাজের সেটিংস সংরক্ষণ করতে ইন্টারনেট সংযোগ লাগবে। আপনার পরিবর্তনগুলো এখানেই থাকছে, অনলাইন হলে আবার চেষ্টা করুন।';
 
@@ -5092,6 +5089,359 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get notificationFailure_inboxItem =>
       'এই বিজ্ঞপ্তিটি খুঁজে পাওয়া যায়নি।';
+
+  @override
+  String get notificationSettingsTitle => 'বিজ্ঞপ্তি ও রিমাইন্ডার';
+
+  @override
+  String get notificationHelpTitle => 'রিমাইন্ডার কাজ না করলে';
+
+  @override
+  String get notificationDeliveryTitle => 'পুশ নাকি সাধারণ বিজ্ঞপ্তি';
+
+  @override
+  String get notificationCategoryChores => 'কাজ';
+
+  @override
+  String get notificationCategoryBazar => 'বাজার ও অর্থ';
+
+  @override
+  String get notificationCategoryFamily => 'পরিবার';
+
+  @override
+  String get notificationTemplateHint =>
+      'প্রতিটি কাজের রিমাইন্ডার তার টেমপ্লেট থেকেও বদলানো যায়।';
+
+  @override
+  String get notificationDefaultOffsets => 'কাজের কতক্ষণ আগে মনে করাবেন';
+
+  @override
+  String get notificationCustomOffset => 'মিনিট লিখুন (১–১৪৪০)';
+
+  @override
+  String get notificationAddOffset => 'সময় যোগ করুন';
+
+  @override
+  String get notificationInvalidOffset =>
+      '১–১৪৪০-এর মধ্যে নতুন একটি সময় লিখুন।';
+
+  @override
+  String get notificationOverdue => 'কাজ বাকি থাকলে পরে আবার মনে করান';
+
+  @override
+  String get notificationQuietHours => 'নীরব সময়';
+
+  @override
+  String get notificationQuietStarts => 'শুরু';
+
+  @override
+  String get notificationQuietEnds => 'শেষ';
+
+  @override
+  String get notificationMorningSummary => 'সকালের কাজের সারাংশ';
+
+  @override
+  String notificationSummaryTime(String time) {
+    return 'সময়: $time';
+  }
+
+  @override
+  String get notificationAllEnabled => 'রিমাইন্ডার চালু';
+
+  @override
+  String get notificationMasterExplanation =>
+      'বন্ধ করলে সব বিভাগের রিমাইন্ডার থামবে; সময়সূচি সংরক্ষিত থাকবে।';
+
+  @override
+  String get notificationMasterOffReason =>
+      'সব রিমাইন্ডার বন্ধ থাকায় এই বিভাগের রিমাইন্ডারও আসবে না।';
+
+  @override
+  String get notificationCategoryOffReason => 'এই বিভাগের রিমাইন্ডার বন্ধ আছে।';
+
+  @override
+  String get notificationPushOnPhone => 'এই ফোনে পুশ বিজ্ঞপ্তি নিন';
+
+  @override
+  String get notificationSenderSparkHint =>
+      'পুশ পাঠানোর ব্যবস্থা নেই (বিনামূল্যের প্ল্যান); এই ফোনের রিমাইন্ডার চলবে।';
+
+  @override
+  String get notificationPushAdminOff => 'পরিবারের প্রশাসক পুশ বন্ধ রেখেছেন।';
+
+  @override
+  String get notificationPushSavedInactive =>
+      'পুশ সেটিং সংরক্ষিত আছে, তবে পুশ চালু না হওয়া পর্যন্ত এটি ব্যবহার হবে না।';
+
+  @override
+  String get notificationPushDisabledHere => 'এই ফোনে পুশ বন্ধ আছে।';
+
+  @override
+  String get notificationPush => 'পুশ';
+
+  @override
+  String get notificationNormal => 'সাধারণ';
+
+  @override
+  String get notificationFamilyDefaults => 'পরিবারের ডিফল্ট';
+
+  @override
+  String get notificationPermissionChecking => 'বিজ্ঞপ্তির অনুমতি দেখা হচ্ছে…';
+
+  @override
+  String get notificationPermissionUnavailable =>
+      'ফোনের অনুমতির তথ্য পাওয়া যায়নি।';
+
+  @override
+  String get notificationPermissionDenied => 'এই অ্যাপের বিজ্ঞপ্তি বন্ধ আছে।';
+
+  @override
+  String get notificationExactAlarmMissing =>
+      'সঠিক সময়ের অ্যালার্ম বন্ধ; রিমাইন্ডার দেরিতে আসতে পারে।';
+
+  @override
+  String get notificationPermissionGranted => 'চালু';
+
+  @override
+  String get notificationAllow => 'অনুমতি দিন';
+
+  @override
+  String get notificationAllowExactAlarms => 'অ্যালার্ম চালু করুন';
+
+  @override
+  String get notificationSaveFailed =>
+      'সংরক্ষণ করা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।';
+
+  @override
+  String get notificationTestTitle => 'ফ্যামিলি হাব পরীক্ষা';
+
+  @override
+  String get notificationTestBody => 'এটি আপনার পরীক্ষামূলক রিমাইন্ডার।';
+
+  @override
+  String get notificationTestScheduled =>
+      '১০ সেকেন্ডের মধ্যে পরীক্ষামূলক বিজ্ঞপ্তি আসবে।';
+
+  @override
+  String get notificationTestFailed => 'পরীক্ষামূলক বিজ্ঞপ্তি ঠিক করা যায়নি।';
+
+  @override
+  String get notificationTestButton => '১০ সেকেন্ডে পরীক্ষামূলক বিজ্ঞপ্তি';
+
+  @override
+  String get notificationUseFamilyDefaults => 'পরিবারের ডিফল্ট ব্যবহার করুন';
+
+  @override
+  String get notificationAllowPush => 'পুশ বিজ্ঞপ্তি চালু করুন';
+
+  @override
+  String get notificationSenderUnavailable =>
+      'পুশ পাঠানোর সার্ভার সেট আপ করা নেই';
+
+  @override
+  String get notificationSenderChecking => 'পুশ ব্যবস্থা দেখা হচ্ছে…';
+
+  @override
+  String get notificationSenderError => 'পুশ ব্যবস্থার অবস্থা জানা যায়নি';
+
+  @override
+  String get notificationSenderReady => 'পুশ পাঠানোর ব্যবস্থা প্রস্তুত';
+
+  @override
+  String get notificationSenderLastFailed => 'সর্বশেষ পুশ পাঠানো যায়নি';
+
+  @override
+  String notificationRecommended(String recommended) {
+    return 'প্রস্তাবিত: $recommended';
+  }
+
+  @override
+  String get notificationTypeLocked => 'ফোনেই তৈরি হয়; সার্ভার ইভেন্ট নেই।';
+
+  @override
+  String get notificationDiscardTitle => 'পরিবর্তন বাতিল করবেন?';
+
+  @override
+  String get notificationDiscardMessage =>
+      'সংরক্ষণ না করা পরিবর্তন হারিয়ে যাবে।';
+
+  @override
+  String get actionDiscard => 'বাতিল করুন';
+
+  @override
+  String get notificationDiagnosticsLoading => 'তথ্য লোড হচ্ছে…';
+
+  @override
+  String get notificationPushUnavailable => 'পুশ তথ্য পাওয়া যায়নি।';
+
+  @override
+  String get notificationPermissionLabel => 'বিজ্ঞপ্তির অনুমতি';
+
+  @override
+  String get notificationExactAlarmLabel => 'সঠিক সময়ের অ্যালার্ম';
+
+  @override
+  String get notificationBatteryLabel => 'ব্যাটারি সীমাবদ্ধতা';
+
+  @override
+  String get notificationOpenSettings => 'ফোনের সেটিংস খুলুন';
+
+  @override
+  String get notificationPendingCount => 'অপেক্ষমাণ রিমাইন্ডার';
+
+  @override
+  String get notificationNextScheduled => 'পরের নির্ধারিত রিমাইন্ডার';
+
+  @override
+  String get notificationAndroidVersion => 'অ্যান্ড্রয়েড সংস্করণ';
+
+  @override
+  String get notificationPushToken => 'পুশ টোকেন';
+
+  @override
+  String get notificationPushTokenPresent => 'এই ফোনে টোকেন আছে';
+
+  @override
+  String get notificationPushTokenMissing => 'এই ফোনে পুশ টোকেন নেই';
+
+  @override
+  String get notificationLastPushReceived => 'শেষ পুশ পাওয়ার সময়';
+
+  @override
+  String get notificationNever => 'এখনও হয়নি';
+
+  @override
+  String get notificationTimezone => 'পরিবারের সময় অঞ্চল';
+
+  @override
+  String get notificationLastError => 'সর্বশেষ ত্রুটি';
+
+  @override
+  String get notificationReminderError => 'রিমাইন্ডার নির্ধারণের ত্রুটি';
+
+  @override
+  String get notificationHelpIntro =>
+      'ফোনের অনুমতি ও নির্ধারিত রিমাইন্ডারের অবস্থা দেখুন।';
+
+  @override
+  String get notificationChecklistTitle => 'যা পরীক্ষা করবেন';
+
+  @override
+  String get notificationChecklistAllow =>
+      'Family Hub-এর বিজ্ঞপ্তির অনুমতি দিন।';
+
+  @override
+  String get notificationChecklistAlarms => 'সঠিক অ্যালার্মের অনুমতি দিন।';
+
+  @override
+  String get notificationChecklistBattery =>
+      'Family Hub-এর ব্যাটারি সীমাবদ্ধতা সরান।';
+
+  @override
+  String get notificationChecklistForceStop => 'অ্যাপটি জোর করে বন্ধ করবেন না।';
+
+  @override
+  String get notificationChecklistOpen =>
+      'নতুন তথ্য লোড করতে দিনে অন্তত একবার অ্যাপ খুলুন।';
+
+  @override
+  String get notificationNoSenderHonesty =>
+      'রিমাইন্ডার এই ফোনে লোড হওয়া তথ্য থেকে নির্ধারিত হয়। অন্য কেউ কাজ দিলে বা অদলবদলের অনুরোধ করলে, অ্যাপ বন্ধ থাকলে তা খুললে দেখা যাবে। বিনামূল্যের প্ল্যানে পুশ পাঠানোর ব্যবস্থা নেই।';
+
+  @override
+  String get notificationResetRecommended => 'প্রস্তাবিত সেটিং ফিরিয়ে আনুন';
+
+  @override
+  String get notificationTypeSwapRequest => 'কাজ অদলবদলের অনুরোধ';
+
+  @override
+  String get notificationTypeSwapResult => 'অদলবদলের সিদ্ধান্ত';
+
+  @override
+  String get notificationTypeNeedsCover => 'কাজের জন্য বিকল্প দরকার';
+
+  @override
+  String get notificationTypeChoreAssigned => 'নতুন কাজ বরাদ্দ';
+
+  @override
+  String get notificationTypeChoreReopened => 'কাজ আবার খোলা হয়েছে';
+
+  @override
+  String get notificationTypeCommentAttention => 'মন্তব্যে মনোযোগ দরকার';
+
+  @override
+  String get notificationTypeVerificationNeeded => 'কাজ যাচাই দরকার';
+
+  @override
+  String get notificationTypeAbsenceDecision => 'অনুপস্থিতির সিদ্ধান্ত';
+
+  @override
+  String get notificationTypeMemberJoinRequest => 'পরিবারে যোগদানের অনুরোধ';
+
+  @override
+  String get notificationTypeMemberApproved => 'পরিবারে যোগ অনুমোদিত';
+
+  @override
+  String get notificationTypeChoreDue => 'কাজের সময়';
+
+  @override
+  String get notificationTypeChoreOverdue => 'বিলম্বিত কাজ';
+
+  @override
+  String get notificationTypeEveningNudge => 'সন্ধ্যার মনে করানো';
+
+  @override
+  String get notificationTypeMorningSummary => 'সকালের সারাংশ';
+
+  @override
+  String get notificationTypeContributionDue => 'চাঁদা দেওয়ার সময়';
+
+  @override
+  String get notificationTypeMonthEnd => 'মাস শেষের স্মরণ';
+
+  @override
+  String get notificationTypeBudgetAlert => 'বাজেট সতর্কতা';
+
+  @override
+  String get notificationTypeAchievement => 'অর্জন';
+
+  @override
+  String reminderWhyNext(String time) {
+    return 'পরের রিমাইন্ডার: $time';
+  }
+
+  @override
+  String get reminderWhyPush => 'এটি পুশ হিসেবে পাঠানো হবে।';
+
+  @override
+  String get reminderWhyGlobalOff => 'সব রিমাইন্ডার বন্ধ আছে।';
+
+  @override
+  String get reminderWhyCategoryOff => 'এই বিভাগের রিমাইন্ডার বন্ধ আছে।';
+
+  @override
+  String get reminderWhyTemplateOff =>
+      'এই কাজের টেমপ্লেটে রিমাইন্ডার বন্ধ আছে।';
+
+  @override
+  String get reminderWhyTemplateNoTimings =>
+      'এই কাজের জন্য কোনো রিমাইন্ডারের সময় দেওয়া নেই।';
+
+  @override
+  String get reminderWhyNotAssigned => 'এই কাজটি আপনাকে বরাদ্দ করা হয়নি।';
+
+  @override
+  String get reminderWhyNotOpen => 'কাজটি আর খোলা নেই।';
+
+  @override
+  String get reminderWhyUnavailable => 'এই কাজের জন্য বিকল্প দরকার।';
+
+  @override
+  String get reminderWhyProjectedPast =>
+      'এই পরিকল্পিত কাজের সময় পেরিয়ে গেছে।';
+
+  @override
+  String get reminderWhyNoUpcoming => 'এখন থেকে নির্ধারিত কোনো রিমাইন্ডার নেই।';
 
   @override
   String reminderDueTitle(String choreName) {

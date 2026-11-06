@@ -53,9 +53,8 @@ class ChangeRotationFields extends ConsumerWidget {
         if (candidates.isEmpty) {
           return Text(
             l10n.dutyRotationNoCandidates,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: t.textSecondary),
           );
         }
         return ChoiceWrap<String>(
@@ -114,9 +113,8 @@ class ChangeRotationFields extends ConsumerWidget {
             const SizedBox(height: 12),
             Text(
               l10n.dutyRotationStartsWith,
-              style: Theme.of(
-                context,
-              ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
+              style: Theme.of(context).textTheme.labelLarge
+                  ?.copyWith(color: t.textSecondary),
             ),
             const SizedBox(height: 4),
             ChoiceWrap<String>(

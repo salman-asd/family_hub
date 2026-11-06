@@ -43,7 +43,11 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
     ];
   }
 
-  Future<void> _reorder(List<Category> current, int oldIndex, int newIndex) async {
+  Future<void> _reorder(
+    List<Category> current,
+    int oldIndex,
+    int newIndex,
+  ) async {
     final familyId = ref.read(currentFamilyIdProvider);
     final uid = ref.read(currentUidProvider);
     if (familyId == null || uid == null) return;
@@ -51,13 +55,15 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
     final target = newIndex > oldIndex ? newIndex - 1 : newIndex;
     ids.insert(target, ids.removeAt(oldIndex));
     setState(() => _pending = ids);
-    await ref.read(catalogListActionProvider.notifier).run<void>(
-      () => ref.read(reorderCategoriesProvider)(
-        actorUid: uid,
-        familyId: familyId,
-        orderedIds: ids,
-      ),
-    );
+    await ref
+        .read(catalogListActionProvider.notifier)
+        .run<void>(
+          () => ref.read(reorderCategoriesProvider)(
+            actorUid: uid,
+            familyId: familyId,
+            orderedIds: ids,
+          ),
+        );
     if (mounted) setState(() => _pending = null);
   }
 
@@ -83,9 +89,8 @@ class _CategoriesTabState extends ConsumerState<CategoriesTab> {
             padding: const EdgeInsets.all(16),
             child: Text(
               l10n.bazarFailureMessage(failure),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: t.danger),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: t.danger),
             ),
           ),
         Expanded(

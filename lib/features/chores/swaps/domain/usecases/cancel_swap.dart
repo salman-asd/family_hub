@@ -62,8 +62,10 @@ class CancelSwap {
     }
 
     final at = clock.nowUtc();
-    final occurrence =
-        (await occurrences.get(familyId, request.occurrenceId)).valueOrNull;
+    final occurrence = (await occurrences.get(
+      familyId,
+      request.occurrenceId,
+    )).valueOrNull;
     final name = occurrence?.nameBn ?? request.occurrenceId;
     final date = request.occurrenceDateKey.toString();
     final row = inbox.swapResult(

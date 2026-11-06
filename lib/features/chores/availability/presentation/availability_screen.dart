@@ -50,7 +50,10 @@ class _AvailabilityScreenState extends ConsumerState<AvailabilityScreen> {
     if (failure != null) _show(failure);
   }
 
-  Future<void> _decide(MemberAvailability record, {required bool approve}) async {
+  Future<void> _decide(
+    MemberAvailability record, {
+    required bool approve,
+  }) async {
     final familyId = ref.read(currentFamilyIdProvider);
     final uid = ref.read(currentUidProvider);
     if (familyId == null || uid == null) return;
@@ -84,7 +87,9 @@ class _AvailabilityScreenState extends ConsumerState<AvailabilityScreen> {
     String typeLabel(String id) {
       for (final reason in reasons) {
         if (reason.id == id) {
-          return english && reason.labelEn != null ? reason.labelEn! : reason.labelBn;
+          return english && reason.labelEn != null
+              ? reason.labelEn!
+              : reason.labelBn;
         }
       }
       return id;
@@ -122,27 +127,44 @@ class _AvailabilityScreenState extends ConsumerState<AvailabilityScreen> {
                   child: SegmentedButton<bool>(
                     key: const Key('availability_scope'),
                     segments: [
-                      ButtonSegment(value: false, label: Text(l10n.availabilityMine)),
-                      ButtonSegment(value: true, label: Text(l10n.availabilityEveryone)),
+                      ButtonSegment(
+                        value: false,
+                        label: Text(l10n.availabilityMine),
+                      ),
+                      ButtonSegment(
+                        value: true,
+                        label: Text(l10n.availabilityEveryone),
+                      ),
                     ],
                     selected: {_everyone},
-                    onSelectionChanged: (s) => setState(() => _everyone = s.first),
+                    onSelectionChanged: (s) =>
+                        setState(() => _everyone = s.first),
                   ),
                 ),
               if (shown.isEmpty)
-                EmptyState(icon: Icons.event_available_outlined, title: l10n.availabilityEmpty),
+                EmptyState(
+                  icon: Icons.event_available_outlined,
+                  title: l10n.availabilityEmpty,
+                ),
               for (final record in shown)
                 AvailabilityCard(
                   record: record,
-                  memberName: memberNameOf(members, record.memberId, fallback: l10n.inboxSomeone),
+                  memberName: memberNameOf(
+                    members,
+                    record.memberId,
+                    fallback: l10n.inboxSomeone,
+                  ),
                   typeLabel: typeLabel(record.typeId),
-                  onApprove: canManage && record.status == AvailabilityStatus.pending
+                  onApprove:
+                      canManage && record.status == AvailabilityStatus.pending
                       ? () => unawaited(_decide(record, approve: true))
                       : null,
-                  onReject: canManage && record.status == AvailabilityStatus.pending
+                  onReject:
+                      canManage && record.status == AvailabilityStatus.pending
                       ? () => unawaited(_decide(record, approve: false))
                       : null,
-                  onCancel: record.isLive && (record.memberId == uid || canManage)
+                  onCancel:
+                      record.isLive && (record.memberId == uid || canManage)
                       ? () => unawaited(_cancel(record))
                       : null,
                 ),

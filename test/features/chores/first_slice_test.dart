@@ -129,9 +129,8 @@ void main() {
   ) async {
     // ── 1. app open generates, Today shows the chore with its assignee ─────
     await openAs(tester, 'cara', Role.member, AppRoutes.choresToday);
-    final failure = await containerOf(
-      tester,
-    ).read(ensureOccurrencesOnOpenProvider(familyId).future);
+    final failure = await containerOf(tester)
+        .read(ensureOccurrencesOnOpenProvider(familyId).future);
     expect(failure, isNull, reason: 'generation must not report a failure');
     await tester.pumpAndSettle();
 

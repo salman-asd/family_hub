@@ -30,7 +30,9 @@ abstract final class InboxWriter {
       return const Failure<NewInboxItem>(Validation('refId', 'required'));
     }
     if (params.length > maxParams) {
-      return const Failure<NewInboxItem>(Validation('params', 'too_many_items'));
+      return const Failure<NewInboxItem>(
+        Validation('params', 'too_many_items'),
+      );
     }
     for (final entry in params.entries) {
       if (entry.key.isEmpty ||

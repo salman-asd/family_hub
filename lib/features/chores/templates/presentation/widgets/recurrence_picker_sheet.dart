@@ -111,9 +111,7 @@ class _RecurrencePickerSheetState extends State<_RecurrencePickerSheet> {
       n: _n,
       anchor: widget.startDate,
     ),
-    RecurrenceKind.weekdays => WeekdaysRecurrence(
-      weekdays: _sorted(_weekdays),
-    ),
+    RecurrenceKind.weekdays => WeekdaysRecurrence(weekdays: _sorted(_weekdays)),
     RecurrenceKind.everyNWeeks => EveryNWeeksRecurrence(
       n: _n,
       anchor: widget.startDate,
@@ -247,9 +245,8 @@ class _RecurrencePickerSheetState extends State<_RecurrencePickerSheet> {
     children: [
       Text(
         l10n.recurrencePickerWeekdays,
-        style: Theme.of(
-          context,
-        ).textTheme.labelLarge?.copyWith(color: context.tokens.textSecondary),
+        style: Theme.of(context).textTheme.labelLarge
+            ?.copyWith(color: context.tokens.textSecondary),
       ),
       const SizedBox(height: 8),
       WeekdayChips(

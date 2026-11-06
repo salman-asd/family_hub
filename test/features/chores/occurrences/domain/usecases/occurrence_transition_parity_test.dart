@@ -67,9 +67,7 @@ void main() {
       final useCases = CompletionUseCases(fixture);
       final seed = c['seed'] as String;
       fixture.backend.permissionSettings[familyId] = seed == 'completed_verify'
-          ? PermissionSettings.defaults.copyWith(
-              choreVerificationEnabled: true,
-            )
+          ? PermissionSettings.defaults.copyWith(choreVerificationEnabled: true)
           : PermissionSettings.defaults;
       seedOccurrence(fixture, seedFor(seed));
 
@@ -81,46 +79,40 @@ void main() {
         final target = uids[step['to'] as String? ?? 'plain']!;
 
         final failure = switch (action) {
-          'skip' =>
-            (await useCases.skip(
-              familyId: familyId,
-              actorUid: actor,
-              occurrenceId: id,
-              reason: 'অসুস্থ',
-              kind: SkipReason.absence,
-            )).failureOrNull,
-          'unskip' =>
-            (await useCases.unskip(
-              familyId: familyId,
-              actorUid: actor,
-              occurrenceId: id,
-            )).failureOrNull,
-          'reassign' =>
-            (await useCases.reassign(
-              familyId: familyId,
-              actorUid: actor,
-              occurrenceId: id,
-              toMemberId: target,
-              reason: 'ছুটিতে',
-            )).failureOrNull,
-          'verify' =>
-            (await useCases.verify(
-              familyId: familyId,
-              actorUid: actor,
-              occurrenceId: id,
-            )).failureOrNull,
-          'complete' =>
-            (await useCases.complete(
-              familyId: familyId,
-              actorUid: actor,
-              occurrenceId: id,
-            )).failureOrNull,
-          'uncomplete' =>
-            (await useCases.uncomplete(
-              familyId: familyId,
-              actorUid: actor,
-              occurrenceId: id,
-            )).failureOrNull,
+          'skip' => (await useCases.skip(
+            familyId: familyId,
+            actorUid: actor,
+            occurrenceId: id,
+            reason: 'অসুস্থ',
+            kind: SkipReason.absence,
+          )).failureOrNull,
+          'unskip' => (await useCases.unskip(
+            familyId: familyId,
+            actorUid: actor,
+            occurrenceId: id,
+          )).failureOrNull,
+          'reassign' => (await useCases.reassign(
+            familyId: familyId,
+            actorUid: actor,
+            occurrenceId: id,
+            toMemberId: target,
+            reason: 'ছুটিতে',
+          )).failureOrNull,
+          'verify' => (await useCases.verify(
+            familyId: familyId,
+            actorUid: actor,
+            occurrenceId: id,
+          )).failureOrNull,
+          'complete' => (await useCases.complete(
+            familyId: familyId,
+            actorUid: actor,
+            occurrenceId: id,
+          )).failureOrNull,
+          'uncomplete' => (await useCases.uncomplete(
+            familyId: familyId,
+            actorUid: actor,
+            occurrenceId: id,
+          )).failureOrNull,
           _ => throw ArgumentError('unknown action $action'),
         };
 

@@ -3,7 +3,13 @@ import 'package:family_hub/features/chores/settings/domain/chore_settings.dart';
 import 'package:family_hub/features/chores/settings/domain/chore_settings_repository.dart';
 
 /// The parts of the settings page that have their own "Reset to defaults".
-enum ChoreSettingsSection { calendar, generation, catalogs, policies, houseRules }
+enum ChoreSettingsSection {
+  calendar,
+  generation,
+  catalogs,
+  policies,
+  houseRules,
+}
 
 /// What the chore settings page holds while it is open (P3-17).
 ///

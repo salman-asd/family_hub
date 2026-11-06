@@ -47,7 +47,9 @@ class _DayHeader extends ConsumerWidget {
     );
     if (day.isToday) text.write(' · ${l10n.calendarToday}');
     if (day.items.isNotEmpty) {
-      text.write(' · ${l10n.calendarCellChores(formatters.number(day.items.length))}');
+      text.write(
+        ' · ${l10n.calendarCellChores(formatters.number(day.items.length))}',
+      );
     }
     return Material(
       color: t.background,
@@ -189,11 +191,7 @@ class _FreeDaysChip extends StatelessWidget {
 }
 
 class _MoreButton extends StatelessWidget {
-  const _MoreButton({
-    required this.label,
-    required this.onPressed,
-    super.key,
-  });
+  const _MoreButton({required this.label, required this.onPressed, super.key});
 
   final String label;
   final VoidCallback onPressed;

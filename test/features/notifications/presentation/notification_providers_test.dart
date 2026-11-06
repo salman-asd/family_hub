@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('fresh family policy resolves a push-capable type to masterOff', () {
+  test('Spark mode resolves every notification type to backendUnavailable', () {
     final container = ProviderContainer(
       overrides: [
         currentFamilyIdProvider.overrideWithValue(null),
@@ -19,21 +19,23 @@ void main() {
             tokenRegistered: false,
             osPermissionGranted: false,
             memberPushEnabled: false,
+            backendAvailable: false,
           ),
         ),
       ],
     );
     addTearDown(container.dispose);
 
-    final result = container.read(effectiveModeProvider('swap_request'));
-
-    expect(
-      result.value,
-      const EffectiveDelivery(
-        mode: DeliveryMode.normal,
-        reason: DeliveryReason.masterOff,
-      ),
-    );
+    for (final type in NotificationTypes.all) {
+      expect(
+        container.read(effectiveModeProvider(type.id)).value,
+        const EffectiveDelivery(
+          mode: DeliveryMode.normal,
+          reason: DeliveryReason.backendUnavailable,
+        ),
+        reason: type.id,
+      );
+    }
   });
 }
 

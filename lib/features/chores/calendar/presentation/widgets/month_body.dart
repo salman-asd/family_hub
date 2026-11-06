@@ -83,7 +83,12 @@ class _GridColumn extends ConsumerWidget {
 
     return SingleChildScrollView(
       key: const PageStorageKey<String>('calendar_month'),
-      padding: EdgeInsets.fromLTRB(12, 0, 12, reserveForSheet ? height * 0.3 : 12),
+      padding: EdgeInsets.fromLTRB(
+        12,
+        0,
+        12,
+        reserveForSheet ? height * 0.3 : 12,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

@@ -177,7 +177,8 @@ abstract final class RotaPreview {
             : RecurrenceEngine.nextAfter(recurrence, cursor);
     }
     for (final later in rotation.versions) {
-      if (later.from.isAfter(cursor) && (raw == null || later.from.isBefore(raw))) {
+      if (later.from.isAfter(cursor) &&
+          (raw == null || later.from.isBefore(raw))) {
         raw = later.from;
       }
     }

@@ -82,7 +82,11 @@ void main() {
     ) async {
       await pump(tester);
 
-      await tester.fling(find.byType(CustomScrollView), const Offset(0, 1500), 3000);
+      await tester.fling(
+        find.byType(CustomScrollView),
+        const Offset(0, 1500),
+        3000,
+      );
       await tester.pumpAndSettle();
 
       expect(find.byKey(const Key('calendar_load_earlier')), findsOneWidget);
@@ -102,7 +106,11 @@ void main() {
         ],
       );
 
-      await tester.fling(find.byType(CustomScrollView), const Offset(0, -2000), 3000);
+      await tester.fling(
+        find.byType(CustomScrollView),
+        const Offset(0, -2000),
+        3000,
+      );
       await tester.pumpAndSettle();
 
       expect(tester.takeException(), isNull);

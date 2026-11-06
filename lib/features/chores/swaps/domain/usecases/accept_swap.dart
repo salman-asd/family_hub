@@ -109,7 +109,8 @@ class AcceptSwap {
         fields: <String, Object?>{
           'assigneeId': actorUid,
           'coverForId': cover ? request.fromMemberId : null,
-          'assignmentSource': (cover ? AssignmentSource.cover : AssignmentSource.swap).id,
+          'assignmentSource':
+              (cover ? AssignmentSource.cover : AssignmentSource.swap).id,
           'needsCover': false,
         },
       ),

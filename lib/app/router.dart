@@ -1,24 +1,19 @@
-import 'package:family_hub/features/notifications/presentation/inbox_screen.dart';
 import 'package:family_hub/app/flavor.dart';
-import 'package:family_hub/app/gallery/dev_gallery_screen.dart';
 import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/app/routing/not_found_screen.dart';
 import 'package:family_hub/app/routing/redirect_rules.dart';
+import 'package:family_hub/app/routing/settings_routes.dart';
 import 'package:family_hub/app/routing/session_phase.dart';
 import 'package:family_hub/app/routing/session_providers.dart';
 import 'package:family_hub/app/routing/splash_screen.dart';
 import 'package:family_hub/app/shell/app_shell.dart';
-import 'package:family_hub/app/theme/dev_tokens_screen.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/core/permissions/permissions.dart';
-import 'package:family_hub/features/activity/presentation/activity_feed_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/login_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/verify_email_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/welcome_screen.dart';
-import 'package:family_hub/features/dashboard/presentation/customize_dashboard_screen.dart';
-import 'package:family_hub/features/dashboard/presentation/dashboard_access_screen.dart';
 import 'package:family_hub/features/dashboard/presentation/home_screen.dart';
 import 'package:family_hub/features/family/presentation/family_screen.dart';
 import 'package:family_hub/features/family/presentation/screens/create_family_screen.dart';
@@ -33,9 +28,6 @@ import 'package:family_hub/features/family/presentation/screens/relationships_sc
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/features/family/presentation/screens/roles_screen.dart';
 import 'package:family_hub/features/onboarding/presentation/screens/profile_setup_screen.dart';
-import 'package:family_hub/features/settings/presentation/language_settings_screen.dart';
-import 'package:family_hub/features/settings/presentation/security_screen.dart';
-import 'package:family_hub/features/settings/presentation/theme_settings_screen.dart';
 import 'package:family_hub/modules/family_module.dart';
 import 'package:family_hub/modules/module_visibility_providers.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +75,10 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.listen<SessionPhase>(sessionPhaseProvider, (_, _) => refresh.value++);
   ref.listen<bool>(
     canProvider(const PermissionQuery(Permission.manageDashboardLayout)),
+    (_, _) => refresh.value++,
+  );
+  ref.listen<bool>(
+    canProvider(const PermissionQuery(Permission.editFamilySettings)),
     (_, _) => refresh.value++,
   );
 
@@ -175,6 +171,12 @@ final routerProvider = Provider<GoRouter>((ref) {
             )) {
           return AppRoutes.home;
         }
+        if (path == AppRoutes.notificationDelivery &&
+            !ref.read(
+              canProvider(const PermissionQuery(Permission.editFamilySettings)),
+            )) {
+          return AppRoutes.home;
+        }
         for (final module in disabled) {
           final base = module.basePath;
           if (path == base || path.startsWith('$base/')) return AppRoutes.home;
@@ -238,45 +240,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const DisabledScreen(),
       ),
 
-      // ── Settings: full screen, above the shell ──────────────────────────
-      GoRoute(
-        path: AppRoutes.settingsTheme,
-        builder: (context, state) => const ThemeSettingsScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.settingsLanguage,
-        builder: (context, state) => const LanguageSettingsScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.inbox,
-        builder: (context, state) => const InboxScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.activity,
-        builder: (context, state) => const ActivityFeedScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.settingsSecurity,
-        builder: (context, state) => const SecurityScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.customizeDashboard,
-        builder: (context, state) => const CustomizeDashboardScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.dashboardAccess,
-        builder: (context, state) => const DashboardAccessScreen(),
-      ),
-      if (flavor == Flavor.dev)
-        GoRoute(
-          path: AppRoutes.devTokens,
-          builder: (context, state) => const DevTokensScreen(),
-        ),
-      if (flavor == Flavor.dev)
-        GoRoute(
-          path: AppRoutes.devGallery,
-          builder: (context, state) => const DevGalleryScreen(),
-        ),
+      ...settingsRoutes(flavor),
 
       // ── The shell ───────────────────────────────────────────────────────
       StatefulShellRoute.indexedStack(

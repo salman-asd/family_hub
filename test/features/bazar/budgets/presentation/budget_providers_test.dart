@@ -61,28 +61,31 @@ void main() {
     );
   });
 
-  test('status moves when an expense is added, using the family levels', () async {
-    f.fx.putCategory();
-    f.repository.stored[BudgetFixture.october] = sampleBudget(
-      BudgetFixture.october,
-      total: const Money.paisa(10000),
-      categories: const {'cat_food': Money.paisa(10000)},
-    );
-    final c = make();
-    keep(c, budgetStatusProvider(BudgetFixture.october));
-    await pump();
-    expect(
-      c.read(budgetStatusProvider(BudgetFixture.october)).total.level,
-      BudgetLevel.ok,
-    );
+  test(
+    'status moves when an expense is added, using the family levels',
+    () async {
+      f.fx.putCategory();
+      f.repository.stored[BudgetFixture.october] = sampleBudget(
+        BudgetFixture.october,
+        total: const Money.paisa(10000),
+        categories: const {'cat_food': Money.paisa(10000)},
+      );
+      final c = make();
+      keep(c, budgetStatusProvider(BudgetFixture.october));
+      await pump();
+      expect(
+        c.read(budgetStatusProvider(BudgetFixture.october)).total.level,
+        BudgetLevel.ok,
+      );
 
-    f.fx.putExpense(id: 'e1', total: const Money.paisa(8500));
-    f.fx.backend.expenseNotify();
-    await pump();
-    final report = c.read(budgetStatusProvider(BudgetFixture.october));
-    expect(report.total.level, BudgetLevel.warning);
-    expect(report.byCategory['cat_food']!.percentBp, 8500);
-  });
+      f.fx.putExpense(id: 'e1', total: const Money.paisa(8500));
+      f.fx.backend.expenseNotify();
+      await pump();
+      final report = c.read(budgetStatusProvider(BudgetFixture.october));
+      expect(report.total.level, BudgetLevel.warning);
+      expect(report.byCategory['cat_food']!.percentBp, 8500);
+    },
+  );
 
   test('alerts are for the current month only, worst first', () async {
     f.fx.putCategory();
@@ -102,8 +105,10 @@ void main() {
     final alerts = c.read(budgetAlertsProvider);
     expect(alerts.map((a) => a.categoryId), ['cat_food']);
     expect(alerts.single.status.level, BudgetLevel.exceeded);
-    expect(c.read(monthSpendProvider(MonthKey(2026, 10))).total,
-        const Money.paisa(12000));
+    expect(
+      c.read(monthSpendProvider(MonthKey(2026, 10))).total,
+      const Money.paisa(12000),
+    );
   });
 
   group('BudgetController', () {
@@ -145,26 +150,29 @@ void main() {
       expect(c.read(budgetControllerProvider(month)).editing, isFalse);
     });
 
-    test('a failed save keeps the draft and the event id for the retry', () async {
-      final c = make();
-      final month = BudgetFixture.october;
-      final controller = c.read(budgetControllerProvider(month).notifier);
-      keep(c, budgetControllerProvider(month));
-      controller
-        ..startEditing(null)
-        ..setTotal('100');
-      final eventId = c.read(budgetControllerProvider(month)).eventId;
-      f.repository.nextFailure = const Network();
+    test(
+      'a failed save keeps the draft and the event id for the retry',
+      () async {
+        final c = make();
+        final month = BudgetFixture.october;
+        final controller = c.read(budgetControllerProvider(month).notifier);
+        keep(c, budgetControllerProvider(month));
+        controller
+          ..startEditing(null)
+          ..setTotal('100');
+        final eventId = c.read(budgetControllerProvider(month)).eventId;
+        f.repository.nextFailure = const Network();
 
-      expect(await controller.save(), isFalse);
-      final after = c.read(budgetControllerProvider(month));
-      expect(after.editing, isTrue);
-      expect(after.failure, const Network());
-      expect(after.eventId, eventId);
+        expect(await controller.save(), isFalse);
+        final after = c.read(budgetControllerProvider(month));
+        expect(after.editing, isTrue);
+        expect(after.failure, const Network());
+        expect(after.eventId, eventId);
 
-      expect(await controller.save(), isTrue);
-      expect(f.repository.events.single.id, eventId);
-    });
+        expect(await controller.save(), isTrue);
+        expect(f.repository.events.single.id, eventId);
+      },
+    );
 
     test('an unreadable amount is shown inline and nothing is saved', () async {
       final c = make();
@@ -186,14 +194,16 @@ void main() {
       final c = make();
       final month = BudgetFixture.october;
       keep(c, budgetControllerProvider(month));
-      c.read(budgetControllerProvider(month).notifier).startEditing(
-        sampleBudget(
-          month,
-          total: const Money.paisa(864000),
-          categories: const {'cat_fish': Money.paisa(300000)},
-          lines: const [riceLine],
-        ),
-      );
+      c
+          .read(budgetControllerProvider(month).notifier)
+          .startEditing(
+            sampleBudget(
+              month,
+              total: const Money.paisa(864000),
+              categories: const {'cat_fish': Money.paisa(300000)},
+              lines: const [riceLine],
+            ),
+          );
       final state = c.read(budgetControllerProvider(month));
       expect(state.totalText, '8640');
       expect(state.categoryTexts['cat_fish'], '3000');
@@ -213,7 +223,10 @@ void main() {
         await c.read(budgetControllerProvider(month).notifier).copyLastMonth(),
         isTrue,
       );
-      expect(f.repository.stored[month]!.totalEstimate, const Money.paisa(5000));
+      expect(
+        f.repository.stored[month]!.totalEstimate,
+        const Money.paisa(5000),
+      );
     });
   });
 }

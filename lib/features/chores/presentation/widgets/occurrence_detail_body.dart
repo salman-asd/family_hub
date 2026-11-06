@@ -28,6 +28,7 @@ class OccurrenceDetailBody extends StatelessWidget {
     required this.onToggleSubtask,
     this.comments,
     this.banner,
+    this.reminderWhyLine,
     super.key,
   });
 
@@ -46,6 +47,7 @@ class OccurrenceDetailBody extends StatelessWidget {
 
   /// The pending swap request of this chore (P3-27), above everything else.
   final Widget? banner;
+  final Widget? reminderWhyLine;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,7 @@ class OccurrenceDetailBody extends StatelessWidget {
       children: [
         ?banner,
         OccurrenceHeader(item: item, formatters: formatters, today: today),
+        ?reminderWhyLine,
         const SizedBox(height: 20),
         SubtaskChecklist(
           item: item,
@@ -68,9 +71,8 @@ class OccurrenceDetailBody extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             context.l10n.occurrenceInstructionsTitle,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(color: t.textPrimary),
+            style: Theme.of(context).textTheme.titleMedium
+                ?.copyWith(color: t.textPrimary),
           ),
           const SizedBox(height: 8),
           MiniMarkdownView(markdown: occurrence.instructions),

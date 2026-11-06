@@ -167,10 +167,7 @@ void main() {
       for (final c in dashboard) 'dashboardFailure_$c',
     ];
     // 26 failure codes: 15 Validation + 9 Conflict + 2 NotFound (road map 3.6).
-    expect(
-      notification.length + engagement.length + dashboard.length,
-      26,
-    );
+    expect(notification.length + engagement.length + dashboard.length, 26);
     final enKeys = messages(en());
     final bnKeys = messages(bn());
     for (final key in required) {

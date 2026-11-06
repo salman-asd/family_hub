@@ -25,8 +25,11 @@ Contribution _c(
   voidedAt: voidedAt,
 );
 
-ContributionPlan _plan(String member, int paisa) =>
-    ContributionPlan(month: _oct, memberId: member, expected: Money.paisa(paisa));
+ContributionPlan _plan(String member, int paisa) => ContributionPlan(
+  month: _oct,
+  memberId: member,
+  expected: Money.paisa(paisa),
+);
 
 void main() {
   group('generateEqualSplit', () {
@@ -37,10 +40,7 @@ void main() {
         activeMemberIds: <String>['a', 'b', 'c'],
       );
       expect(plans.map((p) => p.expected.paisa), <int>[166667, 166667, 166666]);
-      expect(
-        plans.fold<int>(0, (sum, p) => sum + p.expected.paisa),
-        500000,
-      );
+      expect(plans.fold<int>(0, (sum, p) => sum + p.expected.paisa), 500000);
       expect(plans.first.id, '2026-10_a');
     });
 
@@ -68,19 +68,23 @@ void main() {
     );
 
     test('nobody paid', () {
-      final rows = run(<ContributionPlan>[_plan('a', 1000), _plan('b', 1000)], []);
+      final rows = run(<ContributionPlan>[
+        _plan('a', 1000),
+        _plan('b', 1000),
+      ], []);
       expect(rows.map((r) => r.remaining.paisa), <int>[1000, 1000]);
       expect(ContributionStatusCalculator.totalReceived(rows), Money.zero);
-      expect(
-        ContributionStatusCalculator.totalExpected(rows).paisa,
-        2000,
-      );
+      expect(ContributionStatusCalculator.totalExpected(rows).paisa, 2000);
     });
 
     test('partial, exact and over (credit)', () {
       final rows = run(
         <ContributionPlan>[_plan('a', 1000), _plan('b', 1000)],
-        <Contribution>[_c('1', 'a', 400), _c('2', 'a', 100), _c('3', 'b', 1500)],
+        <Contribution>[
+          _c('1', 'a', 400),
+          _c('2', 'a', 100),
+          _c('3', 'b', 1500),
+        ],
       );
       expect(rows[0].received.paisa, 500);
       expect(rows[0].remaining.paisa, 500);
@@ -111,10 +115,9 @@ void main() {
     });
 
     test('a non-active member with money still appears, after the roster', () {
-      final rows = run(
-        <ContributionPlan>[],
-        <Contribution>[_c('1', 'zed', 100)],
-      );
+      final rows = run(<ContributionPlan>[], <Contribution>[
+        _c('1', 'zed', 100),
+      ]);
       expect(rows.map((r) => r.memberId), <String>['a', 'b', 'zed']);
     });
   });

@@ -46,7 +46,8 @@ extension AddAvailabilitySheet on WidgetRef {
       reason: input.reason,
     );
     var failure = added.failureOrNull;
-    if (failure == null && added.valueOrNull?.status == AvailabilityStatus.active) {
+    if (failure == null &&
+        added.valueOrNull?.status == AvailabilityStatus.active) {
       failure = (await read(applyAbsencePolicyProvider)(
         familyId: familyId,
         actorUid: uid,
@@ -63,7 +64,12 @@ extension AddAvailabilitySheet on WidgetRef {
 }
 
 /// What the sheet collects.
-typedef AvailabilityInput = ({DateKey start, DateKey end, String typeId, String reason});
+typedef AvailabilityInput = ({
+  DateKey start,
+  DateKey end,
+  String typeId,
+  String reason,
+});
 
 /// The sentence that tells what the family policy will do (P3-27).
 String policyLineText(AppLocalizations l10n, PolicyLine line) => switch (line) {
@@ -154,9 +160,15 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(l10n.availabilityAdd, style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              l10n.availabilityAdd,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 12),
-            Text(l10n.availabilityType, style: TextStyle(color: t.textSecondary)),
+            Text(
+              l10n.availabilityType,
+              style: TextStyle(color: t.textSecondary),
+            ),
             Wrap(
               spacing: 8,
               children: [
@@ -167,7 +179,11 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
                     avatar: _typeId == reason.id
                         ? const Icon(Icons.check_rounded, size: 18)
                         : null,
-                    label: Text(english && reason.labelEn != null ? reason.labelEn! : reason.labelBn),
+                    label: Text(
+                      english && reason.labelEn != null
+                          ? reason.labelEn!
+                          : reason.labelBn,
+                    ),
                     onSelected: (_) => setState(() => _typeId = reason.id),
                   ),
               ],
@@ -175,7 +191,9 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
             const SizedBox(height: 12),
             OutlinedButton.icon(
               key: const Key('availability_range'),
-              style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+              ),
               onPressed: _pickRange,
               icon: const Icon(Icons.date_range_rounded),
               label: Text(
@@ -194,7 +212,9 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
               maxLength: AvailabilityLimits.maxReason,
               minLines: 1,
               maxLines: 3,
-              decoration: InputDecoration(hintText: l10n.availabilityReasonHint),
+              decoration: InputDecoration(
+                hintText: l10n.availabilityReasonHint,
+              ),
               onChanged: (_) => setState(() {}),
             ),
             if (start != null && end != null)
@@ -203,7 +223,10 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
                 child: Text(
                   l10n.availabilityAffected(formatters.number(affected)),
                   key: const Key('availability_affected'),
-                  style: TextStyle(color: t.textPrimary, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    color: t.textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             Padding(
@@ -216,7 +239,9 @@ class _AddSheetState extends ConsumerState<_AddSheet> {
             ),
             FilledButton.icon(
               key: const Key('availability_save'),
-              style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+              ),
               onPressed: _valid
                   ? () => Navigator.of(context).pop((
                       start: start!,

@@ -69,9 +69,8 @@ void main() {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(textScale)),
             child: child!,
           ),
           home: FundScreen(focusPendingApprovals: focusPendingApprovals),
@@ -138,8 +137,10 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('pending-approve')).first);
     await tester.pump(const Duration(milliseconds: 400));
 
-    expect(contributions.repo.contributions[pending.valueOrNull!.id]!.isApproved,
-        isTrue);
+    expect(
+      contributions.repo.contributions[pending.valueOrNull!.id]!.isApproved,
+      isTrue,
+    );
     expect(contributions.balance, const Money.paisa(50000));
   });
 
@@ -242,7 +243,9 @@ void main() {
     );
     await pump(tester, height: 520, focusPendingApprovals: true);
 
-    final section = tester.getRect(find.byKey(const ValueKey('pending-approvals')));
+    final section = tester.getRect(
+      find.byKey(const ValueKey('pending-approvals')),
+    );
     expect(section.top, lessThan(520));
     expect(tester.takeException(), isNull);
   });

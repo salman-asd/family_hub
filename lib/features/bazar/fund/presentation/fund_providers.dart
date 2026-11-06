@@ -113,7 +113,8 @@ final ledgerIntegrityProvider = Provider.autoDispose
           ref.watch(monthExpensesProvider(month)).value ?? const <Expense>[];
       return checkLedger(
         expenses: expenses,
-        txs: ref.watch(fundTransactionsProvider).value ??
+        txs:
+            ref.watch(fundTransactionsProvider).value ??
             const <FundTransaction>[],
         month: month,
       );
@@ -123,8 +124,8 @@ final ledgerIntegrityProvider = Provider.autoDispose
 final balanceDriftProvider = Provider<BalanceDrift?>(
   (ref) => detectBalanceDrift(
     closings: ref.watch(monthClosingMapProvider),
-    window: ref.watch(fundTransactionsProvider).value ??
-        const <FundTransaction>[],
+    window:
+        ref.watch(fundTransactionsProvider).value ?? const <FundTransaction>[],
   ),
 );
 
@@ -142,8 +143,7 @@ final monthClosePreviewProvider = Provider.autoDispose
       return MonthClosePreview(
         month: month,
         summary: FundBalanceCalculator.summarize(rows),
-        openAdvances:
-            ref.watch(openAdvancesProvider).value?.length ?? 0,
+        openAdvances: ref.watch(openAdvancesProvider).value?.length ?? 0,
         expected: ContributionStatusCalculator.totalExpected(statuses),
         received: ContributionStatusCalculator.totalReceived(statuses),
       );
@@ -176,5 +176,3 @@ final monthClosingProvider = Provider.autoDispose
     .family<MonthClosing?, MonthKey>(
       (ref, month) => ref.watch(monthClosingMapProvider)[month],
     );
-
-

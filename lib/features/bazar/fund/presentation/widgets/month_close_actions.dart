@@ -38,9 +38,7 @@ class _MonthCloseActionsState extends ConsumerState<MonthCloseActions> {
       label: closed ? l10n.monthReopen : l10n.monthClose,
       busy: _busy,
       busyLabel: l10n.loadingSemantics,
-      onPressed: closed
-          ? () => _reopen()
-          : () => _close(),
+      onPressed: closed ? () => _reopen() : () => _close(),
     );
   }
 

@@ -98,52 +98,59 @@ void main() {
       }
     }
 
-    test('a month that is not the current one is cancelled once unwatched',
-        () async {
-      final container = makeContainer();
-      final past = container.listen(
-        monthOccurrencesProvider(MonthKey(2026, 9)),
-        (_, _) {},
-      );
-      final future = container.listen(
-        monthOccurrencesProvider(MonthKey(2026, 11)),
-        (_, _) {},
-      );
-      await settle(container);
-      expect(fixture.occurrences.activeRangeListeners, 2);
+    test(
+      'a month that is not the current one is cancelled once unwatched',
+      () async {
+        final container = makeContainer();
+        final past = container.listen(
+          monthOccurrencesProvider(MonthKey(2026, 9)),
+          (_, _) {},
+        );
+        final future = container.listen(
+          monthOccurrencesProvider(MonthKey(2026, 11)),
+          (_, _) {},
+        );
+        await settle(container);
+        expect(fixture.occurrences.activeRangeListeners, 2);
 
-      past.close();
-      future.close();
-      await settle(container);
+        past.close();
+        future.close();
+        await settle(container);
 
-      expect(fixture.occurrences.activeRangeListeners, 0);
-    });
+        expect(fixture.occurrences.activeRangeListeners, 0);
+      },
+    );
 
-    test('the current month stays alive after its last listener leaves',
-        () async {
-      final container = makeContainer();
-      final current = container.listen(
-        monthOccurrencesProvider(MonthKey(2026, 10)),
-        (_, _) {},
-      );
-      await settle(container);
-      current.close();
-      await settle(container);
+    test(
+      'the current month stays alive after its last listener leaves',
+      () async {
+        final container = makeContainer();
+        final current = container.listen(
+          monthOccurrencesProvider(MonthKey(2026, 10)),
+          (_, _) {},
+        );
+        await settle(container);
+        current.close();
+        await settle(container);
 
-      expect(fixture.occurrences.activeRangeListeners, 1);
-    });
+        expect(fixture.occurrences.activeRangeListeners, 1);
+      },
+    );
 
-    test('browsing five months leaves only the current month running', () async {
-      final container = makeContainer();
-      for (var m = 8; m <= 12; m++) {
-        container
-            .listen(monthOccurrencesProvider(MonthKey(2026, m)), (_, _) {})
-            .close();
-      }
-      await settle(container);
+    test(
+      'browsing five months leaves only the current month running',
+      () async {
+        final container = makeContainer();
+        for (var m = 8; m <= 12; m++) {
+          container
+              .listen(monthOccurrencesProvider(MonthKey(2026, m)), (_, _) {})
+              .close();
+        }
+        await settle(container);
 
-      expect(fixture.occurrences.activeRangeListeners, 1);
-    });
+        expect(fixture.occurrences.activeRangeListeners, 1);
+      },
+    );
 
     test('a deep link into an old month does not pin its listener', () async {
       seed(<ChoreOccurrence>[
@@ -160,7 +167,10 @@ void main() {
       );
       await settle(container);
       expect(fixture.occurrences.activeRangeListeners, 1);
-      expect(container.read(occurrenceItemProvider('tpl_1_20260915')), isNotNull);
+      expect(
+        container.read(occurrenceItemProvider('tpl_1_20260915')),
+        isNotNull,
+      );
 
       link.close();
       await settle(container);
@@ -179,9 +189,7 @@ void main() {
       await settle(container);
 
       expect(
-        container
-            .read(monthOccurrencesProvider(MonthKey(2026, 9)))
-            .hasValue,
+        container.read(monthOccurrencesProvider(MonthKey(2026, 9))).hasValue,
         isTrue,
       );
     });
@@ -292,17 +300,20 @@ void main() {
     );
   });
 
-  test('the app-open hook reports a denied write instead of hiding it', () async {
-    // B-01: only "offline" is silent; every other failure is surfaced.
-    final container = makeContainer();
-    container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
-    fixture.occurrences.nextMarkerFailure = const PermissionDenied();
-    await container.pump();
+  test(
+    'the app-open hook reports a denied write instead of hiding it',
+    () async {
+      // B-01: only "offline" is silent; every other failure is surfaced.
+      final container = makeContainer();
+      container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
+      fixture.occurrences.nextMarkerFailure = const PermissionDenied();
+      await container.pump();
 
-    final state = container.read(ensureOccurrencesOnOpenProvider(familyId));
-    expect(state.hasError, isFalse, reason: 'it never fails the app start');
-    expect(state.value, isA<PermissionDenied>());
-  });
+      final state = container.read(ensureOccurrencesOnOpenProvider(familyId));
+      expect(state.hasError, isFalse, reason: 'it never fails the app start');
+      expect(state.value, isA<PermissionDenied>());
+    },
+  );
 
   test('the app-open hook reports nothing on success', () async {
     final container = makeContainer();

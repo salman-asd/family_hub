@@ -31,10 +31,9 @@ void main() {
     });
 
     test('group, status and member narrow independently', () {
-      expect(
-        const CalendarFilters(groupIds: {'cleaning'}).apply(all),
-        [cleaning],
-      );
+      expect(const CalendarFilters(groupIds: {'cleaning'}).apply(all), [
+        cleaning,
+      ]);
       expect(
         const CalendarFilters(statuses: {ChoreStatus.overdue}).apply(all),
         [dishes],
@@ -43,15 +42,16 @@ void main() {
     });
 
     test('a member filter never matches an unassigned chore', () {
-      expect(const CalendarFilters(memberIds: {'cara', 'dave'}).apply([orphan]),
-          isEmpty);
+      expect(
+        const CalendarFilters(memberIds: {'cara', 'dave'}).apply([orphan]),
+        isEmpty,
+      );
     });
 
     test('only-needs-attention keeps flagged chores', () {
-      expect(
-        const CalendarFilters(onlyNeedsAttention: true).apply(all),
-        [orphan],
-      );
+      expect(const CalendarFilters(onlyNeedsAttention: true).apply(all), [
+        orphan,
+      ]);
     });
 
     test('filters combine with AND', () {
@@ -93,8 +93,10 @@ void main() {
         const CalendarFilters(groupIds: {'a'}).hashCode,
         const CalendarFilters(groupIds: {'a'}).hashCode,
       );
-      expect(const CalendarFilters(groupIds: {'a'}) == CalendarFilters.none,
-          isFalse);
+      expect(
+        const CalendarFilters(groupIds: {'a'}) == CalendarFilters.none,
+        isFalse,
+      );
     });
   });
 

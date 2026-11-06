@@ -80,7 +80,8 @@ class _ItemAutocompleteFieldState extends ConsumerState<ItemAutocompleteField> {
     final index = ref.watch(catalogIndexProvider);
     final query = widget.controller.text.trim();
     final bangla = Localizations.localeOf(context).languageCode == 'bn';
-    final showList = widget.enabled && widget.selected == null && _focus.hasFocus;
+    final showList =
+        widget.enabled && widget.selected == null && _focus.hasFocus;
     final results = showList
         ? index.search.search(
             query,

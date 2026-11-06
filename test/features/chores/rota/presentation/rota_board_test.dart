@@ -16,7 +16,13 @@ void main() {
 
   setUp(() => fixture = ChoresFixture());
 
-  Future<void> open(WidgetTester tester, {String uid = 'bob', Role role = Role.moderator, String language = 'en', double scale = 1}) async {
+  Future<void> open(
+    WidgetTester tester, {
+    String uid = 'bob',
+    Role role = Role.moderator,
+    String language = 'en',
+    double scale = 1,
+  }) async {
     await pumpP3Screen(
       tester,
       home: const RotaBoardScreen(),
@@ -24,9 +30,22 @@ void main() {
       uid: uid,
       role: role,
       occurrences: [
-        anOccurrence(id: 'a', dateKey: DateKey(2026, 10, 24), assigneeId: 'cara'),
-        anOccurrence(id: 'b', dateKey: DateKey(2026, 10, 24), assigneeId: 'dave', difficulty: Difficulty.hard),
-        anOccurrence(id: 'c', dateKey: DateKey(2026, 10, 25), assigneeId: 'cara'),
+        anOccurrence(
+          id: 'a',
+          dateKey: DateKey(2026, 10, 24),
+          assigneeId: 'cara',
+        ),
+        anOccurrence(
+          id: 'b',
+          dateKey: DateKey(2026, 10, 24),
+          assigneeId: 'dave',
+          difficulty: Difficulty.hard,
+        ),
+        anOccurrence(
+          id: 'c',
+          dateKey: DateKey(2026, 10, 25),
+          assigneeId: 'cara',
+        ),
       ],
       languageCode: language,
       textScale: scale,
@@ -37,22 +56,40 @@ void main() {
 
   test('a week starts on the family week-start day', () {
     // 2026-10-24 is a Saturday; the default week starts on Saturday (6).
-    final saturday = rotaBoundsFor(range: RotaRange.week, today: DateKey(2026, 10, 24), weekStartDay: 6);
+    final saturday = rotaBoundsFor(
+      range: RotaRange.week,
+      today: DateKey(2026, 10, 24),
+      weekStartDay: 6,
+    );
     expect(saturday.from, DateKey(2026, 10, 24));
     expect(saturday.to, DateKey(2026, 10, 30));
-    final wednesday = rotaBoundsFor(range: RotaRange.week, today: DateKey(2026, 10, 28), weekStartDay: 6);
+    final wednesday = rotaBoundsFor(
+      range: RotaRange.week,
+      today: DateKey(2026, 10, 28),
+      weekStartDay: 6,
+    );
     expect(wednesday.from, DateKey(2026, 10, 24));
-    final sundayStart = rotaBoundsFor(range: RotaRange.week, today: DateKey(2026, 10, 24), weekStartDay: 0);
+    final sundayStart = rotaBoundsFor(
+      range: RotaRange.week,
+      today: DateKey(2026, 10, 24),
+      weekStartDay: 0,
+    );
     expect(sundayStart.from, DateKey(2026, 10, 18));
   });
 
   test('a month is the calendar month', () {
-    final month = rotaBoundsFor(range: RotaRange.month, today: DateKey(2026, 12, 5), weekStartDay: 6);
+    final month = rotaBoundsFor(
+      range: RotaRange.month,
+      today: DateKey(2026, 12, 5),
+      weekStartDay: 6,
+    );
     expect(month.from, DateKey(2026, 12, 1));
     expect(month.to, DateKey(2026, 12, 31));
   });
 
-  testWidgets('a manager sees today’s duty, each share and the grid', (tester) async {
+  testWidgets('a manager sees today’s duty, each share and the grid', (
+    tester,
+  ) async {
     await open(tester);
 
     expect(find.text('On duty today'), findsOneWidget);
@@ -71,15 +108,21 @@ void main() {
     expect(find.byKey(const Key('rota_matrix')), findsOneWidget);
   });
 
-  testWidgets('members do not see the board while the workload is hidden', (tester) async {
-    fixture.settings.settings = ChoreSettings.defaults.copyWith(workloadVisibleToMembers: false);
+  testWidgets('members do not see the board while the workload is hidden', (
+    tester,
+  ) async {
+    fixture.settings.settings = ChoreSettings.defaults.copyWith(
+      workloadVisibleToMembers: false,
+    );
     await open(tester, uid: 'cara', role: Role.member);
     expect(find.text('The workload is hidden from members.'), findsOneWidget);
     expect(find.byKey(const Key('rota_matrix')), findsNothing);
   });
 
   testWidgets('members see it when the family turns it on', (tester) async {
-    fixture.settings.settings = ChoreSettings.defaults.copyWith(workloadVisibleToMembers: true);
+    fixture.settings.settings = ChoreSettings.defaults.copyWith(
+      workloadVisibleToMembers: true,
+    );
     await open(tester, uid: 'cara', role: Role.member);
     expect(find.byKey(const Key('rota_matrix')), findsOneWidget);
   });

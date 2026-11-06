@@ -43,9 +43,8 @@ void main() {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(textScale)),
             child: child!,
           ),
           home: const AdvancesScreen(),
@@ -58,9 +57,21 @@ void main() {
   testWidgets('groups open advances by member with the owed total', (
     tester,
   ) async {
-    fx.putAdvance(expenseId: 'e1', memberId: 'cara', amount: const Money.paisa(5000));
-    fx.putAdvance(expenseId: 'e2', memberId: 'cara', amount: const Money.paisa(7000));
-    fx.putAdvance(expenseId: 'e3', memberId: 'bob', amount: const Money.paisa(1000));
+    fx.putAdvance(
+      expenseId: 'e1',
+      memberId: 'cara',
+      amount: const Money.paisa(5000),
+    );
+    fx.putAdvance(
+      expenseId: 'e2',
+      memberId: 'cara',
+      amount: const Money.paisa(7000),
+    );
+    fx.putAdvance(
+      expenseId: 'e3',
+      memberId: 'bob',
+      amount: const Money.paisa(1000),
+    );
     await pump(tester);
 
     expect(find.byKey(const ValueKey('advance-group-cara')), findsOneWidget);
@@ -72,8 +83,16 @@ void main() {
   testWidgets('a member sees only their own rows and no settle action', (
     tester,
   ) async {
-    fx.putAdvance(expenseId: 'e1', memberId: 'cara', amount: const Money.paisa(5000));
-    fx.putAdvance(expenseId: 'e2', memberId: 'bob', amount: const Money.paisa(1000));
+    fx.putAdvance(
+      expenseId: 'e1',
+      memberId: 'cara',
+      amount: const Money.paisa(5000),
+    );
+    fx.putAdvance(
+      expenseId: 'e2',
+      memberId: 'bob',
+      amount: const Money.paisa(1000),
+    );
     await pump(tester, uid: 'cara', role: Role.member);
 
     expect(find.byKey(const ValueKey('advance-group-cara')), findsOneWidget);
@@ -82,7 +101,11 @@ void main() {
   });
 
   testWidgets('a manager settles in two instalments', (tester) async {
-    fx.putAdvance(expenseId: 'e1', memberId: 'cara', amount: const Money.paisa(10000));
+    fx.putAdvance(
+      expenseId: 'e1',
+      memberId: 'cara',
+      amount: const Money.paisa(10000),
+    );
     await pump(tester);
 
     await tester.tap(find.byKey(const ValueKey('advance-settle-e1')));
@@ -98,7 +121,11 @@ void main() {
   });
 
   testWidgets('an overpayment shows inline and does not save', (tester) async {
-    fx.putAdvance(expenseId: 'e1', memberId: 'cara', amount: const Money.paisa(5000));
+    fx.putAdvance(
+      expenseId: 'e1',
+      memberId: 'cara',
+      amount: const Money.paisa(5000),
+    );
     await pump(tester);
 
     await tester.tap(find.byKey(const ValueKey('advance-settle-e1')));

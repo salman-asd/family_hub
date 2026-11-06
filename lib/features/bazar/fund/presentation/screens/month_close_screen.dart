@@ -94,5 +94,3 @@ class _MonthCloseScreenState extends ConsumerState<MonthCloseScreen> {
     );
   }
 }
-
-

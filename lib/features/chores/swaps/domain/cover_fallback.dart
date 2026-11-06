@@ -133,4 +133,3 @@ abstract final class CoverFallback {
     );
   }
 }
-

@@ -39,9 +39,7 @@ void main() {
     );
   }
 
-  testWidgets('a manager gets one button and an overflow menu', (
-    tester,
-  ) async {
+  testWidgets('a manager gets one button and an overflow menu', (tester) async {
     await pumpBar(tester, role: Role.admin);
 
     expect(find.byKey(const ValueKey('action_complete')), findsOneWidget);

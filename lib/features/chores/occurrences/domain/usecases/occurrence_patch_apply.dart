@@ -76,7 +76,10 @@ ChoreOccurrence _withoutField(ChoreOccurrence o, String key) {
 }
 
 List<String> _steps(Object? value) => value is List
-    ? <String>[for (final step in value) if (step is String) step]
+    ? <String>[
+        for (final step in value)
+          if (step is String) step,
+      ]
     : const <String>[];
 
 SubtaskDone _tick(Object? value) {

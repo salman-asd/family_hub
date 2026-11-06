@@ -64,8 +64,9 @@ void main() {
 
   test('permission is checked first', () async {
     expect(await copy(actor: 'cara'), const PermissionDenied());
-    f.fx.backend.permissionSettings[BudgetFixture.familyId] =
-        PermissionSettings.defaults.copyWith(moderatorManagesFinance: false);
+    f.fx.backend.permissionSettings[BudgetFixture.familyId] = PermissionSettings
+        .defaults
+        .copyWith(moderatorManagesFinance: false);
     expect(await copy(actor: 'bob'), const PermissionDenied());
   });
 }

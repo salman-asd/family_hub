@@ -71,7 +71,9 @@ class BazarHomeScreen extends ConsumerWidget {
                   _BazarEntryCard(
                     entry: entry,
                     alertCount: entry.id == 'budget' ? alerts.length : 0,
-                    alertLevel: alerts.isEmpty ? null : alerts.first.status.level,
+                    alertLevel: alerts.isEmpty
+                        ? null
+                        : alerts.first.status.level,
                   ),
               ],
             ),
@@ -259,9 +261,8 @@ class _AlertCountBadge extends ConsumerWidget {
           const SizedBox(width: 4),
           Text(
             ref.watch(appFormattersProvider).number(count),
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: color,
-            ),
+            style: Theme.of(context).textTheme.labelLarge
+                ?.copyWith(color: color),
           ),
         ],
       ),

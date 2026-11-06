@@ -164,7 +164,8 @@ class _LineRowState extends State<_LineRow> {
                     labelText: l10n.budgetLineName,
                     errorText: _error('name'),
                   ),
-                  onChanged: (v) => widget.onChanged((x) => x.copyWith(name: v)),
+                  onChanged: (v) =>
+                      widget.onChanged((x) => x.copyWith(name: v)),
                 ),
               ),
               IconButton(
@@ -187,7 +188,8 @@ class _LineRowState extends State<_LineRow> {
                   label: l10n.expenseQtyField,
                   scale: 3,
                   errorText: _error('qty'),
-                  onChanged: (v) => widget.onChanged((x) => x.copyWith(qtyText: v)),
+                  onChanged: (v) =>
+                      widget.onChanged((x) => x.copyWith(qtyText: v)),
                 ),
               ),
               const SizedBox(width: 8),
@@ -207,7 +209,8 @@ class _LineRowState extends State<_LineRow> {
                         child: Text(l10n.unitLabel(u)),
                       ),
                   ],
-                  onChanged: (u) => widget.onChanged((x) => x.copyWith(unit: u)),
+                  onChanged: (u) =>
+                      widget.onChanged((x) => x.copyWith(unit: u)),
                 ),
               ),
             ],

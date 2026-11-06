@@ -31,9 +31,8 @@ class HouseRulesCard extends ConsumerWidget {
               Expanded(
                 child: Text(
                   context.l10n.choresSettingsHouseRulesTitle,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(color: t.textPrimary),
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(color: t.textPrimary),
                 ),
               ),
             ],

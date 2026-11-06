@@ -54,9 +54,7 @@ class FakeBudgetRepository implements BudgetRepository {
 
 /// Fixture + fake repository + both use cases, wired like the providers.
 class BudgetFixture {
-  BudgetFixture()
-    : fx = BazarFixture(),
-      repository = FakeBudgetRepository() {
+  BudgetFixture() : fx = BazarFixture(), repository = FakeBudgetRepository() {
     save = SaveBudget(
       budgets: repository,
       families: fx.backend,

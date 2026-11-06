@@ -26,9 +26,8 @@ class FieldErrorText extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: context.tokens.danger),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: context.tokens.danger),
             ),
           ),
         ],

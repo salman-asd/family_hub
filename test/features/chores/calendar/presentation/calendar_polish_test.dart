@@ -73,7 +73,11 @@ void main() {
       testWidgets('heat level 3 tints the cell (${appThemes[i].id})', (
         tester,
       ) async {
-        await pumpCell(tester, DaySummary(dateKey: day, heatLevel: 3), theme: i);
+        await pumpCell(
+          tester,
+          DaySummary(dateKey: day, heatLevel: 3),
+          theme: i,
+        );
 
         final material = tester.widget<Material>(
           find
@@ -113,10 +117,7 @@ void main() {
 
       await pumpCell(
         tester,
-        DaySummary(
-          dateKey: day,
-          unavailableMemberIds: const <String>{'dave'},
-        ),
+        DaySummary(dateKey: day, unavailableMemberIds: const <String>{'dave'}),
       );
       final away =
           tester.widget<CustomPaint>(hatchFinder).painter! as HatchPainter;
@@ -143,7 +144,10 @@ void main() {
         ),
       );
 
-      expect(find.byKey(const Key('calendar_mark_needs_cover')), findsOneWidget);
+      expect(
+        find.byKey(const Key('calendar_mark_needs_cover')),
+        findsOneWidget,
+      );
       expect(
         find.byKey(const Key('calendar_mark_needs_attention')),
         findsOneWidget,

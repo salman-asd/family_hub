@@ -44,11 +44,17 @@ class MonthClosePreviewCard extends ConsumerWidget {
               ),
               _Line(
                 label: l10n.monthCloseExpected,
-                value: MoneyText(value: preview.expected, hideZeroFraction: true),
+                value: MoneyText(
+                  value: preview.expected,
+                  hideZeroFraction: true,
+                ),
               ),
               _Line(
                 label: l10n.monthCloseReceived,
-                value: MoneyText(value: preview.received, hideZeroFraction: true),
+                value: MoneyText(
+                  value: preview.received,
+                  hideZeroFraction: true,
+                ),
               ),
             ],
           ),
@@ -78,5 +84,3 @@ class _Line extends StatelessWidget {
     );
   }
 }
-
-

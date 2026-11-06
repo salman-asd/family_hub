@@ -67,8 +67,10 @@ void main() {
     expect(draft.rateText, '70');
     expect(draft.totalText, '');
     expect(draft.stockText, '5');
-    expect(readLineDrafts([draft]).lines.single.estimatedTotal,
-        const Money.paisa(350000));
+    expect(
+      readLineDrafts([draft]).lines.single.estimatedTotal,
+      const Money.paisa(350000),
+    );
     final oil = BudgetLineDraft.fromLine('y', oilLine);
     expect(oil.totalText, '1200');
     expect(oil.qtyText, '');

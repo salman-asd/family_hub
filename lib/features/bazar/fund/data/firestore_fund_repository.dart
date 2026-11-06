@@ -22,8 +22,7 @@ import 'package:family_hub/features/bazar/fund/domain/month_plans.dart';
 /// reopen, P2-21) are ONE batch each and need the server (rule 26): the
 /// closing balance comes from a server read taken just before the batch, so a
 /// queued offline would close a month from an unknown balance.
-class FirestoreFundRepository
-    implements FundRepository, ExistingOpeningLedger {
+class FirestoreFundRepository implements FundRepository, ExistingOpeningLedger {
   FirestoreFundRepository({this._tx, this._firestore});
 
   final TxRunner? _tx;

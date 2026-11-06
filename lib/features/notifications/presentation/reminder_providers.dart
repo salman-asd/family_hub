@@ -33,6 +33,11 @@ final reminderSchedulerProvider = Provider<ReminderScheduler>(
   ),
 );
 
+final reminderPlatformDiagnosticsProvider =
+    FutureProvider.autoDispose<ReminderPlatformDiagnostics>(
+      (ref) => ref.watch(reminderSchedulerProvider).diagnostics(),
+    );
+
 final notificationTapRouterProvider = Provider<NotificationTapRouter>(
   (ref) => NotificationTapRouter(),
 );

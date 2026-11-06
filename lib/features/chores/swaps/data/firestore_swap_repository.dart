@@ -43,11 +43,12 @@ class FirestoreSwapRepository implements SwapRepository {
   }
 
   @override
-  Stream<List<SwapRequest>> watchPending(String familyId) => _col(familyId)
-      .where('status', isEqualTo: SwapStatus.pending.id)
-      .limit(kMaxSwapDocs)
-      .snapshots()
-      .map(_read);
+  Stream<List<SwapRequest>> watchPending(String familyId) =>
+      _col(familyId)
+          .where('status', isEqualTo: SwapStatus.pending.id)
+          .limit(kMaxSwapDocs)
+          .snapshots()
+          .map(_read);
 
   @override
   Future<Result<SwapRequest?>> get(String familyId, String requestId) =>
@@ -86,7 +87,10 @@ class FirestoreSwapRepository implements SwapRepository {
   ) => guardFirestore(() async {
     final snapshot = await _col(familyId)
         .where('status', isEqualTo: SwapStatus.pending.id)
-        .where('expiresAt', isLessThanOrEqualTo: BaseMapper.dateTimeToTimestamp(now))
+        .where(
+          'expiresAt',
+          isLessThanOrEqualTo: BaseMapper.dateTimeToTimestamp(now),
+        )
         .limit(kMaxSwapDocs)
         .get();
     return _read(snapshot);

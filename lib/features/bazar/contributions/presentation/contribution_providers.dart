@@ -64,9 +64,11 @@ final activeMemberIdsProvider = Provider<List<String>>((ref) {
 final contributionStatusProvider = Provider.autoDispose
     .family<List<MemberContributionStatus>, MonthKey>(
       (ref, month) => ContributionStatusCalculator.compute(
-        plans: ref.watch(contributionPlansProvider(month)).value ??
+        plans:
+            ref.watch(contributionPlansProvider(month)).value ??
             const <ContributionPlan>[],
-        contributions: ref.watch(contributionsProvider(month)).value ??
+        contributions:
+            ref.watch(contributionsProvider(month)).value ??
             const <Contribution>[],
         activeMemberIds: ref.watch(activeMemberIdsProvider),
       ),
@@ -76,7 +78,8 @@ final contributionStatusProvider = Provider.autoDispose
 /// list and the dashboard badge).  Voided rows are never listed.
 final pendingContributionsProvider = Provider.autoDispose
     .family<List<Contribution>, MonthKey>((ref, month) {
-      final all = ref.watch(contributionsProvider(month)).value ??
+      final all =
+          ref.watch(contributionsProvider(month)).value ??
           const <Contribution>[];
       return <Contribution>[
         for (final c in all)
@@ -88,7 +91,8 @@ final pendingContributionsProvider = Provider.autoDispose
 final myContributionsProvider = Provider.autoDispose
     .family<List<Contribution>, MonthKey>((ref, month) {
       final uid = ref.watch(currentUidProvider);
-      final all = ref.watch(contributionsProvider(month)).value ??
+      final all =
+          ref.watch(contributionsProvider(month)).value ??
           const <Contribution>[];
       return <Contribution>[
         for (final c in all)

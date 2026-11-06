@@ -81,14 +81,17 @@ void main() {
         text: text,
       )).failureOrNull;
 
-  Future<AppFailure?> raise(String uid, String text, {String id = 'f1'}) async =>
-      (await flag(
-        familyId: familyId,
-        actorUid: uid,
-        occurrenceId: occId,
-        commentId: id,
-        reason: text,
-      )).failureOrNull;
+  Future<AppFailure?> raise(
+    String uid,
+    String text, {
+    String id = 'f1',
+  }) async => (await flag(
+    familyId: familyId,
+    actorUid: uid,
+    occurrenceId: occId,
+    commentId: id,
+    reason: text,
+  )).failureOrNull;
 
   Future<AppFailure?> answer(String uid, String id) async => (await resolve(
     familyId: familyId,
@@ -107,8 +110,10 @@ void main() {
       expect(stored().needsAttention, isFalse);
       final plan = fixture.comments.plans.single;
       expect(plan.occurrence.patches.single.fields.keys, ['lastCommentAt']);
-      expect(plan.occurrence.audits.single.type,
-          AuditEventType.choresCommentAdded);
+      expect(
+        plan.occurrence.audits.single.type,
+        AuditEventType.choresCommentAdded,
+      );
       expect(completion.inbox.sent, isEmpty);
     });
 
@@ -126,17 +131,19 @@ void main() {
       expect(thread(), isEmpty);
     });
 
-    test('a failed write leaves nothing behind and a retry reuses the id',
-        () async {
-      fixture.comments.nextStageFailure = const Network();
-      expect(await say('dave', 'hello'), isA<Network>());
-      expect(thread(), isEmpty);
-      expect(stored().lastCommentAt, isNull);
+    test(
+      'a failed write leaves nothing behind and a retry reuses the id',
+      () async {
+        fixture.comments.nextStageFailure = const Network();
+        expect(await say('dave', 'hello'), isA<Network>());
+        expect(thread(), isEmpty);
+        expect(stored().lastCommentAt, isNull);
 
-      expect(await say('dave', 'hello'), isNull);
-      expect(await say('dave', 'hello'), isNull);
-      expect(thread().length, 1, reason: 'same comment id: one document');
-    });
+        expect(await say('dave', 'hello'), isNull);
+        expect(await say('dave', 'hello'), isNull);
+        expect(thread().length, 1, reason: 'same comment id: one document');
+      },
+    );
 
     test('a comment on a finished chore does not change its status', () async {
       seedOccurrence(
@@ -174,7 +181,10 @@ void main() {
     test('only whoever may act on the chore resolves a flag', () async {
       await raise('dave', 'Dirty');
 
-      expect(await answer('dave', 'f1'), const Conflict(code: 'not_assigned_to_you'));
+      expect(
+        await answer('dave', 'f1'),
+        const Conflict(code: 'not_assigned_to_you'),
+      );
       expect(stored().needsAttention, isTrue);
 
       expect(await answer('cara', 'f1'), isNull);
@@ -193,16 +203,27 @@ void main() {
       expect(stored().needsAttention, isFalse);
     });
 
-    test('a manager may resolve; a stale or plain comment is a conflict',
-        () async {
-      await say('dave', 'just a note', id: 'n1');
-      await raise('dave', 'Dirty');
+    test(
+      'a manager may resolve; a stale or plain comment is a conflict',
+      () async {
+        await say('dave', 'just a note', id: 'n1');
+        await raise('dave', 'Dirty');
 
-      expect(await answer('alice', 'n1'), const Conflict(code: 'concurrent_edit'));
-      expect(await answer('alice', 'f1'), isNull);
-      expect(await answer('alice', 'f1'), const Conflict(code: 'concurrent_edit'));
-      expect(await answer('alice', 'nope'), const NotFound(entity: 'comment'));
-    });
+        expect(
+          await answer('alice', 'n1'),
+          const Conflict(code: 'concurrent_edit'),
+        );
+        expect(await answer('alice', 'f1'), isNull);
+        expect(
+          await answer('alice', 'f1'),
+          const Conflict(code: 'concurrent_edit'),
+        );
+        expect(
+          await answer('alice', 'nope'),
+          const NotFound(entity: 'comment'),
+        );
+      },
+    );
   });
 
   group('HideComment / UnhideComment', () {
@@ -224,50 +245,60 @@ void main() {
           note: note,
         )).failureOrNull;
 
-    test('a member cannot hide; a manager needs a note of 3 characters',
-        () async {
-      await say('dave', 'rude words');
+    test(
+      'a member cannot hide; a manager needs a note of 3 characters',
+      () async {
+        await say('dave', 'rude words');
 
-      expect(await hideAs('cara', 'c1', 'because'), isA<PermissionDenied>());
-      expect(
-        await hideAs('bob', 'c1', 'no'),
-        const Validation('note', 'reason_required'),
-      );
-      expect(thread().single.hidden, isFalse);
+        expect(await hideAs('cara', 'c1', 'because'), isA<PermissionDenied>());
+        expect(
+          await hideAs('bob', 'c1', 'no'),
+          const Validation('note', 'reason_required'),
+        );
+        expect(thread().single.hidden, isFalse);
 
-      expect(await hideAs('bob', 'c1', 'Not kind'), isNull);
-      expect(thread().single.hidden, isTrue);
-      expect(thread().single.hiddenBy, 'bob');
-      expect(thread().single.hiddenNote, 'Not kind');
-      expect(thread().single.text, 'rude words', reason: 'never deleted');
-      final audit = fixture.comments.plans.last.occurrence.audits.single;
-      expect(audit.type, AuditEventType.choresCommentHidden);
-      expect(audit.params['reason'], 'Not kind');
-    });
+        expect(await hideAs('bob', 'c1', 'Not kind'), isNull);
+        expect(thread().single.hidden, isTrue);
+        expect(thread().single.hiddenBy, 'bob');
+        expect(thread().single.hiddenNote, 'Not kind');
+        expect(thread().single.text, 'rude words', reason: 'never deleted');
+        final audit = fixture.comments.plans.last.occurrence.audits.single;
+        expect(audit.type, AuditEventType.choresCommentHidden);
+        expect(audit.params['reason'], 'Not kind');
+      },
+    );
 
-    test('hiding the last open flag clears the marker; showing it sets it',
-        () async {
-      await raise('dave', 'Dirty');
-      expect(stored().needsAttention, isTrue);
+    test(
+      'hiding the last open flag clears the marker; showing it sets it',
+      () async {
+        await raise('dave', 'Dirty');
+        expect(stored().needsAttention, isTrue);
 
-      expect(await hideAs('alice', 'f1', 'Wrong chore'), isNull);
-      expect(stored().needsAttention, isFalse);
+        expect(await hideAs('alice', 'f1', 'Wrong chore'), isNull);
+        expect(stored().needsAttention, isFalse);
 
-      expect(await showAs('alice', 'f1', 'It was right'), isNull);
-      expect(thread().single.hidden, isFalse);
-      expect(thread().single.hiddenBy, isNull);
-      expect(stored().needsAttention, isTrue);
-      expect(
-        fixture.comments.plans.last.occurrence.audits.single.type,
-        AuditEventType.choresCommentUnhidden,
-      );
-    });
+        expect(await showAs('alice', 'f1', 'It was right'), isNull);
+        expect(thread().single.hidden, isFalse);
+        expect(thread().single.hiddenBy, isNull);
+        expect(stored().needsAttention, isTrue);
+        expect(
+          fixture.comments.plans.last.occurrence.audits.single.type,
+          AuditEventType.choresCommentUnhidden,
+        );
+      },
+    );
 
     test('hiding twice or unhiding a visible comment is a conflict', () async {
       await say('dave', 'hi');
-      expect(await showAs('bob', 'c1', 'oops'), const Conflict(code: 'concurrent_edit'));
+      expect(
+        await showAs('bob', 'c1', 'oops'),
+        const Conflict(code: 'concurrent_edit'),
+      );
       expect(await hideAs('bob', 'c1', 'reason'), isNull);
-      expect(await hideAs('bob', 'c1', 'again'), const Conflict(code: 'concurrent_edit'));
+      expect(
+        await hideAs('bob', 'c1', 'again'),
+        const Conflict(code: 'concurrent_edit'),
+      );
     });
   });
 

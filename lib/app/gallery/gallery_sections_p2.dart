@@ -32,17 +32,9 @@ final GallerySection _monthSwitcher = GallerySection(
     children: [
       MonthSwitcher(month: _sampleMonth, onChanged: (_) {}),
       // At the lower bound: the back arrow is disabled.
-      MonthSwitcher(
-        month: _sampleMonth,
-        min: _sampleMonth,
-        onChanged: (_) {},
-      ),
+      MonthSwitcher(month: _sampleMonth, min: _sampleMonth, onChanged: (_) {}),
       // At the upper bound: the forward arrow is disabled.
-      MonthSwitcher(
-        month: _sampleMonth,
-        max: _sampleMonth,
-        onChanged: (_) {},
-      ),
+      MonthSwitcher(month: _sampleMonth, max: _sampleMonth, onChanged: (_) {}),
       // The longest Bangla month name.
       MonthSwitcher(month: MonthKey(2026, 2), onChanged: (_) {}),
     ],

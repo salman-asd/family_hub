@@ -76,15 +76,11 @@ class RangeExpensesController extends AsyncNotifier<RangePage> {
 
   Future<RangePage> _load(Expense? after, List<Expense> before) async {
     final familyId = ref.read(currentFamilyIdProvider);
-    if (familyId == null) return const RangePage(rows: <Expense>[], hasMore: false);
+    if (familyId == null)
+      return const RangePage(rows: <Expense>[], hasMore: false);
     final result = await ref
         .read(expenseRepositoryProvider)
-        .queryRange(
-          familyId,
-          range,
-          limit: defaultPageSize,
-          startAfter: after,
-        );
+        .queryRange(familyId, range, limit: defaultPageSize, startAfter: after);
     final failure = result.failureOrNull;
     if (failure != null) throw failure;
     final page = result.valueOrNull ?? const <Expense>[];
@@ -97,7 +93,9 @@ class RangeExpensesController extends AsyncNotifier<RangePage> {
   Future<void> loadMore() async {
     final current = state.value;
     if (current == null || !current.hasMore) return;
-    state = await AsyncValue.guard(() => _load(current.rows.last, current.rows));
+    state = await AsyncValue.guard(
+      () => _load(current.rows.last, current.rows),
+    );
   }
 
   Future<void> refresh() async {

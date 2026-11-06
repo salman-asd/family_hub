@@ -48,9 +48,8 @@ class DateChipField extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               errorText!,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: t.danger),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: t.danger),
             ),
           ),
       ],

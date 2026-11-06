@@ -127,7 +127,8 @@ class InMemorySwapBackend implements SwapRepository {
       world.swapRequests[swap.id] = world.toRequest(swap, plan.actorId);
     }
     for (final change in plan.changes) {
-      world.swapRequests[change.requestId] = world.swapRequests[change.requestId]!
+      world.swapRequests[change.requestId] = world
+          .swapRequests[change.requestId]!
           .withStatus(
             change.status,
             by: plan.actorId,

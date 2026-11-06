@@ -2,6 +2,10 @@
 
 **Status:** accepted (Phase 4, P4-01). Backs CLAUDE.md rules 61, 62 and 73.
 
+**Spark status (2026-11-06):** the FCM receive client is present, but no push
+sender is configured. Until a sender is added, every type is effectively
+Normal; `FeatureFlags.pushBackend` remains false.
+
 **Context.** Phase 3 had only local notifications in mind, because the Spark plan
 cannot send push (ADR 0020). The owner asked for FCM push that is
 **configurable**: the admin chooses, per notification type, whether it is Push

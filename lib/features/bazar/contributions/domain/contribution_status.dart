@@ -39,8 +39,14 @@ final class MemberContributionStatus {
       other.pendingTotal == pendingTotal;
 
   @override
-  int get hashCode =>
-      Object.hash(memberId, expected, received, remaining, credit, pendingTotal);
+  int get hashCode => Object.hash(
+    memberId,
+    expected,
+    received,
+    remaining,
+    credit,
+    pendingTotal,
+  );
 
   @override
   String toString() =>

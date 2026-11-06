@@ -66,7 +66,9 @@ class CommentBubble extends StatelessWidget {
           Expanded(
             child: DecoratedBox(
               decoration: BoxDecoration(
-                color: comment.isOpenFlag ? t.statusOverdueContainer : t.surface,
+                color: comment.isOpenFlag
+                    ? t.statusOverdueContainer
+                    : t.surface,
                 borderRadius: BorderRadius.circular(t.radiusMd),
                 border: Border.all(
                   color: comment.isOpenFlag ? t.statusOverdue : t.divider,
@@ -148,7 +150,11 @@ class CommentBubble extends StatelessWidget {
         if (comment.hidden)
           Row(
             children: [
-              Icon(Icons.visibility_off_outlined, size: 14, color: t.textSecondary),
+              Icon(
+                Icons.visibility_off_outlined,
+                size: 14,
+                color: t.textSecondary,
+              ),
               const SizedBox(width: 4),
               Flexible(
                 child: Text(

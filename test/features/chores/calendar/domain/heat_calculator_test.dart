@@ -28,10 +28,10 @@ void main() {
   DateKey day(int n) => DateKey(2026, 10, n);
 
   test('an empty month is all level 0', () {
-    expect(
-      HeatCalculator.levels({day(1): 0, day(2): 0}),
-      {day(1): 0, day(2): 0},
-    );
+    expect(HeatCalculator.levels({day(1): 0, day(2): 0}), {
+      day(1): 0,
+      day(2): 0,
+    });
     expect(HeatCalculator.levels(const {}), isEmpty);
   });
 

@@ -80,11 +80,17 @@ void main() {
           _contrast(t.statusOverdueOn, t.statusOverdueContainer),
           greaterThanOrEqualTo(4.5),
         );
-        expect(_contrast(t.accentStrong, t.accentSoft), greaterThanOrEqualTo(4.5));
+        expect(
+          _contrast(t.accentStrong, t.accentSoft),
+          greaterThanOrEqualTo(4.5),
+        );
       });
 
       test('the selected number is >= 4.5 on its pill', () {
-        expect(_contrast(t.accentStrong, t.accentSoft), greaterThanOrEqualTo(4.5));
+        expect(
+          _contrast(t.accentStrong, t.accentSoft),
+          greaterThanOrEqualTo(4.5),
+        );
       });
     });
   }

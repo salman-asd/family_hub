@@ -34,72 +34,74 @@ class FirestoreAdvanceRepository implements AdvanceRepository {
     required String advanceId,
     required Result<SettlementPlan> Function(MemberAdvance? current) build,
     required AuditEvent event,
-  }) => guardWrite(
-    probe: serverProbeFor(_db, event.actorId),
-    () async {
-      final snapshot = await _db
-          .doc(FirestorePaths.memberAdvanceDoc(familyId, advanceId))
-          .get(const GetOptions(source: Source.server));
-      final data = snapshot.data();
-      final current = snapshot.exists && data != null
-          ? AdvanceMappers.advanceFromMap(advanceId, data)
-          : null;
-      // A failure from `build` (overpayment, voided, missing) writes nothing.
-      final plan = build(current);
-      final failure = plan.failureOrNull;
-      if (failure != null) return Failure<SettlementPlan>(failure);
-      final settlement = plan.valueOrNull!;
+  }) => guardWrite(probe: serverProbeFor(_db, event.actorId), () async {
+    final snapshot = await _db
+        .doc(FirestorePaths.memberAdvanceDoc(familyId, advanceId))
+        .get(const GetOptions(source: Source.server));
+    final data = snapshot.data();
+    final current = snapshot.exists && data != null
+        ? AdvanceMappers.advanceFromMap(advanceId, data)
+        : null;
+    // A failure from `build` (overpayment, voided, missing) writes nothing.
+    final plan = build(current);
+    final failure = plan.failureOrNull;
+    if (failure != null) return Failure<SettlementPlan>(failure);
+    final settlement = plan.valueOrNull!;
 
-      await _tx.runBatch((batch) {
-        batch.set(
-          FirestorePaths.settlementDoc(familyId, settlement.settlement.id),
-          AdvanceMappers.settlementToMap(
-            settlement.settlement,
-            BaseDocumentMetadata(
-              createdAt: event.at,
-              createdBy: event.actorId,
-              updatedAt: event.at,
-              updatedBy: event.actorId,
-            ),
+    await _tx.runBatch((batch) {
+      batch.set(
+        FirestorePaths.settlementDoc(familyId, settlement.settlement.id),
+        AdvanceMappers.settlementToMap(
+          settlement.settlement,
+          BaseDocumentMetadata(
+            createdAt: event.at,
+            createdBy: event.actorId,
+            updatedAt: event.at,
+            updatedBy: event.actorId,
           ),
-        );
-        final row = settlement.reimbursement;
-        batch.set(
-          FirestorePaths.fundTransactionDoc(familyId, row.id),
-          FundMappers.fundTxToMap(
-            row,
-            BaseDocumentMetadata(
-              createdAt: row.createdAt,
-              createdBy: row.createdBy,
-              updatedAt: event.at,
-              updatedBy: event.actorId,
-            ),
+        ),
+      );
+      final row = settlement.reimbursement;
+      batch.set(
+        FirestorePaths.fundTransactionDoc(familyId, row.id),
+        FundMappers.fundTxToMap(
+          row,
+          BaseDocumentMetadata(
+            createdAt: row.createdAt,
+            createdBy: row.createdBy,
+            updatedAt: event.at,
+            updatedBy: event.actorId,
           ),
-        );
-        // Only the settlement progress changes on the advance.
-        batch.update(
-          FirestorePaths.memberAdvanceDoc(familyId, advanceId),
-          AdvanceMappers.advanceChangeMap(
-            settlement.advanceAfter,
-            actorUid: event.actorId,
-            now: event.at,
-          ),
-        );
-        AuditWriter.write(batch, familyId, event);
-      });
-      return Success<SettlementPlan>(settlement);
-    },
-  );
+        ),
+      );
+      // Only the settlement progress changes on the advance.
+      batch.update(
+        FirestorePaths.memberAdvanceDoc(familyId, advanceId),
+        AdvanceMappers.advanceChangeMap(
+          settlement.advanceAfter,
+          actorUid: event.actorId,
+          now: event.at,
+        ),
+      );
+      AuditWriter.write(batch, familyId, event);
+    });
+    return Success<SettlementPlan>(settlement);
+  });
 
   @override
   Stream<List<MemberAdvance>> watchOpenAdvances(
     String familyId, {
     String? memberId,
   }) {
-    var query = _db.collection(FirestorePaths.memberAdvances(familyId)).where(
-      'status',
-      whereIn: <String>[AdvanceStatus.pending.name, AdvanceStatus.partial.name],
-    );
+    var query = _db
+        .collection(FirestorePaths.memberAdvances(familyId))
+        .where(
+          'status',
+          whereIn: <String>[
+            AdvanceStatus.pending.name,
+            AdvanceStatus.partial.name,
+          ],
+        );
     if (memberId != null) {
       query = query.where('memberId', isEqualTo: memberId);
     }

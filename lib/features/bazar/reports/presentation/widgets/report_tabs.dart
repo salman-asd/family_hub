@@ -55,15 +55,9 @@ String previousPeriodName(AppLocalizations l10n, RangePreset preset) =>
       RangePreset.custom => l10n.reportPrevRange,
     };
 
-
-
 /// Summary: total, daily average, row count, range and the comparison.
 class SummaryTab extends ConsumerWidget {
-  const SummaryTab({
-    required this.data,
-    required this.query,
-    super.key,
-  });
+  const SummaryTab({required this.data, required this.query, super.key});
 
   final ReportData data;
   final ReportQuery query;
@@ -80,7 +74,11 @@ class SummaryTab extends ConsumerWidget {
       children: [
         ReportTable(
           rows: <ReportRow>[
-            ReportRow(key: 'total', label: l10n.reportTotal, amount: summary.total),
+            ReportRow(
+              key: 'total',
+              label: l10n.reportTotal,
+              amount: summary.total,
+            ),
             ReportRow(
               key: 'average',
               label: l10n.reportAveragePerDay,
@@ -194,7 +192,3 @@ class ItemsTab extends StatelessWidget {
     );
   }
 }
-
-
-
-

@@ -153,9 +153,8 @@ class _StepHeader extends StatelessWidget {
                   '${state.stepNumber}',
                   '${StarterPackWizardStep.values.length}',
                 ),
-                style: Theme.of(
-                  context,
-                ).textTheme.labelMedium?.copyWith(color: t.textSecondary),
+                style: Theme.of(context).textTheme.labelMedium
+                    ?.copyWith(color: t.textSecondary),
               ),
             ],
           ),
@@ -163,8 +162,7 @@ class _StepHeader extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(t.radiusPill),
             child: LinearProgressIndicator(
-              value:
-                  state.stepNumber / StarterPackWizardStep.values.length,
+              value: state.stepNumber / StarterPackWizardStep.values.length,
               minHeight: 6,
               backgroundColor: t.surfaceSunken,
               color: t.accent,
@@ -247,9 +245,7 @@ class _BottomBar extends StatelessWidget {
             ],
             Expanded(
               child: BusyButton(
-                key: ValueKey<String>(
-                  last ? 'starter_apply' : 'starter_next',
-                ),
+                key: ValueKey<String>(last ? 'starter_apply' : 'starter_next'),
                 label: last ? l10n.starterPackApply : l10n.actionContinue,
                 busyLabel: l10n.starterPackApplying,
                 busy: state.applying,

@@ -61,26 +61,24 @@ final class StarterTemplate {
 
   /// The draft stored on the template. [dutyGroupId] is the rotation the family
   /// chose in the wizard; null means "assign later" (`AssigneeSpec.manual`).
-  TemplateDraft toDraft({
-    required DateKey startDate,
-    String? dutyGroupId,
-  }) => TemplateDraft(
-    nameBn: nameBn,
-    nameEn: nameEn,
-    groupId: groupId,
-    recurrence: recurrence,
-    slots: slots,
-    assignee: dutyGroupId == null
-        ? AssigneeSpec.manual
-        : AssigneeSpec(
-            strategy: AssigneeStrategy.rotation,
-            dutyGroupId: dutyGroupId,
-          ),
-    instructions: instructions,
-    subtasks: subtasks,
-    verification: verification,
-    startDate: startDate,
-  );
+  TemplateDraft toDraft({required DateKey startDate, String? dutyGroupId}) =>
+      TemplateDraft(
+        nameBn: nameBn,
+        nameEn: nameEn,
+        groupId: groupId,
+        recurrence: recurrence,
+        slots: slots,
+        assignee: dutyGroupId == null
+            ? AssigneeSpec.manual
+            : AssigneeSpec(
+                strategy: AssigneeStrategy.rotation,
+                dutyGroupId: dutyGroupId,
+              ),
+        instructions: instructions,
+        subtasks: subtasks,
+        verification: verification,
+        startDate: startDate,
+      );
 
   @override
   bool operator ==(Object other) =>
@@ -116,11 +114,7 @@ final class StarterTemplate {
 
 /// The duty group a pack would create (Q8: one group for the daily chores).
 final class StarterDutyGroup {
-  const StarterDutyGroup({
-    required this.nameBn,
-    this.nameEn,
-    this.colorIndex,
-  });
+  const StarterDutyGroup({required this.nameBn, this.nameEn, this.colorIndex});
 
   final String nameBn;
   final String? nameEn;

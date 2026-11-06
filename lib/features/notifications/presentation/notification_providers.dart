@@ -3,6 +3,7 @@ import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/notifications/domain/delivery_policy.dart';
 import 'package:family_hub/core/notifications/domain/notification_type.dart';
 import 'package:family_hub/core/notifications/domain/reminder_settings.dart';
+import 'package:family_hub/app/feature_flags.dart';
 import 'package:family_hub/core/utils/clock_provider.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/notifications/domain/member_notification_prefs.dart';
@@ -104,6 +105,7 @@ final pushCapabilityProvider = Provider<DeliveryCapability>((ref) {
     tokenRegistered: diagnostics?.tokenRegistered ?? false,
     osPermissionGranted: diagnostics?.notificationsGranted ?? false,
     memberPushEnabled: ref.watch(memberPrefsProvider).pushEnabled,
+    backendAvailable: FeatureFlags.pushBackend,
   );
 });
 
@@ -113,6 +115,15 @@ final notificationDeliveryCapabilityProvider = Provider<DeliveryCapability>(
 
 final effectiveModeProvider =
     Provider.family<AsyncValue<EffectiveDelivery>, String>((ref, typeId) {
+      if (!FeatureFlags.pushBackend) {
+        return const AsyncData<EffectiveDelivery>(
+          EffectiveDelivery(
+            mode: DeliveryMode.normal,
+            reason: DeliveryReason.backendUnavailable,
+          ),
+        );
+      }
+
       final type = NotificationTypes.byId(typeId);
       if (type == null) {
         return const AsyncData<EffectiveDelivery>(

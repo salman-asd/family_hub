@@ -34,7 +34,13 @@ void main() {
 
   setUp(() => fixture = ChoresFixture());
 
-  Future<void> open(WidgetTester tester, {required String uid, Role role = Role.member, String language = 'en', double scale = 1}) async {
+  Future<void> open(
+    WidgetTester tester, {
+    required String uid,
+    Role role = Role.member,
+    String language = 'en',
+    double scale = 1,
+  }) async {
     await pumpP3Screen(
       tester,
       home: const AvailabilityScreen(),
@@ -51,21 +57,32 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
   }
 
-  testWidgets('a member sees and cancels their own absence only', (tester) async {
+  testWidgets('a member sees and cancels their own absence only', (
+    tester,
+  ) async {
     seed('a1', 'cara', AvailabilityStatus.active);
     seed('a2', 'dave', AvailabilityStatus.pending);
     await open(tester, uid: 'cara');
 
     expect(find.text('Approved'), findsOneWidget);
-    expect(find.text('Waiting for approval'), findsNothing, reason: 'dave’s is not mine');
+    expect(
+      find.text('Waiting for approval'),
+      findsNothing,
+      reason: 'dave’s is not mine',
+    );
     expect(find.byKey(const Key('availability_scope')), findsNothing);
 
     await tester.tap(find.byKey(const Key('availability_cancel')));
     await tester.pump(const Duration(milliseconds: 100));
-    expect(fixture.swapWorld.absences['a1']!.status, AvailabilityStatus.cancelled);
+    expect(
+      fixture.swapWorld.absences['a1']!.status,
+      AvailabilityStatus.cancelled,
+    );
   });
 
-  testWidgets('a manager switches to Everyone and approves a pending absence', (tester) async {
+  testWidgets('a manager switches to Everyone and approves a pending absence', (
+    tester,
+  ) async {
     seed('a2', 'dave', AvailabilityStatus.pending);
     await open(tester, uid: 'bob', role: Role.moderator);
 
@@ -97,7 +114,8 @@ void main() {
         home: Scaffold(
           body: Consumer(
             builder: (context, ref, _) => TextButton(
-              onPressed: () => ref.addAvailabilityWithSheet(context, memberId: 'cara'),
+              onPressed: () =>
+                  ref.addAvailabilityWithSheet(context, memberId: 'cara'),
               child: const Text('open'),
             ),
           ),
@@ -106,7 +124,9 @@ void main() {
         uid: 'cara',
         height: 1400,
         overrides: [
-          availabilityRepositoryProvider.overrideWithValue(fixture.availability),
+          availabilityRepositoryProvider.overrideWithValue(
+            fixture.availability,
+          ),
           swapRepositoryProvider.overrideWithValue(fixture.swaps),
         ],
       );
@@ -124,18 +144,30 @@ void main() {
       fixture.settings.policy = AbsencePolicy.autoCover;
       await openSheet(tester);
       await tester.pump(const Duration(milliseconds: 100));
-      expect(find.textContaining('Nothing changes until they accept'), findsOneWidget);
+      expect(
+        find.textContaining('Nothing changes until they accept'),
+        findsOneWidget,
+      );
     });
 
-    testWidgets('Save stays disabled until type, dates and reason are given', (tester) async {
+    testWidgets('Save stays disabled until type, dates and reason are given', (
+      tester,
+    ) async {
       await openSheet(tester);
       final save = find.byKey(const Key('availability_save'));
       expect(tester.widget<FilledButton>(save).onPressed, isNull);
 
       await tester.tap(find.byKey(Key('availability_type_$typeId')));
-      await tester.enterText(find.byKey(const Key('availability_reason')), 'Fever');
+      await tester.enterText(
+        find.byKey(const Key('availability_reason')),
+        'Fever',
+      );
       await tester.pump();
-      expect(tester.widget<FilledButton>(save).onPressed, isNull, reason: 'no dates yet');
+      expect(
+        tester.widget<FilledButton>(save).onPressed,
+        isNull,
+        reason: 'no dates yet',
+      );
     });
   });
 }

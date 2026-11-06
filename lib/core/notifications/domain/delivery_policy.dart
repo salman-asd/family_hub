@@ -65,8 +65,7 @@ final class DeliveryPolicySettings {
   static DeliveryPolicySettings defaults() => DeliveryPolicySettings(
     pushEnabled: false,
     modes: <String, DeliveryMode>{
-      for (final type in NotificationTypes.all)
-        type.id: type.recommendedMode,
+      for (final type in NotificationTypes.all) type.id: type.recommendedMode,
     },
   );
 
@@ -83,8 +82,7 @@ final class DeliveryPolicySettings {
     return Map<String, DeliveryMode>.unmodifiable(validModes);
   }
 
-  DeliveryMode modeFor(NotificationType type) =>
-      type.userMutable
+  DeliveryMode modeFor(NotificationType type) => type.userMutable
       ? modes[type.id] ?? type.recommendedMode
       : type.recommendedMode;
 
@@ -119,10 +117,7 @@ final class EffectiveDelivery {
   final DeliveryReason reason;
 
   EffectiveDelivery copyWith({DeliveryMode? mode, DeliveryReason? reason}) =>
-      EffectiveDelivery(
-        mode: mode ?? this.mode,
-        reason: reason ?? this.reason,
-      );
+      EffectiveDelivery(mode: mode ?? this.mode, reason: reason ?? this.reason);
 
   @override
   bool operator ==(Object other) =>

@@ -606,8 +606,9 @@ class InMemoryBazarBackend extends InMemoryBackend
   ) async {
     final failed = _takeWriteFailure();
     if (failed != null) return failed;
-    (closings[familyId] ??= <MonthKey, MonthClosing>{})[plan.reopened
-        .monthKey] = plan.reopened;
+    (closings[familyId] ??=
+            <MonthKey, MonthClosing>{})[plan.reopened.monthKey] =
+        plan.reopened;
     _addEventOnce(event);
     writes++;
     _expenseChanges.add(null);
@@ -632,9 +633,8 @@ class InMemoryBazarBackend extends InMemoryBackend
   Future<Result<Money?>> getOpeningAmount(
     String familyId,
     MonthKey month,
-  ) async => Success<Money?>(
-    fundTransactions[familyId]?['open_$month']?.amount,
-  );
+  ) async =>
+      Success<Money?>(fundTransactions[familyId]?['open_$month']?.amount);
 
   /// Mirrors the Firestore window query: rows with `monthKey >= from`,
   /// read fresh (no cache), newest month first.
@@ -672,7 +672,8 @@ class InMemoryBazarBackend extends InMemoryBackend
   ) async {
     final failed = _takeWriteFailure();
     if (failed != null) return failed;
-    (closings[familyId] ??= <MonthKey, MonthClosing>{})[plan.reopened.monthKey] =
+    (closings[familyId] ??=
+            <MonthKey, MonthClosing>{})[plan.reopened.monthKey] =
         plan.reopened;
     _addEventOnce(event);
     writes++;

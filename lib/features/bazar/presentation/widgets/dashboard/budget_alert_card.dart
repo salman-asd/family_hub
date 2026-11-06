@@ -99,9 +99,7 @@ class _AlertCard extends ConsumerWidget {
           );
     final amount = exceeded
         ? l10n.budgetOver(
-            ref.watch(appFormattersProvider).money(
-              status.spent - status.limit,
-            ),
+            ref.watch(appFormattersProvider).money(status.spent - status.limit),
           )
         : l10n.budgetLeft(
             ref.watch(appFormattersProvider).money(status.remaining),
@@ -120,12 +118,11 @@ class _AlertCard extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            ref.watch(appFormattersProvider).monthLabel(
-              ref.watch(familyDateKeysProvider).thisMonth(),
-            ),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: tokens.textSecondary,
-            ),
+            ref
+                .watch(appFormattersProvider)
+                .monthLabel(ref.watch(familyDateKeysProvider).thisMonth()),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: tokens.textSecondary),
           ),
           const SizedBox(height: 8),
           Row(
@@ -146,9 +143,15 @@ class _AlertCard extends ConsumerWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             spacing: 4,
             children: [
-              MoneyText(value: status.spent, style: Theme.of(context).textTheme.bodySmall),
+              MoneyText(
+                value: status.spent,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
               Text(' / ', style: Theme.of(context).textTheme.bodySmall),
-              MoneyText(value: status.limit, style: Theme.of(context).textTheme.bodySmall),
+              MoneyText(
+                value: status.limit,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             ],
           ),
         ],

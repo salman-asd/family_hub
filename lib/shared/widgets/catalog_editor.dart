@@ -106,9 +106,8 @@ class CatalogEditor extends StatelessWidget {
 
   final bool canReorder;
   final Future<CatalogEntry?> Function(BuildContext, CatalogEntry?)?
-      onEditEntry;
-  final Future<bool> Function(BuildContext, CatalogEntry)?
-      onBeforeToggleActive;
+  onEditEntry;
+  final Future<bool> Function(BuildContext, CatalogEntry)? onBeforeToggleActive;
 
   @override
   Widget build(BuildContext context) {
@@ -153,8 +152,7 @@ class CatalogEditor extends StatelessWidget {
                 index: index,
                 showHandle: canReorder,
                 onEdit: () => _edit(context, entry),
-                onToggleActive: () =>
-                    _handleToggle(context, entry),
+                onToggleActive: () => _handleToggle(context, entry),
                 onDelete: entry.builtIn ? null : () => _remove(entry),
               );
             },

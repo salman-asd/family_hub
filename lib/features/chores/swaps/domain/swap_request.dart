@@ -102,5 +102,6 @@ final class SwapRequest {
   );
 
   @override
-  String toString() => 'SwapRequest($id ${status.id} $fromMemberId->$toMemberId)';
+  String toString() =>
+      'SwapRequest($id ${status.id} $fromMemberId->$toMemberId)';
 }

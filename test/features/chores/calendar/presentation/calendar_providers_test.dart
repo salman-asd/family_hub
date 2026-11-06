@@ -164,7 +164,10 @@ void main() {
       final container = make();
       container.listen(monthItemsProvider(october), (_, _) {});
       await settle(container);
-      expect(container.read(monthItemsProvider(october)).value!.items, isNotEmpty);
+      expect(
+        container.read(monthItemsProvider(october)).value!.items,
+        isNotEmpty,
+      );
 
       await container
           .read(calendarPrefsProvider.notifier)
@@ -180,7 +183,10 @@ void main() {
       container.listen(projectedItemsProvider(october), (_, _) {});
       await settle(container);
 
-      expect(container.read(projectedItemProvider('tpl_1_20261026')), isNotNull);
+      expect(
+        container.read(projectedItemProvider('tpl_1_20261026')),
+        isNotNull,
+      );
       expect(container.read(projectedItemProvider('nope_20261026')), isNull);
       expect(occurrenceMonthOf('tpl_dishes_20261105_noon'), MonthKey(2026, 11));
       expect(occurrenceMonthOf('garbage'), isNull);
@@ -250,12 +256,20 @@ void main() {
       await settle(sunday);
 
       expect(
-        saturday.read(calendarMonthModelProvider(october)).value!.days.first
+        saturday
+            .read(calendarMonthModelProvider(october))
+            .value!
+            .days
+            .first
             .dateKey,
         DateKey(2026, 9, 26),
       );
       expect(
-        sunday.read(calendarMonthModelProvider(october)).value!.days.first
+        sunday
+            .read(calendarMonthModelProvider(october))
+            .value!
+            .days
+            .first
             .dateKey,
         DateKey(2026, 9, 27),
       );
@@ -264,12 +278,7 @@ void main() {
 
   group('the clock', () {
     test('a tick that changes nothing does not rebuild the model', () async {
-      seed(
-        anOccurrence(
-          id: 'tpl_1_20261026',
-          dateKey: DateKey(2026, 10, 26),
-        ),
-      );
+      seed(anOccurrence(id: 'tpl_1_20261026', dateKey: DateKey(2026, 10, 26)));
       final ticks = StreamController<DateTime>.broadcast();
       addTearDown(ticks.close);
       final container = make(ticks: ticks.stream);
@@ -373,12 +382,7 @@ void main() {
   group('week and agenda', () {
     test('a week that crosses a month border reads both months', () async {
       seed(anOccurrence(id: 'tpl_1_20261031', dateKey: DateKey(2026, 10, 31)));
-      seed(
-        anOccurrence(
-          id: 'tpl_1_20261101',
-          dateKey: DateKey(2026, 11, 1),
-        ),
-      );
+      seed(anOccurrence(id: 'tpl_1_20261101', dateKey: DateKey(2026, 11, 1)));
       final container = make(
         settings: ChoreSettings.defaults.copyWith(weekStartDay: 1),
       );
@@ -393,12 +397,7 @@ void main() {
     });
 
     test('the agenda pins an open chore of last month as overdue', () async {
-      seed(
-        anOccurrence(
-          id: 'tpl_1_20260930',
-          dateKey: DateKey(2026, 9, 30),
-        ),
-      );
+      seed(anOccurrence(id: 'tpl_1_20260930', dateKey: DateKey(2026, 9, 30)));
       final container = make();
       container.listen(agendaModelProvider(2), (_, _) {});
       await settle(container);

@@ -21,7 +21,10 @@ Map<String, String> resolveChoreActivityNames(
       type == AuditEventType.choresSwapCancelled ||
       type == AuditEventType.choresSwapExpired ||
       type == AuditEventType.choresCoverAssigned;
-  final keys = <String>{'member', if (peopleInFromTo) ...['from', 'to']};
+  final keys = <String>{
+    'member',
+    if (peopleInFromTo) ...['from', 'to'],
+  };
   return <String, String>{
     for (final entry in params.entries)
       entry.key: keys.contains(entry.key)

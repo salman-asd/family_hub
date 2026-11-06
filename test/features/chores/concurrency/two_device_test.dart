@@ -56,18 +56,21 @@ void main() {
       expect(ab['subtaskDone.step_2'], ba['subtaskDone.step_2']);
     });
 
-    test('the effective status follows the merged ticks, not the stored one', () {
-      // Each phone stored "in_progress"; together every step is ticked.
-      final merged = anOccurrence(
-        subtasks: steps,
-        status: OccurrenceStatus.inProgress,
-        subtaskDone: <String, SubtaskDone>{
-          'step_1': SubtaskDone(at: at, by: 'cara'),
-          'step_2': SubtaskDone(at: at, by: 'dave'),
-        },
-      );
-      expect(effectiveStatus(merged), ChoreStatus.completed);
-    });
+    test(
+      'the effective status follows the merged ticks, not the stored one',
+      () {
+        // Each phone stored "in_progress"; together every step is ticked.
+        final merged = anOccurrence(
+          subtasks: steps,
+          status: OccurrenceStatus.inProgress,
+          subtaskDone: <String, SubtaskDone>{
+            'step_1': SubtaskDone(at: at, by: 'cara'),
+            'step_2': SubtaskDone(at: at, by: 'dave'),
+          },
+        );
+        expect(effectiveStatus(merged), ChoreStatus.completed);
+      },
+    );
   });
 
   group('two devices generate the same range', () {
@@ -76,7 +79,10 @@ void main() {
     List<String> ids() => OccurrenceGenerator.drafts(
       templates: <ChoreTemplate>[
         ChoreTemplate(id: 'tpl_1', draft: aTemplate()),
-        ChoreTemplate(id: 'tpl_2', draft: aTemplate(nameEn: 'Sweep')),
+        ChoreTemplate(
+          id: 'tpl_2',
+          draft: aTemplate(nameEn: 'Sweep'),
+        ),
       ],
       dutyGroups: const [],
       members: fixture.roster,
@@ -84,12 +90,15 @@ void main() {
       dateKeys: fixture.dateKeys,
     ).map((d) => d.id).toList();
 
-    test('identical deterministic ids, so a race writes the same documents', () {
-      final first = ids();
-      final second = ids();
-      expect(first, second);
-      expect(first.toSet(), hasLength(first.length));
-      expect(first, contains('tpl_1_20261024'));
-    });
+    test(
+      'identical deterministic ids, so a race writes the same documents',
+      () {
+        final first = ids();
+        final second = ids();
+        expect(first, second);
+        expect(first.toSet(), hasLength(first.length));
+        expect(first, contains('tpl_1_20261024'));
+      },
+    );
   });
 }

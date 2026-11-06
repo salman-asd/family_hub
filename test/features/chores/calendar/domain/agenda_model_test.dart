@@ -51,29 +51,31 @@ void main() {
     expect((model.entries[2] as AgendaFreeDays).count, 2);
   });
 
-  test('overdue is pinned first, newest first, and never repeated in a day',
-      () {
-    final model = build(
-      [
-        aChoreItem('old', kToday.addDays(-3), status: ChoreStatus.overdue),
-        aChoreItem('newer', kToday.addDays(-1), status: ChoreStatus.overdue),
-        aChoreItem('grace', kToday.addDays(-1)),
-        aChoreItem('done', kToday.addDays(-1), status: ChoreStatus.completed),
-        aChoreItem('later', kToday.addDays(1)),
-      ],
-      from: kToday.addDays(-2),
-      to: kToday.addDays(1),
-    );
-    final overdue = model.entries.first as AgendaOverdue;
-    expect(overdue.items.map((i) => i.id), ['grace', 'newer', 'old']);
-    expect(overdue.total, 3);
-    expect(overdue.hasMore, isFalse);
+  test(
+    'overdue is pinned first, newest first, and never repeated in a day',
+    () {
+      final model = build(
+        [
+          aChoreItem('old', kToday.addDays(-3), status: ChoreStatus.overdue),
+          aChoreItem('newer', kToday.addDays(-1), status: ChoreStatus.overdue),
+          aChoreItem('grace', kToday.addDays(-1)),
+          aChoreItem('done', kToday.addDays(-1), status: ChoreStatus.completed),
+          aChoreItem('later', kToday.addDays(1)),
+        ],
+        from: kToday.addDays(-2),
+        to: kToday.addDays(1),
+      );
+      final overdue = model.entries.first as AgendaOverdue;
+      expect(overdue.items.map((i) => i.id), ['grace', 'newer', 'old']);
+      expect(overdue.total, 3);
+      expect(overdue.hasMore, isFalse);
 
-    final yesterday = model.entries.whereType<AgendaDay>().firstWhere(
-      (d) => d.dateKey == kToday.addDays(-1),
-    );
-    expect(yesterday.items.map((i) => i.id), ['done']);
-  });
+      final yesterday = model.entries.whereType<AgendaDay>().firstWhere(
+        (d) => d.dateKey == kToday.addDays(-1),
+      );
+      expect(yesterday.items.map((i) => i.id), ['done']);
+    },
+  );
 
   test('a chore overdue today stays in today, not in the overdue block', () {
     final model = build([

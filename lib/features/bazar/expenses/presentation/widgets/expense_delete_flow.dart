@@ -44,7 +44,9 @@ Future<bool> confirmAndDeleteExpense(
   );
   final failure = result.failureOrNull;
   if (failure != null) {
-    messenger.showSnackBar(SnackBar(content: Text(l10n.bazarFailureMessage(failure))));
+    messenger.showSnackBar(
+      SnackBar(content: Text(l10n.bazarFailureMessage(failure))),
+    );
     return false;
   }
 
@@ -118,9 +120,8 @@ class _ConfirmDeleteSheet extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               l10n.expenseDeleteMessage(name),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: t.textSecondary),
             ),
             const SizedBox(height: 16),
             SizedBox(

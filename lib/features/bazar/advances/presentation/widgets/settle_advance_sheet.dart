@@ -27,9 +27,7 @@ Future<bool> showSettleAdvanceSheet(
     isScrollControlled: true,
     useSafeArea: true,
     builder: (_) => Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.viewInsetsOf(context).bottom,
-      ),
+      padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
       child: SettleAdvanceSheet(advance: advance),
     ),
   );
@@ -173,8 +171,7 @@ class _SettleAdvanceSheetState extends ConsumerState<SettleAdvanceSheet> {
                   key: ValueKey('settle-method-${option.value}'),
                   label: Text(option.label(l10n)),
                   selected: _method == option.value,
-                  onSelected: (_) =>
-                      setState(() => _method = option.value),
+                  onSelected: (_) => setState(() => _method = option.value),
                 ),
             ],
           ),
@@ -202,5 +199,3 @@ class _SettleAdvanceSheetState extends ConsumerState<SettleAdvanceSheet> {
     );
   }
 }
-
-

@@ -57,11 +57,8 @@ class BudgetScreen extends ConsumerWidget {
                 message: l10n.errorNetwork,
                 onRetry: () => ref.invalidate(monthBudgetProvider(month)),
               ),
-              data: (value) => _Body(
-                month: month,
-                budget: value,
-                canManage: canManage,
-              ),
+              data: (value) =>
+                  _Body(month: month, budget: value, canManage: canManage),
             ),
           ),
         ],
@@ -96,9 +93,9 @@ class _Body extends ConsumerWidget {
           BudgetEditorForm(
             month: month,
             categories: categories,
-            onSaved: () => ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(l10n.budgetSaved))),
+            onSaved: () =>
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(l10n.budgetSaved))),
           ),
         ],
       );
@@ -203,7 +200,9 @@ class _Empty extends StatelessWidget {
         EmptyState(
           icon: Icons.savings_outlined,
           title: l10n.budgetEmptyTitle,
-          message: canManage ? l10n.budgetEmptyMessage : l10n.budgetEmptyReadOnly,
+          message: canManage
+              ? l10n.budgetEmptyMessage
+              : l10n.budgetEmptyReadOnly,
           actionLabel: canManage ? l10n.budgetPlanThisMonth : null,
           onAction: canManage ? onPlan : null,
         ),
@@ -224,9 +223,8 @@ class _Empty extends StatelessWidget {
               problem is NotFound
                   ? l10n.budgetNoLastMonth
                   : l10n.bazarFailureMessage(problem),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: t.danger),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: t.danger),
             ),
           ),
         const SizedBox(height: 12),

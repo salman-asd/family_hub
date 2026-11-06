@@ -36,9 +36,8 @@ class StarterPackPickStep extends StatelessWidget {
       children: <Widget>[
         Text(
           l10n.starterPackPickBody,
-          style: Theme.of(
-            context,
-          ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+          style: Theme.of(context).textTheme.bodyMedium
+              ?.copyWith(color: t.textSecondary),
         ),
         const SizedBox(height: 16),
         AppCard(
@@ -90,9 +89,8 @@ class StarterPackPickStep extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 l10n.starterPackFamilyPdfDescription,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+                style: Theme.of(context).textTheme.bodyMedium
+                    ?.copyWith(color: t.textSecondary),
               ),
               const SizedBox(height: 16),
               Wrap(
@@ -101,9 +99,7 @@ class StarterPackPickStep extends StatelessWidget {
                 children: <Widget>[
                   _CountChip(
                     confidence: Confidence.high,
-                    label: l10n.starterPackCountHigh(
-                      formatters.number(high),
-                    ),
+                    label: l10n.starterPackCountHigh(formatters.number(high)),
                   ),
                   _CountChip(
                     confidence: Confidence.medium,
@@ -113,18 +109,15 @@ class StarterPackPickStep extends StatelessWidget {
                   ),
                   _CountChip(
                     confidence: Confidence.low,
-                    label: l10n.starterPackCountLow(
-                      formatters.number(low),
-                    ),
+                    label: l10n.starterPackCountLow(formatters.number(low)),
                   ),
                 ],
               ),
               const SizedBox(height: 12),
               Text(
                 l10n.starterPackPickHint,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: t.textSecondary),
               ),
             ],
           ),

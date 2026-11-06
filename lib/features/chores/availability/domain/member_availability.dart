@@ -102,9 +102,9 @@ final class MemberAvailability {
   );
 
   @override
-  String toString() => 'MemberAvailability($id $memberId $startDate..$endDate ${status.id})';
+  String toString() =>
+      'MemberAvailability($id $memberId $startDate..$endDate ${status.id})';
 }
 
 /// The days of an absence record, inclusive.
-int availabilityDays(DateKey start, DateKey end) =>
-    start.daysUntil(end) + 1;
+int availabilityDays(DateKey start, DateKey end) => start.daysUntil(end) + 1;

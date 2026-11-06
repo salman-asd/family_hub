@@ -37,7 +37,9 @@ void main() {
     final fixture = ChoresFixture();
     if (withFlag) {
       fixture.comments.threads[ChoresFixture.familyId] =
-          <String, List<OccurrenceComment>>{id: <OccurrenceComment>[flagged()]};
+          <String, List<OccurrenceComment>>{
+            id: <OccurrenceComment>[flagged()],
+          };
     }
     return fixture;
   }
@@ -97,7 +99,9 @@ void main() {
     final thread = fixture.comments.thread(ChoresFixture.familyId, id);
     expect(thread.single.isResolved, isTrue);
     expect(
-      fixture.occurrences.occurrences[ChoresFixture.familyId]![id]!
+      fixture
+          .occurrences
+          .occurrences[ChoresFixture.familyId]![id]!
           .needsAttention,
       isFalse,
     );
@@ -137,7 +141,13 @@ void main() {
   });
 
   testWidgets('Bangla at text scale 2.0 does not overflow', (tester) async {
-    await open(tester, uid: 'bob', role: Role.moderator, language: 'bn', scale: 2);
+    await open(
+      tester,
+      uid: 'bob',
+      role: Role.moderator,
+      language: 'bn',
+      scale: 2,
+    );
     expect(tester.takeException(), isNull);
   });
 }

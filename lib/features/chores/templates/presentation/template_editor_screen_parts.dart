@@ -37,9 +37,8 @@ class _Banner extends StatelessWidget {
               children: [
                 Text(
                   message,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: t.textPrimary),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: t.textPrimary),
                 ),
                 if (actionLabel != null)
                   TextButton(
@@ -90,15 +89,18 @@ class _SaveBar extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.error_outline_rounded, size: 18, color: t.danger),
+                      Icon(
+                        Icons.error_outline_rounded,
+                        size: 18,
+                        color: t.danger,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           l10n.choresFailureMessage(f),
                           key: const ValueKey<String>('editor_failure'),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall?.copyWith(color: t.danger),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: t.danger),
                         ),
                       ),
                     ],

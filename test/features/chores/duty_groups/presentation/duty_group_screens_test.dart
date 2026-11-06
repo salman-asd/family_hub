@@ -41,9 +41,7 @@ Future<ChoresFixture> _pump(
     uid: uid,
     role: role,
     overrides: [
-      membersProvider.overrideWith(
-        (ref) => Stream.value(fixture.roster),
-      ),
+      membersProvider.overrideWith((ref) => Stream.value(fixture.roster)),
     ],
   );
   // Tall enough that a long form never needs scrolling.
@@ -154,10 +152,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(fixture.chores.dutyGroups.groups[_familyId], isNull);
-      expect(
-        find.text('Add at least two members to rotate.'),
-        findsOneWidget,
-      );
+      expect(find.text('Add at least two members to rotate.'), findsOneWidget);
     });
 
     testWidgets('a plain member sees the group read-only', (tester) async {
@@ -200,11 +195,7 @@ void main() {
 
       final group = fixture.chores.dutyGroups.groups[_familyId]!['group_1']!;
       expect(group.rotation.versions, hasLength(2));
-      expect(group.rotation.versions.first.members, [
-        'alice',
-        'cara',
-        'dave',
-      ]);
+      expect(group.rotation.versions.first.members, ['alice', 'cara', 'dave']);
       expect(group.rotation.versions.last.members, [
         'alice',
         'cara',

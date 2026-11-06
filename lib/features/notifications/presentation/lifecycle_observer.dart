@@ -1,8 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String kReminderDeviceTimezonePreferenceKey =
-    'reminder_device_timezone';
+const String kReminderDeviceTimezonePreferenceKey = 'reminder_device_timezone';
 
 Future<bool> updateReminderDeviceTimezone({
   required SharedPreferences preferences,

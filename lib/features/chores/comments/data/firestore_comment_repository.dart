@@ -20,9 +20,11 @@ import 'package:family_hub/features/chores/occurrences/data/occurrence_write_sta
 /// so a flag can never exist without its marker. Everyday write: no server
 /// probe, so it queues offline.
 class FirestoreCommentRepository implements CommentRepository {
-  FirestoreCommentRepository({required TxRunner tx, FirebaseFirestore? firestore})
-    : _tx = tx,
-      _firestore = firestore;
+  FirestoreCommentRepository({
+    required TxRunner tx,
+    FirebaseFirestore? firestore,
+  }) : _tx = tx,
+       _firestore = firestore;
 
   final TxRunner _tx;
   final FirebaseFirestore? _firestore;
@@ -47,9 +49,10 @@ class FirestoreCommentRepository implements CommentRepository {
   Stream<List<OccurrenceComment>> watchComments(
     String familyId,
     String occurrenceId,
-  ) => _thread(familyId, occurrenceId).snapshots().map(
-    (snapshot) => _read(occurrenceId, snapshot),
-  );
+  ) => _thread(
+    familyId,
+    occurrenceId,
+  ).snapshots().map((snapshot) => _read(occurrenceId, snapshot));
 
   @override
   Future<Result<List<OccurrenceComment>>> list(
@@ -61,38 +64,32 @@ class FirestoreCommentRepository implements CommentRepository {
   });
 
   @override
-  Future<Result<void>> stage(String familyId, CommentWritePlan plan) =>
-      guardWrite(
-        () => _tx.runBatch((batch) {
-          OccurrenceWriteStager.stage(batch, familyId, plan.occurrence);
-          for (final comment in plan.comments) {
-            batch.set(
-              FirestorePaths.occurrenceCommentDoc(
-                familyId,
-                comment.occurrenceId,
-                comment.id,
-              ),
-              CommentMappers.toMap(
-                comment,
-                authorId: plan.actorId,
-                at: plan.at,
-              ),
-            );
-          }
-          for (final change in plan.changes) {
-            batch.update(
-              FirestorePaths.occurrenceCommentDoc(
-                familyId,
-                change.occurrenceId,
-                change.commentId,
-              ),
-              CommentMappers.changeMap(
-                change,
-                actorId: plan.actorId,
-                at: plan.at,
-              ),
-            );
-          }
-        }),
-      );
+  Future<Result<void>> stage(
+    String familyId,
+    CommentWritePlan plan,
+  ) => guardWrite(
+    () => _tx.runBatch((batch) {
+      OccurrenceWriteStager.stage(batch, familyId, plan.occurrence);
+      for (final comment in plan.comments) {
+        batch.set(
+          FirestorePaths.occurrenceCommentDoc(
+            familyId,
+            comment.occurrenceId,
+            comment.id,
+          ),
+          CommentMappers.toMap(comment, authorId: plan.actorId, at: plan.at),
+        );
+      }
+      for (final change in plan.changes) {
+        batch.update(
+          FirestorePaths.occurrenceCommentDoc(
+            familyId,
+            change.occurrenceId,
+            change.commentId,
+          ),
+          CommentMappers.changeMap(change, actorId: plan.actorId, at: plan.at),
+        );
+      }
+    }),
+  );
 }

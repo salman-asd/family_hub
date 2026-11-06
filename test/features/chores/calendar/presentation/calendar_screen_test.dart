@@ -149,10 +149,7 @@ void main() {
   group('markers', () {
     testWidgets('three glyphs and a +N for a busy day', (tester) async {
       final day = DateKey(2026, 10, 27);
-      await pump(
-        tester,
-        occurrences: [for (var i = 0; i < 5; i++) on(i, day)],
-      );
+      await pump(tester, occurrences: [for (var i = 0; i < 5; i++) on(i, day)]);
 
       expect(
         find.descendant(
@@ -168,10 +165,7 @@ void main() {
     });
 
     testWidgets('a day outside the month carries no markers', (tester) async {
-      await pump(
-        tester,
-        occurrences: [on(1, DateKey(2026, 11, 1))],
-      );
+      await pump(tester, occurrences: [on(1, DateKey(2026, 11, 1))]);
 
       expect(
         find.descendant(
@@ -185,10 +179,7 @@ void main() {
     testWidgets('a cell announces its day as one sentence', (tester) async {
       final handle = tester.ensureSemantics();
       final day = DateKey(2026, 10, 27);
-      await pump(
-        tester,
-        occurrences: [for (var i = 0; i < 3; i++) on(i, day)],
-      );
+      await pump(tester, occurrences: [for (var i = 0; i < 3; i++) on(i, day)]);
 
       expect(
         find.bySemanticsLabel(RegExp(r'^27 October, Tuesday, 3 chores')),
@@ -203,11 +194,7 @@ void main() {
       final day = DateKey(2026, 10, 27);
       await pump(
         tester,
-        occurrences: [
-          on(1, day),
-          on(2, day),
-          on(3, DateKey(2026, 10, 28)),
-        ],
+        occurrences: [on(1, day), on(2, day), on(3, DateKey(2026, 10, 28))],
       );
 
       await tester.tap(cell(2026, 10, 27));
@@ -229,7 +216,10 @@ void main() {
       final day = DateKey(2026, 10, 27);
       await pump(
         tester,
-        occurrences: [on(1, day), on(2, day, assignee: 'dave')],
+        occurrences: [
+          on(1, day),
+          on(2, day, assignee: 'dave'),
+        ],
       );
       await tester.tap(cell(2026, 10, 27));
       await tester.pumpAndSettle();
@@ -247,8 +237,7 @@ void main() {
       await pump(
         tester,
         occurrences: [
-          for (var i = 0; i <= 900; i++)
-            on(i, DateKey(2026, 10, 1 + i % 28)),
+          for (var i = 0; i <= 900; i++) on(i, DateKey(2026, 10, 1 + i % 28)),
         ],
       );
 

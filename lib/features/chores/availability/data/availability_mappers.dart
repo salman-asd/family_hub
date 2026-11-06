@@ -55,7 +55,9 @@ abstract final class AvailabilityMappers {
       typeId: '${map['typeId'] ?? ''}',
       reason: '${map['reason'] ?? ''}',
       status: AvailabilityStatus.fromId(map['status']),
-      createdBy: map['createdBy'] is String ? map['createdBy'] as String : member,
+      createdBy: map['createdBy'] is String
+          ? map['createdBy'] as String
+          : member,
       decidedBy: map['decidedBy'] is String ? map['decidedBy'] as String : null,
       decidedAt: BaseMapper.timestampToDateTime(map['decidedAt']),
     );

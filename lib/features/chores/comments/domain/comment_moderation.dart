@@ -43,7 +43,9 @@ Future<Result<OccurrenceComment>> moderateComment({
   final loadFailure = loaded.failureOrNull;
   if (loadFailure != null) return Failure<OccurrenceComment>(loadFailure);
   final context = loaded.valueOrNull!;
-  final denied = context.require(Permission.moderateChoreComments).failureOrNull;
+  final denied = context
+      .require(Permission.moderateChoreComments)
+      .failureOrNull;
   if (denied != null) return Failure<OccurrenceComment>(denied);
 
   final listed = await comments.list(familyId, occurrenceId);

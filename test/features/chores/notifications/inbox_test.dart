@@ -49,42 +49,81 @@ void main() {
   });
 
   test('the owner marks a row read, once', () async {
-    final first = await markRead(familyId: familyId, actorUid: 'cara', ids: ['i1']);
+    final first = await markRead(
+      familyId: familyId,
+      actorUid: 'cara',
+      ids: ['i1'],
+    );
     expect(first.valueOrNull, 1);
     expect(fixture.inboxRows.items['i1']!.readAt, fixture.clock.nowUtc());
-    final again = await markRead(familyId: familyId, actorUid: 'cara', ids: ['i1']);
+    final again = await markRead(
+      familyId: familyId,
+      actorUid: 'cara',
+      ids: ['i1'],
+    );
     expect(again.valueOrNull, 0, reason: 'already read: nothing written');
   });
 
   test('nobody touches somebody else’s row', () async {
-    final result = await markRead(familyId: familyId, actorUid: 'cara', ids: ['i2']);
+    final result = await markRead(
+      familyId: familyId,
+      actorUid: 'cara',
+      ids: ['i2'],
+    );
     expect(result.failureOrNull, isA<PermissionDenied>());
-    final denied = await archive(familyId: familyId, actorUid: 'cara', itemId: 'i2');
+    final denied = await archive(
+      familyId: familyId,
+      actorUid: 'cara',
+      itemId: 'i2',
+    );
     expect(denied.failureOrNull, isA<PermissionDenied>());
-    final pending = await markRead(familyId: familyId, actorUid: 'erin', ids: ['i1']);
+    final pending = await markRead(
+      familyId: familyId,
+      actorUid: 'erin',
+      ids: ['i1'],
+    );
     expect(pending.failureOrNull, isA<PermissionDenied>());
   });
 
   test('archiving hides the row but keeps it', () async {
-    final result = await archive(familyId: familyId, actorUid: 'cara', itemId: 'i1');
+    final result = await archive(
+      familyId: familyId,
+      actorUid: 'cara',
+      itemId: 'i1',
+    );
     expect(result.failureOrNull, isNull);
     expect(fixture.inboxRows.items['i1']!.isArchived, isTrue);
-    final missing = await archive(familyId: familyId, actorUid: 'cara', itemId: 'nope');
+    final missing = await archive(
+      familyId: familyId,
+      actorUid: 'cara',
+      itemId: 'nope',
+    );
     expect(missing.failureOrNull, isA<NotFound>());
   });
 
   test('the writer enforces the closed type list and six parameters', () {
     NewInboxItem? ok() => InboxWriter.create(
-      toMemberId: 'cara', type: InboxType.needsCover, refType: 'availability', refId: 'a1',
+      toMemberId: 'cara',
+      type: InboxType.needsCover,
+      refType: 'availability',
+      refId: 'a1',
     ).valueOrNull;
     expect(ok(), isNotNull);
     expect(
-      InboxWriter.create(toMemberId: 'cara', type: 'spam', refType: 'x', refId: 'a1').failureOrNull,
+      InboxWriter.create(
+        toMemberId: 'cara',
+        type: 'spam',
+        refType: 'x',
+        refId: 'a1',
+      ).failureOrNull,
       isA<Validation>(),
     );
     expect(
       InboxWriter.create(
-        toMemberId: 'cara', type: InboxType.needsCover, refType: 'x', refId: 'a1',
+        toMemberId: 'cara',
+        type: InboxType.needsCover,
+        refType: 'x',
+        refId: 'a1',
         params: {for (var i = 0; i < 7; i++) 'k$i': 'v'},
       ).failureOrNull,
       isA<Validation>(),
@@ -94,12 +133,50 @@ void main() {
   test('every row the real port builds is a valid inbox shape', () {
     const port = ChoresInboxPort();
     final rows = <NewInboxItem?>[
-      port.swapRequested(requestId: 'r', toMemberId: 'a', choreName: 'n', dateKey: 'd', fromMemberId: 'b', cover: true),
-      port.swapResult(requestId: 'r', toMemberId: 'a', choreName: 'n', dateKey: 'd', outcome: 'accepted', byMemberId: 'b'),
-      port.needsCover(availabilityId: 'a', toMemberId: 'a', absentMemberId: 'b', count: 2, from: 'x', to: 'y'),
-      port.absenceDecision(availabilityId: 'a', toMemberId: 'a', status: 'active', byMemberId: 'b'),
-      port.choreReopened(occurrenceId: 'o', toMemberId: 'a', choreName: 'n', dateKey: 'd', actorId: 'b'),
-      port.commentAttention(occurrenceId: 'o', toMemberId: 'a', choreName: 'n', dateKey: 'd', authorId: 'b'),
+      port.swapRequested(
+        requestId: 'r',
+        toMemberId: 'a',
+        choreName: 'n',
+        dateKey: 'd',
+        fromMemberId: 'b',
+        cover: true,
+      ),
+      port.swapResult(
+        requestId: 'r',
+        toMemberId: 'a',
+        choreName: 'n',
+        dateKey: 'd',
+        outcome: 'accepted',
+        byMemberId: 'b',
+      ),
+      port.needsCover(
+        availabilityId: 'a',
+        toMemberId: 'a',
+        absentMemberId: 'b',
+        count: 2,
+        from: 'x',
+        to: 'y',
+      ),
+      port.absenceDecision(
+        availabilityId: 'a',
+        toMemberId: 'a',
+        status: 'active',
+        byMemberId: 'b',
+      ),
+      port.choreReopened(
+        occurrenceId: 'o',
+        toMemberId: 'a',
+        choreName: 'n',
+        dateKey: 'd',
+        actorId: 'b',
+      ),
+      port.commentAttention(
+        occurrenceId: 'o',
+        toMemberId: 'a',
+        choreName: 'n',
+        dateKey: 'd',
+        authorId: 'b',
+      ),
     ];
     for (final item in rows) {
       expect(InboxType.all, contains(item!.type));
@@ -110,20 +187,37 @@ void main() {
   test('mapper keys match the rules key lists', () {
     final swap = SwapMappers.toMap(
       NewSwap(
-        id: 's', occurrenceId: 'o', occurrenceDateKey: DateKey(2026, 10, 24),
-        kind: SwapKind.swap, fromMemberId: 'a', toMemberId: 'b', reason: 'abc',
+        id: 's',
+        occurrenceId: 'o',
+        occurrenceDateKey: DateKey(2026, 10, 24),
+        kind: SwapKind.swap,
+        fromMemberId: 'a',
+        toMemberId: 'b',
+        reason: 'abc',
         expiresAt: DateTime.utc(2026, 10, 24, 15),
       ),
-      actorId: 'a', at: DateTime.utc(2026, 10, 24),
+      actorId: 'a',
+      at: DateTime.utc(2026, 10, 24),
     );
     expect(swap.keys.toSet(), rulesList('swapKeys'));
     final change = SwapMappers.changeMap(
       const SwapChange(requestId: 's', status: SwapStatus.accepted),
-      actorId: 'b', at: DateTime.utc(2026, 10, 24),
+      actorId: 'b',
+      at: DateTime.utc(2026, 10, 24),
     );
     expect(rulesList('swapKeys').containsAll(change.keys), isTrue);
-    expect(rulesList('inboxKeys').containsAll(InboxMappers.readMap(actorId: 'a', at: DateTime.utc(2026)).keys), isTrue);
-    expect(rulesList('inboxKeys').containsAll(InboxMappers.archiveMap(actorId: 'a', at: DateTime.utc(2026)).keys), isTrue);
+    expect(
+      rulesList('inboxKeys').containsAll(
+        InboxMappers.readMap(actorId: 'a', at: DateTime.utc(2026)).keys,
+      ),
+      isTrue,
+    );
+    expect(
+      rulesList('inboxKeys').containsAll(
+        InboxMappers.archiveMap(actorId: 'a', at: DateTime.utc(2026)).keys,
+      ),
+      isTrue,
+    );
     expect(rulesList('availabilityKeys').isNotEmpty, isTrue);
     expect(AvailabilityMappers.fromDoc('x', null), isNull);
   });

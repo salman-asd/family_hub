@@ -58,7 +58,8 @@ abstract final class SwapMappers {
     final to = map['toMemberId'];
     final occurrenceId = map['occurrenceId'];
     if (date == null || expires == null) return null;
-    if (from is! String || to is! String || occurrenceId is! String) return null;
+    if (from is! String || to is! String || occurrenceId is! String)
+      return null;
     return SwapRequest(
       id: id,
       occurrenceId: occurrenceId,
@@ -69,11 +70,19 @@ abstract final class SwapMappers {
       reason: '${map['reason'] ?? ''}',
       status: SwapStatus.fromId(map['status']),
       expiresAt: expires,
-      requestedBy: map['requestedBy'] is String ? map['requestedBy'] as String : from,
+      requestedBy: map['requestedBy'] is String
+          ? map['requestedBy'] as String
+          : from,
       respondedAt: BaseMapper.timestampToDateTime(map['respondedAt']),
-      respondedBy: map['respondedBy'] is String ? map['respondedBy'] as String : null,
-      responseReason: map['responseReason'] is String ? map['responseReason'] as String : null,
-      availabilityId: map['availabilityId'] is String ? map['availabilityId'] as String : null,
+      respondedBy: map['respondedBy'] is String
+          ? map['respondedBy'] as String
+          : null,
+      responseReason: map['responseReason'] is String
+          ? map['responseReason'] as String
+          : null,
+      availabilityId: map['availabilityId'] is String
+          ? map['availabilityId'] as String
+          : null,
     );
   }
 }

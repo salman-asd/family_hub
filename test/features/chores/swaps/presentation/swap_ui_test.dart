@@ -37,18 +37,19 @@ void main() {
     swapRepositoryProvider.overrideWithValue(fixture.swaps),
   ];
 
-  SwapRequest pending({String from = 'cara', String to = 'dave'}) => SwapRequest(
-    id: 'r1',
-    occurrenceId: occId,
-    occurrenceDateKey: DateKey(2026, 10, 24),
-    kind: SwapKind.swap,
-    fromMemberId: from,
-    toMemberId: to,
-    reason: 'I am travelling',
-    status: SwapStatus.pending,
-    expiresAt: DateTime.utc(2026, 10, 24, 15),
-    requestedBy: from,
-  );
+  SwapRequest pending({String from = 'cara', String to = 'dave'}) =>
+      SwapRequest(
+        id: 'r1',
+        occurrenceId: occId,
+        occurrenceDateKey: DateKey(2026, 10, 24),
+        kind: SwapKind.swap,
+        fromMemberId: from,
+        toMemberId: to,
+        reason: 'I am travelling',
+        status: SwapStatus.pending,
+        expiresAt: DateTime.utc(2026, 10, 24, 15),
+        requestedBy: from,
+      );
 
   Future<void> openSwapSheet(WidgetTester tester) async {
     await pumpP3Screen(
@@ -58,7 +59,8 @@ void main() {
           builder: (context, ref, _) {
             ref.watch(availabilityIndexProvider); // keep the index alive
             return TextButton(
-              onPressed: () => ref.requestSwapWithSheet(context, occurrence: chore),
+              onPressed: () =>
+                  ref.requestSwapWithSheet(context, occurrence: chore),
               child: const Text('open'),
             );
           },
@@ -75,7 +77,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
   }
 
-  testWidgets('the swap sheet offers only members who are free', (tester) async {
+  testWidgets('the swap sheet offers only members who are free', (
+    tester,
+  ) async {
     fixture.swapWorld.absences['a1'] = MemberAvailability(
       id: 'a1',
       memberId: 'dave',
@@ -89,9 +93,21 @@ void main() {
     await openSwapSheet(tester);
 
     expect(find.byKey(const Key('swap_person_bob')), findsOneWidget);
-    expect(find.byKey(const Key('swap_person_dave')), findsNothing, reason: 'away');
-    expect(find.byKey(const Key('swap_person_cara')), findsNothing, reason: 'the requester');
-    expect(find.byKey(const Key('swap_person_erin')), findsNothing, reason: 'pending');
+    expect(
+      find.byKey(const Key('swap_person_dave')),
+      findsNothing,
+      reason: 'away',
+    );
+    expect(
+      find.byKey(const Key('swap_person_cara')),
+      findsNothing,
+      reason: 'the requester',
+    );
+    expect(
+      find.byKey(const Key('swap_person_erin')),
+      findsNothing,
+      reason: 'pending',
+    );
   });
 
   testWidgets('choose a person, give a reason and send', (tester) async {
@@ -100,9 +116,16 @@ void main() {
     expect(tester.widget<FilledButton>(send).onPressed, isNull);
 
     await tester.tap(find.byKey(const Key('swap_person_dave')));
-    await tester.enterText(find.byKey(const Key('swap_reason')), 'I am travelling');
+    await tester.enterText(
+      find.byKey(const Key('swap_reason')),
+      'I am travelling',
+    );
     await tester.pump();
-    expect(find.textContaining('Request to'), findsOneWidget, reason: 'preview');
+    expect(
+      find.textContaining('Request to'),
+      findsOneWidget,
+      reason: 'preview',
+    );
     await tester.tap(send);
     await tester.pump(const Duration(milliseconds: 200));
 
@@ -130,7 +153,9 @@ void main() {
     expect(fixture.swapWorld.swapRequests['r1']!.status, SwapStatus.cancelled);
   });
 
-  testWidgets('the recipient answers from the banner: accept moves the chore', (tester) async {
+  testWidgets('the recipient answers from the banner: accept moves the chore', (
+    tester,
+  ) async {
     fixture.swapWorld.swapRequests['r1'] = pending();
     await pumpP3Screen(
       tester,
@@ -150,10 +175,18 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(fixture.swapWorld.swapRequests['r1']!.status, SwapStatus.accepted);
-    expect(fixture.occurrences.occurrences[ChoresFixture.familyId]![occId]!.assigneeId, 'dave');
+    expect(
+      fixture
+          .occurrences
+          .occurrences[ChoresFixture.familyId]![occId]!
+          .assigneeId,
+      'dave',
+    );
   });
 
-  testWidgets('a chore with no pending request shows no banner', (tester) async {
+  testWidgets('a chore with no pending request shows no banner', (
+    tester,
+  ) async {
     await pumpP3Screen(
       tester,
       home: const Scaffold(body: SwapStatusBanner(occurrenceId: occId)),

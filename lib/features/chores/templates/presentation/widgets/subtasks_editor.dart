@@ -56,9 +56,8 @@ class SubtasksEditor extends ConsumerWidget {
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
               l10n.choreSubtasksEmpty,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: t.textSecondary),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: t.textSecondary),
             ),
           )
         else
@@ -117,9 +116,8 @@ class SubtasksEditor extends ConsumerWidget {
               l10n.choreSubtaskLimit(
                 formatters.number(TemplateLimits.maxSubtasks),
               ),
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: t.textSecondary),
             ),
           ),
       ],

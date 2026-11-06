@@ -62,7 +62,10 @@ void main() {
   test('changing the week start re-resolves "this week" at once', () {
     final c = makeContainer(weekStartDay: DateTime.saturday);
     c.read(reportQueryProvider.notifier).setPreset(RangePreset.thisWeek);
-    expect(c.read(reportQueryProvider).resolvedRange.start, DateKey(2026, 10, 17));
+    expect(
+      c.read(reportQueryProvider).resolvedRange.start,
+      DateKey(2026, 10, 17),
+    );
 
     final monday = makeContainer(weekStartDay: DateTime.monday);
     monday.read(reportQueryProvider.notifier).setPreset(RangePreset.thisWeek);
@@ -72,21 +75,28 @@ void main() {
     );
   });
 
-  test('a whole month reuses the live month listener, a range does not', () async {
-    fx.putExpense(id: 'a', total: const Money.paisa(1000));
-    final c = makeContainer();
-    final monthSub = c.listen(
-      reportRowsProvider(monthRange(MonthKey(2026, 10))),
-      (_, _) {},
-    );
-    addTearDown(monthSub.close);
-    await pump();
-    expect(monthSub.read().value!.count, 1);
-    expect(monthSub.read().value!.truncated, isFalse);
-  });
+  test(
+    'a whole month reuses the live month listener, a range does not',
+    () async {
+      fx.putExpense(id: 'a', total: const Money.paisa(1000));
+      final c = makeContainer();
+      final monthSub = c.listen(
+        reportRowsProvider(monthRange(MonthKey(2026, 10))),
+        (_, _) {},
+      );
+      addTearDown(monthSub.close);
+      await pump();
+      expect(monthSub.read().value!.count, 1);
+      expect(monthSub.read().value!.truncated, isFalse);
+    },
+  );
 
   test('the report data totals the selected month', () async {
-    fx.putExpense(id: 'a', total: const Money.paisa(1000), categoryId: 'cat_food');
+    fx.putExpense(
+      id: 'a',
+      total: const Money.paisa(1000),
+      categoryId: 'cat_food',
+    );
     fx.putExpense(
       id: 'b',
       dateKey: DateKey(2026, 9, 5),
@@ -105,8 +115,16 @@ void main() {
   });
 
   test('a category filter narrows the data', () async {
-    fx.putExpense(id: 'a', total: const Money.paisa(1000), categoryId: 'cat_food');
-    fx.putExpense(id: 'b', total: const Money.paisa(300), categoryId: 'cat_veg');
+    fx.putExpense(
+      id: 'a',
+      total: const Money.paisa(1000),
+      categoryId: 'cat_food',
+    );
+    fx.putExpense(
+      id: 'b',
+      total: const Money.paisa(300),
+      categoryId: 'cat_veg',
+    );
     final c = makeContainer();
     c.read(reportQueryProvider.notifier).setCategory('cat_veg');
     final sub = c.listen(reportDataProvider, (_, _) {});
@@ -125,9 +143,7 @@ void main() {
       ),
     );
     expect(
-      c.read(
-        canProvider(const PermissionQuery(Permission.viewFamilyReports)),
-      ),
+      c.read(canProvider(const PermissionQuery(Permission.viewFamilyReports))),
       isFalse,
     );
   });
@@ -135,12 +151,12 @@ void main() {
   test('moving to a custom range replaces the range only', () {
     final c = makeContainer();
     c.read(reportQueryProvider.notifier).setMember('cara');
-    c.read(
-      reportQueryProvider.notifier,
-    ).setPreset(
-      RangePreset.custom,
-      custom: DateKeyRange(DateKey(2026, 10, 1), DateKey(2026, 10, 10)),
-    );
+    c
+        .read(reportQueryProvider.notifier)
+        .setPreset(
+          RangePreset.custom,
+          custom: DateKeyRange(DateKey(2026, 10, 1), DateKey(2026, 10, 10)),
+        );
     final query = c.read(reportQueryProvider);
     expect(query.resolvedRange.end, DateKey(2026, 10, 10));
     expect(query.memberId, 'cara');

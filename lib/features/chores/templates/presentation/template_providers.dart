@@ -31,8 +31,7 @@ final templatesStreamProvider = StreamProvider<List<TemplateRecord>>((ref) {
 
 /// Every template (including paused and archived), synchronously.
 final templatesProvider = Provider<List<TemplateRecord>>(
-  (ref) =>
-      ref.watch(templatesStreamProvider).value ?? const <TemplateRecord>[],
+  (ref) => ref.watch(templatesStreamProvider).value ?? const <TemplateRecord>[],
 );
 
 /// True when the listener hit [kMaxChoreTemplates]: the list is incomplete and

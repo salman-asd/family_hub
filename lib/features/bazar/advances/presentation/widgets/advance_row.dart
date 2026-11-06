@@ -35,10 +35,12 @@ class AdvanceRow extends ConsumerWidget {
     final name = familyId == null
         ? null
         : ref
-              .watch(advanceExpenseNameProvider((
-                familyId: familyId,
-                expenseId: advance.expenseId,
-              )))
+              .watch(
+                advanceExpenseNameProvider((
+                  familyId: familyId,
+                  expenseId: advance.expenseId,
+                )),
+              )
               .value;
 
     return ListTile(
@@ -126,5 +128,3 @@ class AdvanceRow extends ConsumerWidget {
     );
   }
 }
-
-

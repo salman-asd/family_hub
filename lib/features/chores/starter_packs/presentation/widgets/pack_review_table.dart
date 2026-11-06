@@ -35,9 +35,8 @@ class ConfidenceLegend extends StatelessWidget {
         children: <Widget>[
           Text(
             l10n.starterPackConfidenceLegend,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: context.tokens.textSecondary,
-            ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: context.tokens.textSecondary),
           ),
           const ConfidenceChip(confidence: Confidence.high),
           const ConfidenceChip(confidence: Confidence.medium),
@@ -80,7 +79,9 @@ class PackReviewTable extends StatelessWidget {
                   width: 48,
                   height: 48,
                   child: Checkbox(
-                    key: ValueKey<String>('starter_template_${template.seedKey}'),
+                    key: ValueKey<String>(
+                      'starter_template_${template.seedKey}',
+                    ),
                     value: selected.contains(template.seedKey),
                     onChanged: (_) => onToggle(template.seedKey),
                   ),
@@ -119,9 +120,8 @@ class PackReviewTable extends StatelessWidget {
                           formatters,
                           RecurrenceSummary.of(template.recurrence),
                         ),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: context.tokens.textSecondary,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: context.tokens.textSecondary),
                       ),
                     ],
                   ),

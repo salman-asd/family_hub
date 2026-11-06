@@ -37,8 +37,7 @@ void main() {
     categoryId: categoryId,
     total: Money.paisa(paisa),
     funding: funding,
-    paidByMemberId:
-        payer ?? (funding == FundingSource.member ? 'cara' : null),
+    paidByMemberId: payer ?? (funding == FundingSource.member ? 'cara' : null),
     purchaserId: purchaserId,
     createdBy: createdBy ?? 'alice',
     createdAt: at,
@@ -46,10 +45,8 @@ void main() {
     deletedBy: deletedAt == null ? null : 'alice',
   );
 
-  ReportQuery monthQuery(MonthKey month) => ReportQuery(
-    preset: RangePreset.thisMonth,
-    range: monthRange(month),
-  );
+  ReportQuery monthQuery(MonthKey month) =>
+      ReportQuery(preset: RangePreset.thisMonth, range: monthRange(month));
 
   final october = MonthKey(2026, 10);
   const String normalizedEggId = 'i_egg';
@@ -80,20 +77,28 @@ void main() {
         query: monthQuery(october),
       );
       expect(data.summary.count, 1);
-      expect(data.days.every((d) => d.total == Money.zero || d.day.day == 2), isTrue);
+      expect(
+        data.days.every((d) => d.total == Money.zero || d.day.day == 2),
+        isTrue,
+      );
     });
 
     test('the daily average is integer, half-up', () {
       // 31 days, 100000 paisa -> 3225.8 -> 3226.
       final data = ReportEngine.build(
-        expenses: <Expense>[expense('a', day: DateKey(2026, 10, 3), paisa: 100000)],
+        expenses: <Expense>[
+          expense('a', day: DateKey(2026, 10, 3), paisa: 100000),
+        ],
         query: monthQuery(october),
       );
       expect(data.summary.averagePerDay, const Money.paisa(3226));
     });
 
     test('an empty range has zero totals and no share', () {
-      final data = ReportEngine.build(expenses: const <Expense>[], query: monthQuery(october));
+      final data = ReportEngine.build(
+        expenses: const <Expense>[],
+        query: monthQuery(october),
+      );
       expect(data.summary.total, Money.zero);
       expect(data.summary.count, 0);
       expect(data.summary.averagePerDay, Money.zero);
@@ -134,7 +139,9 @@ void main() {
 
     test('every day of the range is present, zero-filled and ascending', () {
       final data = ReportEngine.build(
-        expenses: <Expense>[expense('a', day: DateKey(2026, 10, 5), paisa: 500)],
+        expenses: <Expense>[
+          expense('a', day: DateKey(2026, 10, 5), paisa: 500),
+        ],
         query: monthQuery(october),
       );
       expect(data.days, hasLength(31));
@@ -149,7 +156,9 @@ void main() {
   group('comparison periods', () {
     test('March compares with a shorter February', () {
       final march = ReportEngine.build(
-        expenses: <Expense>[expense('mar', day: DateKey(2027, 3, 31), paisa: 31000)],
+        expenses: <Expense>[
+          expense('mar', day: DateKey(2027, 3, 31), paisa: 31000),
+        ],
         query: monthQuery(MonthKey(2027, 3)),
       );
       final comparison = ReportEngine.compare(
@@ -202,10 +211,33 @@ void main() {
     test('eggs this month', () {
       final data = ReportEngine.build(
         expenses: <Expense>[
-          expense('e1', day: DateKey(2026, 10, 2), itemName: 'ডিম', itemId: normalizedEggId, paisa: 12000),
-          expense('e2', day: DateKey(2026, 10, 9), itemName: 'ডিম', itemId: normalizedEggId, paisa: 13000),
-          expense('r', day: DateKey(2026, 10, 3), itemName: 'চাল', paisa: 50000),
-          expense('old', day: DateKey(2026, 9, 9), itemName: 'ডিম', itemId: normalizedEggId, paisa: 99000),
+          expense(
+            'e1',
+            day: DateKey(2026, 10, 2),
+            itemName: 'ডিম',
+            itemId: normalizedEggId,
+            paisa: 12000,
+          ),
+          expense(
+            'e2',
+            day: DateKey(2026, 10, 9),
+            itemName: 'ডিম',
+            itemId: normalizedEggId,
+            paisa: 13000,
+          ),
+          expense(
+            'r',
+            day: DateKey(2026, 10, 3),
+            itemName: 'চাল',
+            paisa: 50000,
+          ),
+          expense(
+            'old',
+            day: DateKey(2026, 9, 9),
+            itemName: 'ডিম',
+            itemId: normalizedEggId,
+            paisa: 99000,
+          ),
         ],
         query: ReportQuery(
           preset: RangePreset.thisMonth,
@@ -222,8 +254,18 @@ void main() {
     test('eggs typed without an item id still group by name', () {
       final data = ReportEngine.build(
         expenses: <Expense>[
-          expense('e1', day: DateKey(2026, 10, 2), itemName: 'ডিম', paisa: 12000),
-          expense('e2', day: DateKey(2026, 10, 9), itemName: ' ডিম ', paisa: 13000),
+          expense(
+            'e1',
+            day: DateKey(2026, 10, 2),
+            itemName: 'ডিম',
+            paisa: 12000,
+          ),
+          expense(
+            'e2',
+            day: DateKey(2026, 10, 9),
+            itemName: ' ডিম ',
+            paisa: 13000,
+          ),
         ],
         query: monthQuery(october),
       );
@@ -234,9 +276,27 @@ void main() {
     test('fish between two dates', () {
       final data = ReportEngine.build(
         expenses: <Expense>[
-          expense('f1', day: DateKey(2026, 10, 3), itemName: 'মাছ', itemId: 'i_fish', paisa: 45000),
-          expense('f2', day: DateKey(2026, 10, 10), itemName: 'মাছ', itemId: 'i_fish', paisa: 30000),
-          expense('f3', day: DateKey(2026, 10, 20), itemName: 'মাছ', itemId: 'i_fish', paisa: 50000),
+          expense(
+            'f1',
+            day: DateKey(2026, 10, 3),
+            itemName: 'মাছ',
+            itemId: 'i_fish',
+            paisa: 45000,
+          ),
+          expense(
+            'f2',
+            day: DateKey(2026, 10, 10),
+            itemName: 'মাছ',
+            itemId: 'i_fish',
+            paisa: 30000,
+          ),
+          expense(
+            'f3',
+            day: DateKey(2026, 10, 20),
+            itemName: 'মাছ',
+            itemId: 'i_fish',
+            paisa: 50000,
+          ),
         ],
         query: ReportQuery(
           preset: RangePreset.custom,
@@ -259,8 +319,18 @@ void main() {
       );
       final data = ReportEngine.build(
         expenses: <Expense>[
-          expense('a', day: DateKey(2026, 10, 2), categoryId: 'cat_food', paisa: 60000),
-          expense('b', day: DateKey(2026, 10, 3), categoryId: 'cat_veg', paisa: 10000),
+          expense(
+            'a',
+            day: DateKey(2026, 10, 2),
+            categoryId: 'cat_food',
+            paisa: 60000,
+          ),
+          expense(
+            'b',
+            day: DateKey(2026, 10, 3),
+            categoryId: 'cat_veg',
+            paisa: 10000,
+          ),
         ],
         query: monthQuery(october),
         budget: budget,
@@ -301,8 +371,19 @@ void main() {
       );
       final data = ReportEngine.build(
         expenses: <Expense>[
-          expense('a', day: DateKey(2026, 10, 2), itemName: 'চাল', itemId: 'i_rice', paisa: 360000),
-          expense('b', day: DateKey(2026, 10, 3), itemName: 'ডাল ', paisa: 100000),
+          expense(
+            'a',
+            day: DateKey(2026, 10, 2),
+            itemName: 'চাল',
+            itemId: 'i_rice',
+            paisa: 360000,
+          ),
+          expense(
+            'b',
+            day: DateKey(2026, 10, 3),
+            itemName: 'ডাল ',
+            paisa: 100000,
+          ),
           expense('c', day: DateKey(2026, 10, 4), itemName: 'লবণ', paisa: 5000),
         ],
         query: monthQuery(october),
@@ -349,8 +430,20 @@ void main() {
 
   group('filters', () {
     final rows = <Expense>[
-      expense('a', day: DateKey(2026, 10, 2), categoryId: 'cat_food', paisa: 1000, purchaserId: 'cara'),
-      expense('b', day: DateKey(2026, 10, 3), categoryId: 'cat_veg', paisa: 2000, createdBy: 'bob'),
+      expense(
+        'a',
+        day: DateKey(2026, 10, 2),
+        categoryId: 'cat_food',
+        paisa: 1000,
+        purchaserId: 'cara',
+      ),
+      expense(
+        'b',
+        day: DateKey(2026, 10, 3),
+        categoryId: 'cat_veg',
+        paisa: 2000,
+        createdBy: 'bob',
+      ),
       expense(
         'c',
         day: DateKey(2026, 10, 4),
@@ -372,31 +465,37 @@ void main() {
       );
       expect(data.summary.total, const Money.paisa(5000));
       expect(data.categories.single.categoryId, 'cat_food');
-      expect(data.members.map((m) => m.memberId), containsAll(<String>['cara', 'alice']));
+      expect(
+        data.members.map((m) => m.memberId),
+        containsAll(<String>['cara', 'alice']),
+      );
       expect(Money.sum(data.days.map((d) => d.total)), const Money.paisa(5000));
     });
 
-    test('a member filter matches spenderId (purchaser, else payer, else creator)', () {
-      final byBob = ReportEngine.build(
-        expenses: rows,
-        query: ReportQuery(
-          preset: RangePreset.thisMonth,
-          range: monthRange(october),
-          memberId: 'bob',
-        ),
-      );
-      expect(byBob.summary.total, const Money.paisa(2000));
+    test(
+      'a member filter matches spenderId (purchaser, else payer, else creator)',
+      () {
+        final byBob = ReportEngine.build(
+          expenses: rows,
+          query: ReportQuery(
+            preset: RangePreset.thisMonth,
+            range: monthRange(october),
+            memberId: 'bob',
+          ),
+        );
+        expect(byBob.summary.total, const Money.paisa(2000));
 
-      final byAlice = ReportEngine.build(
-        expenses: rows,
-        query: ReportQuery(
-          preset: RangePreset.thisMonth,
-          range: monthRange(october),
-          memberId: 'alice',
-        ),
-      );
-      expect(byAlice.summary.total, const Money.paisa(4000));
-    });
+        final byAlice = ReportEngine.build(
+          expenses: rows,
+          query: ReportQuery(
+            preset: RangePreset.thisMonth,
+            range: monthRange(october),
+            memberId: 'alice',
+          ),
+        );
+        expect(byAlice.summary.total, const Money.paisa(4000));
+      },
+    );
 
     test('a funding filter narrows the rows too', () {
       final data = ReportEngine.build(

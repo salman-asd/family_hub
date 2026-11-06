@@ -14,10 +14,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Auto-disposed with its screen: an abandoned wizard never keeps the family's
 /// half-made selection alive. Applying twice is safe even when the first run
 /// was interrupted, because the use case's ids are deterministic.
-final starterPackWizardProvider = NotifierProvider.autoDispose<
-  StarterPackWizardController,
-  StarterPackWizardState
->(StarterPackWizardController.new);
+final starterPackWizardProvider =
+    NotifierProvider.autoDispose<
+      StarterPackWizardController,
+      StarterPackWizardState
+    >(StarterPackWizardController.new);
 
 class StarterPackWizardController extends Notifier<StarterPackWizardState> {
   @override
@@ -42,9 +43,8 @@ class StarterPackWizardController extends Notifier<StarterPackWizardState> {
 
   /// The active roster, capped at the rotation limit (12).
   List<String> _activeMemberIds() => <String>[
-    for (final member in ref
-        .read(dutyRosterProvider)
-        .take(TemplateLimits.maxRotationMembers))
+    for (final member
+        in ref.read(dutyRosterProvider).take(TemplateLimits.maxRotationMembers))
       member.uid,
   ];
 

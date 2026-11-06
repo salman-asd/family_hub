@@ -65,9 +65,7 @@ class RejectContributionChange {
     if (!current.isApproved || current.pendingChange == null) {
       return const Failure<Contribution>(Conflict(code: 'no_pending_change'));
     }
-    final locked = await monthLockFailure(_funds, familyId, [
-      current.monthKey,
-    ]);
+    final locked = await monthLockFailure(_funds, familyId, [current.monthKey]);
     if (locked != null) return Failure<Contribution>(locked);
 
     final now = _clock.nowUtc();
@@ -81,7 +79,9 @@ class RejectContributionChange {
         actorId: actorUid,
         contribution: updated,
         at: now,
-        extra: <String, String>{if (cleanReason.isNotEmpty) 'reason': cleanReason},
+        extra: <String, String>{
+          if (cleanReason.isNotEmpty) 'reason': cleanReason,
+        },
       ),
     );
     final failure = saved.failureOrNull;

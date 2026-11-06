@@ -36,7 +36,10 @@ class TotalDisplay extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: theme.labelLarge?.copyWith(color: t.textSecondary)),
+          Text(
+            label,
+            style: theme.labelLarge?.copyWith(color: t.textSecondary),
+          ),
           const SizedBox(height: 4),
           if (value == null)
             Semantics(
@@ -50,7 +53,11 @@ class TotalDisplay extends StatelessWidget {
             const SizedBox(height: 2),
             Row(
               children: [
-                Icon(Icons.calculate_outlined, size: 14, color: t.textSecondary),
+                Icon(
+                  Icons.calculate_outlined,
+                  size: 14,
+                  color: t.textSecondary,
+                ),
                 const SizedBox(width: 4),
                 Flexible(
                   child: Text(

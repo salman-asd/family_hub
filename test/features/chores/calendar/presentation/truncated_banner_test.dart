@@ -22,7 +22,10 @@ void main() {
             textScale: scale,
           );
 
-          expect(find.byKey(const Key('calendar_truncated_banner')), findsOneWidget);
+          expect(
+            find.byKey(const Key('calendar_truncated_banner')),
+            findsOneWidget,
+          );
           expect(tester.takeException(), isNull);
 
           final action = find.byKey(

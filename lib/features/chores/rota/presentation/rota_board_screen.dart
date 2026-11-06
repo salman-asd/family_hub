@@ -26,7 +26,10 @@ class RotaBoardScreen extends ConsumerWidget {
     if (!ref.watch(rotaVisibleProvider)) {
       return Scaffold(
         appBar: AppBar(title: Text(l10n.rotaTitle)),
-        body: EmptyState(icon: Icons.lock_outline_rounded, title: l10n.rotaNoAccess),
+        body: EmptyState(
+          icon: Icons.lock_outline_rounded,
+          title: l10n.rotaNoAccess,
+        ),
       );
     }
     final range = ref.watch(rotaRangeProvider);
@@ -46,8 +49,14 @@ class RotaBoardScreen extends ConsumerWidget {
             child: SegmentedButton<RotaRange>(
               key: const Key('rota_range'),
               segments: [
-                ButtonSegment(value: RotaRange.week, label: Text(l10n.rotaWeek)),
-                ButtonSegment(value: RotaRange.month, label: Text(l10n.rotaMonth)),
+                ButtonSegment(
+                  value: RotaRange.week,
+                  label: Text(l10n.rotaWeek),
+                ),
+                ButtonSegment(
+                  value: RotaRange.month,
+                  label: Text(l10n.rotaMonth),
+                ),
               ],
               selected: {range},
               onSelectionChanged: (s) =>
@@ -57,9 +66,13 @@ class RotaBoardScreen extends ConsumerWidget {
           OnDutyStrip(matrix: matrix),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-            child: Text(l10n.rotaShareTitle, style: Theme.of(context).textTheme.titleMedium),
+            child: Text(
+              l10n.rotaShareTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
-          if (memberIds.isEmpty || summary.totalPoints == 0 && matrix.unassigned.isEmpty)
+          if (memberIds.isEmpty ||
+              summary.totalPoints == 0 && matrix.unassigned.isEmpty)
             Padding(
               padding: const EdgeInsets.all(16),
               child: Text(
@@ -71,11 +84,18 @@ class RotaBoardScreen extends ConsumerWidget {
           for (final workload in summary.members)
             MemberShareRow(
               workload: workload,
-              name: memberNameOf(members, workload.memberId, fallback: l10n.inboxSomeone),
+              name: memberNameOf(
+                members,
+                workload.memberId,
+                fallback: l10n.inboxSomeone,
+              ),
             ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-            child: Text(l10n.rotaMatrixTitle, style: Theme.of(context).textTheme.titleMedium),
+            child: Text(
+              l10n.rotaMatrixTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),

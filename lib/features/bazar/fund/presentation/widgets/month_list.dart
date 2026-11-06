@@ -45,13 +45,10 @@ class MonthList extends ConsumerWidget {
                 : null,
             label: Text(
               closingOf(closings, month)?.status == MonthStatus.closed
-                  ? l10n.monthClosedChip(
-                      formatters.monthLabel(month),
-                    )
+                  ? l10n.monthClosedChip(formatters.monthLabel(month))
                   : formatters.monthLabel(month),
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: t.textSecondary),
             ),
           ),
       ],

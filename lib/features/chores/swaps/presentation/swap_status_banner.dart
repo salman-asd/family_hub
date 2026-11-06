@@ -26,7 +26,8 @@ class SwapStatusBanner extends ConsumerWidget {
     final t = context.tokens;
     final uid = ref.watch(currentUidProvider);
     final members = ref.watch(membersProvider).value ?? const [];
-    final pending = ref.watch(pendingSwapsProvider).value ?? const <SwapRequest>[];
+    final pending =
+        ref.watch(pendingSwapsProvider).value ?? const <SwapRequest>[];
     SwapRequest? request;
     for (final r in pending) {
       if (r.occurrenceId == occurrenceId) request = r;
@@ -38,10 +39,18 @@ class SwapStatusBanner extends ConsumerWidget {
     final forMe = shown.toMemberId == uid;
     final text = forMe
         ? l10n.swapBannerForYou(
-            memberNameOf(members, shown.fromMemberId, fallback: l10n.inboxSomeone),
+            memberNameOf(
+              members,
+              shown.fromMemberId,
+              fallback: l10n.inboxSomeone,
+            ),
           )
         : l10n.swapBannerSent(
-            memberNameOf(members, shown.toMemberId, fallback: l10n.inboxSomeone),
+            memberNameOf(
+              members,
+              shown.toMemberId,
+              fallback: l10n.inboxSomeone,
+            ),
           );
 
     return Container(
@@ -62,7 +71,8 @@ class SwapStatusBanner extends ConsumerWidget {
             TextButton(
               key: const Key('swap_banner_answer'),
               style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
-              onPressed: () => unawaited(ref.respondToSwapWithSheet(context, shown)),
+              onPressed: () =>
+                  unawaited(ref.respondToSwapWithSheet(context, shown)),
               child: Text(l10n.swapResponseTitle),
             )
           else if (mine)

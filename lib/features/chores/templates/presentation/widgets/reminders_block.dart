@@ -1,9 +1,10 @@
-import 'package:family_hub/core/localization/app_formatters.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/app/routing/app_routes.dart';
 import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
 import 'package:family_hub/features/chores/templates/presentation/widgets/draft_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 /// The reminder settings of one chore (P3-16): at the due time, N minutes
 /// before (up to five), and once when it is overdue.
@@ -61,6 +62,15 @@ class RemindersBlock extends ConsumerWidget {
           onChanged: enabled
               ? (v) => onChanged(reminders.copyWith(enabled: v))
               : null,
+        ),
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: TextButton.icon(
+            key: const ValueKey<String>('reminders_help_link'),
+            onPressed: () => context.push(AppRoutes.remindersHelp),
+            icon: const Icon(Icons.help_outline),
+            label: Text(l10n.notificationHelpTitle),
+          ),
         ),
         if (reminders.enabled) ...[
           SwitchListTile(

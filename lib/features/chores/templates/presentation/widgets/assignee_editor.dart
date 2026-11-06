@@ -149,9 +149,8 @@ class _AssigneeEditorState extends ConsumerState<AssigneeEditor> {
         switch (spec.strategy) {
           AssigneeStrategy.manual => Text(
             l10n.choreAssigneeManualHelp,
-            style: Theme.of(
-              context,
-            ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: t.textSecondary),
           ),
           AssigneeStrategy.fixed => PersonPicker(
             label: l10n.choreAssigneeFixedLabel,

@@ -142,9 +142,8 @@ class _TripLineSheetState extends ConsumerState<TripLineSheet> {
           children: [
             Text(
               l10n.tripLineSheetTitle,
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(color: t.textPrimary),
+              style: Theme.of(context).textTheme.titleMedium
+                  ?.copyWith(color: t.textPrimary),
             ),
             const SizedBox(height: 12),
             ItemAutocompleteField(
@@ -153,7 +152,8 @@ class _TripLineSheetState extends ConsumerState<TripLineSheet> {
               autofocus: widget.initial == null,
               errorText: fieldErrorText(l10n, _errors, 'itemName'),
               onTextChanged: (text) => setState(() {
-                if (_selected != null && _selected!.nameBn.trim() != text.trim()) {
+                if (_selected != null &&
+                    _selected!.nameBn.trim() != text.trim()) {
                   _selected = null;
                 }
               }),
@@ -180,9 +180,8 @@ class _TripLineSheetState extends ConsumerState<TripLineSheet> {
             if (_errors['categoryId'] != null)
               Text(
                 fieldErrorText(l10n, _errors, 'categoryId')!,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: t.danger),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: t.danger),
               ),
             if (isNew)
               CheckboxListTile(

@@ -32,7 +32,8 @@ class CategoryChart extends ConsumerWidget {
     final l10n = context.l10n;
     final t = context.tokens;
     final formatters = ref.watch(appFormattersProvider);
-    String money(Money value) => formatters.money(value, hideZeroFraction: true);
+    String money(Money value) =>
+        formatters.money(value, hideZeroFraction: true);
     final bangla = Localizations.localeOf(context).languageCode == 'bn';
 
     final nonZero = <CategoryTotal>[

@@ -41,7 +41,9 @@ class _ExpenseFilterSheetState extends ConsumerState<ExpenseFilterSheet> {
   void initState() {
     super.initState();
     final id = ref.read(expenseFiltersProvider).itemId;
-    _selectedItem = id == null ? null : ref.read(catalogIndexProvider).itemsById[id];
+    _selectedItem = id == null
+        ? null
+        : ref.read(catalogIndexProvider).itemsById[id];
     _item.text = _selectedItem?.nameBn ?? '';
   }
 
@@ -68,10 +70,14 @@ class _ExpenseFilterSheetState extends ConsumerState<ExpenseFilterSheet> {
     final f = _filters;
     return ExpenseFilters(
       range: identical(range, _keep) ? f.range : range as DateKeyRange?,
-      categoryId: identical(categoryId, _keep) ? f.categoryId : categoryId as String?,
+      categoryId: identical(categoryId, _keep)
+          ? f.categoryId
+          : categoryId as String?,
       itemId: identical(itemId, _keep) ? f.itemId : itemId as String?,
       memberId: identical(memberId, _keep) ? f.memberId : memberId as String?,
-      funding: identical(funding, _keep) ? f.funding : funding as FundingSource?,
+      funding: identical(funding, _keep)
+          ? f.funding
+          : funding as FundingSource?,
       includeDeleted: includeDeleted ?? f.includeDeleted,
       text: f.text,
     );
@@ -143,7 +149,10 @@ class _ExpenseFilterSheetState extends ConsumerState<ExpenseFilterSheet> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l10n.expenseFilterTitle, style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              l10n.expenseFilterTitle,
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 12),
             Text(l10n.expenseFilterRange, style: label),
             const SizedBox(height: 8),
@@ -180,9 +189,8 @@ class _ExpenseFilterSheetState extends ConsumerState<ExpenseFilterSheet> {
             const SizedBox(height: 8),
             ChoiceWrap<String?>(
               selected: filters.categoryId,
-              onChanged: (id) => _set(
-                _with(categoryId: id == filters.categoryId ? null : id),
-              ),
+              onChanged: (id) =>
+                  _set(_with(categoryId: id == filters.categoryId ? null : id)),
               options: [
                 for (final c in index.activeCategories)
                   ChoiceOption<String?>(c.id, c.displayName(bangla: bangla)),

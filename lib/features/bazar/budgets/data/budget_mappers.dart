@@ -12,22 +12,20 @@ import 'package:family_hub/features/bazar/budgets/domain/budget.dart';
 /// of old or damaged documents, like `relationships.items`: a malformed line is
 /// skipped, never a crash.
 abstract final class BudgetMappers {
-  static Map<String, dynamic> toMap(
-    Budget budget,
-    BaseDocumentMetadata meta,
-  ) => <String, dynamic>{
-    'monthKey': budget.month.toString(),
-    'totalEstimatePaisa': budget.totalEstimate.paisa,
-    'categoryEstimates': <String, int>{
-      for (final entry in budget.categoryEstimates.entries)
-        entry.key: entry.value.paisa,
-    },
-    'lines': <Map<String, dynamic>>[
-      for (final line in budget.lines) lineToMap(line),
-    ],
-    'alertThresholds': <int>[...budget.alertThresholds],
-    ...BaseMapper.metadataToMap(meta),
-  };
+  static Map<String, dynamic> toMap(Budget budget, BaseDocumentMetadata meta) =>
+      <String, dynamic>{
+        'monthKey': budget.month.toString(),
+        'totalEstimatePaisa': budget.totalEstimate.paisa,
+        'categoryEstimates': <String, int>{
+          for (final entry in budget.categoryEstimates.entries)
+            entry.key: entry.value.paisa,
+        },
+        'lines': <Map<String, dynamic>>[
+          for (final line in budget.lines) lineToMap(line),
+        ],
+        'alertThresholds': <int>[...budget.alertThresholds],
+        ...BaseMapper.metadataToMap(meta),
+      };
 
   /// Absent optional values are left out (they are optional in the rules too).
   static Map<String, dynamic> lineToMap(BudgetLine line) => <String, dynamic>{
@@ -75,7 +73,9 @@ abstract final class BudgetMappers {
 
     return Budget(
       month: month,
-      totalEstimate: Money.paisa(_nonNegativeInt(map['totalEstimatePaisa']) ?? 0),
+      totalEstimate: Money.paisa(
+        _nonNegativeInt(map['totalEstimatePaisa']) ?? 0,
+      ),
       categoryEstimates: estimates,
       lines: lines,
       alertThresholds: _thresholds(map['alertThresholds']),
@@ -98,7 +98,9 @@ abstract final class BudgetMappers {
       plannedQty: qty == null ? null : Quantity.milli(qty),
       unit: _unit(raw['unit']),
       estimatedRate: rate == null ? null : Money.paisa(rate),
-      estimatedTotal: Money.paisa(_nonNegativeInt(raw['estimatedTotalPaisa']) ?? 0),
+      estimatedTotal: Money.paisa(
+        _nonNegativeInt(raw['estimatedTotalPaisa']) ?? 0,
+      ),
       stock: stock == null ? null : Quantity.milli(stock),
     );
   }

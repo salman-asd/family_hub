@@ -41,9 +41,8 @@ class FundBalanceCard extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             ref.watch(appFormattersProvider).monthLabel(month),
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: context.tokens.textSecondary,
-            ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: context.tokens.textSecondary),
           ),
           const SizedBox(height: 8),
           if (transactions.isLoading ||
@@ -61,8 +60,9 @@ class FundBalanceCard extends ConsumerWidget {
               balance: ref.watch(fundBalanceProvider),
               statuses: ref.watch(contributionStatusProvider(month)),
               canReview: ref.can(Permission.recordContribution),
-              pendingCount:
-                  ref.watch(pendingContributionsProvider(month)).length,
+              pendingCount: ref
+                  .watch(pendingContributionsProvider(month))
+                  .length,
             ),
         ],
       ),
@@ -95,9 +95,8 @@ class _FundSummary extends ConsumerWidget {
         MoneyText(
           key: const ValueKey('dashboard-fund-value'),
           value: balance,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
+          style: Theme.of(context).textTheme.headlineSmall
+              ?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -142,9 +141,8 @@ class _AmountLabel extends StatelessWidget {
     children: [
       Text(
         '$label:',
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          color: context.tokens.textSecondary,
-        ),
+        style: Theme.of(context).textTheme.bodyMedium
+            ?.copyWith(color: context.tokens.textSecondary),
       ),
       MoneyText(value: amount, style: Theme.of(context).textTheme.bodyMedium),
     ],

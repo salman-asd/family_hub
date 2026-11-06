@@ -6,10 +6,7 @@ import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.
 final class MarkerPick {
   const MarkerPick({required this.markers, required this.extra});
 
-  static const MarkerPick none = MarkerPick(
-    markers: <ChoreStatus>[],
-    extra: 0,
-  );
+  static const MarkerPick none = MarkerPick(markers: <ChoreStatus>[], extra: 0);
 
   /// The glyphs to draw, most urgent first.
   final List<ChoreStatus> markers;
@@ -63,9 +60,8 @@ abstract final class MarkerPolicy {
     // List.sort is not stable, so rank ties are broken by position.
     final order = List<int>.generate(statuses.length, (i) => i)
       ..sort((a, b) {
-        final byRank = urgencyRank(
-          statuses[a],
-        ).compareTo(urgencyRank(statuses[b]));
+        final byRank = urgencyRank(statuses[a])
+            .compareTo(urgencyRank(statuses[b]));
         return byRank != 0 ? byRank : a.compareTo(b);
       });
     final shown = order.length < maxMarkers ? order.length : maxMarkers;

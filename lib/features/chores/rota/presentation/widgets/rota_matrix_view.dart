@@ -53,8 +53,12 @@ class RotaMatrixView extends ConsumerWidget {
                       f.number(day.day),
                       style: TextStyle(
                         color: t.textSecondary,
-                        fontWeight: day == today ? FontWeight.w800 : FontWeight.w400,
-                        decoration: day == today ? TextDecoration.underline : null,
+                        fontWeight: day == today
+                            ? FontWeight.w800
+                            : FontWeight.w400,
+                        decoration: day == today
+                            ? TextDecoration.underline
+                            : null,
                       ),
                     ),
                   ),
@@ -76,7 +80,8 @@ class RotaMatrixView extends ConsumerWidget {
                     ),
                   ),
                 ),
-                for (final day in matrix.days) _cellFor(context, l10n, f, id, day),
+                for (final day in matrix.days)
+                  _cellFor(context, l10n, f, id, day),
               ],
             ),
         ],
@@ -110,7 +115,10 @@ class RotaMatrixView extends ConsumerWidget {
             : Center(
                 child: Container(
                   key: Key('rota_cell_${id}_${day.toString()}'),
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: done ? t.statusCompletedContainer : t.surfaceRaised,
                     borderRadius: BorderRadius.circular(t.radiusSm),
@@ -120,7 +128,10 @@ class RotaMatrixView extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (done) const Icon(Icons.check_rounded, size: 12),
-                      Text(f.number(count), style: TextStyle(color: t.textPrimary, fontSize: 12)),
+                      Text(
+                        f.number(count),
+                        style: TextStyle(color: t.textPrimary, fontSize: 12),
+                      ),
                     ],
                   ),
                 ),

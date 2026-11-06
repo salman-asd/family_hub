@@ -43,9 +43,8 @@ class StarterPackWhoStep extends StatelessWidget {
     final l10n = context.l10n;
     final t = context.tokens;
     final canRotate = members.length >= 2;
-    final bodyStyle = Theme.of(
-      context,
-    ).textTheme.bodyMedium?.copyWith(color: t.textSecondary);
+    final bodyStyle = Theme.of(context).textTheme.bodyMedium
+        ?.copyWith(color: t.textSecondary);
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),

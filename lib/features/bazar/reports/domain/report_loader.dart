@@ -56,9 +56,7 @@ Future<Result<ReportLoad>> loadRange(
     rows.addAll(batch);
     // A short page is the last one; an empty page cannot advance the cursor.
     if (batch.length < take) {
-      return Success<ReportLoad>(
-        ReportLoad(expenses: rows, truncated: false),
-      );
+      return Success<ReportLoad>(ReportLoad(expenses: rows, truncated: false));
     }
     final last = batch.last;
     // A server that keeps returning the same cursor would loop forever.
@@ -68,5 +66,3 @@ Future<Result<ReportLoad>> loadRange(
 
   return Success<ReportLoad>(ReportLoad(expenses: rows, truncated: true));
 }
-
-

@@ -42,9 +42,8 @@ Future<void> _pump(
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         builder: (context, child) => MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.linear(textScale)),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: TextScaler.linear(textScale)),
           child: child!,
         ),
         home: const BudgetScreen(),
@@ -69,8 +68,10 @@ void main() {
     expect(find.text('No budget for this month'), findsOneWidget);
     expect(find.text('Plan this month'), findsWidgets);
     expect(find.byKey(const ValueKey('budget-copy-last')), findsOneWidget);
-    expect(find.text('A budget is a plan; the fund balance is real money.'),
-        findsOneWidget);
+    expect(
+      find.text('A budget is a plan; the fund balance is real money.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('a member sees the empty state read-only', (tester) async {
@@ -78,7 +79,9 @@ void main() {
     expect(find.byKey(const ValueKey('budget-copy-last')), findsNothing);
     expect(find.text('Plan this month'), findsNothing);
     expect(
-      find.text('The Household Manager or Admin has not planned this month yet.'),
+      find.text(
+        'The Household Manager or Admin has not planned this month yet.',
+      ),
       findsOneWidget,
     );
   });
@@ -89,8 +92,10 @@ void main() {
     await _pump(tester, f);
     await tester.tap(find.byKey(const ValueKey('budget-copy-last')));
     await tester.pump(const Duration(milliseconds: 200));
-    expect(find.text('There is no budget for last month to copy.'),
-        findsOneWidget);
+    expect(
+      find.text('There is no budget for last month to copy.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('copy last month fills the month', (tester) async {

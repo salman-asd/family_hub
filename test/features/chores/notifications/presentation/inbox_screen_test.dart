@@ -15,42 +15,63 @@ import '../../presentation/chores_p3_15_support.dart';
 void main() {
   late ChoresFixture fixture;
 
-  InboxItem row(String id, {bool read = false, DateTime? at, Map<String, String>? params, String type = InboxType.swapRequest}) =>
-      InboxItem(
-        id: id,
-        toMemberId: 'cara',
-        type: type,
-        refType: 'swapRequest',
-        refId: 'r1',
-        createdAt: at ?? fixture.clock.nowUtc(),
-        readAt: read ? fixture.clock.nowUtc() : null,
-        params: params ??
-            <String, String>{'name': 'Dishes', 'date': '2026-10-24', 'from': 'dave', 'kind': 'swap'},
-      );
+  InboxItem row(
+    String id, {
+    bool read = false,
+    DateTime? at,
+    Map<String, String>? params,
+    String type = InboxType.swapRequest,
+  }) => InboxItem(
+    id: id,
+    toMemberId: 'cara',
+    type: type,
+    refType: 'swapRequest',
+    refId: 'r1',
+    createdAt: at ?? fixture.clock.nowUtc(),
+    readAt: read ? fixture.clock.nowUtc() : null,
+    params:
+        params ??
+        <String, String>{
+          'name': 'Dishes',
+          'date': '2026-10-24',
+          'from': 'dave',
+          'kind': 'swap',
+        },
+  );
 
   setUp(() => fixture = ChoresFixture());
 
-  Future<void> open(WidgetTester tester, {String language = 'en', double scale = 1}) =>
-      pumpP3Screen(
-        tester,
-        home: const InboxScreen(),
-        sharedFixture: fixture,
-        languageCode: language,
-        textScale: scale,
-        overrides: [
-          inboxRepositoryProvider.overrideWithValue(fixture.inboxRows),
-          swapRepositoryProvider.overrideWithValue(fixture.swaps),
-          availabilityRepositoryProvider.overrideWithValue(fixture.availability),
-        ],
-      ).then((_) => tester.pump(const Duration(milliseconds: 100)));
+  Future<void> open(
+    WidgetTester tester, {
+    String language = 'en',
+    double scale = 1,
+  }) => pumpP3Screen(
+    tester,
+    home: const InboxScreen(),
+    sharedFixture: fixture,
+    languageCode: language,
+    textScale: scale,
+    overrides: [
+      inboxRepositoryProvider.overrideWithValue(fixture.inboxRows),
+      swapRepositoryProvider.overrideWithValue(fixture.swaps),
+      availabilityRepositoryProvider.overrideWithValue(fixture.availability),
+    ],
+  ).then((_) => tester.pump(const Duration(milliseconds: 100)));
 
-  testWidgets('groups Today and Earlier, marks unread and explains Spark', (tester) async {
+  testWidgets('groups Today and Earlier, marks unread and explains Spark', (
+    tester,
+  ) async {
     fixture.inboxRows.items['i1'] = row('i1');
     fixture.inboxRows.items['i2'] = row(
       'i2',
       read: true,
       at: DateTime.utc(2026, 10, 20),
-      params: <String, String>{'name': 'Bins', 'date': '2026-10-20', 'outcome': 'declined', 'by': 'dave'},
+      params: <String, String>{
+        'name': 'Bins',
+        'date': '2026-10-20',
+        'outcome': 'declined',
+        'by': 'dave',
+      },
       type: InboxType.swapResult,
     );
     await open(tester);
@@ -64,7 +85,15 @@ void main() {
   });
 
   testWidgets('tapping a row marks it read', (tester) async {
-    fixture.inboxRows.items['i1'] = row('i1', params: <String, String>{'name': 'Dishes', 'date': '2026-10-24', 'from': 'dave', 'kind': 'swap'});
+    fixture.inboxRows.items['i1'] = row(
+      'i1',
+      params: <String, String>{
+        'name': 'Dishes',
+        'date': '2026-10-24',
+        'from': 'dave',
+        'kind': 'swap',
+      },
+    );
     await open(tester);
 
     await tester.tap(find.textContaining('Dishes'));
@@ -81,7 +110,10 @@ void main() {
     await tester.tap(find.byKey(const Key('inbox_mark_all')));
     await tester.pump(const Duration(milliseconds: 100));
 
-    expect(fixture.inboxRows.items.values.every((i) => i.readAt != null), isTrue);
+    expect(
+      fixture.inboxRows.items.values.every((i) => i.readAt != null),
+      isTrue,
+    );
   });
 
   testWidgets('an empty inbox says so', (tester) async {

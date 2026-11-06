@@ -47,7 +47,9 @@ class CancelAvailability {
     if (readFailure != null) return Failure<MemberAvailability>(readFailure);
     final record = found.valueOrNull;
     if (record == null) {
-      return const Failure<MemberAvailability>(NotFound(entity: 'availability'));
+      return const Failure<MemberAvailability>(
+        NotFound(entity: 'availability'),
+      );
     }
     final own = actorUid == record.memberId;
     final denied = checkPermission(
@@ -58,7 +60,9 @@ class CancelAvailability {
     ).failureOrNull;
     if (denied != null) return Failure<MemberAvailability>(denied);
     if (!record.isLive) {
-      return const Failure<MemberAvailability>(Conflict(code: 'concurrent_edit'));
+      return const Failure<MemberAvailability>(
+        Conflict(code: 'concurrent_edit'),
+      );
     }
 
     final at = clock.nowUtc();

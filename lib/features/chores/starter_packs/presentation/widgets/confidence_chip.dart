@@ -66,12 +66,10 @@ class ConfidenceChip extends StatelessWidget {
   };
 
   /// Localized label of [confidence].
-  static String confidenceLabel(
-    AppLocalizations l10n,
-    Confidence confidence,
-  ) => switch (confidence) {
-    Confidence.high => l10n.starterPackConfidenceHigh,
-    Confidence.medium => l10n.starterPackConfidenceMedium,
-    Confidence.low => l10n.starterPackConfidenceLow,
-  };
+  static String confidenceLabel(AppLocalizations l10n, Confidence confidence) =>
+      switch (confidence) {
+        Confidence.high => l10n.starterPackConfidenceHigh,
+        Confidence.medium => l10n.starterPackConfidenceMedium,
+        Confidence.low => l10n.starterPackConfidenceLow,
+      };
 }

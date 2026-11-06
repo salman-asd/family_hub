@@ -67,7 +67,9 @@ class FilterChipsRow extends ConsumerWidget {
               () => unawaited(
                 prefs.setFilters(
                   filters.copyWith(
-                    statuses: filters.statuses.where((s) => s != status).toSet(),
+                    statuses: filters.statuses
+                        .where((s) => s != status)
+                        .toSet(),
                     query: '',
                   ),
                 ),
@@ -76,7 +78,11 @@ class FilterChipsRow extends ConsumerWidget {
           for (final id in filters.memberIds)
             chip(
               Key('calendar_chip_member_$id'),
-              members.where((m) => m.uid == id).map((m) => m.displayName).firstOrNull ?? id,
+              members
+                      .where((m) => m.uid == id)
+                      .map((m) => m.displayName)
+                      .firstOrNull ??
+                  id,
               () => unawaited(
                 prefs.setFilters(
                   filters.copyWith(

@@ -41,12 +41,16 @@ void main() {
   });
 
   test('a finance moderator may save', () async {
-    expect(await save(sampleBudget(BudgetFixture.october), actor: 'bob'), isNull);
+    expect(
+      await save(sampleBudget(BudgetFixture.october), actor: 'bob'),
+      isNull,
+    );
   });
 
   test('a moderator without finance is denied', () async {
-    f.fx.backend.permissionSettings[BudgetFixture.familyId] =
-        PermissionSettings.defaults.copyWith(moderatorManagesFinance: false);
+    f.fx.backend.permissionSettings[BudgetFixture.familyId] = PermissionSettings
+        .defaults
+        .copyWith(moderatorManagesFinance: false);
     expect(
       await save(sampleBudget(BudgetFixture.october), actor: 'bob'),
       const PermissionDenied(),
@@ -66,26 +70,29 @@ void main() {
     expect(f.repository.saves, 0);
   });
 
-  test('lines drive the dry-grocery estimate, overriding a typed one', () async {
-    await save(
-      sampleBudget(
-        BudgetFixture.october,
-        total: Money.zero,
-        categories: const {
-          kDryGroceriesCategoryId: Money.paisa(1),
-          'cat_fish': Money.paisa(300000),
-        },
-        lines: const [riceLine, oilLine],
-      ),
-    );
-    final saved = f.repository.stored[BudgetFixture.october]!;
-    expect(
-      saved.categoryEstimates[kDryGroceriesCategoryId],
-      const Money.paisa(470000),
-    );
-    // Zero total defaults to the sum of the category estimates.
-    expect(saved.totalEstimate, const Money.paisa(770000));
-  });
+  test(
+    'lines drive the dry-grocery estimate, overriding a typed one',
+    () async {
+      await save(
+        sampleBudget(
+          BudgetFixture.october,
+          total: Money.zero,
+          categories: const {
+            kDryGroceriesCategoryId: Money.paisa(1),
+            'cat_fish': Money.paisa(300000),
+          },
+          lines: const [riceLine, oilLine],
+        ),
+      );
+      final saved = f.repository.stored[BudgetFixture.october]!;
+      expect(
+        saved.categoryEstimates[kDryGroceriesCategoryId],
+        const Money.paisa(470000),
+      );
+      // Zero total defaults to the sum of the category estimates.
+      expect(saved.totalEstimate, const Money.paisa(770000));
+    },
+  );
 
   test('a typed total is kept when given', () async {
     await save(

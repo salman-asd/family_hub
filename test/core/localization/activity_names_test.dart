@@ -33,11 +33,9 @@ void main() {
 
   test('an unknown uid and a non-chore type are left alone', () {
     expect(
-      resolveChoreActivityNames(
-        AuditEventType.choresCommentAdded,
-        const {'member': 'gone'},
-        nameOf,
-      )['member'],
+      resolveChoreActivityNames(AuditEventType.choresCommentAdded, const {
+        'member': 'gone',
+      }, nameOf)['member'],
       'gone',
     );
     const other = {'member': 'u1'};

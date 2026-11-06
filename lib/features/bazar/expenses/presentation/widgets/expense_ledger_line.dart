@@ -59,9 +59,8 @@ class ExpenseLedgerLine extends ConsumerWidget {
         Expanded(
           child: Text(
             text,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: t.textPrimary),
+            style: Theme.of(context).textTheme.bodyMedium
+                ?.copyWith(color: t.textPrimary),
           ),
         ),
       ],

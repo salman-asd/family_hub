@@ -10,11 +10,8 @@ import 'package:family_hub/features/bazar/reports/domain/report_query.dart';
 /// [averagePerDay] is integer arithmetic (half-up on paisa), so nothing here
 /// can introduce a rounding difference between platforms.
 final class ReportSummary {
-  ReportSummary({
-    required this.total,
-    required this.count,
-    required this.range,
-  }) : averagePerDay = averageMoney(total, lengthInDays(range));
+  ReportSummary({required this.total, required this.count, required this.range})
+    : averagePerDay = averageMoney(total, lengthInDays(range));
 
   final Money total;
   final int count;
@@ -124,7 +121,9 @@ final class MemberTotal {
 
   @override
   bool operator ==(Object other) =>
-      other is MemberTotal && other.memberId == memberId && other.total == total;
+      other is MemberTotal &&
+      other.memberId == memberId &&
+      other.total == total;
 
   @override
   int get hashCode => Object.hash(memberId, total);
@@ -190,11 +189,8 @@ final class DryGroceryComparison {
       _sameLines(other.lines, lines);
 
   @override
-  int get hashCode =>
-      Object.hash(estimate, actual, Object.hashAll(lines));
+  int get hashCode => Object.hash(estimate, actual, Object.hashAll(lines));
 }
-
-
 
 /// Everything a report screen draws, computed once by `ReportEngine`.
 final class ReportData {

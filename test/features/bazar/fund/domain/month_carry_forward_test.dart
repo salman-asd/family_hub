@@ -47,12 +47,15 @@ void main() {
       expect(result.adjustment, isNull);
     });
 
-    test('a negative balance (overdrawn fund) is carried as a negative row', () {
-      final result = carry(closing: -4200);
+    test(
+      'a negative balance (overdrawn fund) is carried as a negative row',
+      () {
+        final result = carry(closing: -4200);
 
-      expect(result.opening!.amount.paisa, -4200);
-      expect(result.opening!.id, 'open_2026-11');
-    });
+        expect(result.opening!.amount.paisa, -4200);
+        expect(result.opening!.id, 'open_2026-11');
+      },
+    );
 
     test('an existing opening row is corrected by the delta, never edited', () {
       // The month was closed at 100000, reopened, 5000 more was spent.
@@ -85,7 +88,10 @@ void main() {
         ]),
         MonthKey(2026, 8),
       );
-      expect(MonthCarryForwardRules.latestClosed(const <MonthClosing>[]), isNull);
+      expect(
+        MonthCarryForwardRules.latestClosed(const <MonthClosing>[]),
+        isNull,
+      );
     });
   });
 
@@ -105,9 +111,7 @@ void main() {
       expect(
         closeWindowStart(
           month: october,
-          closings: <MonthClosing>[
-            closing(MonthKey(2026, 9), closed: true),
-          ],
+          closings: <MonthClosing>[closing(MonthKey(2026, 9), closed: true)],
           fundStartMonth: MonthKey(2026, 1),
         ),
         october,

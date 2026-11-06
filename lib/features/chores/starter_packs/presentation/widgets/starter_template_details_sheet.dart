@@ -43,9 +43,8 @@ class StarterTemplateDetailsSheet extends StatelessWidget {
     final t = context.tokens;
     final bn = Localizations.localeOf(context).languageCode == 'bn';
     final name = bn ? template.nameBn : (template.nameEn ?? template.nameBn);
-    final bodyStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
-      color: t.textSecondary,
-    );
+    final bodyStyle = Theme.of(context).textTheme.bodyMedium
+        ?.copyWith(color: t.textSecondary);
 
     return SafeArea(
       top: false,
@@ -57,9 +56,8 @@ class StarterTemplateDetailsSheet extends StatelessWidget {
           children: <Widget>[
             Text(
               name,
-              style: Theme.of(
-                context,
-              ).textTheme.titleLarge?.copyWith(color: t.textPrimary),
+              style: Theme.of(context).textTheme.titleLarge
+                  ?.copyWith(color: t.textPrimary),
             ),
             const SizedBox(height: 8),
             ConfidenceChip(confidence: template.confidence),
@@ -110,8 +108,10 @@ class StarterTemplateDetailsSheet extends StatelessWidget {
     );
   }
 
-  TextStyle? _labelStyle(BuildContext context) =>
-      Theme.of(context).textTheme.labelLarge?.copyWith(
+  TextStyle? _labelStyle(BuildContext context) => Theme.of(context)
+      .textTheme
+      .labelLarge
+      ?.copyWith(
         color: context.tokens.textPrimary,
         fontWeight: FontWeight.w700,
       );

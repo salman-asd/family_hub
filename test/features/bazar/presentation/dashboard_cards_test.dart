@@ -84,11 +84,7 @@ void main() {
   screenStateTests(
     'Bazar dashboard cards',
     () => const Column(
-      children: [
-        BazarMonthCard(),
-        FundBalanceCard(),
-        BudgetAlertCard(),
-      ],
+      children: [BazarMonthCard(), FundBalanceCard(), BudgetAlertCard()],
     ),
     overrides: (_) => _readyOverrides(),
   );
@@ -192,24 +188,31 @@ void main() {
     expect(find.byKey(const ValueKey('dashboard-fund-pending')), findsNothing);
   });
 
-  testWidgets('budget card shows the first (worst) alert and hides when clear', (
-    tester,
-  ) async {
-    await _pump(
-      tester,
-      const BudgetAlertCard(),
-      overrides: _readyOverrides(alerts: [_alert]),
-    );
-    expect(find.byKey(const ValueKey('dashboard-budget-alert')), findsOneWidget);
-    expect(find.text('Food'), findsOneWidget);
+  testWidgets(
+    'budget card shows the first (worst) alert and hides when clear',
+    (tester) async {
+      await _pump(
+        tester,
+        const BudgetAlertCard(),
+        overrides: _readyOverrides(alerts: [_alert]),
+      );
+      expect(
+        find.byKey(const ValueKey('dashboard-budget-alert')),
+        findsOneWidget,
+      );
+      expect(find.text('Food'), findsOneWidget);
 
-    await _pump(
-      tester,
-      const BudgetAlertCard(),
-      overrides: _readyOverrides(alerts: const []),
-    );
-    expect(find.byKey(const ValueKey('dashboard-budget-alert')), findsNothing);
-  });
+      await _pump(
+        tester,
+        const BudgetAlertCard(),
+        overrides: _readyOverrides(alerts: const []),
+      );
+      expect(
+        find.byKey(const ValueKey('dashboard-budget-alert')),
+        findsNothing,
+      );
+    },
+  );
 
   testWidgets('home only includes dashboard cards from visible modules', (
     tester,
@@ -238,38 +241,40 @@ void main() {
       ],
     );
     expect(find.byKey(const ValueKey('dashboard-bazar-month')), findsOneWidget);
-    expect(find.byKey(const ValueKey('dashboard-fund-balance')), findsOneWidget);
-  });
-
-  testWidgets('Bazar home places its summary above the budget entry and badge', (
-    tester,
-  ) async {
-    final budget = BazarEntry(
-      id: 'budget',
-      icon: Icons.savings_outlined,
-      label: (l10n) => l10n.budgetTitle,
-      route: '/bazar/budget',
-    );
-    await _pump(
-      tester,
-      BazarHomeScreen(
-        entries: [budget],
-      ),
-      fullScreen: true,
-      overrides: _readyOverrides(alerts: [_alert]),
-    );
-
-    final monthCard = find.byKey(const ValueKey('dashboard-bazar-month'));
-    final fundCard = find.byKey(const ValueKey('dashboard-fund-balance'));
-    final budgetTile = find.text('Budget');
-    expect(monthCard, findsOneWidget);
-    expect(fundCard, findsOneWidget);
     expect(
-      tester.getTopLeft(monthCard).dy,
-      lessThan(tester.getTopLeft(budgetTile).dy),
+      find.byKey(const ValueKey('dashboard-fund-balance')),
+      findsOneWidget,
     );
-    expect(find.byIcon(Icons.warning_amber_rounded), findsWidgets);
   });
+
+  testWidgets(
+    'Bazar home places its summary above the budget entry and badge',
+    (tester) async {
+      final budget = BazarEntry(
+        id: 'budget',
+        icon: Icons.savings_outlined,
+        label: (l10n) => l10n.budgetTitle,
+        route: '/bazar/budget',
+      );
+      await _pump(
+        tester,
+        BazarHomeScreen(entries: [budget]),
+        fullScreen: true,
+        overrides: _readyOverrides(alerts: [_alert]),
+      );
+
+      final monthCard = find.byKey(const ValueKey('dashboard-bazar-month'));
+      final fundCard = find.byKey(const ValueKey('dashboard-fund-balance'));
+      final budgetTile = find.text('Budget');
+      expect(monthCard, findsOneWidget);
+      expect(fundCard, findsOneWidget);
+      expect(
+        tester.getTopLeft(monthCard).dy,
+        lessThan(tester.getTopLeft(budgetTile).dy),
+      );
+      expect(find.byIcon(Icons.warning_amber_rounded), findsWidgets);
+    },
+  );
 }
 
 List<Override> _readyOverrides({
@@ -283,13 +288,11 @@ List<Override> _readyOverrides({
   familyDateKeysProvider.overrideWithValue(
     FamilyDateKeys(clock: FakeClock(DateTime.utc(2026, 10, 18))),
   ),
-  monthExpensesProvider.overrideWith(
-    (ref, month) {
-      if (expenseError) return Stream<List<Expense>>.error(StateError('offline'));
-      if (expenseLoading) return const Stream<List<Expense>>.empty();
-      return Stream.value(expenses);
-    },
-  ),
+  monthExpensesProvider.overrideWith((ref, month) {
+    if (expenseError) return Stream<List<Expense>>.error(StateError('offline'));
+    if (expenseLoading) return const Stream<List<Expense>>.empty();
+    return Stream.value(expenses);
+  }),
   categoriesProvider.overrideWith((ref) => Stream.value([_category])),
   fundTransactionsProvider.overrideWith(
     (ref) => fundError

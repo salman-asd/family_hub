@@ -6274,12 +6274,6 @@ abstract class AppLocalizations {
   /// **'কাজটি গ্রুপে যোগ হয়েছে'**
   String get dutyChoreAdded;
 
-  /// No description provided for @actionDiscard.
-  ///
-  /// In bn, this message translates to:
-  /// **'বাতিল করুন'**
-  String get actionDiscard;
-
   /// No description provided for @choresSettingsNeedsInternet.
   ///
   /// In bn, this message translates to:
@@ -8889,6 +8883,660 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'এই বিজ্ঞপ্তিটি খুঁজে পাওয়া যায়নি।'**
   String get notificationFailure_inboxItem;
+
+  /// No description provided for @notificationSettingsTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিজ্ঞপ্তি ও রিমাইন্ডার'**
+  String get notificationSettingsTitle;
+
+  /// No description provided for @notificationHelpTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিমাইন্ডার কাজ না করলে'**
+  String get notificationHelpTitle;
+
+  /// No description provided for @notificationDeliveryTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ নাকি সাধারণ বিজ্ঞপ্তি'**
+  String get notificationDeliveryTitle;
+
+  /// No description provided for @notificationCategoryChores.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ'**
+  String get notificationCategoryChores;
+
+  /// No description provided for @notificationCategoryBazar.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ও অর্থ'**
+  String get notificationCategoryBazar;
+
+  /// No description provided for @notificationCategoryFamily.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার'**
+  String get notificationCategoryFamily;
+
+  /// No description provided for @notificationTemplateHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রতিটি কাজের রিমাইন্ডার তার টেমপ্লেট থেকেও বদলানো যায়।'**
+  String get notificationTemplateHint;
+
+  /// No description provided for @notificationDefaultOffsets.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের কতক্ষণ আগে মনে করাবেন'**
+  String get notificationDefaultOffsets;
+
+  /// No description provided for @notificationCustomOffset.
+  ///
+  /// In bn, this message translates to:
+  /// **'মিনিট লিখুন (১–১৪৪০)'**
+  String get notificationCustomOffset;
+
+  /// No description provided for @notificationAddOffset.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময় যোগ করুন'**
+  String get notificationAddOffset;
+
+  /// No description provided for @notificationInvalidOffset.
+  ///
+  /// In bn, this message translates to:
+  /// **'১–১৪৪০-এর মধ্যে নতুন একটি সময় লিখুন।'**
+  String get notificationInvalidOffset;
+
+  /// No description provided for @notificationOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ বাকি থাকলে পরে আবার মনে করান'**
+  String get notificationOverdue;
+
+  /// No description provided for @notificationQuietHours.
+  ///
+  /// In bn, this message translates to:
+  /// **'নীরব সময়'**
+  String get notificationQuietHours;
+
+  /// No description provided for @notificationQuietStarts.
+  ///
+  /// In bn, this message translates to:
+  /// **'শুরু'**
+  String get notificationQuietStarts;
+
+  /// No description provided for @notificationQuietEnds.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ'**
+  String get notificationQuietEnds;
+
+  /// No description provided for @notificationMorningSummary.
+  ///
+  /// In bn, this message translates to:
+  /// **'সকালের কাজের সারাংশ'**
+  String get notificationMorningSummary;
+
+  /// No description provided for @notificationSummaryTime.
+  ///
+  /// In bn, this message translates to:
+  /// **'সময়: {time}'**
+  String notificationSummaryTime(String time);
+
+  /// No description provided for @notificationAllEnabled.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিমাইন্ডার চালু'**
+  String get notificationAllEnabled;
+
+  /// No description provided for @notificationMasterExplanation.
+  ///
+  /// In bn, this message translates to:
+  /// **'বন্ধ করলে সব বিভাগের রিমাইন্ডার থামবে; সময়সূচি সংরক্ষিত থাকবে।'**
+  String get notificationMasterExplanation;
+
+  /// No description provided for @notificationMasterOffReason.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব রিমাইন্ডার বন্ধ থাকায় এই বিভাগের রিমাইন্ডারও আসবে না।'**
+  String get notificationMasterOffReason;
+
+  /// No description provided for @notificationCategoryOffReason.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই বিভাগের রিমাইন্ডার বন্ধ আছে।'**
+  String get notificationCategoryOffReason;
+
+  /// No description provided for @notificationPushOnPhone.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ফোনে পুশ বিজ্ঞপ্তি নিন'**
+  String get notificationPushOnPhone;
+
+  /// No description provided for @notificationSenderSparkHint.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ পাঠানোর ব্যবস্থা নেই (বিনামূল্যের প্ল্যান); এই ফোনের রিমাইন্ডার চলবে।'**
+  String get notificationSenderSparkHint;
+
+  /// No description provided for @notificationPushAdminOff.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের প্রশাসক পুশ বন্ধ রেখেছেন।'**
+  String get notificationPushAdminOff;
+
+  /// No description provided for @notificationPushSavedInactive.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ সেটিং সংরক্ষিত আছে, তবে পুশ চালু না হওয়া পর্যন্ত এটি ব্যবহার হবে না।'**
+  String get notificationPushSavedInactive;
+
+  /// No description provided for @notificationPushDisabledHere.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ফোনে পুশ বন্ধ আছে।'**
+  String get notificationPushDisabledHere;
+
+  /// No description provided for @notificationPush.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ'**
+  String get notificationPush;
+
+  /// No description provided for @notificationNormal.
+  ///
+  /// In bn, this message translates to:
+  /// **'সাধারণ'**
+  String get notificationNormal;
+
+  /// No description provided for @notificationFamilyDefaults.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের ডিফল্ট'**
+  String get notificationFamilyDefaults;
+
+  /// No description provided for @notificationPermissionChecking.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিজ্ঞপ্তির অনুমতি দেখা হচ্ছে…'**
+  String get notificationPermissionChecking;
+
+  /// No description provided for @notificationPermissionUnavailable.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফোনের অনুমতির তথ্য পাওয়া যায়নি।'**
+  String get notificationPermissionUnavailable;
+
+  /// No description provided for @notificationPermissionDenied.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই অ্যাপের বিজ্ঞপ্তি বন্ধ আছে।'**
+  String get notificationPermissionDenied;
+
+  /// No description provided for @notificationExactAlarmMissing.
+  ///
+  /// In bn, this message translates to:
+  /// **'সঠিক সময়ের অ্যালার্ম বন্ধ; রিমাইন্ডার দেরিতে আসতে পারে।'**
+  String get notificationExactAlarmMissing;
+
+  /// No description provided for @notificationPermissionGranted.
+  ///
+  /// In bn, this message translates to:
+  /// **'চালু'**
+  String get notificationPermissionGranted;
+
+  /// No description provided for @notificationAllow.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুমতি দিন'**
+  String get notificationAllow;
+
+  /// No description provided for @notificationAllowExactAlarms.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যালার্ম চালু করুন'**
+  String get notificationAllowExactAlarms;
+
+  /// No description provided for @notificationSaveFailed.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষণ করা যায়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।'**
+  String get notificationSaveFailed;
+
+  /// No description provided for @notificationTestTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফ্যামিলি হাব পরীক্ষা'**
+  String get notificationTestTitle;
+
+  /// No description provided for @notificationTestBody.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি আপনার পরীক্ষামূলক রিমাইন্ডার।'**
+  String get notificationTestBody;
+
+  /// No description provided for @notificationTestScheduled.
+  ///
+  /// In bn, this message translates to:
+  /// **'১০ সেকেন্ডের মধ্যে পরীক্ষামূলক বিজ্ঞপ্তি আসবে।'**
+  String get notificationTestScheduled;
+
+  /// No description provided for @notificationTestFailed.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরীক্ষামূলক বিজ্ঞপ্তি ঠিক করা যায়নি।'**
+  String get notificationTestFailed;
+
+  /// No description provided for @notificationTestButton.
+  ///
+  /// In bn, this message translates to:
+  /// **'১০ সেকেন্ডে পরীক্ষামূলক বিজ্ঞপ্তি'**
+  String get notificationTestButton;
+
+  /// No description provided for @notificationUseFamilyDefaults.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের ডিফল্ট ব্যবহার করুন'**
+  String get notificationUseFamilyDefaults;
+
+  /// No description provided for @notificationAllowPush.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ বিজ্ঞপ্তি চালু করুন'**
+  String get notificationAllowPush;
+
+  /// No description provided for @notificationSenderUnavailable.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ পাঠানোর সার্ভার সেট আপ করা নেই'**
+  String get notificationSenderUnavailable;
+
+  /// No description provided for @notificationSenderChecking.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ ব্যবস্থা দেখা হচ্ছে…'**
+  String get notificationSenderChecking;
+
+  /// No description provided for @notificationSenderError.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ ব্যবস্থার অবস্থা জানা যায়নি'**
+  String get notificationSenderError;
+
+  /// No description provided for @notificationSenderReady.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ পাঠানোর ব্যবস্থা প্রস্তুত'**
+  String get notificationSenderReady;
+
+  /// No description provided for @notificationSenderLastFailed.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বশেষ পুশ পাঠানো যায়নি'**
+  String get notificationSenderLastFailed;
+
+  /// No description provided for @notificationRecommended.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রস্তাবিত: {recommended}'**
+  String notificationRecommended(String recommended);
+
+  /// No description provided for @notificationTypeLocked.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফোনেই তৈরি হয়; সার্ভার ইভেন্ট নেই।'**
+  String get notificationTypeLocked;
+
+  /// No description provided for @notificationDiscardTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবর্তন বাতিল করবেন?'**
+  String get notificationDiscardTitle;
+
+  /// No description provided for @notificationDiscardMessage.
+  ///
+  /// In bn, this message translates to:
+  /// **'সংরক্ষণ না করা পরিবর্তন হারিয়ে যাবে।'**
+  String get notificationDiscardMessage;
+
+  /// No description provided for @actionDiscard.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাতিল করুন'**
+  String get actionDiscard;
+
+  /// No description provided for @notificationDiagnosticsLoading.
+  ///
+  /// In bn, this message translates to:
+  /// **'তথ্য লোড হচ্ছে…'**
+  String get notificationDiagnosticsLoading;
+
+  /// No description provided for @notificationPushUnavailable.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ তথ্য পাওয়া যায়নি।'**
+  String get notificationPushUnavailable;
+
+  /// No description provided for @notificationPermissionLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিজ্ঞপ্তির অনুমতি'**
+  String get notificationPermissionLabel;
+
+  /// No description provided for @notificationExactAlarmLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'সঠিক সময়ের অ্যালার্ম'**
+  String get notificationExactAlarmLabel;
+
+  /// No description provided for @notificationBatteryLabel.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাটারি সীমাবদ্ধতা'**
+  String get notificationBatteryLabel;
+
+  /// No description provided for @notificationOpenSettings.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফোনের সেটিংস খুলুন'**
+  String get notificationOpenSettings;
+
+  /// No description provided for @notificationPendingCount.
+  ///
+  /// In bn, this message translates to:
+  /// **'অপেক্ষমাণ রিমাইন্ডার'**
+  String get notificationPendingCount;
+
+  /// No description provided for @notificationNextScheduled.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের নির্ধারিত রিমাইন্ডার'**
+  String get notificationNextScheduled;
+
+  /// No description provided for @notificationAndroidVersion.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যান্ড্রয়েড সংস্করণ'**
+  String get notificationAndroidVersion;
+
+  /// No description provided for @notificationPushToken.
+  ///
+  /// In bn, this message translates to:
+  /// **'পুশ টোকেন'**
+  String get notificationPushToken;
+
+  /// No description provided for @notificationPushTokenPresent.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ফোনে টোকেন আছে'**
+  String get notificationPushTokenPresent;
+
+  /// No description provided for @notificationPushTokenMissing.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ফোনে পুশ টোকেন নেই'**
+  String get notificationPushTokenMissing;
+
+  /// No description provided for @notificationLastPushReceived.
+  ///
+  /// In bn, this message translates to:
+  /// **'শেষ পুশ পাওয়ার সময়'**
+  String get notificationLastPushReceived;
+
+  /// No description provided for @notificationNever.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনও হয়নি'**
+  String get notificationNever;
+
+  /// No description provided for @notificationTimezone.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারের সময় অঞ্চল'**
+  String get notificationTimezone;
+
+  /// No description provided for @notificationLastError.
+  ///
+  /// In bn, this message translates to:
+  /// **'সর্বশেষ ত্রুটি'**
+  String get notificationLastError;
+
+  /// No description provided for @notificationReminderError.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিমাইন্ডার নির্ধারণের ত্রুটি'**
+  String get notificationReminderError;
+
+  /// No description provided for @notificationHelpIntro.
+  ///
+  /// In bn, this message translates to:
+  /// **'ফোনের অনুমতি ও নির্ধারিত রিমাইন্ডারের অবস্থা দেখুন।'**
+  String get notificationHelpIntro;
+
+  /// No description provided for @notificationChecklistTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'যা পরীক্ষা করবেন'**
+  String get notificationChecklistTitle;
+
+  /// No description provided for @notificationChecklistAllow.
+  ///
+  /// In bn, this message translates to:
+  /// **'Family Hub-এর বিজ্ঞপ্তির অনুমতি দিন।'**
+  String get notificationChecklistAllow;
+
+  /// No description provided for @notificationChecklistAlarms.
+  ///
+  /// In bn, this message translates to:
+  /// **'সঠিক অ্যালার্মের অনুমতি দিন।'**
+  String get notificationChecklistAlarms;
+
+  /// No description provided for @notificationChecklistBattery.
+  ///
+  /// In bn, this message translates to:
+  /// **'Family Hub-এর ব্যাটারি সীমাবদ্ধতা সরান।'**
+  String get notificationChecklistBattery;
+
+  /// No description provided for @notificationChecklistForceStop.
+  ///
+  /// In bn, this message translates to:
+  /// **'অ্যাপটি জোর করে বন্ধ করবেন না।'**
+  String get notificationChecklistForceStop;
+
+  /// No description provided for @notificationChecklistOpen.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন তথ্য লোড করতে দিনে অন্তত একবার অ্যাপ খুলুন।'**
+  String get notificationChecklistOpen;
+
+  /// No description provided for @notificationNoSenderHonesty.
+  ///
+  /// In bn, this message translates to:
+  /// **'রিমাইন্ডার এই ফোনে লোড হওয়া তথ্য থেকে নির্ধারিত হয়। অন্য কেউ কাজ দিলে বা অদলবদলের অনুরোধ করলে, অ্যাপ বন্ধ থাকলে তা খুললে দেখা যাবে। বিনামূল্যের প্ল্যানে পুশ পাঠানোর ব্যবস্থা নেই।'**
+  String get notificationNoSenderHonesty;
+
+  /// No description provided for @notificationResetRecommended.
+  ///
+  /// In bn, this message translates to:
+  /// **'প্রস্তাবিত সেটিং ফিরিয়ে আনুন'**
+  String get notificationResetRecommended;
+
+  /// No description provided for @notificationTypeSwapRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ অদলবদলের অনুরোধ'**
+  String get notificationTypeSwapRequest;
+
+  /// No description provided for @notificationTypeSwapResult.
+  ///
+  /// In bn, this message translates to:
+  /// **'অদলবদলের সিদ্ধান্ত'**
+  String get notificationTypeSwapResult;
+
+  /// No description provided for @notificationTypeNeedsCover.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের জন্য বিকল্প দরকার'**
+  String get notificationTypeNeedsCover;
+
+  /// No description provided for @notificationTypeChoreAssigned.
+  ///
+  /// In bn, this message translates to:
+  /// **'নতুন কাজ বরাদ্দ'**
+  String get notificationTypeChoreAssigned;
+
+  /// No description provided for @notificationTypeChoreReopened.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ আবার খোলা হয়েছে'**
+  String get notificationTypeChoreReopened;
+
+  /// No description provided for @notificationTypeCommentAttention.
+  ///
+  /// In bn, this message translates to:
+  /// **'মন্তব্যে মনোযোগ দরকার'**
+  String get notificationTypeCommentAttention;
+
+  /// No description provided for @notificationTypeVerificationNeeded.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজ যাচাই দরকার'**
+  String get notificationTypeVerificationNeeded;
+
+  /// No description provided for @notificationTypeAbsenceDecision.
+  ///
+  /// In bn, this message translates to:
+  /// **'অনুপস্থিতির সিদ্ধান্ত'**
+  String get notificationTypeAbsenceDecision;
+
+  /// No description provided for @notificationTypeMemberJoinRequest.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারে যোগদানের অনুরোধ'**
+  String get notificationTypeMemberJoinRequest;
+
+  /// No description provided for @notificationTypeMemberApproved.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারে যোগ অনুমোদিত'**
+  String get notificationTypeMemberApproved;
+
+  /// No description provided for @notificationTypeChoreDue.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজের সময়'**
+  String get notificationTypeChoreDue;
+
+  /// No description provided for @notificationTypeChoreOverdue.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিলম্বিত কাজ'**
+  String get notificationTypeChoreOverdue;
+
+  /// No description provided for @notificationTypeEveningNudge.
+  ///
+  /// In bn, this message translates to:
+  /// **'সন্ধ্যার মনে করানো'**
+  String get notificationTypeEveningNudge;
+
+  /// No description provided for @notificationTypeMorningSummary.
+  ///
+  /// In bn, this message translates to:
+  /// **'সকালের সারাংশ'**
+  String get notificationTypeMorningSummary;
+
+  /// No description provided for @notificationTypeContributionDue.
+  ///
+  /// In bn, this message translates to:
+  /// **'চাঁদা দেওয়ার সময়'**
+  String get notificationTypeContributionDue;
+
+  /// No description provided for @notificationTypeMonthEnd.
+  ///
+  /// In bn, this message translates to:
+  /// **'মাস শেষের স্মরণ'**
+  String get notificationTypeMonthEnd;
+
+  /// No description provided for @notificationTypeBudgetAlert.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজেট সতর্কতা'**
+  String get notificationTypeBudgetAlert;
+
+  /// No description provided for @notificationTypeAchievement.
+  ///
+  /// In bn, this message translates to:
+  /// **'অর্জন'**
+  String get notificationTypeAchievement;
+
+  /// No description provided for @reminderWhyNext.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরের রিমাইন্ডার: {time}'**
+  String reminderWhyNext(String time);
+
+  /// No description provided for @reminderWhyPush.
+  ///
+  /// In bn, this message translates to:
+  /// **'এটি পুশ হিসেবে পাঠানো হবে।'**
+  String get reminderWhyPush;
+
+  /// No description provided for @reminderWhyGlobalOff.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব রিমাইন্ডার বন্ধ আছে।'**
+  String get reminderWhyGlobalOff;
+
+  /// No description provided for @reminderWhyCategoryOff.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই বিভাগের রিমাইন্ডার বন্ধ আছে।'**
+  String get reminderWhyCategoryOff;
+
+  /// No description provided for @reminderWhyTemplateOff.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজের টেমপ্লেটে রিমাইন্ডার বন্ধ আছে।'**
+  String get reminderWhyTemplateOff;
+
+  /// No description provided for @reminderWhyTemplateNoTimings.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজের জন্য কোনো রিমাইন্ডারের সময় দেওয়া নেই।'**
+  String get reminderWhyTemplateNoTimings;
+
+  /// No description provided for @reminderWhyNotAssigned.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজটি আপনাকে বরাদ্দ করা হয়নি।'**
+  String get reminderWhyNotAssigned;
+
+  /// No description provided for @reminderWhyNotOpen.
+  ///
+  /// In bn, this message translates to:
+  /// **'কাজটি আর খোলা নেই।'**
+  String get reminderWhyNotOpen;
+
+  /// No description provided for @reminderWhyUnavailable.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই কাজের জন্য বিকল্প দরকার।'**
+  String get reminderWhyUnavailable;
+
+  /// No description provided for @reminderWhyProjectedPast.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই পরিকল্পিত কাজের সময় পেরিয়ে গেছে।'**
+  String get reminderWhyProjectedPast;
+
+  /// No description provided for @reminderWhyNoUpcoming.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখন থেকে নির্ধারিত কোনো রিমাইন্ডার নেই।'**
+  String get reminderWhyNoUpcoming;
 
   /// No description provided for @reminderDueTitle.
   ///

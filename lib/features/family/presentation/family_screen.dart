@@ -6,6 +6,7 @@ import 'package:family_hub/core/permissions/permissions.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/family/presentation/action_controller.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:family_hub/features/family/presentation/family_settings_tile.dart';
 import 'package:family_hub/features/family/presentation/membership_providers.dart';
 import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:family_hub/shared/widgets/error_view.dart';
@@ -42,7 +43,7 @@ class FamilyScreen extends ConsumerWidget {
               key: const PageStorageKey<String>('family_tab_list'),
               padding: const EdgeInsets.all(16),
               children: [
-                _SettingsTile(
+                FamilySettingsTile(
                   key: const Key('family_members'),
                   icon: Icons.people_outline_rounded,
                   label: l10n.membersTitle,
@@ -52,7 +53,7 @@ class FamilyScreen extends ConsumerWidget {
                   allowed: canInvite,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: _SettingsTile(
+                    child: FamilySettingsTile(
                       key: const Key('family_invitations'),
                       icon: Icons.mail_outline_rounded,
                       label: l10n.invitationsTitle,
@@ -64,7 +65,7 @@ class FamilyScreen extends ConsumerWidget {
                   allowed: canChangeRoles,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: _SettingsTile(
+                    child: FamilySettingsTile(
                       key: const Key('family_roles'),
                       icon: Icons.admin_panel_settings_outlined,
                       label: l10n.rolesTitle,
@@ -76,7 +77,7 @@ class FamilyScreen extends ConsumerWidget {
                   allowed: canEditSettings,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: _SettingsTile(
+                    child: FamilySettingsTile(
                       key: const Key('family_settings'),
                       icon: Icons.tune_rounded,
                       label: l10n.familySettingsTitle,
@@ -88,7 +89,7 @@ class FamilyScreen extends ConsumerWidget {
                   allowed: canManageChores,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: _SettingsTile(
+                    child: FamilySettingsTile(
                       key: const Key('family_chore_settings'),
                       icon: Icons.checklist_rounded,
                       label: l10n.choresSettingsTitle,
@@ -100,7 +101,7 @@ class FamilyScreen extends ConsumerWidget {
                   allowed: canEditSettings,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: _SettingsTile(
+                    child: FamilySettingsTile(
                       key: const Key('family_relationships'),
                       icon: Icons.diversity_3_rounded,
                       label: l10n.relationshipsTitle,
@@ -117,7 +118,7 @@ class FamilyScreen extends ConsumerWidget {
                         ?.copyWith(color: t.textSecondary),
                   ),
                 ),
-                _SettingsTile(
+                FamilySettingsTile(
                   key: const Key('family_dashboard_customize'),
                   icon: Icons.dashboard_customize_outlined,
                   label: l10n.dashboardCustomize,
@@ -126,7 +127,7 @@ class FamilyScreen extends ConsumerWidget {
                 const SizedBox(height: 8),
                 PermissionGate(
                   allowed: ref.can(Permission.manageDashboardLayout),
-                  child: _SettingsTile(
+                  child: FamilySettingsTile(
                     key: const Key('family_dashboard_access'),
                     icon: Icons.dashboard_outlined,
                     label: l10n.dashboardAccess,
@@ -134,21 +135,38 @@ class FamilyScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                _SettingsTile(
+                FamilySettingsTile(
+                  key: const Key('family_notification_settings'),
+                  icon: Icons.notifications_outlined,
+                  label: l10n.notificationSettingsTitle,
+                  onTap: () => context.push(AppRoutes.notificationSettings),
+                ),
+                const SizedBox(height: 8),
+                PermissionGate(
+                  allowed: ref.can(Permission.editFamilySettings),
+                  child: FamilySettingsTile(
+                    key: const Key('family_notification_delivery'),
+                    icon: Icons.compare_arrows,
+                    label: l10n.notificationDeliveryTitle,
+                    onTap: () => context.push(AppRoutes.notificationDelivery),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                FamilySettingsTile(
                   key: const Key('family_settings_theme'),
                   icon: Icons.palette_outlined,
                   label: l10n.settingsThemeTitle,
                   onTap: () => context.push(AppRoutes.settingsTheme),
                 ),
                 const SizedBox(height: 8),
-                _SettingsTile(
+                FamilySettingsTile(
                   key: const Key('family_settings_language'),
                   icon: Icons.translate_rounded,
                   label: l10n.settingsLanguageTitle,
                   onTap: () => context.push(AppRoutes.settingsLanguage),
                 ),
                 const SizedBox(height: 8),
-                _SettingsTile(
+                FamilySettingsTile(
                   key: const Key('family_settings_security'),
                   icon: Icons.lock_outline_rounded,
                   label: l10n.securityTitle,
@@ -156,7 +174,7 @@ class FamilyScreen extends ConsumerWidget {
                 ),
                 if (flavor == Flavor.dev) ...[
                   const SizedBox(height: 8),
-                  _SettingsTile(
+                  FamilySettingsTile(
                     key: const Key('family_dev_tokens'),
                     icon: Icons.color_lens_outlined,
                     label: l10n.homeViewThemeTokens,
@@ -165,7 +183,7 @@ class FamilyScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   // The component gallery (Step 11).  A route alone is not reachable
                   // on a phone, so the dev flavor gets an entry next to the tokens.
-                  _SettingsTile(
+                  FamilySettingsTile(
                     key: const Key('family_dev_gallery'),
                     icon: Icons.widgets_outlined,
                     label: l10n.devGalleryTitle,
@@ -175,7 +193,7 @@ class FamilyScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
                 _LeaveFamilyTile(familyId: membership?.familyId),
                 const SizedBox(height: 8),
-                _SettingsTile(
+                FamilySettingsTile(
                   key: const Key('family_sign_out'),
                   icon: Icons.logout_rounded,
                   label: l10n.authSignOut,
@@ -183,56 +201,6 @@ class FamilyScreen extends ConsumerWidget {
                 ),
               ],
             ),
-    );
-  }
-}
-
-class _SettingsTile extends StatelessWidget {
-  const _SettingsTile({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    super.key,
-  });
-
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = context.tokens;
-    return Material(
-      color: t.surface,
-      borderRadius: BorderRadius.circular(t.radiusMd),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(t.radiusMd),
-        onTap: onTap,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 56),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                Icon(icon, color: t.accentStrong),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: Theme.of(context).textTheme.bodyLarge
-                        ?.copyWith(color: t.textPrimary),
-                  ),
-                ),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  color: t.textSecondary,
-                  textDirection: Directionality.of(context),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
@@ -296,7 +264,7 @@ class _LeaveFamilyTile extends ConsumerWidget {
       allowed: !soleAdmin,
       mode: PermissionGateMode.disable,
       deniedMessage: l10n.familyLeaveLastAdminReason,
-      child: _SettingsTile(
+      child: FamilySettingsTile(
         key: const Key('family_leave'),
         icon: Icons.exit_to_app_rounded,
         label: l10n.familyLeave,

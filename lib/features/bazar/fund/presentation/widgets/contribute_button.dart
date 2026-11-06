@@ -26,9 +26,8 @@ class ContributeButton extends ConsumerWidget {
     if (locked) {
       return FloatingActionButton.extended(
         key: const ValueKey('fund-add-contribution'),
-        onPressed: () => ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(l10n.bazarErrMonthLocked))),
+        onPressed: () => ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(l10n.bazarErrMonthLocked))),
         icon: const Icon(Icons.lock_outline),
         label: Text(l10n.fundContributionLocked),
       );
@@ -37,9 +36,7 @@ class ContributeButton extends ConsumerWidget {
       key: const ValueKey('fund-add-contribution'),
       onPressed: () => showContributionSheet(
         context,
-        canRecord
-            ? ContributionFormMode.record
-            : ContributionFormMode.request,
+        canRecord ? ContributionFormMode.record : ContributionFormMode.request,
         month: month,
       ),
       icon: const Icon(Icons.add),

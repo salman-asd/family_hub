@@ -42,9 +42,8 @@ class PersonPicker extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(
-            context,
-          ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
+          style: Theme.of(context).textTheme.labelLarge
+              ?.copyWith(color: t.textSecondary),
         ),
         const SizedBox(height: 8),
         SingleChildScrollView(

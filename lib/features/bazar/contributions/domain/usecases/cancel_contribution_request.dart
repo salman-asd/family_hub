@@ -60,9 +60,7 @@ class CancelContributionRequest {
     if (!current.isPending) {
       return const Failure<void>(Conflict(code: 'contribution_not_pending'));
     }
-    final locked = await monthLockFailure(_funds, familyId, [
-      current.monthKey,
-    ]);
+    final locked = await monthLockFailure(_funds, familyId, [current.monthKey]);
     if (locked != null) return Failure<void>(locked);
 
     final now = _clock.nowUtc();

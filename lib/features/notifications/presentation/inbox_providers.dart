@@ -33,10 +33,9 @@ final inboxProvider = StreamProvider<List<InboxItem>>((ref) {
 
 /// The badge number of the bell.
 final unreadInboxCountProvider = Provider<int>(
-  (ref) =>
-      (ref.watch(inboxProvider).value ?? const <InboxItem>[])
-          .where((item) => item.isUnread)
-          .length,
+  (ref) => (ref.watch(inboxProvider).value ?? const <InboxItem>[])
+      .where((item) => item.isUnread)
+      .length,
 );
 
 final markInboxReadProvider = Provider<MarkInboxRead>(

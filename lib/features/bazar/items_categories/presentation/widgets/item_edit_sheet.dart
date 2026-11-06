@@ -163,9 +163,8 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
     final index = ref.watch(catalogIndexProvider);
     final bangla = Localizations.localeOf(context).languageCode == 'bn';
     final editing = widget.existing != null;
-    final label = Theme.of(
-      context,
-    ).textTheme.labelLarge?.copyWith(color: t.textSecondary);
+    final label = Theme.of(context).textTheme.labelLarge
+        ?.copyWith(color: t.textSecondary);
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -215,9 +214,8 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
             if (_categoryError != null)
               Text(
                 _categoryError!,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: t.danger),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: t.danger),
               ),
             const SizedBox(height: 16),
             Text(l10n.catalogDefaultUnit, style: label),
@@ -264,9 +262,8 @@ class _ItemEditSheetState extends ConsumerState<ItemEditSheet> {
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   l10n.bazarFailureMessage(failure),
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.copyWith(color: t.danger),
+                  style: Theme.of(context).textTheme.bodyMedium
+                      ?.copyWith(color: t.danger),
                 ),
               ),
             const SizedBox(height: 16),

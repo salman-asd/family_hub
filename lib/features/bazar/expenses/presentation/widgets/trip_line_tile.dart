@@ -42,12 +42,19 @@ class TripLineTile extends StatelessWidget {
         contentPadding: EdgeInsets.zero,
         minTileHeight: 56,
         onTap: onTap,
-        title: Text(line.itemName, maxLines: 2, overflow: TextOverflow.ellipsis),
+        title: Text(
+          line.itemName,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         subtitle: detail == null ? null : Text(detail),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            MoneyText(value: line.total, style: Theme.of(context).textTheme.titleSmall),
+            MoneyText(
+              value: line.total,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
             IconButton(
               key: ValueKey('remove-${line.id}'),
               tooltip: l10n.actionDelete,

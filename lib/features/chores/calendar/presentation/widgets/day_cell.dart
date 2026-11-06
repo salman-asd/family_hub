@@ -63,8 +63,7 @@ class DayCell extends StatelessWidget {
         ? const <HatchDirection>{}
         : <HatchDirection>{
             if (summary.hasProjectedOnly) HatchDirection.rising,
-            if (summary.unavailableMemberIds.isNotEmpty)
-              HatchDirection.falling,
+            if (summary.unavailableMemberIds.isNotEmpty) HatchDirection.falling,
           };
     final numberColour = outside
         ? ramp.outsideMonthText

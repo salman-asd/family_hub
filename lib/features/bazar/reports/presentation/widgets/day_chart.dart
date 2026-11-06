@@ -32,7 +32,9 @@ class DayChart extends ConsumerWidget {
         .reduce((a, b) => a > b ? a : b);
     // `FlGridData` rejects a zero interval (a single non-zero day x 4).
     final gridInterval = maxPaisa <= 0 ? 1.0 : maxPaisa / 4;
-    final busiest = days.reduce((a, b) => a.total.paisa >= b.total.paisa ? a : b);
+    final busiest = days.reduce(
+      (a, b) => a.total.paisa >= b.total.paisa ? a : b,
+    );
     final step = (days.length / 8).ceil().clamp(1, 366);
 
     return ReportChartCard(
@@ -79,10 +81,7 @@ class DayChart extends ConsumerWidget {
           barTouchData: BarTouchData(
             touchTooltipData: BarTouchTooltipData(
               getTooltipItem: (group, _, rod, _) => BarTooltipItem(
-                formatters.money(
-                  days[group.x].total,
-                  hideZeroFraction: true,
-                ),
+                formatters.money(days[group.x].total, hideZeroFraction: true),
                 Theme.of(context).textTheme.bodySmall ?? const TextStyle(),
               ),
             ),

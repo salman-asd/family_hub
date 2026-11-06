@@ -28,8 +28,7 @@ class MonthFixture {
 
   DateKey get today => fx.dateKeys.today();
 
-  List<FundTransaction> get ledger =>
-      fx.backend.fundTransactionsOf(familyId);
+  List<FundTransaction> get ledger => fx.backend.fundTransactionsOf(familyId);
 
   Money get balance => FundBalanceCalculator.balance(ledger);
 

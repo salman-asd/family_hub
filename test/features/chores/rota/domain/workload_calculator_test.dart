@@ -53,7 +53,10 @@ void main() {
     expect(summary.totalPoints, 1 + 3 + 2 + 3);
     expect(summary.of('alice')!.points, 1);
     expect(summary.of('cara')!.points, 5);
-    expect(summary.members.fold<double>(0, (s, m) => s + m.share), closeTo(1, 1e-9));
+    expect(
+      summary.members.fold<double>(0, (s, m) => s + m.share),
+      closeTo(1, 1e-9),
+    );
     expect(summary.of('cara')!.share, closeTo(5 / 9, 1e-9));
   });
 
@@ -96,10 +99,18 @@ void main() {
       from: from,
       to: to,
       availability: AvailabilityIndex(<AvailabilitySpan>[
-        AvailabilitySpan(memberId: 'bob', startDate: DateKey(2026, 10, 26), endDate: DateKey(2026, 11, 3)),
+        AvailabilitySpan(
+          memberId: 'bob',
+          startDate: DateKey(2026, 10, 26),
+          endDate: DateKey(2026, 11, 3),
+        ),
       ]),
     );
-    expect(summary.of('bob')!.unavailableDays, 5, reason: '26..30 inside the range');
+    expect(
+      summary.of('bob')!.unavailableDays,
+      5,
+      reason: '26..30 inside the range',
+    );
     expect(summary.of('alice')!.unavailableDays, 0);
     expect(summary.totalPoints, 0);
     expect(summary.of('alice')!.share, 0, reason: 'no division by zero');
@@ -111,7 +122,14 @@ void main() {
         chore('a', 24, who: 'bob', planned: 'cara'),
         chore('b', 24, who: 'bob', status: OccurrenceStatus.completed),
         chore('c', 25, who: 'cara'),
-        ChoreItem.fromOccurrence(anOccurrence(id: 'u', dateKey: DateKey(2026, 10, 25), assigneeId: null, plannedAssigneeId: null)),
+        ChoreItem.fromOccurrence(
+          anOccurrence(
+            id: 'u',
+            dateKey: DateKey(2026, 10, 25),
+            assigneeId: null,
+            plannedAssigneeId: null,
+          ),
+        ),
       ],
       memberIds: members,
       from: from,

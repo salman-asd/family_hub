@@ -138,58 +138,66 @@ void main() {
     },
   );
 
-  group('B-07: the lost create race retries on the failure Firestore returns', () {
-    // The rules read a create on an existing id as an UPDATE and deny it, so
-    // the guard reports PermissionDenied, not Conflict.
-    test('half of a chunk created by another device, permission-denied', () async {
-      seedTemplate();
-      fixture.occurrences.duplicateCreateFailure = const PermissionDenied();
-      var raced = false;
-      fixture.occurrences.beforeStage = (familyId, plan) {
-        if (raced) return;
-        raced = true;
-        final docs = fixture.occurrences.occurrences[familyId] ??= {};
-        for (final draft in plan.creates.take(plan.creates.length ~/ 2)) {
-          docs[draft.id] = draft.toOccurrence();
-        }
-      };
-
-      final result = await ensure(
-        familyId: familyId,
-        actorUid: 'cara',
-        today: DateKey(2026, 10, 25),
-      );
-
-      expect(result.isSuccess, isTrue);
-      expect(fixture.occurrences.stageAttempts, 2);
-      expect(
-        fixture.occurrences.audits.map((audit) => audit.id).toSet(),
-        <String>{'id_1'},
-        reason: 'the retry reuses the chunk audit id',
-      );
-      expect(fixture.occurrences.occurrences[familyId], hasLength(31));
-      expect(fixture.occurrences.markers[familyId], DateKey(2026, 11, 24));
-    });
-
-    test('permission-denied twice in a row is still reported, marker kept',
+  group(
+    'B-07: the lost create race retries on the failure Firestore returns',
+    () {
+      // The rules read a create on an existing id as an UPDATE and deny it, so
+      // the guard reports PermissionDenied, not Conflict.
+      test(
+        'half of a chunk created by another device, permission-denied',
         () async {
-      seedTemplate();
-      fixture.occurrences.beforeStage = (familyId, plan) {
-        // A genuine denial: nothing exists, yet every attempt is refused.
-        fixture.occurrences.nextStageFailure = const PermissionDenied();
-      };
+          seedTemplate();
+          fixture.occurrences.duplicateCreateFailure = const PermissionDenied();
+          var raced = false;
+          fixture.occurrences.beforeStage = (familyId, plan) {
+            if (raced) return;
+            raced = true;
+            final docs = fixture.occurrences.occurrences[familyId] ??= {};
+            for (final draft in plan.creates.take(plan.creates.length ~/ 2)) {
+              docs[draft.id] = draft.toOccurrence();
+            }
+          };
 
-      final result = await ensure(
-        familyId: familyId,
-        actorUid: 'cara',
-        today: DateKey(2026, 10, 25),
+          final result = await ensure(
+            familyId: familyId,
+            actorUid: 'cara',
+            today: DateKey(2026, 10, 25),
+          );
+
+          expect(result.isSuccess, isTrue);
+          expect(fixture.occurrences.stageAttempts, 2);
+          expect(
+            fixture.occurrences.audits.map((audit) => audit.id).toSet(),
+            <String>{'id_1'},
+            reason: 'the retry reuses the chunk audit id',
+          );
+          expect(fixture.occurrences.occurrences[familyId], hasLength(31));
+          expect(fixture.occurrences.markers[familyId], DateKey(2026, 11, 24));
+        },
       );
 
-      expect(result.failureOrNull, const PermissionDenied());
-      expect(fixture.occurrences.stageAttempts, 2);
-      expect(fixture.occurrences.markers, isEmpty);
-    });
-  });
+      test(
+        'permission-denied twice in a row is still reported, marker kept',
+        () async {
+          seedTemplate();
+          fixture.occurrences.beforeStage = (familyId, plan) {
+            // A genuine denial: nothing exists, yet every attempt is refused.
+            fixture.occurrences.nextStageFailure = const PermissionDenied();
+          };
+
+          final result = await ensure(
+            familyId: familyId,
+            actorUid: 'cara',
+            today: DateKey(2026, 10, 25),
+          );
+
+          expect(result.failureOrNull, const PermissionDenied());
+          expect(fixture.occurrences.stageAttempts, 2);
+          expect(fixture.occurrences.markers, isEmpty);
+        },
+      );
+    },
+  );
 
   test('a plain member may run it; a pending member may not', () async {
     seedTemplate();

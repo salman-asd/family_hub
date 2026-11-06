@@ -126,9 +126,8 @@ class StarterPackResultView extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         l10n.choresFailureMessage(failure),
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: t.statusOverdueOn,
-                        ),
+                        style: Theme.of(context).textTheme.bodySmall
+                            ?.copyWith(color: t.statusOverdueOn),
                       ),
                     ],
                   ),

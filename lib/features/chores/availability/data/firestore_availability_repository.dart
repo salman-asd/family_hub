@@ -36,10 +36,11 @@ class FirestoreAvailabilityRepository implements AvailabilityRepository {
   CollectionReference<Map<String, dynamic>> _col(String familyId) =>
       _db.collection(FirestorePaths.memberAvailability(familyId));
 
-  static List<MemberAvailability> _read(QuerySnapshot<Map<String, dynamic>> s) =>
-      <MemberAvailability>[
-        for (final doc in s.docs) ?AvailabilityMappers.fromDoc(doc.id, doc.data()),
-      ];
+  static List<MemberAvailability> _read(
+    QuerySnapshot<Map<String, dynamic>> s,
+  ) => <MemberAvailability>[
+    for (final doc in s.docs) ?AvailabilityMappers.fromDoc(doc.id, doc.data()),
+  ];
 
   @override
   Stream<List<MemberAvailability>> watchLive(String familyId, DateKey since) =>
@@ -105,7 +106,11 @@ class FirestoreAvailabilityRepository implements AvailabilityRepository {
       for (final change in plan.changes) {
         batch.update(
           FirestorePaths.memberAvailabilityDoc(familyId, change.availabilityId),
-          AvailabilityMappers.changeMap(change, actorId: plan.actorId, at: plan.at),
+          AvailabilityMappers.changeMap(
+            change,
+            actorId: plan.actorId,
+            at: plan.at,
+          ),
         );
       }
       for (final swap in plan.swaps) {

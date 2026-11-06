@@ -113,7 +113,9 @@ class EditorScheduleSection extends ConsumerWidget {
               label: Text(
                 draft.endDate == null
                     ? l10n.choreEditorEndDateNone
-                    : l10n.choreEditorEndDate(_text(formatters, draft.endDate!)),
+                    : l10n.choreEditorEndDate(
+                        _text(formatters, draft.endDate!),
+                      ),
               ),
             ),
             if (draft.endDate != null)

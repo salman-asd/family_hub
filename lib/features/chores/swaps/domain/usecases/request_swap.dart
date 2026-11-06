@@ -79,11 +79,18 @@ class RequestSwap {
       return const Failure<SwapRequest>(Conflict(code: 'occurrence_started'));
     }
     if (toMemberId == actorUid) {
-      return const Failure<SwapRequest>(Validation('toMemberId', 'member_required'));
+      return const Failure<SwapRequest>(
+        Validation('toMemberId', 'member_required'),
+      );
     }
-    final target = (await loader.families.getMember(familyId, toMemberId)).valueOrNull;
+    final target = (await loader.families.getMember(
+      familyId,
+      toMemberId,
+    )).valueOrNull;
     if (target == null || !target.isActive) {
-      return const Failure<SwapRequest>(Validation('toMemberId', 'member_required'));
+      return const Failure<SwapRequest>(
+        Validation('toMemberId', 'member_required'),
+      );
     }
     final records = await availability.listActive(familyId, occurrence.dateKey);
     final recordsFailure = records.failureOrNull;
@@ -92,7 +99,10 @@ class RequestSwap {
     if (index.isUnavailable(toMemberId, occurrence.dateKey)) {
       return const Failure<SwapRequest>(Conflict(code: 'member_unavailable'));
     }
-    final pending = await swaps.listPendingForOccurrence(familyId, occurrenceId);
+    final pending = await swaps.listPendingForOccurrence(
+      familyId,
+      occurrenceId,
+    );
     final pendingFailure = pending.failureOrNull;
     if (pendingFailure != null) return Failure<SwapRequest>(pendingFailure);
     if (pending.valueOrNull!.any((r) => r.id != requestId)) {

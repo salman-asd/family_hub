@@ -238,7 +238,10 @@ void main() {
       // `requiredSubtasks` falls back to every step (M-09), and the rules
       // compare `subtaskDone.size()` with this number.
       final occurrence = anOccurrence(
-        subtasks: <TemplateSubtask>[aSubtask(id: 'a'), aSubtask(id: 'b')],
+        subtasks: <TemplateSubtask>[
+          aSubtask(id: 'a'),
+          aSubtask(id: 'b'),
+        ],
       );
       expect(OccurrenceMappers.toMap(occurrence, meta)['requiredCount'], 2);
     });

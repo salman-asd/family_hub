@@ -71,7 +71,11 @@ class RotationMemberRow extends StatelessWidget {
                 if (gone)
                   Row(
                     children: [
-                      Icon(Icons.warning_amber_rounded, size: 16, color: t.danger),
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        size: 16,
+                        color: t.danger,
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(

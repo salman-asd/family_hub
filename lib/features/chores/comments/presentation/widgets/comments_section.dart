@@ -105,7 +105,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
               actorUid: uid,
               occurrenceId: _id,
               commentId: _commentId,
-            text: text,
+              text: text,
             );
       at = result.valueOrNull?.createdAt;
       return result;
@@ -188,8 +188,7 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
     final canComment = ref.can(Permission.commentOnChore);
     final canModerate = ref.can(Permission.moderateChoreComments);
     final isAssignee = uid != null && widget.occurrence.assigneeId == uid;
-    final canResolve =
-        isAssignee || ref.can(Permission.completeChoreForOthers);
+    final canResolve = isAssignee || ref.can(Permission.completeChoreForOthers);
     final finished =
         widget.item.status == ChoreStatus.completed ||
         widget.item.status == ChoreStatus.verified;
@@ -206,9 +205,8 @@ class _CommentsSectionState extends ConsumerState<CommentsSection> {
             Expanded(
               child: Text(
                 l10n.commentsTitle,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(color: t.textPrimary),
+                style: Theme.of(context).textTheme.titleMedium
+                    ?.copyWith(color: t.textPrimary),
               ),
             ),
             if (_newOnOpen > 0)

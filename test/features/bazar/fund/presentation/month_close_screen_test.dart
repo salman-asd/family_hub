@@ -51,9 +51,8 @@ void main() {
           ],
           supportedLocales: AppLocalizations.supportedLocales,
           builder: (context, child) => MediaQuery(
-            data: MediaQuery.of(
-              context,
-            ).copyWith(textScaler: TextScaler.linear(textScale)),
+            data: MediaQuery.of(context)
+                .copyWith(textScaler: TextScaler.linear(textScale)),
             child: child!,
           ),
           home: const MonthCloseScreen(),
@@ -78,7 +77,9 @@ void main() {
     await pump(tester, uid: 'cara', role: Role.member);
     expect(find.byKey(const ValueKey('month-close-action')), findsNothing);
     expect(
-      find.text('Only the Household Manager or Admin can close or reopen a month.'),
+      find.text(
+        'Only the Household Manager or Admin can close or reopen a month.',
+      ),
       findsOneWidget,
     );
   });
@@ -87,14 +88,20 @@ void main() {
     tester,
   ) async {
     fixture.fx.putFundTransaction(contribution('c1', 100000));
-    fixture.fx.putAdvance(expenseId: 'e1', memberId: 'cara', amount: const Money.paisa(4000));
+    fixture.fx.putAdvance(
+      expenseId: 'e1',
+      memberId: 'cara',
+      amount: const Money.paisa(4000),
+    );
     await pump(tester);
 
     expect(find.byKey(const ValueKey('close-open-advances')), findsOneWidget);
     expect(find.text('1'), findsWidgets);
   });
 
-  testWidgets('closing asks for confirmation and locks the month', (tester) async {
+  testWidgets('closing asks for confirmation and locks the month', (
+    tester,
+  ) async {
     fixture.fx.putFundTransaction(contribution('c1', 100000));
     await pump(tester);
 
@@ -105,7 +112,8 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('month-close-confirm')));
     await tester.pump(const Duration(milliseconds: 500));
 
-    final closing = fixture.fx.backend.closings[BazarFixture.familyId]![MonthKey(2026, 10)];
+    final closing =
+        fixture.fx.backend.closings[BazarFixture.familyId]![MonthKey(2026, 10)];
     expect(closing!.status, MonthStatus.closed);
     expect(closing.closingBalance, const Money.paisa(100000));
     // The action flips to Reopen.
@@ -133,7 +141,10 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('reopen-note-send')));
     await tester.pump(const Duration(milliseconds: 500));
 
-    final reopened = fixture.fx.backend.closings[BazarFixture.familyId]![MonthKey(2026, 10)]!;
+    final reopened = fixture
+        .fx
+        .backend
+        .closings[BazarFixture.familyId]![MonthKey(2026, 10)]!;
     expect(reopened.status, MonthStatus.open);
     expect(reopened.reopenNote, 'wrong total');
   });

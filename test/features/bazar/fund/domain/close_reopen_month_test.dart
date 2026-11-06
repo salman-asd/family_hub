@@ -53,12 +53,9 @@ void main() {
     return result.failureOrNull;
   }
 
-  Money balanceOf(MonthKey from, MonthKey to) =>
-      Money.sum(
-        fx.backend
-            .fundTransactionsBetween(_f, from, to)
-            .map((row) => row.amount),
-      );
+  Money balanceOf(MonthKey from, MonthKey to) => Money.sum(
+    fx.backend.fundTransactionsBetween(_f, from, to).map((row) => row.amount),
+  );
 
   group('CloseMonth', () {
     test('closes an empty next month with one carry-forward row', () async {
@@ -88,14 +85,12 @@ void main() {
       expect(balanceOf(_november, _november), const Money.paisa(100000));
 
       expect(
-        (
-          await fx.reopenMonth(
-            actorUid: 'alice',
-            familyId: _f,
-            month: _october,
-            note: 'missed a bill',
-          )
-        ).failureOrNull,
+        (await fx.reopenMonth(
+          actorUid: 'alice',
+          familyId: _f,
+          month: _october,
+          note: 'missed a bill',
+        )).failureOrNull,
         isNull,
       );
       // The correction lands in October, the month that was wrong.
@@ -115,20 +110,23 @@ void main() {
       expect(fx.backend.closings[_f]![_october]!.reopenCount, 1);
     });
 
-    test('refuses a future month, a closed month and a later closed month', () async {
-      expect(
-        await close(month: MonthKey(2027, 1)),
-        const Validation('month', 'invalid_month'),
-      );
+    test(
+      'refuses a future month, a closed month and a later closed month',
+      () async {
+        expect(
+          await close(month: MonthKey(2027, 1)),
+          const Validation('month', 'invalid_month'),
+        );
 
-      fx.putClosing(monthKey: _october);
-      expect(await close(), const Conflict(code: 'already_closed'));
+        fx.putClosing(monthKey: _october);
+        expect(await close(), const Conflict(code: 'already_closed'));
 
-      fx = BazarFixture();
-      fx.putClosing(monthKey: _november);
-      expect(await close(), const Conflict(code: 'month_locked'));
-      expect(fx.backend.writes, 0);
-    });
+        fx = BazarFixture();
+        fx.putClosing(monthKey: _november);
+        expect(await close(), const Conflict(code: 'month_locked'));
+        expect(fx.backend.writes, 0);
+      },
+    );
 
     test('permission: a plain member may not close, a manager may', () async {
       expect(await close(actor: 'cara'), isA<PermissionDenied>());
@@ -179,10 +177,9 @@ void main() {
       expect(reopened.reopenCount, 1);
       // A reopened month no longer moves the window.
       expect(
-        MonthLocks.fundWindowStart(
-          <MonthKey, MonthClosing>{_october: reopened},
-          MonthKey(2026, 1),
-        ),
+        MonthLocks.fundWindowStart(<MonthKey, MonthClosing>{
+          _october: reopened,
+        }, MonthKey(2026, 1)),
         MonthKey(2026, 1),
       );
     });
@@ -195,30 +192,33 @@ void main() {
       );
     });
 
-    test('refuses an open month, a later closed month and a plain member', () async {
-      expect(await reopen(), const Conflict(code: 'not_closed'));
+    test(
+      'refuses an open month, a later closed month and a plain member',
+      () async {
+        expect(await reopen(), const Conflict(code: 'not_closed'));
 
-      fx.putClosing(monthKey: _october);
-      fx.putClosing(monthKey: _november);
-      expect(
-        await reopen(),
-        const Conflict(code: 'later_month_closed'),
-      );
+        fx.putClosing(monthKey: _october);
+        fx.putClosing(monthKey: _november);
+        expect(await reopen(), const Conflict(code: 'later_month_closed'));
 
-      fx = BazarFixture();
-      fx.putClosing(monthKey: _october);
-      expect(await reopen(actor: 'cara'), isA<PermissionDenied>());
-    });
+        fx = BazarFixture();
+        fx.putClosing(monthKey: _october);
+        expect(await reopen(actor: 'cara'), isA<PermissionDenied>());
+      },
+    );
 
-    test('a long note is kept in the document and clipped in the log', () async {
-      fx.putClosing(monthKey: _october);
-      final note = 'a' * 400;
-      expect(await reopen(note: note), isNull);
+    test(
+      'a long note is kept in the document and clipped in the log',
+      () async {
+        fx.putClosing(monthKey: _october);
+        final note = 'a' * 400;
+        expect(await reopen(note: note), isNull);
 
-      expect(fx.backend.closings[_f]![_october]!.reopenNote, note);
-      final event = fx.backend.events.single;
-      expect(event.params['note'], hasLength(100));
-      expect(event.params['reopenCount'], '2');
-    });
+        expect(fx.backend.closings[_f]![_october]!.reopenNote, note);
+        final event = fx.backend.events.single;
+        expect(event.params['note'], hasLength(100));
+        expect(event.params['reopenCount'], '2');
+      },
+    );
   });
 }

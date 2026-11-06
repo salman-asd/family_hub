@@ -125,10 +125,8 @@ class _ReasonSheetState extends State<_ReasonSheet> {
   /// What the sheet answers: the reason; `stepIds` is empty without a
   /// checklist, so a plain reason still comes back as a record (the result
   /// type never varies between the two sheets).
-  ({String reason, List<String> stepIds}) _sheetResult() => (
-    reason: _trimmed,
-    stepIds: _pickedSteps,
-  );
+  ({String reason, List<String> stepIds}) _sheetResult() =>
+      (reason: _trimmed, stepIds: _pickedSteps);
 
   /// The steps picked (in the order the sheet listed them).
   List<String> get _pickedSteps {
@@ -178,9 +176,8 @@ class _ReasonSheetState extends State<_ReasonSheet> {
             ),
             Text(
               widget.checklist!.hint,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: tokens.textSecondary),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: tokens.textSecondary),
             ),
             const SizedBox(height: 4),
             for (var i = 0; i < widget.checklist!.options.length; i++)

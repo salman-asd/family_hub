@@ -117,9 +117,9 @@ class _Total extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              showSettled ? l10n.advanceTotalOwed : l10n.advanceOpenCount(
-                summary.openCount,
-              ),
+              showSettled
+                  ? l10n.advanceTotalOwed
+                  : l10n.advanceOpenCount(summary.openCount),
               style: style.titleSmall,
             ),
           ),
@@ -134,5 +134,3 @@ class _Total extends StatelessWidget {
     );
   }
 }
-
-

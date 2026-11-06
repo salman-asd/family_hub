@@ -17,9 +17,8 @@ class HeatLegend extends StatelessWidget {
     final l10n = context.l10n;
     final t = context.tokens;
     final ramp = HeatRamp.of(t);
-    final style = Theme.of(context).textTheme.bodySmall?.copyWith(
-      color: t.textSecondary,
-    );
+    final style = Theme.of(context).textTheme.bodySmall
+        ?.copyWith(color: t.textSecondary);
     return Semantics(
       container: true,
       label: l10n.calendarHeatLegendLabel,

@@ -371,7 +371,10 @@ void main() {
 
     test('recordOnly ticks the steps when all of them are optional', () {
       final occ = anOccurrence(
-        subtasks: <TemplateSubtask>[aSubtask(id: 'a'), aSubtask(id: 'b')],
+        subtasks: <TemplateSubtask>[
+          aSubtask(id: 'a'),
+          aSubtask(id: 'b'),
+        ],
       );
       final patch = SubtaskSync.completionPatch(
         occurrence: occ,

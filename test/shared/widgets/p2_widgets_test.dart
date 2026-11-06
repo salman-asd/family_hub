@@ -84,9 +84,7 @@ void main() {
       expect(picked, MonthKey(2026, 3));
     });
 
-    testWidgets('the picker disables months outside the range', (
-      tester,
-    ) async {
+    testWidgets('the picker disables months outside the range', (tester) async {
       await pump(
         tester,
         MonthSwitcher(
@@ -216,7 +214,11 @@ void main() {
     testWidgets('level is an icon and a word, not just a colour', (
       tester,
     ) async {
-      Future<void> check(ProgressLevel level, IconData icon, String word) async {
+      Future<void> check(
+        ProgressLevel level,
+        IconData icon,
+        String word,
+      ) async {
         await pump(
           tester,
           ProgressBarStatus(basisPoints: 9000, level: level, label: 'Fish'),
@@ -370,7 +372,10 @@ void main() {
           label: 'Paid by',
         ),
       );
-      expect(tester.getSize(find.byType(InkWell).first).height, greaterThan(47));
+      expect(
+        tester.getSize(find.byType(InkWell).first).height,
+        greaterThan(47),
+      );
     });
   });
 
@@ -401,17 +406,19 @@ void main() {
     testWidgets('the same index gives the same colour every time', (
       tester,
     ) async {
-      Color colorOf() => (tester
-              .widget<Container>(
-                find
-                    .descendant(
-                      of: find.byType(CategoryBadge),
-                      matching: find.byType(Container),
-                    )
-                    .first,
-              )
-              .decoration! as BoxDecoration)
-          .color!;
+      Color colorOf() =>
+          (tester
+                      .widget<Container>(
+                        find
+                            .descendant(
+                              of: find.byType(CategoryBadge),
+                              matching: find.byType(Container),
+                            )
+                            .first,
+                      )
+                      .decoration!
+                  as BoxDecoration)
+              .color!;
       await pump(tester, const CategoryBadge(name: 'A', colorIndex: 4));
       final first = colorOf();
       await pump(tester, const CategoryBadge(name: 'B', colorIndex: 4));

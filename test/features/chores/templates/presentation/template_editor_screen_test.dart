@@ -53,7 +53,10 @@ void main() {
     await tester.pump();
   }
 
-  Future<ChoreTemplate> seed(ChoresFixture fixture, {TemplateDraft? draft}) async {
+  Future<ChoreTemplate> seed(
+    ChoresFixture fixture, {
+    TemplateDraft? draft,
+  }) async {
     final create = CreateTemplate(
       templates: fixture.chores,
       families: fixture.families,
@@ -138,7 +141,10 @@ void main() {
     expect(fixture.chores.templates[familyId] ?? const {}, isEmpty);
   });
 
-  for (final scope in <String>['replan_future_only', 'replan_include_upcoming']) {
+  for (final scope in <String>[
+    'replan_future_only',
+    'replan_include_upcoming',
+  ]) {
     testWidgets('editing asks for the replan scope ($scope)', (tester) async {
       final fixture = ChoresFixture();
       final template = await seed(fixture);
@@ -200,12 +206,7 @@ void main() {
   });
 
   testWidgets('the 31st step cannot be added', (tester) async {
-    await pumpP3Screen(
-      tester,
-      role: Role.admin,
-      uid: 'alice',
-      home: pushed(),
-    );
+    await pumpP3Screen(tester, role: Role.admin, uid: 'alice', home: pushed());
     await open(tester);
 
     final add = find.byKey(const ValueKey<String>('subtask_add'));
@@ -291,7 +292,9 @@ void main() {
         final template = await seed(
           fixture,
           draft: aTemplate(
-            subtasks: <TemplateSubtask>[aSubtask(required: true, hint: 'ইঙ্গিত')],
+            subtasks: <TemplateSubtask>[
+              aSubtask(required: true, hint: 'ইঙ্গিত'),
+            ],
           ),
         );
         await pumpP3Screen(

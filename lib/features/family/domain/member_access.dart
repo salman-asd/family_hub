@@ -29,8 +29,6 @@ Future<Result<Member>> requireActor(
 
 /// True when applying [updated] to [members] leaves no active admin.
 bool leavesNoActiveAdmin(List<Member> members, Member updated) {
-  final after = [
-    for (final m in members) m.uid == updated.uid ? updated : m,
-  ];
+  final after = [for (final m in members) m.uid == updated.uid ? updated : m];
   return !after.any((m) => m.isActiveAdmin);
 }

@@ -34,7 +34,8 @@ class CatalogSections extends ConsumerWidget {
     final catalogs = ChoreCatalogs(draft);
     final usedGroupIds = <String>{
       for (final record in ref.watch(templatesProvider))
-        if (!record.template.isArchived && record.template.draft.groupId != null)
+        if (!record.template.isArchived &&
+            record.template.draft.groupId != null)
           record.template.draft.groupId!,
     };
 
@@ -52,7 +53,9 @@ class CatalogSections extends ConsumerWidget {
           onBeforeToggleActive: (ctx, row) =>
               _confirmGroupOff(ctx, row, usedGroupIds),
           onChanged: (rows) => onChanged(
-            draft.copyWith(groups: CatalogMapping.groupsFrom(rows, draft.groups)),
+            draft.copyWith(
+              groups: CatalogMapping.groupsFrom(rows, draft.groups),
+            ),
           ),
         ),
         const SizedBox(height: 24),
@@ -81,8 +84,7 @@ class CatalogSections extends ConsumerWidget {
           key: const ValueKey<String>('reasons_catalog'),
           title: l10n.choresSettingsAbsenceReasonsTitle,
           entries: [
-            for (final r in draft.absenceReasons)
-              CatalogMapping.reasonEntry(r),
+            for (final r in draft.absenceReasons) CatalogMapping.reasonEntry(r),
           ],
           onChanged: (rows) => onChanged(
             draft.copyWith(

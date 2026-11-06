@@ -55,18 +55,23 @@ class ExpireSwaps {
     final due = listed.valueOrNull!;
     if (due.isEmpty) return const Success<int>(0);
 
-    final members = (await families.getMembers(familyId)).valueOrNull ?? const [];
+    final members =
+        (await families.getMembers(familyId)).valueOrNull ?? const [];
     final settings = (await choreSettings.get(familyId)).valueOrNull;
     final creates = <NewSwap>[];
     final changes = <SwapChange>[];
     final rows = <NewInboxItem>[];
     final audits = <NewAudit>[];
     for (final request in due) {
-      final occurrence =
-          (await occurrences.get(familyId, request.occurrenceId)).valueOrNull;
+      final occurrence = (await occurrences.get(
+        familyId,
+        request.occurrenceId,
+      )).valueOrNull;
       final name = occurrence?.nameBn ?? request.occurrenceId;
       final date = request.occurrenceDateKey.toString();
-      changes.add(SwapChange(requestId: request.id, status: SwapStatus.expired));
+      changes.add(
+        SwapChange(requestId: request.id, status: SwapStatus.expired),
+      );
       final row = inbox.swapResult(
         requestId: request.id,
         toMemberId: request.requestedBy,
@@ -89,10 +94,15 @@ class ExpireSwaps {
       );
       final absenceId = request.availabilityId;
       if (request.kind == SwapKind.cover && absenceId != null) {
-        final absence = (await availability.get(familyId, absenceId)).valueOrNull;
+        final absence = (await availability.get(
+          familyId,
+          absenceId,
+        )).valueOrNull;
         final records =
-            (await availability.listActive(familyId, request.occurrenceDateKey))
-                .valueOrNull ??
+            (await availability.listActive(
+              familyId,
+              request.occurrenceDateKey,
+            )).valueOrNull ??
             const [];
         final next = CoverFallback.next(
           failed: request,

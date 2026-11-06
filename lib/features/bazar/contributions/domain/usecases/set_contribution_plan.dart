@@ -47,7 +47,9 @@ class SetContributionPlan {
     if (denied != null) return Failure<ContributionPlan>(denied);
 
     if (expected.isNegative) {
-      return const Failure<ContributionPlan>(Validation('expected', 'negative'));
+      return const Failure<ContributionPlan>(
+        Validation('expected', 'negative'),
+      );
     }
     final memberResult = await _families.getMember(familyId, memberId);
     final memberFailure = memberResult.failureOrNull;

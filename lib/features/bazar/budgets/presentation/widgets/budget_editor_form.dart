@@ -86,7 +86,9 @@ class _BudgetEditorFormState extends ConsumerState<BudgetEditorForm> {
     final l10n = context.l10n;
     final t = context.tokens;
     final state = ref.watch(budgetControllerProvider(widget.month));
-    final controller = ref.read(budgetControllerProvider(widget.month).notifier);
+    final controller = ref.read(
+      budgetControllerProvider(widget.month).notifier,
+    );
     _sync(state);
     final bangla = Localizations.localeOf(context).languageCode == 'bn';
     final hasLines = state.lines.any((l) => !l.isBlank);
@@ -136,9 +138,8 @@ class _BudgetEditorFormState extends ConsumerState<BudgetEditorForm> {
             padding: const EdgeInsets.only(top: 12),
             child: Text(
               l10n.bazarFailureMessage(failure),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: t.danger),
+              style: Theme.of(context).textTheme.bodyMedium
+                  ?.copyWith(color: t.danger),
             ),
           ),
         const SizedBox(height: 20),

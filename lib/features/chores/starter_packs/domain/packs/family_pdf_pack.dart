@@ -41,12 +41,7 @@ const List<TemplateSlot> _threeTimes = <TemplateSlot>[
     labelEn: 'Morning',
     dueMinutes: 540,
   ),
-  TemplateSlot(
-    key: 'noon',
-    labelBn: 'দুপুর',
-    labelEn: 'Noon',
-    dueMinutes: 840,
-  ),
+  TemplateSlot(key: 'noon', labelBn: 'দুপুর', labelEn: 'Noon', dueMinutes: 840),
   TemplateSlot(
     key: 'evening',
     labelBn: 'সন্ধ্যা',
@@ -71,7 +66,10 @@ const List<TemplateSubtask> _fridgeSteps = <TemplateSubtask>[
   ),
   TemplateSubtask(id: 'gasket', title: 'দরজার গ্যাসকেট পরিষ্কার'),
   TemplateSubtask(id: 'door', title: 'দরজা ও বাইরের অংশ পরিষ্কার'),
-  TemplateSubtask(id: 'reassemble', title: 'তাক ও ডিভাইডার শুকিয়ে ঠিকভাবে লাগানো'),
+  TemplateSubtask(
+    id: 'reassemble',
+    title: 'তাক ও ডিভাইডার শুকিয়ে ঠিকভাবে লাগানো',
+  ),
 ];
 
 /// The lines the wizard offers, in Appendix A.1 order.

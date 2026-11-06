@@ -9,5 +9,7 @@ String? fieldErrorText(
   String field,
 ) {
   final code = errors[field];
-  return code == null ? null : l10n.bazarFailureMessage(Validation(field, code));
+  return code == null
+      ? null
+      : l10n.bazarFailureMessage(Validation(field, code));
 }

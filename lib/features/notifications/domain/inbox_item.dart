@@ -54,7 +54,8 @@ final class InboxItem {
       other.archivedAt == archivedAt;
 
   @override
-  int get hashCode => Object.hash(id, toMemberId, type, refId, readAt, archivedAt);
+  int get hashCode =>
+      Object.hash(id, toMemberId, type, refId, readAt, archivedAt);
 
   @override
   String toString() => 'InboxItem($id $type to $toMemberId)';

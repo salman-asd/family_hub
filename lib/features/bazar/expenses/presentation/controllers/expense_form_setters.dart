@@ -72,10 +72,8 @@ abstract class ExpenseFormSetters extends Notifier<ExpenseFormState> {
     duplicate: null,
   );
 
-  void setUnit(Unit? unit) => state = state.copyWith(
-    unit: unit,
-    fieldErrors: _without(const ['unit']),
-  );
+  void setUnit(Unit? unit) =>
+      state = state.copyWith(unit: unit, fieldErrors: _without(const ['unit']));
 
   void setUnitPrice(String text) => state = state.copyWith(
     unitPriceText: text,
@@ -121,15 +119,11 @@ abstract class ExpenseFormSetters extends Notifier<ExpenseFormState> {
     );
   }
 
-  void setShop(String text) => state = state.copyWith(
-    shop: text,
-    fieldErrors: _without(const ['shop']),
-  );
+  void setShop(String text) =>
+      state = state.copyWith(shop: text, fieldErrors: _without(const ['shop']));
 
-  void setNote(String text) => state = state.copyWith(
-    note: text,
-    fieldErrors: _without(const ['note']),
-  );
+  void setNote(String text) =>
+      state = state.copyWith(note: text, fieldErrors: _without(const ['note']));
 
   void setPurchaser(String? memberId) =>
       state = state.copyWith(purchaserId: memberId);

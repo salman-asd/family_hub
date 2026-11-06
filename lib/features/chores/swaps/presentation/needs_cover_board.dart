@@ -30,9 +30,15 @@ class NeedsCoverBoard extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(l10n.needsCoverTitle)),
       body: !canAssign
-          ? EmptyState(icon: Icons.lock_outline_rounded, title: l10n.needsCoverNoAccess)
+          ? EmptyState(
+              icon: Icons.lock_outline_rounded,
+              title: l10n.needsCoverNoAccess,
+            )
           : needing.isEmpty
-          ? EmptyState(icon: Icons.verified_outlined, title: l10n.needsCoverEmpty)
+          ? EmptyState(
+              icon: Icons.verified_outlined,
+              title: l10n.needsCoverEmpty,
+            )
           : ListView(
               children: [
                 for (final item in needing)
@@ -46,7 +52,9 @@ class NeedsCoverBoard extends ConsumerWidget {
                       style: TextStyle(color: t.textSecondary),
                     ),
                     trailing: FilledButton(
-                      style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
+                      style: FilledButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
                       onPressed: () => unawaited(
                         ref.reassignWithSheets(context, occurrenceId: item.id),
                       ),

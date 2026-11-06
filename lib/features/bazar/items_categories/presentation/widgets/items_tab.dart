@@ -45,15 +45,16 @@ class ItemsTabState extends ConsumerState<ItemsTab> {
     final index = ref.watch(catalogIndexProvider);
     final bangla = Localizations.localeOf(context).languageCode == 'bn';
     final key = normalizeSearch(_query.text);
-    final items = <Item>[
-      for (final item in index.itemsById.values)
-        if ((categoryId == null || item.categoryId == categoryId) &&
-            _matches(item, key))
-          item,
-    ]..sort((a, b) {
-        final name = a.nameBn.compareTo(b.nameBn);
-        return name != 0 ? name : a.id.compareTo(b.id);
-      });
+    final items =
+        <Item>[
+          for (final item in index.itemsById.values)
+            if ((categoryId == null || item.categoryId == categoryId) &&
+                _matches(item, key))
+              item,
+        ]..sort((a, b) {
+          final name = a.nameBn.compareTo(b.nameBn);
+          return name != 0 ? name : a.id.compareTo(b.id);
+        });
 
     return Column(
       children: [

@@ -12,49 +12,41 @@ List<Widget> _daysOfMonthFields(
   final l10n = context.l10n;
   final t = context.tokens;
   return [
-          Text(
-            l10n.recurrencePickerDaysOfMonth,
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
+    Text(
+      l10n.recurrencePickerDaysOfMonth,
+      style: Theme.of(context).textTheme.labelLarge
+          ?.copyWith(color: t.textSecondary),
+    ),
+    const SizedBox(height: 8),
+    Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (var day = 1; day <= 31; day++)
+          FilterChip(
+            key: ValueKey<String>('recurrence_day_$day'),
+            label: Text(formatters.number(day)),
+            selected: days.contains(day),
+            showCheckmark: true,
+            onSelected: (_) => onToggleDay(day),
           ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (var day = 1; day <= 31; day++)
-                FilterChip(
-                  key: ValueKey<String>('recurrence_day_$day'),
-                  label: Text(formatters.number(day)),
-                  selected: days.contains(day),
-                  showCheckmark: true,
-                  onSelected: (_) => onToggleDay(day),
-                ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.recurrencePickerMonthEnd,
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
-          ),
-          const SizedBox(height: 8),
-          ChoiceWrap<MonthEndMode>(
-            selected: monthEnd,
-            onChanged: onMonthEndChanged,
-            options: [
-              ChoiceOption(
-                MonthEndMode.clamp,
-                l10n.recurrencePickerMonthEndClamp,
-              ),
-              ChoiceOption(
-                MonthEndMode.skip,
-                l10n.recurrencePickerMonthEndSkip,
-              ),
-            ],
-          ),
+      ],
+    ),
+    const SizedBox(height: 16),
+    Text(
+      l10n.recurrencePickerMonthEnd,
+      style: Theme.of(context).textTheme.labelLarge
+          ?.copyWith(color: t.textSecondary),
+    ),
+    const SizedBox(height: 8),
+    ChoiceWrap<MonthEndMode>(
+      selected: monthEnd,
+      onChanged: onMonthEndChanged,
+      options: [
+        ChoiceOption(MonthEndMode.clamp, l10n.recurrencePickerMonthEndClamp),
+        ChoiceOption(MonthEndMode.skip, l10n.recurrencePickerMonthEndSkip),
+      ],
+    ),
   ];
 }
 
@@ -71,54 +63,51 @@ List<Widget> _nthWeekdayFields(
   final l10n = context.l10n;
   final t = context.tokens;
   return [
-          Text(
-            l10n.recurrencePickerNth,
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
-          ),
-          const SizedBox(height: 8),
-          ChoiceWrap<int>(
-            selected: nth,
-            onChanged: onNthChanged,
-            options: [
-              ChoiceOption(1, l10n.recurrenceNthFirst),
-              ChoiceOption(2, l10n.recurrenceNthSecond),
-              ChoiceOption(3, l10n.recurrenceNthThird),
-              ChoiceOption(4, l10n.recurrenceNthFourth),
-              ChoiceOption(-1, l10n.recurrenceNthLast),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            l10n.recurrencePickerWeekday,
-            style: Theme.of(
-              context,
-            ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
-          ),
-          const SizedBox(height: 8),
-          ChoiceWrap<int>(
-            selected: weekday,
-            onChanged: onWeekdayChanged,
-            options: [
-              for (final day in WeekdayChips.order(weekStart))
-                ChoiceOption(day, formatters.weekdayName(day)),
-            ],
-          ),
+    Text(
+      l10n.recurrencePickerNth,
+      style: Theme.of(context).textTheme.labelLarge
+          ?.copyWith(color: t.textSecondary),
+    ),
+    const SizedBox(height: 8),
+    ChoiceWrap<int>(
+      selected: nth,
+      onChanged: onNthChanged,
+      options: [
+        ChoiceOption(1, l10n.recurrenceNthFirst),
+        ChoiceOption(2, l10n.recurrenceNthSecond),
+        ChoiceOption(3, l10n.recurrenceNthThird),
+        ChoiceOption(4, l10n.recurrenceNthFourth),
+        ChoiceOption(-1, l10n.recurrenceNthLast),
+      ],
+    ),
+    const SizedBox(height: 16),
+    Text(
+      l10n.recurrencePickerWeekday,
+      style: Theme.of(context).textTheme.labelLarge
+          ?.copyWith(color: t.textSecondary),
+    ),
+    const SizedBox(height: 8),
+    ChoiceWrap<int>(
+      selected: weekday,
+      onChanged: onWeekdayChanged,
+      options: [
+        for (final day in WeekdayChips.order(weekStart))
+          ChoiceOption(day, formatters.weekdayName(day)),
+      ],
+    ),
   ];
 }
 
-String _kindLabel(AppLocalizations l10n, RecurrenceKind kind) =>
-    switch (kind) {
-      RecurrenceKind.once => l10n.recurrenceKindOnce,
-      RecurrenceKind.daily => l10n.recurrenceKindDaily,
-      RecurrenceKind.everyNDays => l10n.recurrenceKindEveryNDays,
-      RecurrenceKind.weekdays => l10n.recurrenceKindWeekdays,
-      RecurrenceKind.everyNWeeks => l10n.recurrenceKindEveryNWeeks,
-      RecurrenceKind.daysOfMonth => l10n.recurrenceKindDaysOfMonth,
-      RecurrenceKind.nthWeekday => l10n.recurrenceKindNthWeekday,
-      RecurrenceKind.lastDay => l10n.recurrenceKindLastDay,
-    };
+String _kindLabel(AppLocalizations l10n, RecurrenceKind kind) => switch (kind) {
+  RecurrenceKind.once => l10n.recurrenceKindOnce,
+  RecurrenceKind.daily => l10n.recurrenceKindDaily,
+  RecurrenceKind.everyNDays => l10n.recurrenceKindEveryNDays,
+  RecurrenceKind.weekdays => l10n.recurrenceKindWeekdays,
+  RecurrenceKind.everyNWeeks => l10n.recurrenceKindEveryNWeeks,
+  RecurrenceKind.daysOfMonth => l10n.recurrenceKindDaysOfMonth,
+  RecurrenceKind.nthWeekday => l10n.recurrenceKindNthWeekday,
+  RecurrenceKind.lastDay => l10n.recurrenceKindLastDay,
+};
 
 /// The Cancel / Done row under the fields.
 class _PickerActions extends StatelessWidget {
@@ -140,10 +129,7 @@ class _PickerActions extends StatelessWidget {
         ),
         const SizedBox(width: 12),
         Expanded(
-          child: FilledButton(
-            onPressed: onDone,
-            child: Text(l10n.actionDone),
-          ),
+          child: FilledButton(onPressed: onDone, child: Text(l10n.actionDone)),
         ),
       ],
     );

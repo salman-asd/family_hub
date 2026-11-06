@@ -31,9 +31,8 @@ class FundingSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final t = context.tokens;
-    final label = Theme.of(context).textTheme.labelLarge?.copyWith(
-      color: t.textSecondary,
-    );
+    final label = Theme.of(context).textTheme.labelLarge
+        ?.copyWith(color: t.textSecondary);
     return IgnorePointer(
       ignoring: !enabled,
       child: Column(
@@ -75,9 +74,8 @@ class FundingSelector extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
                   errorText!,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: t.danger),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: t.danger),
                 ),
               ),
           ],

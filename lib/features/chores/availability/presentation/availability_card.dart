@@ -75,7 +75,10 @@ class AvailabilityCard extends ConsumerWidget {
                 ),
                 Icon(icon, size: 16, color: t.textSecondary),
                 const SizedBox(width: 4),
-                Text(label, style: TextStyle(color: t.textSecondary, fontSize: 12)),
+                Text(
+                  label,
+                  style: TextStyle(color: t.textSecondary, fontSize: 12),
+                ),
               ],
             ),
             const SizedBox(height: 4),
@@ -91,7 +94,9 @@ class AvailabilityCard extends ConsumerWidget {
                   if (onApprove != null)
                     TextButton.icon(
                       key: const Key('availability_approve'),
-                      style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
                       onPressed: onApprove,
                       icon: const Icon(Icons.check_rounded, size: 18),
                       label: Text(l10n.availabilityApprove),
@@ -99,7 +104,9 @@ class AvailabilityCard extends ConsumerWidget {
                   if (onReject != null)
                     TextButton.icon(
                       key: const Key('availability_reject'),
-                      style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
                       onPressed: onReject,
                       icon: const Icon(Icons.close_rounded, size: 18),
                       label: Text(l10n.availabilityReject),
@@ -107,9 +114,14 @@ class AvailabilityCard extends ConsumerWidget {
                   if (onCancel != null)
                     TextButton.icon(
                       key: const Key('availability_cancel'),
-                      style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+                      style: TextButton.styleFrom(
+                        minimumSize: const Size(48, 48),
+                      ),
                       onPressed: onCancel,
-                      icon: const Icon(Icons.event_available_outlined, size: 18),
+                      icon: const Icon(
+                        Icons.event_available_outlined,
+                        size: 18,
+                      ),
                       label: Text(l10n.availabilityCancel),
                     ),
                 ],

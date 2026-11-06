@@ -20,11 +20,10 @@ void main() {
   test('only a visible, unresolved flag is open', () {
     expect(CommentFlags.openCount([c('a'), c('b', flag: true)]), 1);
     expect(CommentFlags.openCount([c('a', flag: true, hidden: true)]), 0);
-    final done = c('a', flag: true).after(
-      CommentChangeKind.resolve,
-      by: 'cara',
-      at: at,
-    );
+    final done = c(
+      'a',
+      flag: true,
+    ).after(CommentChangeKind.resolve, by: 'cara', at: at);
     expect(done.isOpenFlag, isFalse);
   });
 
@@ -47,6 +46,9 @@ void main() {
     expect(CommentFlags.hasUnread(null, null), isFalse);
     expect(CommentFlags.hasUnread(at, null), isTrue);
     expect(CommentFlags.hasUnread(at, at), isFalse);
-    expect(CommentFlags.hasUnread(at, at.subtract(const Duration(minutes: 1))), isTrue);
+    expect(
+      CommentFlags.hasUnread(at, at.subtract(const Duration(minutes: 1))),
+      isTrue,
+    );
   });
 }

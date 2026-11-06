@@ -42,11 +42,7 @@ class DaysTab extends StatelessWidget {
 
 /// Members: "who spent" per member.
 class MembersTab extends StatelessWidget {
-  const MembersTab({
-    required this.data,
-    required this.memberNames,
-    super.key,
-  });
+  const MembersTab({required this.data, required this.memberNames, super.key});
 
   final ReportData data;
 

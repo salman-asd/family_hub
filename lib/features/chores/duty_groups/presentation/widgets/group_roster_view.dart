@@ -26,9 +26,8 @@ class GroupRosterView extends ConsumerWidget {
       children: [
         Text(
           context.l10n.dutyRosterTitle,
-          style: Theme.of(
-            context,
-          ).textTheme.titleSmall?.copyWith(color: t.textPrimary),
+          style: Theme.of(context).textTheme.titleSmall
+              ?.copyWith(color: t.textPrimary),
         ),
         const SizedBox(height: 4),
         for (final id in memberIds)

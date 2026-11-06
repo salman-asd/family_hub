@@ -68,9 +68,8 @@ class ProgressBarStatus extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   trailing!,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: t.textSecondary),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: t.textSecondary),
                 ),
               ],
             ],
@@ -117,11 +116,11 @@ class ProgressBarStatus extends ConsumerWidget {
               const SizedBox(width: 4),
               Flexible(
                 child: Text(
-                  percentText == null ? levelText : '$percentText% · $levelText',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: textColor,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  percentText == null
+                      ? levelText
+                      : '$percentText% · $levelText',
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: textColor, fontWeight: FontWeight.w600),
                 ),
               ),
             ],

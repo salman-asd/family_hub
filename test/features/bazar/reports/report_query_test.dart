@@ -69,10 +69,28 @@ void main() {
 
   group('halfUpRatioBp', () {
     test('rounds half away from zero and keeps the sign', () {
-      expect(halfUpRatioBp(delta: const Money.paisa(50), base: const Money.paisa(200)), 2500);
-      expect(halfUpRatioBp(delta: const Money.paisa(-50), base: const Money.paisa(200)), -2500);
-      expect(halfUpRatioBp(delta: const Money.paisa(1), base: const Money.paisa(3)), 3333);
-      expect(halfUpRatioBp(delta: const Money.paisa(2), base: const Money.paisa(3)), 6667);
+      expect(
+        halfUpRatioBp(
+          delta: const Money.paisa(50),
+          base: const Money.paisa(200),
+        ),
+        2500,
+      );
+      expect(
+        halfUpRatioBp(
+          delta: const Money.paisa(-50),
+          base: const Money.paisa(200),
+        ),
+        -2500,
+      );
+      expect(
+        halfUpRatioBp(delta: const Money.paisa(1), base: const Money.paisa(3)),
+        3333,
+      );
+      expect(
+        halfUpRatioBp(delta: const Money.paisa(2), base: const Money.paisa(3)),
+        6667,
+      );
     });
   });
 

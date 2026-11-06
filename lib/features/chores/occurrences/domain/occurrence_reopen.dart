@@ -74,7 +74,9 @@ abstract final class OccurrenceReopen {
       );
     }
     final wanted = <String>{...requested};
-    final known = <String>{for (final subtask in occurrence.subtasks) subtask.id};
+    final known = <String>{
+      for (final subtask in occurrence.subtasks) subtask.id,
+    };
     if (wanted.difference(known).isNotEmpty) {
       return const Failure<ReopenPlan>(Conflict(code: 'concurrent_edit'));
     }

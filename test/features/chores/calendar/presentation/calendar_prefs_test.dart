@@ -68,17 +68,20 @@ void main() {
       expect(CalendarPrefs.decode('[1,2]', fallback: fallback), isNull);
     });
 
-    test('a missing field keeps the fallback, an unknown status is dropped', () {
-      final back = CalendarPrefs.decode(
-        '{"v":1,"view":"month","statuses":["overdue","martian"]}',
-        fallback: fallback,
-      )!;
+    test(
+      'a missing field keeps the fallback, an unknown status is dropped',
+      () {
+        final back = CalendarPrefs.decode(
+          '{"v":1,"view":"month","statuses":["overdue","martian"]}',
+          fallback: fallback,
+        )!;
 
-      expect(back.view, CalendarViewKind.month);
-      expect(back.scope, CalendarScopeKind.mine);
-      expect(back.showProjected, isTrue);
-      expect(back.filters.statuses, <ChoreStatus>{ChoreStatus.overdue});
-    });
+        expect(back.view, CalendarViewKind.month);
+        expect(back.scope, CalendarScopeKind.mine);
+        expect(back.showProjected, isTrue);
+        expect(back.filters.statuses, <ChoreStatus>{ChoreStatus.overdue});
+      },
+    );
   });
 
   group('CalendarPrefsController', () {
@@ -105,7 +108,10 @@ void main() {
       final container = make();
       container.listen(calendarPrefsProvider, (_, _) {});
 
-      expect(container.read(calendarPrefsProvider).view, CalendarViewKind.agenda);
+      expect(
+        container.read(calendarPrefsProvider).view,
+        CalendarViewKind.agenda,
+      );
       expect(container.read(calendarUsesFamilyDefaultsProvider), isTrue);
 
       container
@@ -122,32 +128,34 @@ void main() {
       expect(now.scope, CalendarScopeKind.all);
     });
 
-    test('a change is stored and a later settings change never overwrites it',
-        () async {
-      final container = make();
-      container.listen(calendarPrefsProvider, (_, _) {});
+    test(
+      'a change is stored and a later settings change never overwrites it',
+      () async {
+        final container = make();
+        container.listen(calendarPrefsProvider, (_, _) {});
 
-      await container
-          .read(calendarPrefsProvider.notifier)
-          .setView(CalendarViewKind.month);
-      expect(container.read(calendarUsesFamilyDefaultsProvider), isFalse);
+        await container
+            .read(calendarPrefsProvider.notifier)
+            .setView(CalendarViewKind.month);
+        expect(container.read(calendarUsesFamilyDefaultsProvider), isFalse);
 
-      container
-          .read(_holder.notifier)
-          .change(
-            ChoreSettings.defaults.copyWith(
-              defaultCalendarView: CalendarViewKind.week,
-              defaultScope: CalendarScopeKind.all,
-              showProjected: false,
-            ),
-          );
+        container
+            .read(_holder.notifier)
+            .change(
+              ChoreSettings.defaults.copyWith(
+                defaultCalendarView: CalendarViewKind.week,
+                defaultScope: CalendarScopeKind.all,
+                showProjected: false,
+              ),
+            );
 
-      final now = container.read(calendarPrefsProvider);
-      expect(now.view, CalendarViewKind.month);
-      // The snapshot taken at the first change also froze the other fields.
-      expect(now.scope, CalendarScopeKind.mine);
-      expect(now.showProjected, isTrue);
-    });
+        final now = container.read(calendarPrefsProvider);
+        expect(now.view, CalendarViewKind.month);
+        // The snapshot taken at the first change also froze the other fields.
+        expect(now.scope, CalendarScopeKind.mine);
+        expect(now.showProjected, isTrue);
+      },
+    );
 
     test('a new container restores what was stored', () async {
       final first = make();
@@ -167,9 +175,7 @@ void main() {
     test('each family has its own key', () async {
       final a = make(familyId: 'fa');
       a.listen(calendarPrefsProvider, (_, _) {});
-      await a
-          .read(calendarPrefsProvider.notifier)
-          .setDensity(Density.compact);
+      await a.read(calendarPrefsProvider.notifier).setDensity(Density.compact);
 
       final b = make(familyId: 'fb');
       b.listen(calendarPrefsProvider, (_, _) {});

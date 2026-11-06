@@ -115,13 +115,22 @@ class _SwapSheetState extends ConsumerState<_SwapSheet> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(l10n.swapSheetTitle, style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              l10n.swapSheetTitle,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 12),
-            Text(l10n.swapSheetPerson, style: TextStyle(color: t.textSecondary)),
+            Text(
+              l10n.swapSheetPerson,
+              style: TextStyle(color: t.textSecondary),
+            ),
             if (widget.eligible.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                child: Text(l10n.swapSheetNobody, key: const Key('swap_nobody')),
+                child: Text(
+                  l10n.swapSheetNobody,
+                  key: const Key('swap_nobody'),
+                ),
               ),
             for (final member in widget.eligible)
               Semantics(
@@ -155,13 +164,19 @@ class _SwapSheetState extends ConsumerState<_SwapSheet> {
                                 ),
                               ),
                               Text(
-                                l10n.swapLoadLabel(formatters.number(load[member.uid] ?? 0)),
-                                style: TextStyle(color: t.textSecondary, fontSize: 12),
+                                l10n.swapLoadLabel(
+                                  formatters.number(load[member.uid] ?? 0),
+                                ),
+                                style: TextStyle(
+                                  color: t.textSecondary,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        if (member.uid == _to) Icon(Icons.check_circle_rounded, color: t.accent),
+                        if (member.uid == _to)
+                          Icon(Icons.check_circle_rounded, color: t.accent),
                       ],
                     ),
                   ),
@@ -191,9 +206,13 @@ class _SwapSheetState extends ConsumerState<_SwapSheet> {
               ),
             FilledButton.icon(
               key: const Key('swap_send'),
-              style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+              style: FilledButton.styleFrom(
+                minimumSize: const Size.fromHeight(48),
+              ),
               onPressed: _valid
-                  ? () => Navigator.of(context).pop((to: _to!, reason: _reason.text.trim()))
+                  ? () =>
+                        Navigator.of(context)
+                            .pop((to: _to!, reason: _reason.text.trim()))
                   : null,
               icon: const Icon(Icons.send_rounded),
               label: Text(l10n.swapSheetSend),

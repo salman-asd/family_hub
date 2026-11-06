@@ -131,8 +131,9 @@ class _ExpenseListScreenState extends ConsumerState<ExpenseListScreen> {
               key: const ValueKey('range-refresh'),
               tooltip: l10n.expenseListRefresh,
               icon: const Icon(Icons.refresh),
-              onPressed: () =>
-                  ref.read(rangeExpensesProvider(filters.range!).notifier).refresh(),
+              onPressed: () => ref
+                  .read(rangeExpensesProvider(filters.range!).notifier)
+                  .refresh(),
             ),
           IconButton(
             key: const ValueKey('open-filters'),
@@ -181,9 +182,8 @@ class _ExpenseListScreenState extends ConsumerState<ExpenseListScreen> {
                 Expanded(
                   child: Text(
                     l10n.expenseListFilteredTotal,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.titleSmall?.copyWith(color: t.textSecondary),
+                    style: Theme.of(context).textTheme.titleSmall
+                        ?.copyWith(color: t.textSecondary),
                   ),
                 ),
                 MoneyText(

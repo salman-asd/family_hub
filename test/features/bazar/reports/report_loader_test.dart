@@ -87,19 +87,22 @@ void main() {
     expect(load.truncated, isTrue);
   });
 
-  test('a cap that is an exact multiple of the page size is not truncated', () async {
-    seed(20);
-    final result = await loadRange(
-      backend,
-      familyId,
-      query,
-      pageSize: 20,
-      maxDocs: 40,
-    );
-    final load = result.valueOrNull!;
-    expect(load.count, 20);
-    expect(load.truncated, isFalse);
-  });
+  test(
+    'a cap that is an exact multiple of the page size is not truncated',
+    () async {
+      seed(20);
+      final result = await loadRange(
+        backend,
+        familyId,
+        query,
+        pageSize: 20,
+        maxDocs: 40,
+      );
+      final load = result.valueOrNull!;
+      expect(load.count, 20);
+      expect(load.truncated, isFalse);
+    },
+  );
 
   test('a read failure is returned, never a partial report', () async {
     seed(60);
@@ -128,15 +131,18 @@ void main() {
     expect(load.expenses.every((e) => e.purchaserId == 'bob'), isTrue);
   });
 
-  test('soft-deleted rows stay in the load and the engine drops them', () async {
-    seed(2);
-    final gone = backend.expenses[familyId]!['e00000']!.copyWith(
-      deletedAt: at,
-      deletedBy: 'alice',
-    );
-    backend.expenses[familyId]!['e00000'] = gone;
+  test(
+    'soft-deleted rows stay in the load and the engine drops them',
+    () async {
+      seed(2);
+      final gone = backend.expenses[familyId]!['e00000']!.copyWith(
+        deletedAt: at,
+        deletedBy: 'alice',
+      );
+      backend.expenses[familyId]!['e00000'] = gone;
 
-    final load = (await loadRange(backend, familyId, query)).valueOrNull!;
-    expect(load.count, 2, reason: 'the loader returns what the range holds');
-  });
+      final load = (await loadRange(backend, familyId, query)).valueOrNull!;
+      expect(load.count, 2, reason: 'the loader returns what the range holds');
+    },
+  );
 }

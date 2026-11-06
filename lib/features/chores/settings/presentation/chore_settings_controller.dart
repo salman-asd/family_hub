@@ -13,9 +13,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// The page's editor state; auto-disposed with the screen so an abandoned
 /// draft never survives a navigation.
 final choreSettingsEditorProvider =
-    NotifierProvider.autoDispose<ChoreSettingsController, ChoreSettingsFormState>(
-      ChoreSettingsController.new,
-    );
+    NotifierProvider.autoDispose<
+      ChoreSettingsController,
+      ChoreSettingsFormState
+    >(ChoreSettingsController.new);
 
 /// Holds an immutable draft of [ChoreSettings] (plus the absence policy and the
 /// admin-only "members can complete for others" switch) and saves them
@@ -39,10 +40,7 @@ class ChoreSettingsController extends Notifier<ChoreSettingsFormState> {
     ref
       ..listen<ChoreSettings>(choreSettingsProvider, (_, next) {
         final dirty = state.draft != state.saved;
-        state = state.copyWith(
-          saved: next,
-          draft: dirty ? state.draft : next,
-        );
+        state = state.copyWith(saved: next, draft: dirty ? state.draft : next);
       })
       ..listen<AbsencePolicy>(rotationPolicyProvider, (_, next) {
         final dirty = state.policy != state.savedPolicy;
@@ -171,11 +169,7 @@ class ChoreSettingsController extends Notifier<ChoreSettingsFormState> {
       return false;
     }
 
-    state = state.copyWith(
-      saving: true,
-      clearFailure: true,
-      justSaved: false,
-    );
+    state = state.copyWith(saving: true, clearFailure: true, justSaved: false);
     try {
       if (state.draft != state.saved) {
         final result = await ref.read(updateChoreSettingsProvider)(
@@ -201,15 +195,13 @@ class ChoreSettingsController extends Notifier<ChoreSettingsFormState> {
         final result = await ref.read(updatePermissionSettingsProvider)(
           actorUid: uid,
           familyId: familyId,
-          settings: ref.read(permissionSettingsProvider).copyWith(
-            membersCanCompleteForOthers: state.completeForOthers,
-          ),
+          settings: ref
+              .read(permissionSettingsProvider)
+              .copyWith(membersCanCompleteForOthers: state.completeForOthers),
         );
         final failure = result.failureOrNull;
         if (failure != null) return _fail(failure);
-        state = state.copyWith(
-          savedCompleteForOthers: state.completeForOthers,
-        );
+        state = state.copyWith(savedCompleteForOthers: state.completeForOthers);
       }
       state = state.copyWith(saving: false, justSaved: true);
       return true;

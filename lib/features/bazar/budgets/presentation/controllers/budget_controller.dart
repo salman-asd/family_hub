@@ -82,9 +82,7 @@ final class BudgetEditState {
 /// The editable draft of one month's budget.  Auto-disposed with its screen,
 /// so leaving the screen (or changing month) drops an unsaved draft.
 final budgetControllerProvider = NotifierProvider.autoDispose
-    .family<BudgetController, BudgetEditState, MonthKey>(
-      BudgetController.new,
-    );
+    .family<BudgetController, BudgetEditState, MonthKey>(BudgetController.new);
 
 class BudgetController extends Notifier<BudgetEditState> {
   BudgetController(this.month);
@@ -139,7 +137,10 @@ class BudgetController extends Notifier<BudgetEditState> {
   }
 
   void addLine() => state = state.copyWith(
-    lines: <BudgetLineDraft>[...state.lines, BudgetLineDraft(id: _newId())],
+    lines: <BudgetLineDraft>[
+      ...state.lines,
+      BudgetLineDraft(id: _newId()),
+    ],
   );
 
   void removeLine(String id) => state = state.copyWith(
@@ -161,9 +162,8 @@ class BudgetController extends Notifier<BudgetEditState> {
   }
 
   /// The sum of the rows that already read cleanly (live footer).
-  Money get linesTotal => Money.sum(
-    readLineDrafts(state.lines).lines.map(Budget.lineEstimate),
-  );
+  Money get linesTotal =>
+      Money.sum(readLineDrafts(state.lines).lines.map(Budget.lineEstimate));
 
   /// Reads the draft, saves it once and closes the editor.  Returns `true` on
   /// success.  Field problems are shown inline and nothing is written.

@@ -26,9 +26,7 @@ Future<void> showContributionSheet(
   isScrollControlled: true,
   useSafeArea: true,
   builder: (_) => Padding(
-    padding: EdgeInsets.only(
-      bottom: MediaQuery.viewInsetsOf(context).bottom,
-    ),
+    padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
     child: ContributionSheet(
       mode: mode,
       month: month,
@@ -88,20 +86,14 @@ class ContributionSheet extends ConsumerWidget {
               text: l10n.bazarErrMonthLocked,
               color: Theme.of(context).colorScheme.outline,
             ),
-          ContributionFormFields(
-            args: args,
-            locked: locked || openingBalance,
-          ),
+          ContributionFormFields(args: args, locked: locked || openingBalance),
           if (state.failure case final failure?)
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
                 l10n.bazarFailureMessage(failure),
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.error,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium
+                    ?.copyWith(color: Theme.of(context).colorScheme.error),
               ),
             ),
           BusyButton(
@@ -137,9 +129,9 @@ class ContributionSheet extends ConsumerWidget {
     final controller = ref.read(contributionFormProvider(args).notifier);
     final failure = await controller.saveOpening();
     if (failure == null || !context.mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(context.l10n.bazarFailureMessage(failure))));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.l10n.bazarFailureMessage(failure))),
+    );
   }
 
   static String _title(
@@ -168,5 +160,3 @@ class ContributionSheet extends ConsumerWidget {
     ContributionFormMode.requestChange => l10n.fundSendChangeRequest,
   };
 }
-
-

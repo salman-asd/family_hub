@@ -85,9 +85,8 @@ class ExpenseFormBody extends ConsumerWidget {
         const SizedBox(height: 12),
         Text(
           l10n.expenseCategoryLabel,
-          style: Theme.of(
-            context,
-          ).textTheme.labelLarge?.copyWith(color: t.textSecondary),
+          style: Theme.of(context).textTheme.labelLarge
+              ?.copyWith(color: t.textSecondary),
         ),
         const SizedBox(height: 8),
         IgnorePointer(
@@ -112,9 +111,8 @@ class ExpenseFormBody extends ConsumerWidget {
             padding: const EdgeInsets.only(top: 4),
             child: Text(
               fieldErrorText(l10n, errors, 'categoryId')!,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: t.danger),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: t.danger),
             ),
           ),
         if (state.isNewItem)

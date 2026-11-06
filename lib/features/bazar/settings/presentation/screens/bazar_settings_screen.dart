@@ -121,18 +121,20 @@ class _BazarSettingsScreenState extends ConsumerState<BazarSettingsScreen> {
     // Confusingly typed on purpose: `run` returns the action's value, and a
     // `Result<void>` value IS null even on success — so the controller's state
     // (not the return value) decides whether "saved" is shown.
-    await ref.read(_settingsActionProvider.notifier).run<Object?>(
-      () => ref.read(updateBazarSettingsProvider)(
-        actorUid: uid,
-        familyId: familyId,
-        settings: current.copyWith(
-          weekStartDay: _weekStart,
-          defaultMonthlyContribution: target,
-          contributionDueDay: _dueDay,
-          alertThresholds: <int>[warn!, exceeded!],
-        ),
-      ),
-    );
+    await ref
+        .read(_settingsActionProvider.notifier)
+        .run<Object?>(
+          () => ref.read(updateBazarSettingsProvider)(
+            actorUid: uid,
+            familyId: familyId,
+            settings: current.copyWith(
+              weekStartDay: _weekStart,
+              defaultMonthlyContribution: target,
+              contributionDueDay: _dueDay,
+              alertThresholds: <int>[warn!, exceeded!],
+            ),
+          ),
+        );
     if (!mounted) return;
     if (ref.read(_settingsActionProvider).failure != null) return;
     messenger.showSnackBar(SnackBar(content: Text(l10n.settingsSaved)));
@@ -152,9 +154,8 @@ class _BazarSettingsScreenState extends ConsumerState<BazarSettingsScreen> {
     final action = ref.watch(_settingsActionProvider);
     final failure = action.failure;
     final fundStart = ref.watch(bazarSettingsProvider).fundStartMonth;
-    final label = Theme.of(
-      context,
-    ).textTheme.labelLarge?.copyWith(color: t.textSecondary);
+    final label = Theme.of(context).textTheme.labelLarge
+        ?.copyWith(color: t.textSecondary);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.bazarSettingsTitle)),
@@ -254,9 +255,8 @@ class _BazarSettingsScreenState extends ConsumerState<BazarSettingsScreen> {
                     padding: const EdgeInsets.only(top: 12),
                     child: Text(
                       l10n.bazarFailureMessage(failure),
-                      style: Theme.of(
-                        context,
-                      ).textTheme.bodyMedium?.copyWith(color: t.danger),
+                      style: Theme.of(context).textTheme.bodyMedium
+                          ?.copyWith(color: t.danger),
                     ),
                   ),
                 const SizedBox(height: 20),

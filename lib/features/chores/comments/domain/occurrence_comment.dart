@@ -80,13 +80,18 @@ final class OccurrenceComment {
   };
 
   /// This comment after [change] (the state a use case answers with).
-  OccurrenceComment after(CommentChangeKind kind, {
+  OccurrenceComment after(
+    CommentChangeKind kind, {
     required String by,
     required DateTime at,
     String? note,
   }) => switch (kind) {
     CommentChangeKind.resolve => _copy(resolvedAt: at, resolvedBy: by),
-    CommentChangeKind.hide => _copy(hidden: true, hiddenBy: by, hiddenNote: note),
+    CommentChangeKind.hide => _copy(
+      hidden: true,
+      hiddenBy: by,
+      hiddenNote: note,
+    ),
     CommentChangeKind.unhide => _copy(hidden: false),
   };
 

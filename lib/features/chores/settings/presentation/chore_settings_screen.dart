@@ -48,16 +48,16 @@ class ChoreSettingsScreen extends ConsumerWidget {
     final form = ref.watch(choreSettingsEditorProvider);
     final controller = ref.read(choreSettingsEditorProvider.notifier);
 
-    ref.listen<bool>(
-      choreSettingsEditorProvider.select((s) => s.justSaved),
-      (_, saved) {
-        if (saved) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(content: Text(l10n.choresSettingsSaved)));
-        }
-      },
-    );
+    ref.listen<bool>(choreSettingsEditorProvider.select((s) => s.justSaved), (
+      _,
+      saved,
+    ) {
+      if (saved) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(SnackBar(content: Text(l10n.choresSettingsSaved)));
+      }
+    });
 
     return PopScope(
       canPop: !form.isDirty,

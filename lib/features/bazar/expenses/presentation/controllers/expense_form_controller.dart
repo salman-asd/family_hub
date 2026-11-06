@@ -60,9 +60,7 @@ class ExpenseFormController extends ExpenseFormSetters {
       newItemId: newId(),
       date: ref.read(currentDateKeyProvider),
       editing: editingId != null,
-      load: editingId == null
-          ? ExpenseFormLoad.ready
-          : ExpenseFormLoad.loading,
+      load: editingId == null ? ExpenseFormLoad.ready : ExpenseFormLoad.loading,
       paidByMemberId: ref.read(currentUidProvider),
     );
     if (editingId != null) unawaited(Future<void>.microtask(_loadForEdit));

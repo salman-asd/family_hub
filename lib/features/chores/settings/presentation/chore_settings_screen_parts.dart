@@ -132,9 +132,8 @@ class _SaveBar extends StatelessWidget {
                         child: Text(
                           message,
                           key: const ValueKey<String>('settings_failure'),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodySmall?.copyWith(color: t.danger),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: t.danger),
                         ),
                       ),
                     ],

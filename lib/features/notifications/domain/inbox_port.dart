@@ -70,6 +70,7 @@ abstract interface class InboxPort {
     required String dateKey,
     required String authorId,
   });
+
   /// "Somebody asks you to take a chore" (swap) or "please cover" (policy B) —
   /// to the recipient (P3-26).
   NewInboxItem? swapRequested({

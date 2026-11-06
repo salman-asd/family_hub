@@ -63,26 +63,22 @@ abstract final class CatalogMapping {
 
   // ── Due-time presets ───────────────────────────────────────────────────────
 
-  static CatalogEntry presetEntry(DueTimePreset p, String time) =>
-      CatalogEntry(
-        id: p.id,
-        labelBn: p.labelBn,
-        labelEn: p.labelEn,
-        active: p.active,
-        builtIn: p.builtIn,
-        detail: time,
-        extra: p,
-      );
+  static CatalogEntry presetEntry(DueTimePreset p, String time) => CatalogEntry(
+    id: p.id,
+    labelBn: p.labelBn,
+    labelEn: p.labelEn,
+    active: p.active,
+    builtIn: p.builtIn,
+    detail: time,
+    extra: p,
+  );
 
   static List<DueTimePreset> presetsFrom(
     List<CatalogEntry> rows,
     List<DueTimePreset> originals,
   ) {
     final byId = <String, DueTimePreset>{for (final p in originals) p.id: p};
-    return <DueTimePreset>[
-      for (final row in rows)
-        _preset(row, byId[row.id]),
-    ];
+    return <DueTimePreset>[for (final row in rows) _preset(row, byId[row.id])];
   }
 
   static DueTimePreset _preset(CatalogEntry row, DueTimePreset? original) {

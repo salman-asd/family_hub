@@ -123,13 +123,17 @@ class ApplyAbsencePolicy {
     if (listFailure != null) return Failure<AbsenceOutcome>(listFailure);
     final affected = <ChoreOccurrence>[
       for (final o in listed.valueOrNull!)
-        if (!o.isDeleted && o.assigneeId == record.memberId && isUnstarted(o)) o,
+        if (!o.isDeleted && o.assigneeId == record.memberId && isUnstarted(o))
+          o,
     ]..sort((a, b) => a.dateKey.compareTo(b.dateKey));
     if (affected.isEmpty || policy == AbsencePolicy.skip) {
-      return Success<AbsenceOutcome>(AbsenceOutcome(policy: policy, affected: affected));
+      return Success<AbsenceOutcome>(
+        AbsenceOutcome(policy: policy, affected: affected),
+      );
     }
 
-    final members = (await families.getMembers(familyId)).valueOrNull ?? const [];
+    final members =
+        (await families.getMembers(familyId)).valueOrNull ?? const [];
     final at = clock.nowUtc();
     final inboxRows = <NewInboxItem>[];
     final audits = <NewAudit>[];
@@ -140,8 +144,11 @@ class ApplyAbsencePolicy {
       final settings = (await choreSettings.get(familyId)).valueOrNull;
       final buffer = settings?.swapExpiryBufferMinutes ?? 120;
       final records = await availability.listActive(familyId, record.startDate);
-      final index = AvailabilityIndex.fromRecords(records.valueOrNull ?? const []);
-      final pending = (await swaps.listPending(familyId)).valueOrNull ?? const [];
+      final index = AvailabilityIndex.fromRecords(
+        records.valueOrNull ?? const [],
+      );
+      final pending =
+          (await swaps.listPending(familyId)).valueOrNull ?? const [];
       final busy = <String>{for (final r in pending) r.occurrenceId};
       final candidates = <String>[
         for (final m in members)
@@ -217,7 +224,8 @@ class ApplyAbsencePolicy {
           from: record.startDate.toString(),
           to: record.endDate.toString(),
         );
-        if (row != null) inboxRows.add(row.withId('ib_nc_${availabilityId}_$to'));
+        if (row != null)
+          inboxRows.add(row.withId('ib_nc_${availabilityId}_$to'));
       }
     }
 

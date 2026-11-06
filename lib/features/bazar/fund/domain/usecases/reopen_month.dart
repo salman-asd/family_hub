@@ -115,8 +115,7 @@ class ReopenMonth {
         : Success<MonthClosing>(reopened);
   }
 
-  static String _clip(String text, int max) =>
-      text.runes.length <= max
+  static String _clip(String text, int max) => text.runes.length <= max
       ? text
       : String.fromCharCodes(text.runes.take(max));
 }

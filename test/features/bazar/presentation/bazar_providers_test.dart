@@ -101,11 +101,8 @@ void main() {
       keep(c, monthExpensesProvider(MonthKey(2026, 9)));
       await pump();
 
-      List<String> ids(MonthKey m) => c
-          .read(monthExpensesProvider(m))
-          .value!
-          .map((e) => e.id)
-          .toList();
+      List<String> ids(MonthKey m) =>
+          c.read(monthExpensesProvider(m)).value!.map((e) => e.id).toList();
       expect(ids(MonthKey(2026, 10)), ['oct']);
       expect(ids(MonthKey(2026, 9)), ['sep']);
       expect(
@@ -219,8 +216,7 @@ void main() {
     });
 
     test('the fund balance follows the ledger window', () async {
-      FundTransaction row(String id, int paisa, DateKey day) =>
-          paisa > 0
+      FundTransaction row(String id, int paisa, DateKey day) => paisa > 0
           ? FundTransaction.forContribution(
               contributionId: id,
               amount: Money.paisa(paisa),
@@ -297,10 +293,9 @@ void main() {
       final c = makeContainer(uid: 'cara', role: Role.member);
       keep(c, openAdvancesProvider);
       await pump();
-      expect(
-        c.read(openAdvancesProvider).value!.map((a) => a.expenseId),
-        ['a1'],
-      );
+      expect(c.read(openAdvancesProvider).value!.map((a) => a.expenseId), [
+        'a1',
+      ]);
     });
   });
 

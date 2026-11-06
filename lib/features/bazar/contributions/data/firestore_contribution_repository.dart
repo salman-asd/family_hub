@@ -27,10 +27,7 @@ import 'package:family_hub/features/bazar/settings/domain/bazar_settings.dart';
 /// removed `pendingChange` really disappears; the rules compare it with the
 /// stored one field by field.
 class FirestoreContributionRepository implements ContributionRepository {
-  FirestoreContributionRepository({
-    required this._tx,
-    this._firestore,
-  });
+  FirestoreContributionRepository({required this._tx, this._firestore});
 
   final TxRunner _tx;
   final FirebaseFirestore? _firestore;
@@ -176,40 +173,37 @@ class FirestoreContributionRepository implements ContributionRepository {
     String familyId,
     OpeningBalancePlan plan,
     AuditEvent event,
-  ) => guardWrite(
-    probe: serverProbeFor(_db, event.actorId),
-    () async {
-      final settingsPath = FirestorePaths.bazarSettingsDoc(familyId);
-      final existing = await _db.doc(settingsPath).get();
-      await _tx.runBatch((batch) {
-        _stager.fundRows(batch, familyId, <FundTransaction?>[
-          plan.opening,
-        ], event);
-        if (existing.exists) {
-          // Only the start month changes; every other setting is kept.
-          batch.set(settingsPath, <String, dynamic>{
-            'fundStartMonth': plan.startMonth.toString(),
-            BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(event.at),
-            BaseMapper.keyUpdatedBy: event.actorId,
-          }, merge: true);
-        } else {
-          batch.set(
-            settingsPath,
-            BazarSettingsMappers.toMap(
-              BazarSettings.defaults.copyWith(fundStartMonth: plan.startMonth),
-              BaseDocumentMetadata(
-                createdAt: event.at,
-                createdBy: event.actorId,
-                updatedAt: event.at,
-                updatedBy: event.actorId,
-              ),
+  ) => guardWrite(probe: serverProbeFor(_db, event.actorId), () async {
+    final settingsPath = FirestorePaths.bazarSettingsDoc(familyId);
+    final existing = await _db.doc(settingsPath).get();
+    await _tx.runBatch((batch) {
+      _stager.fundRows(batch, familyId, <FundTransaction?>[
+        plan.opening,
+      ], event);
+      if (existing.exists) {
+        // Only the start month changes; every other setting is kept.
+        batch.set(settingsPath, <String, dynamic>{
+          'fundStartMonth': plan.startMonth.toString(),
+          BaseMapper.keyUpdatedAt: BaseMapper.dateTimeToTimestamp(event.at),
+          BaseMapper.keyUpdatedBy: event.actorId,
+        }, merge: true);
+      } else {
+        batch.set(
+          settingsPath,
+          BazarSettingsMappers.toMap(
+            BazarSettings.defaults.copyWith(fundStartMonth: plan.startMonth),
+            BaseDocumentMetadata(
+              createdAt: event.at,
+              createdBy: event.actorId,
+              updatedAt: event.at,
+              updatedBy: event.actorId,
             ),
-          );
-        }
-        AuditWriter.write(batch, familyId, event);
-      });
-    },
-  );
+          ),
+        );
+      }
+      AuditWriter.write(batch, familyId, event);
+    });
+  });
 
   Query<Map<String, dynamic>> _monthQuery(
     String path,
@@ -236,13 +230,14 @@ class FirestoreContributionRepository implements ContributionRepository {
   List<Contribution> _contributions(
     QuerySnapshot<Map<String, dynamic>> snapshot,
   ) {
-    final rows = <Contribution>[
-      for (final document in snapshot.docs)
-        ?ContributionMappers.fromMap(document.id, document.data()),
-    ]..sort((a, b) {
-        final byDate = b.dateKey.compareTo(a.dateKey);
-        return byDate != 0 ? byDate : b.id.compareTo(a.id);
-      });
+    final rows =
+        <Contribution>[
+          for (final document in snapshot.docs)
+            ?ContributionMappers.fromMap(document.id, document.data()),
+        ]..sort((a, b) {
+          final byDate = b.dateKey.compareTo(a.dateKey);
+          return byDate != 0 ? byDate : b.id.compareTo(a.id);
+        });
     return rows;
   }
 }

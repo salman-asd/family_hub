@@ -56,13 +56,12 @@ class FirestoreOccurrenceRepository
     String familyId, {
     required DateKey from,
     required DateKey to,
-  }) =>
-      _rangeQuery(
-        familyId,
-        from: from,
-        to: to,
-        limit: kMaxOccurrencesPerMonth + 1,
-      ).snapshots().map(_toOccurrences);
+  }) => _rangeQuery(
+    familyId,
+    from: from,
+    to: to,
+    limit: kMaxOccurrencesPerMonth + 1,
+  ).snapshots().map(_toOccurrences);
 
   @override
   Stream<ChoreOccurrence?> watchOne(String familyId, String occurrenceId) =>
@@ -240,25 +239,23 @@ class FirestoreOccurrenceRepository
   /// time. [query] must already carry `.limit(kOccurrencePageSize)` and a total
   /// order; every page resumes with `startAfterDocument(lastSnapshot)`, never
   /// with a field value (B-09, see [readAllPages]).
-  Future<List<ChoreOccurrence>> _readAll(
-    Query<Map<String, dynamic>> query,
-  ) => readAllPages<ChoreOccurrence, DocumentSnapshot<Map<String, dynamic>>>(
-    pageSize: kOccurrencePageSize,
-    fetch: (after) async {
-      final snapshot = await (after == null
-              ? query
-              : query.startAfterDocument(after))
-          .get();
-      return PageResult<
-        ChoreOccurrence,
-        DocumentSnapshot<Map<String, dynamic>>
-      >(
-        items: _toOccurrences(snapshot),
-        fetched: snapshot.docs.length,
-        cursor: snapshot.docs.isEmpty ? null : snapshot.docs.last,
+  Future<List<ChoreOccurrence>> _readAll(Query<Map<String, dynamic>> query) =>
+      readAllPages<ChoreOccurrence, DocumentSnapshot<Map<String, dynamic>>>(
+        pageSize: kOccurrencePageSize,
+        fetch: (after) async {
+          final snapshot =
+              await (after == null ? query : query.startAfterDocument(after))
+                  .get();
+          return PageResult<
+            ChoreOccurrence,
+            DocumentSnapshot<Map<String, dynamic>>
+          >(
+            items: _toOccurrences(snapshot),
+            fetched: snapshot.docs.length,
+            cursor: snapshot.docs.isEmpty ? null : snapshot.docs.last,
+          );
+        },
       );
-    },
-  );
 
   static DateKey? _epochDayOf(Map<String, dynamic>? map) {
     final raw = map?['throughEpochDay'];

@@ -47,9 +47,7 @@ class DayPanel extends ConsumerWidget {
         color: t.surfaceRaised,
         elevation: 8,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(t.radiusLg),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(t.radiusLg)),
         ),
         clipBehavior: Clip.antiAlias,
         child: DayPanelList(day: day, controller: controller, handle: true),
@@ -165,7 +163,7 @@ class DayPanelList extends ConsumerWidget {
               child: Text(
                 l10n.calendarDayHeader(
                   '${formatters.fullDate(date)}, '
-                      '${formatters.weekdayName(day.isoWeekday)}',
+                  '${formatters.weekdayName(day.isoWeekday)}',
                   formatters.number(count),
                 ),
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(

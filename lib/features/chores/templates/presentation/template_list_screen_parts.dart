@@ -33,9 +33,8 @@ class _GroupSection extends StatelessWidget {
         childrenPadding: EdgeInsets.zero,
         title: Text(
           '$name (${formatters.number(rows.length)})',
-          style: Theme.of(
-            context,
-          ).textTheme.titleMedium?.copyWith(color: t.textPrimary),
+          style: Theme.of(context).textTheme.titleMedium
+              ?.copyWith(color: t.textPrimary),
         ),
         children: [
           for (final r in rows)
