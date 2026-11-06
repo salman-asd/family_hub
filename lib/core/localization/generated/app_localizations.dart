@@ -8943,6 +8943,90 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'প্রবেশাধিকারের এই পছন্দটি সঠিক নয়।'**
   String get dashboardFailure_invalid_access;
+
+  /// No description provided for @activityTitle.
+  ///
+  /// In bn, this message translates to:
+  /// **'কার্যকলাপ'**
+  String get activityTitle;
+
+  /// No description provided for @activityEmpty.
+  ///
+  /// In bn, this message translates to:
+  /// **'এখনও কোনো কার্যকলাপ নেই।'**
+  String get activityEmpty;
+
+  /// No description provided for @activityNoMatches.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই ফিল্টারে কোনো কার্যকলাপ নেই।'**
+  String get activityNoMatches;
+
+  /// No description provided for @activityLoadError.
+  ///
+  /// In bn, this message translates to:
+  /// **'কার্যকলাপ আনা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।'**
+  String get activityLoadError;
+
+  /// No description provided for @activityLoadMore.
+  ///
+  /// In bn, this message translates to:
+  /// **'আরও দেখুন'**
+  String get activityLoadMore;
+
+  /// No description provided for @activityModuleFilter.
+  ///
+  /// In bn, this message translates to:
+  /// **'বিভাগ'**
+  String get activityModuleFilter;
+
+  /// No description provided for @activityModuleAll.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব বিভাগ'**
+  String get activityModuleAll;
+
+  /// No description provided for @activityModuleBazar.
+  ///
+  /// In bn, this message translates to:
+  /// **'বাজার ও অর্থ'**
+  String get activityModuleBazar;
+
+  /// No description provided for @activityModuleChores.
+  ///
+  /// In bn, this message translates to:
+  /// **'ঘরের কাজ'**
+  String get activityModuleChores;
+
+  /// No description provided for @activityModuleFamily.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবার'**
+  String get activityModuleFamily;
+
+  /// No description provided for @activityModuleEngagement.
+  ///
+  /// In bn, this message translates to:
+  /// **'ব্যাজ ও স্তর'**
+  String get activityModuleEngagement;
+
+  /// No description provided for @activityMemberFilter.
+  ///
+  /// In bn, this message translates to:
+  /// **'সদস্য'**
+  String get activityMemberFilter;
+
+  /// No description provided for @activityMemberAll.
+  ///
+  /// In bn, this message translates to:
+  /// **'সব সদস্য'**
+  String get activityMemberAll;
+
+  /// No description provided for @activityUnknownActor.
+  ///
+  /// In bn, this message translates to:
+  /// **'অজানা সদস্য'**
+  String get activityUnknownActor;
 }
 
 class _AppLocalizationsDelegate

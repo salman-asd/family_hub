@@ -5153,4 +5153,47 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dashboardFailure_invalid_access =>
       'This access choice is not valid.';
+
+  @override
+  String get activityTitle => 'Activity';
+
+  @override
+  String get activityEmpty => 'There is no activity yet.';
+
+  @override
+  String get activityNoMatches => 'No activity matches these filters.';
+
+  @override
+  String get activityLoadError =>
+      'Could not load activity. Check your connection and try again.';
+
+  @override
+  String get activityLoadMore => 'Load more';
+
+  @override
+  String get activityModuleFilter => 'Module';
+
+  @override
+  String get activityModuleAll => 'All modules';
+
+  @override
+  String get activityModuleBazar => 'Bazar & finance';
+
+  @override
+  String get activityModuleChores => 'Chores';
+
+  @override
+  String get activityModuleFamily => 'Family';
+
+  @override
+  String get activityModuleEngagement => 'Badges & levels';
+
+  @override
+  String get activityMemberFilter => 'Member';
+
+  @override
+  String get activityMemberAll => 'All members';
+
+  @override
+  String get activityUnknownActor => 'Unknown member';
 }

@@ -5128,4 +5128,47 @@ class AppLocalizationsBn extends AppLocalizations {
   @override
   String get dashboardFailure_invalid_access =>
       'প্রবেশাধিকারের এই পছন্দটি সঠিক নয়।';
+
+  @override
+  String get activityTitle => 'কার্যকলাপ';
+
+  @override
+  String get activityEmpty => 'এখনও কোনো কার্যকলাপ নেই।';
+
+  @override
+  String get activityNoMatches => 'এই ফিল্টারে কোনো কার্যকলাপ নেই।';
+
+  @override
+  String get activityLoadError =>
+      'কার্যকলাপ আনা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।';
+
+  @override
+  String get activityLoadMore => 'আরও দেখুন';
+
+  @override
+  String get activityModuleFilter => 'বিভাগ';
+
+  @override
+  String get activityModuleAll => 'সব বিভাগ';
+
+  @override
+  String get activityModuleBazar => 'বাজার ও অর্থ';
+
+  @override
+  String get activityModuleChores => 'ঘরের কাজ';
+
+  @override
+  String get activityModuleFamily => 'পরিবার';
+
+  @override
+  String get activityModuleEngagement => 'ব্যাজ ও স্তর';
+
+  @override
+  String get activityMemberFilter => 'সদস্য';
+
+  @override
+  String get activityMemberAll => 'সব সদস্য';
+
+  @override
+  String get activityUnknownActor => 'অজানা সদস্য';
 }

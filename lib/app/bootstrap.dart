@@ -6,6 +6,8 @@ import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/theme/theme_controller.dart';
 import 'package:family_hub/core/firebase/cache_wipe.dart';
 import 'package:family_hub/core/firebase/firebase_bootstrap.dart';
+import 'package:family_hub/features/activity/data/firestore_activity_repository.dart';
+import 'package:family_hub/features/activity/presentation/activity_providers.dart';
 import 'package:family_hub/features/auth/data/firebase_auth_repository.dart';
 import 'package:family_hub/features/auth/presentation/auth_providers.dart';
 import 'package:family_hub/features/bazar/advances/data/firestore_advance_repository.dart';
@@ -131,6 +133,7 @@ Future<void> bootstrap(Flavor flavor) async {
     final availability = FirestoreAvailabilityRepository(tx: tx);
     final swaps = FirestoreSwapRepository(tx: tx);
     final inbox = FirestoreInboxRepository(tx: tx);
+    final activity = FirestoreActivityRepository();
 
     runApp(
       ProviderScope(
@@ -170,6 +173,7 @@ Future<void> bootstrap(Flavor flavor) async {
           availabilityRepositoryProvider.overrideWithValue(availability),
           swapRepositoryProvider.overrideWithValue(swaps),
           inboxRepositoryProvider.overrideWithValue(inbox),
+          activityRepositoryProvider.overrideWithValue(activity),
           inboxPortProvider.overrideWithValue(const ChoresInboxPort()),
           themePreferenceSyncProvider.overrideWithValue(
             FirestoreThemePreferenceSync(),

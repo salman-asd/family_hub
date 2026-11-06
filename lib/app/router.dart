@@ -10,6 +10,7 @@ import 'package:family_hub/app/routing/splash_screen.dart';
 import 'package:family_hub/app/shell/app_shell.dart';
 import 'package:family_hub/app/theme/dev_tokens_screen.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
+import 'package:family_hub/features/activity/presentation/activity_feed_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/forgot_password_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/login_screen.dart';
 import 'package:family_hub/features/auth/presentation/screens/sign_up_screen.dart';
@@ -233,6 +234,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.inbox,
         builder: (context, state) => const InboxScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.activity,
+        builder: (context, state) => const ActivityFeedScreen(),
       ),
       GoRoute(
         path: AppRoutes.settingsSecurity,
