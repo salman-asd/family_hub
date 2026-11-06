@@ -51,6 +51,9 @@ void main() {
       expect(r.isSuccess, isTrue);
       expect(statusOf('wait'), MembershipStatus.active);
       expect(f.backend.events.single.type, 'member.approved');
+      expect(f.backend.lastApprovalNotification?.toMemberId, 'wait');
+      expect(f.backend.lastApprovalNotification?.actorId, 'admin');
+      expect(f.backend.lastApprovalNotification?.id, 'approved_id-2');
     });
 
     test('a moderator may approve', () async {
@@ -178,6 +181,7 @@ void main() {
       await disable(actorUid: 'admin', familyId: 'fam', targetUid: 'kid');
       await approve(actorUid: 'admin', familyId: 'fam', targetUid: 'kid');
       expect(statusOf('kid'), MembershipStatus.active);
+      expect(f.backend.lastApprovalNotification, isNull);
     });
 
     test('a disabled member can no longer manage anything', () async {

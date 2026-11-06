@@ -4,12 +4,15 @@ import 'package:family_hub/features/chores/presentation/chores_inbox_port.dart';
 import 'package:family_hub/features/chores/swaps/data/swap_mappers.dart';
 import 'package:family_hub/features/chores/swaps/domain/swap_request.dart';
 import 'package:family_hub/features/chores/swaps/domain/swap_write_plan.dart';
+import 'package:family_hub/features/chores/occurrences/domain/occurrence_write_plan.dart';
 import 'package:family_hub/features/notifications/data/inbox_mappers.dart';
 import 'package:family_hub/features/notifications/domain/inbox_item.dart';
 import 'package:family_hub/features/notifications/domain/inbox_port.dart';
 import 'package:family_hub/features/notifications/domain/inbox_writer.dart';
 import 'package:family_hub/features/notifications/domain/usecases/archive_inbox_item.dart';
+import 'package:family_hub/features/notifications/domain/usecases/mark_all_read.dart';
 import 'package:family_hub/features/notifications/domain/usecases/mark_inbox_read.dart';
+import 'package:family_hub/features/notifications/domain/virtual_inbox.dart';
 import 'package:family_hub/core/utils/date_key.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -64,6 +67,28 @@ void main() {
     expect(again.valueOrNull, 0, reason: 'already read: nothing written');
   });
 
+  test('mark all read changes stored rows and ignores virtual rows', () async {
+    final markAll = MarkAllRead(markRead);
+    final result = await markAll(
+      familyId: familyId,
+      actorUid: 'cara',
+      items: <InboxItem>[
+        fixture.inboxRows.items['i1']!,
+        InboxItem(
+          id: 'v:budget:2026-10',
+          toMemberId: 'cara',
+          type: VirtualInboxType.budgetAlert,
+          refType: 'budget',
+          refId: '2026-10',
+          createdAt: fixture.clock.nowUtc(),
+        ),
+      ],
+    );
+
+    expect(result.valueOrNull, 1);
+    expect(fixture.inboxRows.items['i1']!.readAt, fixture.clock.nowUtc());
+  });
+
   test('nobody touches somebody else’s row', () async {
     final result = await markRead(
       familyId: familyId,
@@ -102,6 +127,7 @@ void main() {
   });
 
   test('the writer enforces the closed type list and six parameters', () {
+    expect(rulesList('inboxTypes'), InboxType.all.toSet());
     NewInboxItem? ok() => InboxWriter.create(
       toMemberId: 'cara',
       type: InboxType.needsCover,

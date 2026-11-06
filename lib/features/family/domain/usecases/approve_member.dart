@@ -23,6 +23,9 @@ class ApproveMember {
     targetUid: targetUid,
     permission: Permission.approveMembers,
     eventType: 'member.approved',
+    shouldNotifyTarget: (target, updated) =>
+        target.status == MembershipStatus.pending &&
+        updated.status == MembershipStatus.active,
     decide: (target, all) {
       if (target.status == MembershipStatus.active) {
         return const Failure<Member>(Conflict(code: 'already_active'));

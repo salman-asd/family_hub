@@ -56,11 +56,10 @@ class ChoresInboxPort implements InboxPort {
     required String choreName,
     required String dateKey,
     required String byMemberId,
-  }) => _occurrence(InboxType.swapResult, toMemberId, occurrenceId, {
+  }) => _occurrence(InboxType.choreAssigned, toMemberId, occurrenceId, {
     'name': choreName,
     'date': dateKey,
     'by': byMemberId,
-    'outcome': 'reassigned',
   });
 
   @override

@@ -8,10 +8,31 @@ import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/module_flags.dart';
+import 'package:family_hub/features/family/domain/member_approval_notification.dart';
 
 /// Pure functions between domain objects and Firestore maps.  Kept free of any
 /// Firestore instance so they are unit-testable.
 abstract final class FamilyMappers {
+  static Map<String, dynamic> memberApprovalInboxMap(
+    MemberApprovalNotification notification,
+  ) => <String, dynamic>{
+    'toMemberId': notification.toMemberId,
+    'type': 'member_approved',
+    'refType': 'member',
+    'refId': notification.toMemberId,
+    'params': const <String, String>{},
+    'readAt': null,
+    'archivedAt': null,
+    ...BaseMapper.metadataToMap(
+      BaseDocumentMetadata(
+        createdAt: notification.at,
+        createdBy: notification.actorId,
+        updatedAt: notification.at,
+        updatedBy: notification.actorId,
+      ),
+    ),
+  };
+
   // ── Member ────────────────────────────────────────────────────────────────
 
   static Map<String, dynamic> memberToMap(

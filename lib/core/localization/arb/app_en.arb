@@ -4137,8 +4137,18 @@
   "@inboxToday": {},
   "inboxEarlier": "Earlier",
   "@inboxEarlier": {},
-  "inboxSparkNote": "You will see new requests when you open the app.",
+  "inboxSparkNote": "Reminders on this phone fire even when the app is closed; changes made by others (assignments and swap requests) appear here when you open the app.",
   "@inboxSparkNote": {},
+  "inboxBudgetAlert": "Your budget has reached {percent}%.",
+  "@inboxBudgetAlert": {"placeholders": {"percent": {"type": "String"}}},
+  "inboxPendingJoinRequests": "{count} family join requests need review.",
+  "@inboxPendingJoinRequests": {"placeholders": {"count": {"type": "String"}}},
+  "inboxPendingContributionRequests": "{count} contribution requests need review.",
+  "@inboxPendingContributionRequests": {"placeholders": {"count": {"type": "String"}}},
+  "inboxContributionDue": "Your monthly contribution is due.",
+  "@inboxContributionDue": {},
+  "inboxAwaitingVerification": "{count} chores are waiting for verification.",
+  "@inboxAwaitingVerification": {"placeholders": {"count": {"type": "String"}}},
   "inboxMarkAllRead": "Mark all as read",
   "@inboxMarkAllRead": {},
   "inboxUnreadSemantics": "Unread",
@@ -4322,6 +4332,8 @@
       }
     }
   },
+  "inboxMemberApproved": "Your request to join the family was approved.",
+  "@inboxMemberApproved": {},
   "inboxNeedsCover": "{name} is away from {from} to {to}: {count} chores need a cover",
   "@inboxNeedsCover": {
     "placeholders": {

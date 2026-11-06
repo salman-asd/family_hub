@@ -9,6 +9,7 @@ import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/member_approval_notification.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/membership_repository.dart';
 import 'package:family_hub/features/family/domain/relationship_catalog.dart';
@@ -42,6 +43,7 @@ class InMemoryBackend
   /// built-in defaults.
   final Map<String, RelationshipCatalog> relationshipCatalogs = {};
   final List<AuditEvent> events = [];
+  MemberApprovalNotification? lastApprovalNotification;
 
   /// H12: documents written by `FamilySeeder`s, by path.
   final Map<String, Map<String, dynamic>> seeded = {};
@@ -275,6 +277,7 @@ class InMemoryBackend
     List<Member> updated,
     AuditEvent event, {
     List<String>? adminIds,
+    MemberApprovalNotification? approvalNotification,
   }) async {
     final failed = _consumeFailure();
     if (failed != null) return failed;
@@ -283,6 +286,7 @@ class InMemoryBackend
     }
     if (adminIds != null) this.adminIds[familyId] = List<String>.of(adminIds);
     events.add(event);
+    lastApprovalNotification = approvalNotification;
     writes++;
     _notify();
     return const Success<void>(null);

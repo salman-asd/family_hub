@@ -4603,7 +4603,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inboxSparkNote =>
-      'You will see new requests when you open the app.';
+      'Reminders on this phone fire even when the app is closed; changes made by others (assignments and swap requests) appear here when you open the app.';
+
+  @override
+  String inboxBudgetAlert(String percent) {
+    return 'Your budget has reached $percent%.';
+  }
+
+  @override
+  String inboxPendingJoinRequests(String count) {
+    return '$count family join requests need review.';
+  }
+
+  @override
+  String inboxPendingContributionRequests(String count) {
+    return '$count contribution requests need review.';
+  }
+
+  @override
+  String get inboxContributionDue => 'Your monthly contribution is due.';
+
+  @override
+  String inboxAwaitingVerification(String count) {
+    return '$count chores are waiting for verification.';
+  }
 
   @override
   String get inboxMarkAllRead => 'Mark all as read';
@@ -4767,6 +4790,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String inboxReassigned(String name, String chore, String date) {
     return '$name moved $chore on $date to you';
   }
+
+  @override
+  String get inboxMemberApproved =>
+      'Your request to join the family was approved.';
 
   @override
   String inboxNeedsCover(String name, String count, String from, String to) {

@@ -13,8 +13,10 @@ abstract final class InboxType {
   static const String commentAttention = 'comment_attention';
   static const String verificationNeeded = 'verification_needed';
   static const String absenceDecision = 'absence_decision';
+  static const String choreAssigned = 'chore_assigned';
+  static const String memberApproved = 'member_approved';
 
-  /// The closed list of roadmap 3.2, mirrored by the P3-26 rules.
+  /// Stored inbox types, mirrored by `inboxTypes()` in Firestore rules.
   static const List<String> all = <String>[
     swapRequest,
     swapResult,
@@ -23,6 +25,8 @@ abstract final class InboxType {
     commentAttention,
     verificationNeeded,
     absenceDecision,
+    choreAssigned,
+    memberApproved,
   ];
 }
 

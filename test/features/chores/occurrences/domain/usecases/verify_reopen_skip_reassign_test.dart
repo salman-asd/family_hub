@@ -362,7 +362,7 @@ void main() {
       expect(event.fromAssigneeId, 'cara');
       expect(event.toAssigneeId, 'dave');
       expect(event.reason, 'কারা আজ ছুটিতে');
-      expect(useCases.inbox.sent, <String>['swap_result -> dave']);
+      expect(useCases.inbox.sent, <String>['chore_assigned -> dave']);
     });
 
     test('a reason is required', () async {
@@ -477,7 +477,7 @@ void main() {
       ),
       isNull,
     );
-    expect(InboxType.all, hasLength(7));
+    expect(InboxType.all, hasLength(9));
   });
 
   test('a plan with no event and no audit still stages the patch', () async {

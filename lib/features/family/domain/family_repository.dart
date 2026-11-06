@@ -5,6 +5,7 @@ import 'package:family_hub/features/family/domain/family.dart';
 import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/member_approval_notification.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 
@@ -65,6 +66,7 @@ abstract interface class FamilyRepository {
     List<Member> members,
     AuditEvent event, {
     List<String>? adminIds,
+    MemberApprovalNotification? approvalNotification,
   });
 
   Future<Result<void>> updateFamily(Family family, AuditEvent event);

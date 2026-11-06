@@ -6,6 +6,7 @@ import 'package:family_hub/features/chores/presentation/member_names.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/notifications/domain/inbox_item.dart';
 import 'package:family_hub/features/notifications/domain/inbox_port.dart';
+import 'package:family_hub/features/notifications/domain/virtual_inbox.dart';
 
 /// The sentence of one inbox row (P3-27), built from the row's few parameters.
 ///
@@ -29,6 +30,24 @@ String inboxTextOf(
       : formatters.fullDate(dateOfKey(parsed));
 
   switch (item.type) {
+    case VirtualInboxType.budgetAlert:
+      return l10n.inboxBudgetAlert(
+        formatters.number(int.tryParse(item.params['percent'] ?? '') ?? 0),
+      );
+    case VirtualInboxType.pendingJoinRequests:
+      return l10n.inboxPendingJoinRequests(
+        formatters.number(int.tryParse(item.params['count'] ?? '') ?? 0),
+      );
+    case VirtualInboxType.pendingContributionRequests:
+      return l10n.inboxPendingContributionRequests(
+        formatters.number(int.tryParse(item.params['count'] ?? '') ?? 0),
+      );
+    case VirtualInboxType.contributionDue:
+      return l10n.inboxContributionDue;
+    case VirtualInboxType.awaitingVerification:
+      return l10n.inboxAwaitingVerification(
+        formatters.number(int.tryParse(item.params['count'] ?? '') ?? 0),
+      );
     case InboxType.swapRequest:
       return item.params['kind'] == 'cover'
           ? l10n.inboxCoverRequest(who('from'), chore, date)
@@ -42,6 +61,10 @@ String inboxTextOf(
         'reassigned' => l10n.inboxReassigned(who('by'), chore, date),
         _ => l10n.inboxUnknown,
       };
+    case InboxType.choreAssigned:
+      return l10n.inboxReassigned(who('by'), chore, date);
+    case InboxType.memberApproved:
+      return l10n.inboxMemberApproved;
     case InboxType.needsCover:
       return l10n.inboxNeedsCover(
         who('member'),

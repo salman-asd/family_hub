@@ -6,6 +6,7 @@ import 'package:family_hub/core/utils/id_generator.dart';
 import 'package:family_hub/core/audit/audit_event.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/member_approval_notification.dart';
 import 'package:family_hub/features/family/domain/permission_access.dart';
 
 /// Shared skeleton of the single-member use cases: check the actor, load the
@@ -29,6 +30,7 @@ class MemberChangeRunner {
     required Permission permission,
     required String eventType,
     required Result<Member> Function(Member target, List<Member> all) decide,
+    bool Function(Member target, Member updated)? shouldNotifyTarget,
   }) async {
     final actor = await requirePermission(
       families,
@@ -68,6 +70,8 @@ class MemberChangeRunner {
         ? null
         : adminIds;
 
+    final at = clock.nowUtc();
+    final notifyTarget = shouldNotifyTarget?.call(target, updated) ?? false;
     final saved = await families.saveMembers(
       familyId,
       [updated],
@@ -81,9 +85,17 @@ class MemberChangeRunner {
         },
         refType: 'member',
         refId: targetUid,
-        at: clock.nowUtc(),
+        at: at,
       ),
       adminIds: writeAdminIds,
+      approvalNotification: notifyTarget
+          ? MemberApprovalNotification(
+              id: 'approved_${newId()}',
+              toMemberId: updated.uid,
+              actorId: actorUid,
+              at: at,
+            )
+          : null,
     );
     final failure = saved.failureOrNull;
     return failure != null

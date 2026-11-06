@@ -4136,8 +4136,18 @@
   "@inboxToday": {},
   "inboxEarlier": "আগে",
   "@inboxEarlier": {},
-  "inboxSparkNote": "আপনি অ্যাপ খুললে নতুন অনুরোধ দেখতে পাবেন।",
+  "inboxSparkNote": "অ্যাপ বন্ধ থাকলেও এই ফোনে অনুস্মারক আসবে; অন্যদের কাজ দেওয়া ও বদলির অনুরোধ অ্যাপ খুললে এখানে দেখা যাবে।",
   "@inboxSparkNote": {},
+  "inboxBudgetAlert": "আপনার বাজেট {percent}% হয়েছে।",
+  "@inboxBudgetAlert": {"placeholders": {"percent": {"type": "String"}}},
+  "inboxPendingJoinRequests": "পরিবারে যোগ দেওয়ার {count}টি অনুরোধ পর্যালোচনা করতে হবে।",
+  "@inboxPendingJoinRequests": {"placeholders": {"count": {"type": "String"}}},
+  "inboxPendingContributionRequests": "অবদানের {count}টি অনুরোধ পর্যালোচনা করতে হবে।",
+  "@inboxPendingContributionRequests": {"placeholders": {"count": {"type": "String"}}},
+  "inboxContributionDue": "এই মাসের আপনার অবদান দেওয়ার সময় হয়েছে।",
+  "@inboxContributionDue": {},
+  "inboxAwaitingVerification": "যাচাইয়ের জন্য {count}টি কাজ অপেক্ষা করছে।",
+  "@inboxAwaitingVerification": {"placeholders": {"count": {"type": "String"}}},
   "inboxMarkAllRead": "সব পড়া হয়েছে",
   "@inboxMarkAllRead": {},
   "inboxUnreadSemantics": "অপঠিত",
@@ -4321,6 +4331,8 @@
       }
     }
   },
+  "inboxMemberApproved": "পরিবারে যোগ দেওয়ার আপনার অনুরোধ অনুমোদিত হয়েছে।",
+  "@inboxMemberApproved": {},
   "inboxNeedsCover": "{name} {from} থেকে {to} পর্যন্ত নেই: {count}টি কাজে বদলি দরকার",
   "@inboxNeedsCover": {
     "placeholders": {

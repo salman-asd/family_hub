@@ -207,6 +207,23 @@ describe('notificationInbox', () => {
   it('lets an active member write a row for another member', async () => {
     await assertSucceeds(setDoc(doc(as(CARA), ib()), inboxDoc(CARA)));
   });
+  it('lets an active member write the two Phase 4 inbox types', async () => {
+    await assertSucceeds(
+      setDoc(doc(as(CARA), ib('assigned')), inboxDoc(CARA, { type: 'chore_assigned' })),
+    );
+    await assertSucceeds(
+      setDoc(
+        doc(as(ALICE), ib('approved')),
+        inboxDoc(ALICE, {
+          toMemberId: DAVE,
+          type: 'member_approved',
+          refType: 'member',
+          refId: DAVE,
+          params: {},
+        }),
+      ),
+    );
+  });
   it('denies a pre-read row, an unknown type, too many params, extra fields', async () => {
     await assertFails(setDoc(doc(as(CARA), ib()), inboxDoc(CARA, { readAt: nowTs() })));
     await assertFails(setDoc(doc(as(CARA), ib()), inboxDoc(CARA, { type: 'spam' })));

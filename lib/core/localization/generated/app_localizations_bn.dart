@@ -4581,7 +4581,32 @@ class AppLocalizationsBn extends AppLocalizations {
   String get inboxEarlier => 'আগে';
 
   @override
-  String get inboxSparkNote => 'আপনি অ্যাপ খুললে নতুন অনুরোধ দেখতে পাবেন।';
+  String get inboxSparkNote =>
+      'অ্যাপ বন্ধ থাকলেও এই ফোনে অনুস্মারক আসবে; অন্যদের কাজ দেওয়া ও বদলির অনুরোধ অ্যাপ খুললে এখানে দেখা যাবে।';
+
+  @override
+  String inboxBudgetAlert(String percent) {
+    return 'আপনার বাজেট $percent% হয়েছে।';
+  }
+
+  @override
+  String inboxPendingJoinRequests(String count) {
+    return 'পরিবারে যোগ দেওয়ার $countটি অনুরোধ পর্যালোচনা করতে হবে।';
+  }
+
+  @override
+  String inboxPendingContributionRequests(String count) {
+    return 'অবদানের $countটি অনুরোধ পর্যালোচনা করতে হবে।';
+  }
+
+  @override
+  String get inboxContributionDue =>
+      'এই মাসের আপনার অবদান দেওয়ার সময় হয়েছে।';
+
+  @override
+  String inboxAwaitingVerification(String count) {
+    return 'যাচাইয়ের জন্য $countটি কাজ অপেক্ষা করছে।';
+  }
 
   @override
   String get inboxMarkAllRead => 'সব পড়া হয়েছে';
@@ -4744,6 +4769,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String inboxReassigned(String name, String chore, String date) {
     return '$name $date-এর $chore আপনাকে দিয়েছেন';
   }
+
+  @override
+  String get inboxMemberApproved =>
+      'পরিবারে যোগ দেওয়ার আপনার অনুরোধ অনুমোদিত হয়েছে।';
 
   @override
   String inboxNeedsCover(String name, String count, String from, String to) {

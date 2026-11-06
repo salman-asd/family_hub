@@ -2,6 +2,7 @@ import 'package:family_hub/app/theme/app_tokens.dart';
 import 'package:family_hub/core/localization/l10n_ext.dart';
 import 'package:family_hub/features/notifications/domain/inbox_item.dart';
 import 'package:family_hub/features/notifications/domain/inbox_port.dart';
+import 'package:family_hub/features/notifications/domain/virtual_inbox.dart';
 import 'package:flutter/material.dart';
 
 /// One row of the inbox (P3-27): icon, sentence, an unread marker that is a dot
@@ -26,6 +27,13 @@ class InboxTile extends StatelessWidget {
     InboxType.commentAttention => Icons.flag_outlined,
     InboxType.verificationNeeded => Icons.fact_check_outlined,
     InboxType.absenceDecision => Icons.event_available_outlined,
+    InboxType.choreAssigned => Icons.assignment_turned_in_outlined,
+    InboxType.memberApproved => Icons.verified_outlined,
+    VirtualInboxType.budgetAlert => Icons.account_balance_wallet_outlined,
+    VirtualInboxType.pendingJoinRequests => Icons.group_add_outlined,
+    VirtualInboxType.pendingContributionRequests => Icons.savings_outlined,
+    VirtualInboxType.contributionDue => Icons.payments_outlined,
+    VirtualInboxType.awaitingVerification => Icons.fact_check_outlined,
     _ => Icons.notifications_none_rounded,
   };
 

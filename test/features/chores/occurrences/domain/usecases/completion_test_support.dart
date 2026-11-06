@@ -185,7 +185,7 @@ class RecordingInboxPort implements InboxPort {
     required String dateKey,
     required String byMemberId,
   }) => _record(
-    InboxType.swapResult,
+    InboxType.choreAssigned,
     toMemberId,
     occurrenceId,
     <String, String>{'name': choreName, 'date': dateKey, 'by': byMemberId},

@@ -1,6 +1,7 @@
 import 'package:family_hub/features/family/data/relationship_mappers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:family_hub/core/audit/audit_event.dart';
+import 'package:family_hub/core/audit/audit_event_type.dart';
 import 'package:family_hub/core/errors/result.dart';
 import 'package:family_hub/core/firebase/audit_writer.dart';
 import 'package:family_hub/core/firebase/base_mapper.dart';
@@ -17,6 +18,7 @@ import 'package:family_hub/features/family/domain/family_seeder.dart';
 import 'package:family_hub/features/family/domain/family_repository.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/member_approval_notification.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/relationship_catalog.dart';
 
@@ -217,6 +219,7 @@ class FirestoreFamilyRepository implements FamilyRepository {
     List<Member> members,
     AuditEvent event, {
     List<String>? adminIds,
+    MemberApprovalNotification? approvalNotification,
   }) => guardWrite(
     probe: _probe(event.actorId),
     () => _tx.runBatch((b) {
@@ -225,6 +228,13 @@ class FirestoreFamilyRepository implements FamilyRepository {
         b.update(
           FirestorePaths.memberDoc(familyId, m.uid),
           FamilyMappers.memberChangeMap(m, actorUid: event.actorId, now: now),
+        );
+      }
+      if (event.type == AuditEventType.memberApproved &&
+          approvalNotification != null) {
+        b.set(
+          FirestorePaths.inboxDoc(familyId, approvalNotification.id),
+          FamilyMappers.memberApprovalInboxMap(approvalNotification),
         );
       }
       // H6: keep `families/{f}.adminIds` truthful in the SAME batch.  The

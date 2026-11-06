@@ -8041,8 +8041,38 @@ abstract class AppLocalizations {
   /// No description provided for @inboxSparkNote.
   ///
   /// In bn, this message translates to:
-  /// **'আপনি অ্যাপ খুললে নতুন অনুরোধ দেখতে পাবেন।'**
+  /// **'অ্যাপ বন্ধ থাকলেও এই ফোনে অনুস্মারক আসবে; অন্যদের কাজ দেওয়া ও বদলির অনুরোধ অ্যাপ খুললে এখানে দেখা যাবে।'**
   String get inboxSparkNote;
+
+  /// No description provided for @inboxBudgetAlert.
+  ///
+  /// In bn, this message translates to:
+  /// **'আপনার বাজেট {percent}% হয়েছে।'**
+  String inboxBudgetAlert(String percent);
+
+  /// No description provided for @inboxPendingJoinRequests.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারে যোগ দেওয়ার {count}টি অনুরোধ পর্যালোচনা করতে হবে।'**
+  String inboxPendingJoinRequests(String count);
+
+  /// No description provided for @inboxPendingContributionRequests.
+  ///
+  /// In bn, this message translates to:
+  /// **'অবদানের {count}টি অনুরোধ পর্যালোচনা করতে হবে।'**
+  String inboxPendingContributionRequests(String count);
+
+  /// No description provided for @inboxContributionDue.
+  ///
+  /// In bn, this message translates to:
+  /// **'এই মাসের আপনার অবদান দেওয়ার সময় হয়েছে।'**
+  String get inboxContributionDue;
+
+  /// No description provided for @inboxAwaitingVerification.
+  ///
+  /// In bn, this message translates to:
+  /// **'যাচাইয়ের জন্য {count}টি কাজ অপেক্ষা করছে।'**
+  String inboxAwaitingVerification(String count);
 
   /// No description provided for @inboxMarkAllRead.
   ///
@@ -8331,6 +8361,12 @@ abstract class AppLocalizations {
   /// In bn, this message translates to:
   /// **'{name} {date}-এর {chore} আপনাকে দিয়েছেন'**
   String inboxReassigned(String name, String chore, String date);
+
+  /// No description provided for @inboxMemberApproved.
+  ///
+  /// In bn, this message translates to:
+  /// **'পরিবারে যোগ দেওয়ার আপনার অনুরোধ অনুমোদিত হয়েছে।'**
+  String get inboxMemberApproved;
 
   /// No description provided for @inboxNeedsCover.
   ///

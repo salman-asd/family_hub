@@ -941,12 +941,16 @@ service cloud.firestore {
               'archivedAt', 'createdAt', 'createdBy', 'updatedAt',
               'updatedBy', 'schemaVersion', 'deletedAt', 'deletedBy'];
     }
+    function inboxTypes() {
+      return ['swap_request', 'swap_result', 'needs_cover',
+              'chore_reopened', 'comment_attention',
+              'verification_needed', 'absence_decision',
+              'chore_assigned', 'member_approved'];
+    }
     function inboxOk(d) {
       return d.keys().hasOnly(inboxKeys())
         && str(d.get('toMemberId', ''), 1, 64)
-        && d.get('type', '') in ['swap_request', 'swap_result', 'needs_cover',
-                                 'chore_reopened', 'comment_attention',
-                                 'verification_needed', 'absence_decision']
+        && d.get('type', '') in inboxTypes()
         && str(d.get('refType', ''), 1, 40)
         && str(d.get('refId', ''), 1, 200)
         && d.get('params', {}) is map

@@ -3,12 +3,34 @@ import 'package:family_hub/core/utils/clock.dart';
 import 'package:family_hub/features/family/data/family_mappers.dart';
 import 'package:family_hub/features/family/domain/invitation.dart';
 import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/domain/member_approval_notification.dart';
 import 'package:family_hub/features/family/domain/member_role.dart';
 import 'package:family_hub/features/family/domain/membership.dart';
 import 'package:family_hub/features/family/domain/module_flags.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('approval inbox row contains only the closed notification shape', () {
+    final at = DateTime.utc(2026, 10, 18, 9);
+    final map = FamilyMappers.memberApprovalInboxMap(
+      MemberApprovalNotification(
+        id: 'approved_1',
+        toMemberId: 'member-2',
+        actorId: 'admin',
+        at: at,
+      ),
+    );
+
+    expect(map, containsPair('type', 'member_approved'));
+    expect(map, containsPair('refType', 'member'));
+    expect(map, containsPair('refId', 'member-2'));
+    expect(map, containsPair('toMemberId', 'member-2'));
+    expect(map, containsPair('createdBy', 'admin'));
+    expect(map, containsPair('updatedBy', 'admin'));
+    expect(map['params'], isEmpty);
+    expect(map['schemaVersion'], 1);
+  });
+
   test('member round-trips through a map, including removal', () {
     final removed = DateTime.utc(2026, 10, 1, 5);
     final m = Member(

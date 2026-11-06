@@ -8,10 +8,11 @@ import 'package:family_hub/features/chores/swaps/presentation/swap_providers.dar
 import 'package:family_hub/features/chores/swaps/presentation/swap_response_sheet.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/features/notifications/domain/inbox_item.dart';
+import 'package:family_hub/features/notifications/domain/inbox_port.dart';
+import 'package:family_hub/features/notifications/domain/virtual_inbox.dart';
 import 'package:family_hub/features/notifications/presentation/inbox_providers.dart';
 import 'package:family_hub/features/notifications/presentation/inbox_text.dart';
 import 'package:family_hub/features/notifications/presentation/inbox_tile.dart';
-import 'package:family_hub/modules/module_providers.dart';
 import 'package:family_hub/shared/widgets/empty_state.dart';
 import 'package:family_hub/shared/widgets/error_view.dart';
 import 'package:flutter/material.dart';
@@ -32,14 +33,55 @@ class InboxScreen extends ConsumerWidget {
   ) async {
     final familyId = ref.read(currentFamilyIdProvider);
     final uid = ref.read(currentUidProvider);
-    if (item.isUnread && familyId != null && uid != null) {
-      unawaited(
-        ref.read(markInboxReadProvider)(
+    if (item.isUnread) {
+      if (item.id.startsWith('v:')) {
+        final saved = await ref.read(markVirtualInboxReadProvider)(<String>[
+          item.id,
+        ]);
+        if (!saved && context.mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(context.l10n.errorUnknown)));
+        }
+      } else if (familyId != null && uid != null) {
+        final result = await ref.read(markInboxReadProvider)(
           familyId: familyId,
           actorUid: uid,
           ids: <String>[item.id],
-        ),
-      );
+        );
+        if (result.failureOrNull != null && context.mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(context.l10n.errorUnknown)));
+        }
+      }
+    }
+    if (!context.mounted) return;
+
+    switch (item.type) {
+      case VirtualInboxType.budgetAlert:
+        if (context.mounted) {
+          unawaited(context.push(AppRoutes.bazarBudget));
+        }
+        return;
+      case VirtualInboxType.pendingJoinRequests:
+        if (context.mounted) {
+          unawaited(context.push(AppRoutes.familyMembers));
+        }
+        return;
+      case VirtualInboxType.pendingContributionRequests:
+        if (context.mounted) {
+          unawaited(context.push(AppRoutes.bazarFundPending));
+        }
+        return;
+      case VirtualInboxType.contributionDue:
+        if (context.mounted) {
+          unawaited(context.push(AppRoutes.bazarFund));
+        }
+        return;
+      case VirtualInboxType.awaitingVerification:
+        if (context.mounted) {
+          unawaited(context.push(AppRoutes.choresVerify));
+        }
+        return;
     }
     switch (item.refType) {
       case AuditRefType.swapRequest:
@@ -51,12 +93,18 @@ class InboxScreen extends ConsumerWidget {
           }
         }
       case AuditRefType.availability:
-        if (context.mounted)
+        if (context.mounted) {
           unawaited(context.push(AppRoutes.choresAvailability));
+        }
       case AuditRefType.occurrence:
         if (context.mounted) {
           unawaited(context.push(AppRoutes.choresOccurrence(item.refId)));
         }
+      case AuditRefType.member:
+        if (item.type == InboxType.memberApproved) {
+          unawaited(context.push(AppRoutes.home));
+        }
+        return;
     }
   }
 
@@ -67,9 +115,7 @@ class InboxScreen extends ConsumerWidget {
     final formatters = ref.watch(appFormattersProvider);
     final inbox = ref.watch(inboxProvider);
     final members = ref.watch(membersProvider).value ?? const [];
-    final choresOn = ref
-        .watch(enabledModulesProvider)
-        .any((module) => module.id == 'chores');
+    final visibleItems = ref.watch(visibleInboxItemsProvider);
     final today = ref.watch(familyDateKeysProvider);
     final now = today.today();
 
@@ -85,17 +131,39 @@ class InboxScreen extends ConsumerWidget {
             onPressed: () {
               final familyId = ref.read(currentFamilyIdProvider);
               final uid = ref.read(currentUidProvider);
-              final unread = <String>[
-                for (final i in inbox.value ?? const <InboxItem>[])
-                  if (i.isUnread) i.id,
-              ];
-              if (familyId == null || uid == null || unread.isEmpty) return;
+              final unread = visibleItems
+                  .where((item) => item.isUnread)
+                  .toList(growable: false);
+              if (unread.isEmpty) return;
+              if (familyId != null && uid != null) {
+                unawaited(
+                  ref
+                      .read(markAllReadProvider)(
+                        familyId: familyId,
+                        actorUid: uid,
+                        items: unread,
+                      )
+                      .then((result) {
+                        if (result.failureOrNull != null && context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(l10n.errorUnknown)),
+                          );
+                        }
+                      }),
+                );
+              }
               unawaited(
-                ref.read(markInboxReadProvider)(
-                  familyId: familyId,
-                  actorUid: uid,
-                  ids: unread,
-                ),
+                ref
+                    .read(markVirtualInboxReadProvider)(
+                      unread.map((item) => item.id).toList(growable: false),
+                    )
+                    .then((saved) {
+                      if (!saved && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(l10n.errorUnknown)),
+                        );
+                      }
+                    }),
               );
             },
           ),
@@ -107,8 +175,8 @@ class InboxScreen extends ConsumerWidget {
           message: l10n.choresFailure_unknown,
           onRetry: () => ref.invalidate(inboxProvider),
         ),
-        data: (all) {
-          final items = choresOn ? all : const <InboxItem>[];
+        data: (_) {
+          final items = visibleItems;
           final todays = <InboxItem>[];
           final earlier = <InboxItem>[];
           for (final item in items) {

@@ -2092,3 +2092,29 @@ Firestore schema, rules, or indexes changed.
 The full analyzer/test gate and physical-device checks remain outstanding under
 C1. Cross-device delivery-setting persistence and the local test-notification
 flow have not been verified on a device.
+
+## Phase 4 - P4-17 inbox and foreground delivery
+
+Implemented the merged stored/virtual inbox, local per-month virtual read state,
+mark-all-read, module-aware filtering, and localized copy. Reassignment now
+creates `chore_assigned`; pending-member approval stages `member_approved` in
+the same family batch. The foreground bridge suppresses old inbox rows, routes
+Normal events to local notifications, handles foreground FCM messages, and
+deduplicates both paths by persisted inbox id. Firestore rules and type-list
+parity tests include the two stored types; no collection or index was added.
+
+| Check | Result |
+| --- | --- |
+| `flutter gen-l10n` | Passed. |
+| Focused analyzer on changed P4-17 Dart files | Passed; zero issues. |
+| Focused notification, virtual inbox, family approval, and reassignment tests | Passed. |
+| `test/architecture/layer_boundaries_test.dart` and `test/architecture/file_size_test.dart` | Passed. |
+| `git diff --check` and `node --check firebase/rules_test/chore_swaps.test.mjs` | Passed. |
+| Full `flutter analyze` | Fails on existing unrelated issues including `session_hook.dart`, `chore_tile_mapping.dart`, reports, and calendar files; no P4-17 paths were reported. |
+| `flutter test --exclude-tags golden` | Fails on existing compile errors outside P4-17, including `chore_tile_mapping.dart`, `session_hook.dart`, reports, and calendar files. |
+| Firestore emulator rules tests | Could not run: Java is not installed/on `PATH` (`Could not spawn java -version`). |
+| Hot restart | Attempted through the connected DTD; no active Flutter app was registered. |
+
+C1 and the full repository gates remain incomplete. The inbox screen’s complete
+widget suite and the Firestore emulator cases still need a clean build/JDK; the
+foreground notification flow also needs physical-device verification.
