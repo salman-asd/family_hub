@@ -2,12 +2,15 @@
 
 **Status: NOT SIGNED OFF.** This is the P4-25 evidence record. The automated
 half of the gate is green on 2026-11-07: `flutter test --exclude-tags golden`
-3275 passed / 0 failed / 0 skipped, `flutter analyze` no issues, `dart format .`
-clean, `node tools/check_indexes.mjs` OK. `[ ]` manual boxes remain incomplete
+3276 passed / 0 failed / 0 skipped, `flutter analyze` no issues, `dart format .`
+clean, `node tools/check_indexes.mjs` OK. The Firestore rules suite now runs for
+the first time — **138 of 153 rules tests pass**, and the 15 failures are all
+chore-occurrence/comment writes hitting the emulator's 1000-expression limit, not
+a permission decision going the wrong way. `[ ]` manual boxes remain incomplete
 unless evidence is linked in the Notes column. Do not infer a device or Firebase
 result from a passing widget test, and do not read this record as acceptance:
-the rules emulator, real devices, family UAT, owner copy review and Linux
-goldens have not been run.
+real devices, family UAT, owner copy review, Linux goldens and a production
+deploy have not been run.
 
 | # | Acceptance criterion | Status | Notes / evidence required |
 |---|---|---|---|
@@ -21,7 +24,7 @@ goldens have not been run.
 | 8 | Reminder switches and explanations behave as specified. | Partial | Widget/domain tests exist; finish the real-device permission and settings flow checks. |
 | 9 | Planner edge cases, limits, and stable identifiers are covered. | Automated | 23 planner tests run inside the green full-suite run above (quiet hours, per-template suppression, overdue, nudge, morning summary, push-excluded types, the 60-notification cap, stable sorted ids). The device half is row 7. |
 | 10 | Scoring is deterministic and monotonic; concurrent syncs preserve results; finalized months stay frozen. | Partial | Sync and scoring unit tests exist. `test/features/chores/achievements/concurrency/stats_sync_concurrency_test.dart` (3 tests) now covers two phones of one member: they converge, the second writes nothing, and a late phone adds a chore once. Its last test records the one case that is **not** preserved — a phone writing from a read taken before the other wrote, because `MemberStatsRepository.save` is a blind set. Guarding that write is Phase 5; see [phase4_polish_audit.md](./phase4_polish_audit.md) item 22. |
-| 11 | Private stats and points-free sharing are enforced by rules and UI. | Not verified in this review | UI and domain tests exist; the rules themselves are unproven here. Run `npx firebase emulators:exec --only firestore --project demo-family-hub "npm --prefix firebase/rules_test test"` (needs JDK 21+ on `PATH`) and UAT task 11 — Java is not installed on this machine, so the emulator could not start. |
+| 11 | Private stats and points-free sharing are enforced by rules and UI. | Rules measured; UI half unproven | `firebase/rules_test` now executes: `contributions`, `engagement_stats`, `activity` and the `contract` suites are fully green, so the rules side of this row is measured — 138/153 pass overall and the 15 failures are all chore-occurrence/comment writes (see [phase4_polish_audit.md](./phase4_polish_audit.md) item 23). Previously "Java is not installed" was wrong: the emulator needs JDK 21+ and `C:\Program Files\Android\Android Studio\jbr` supplies OpenJDK 25. UAT task 11 on a real device remains open. |
 | 12 | Daily celebration is once per day, avoids stale cold-start celebration, and respects reduced motion. | Automated partial | Celebration tests pass (7 tests), including a shared in-memory two-session race and offline fallback. Firestore transaction race and device motion checks remain. The offline fallback is device-local and cannot guarantee cross-device deduplication. |
 | 13 | No star ratings or rankings appear. | Review pending | Complete a product-wide screen/content review and record the reviewer/date. |
 | 14 | Activity types have Bangla/English text; filtering and paging do not grow listeners. | Partial | Run activity localization, paging, and listener tests; no read-budget evidence is recorded here. |

@@ -44,7 +44,7 @@ no push backend in this build (P4-15 and P4-26 are deferred, Appendix I), so a
 message can only come from the Firebase console. The rows that remain real work
 are the console sends in steps 5–7, the permission flow in step 3, and the
 sign-out / leave-family device-record checks in steps 8–10; the app can be built
-against `familyhub-dev` for them with
+against `familyhub-app-ai` for them with
 
 ```bash
 flutter build apk --flavor dev -t lib/main_dev.dart

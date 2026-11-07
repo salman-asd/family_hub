@@ -226,7 +226,7 @@ Set up localization and typography.
 
 **Goal:** Firebase connected, offline persistence on, emulator ready.
 
-**You do manually first:** create two Firebase projects (`familyhub-dev`, `familyhub-prod`), enable Email/Password sign-in, create Firestore in the region nearest your family, and note that the Firestore location is permanent `[VERIFY]` before choosing. Confirm current Spark limits in the Firebase console `[VERIFY]`.
+**You do manually first:** create one Firebase project (`familyhub-app-ai`) — the owner chose a single project over the planned dev/prod pair, so there is no sandbox database; enable Email/Password sign-in, create Firestore in the region nearest your family, and note that the Firestore location is permanent `[VERIFY]` before choosing. Confirm current Spark limits in the Firebase console `[VERIFY]`.
 
 ```text
 Integrate Firebase for both flavors.
@@ -695,11 +695,15 @@ Add golden tests for dashboard, calendar and expense form in each registered the
 ### Phase 4 acceptance gate
 
 > **Status (2026-11-07):** Steps 27–31 are delivered as P4-01 … P4-25 and the
-> automated gate is green (3275 tests, `flutter analyze` clean). The gate below
-> is **not** signed off: the first bullet is only partly met — Home measures 13
+> automated gate is green (3276 tests, `flutter analyze` clean). The rules
+> emulator ran for the first time and found that `firestore.rules` had never
+> compiled; it does now, with 138 of its 153 tests passing. A first device run on
+> an Android emulator found a startup crash that no widget test could see
+> (finding 25 of `docs/phase4_polish_audit.md`); it is fixed. The gate below is
+> **not** signed off: the first bullet is only partly met — Home measures 13
 > live listeners where the plan said seven
 > (`docs/phase4_read_budget.md`) — and the second and third are proven in tests
-> only; no device run, family UAT, rules-emulator run or Linux golden exists
+> only; no family UAT, real-phone run or Linux golden exists
 > yet. Evidence and the exact open rows: `docs/phase4_acceptance.md`. P4-26
 > (scheduled push sweeper) stays deferred with the Spark push sender.
 

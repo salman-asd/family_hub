@@ -217,10 +217,6 @@ service cloud.firestore {
     function canReadFamilyData(f) {
       return isActiveMember(f);
     }
-    // A record the caller creates for themselves in their own family.
-    function canWriteOwnRecord(f) {
-      return verified() && isActiveMember(f) && createsAsSelf();
-    }
     // Integer paisa that is present and non-negative.
     function moneyOk(data, key) {
       return key in data.keys() && isNonNegativeInt(data[key]);
@@ -545,7 +541,7 @@ service cloud.firestore {
                     >= resource.data.get('processedThrough', '')))
         && (d.get('lastCelebratedDateKey', null) == null
             || (dateKeyOk(d.lastCelebratedDateKey)
-                && d.lastCelebratedDateKey <= todayKey(f)))
+                && d.lastCelebratedDateKey <= todayKey()))
         && (resource.data.get('lastCelebratedDateKey', null) == null
             || d.get('lastCelebratedDateKey', null) is string
             && d.lastCelebratedDateKey
@@ -831,7 +827,7 @@ service cloud.firestore {
         && d.dateKey.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
         && occurrenceIdMatchesDate(id, d)
         && monthKeyOk(d.get('monthKey', ''))
-        && d.monthKey == d.dateKey.substring(0, 7)
+        && d.dateKey.matches('^' + d.monthKey + '-[0-9]{2}$')
         && d.get('dueAt', null) is timestamp
         && d.get('templateRev', 0) is int && d.templateRev >= 1
         && optStr(d, 'slotKey', 12)
@@ -909,28 +905,6 @@ service cloud.firestore {
     function occurrenceEventPath(f, o, e) {
       return /databases/$(database)/documents/families/$(f)/choreOccurrences/$(o)/events/$(e);
     }
-    // The snapshot fields a template edit may refresh (P3-12 replan).
-    function occurrenceSnapshotUnchanged(after, before) {
-      return after.get('templateId', '') == before.get('templateId', '')
-        && after.get('slotKey', null) == before.get('slotKey', null)
-        && after.get('dateKey', '') == before.get('dateKey', '')
-        && after.get('monthKey', '') == before.get('monthKey', '')
-        && after.get('templateRev', 0) == before.get('templateRev', 0)
-        && after.get('nameBn', '') == before.get('nameBn', '')
-        && after.get('nameEn', null) == before.get('nameEn', null)
-        && after.get('groupId', null) == before.get('groupId', null)
-        && after.get('instructions', '') == before.get('instructions', '')
-        && after.get('subtasks', []) == before.get('subtasks', [])
-        && after.get('requiredCount', 0) == before.get('requiredCount', 0)
-        && after.get('difficulty', 'normal') == before.get('difficulty', 'normal')
-        && after.get('estimatedMinutes', null)
-             == before.get('estimatedMinutes', null)
-        && after.get('verification', 'off') == before.get('verification', 'off')
-        && after.get('dueAt', null) == before.get('dueAt', null)
-        && after.get('dueMinutes', null) == before.get('dueMinutes', null)
-        && after.get('createdAt', null) == before.get('createdAt', null)
-        && after.get('createdBy', '') == before.get('createdBy', '');
-    }
     // D-P3-14: a plain member only acts on somebody else's chore when the
     // family switch allows it.  Absent document or key = false.
     function membersMayCompleteForOthers(f) {
@@ -981,7 +955,7 @@ service cloud.firestore {
     // `timestamp.date(timestamp.value(..))`, `.year` and `.toString()`.
     // Still fixed to UTC+6 (M-07, ADR 0014, CLAUDE.md rule 46): the family
     // timezone setting is not read.
-    function todayKey(f) {
+    function todayKey() {
       let local = request.time + duration.value(6, 'h');
       return string(local.year()) + '-'
         + (local.month() < 10 ? '0' : '') + string(local.month()) + '-'
@@ -1010,11 +984,6 @@ service cloud.firestore {
             || (d.redoSubtaskIds is list && d.redoSubtaskIds.size() <= 30))
         && d.get('deletedAt', null) == null
         && d.get('deletedBy', null) == null;
-    }
-    // Every occurrence update keeps the metadata and the soft-delete pair of a
-    // live document; only the transitions listed in the match block change it.
-    function occurrenceLive() {
-      return resource.data.get('deletedAt', null) == null;
     }
     function occurrenceChanged() {
       return request.resource.data.diff(resource.data).affectedKeys();
@@ -1054,9 +1023,6 @@ service cloud.firestore {
     // exactly what the matching mapper writes (mirrored in the Dart tests).
     function swapPath(f, r) {
       return /databases/$(database)/documents/families/$(f)/swapRequests/$(r);
-    }
-    function dateKeyOk(v) {
-      return v is string && v.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$');
     }
     function availabilityKeys() {
       return ['memberId', 'startDateKey', 'endDateKey', 'typeId', 'reason',
@@ -1340,9 +1306,6 @@ service cloud.firestore {
     function contributionMethods() {
       return ['cash', 'bkash', 'nagad', 'bank', 'other'];
     }
-    function contributionPath(f, c) {
-      return /databases/$(database)/documents/families/$(f)/contributions/$(c);
-    }
     function fundTxPathOf(f, t) {
       return /databases/$(database)/documents/families/$(f)/fundTransactions/$(t);
     }
@@ -1549,15 +1512,6 @@ service cloud.firestore {
     function expenseOwner(f, e) {
       return exists(expensePath(f, e))
         && get(expensePath(f, e)).data.get('createdBy', '') == request.auth.uid;
-    }
-    // D-P2-5: contributions are visible to every active member by default.
-    // The switch only exists for families that want to restrict the list.
-    function canViewAllContributions(f) {
-      return isActiveMember(f)
-        && (financeManager(f)
-            || !exists(permissionsPath(f))
-            || get(permissionsPath(f)).data
-                .get('membersViewAllContributions', true) == true);
     }
     function expenseOk(d) {
       return d.keys().hasOnly(expenseKeys())
@@ -1825,38 +1779,56 @@ service cloud.firestore {
         ? get(memberPath(f, request.auth.uid)).data
         : {};
     }
-    function isMember(f) {
-      return signedIn() && exists(memberPath(f, request.auth.uid));
+    // Every role question is answered from ONE `me(f)` read of the caller's
+    // member document, passed through these two predicates.  Rules
+    // re-evaluate a function at every call site, so the old chain (`isManager`
+    // over `isAdmin` and `isMod`, each over `isActiveMember` and `role`, each
+    // over `me`) cost six `me` reads - twelve document accesses - and a single
+    // write can only afford twenty of them, which the chore rules needed
+    // several times over.
+    function activeIn(m) {
+      return m.get('status', 'pending') == 'active'
+        && m.get('removedAt', null) == null;
+    }
+    function roleIn(m) {
+      return m.get('role', '');
     }
     function role(f) {
-      return me(f).get('role', '');
+      return roleIn(me(f));
     }
     // Active = approved, and not rejected (soft delete) or disabled.
     function isActiveMember(f) {
-      return signedIn()
-        && me(f).get('status', 'pending') == 'active'
-        && me(f).get('removedAt', null) == null;
+      let m = me(f);
+      return signedIn() && activeIn(m);
     }
     function isAdmin(f) {
-      return isActiveMember(f) && role(f) == 'admin';
+      let m = me(f);
+      return signedIn() && activeIn(m) && roleIn(m) == 'admin';
     }
     function isMod(f) {
-      return isActiveMember(f) && role(f) == 'moderator';
+      let m = me(f);
+      return signedIn() && activeIn(m) && roleIn(m) == 'moderator';
     }
     // Admin or moderator: may invite and decide requests (Step 9 rule).
     function isManager(f) {
-      return isAdmin(f) || isMod(f);
+      let m = me(f);
+      return signedIn()
+        && activeIn(m)
+        && (roleIn(m) == 'admin' || roleIn(m) == 'moderator');
     }
     // The catalog and budgets are finance-managed: an admin always, a moderator
     // only while `settings/permissions.moderatorManagesFinance` is true
     // (missing document/key = true, the domain default).
     function financeManager(f) {
-      return isAdmin(f)
-        || (isMod(f)
-            && (exists(permissionsPath(f))
-                ? get(permissionsPath(f)).data
-                    .get('moderatorManagesFinance', true) == true
-                : true));
+      let m = me(f);
+      return signedIn()
+        && activeIn(m)
+        && (roleIn(m) == 'admin'
+            || (roleIn(m) == 'moderator'
+                && (exists(permissionsPath(f))
+                    ? get(permissionsPath(f)).data
+                        .get('moderatorManagesFinance', true) == true
+                    : true)));
     }
 
     // ── Member invitations (H7) ────────────────────────────────────────────
@@ -2556,7 +2528,7 @@ service cloud.firestore {
           && isManager(f)
           && (request.resource.data.get('statsVisibility', 'private')
                 == 'private' || isAdmin(f))
-          && request.resource.data.get('startedOn', '') == todayKey(f)
+          && request.resource.data.get('startedOn', '') == todayKey()
           && createsAsSelf()
           && engagementSettingsOk(request.resource.data);
         allow update: if verified()
@@ -2571,7 +2543,7 @@ service cloud.firestore {
                       == resource.data.get('startedOn', ''))
               || (!resource.data.get('enabled', true)
                   && request.resource.data.get('enabled', true)
-                  && request.resource.data.startedOn == todayKey(f))
+                  && request.resource.data.startedOn == todayKey())
               || (!resource.data.get('enabled', true)
                   && !request.resource.data.get('enabled', true)
                   && request.resource.data.startedOn
@@ -2975,7 +2947,7 @@ service cloud.firestore {
           && prev().get('subtaskDone', {}).size() == 0
           && prev().get('completedAt', null) == null
           && prev().get('reopenCount', 0) == 0
-          && (next().get('dateKey', '') > todayKey(f))
+          && (next().get('dateKey', '') > todayKey())
           && occurrenceChanged()
                .hasOnly(['deletedAt', 'deletedBy', 'updatedAt', 'updatedBy']);
 

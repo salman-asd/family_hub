@@ -193,6 +193,10 @@ Finish with: files changed, exact commands to verify, assumptions.
 **Goal:** the Phase 1 scenario works on a **real device against a real `familyhub-dev` project**, rules and indexes deploy cleanly, and a release APK can reach the internet.
 **Fixes:** F-02, F-03, F-04, F-05, F-32.
 
+> **2026-11-07:** the two-project plan below is superseded — there is now one project,
+> `familyhub-app-ai`, for both flavors. `firebase/README.md` is the live procedure; this section
+> is kept as the historical record of what Phase 1 H2 asked for.
+
 **You do manually first** (the AI cannot do this):
 1. In the Firebase console confirm both projects exist (`familyhub-dev`, `familyhub-prod`), plan = **Spark**, Authentication → Email/Password enabled, Firestore created (the location is permanent — pick the region closest to Bangladesh that is offered **[VERIFY in the console]**).
 2. Add an Android app to each project: dev = `com.familyhub.family_hub.dev`, prod = `com.familyhub.family_hub`. Add your debug **SHA-1/SHA-256** to the dev app.

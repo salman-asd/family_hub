@@ -30,7 +30,7 @@ class FirebaseNotConfiguredException implements Exception {
   String toString() =>
       'Firebase is not configured for the ${flavor.name} flavor: the options '
       'still contain placeholder keys. Run `flutterfire configure` for '
-      'project familyhub-${flavor.name} (see firebase/README.md).';
+      'project familyhub-app-ai (see firebase/README.md).';
 }
 
 /// Fails fast on placeholder credentials unless running against the emulator.

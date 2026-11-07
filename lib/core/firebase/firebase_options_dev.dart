@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart'
 
 /// Default [FirebaseOptions] for the `dev` flavor.
 ///
-/// Generated / structured for Firebase project `familyhub-dev`.
+/// Generated / structured for Firebase project `familyhub-app-ai`.
 /// Replace placeholder API keys and app IDs when the live Firebase project
 /// is provisioned with FlutterFire CLI.
 class DevFirebaseOptions {
-  static const String projectId = 'familyhub-dev';
+  static const String projectId = 'familyhub-app-ai';
 
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {

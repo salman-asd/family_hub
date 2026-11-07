@@ -33,7 +33,12 @@ final celebrationOrchestrationProvider = Provider<void>((ref) {
   final familyId = ref.watch(currentFamilyIdProvider);
   final memberId = ref.watch(currentUidProvider);
   if (phase != SessionPhase.active || familyId == null || memberId == null) {
-    ref.read(celebrationControllerProvider.notifier).reset();
+    // `app.dart` watches this provider from its build method, and Riverpod 3
+    // refuses a provider that notifies another one while it is still building.
+    // The notifier is captured now because `ref` may be gone by the time the
+    // microtask runs.
+    final controller = ref.read(celebrationControllerProvider.notifier);
+    unawaited(Future<void>.microtask(controller.reset));
     return;
   }
 

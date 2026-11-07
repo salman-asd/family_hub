@@ -48,6 +48,19 @@ implementation.
 
 ## Debts Phase 4 hands over (measured, not assumed)
 
+- **The chore rules exceed the emulator's expression budget, and had never
+  compiled before 2026-11-07.** `firebase/firestore.rules` is now compilable and
+  138 of its 153 tests pass, but 15 fail with `maximum of 1000 expressions to
+  evaluate has been reached` (or time out) on `choreOccurrences` create/update,
+  comment flags and the skip/reassign transitions — see item 23 and item 24 of
+  [phase4_polish_audit.md](./phase4_polish_audit.md). Those paths therefore have
+  **no rules evidence**: do not treat a client-side `PermissionPolicy` pass as a
+  server-side permission, and do not add another transition rule to the
+  `choreOccurrences` block without first shrinking it (one validator per
+  transition instead of ~13 alternative blocks that each re-evaluate
+  `occurrenceOk`). Document accesses in rules are not memoized across call
+  sites, which is why the role helpers now read the member document once and
+  answer every role question from that snapshot.
 - **`memberStats` writes are unguarded.** `MemberStatsRepository.save` is a
   plain batch `set`, so a phone that syncs from a read taken before another
   phone wrote replaces that phone's document, including its finalised month.
@@ -55,6 +68,14 @@ implementation.
   `test/features/chores/achievements/concurrency/stats_sync_concurrency_test.dart`.
   Phase 5 must not add a second writer to this document before the write is
   guarded (compare-and-set, or a transaction that re-reads and merges).
+- **Widget tests stub out every app-level side-effect provider.**
+  `test/support/app_test_side_effect_overrides.dart` overrides the seven
+  orchestration hooks with `overrideWithValue(null)`, so their bodies never run
+  under test; that is how a startup crash that reproduced on the first device
+  boot stayed green through 3275 tests. A hook change is only evidence once its
+  real body has been built — see
+  `test/features/chores/achievements/presentation/celebration_orchestration_test.dart`
+  for the shape to copy.
 - **Home's listener inventory is 13, not 7.** Measured in
   `test/features/dashboard/perf/home_listener_census_test.dart`; the ceiling
   that test asserts is the measured number, so a new listener fails it. Do not

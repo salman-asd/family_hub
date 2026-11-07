@@ -7,17 +7,17 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('FirebaseOptions', () {
-    test('dev and prod options have distinct project IDs', () {
-      expect(DevFirebaseOptions.projectId, 'familyhub-dev');
-      expect(ProdFirebaseOptions.projectId, 'familyhub-prod');
+    test('both flavors resolve to the one Firebase project', () {
+      expect(DevFirebaseOptions.projectId, 'familyhub-app-ai');
+      expect(ProdFirebaseOptions.projectId, 'familyhub-app-ai');
     });
 
     test('resolver returns platform options for each flavor', () {
       final devOptions = firebaseOptionsForFlavor(Flavor.dev);
-      expect(devOptions.projectId, 'familyhub-dev');
+      expect(devOptions.projectId, 'familyhub-app-ai');
 
       final prodOptions = firebaseOptionsForFlavor(Flavor.prod);
-      expect(prodOptions.projectId, 'familyhub-prod');
+      expect(prodOptions.projectId, 'familyhub-app-ai');
     });
   });
 
@@ -26,13 +26,13 @@ void main() {
       apiKey: 'AIzaSy-dev-android-placeholder-key',
       appId: '1:1:android:devplaceholder00001',
       messagingSenderId: '1',
-      projectId: 'familyhub-dev',
+      projectId: 'familyhub-app-ai',
     );
     const real = FirebaseOptions(
       apiKey: 'AIzaSyRealLookingKey',
       appId: '1:1:android:abc123',
       messagingSenderId: '1',
-      projectId: 'familyhub-dev',
+      projectId: 'familyhub-app-ai',
     );
 
     test('detects placeholder credentials', () {

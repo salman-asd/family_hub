@@ -57,7 +57,13 @@
 - **Fixed:** `FirebaseAuthRepository.authStateChanges()` used `FirebaseAuth.authStateChanges()`, which does not fire on `User.reload()`. After "I have verified" the stream would never report `emailVerified == true`, so the Step 8 guard could not leave /verify-email. It now uses `userChanges()`.
 - **Fixed:** `auth_providers.dart` lived in `features/auth/domain/` but imports `flutter_riverpod`, breaking "domain has zero imports of flutter". Moved to `features/auth/presentation/`. `test/architecture/layer_boundaries_test.dart` now enforces the layer table.
 - **Fixed:** `FamilyHubApp` built a new `GoRouter` inside `build()`, resetting navigation on every theme/language change. The router is now a provider.
-- **Open:** `google-services.json` (dev/prod) and `firebase_options_*.dart` still contain placeholder keys (`AIzaSy-dev-android-placeholder-key`, project numbers 1000000000xx). Run `flutterfire configure` for `familyhub-dev` / `familyhub-prod` before testing against real Firebase. The emulator route (`--dart-define=USE_EMULATOR=true`) does not need real keys.
+- **Open (updated 2026-11-07):** the plan for two projects was collapsed to one, `familyhub-app-ai`
+  (both flavors still build; `.firebaserc` points all three aliases at it). The real
+  `android/app/src/{dev,prod}/google-services.json` are on the owner's machine and are
+  `skip-worktree`, so they are not in the commit. `firebase_options_*.dart` still contain
+  placeholder keys (`AIzaSy-dev-android-placeholder-key`) — run `flutterfire configure` for
+  `familyhub-app-ai` before testing against real Firebase. The emulator route
+  (`--dart-define=USE_EMULATOR=true`) does not need real keys.
 - **Open:** Step 4 asked for a golden test of the theme settings screen and a widget test that switching themes changes the scaffold background instantly; neither exists (only controller/persistence tests).
 - **Open:** auth goldens were generated on Windows (`D:/...` in the logs). Linux CI renders fonts differently, so they may fail in CI; regenerate on CI or tag them and exclude from the CI run.
 - **Open:** `core/utils/clock.dart` imports `flutter_riverpod` (the `clockProvider`), so anything in domain that imports `Clock` pulls Flutter in transitively. Consider splitting the provider out in Step 9.
@@ -2332,10 +2338,18 @@ guarded write.
 | --- | --- |
 | `dart format .` | Passed; 3 test files reformatted and the re-run reports 0 changed. |
 | `flutter analyze` | Passed, no issues. |
-| `flutter test --exclude-tags golden` | **3275 passed, 0 failed, 0 skipped** (was 61 failing). |
+| `flutter test --exclude-tags golden` | **3276 passed, 0 failed, 0 skipped** (was 61 failing). |
 | `node tools/check_indexes.mjs` | Passed (`firestore.indexes.json OK`). |
-| Firestore rules emulator | NOT RUN - no Java on this machine. Run `npx firebase emulators:exec --only firestore --project demo-family-hub "npm --prefix firebase/rules_test test"`. |
-| Device checks, family UAT, owner copy review, Linux goldens | NOT RUN - `docs/reminders_manual_test.md` and `docs/push_manual_test.md` carry the procedures and an empty results section. |
+| Firestore rules emulator | Ran 2026-11-07: **138 passed, 15 failed of 153.** `firebase/firestore.rules` did not compile at all before this run (15 compiler errors - dead helpers, a duplicate `dateKeyOk`, `todayKey(f)` with an unbound `f`, `String.substring`), so no rules test had ever executed and `firebase deploy --only firestore:rules` would have been refused. The 15 failures are one root cause: the emulator's 1000-expressions-per-request budget, exceeded by the chore-occurrence validators. See `docs/phase5_contract.md` debt. |
+| Device checks, family UAT, owner copy review, Linux goldens | Partly run: the dev APK installs and the app reaches the Bangla welcome screen on an Android emulator (API 37) wired to the Auth + Firestore emulators. That run exposed a startup crash no widget test could see — `celebrationOrchestrationProvider` edited the celebration controller while `app.dart` was building it — now fixed with a test (finding 25, `docs/phase4_polish_audit.md`). Family UAT, owner copy review, the reminder/push sheets and Linux goldens are still NOT RUN. |
+
+The rules gate had been reported as "no Java on this machine"; that was wrong.
+Android Studio ships OpenJDK 25 at `C:\Program Files\Android\Android Studio\jbr`,
+which satisfies the emulator's JDK 21+ requirement once `JAVA_HOME` and `PATH`
+point at it — the recipe is in `firebase/README.md`. Running it exposed that the
+rules file itself has never compiled, which is why every earlier "enforced in
+firestore.rules" line in this project was an unverified claim. `README.md` and
+`docs/` now carry the measured numbers.
 | P4-26 scheduled push sweeper | Deferred, as designed: it needs the push sender (Appendix I) that Spark does not provide. Nothing in Phase 4 blocks on it. |
 
 Phase 4 is **built and green in automation**, not signed off: `docs/phase4_acceptance.md`

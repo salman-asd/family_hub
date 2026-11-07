@@ -37,9 +37,11 @@ at the repo root and commit the PNGs. Never commit goldens rendered on Windows o
 Locally, skip them: `flutter test --exclude-tags golden`.
 
 ## Firebase
-Two projects: `familyhub-dev` and `familyhub-prod` (aliases in `.firebaserc`).
+One Firebase project, `familyhub-app-ai`, backs both build flavors (aliases in `.firebaserc`).
 First-time wiring (`flutterfire configure`, `google-services.json`, deploying rules and
-indexes) is in `firebase/README.md`. Until `flutterfire configure` has been run, the
+indexes) is in `firebase/README.md`. The real `android/app/src/{dev,prod}/google-services.json`
+files are marked `skip-worktree` and must never be committed; their project number, app ids and
+API key must not be copied into any tracked file. Until `flutterfire configure` has been run, the
 app refuses to start against real Firebase (placeholder guard); it still runs against
 the emulators.
 
@@ -50,7 +52,22 @@ firebase emulators:start --only auth,firestore
 flutter run --flavor dev -t lib/main_dev.dart --dart-define=USE_EMULATOR=true
 ```
 On an Android emulator the app connects to `10.0.2.2`, elsewhere to `127.0.0.1`.
-The Emulator UI is at http://localhost:4000.
+The Emulator UI is at http://localhost:4000. `firebase emulators:start` needs a
+JDK 21+; Android Studio ships one — see `firebase/README.md` for the `JAVA_HOME`
+lines and for the curl that marks an emulator user's e-mail address verified
+(every rule except the owner's own profile requires it).
+
+Without a terminal attached to `flutter run`, the same check works headlessly:
+
+```bash
+flutter build apk --debug --flavor dev -t lib/main_dev.dart --dart-define=USE_EMULATOR=true
+"$ANDROID_SDK_ROOT/platform-tools/adb" install -r -g build/app/outputs/flutter-apk/app-dev-debug.apk
+"$ANDROID_SDK_ROOT/platform-tools/adb" shell am start -n \
+  "com.familyhub.family_hub.dev/com.familyhub.family_hub.MainActivity"
+```
+
+The activity class stays in the `com.familyhub.family_hub` package; only the
+applicationId carries the `.dev` suffix.
 
 ## Chores (Phase 3)
 
@@ -65,5 +82,10 @@ badges and the once-a-day celebration are private by default, with an opt-in
 points-free level card. Evidence lives in `docs/phase4_acceptance.md`, the
 measured listener inventory in `docs/phase4_read_budget.md`, the polish audit in
 `docs/phase4_polish_audit.md` and what Phase 5 may build on in
-`docs/phase5_contract.md`. The Firestore rules suite needs a JDK 21+ on PATH and
-has not been run on this machine.
+`docs/phase5_contract.md`. The Firestore rules suite needs a JDK 21+ on PATH;
+Android Studio ships one, so on Windows
+`export JAVA_HOME="/c/Program Files/Android/Android Studio/jbr"` and
+`export PATH="$JAVA_HOME/bin:$PATH"` before running it. It ran here on
+2026-11-07: `firebase/firestore.rules` had never compiled, the fixes landed, and
+138 of 153 rules tests pass — see item 24 of
+`docs/phase4_polish_audit.md` for the 15 that still fail.

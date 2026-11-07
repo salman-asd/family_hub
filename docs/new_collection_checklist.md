@@ -7,9 +7,11 @@ Every step that adds a Firestore collection does ALL of these in the same commit
    (no path string is written twice) and removed from `pending` in
    `test/core/firebase/paths_match_rules_test.dart` once it has rules.
 2. **Rules** - `firebase/firestore.rules`: a `match` block composed from the H12
-   helpers (`canReadFamilyData`, `canWriteOwnRecord`, `moneyOk`, `dateKeyOk`,
-   `monthKeyOk`, `softDeleteOnly`), a closed key set (`*Keys()` + `hasOnly`),
-   field types and lengths, and no hard delete.
+   helpers (`canReadFamilyData`, `verified` + `createsAsSelf`, `moneyOk`,
+   `dateKeyOk`, `monthKeyOk`, `softDeleteOnly`), a closed key set (`*Keys()` +
+   `hasOnly`), field types and lengths, and no hard delete.
+   A helper that nothing calls is a compile error in the emulator, so compose an
+   existing helper or write the condition inline - never park one for later.
 3. **Rules tests** - copy `firebase/rules_test/templates/collection.test.mjs.tmpl`:
    one allowed and one denied case per rule.
 4. **Contract fixtures** - real mapper output pushed through the rules
