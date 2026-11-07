@@ -35,12 +35,16 @@ void main() {
     WidgetTester tester, {
     EngagementSettings? config,
     MemberStats? memberStats,
+    Map<String, PublicStats>? publicStats,
     String languageCode = 'en',
     double textScale = 1,
     List<Override> extraOverrides = const [],
   }) {
     final selectedSettings = config ?? settings;
     final selectedStats = memberStats ?? stats;
+    // Riverpod 3 refuses the same provider twice in one container, so a value
+    // a test may change is a named parameter instead of an extra override.
+    final selectedPublicStats = publicStats ?? const <String, PublicStats>{};
     return pumpEngagementApp(
       tester,
       home: const AchievementsScreen(),
@@ -55,7 +59,7 @@ void main() {
           (ref, memberId) => Stream.value(selectedStats),
         ),
         familyPublicStatsProvider.overrideWith(
-          (ref) => Stream.value(const <String, PublicStats>{}),
+          (ref) => Stream.value(selectedPublicStats),
         ),
         membersProvider.overrideWith(
           (ref) => Stream.value(engagementTestMembers()),
@@ -87,17 +91,15 @@ void main() {
     await pumpAchievements(
       tester,
       config: sharedSettings,
-      extraOverrides: [
-        familyPublicStatsProvider.overrideWith(
-          (ref) => Stream.value({
-            'cara': PublicStats(level: 3, badgeIds: const ['fresh_start']),
-            'alice': PublicStats(level: 2, badgeIds: const []),
-          }),
-        ),
-      ],
+      publicStats: {
+        'cara': PublicStats(level: 3, badgeIds: const ['fresh_start']),
+        'alice': PublicStats(level: 2, badgeIds: const []),
+      },
     );
 
-    expect(find.byKey(const Key('achievement_share_switch')), findsOneWidget);
+    final shareSwitch = find.byKey(const Key('achievement_share_switch'));
+    await scrollTo(tester, shareSwitch);
+    expect(shareSwitch, findsOneWidget);
     expect(find.text('Family achievements'), findsOneWidget);
     expect(find.text('Person alice'), findsOneWidget);
     expect(find.text('Person cara'), findsOneWidget);
@@ -163,6 +165,10 @@ void main() {
     );
 
     expect(find.text('Enable levels and badges'), findsOneWidget);
+    await scrollTo(
+      tester,
+      find.text('Only an administrator can change family visibility.'),
+    );
     expect(
       find.text('Only an administrator can change family visibility.'),
       findsOneWidget,
@@ -184,7 +190,9 @@ void main() {
       ],
     );
 
-    await tester.tap(find.text('Levels and badges only'));
+    final levelsOnly = find.text('Levels and badges only');
+    await scrollTo(tester, levelsOnly);
+    await tester.tap(levelsOnly);
     await tester.pumpAndSettle();
     expect(find.text('Change family visibility?'), findsOneWidget);
     expect(find.textContaining('Points are never shared.'), findsOneWidget);

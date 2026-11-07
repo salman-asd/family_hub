@@ -296,16 +296,27 @@ class InMemoryOccurrenceBackend
     String familyId, {
     required DateKey from,
     required DateKey to,
-  }) async* {
-    activeRangeListeners++;
-    try {
-      yield _inRange(familyId, from, to);
-      await for (final _ in _controller(familyId).stream) {
-        yield _inRange(familyId, from, to);
-      }
-    } finally {
-      activeRangeListeners--;
-    }
+  }) {
+    // Not an `async*` + `await for`: a generator parked waiting for the next
+    // event does not run its `finally` when the consumer cancels, so
+    // [activeRangeListeners] would stay where it was and the D-01 tests could
+    // never see a month released. This controller is told the moment its last
+    // listener leaves.
+    late final StreamController<List<ChoreOccurrence>> out;
+    StreamSubscription<void>? changes;
+    out = StreamController<List<ChoreOccurrence>>(
+      onListen: () {
+        activeRangeListeners++;
+        out.add(_inRange(familyId, from, to));
+        changes = _controller(familyId).stream
+            .listen((_) => out.add(_inRange(familyId, from, to)));
+      },
+      onCancel: () {
+        activeRangeListeners--;
+        return changes?.cancel();
+      },
+    );
+    return out.stream;
   }
 
   @override

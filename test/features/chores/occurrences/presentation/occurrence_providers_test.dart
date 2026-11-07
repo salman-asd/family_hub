@@ -288,11 +288,22 @@ void main() {
     expect(container.read(generationThroughProvider), DateKey(2026, 11, 24));
   });
 
+  /// The run happens in the provider the moment it is first read, so a failure
+  /// armed after the `listen` may arrive too late — arm it before — and one
+  /// `pump()` is not enough to reach the last write. Awaiting the future makes
+  /// the hook finish before the assertions.
+  Future<void> runHook(
+    ProviderContainer container, {
+    AppFailure? markerFailure,
+  }) async {
+    fixture.occurrences.nextMarkerFailure = markerFailure;
+    container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
+    await container.read(ensureOccurrencesOnOpenProvider(familyId).future);
+  }
+
   test('the app-open hook swallows an offline failure', () async {
     final container = makeContainer();
-    container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
-    fixture.occurrences.nextMarkerFailure = const Network();
-    await container.pump();
+    await runHook(container, markerFailure: const Network());
 
     expect(
       container.read(ensureOccurrencesOnOpenProvider(familyId)).value,
@@ -305,9 +316,7 @@ void main() {
     () async {
       // B-01: only "offline" is silent; every other failure is surfaced.
       final container = makeContainer();
-      container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
-      fixture.occurrences.nextMarkerFailure = const PermissionDenied();
-      await container.pump();
+      await runHook(container, markerFailure: const PermissionDenied());
 
       final state = container.read(ensureOccurrencesOnOpenProvider(familyId));
       expect(state.hasError, isFalse, reason: 'it never fails the app start');
@@ -317,8 +326,7 @@ void main() {
 
   test('the app-open hook reports nothing on success', () async {
     final container = makeContainer();
-    container.listen(ensureOccurrencesOnOpenProvider(familyId), (_, _) {});
-    await container.pump();
+    await runHook(container);
 
     final state = container.read(ensureOccurrencesOnOpenProvider(familyId));
     expect(state.hasError, isFalse);

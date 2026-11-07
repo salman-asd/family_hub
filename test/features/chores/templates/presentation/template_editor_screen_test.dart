@@ -74,6 +74,9 @@ void main() {
   }
 
   Future<void> tapSave(WidgetTester tester) async {
+    // enterText does not pump, and an unchanged draft keeps the button
+    // disabled: without this frame the tap lands on a dead button.
+    await tester.pump();
     await tester.tap(find.byKey(const ValueKey<String>('editor_save')));
     await tester.pumpAndSettle();
   }
@@ -103,12 +106,25 @@ void main() {
       'ওষুধ খাওয়ানো',
     );
     final add = find.byKey(const ValueKey<String>('slot_add'));
+    final label2 = find.byKey(const ValueKey<String>('slot_label_s2'));
+    final label3 = find.byKey(const ValueKey<String>('slot_label_s3'));
+    await scrollTo(tester, add);
+    // Every step settles before the next: the editor's buttons write the slot
+    // list they were built with, so a tap in an unpainted frame would drop the
+    // text typed a moment earlier.
+    await tester.tap(add);
+    await tester.pumpAndSettle();
+    // A second slot needs a label (template_validator_test asserts the rule),
+    // so the editor asks for one before it will save.
+    await scrollTo(tester, label2);
+    await tester.enterText(label2, 'দুপুর');
+    await tester.pumpAndSettle();
     await scrollTo(tester, add);
     await tester.tap(add);
-    await tester.pump();
-    await tester.ensureVisible(add);
-    await tester.tap(add);
-    await tester.pump();
+    await tester.pumpAndSettle();
+    await scrollTo(tester, label3);
+    await tester.enterText(label3, 'সন্ধ্যা');
+    await tester.pumpAndSettle();
 
     await tapSave(tester);
 

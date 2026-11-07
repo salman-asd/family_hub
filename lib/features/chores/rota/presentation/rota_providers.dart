@@ -37,10 +37,8 @@ RotaBounds rotaBoundsFor({
   required int weekStartDay,
 }) {
   if (range == RotaRange.month) {
-    return (
-      from: DateKey(today.year, today.month, 1),
-      to: DateKey(today.year, today.month + 1, 1).addDays(-1),
-    );
+    final month = today.monthKey;
+    return (from: month.startOfMonth, to: month.endOfMonth);
   }
   // Dart: Monday = 1 ... Sunday = 7, so `% 7` gives Sunday = 0 ... Saturday = 6.
   final weekday = DateTime.utc(today.year, today.month, today.day).weekday % 7;

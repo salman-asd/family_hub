@@ -1,3 +1,4 @@
+import 'package:family_hub/app/flavor.dart';
 import 'package:family_hub/app/theme/theme_builder.dart';
 import 'package:family_hub/app/theme/theme_controller.dart'
     show sharedPreferencesProvider;
@@ -27,6 +28,10 @@ import 'package:family_hub/features/bazar/presentation/bazar_home_screen.dart';
 import 'package:family_hub/features/bazar/presentation/widgets/dashboard/bazar_month_card.dart';
 import 'package:family_hub/features/bazar/presentation/widgets/dashboard/budget_alert_card.dart';
 import 'package:family_hub/features/bazar/presentation/widgets/dashboard/fund_balance_card.dart';
+import 'package:family_hub/features/dashboard/domain/card_access.dart';
+import 'package:family_hub/features/dashboard/domain/card_catalog.dart';
+import 'package:family_hub/features/dashboard/domain/dashboard_resolver.dart';
+import 'package:family_hub/features/dashboard/presentation/dashboard_providers.dart';
 import 'package:family_hub/features/dashboard/presentation/home_screen.dart';
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/domain/module_flags.dart';
@@ -84,7 +89,11 @@ void main() {
   screenStateTests(
     'Bazar dashboard cards',
     () => ListView(
-      children: [BazarMonthCard(), FundBalanceCard(), BudgetAlertCard()],
+      children: [
+        const BazarMonthCard(),
+        const FundBalanceCard(),
+        const BudgetAlertCard(),
+      ],
     ),
     overrides: (_) => _readyOverrides(),
   );
@@ -223,6 +232,9 @@ void main() {
       fullScreen: true,
       overrides: [
         ..._readyOverrides(alerts: const []),
+        // HomeScreen asks the build flavour which cards it may show.
+        flavorProvider.overrideWithValue(Flavor.dev),
+        dashboardLayoutProvider.overrideWithValue(_bazarSavedLayout()),
         moduleFlagsProvider.overrideWithValue(
           const ModuleFlags({'bazar': false}),
         ),
@@ -237,6 +249,8 @@ void main() {
       fullScreen: true,
       overrides: [
         ..._readyOverrides(alerts: const []),
+        flavorProvider.overrideWithValue(Flavor.dev),
+        dashboardLayoutProvider.overrideWithValue(_bazarSavedLayout()),
         moduleFlagsProvider.overrideWithValue(ModuleFlags.allOn),
       ],
     );
@@ -332,6 +346,23 @@ Expense _expense() => Expense(
   createdBy: 'member',
   createdAt: DateTime.utc(2026, 10, 12),
 );
+
+/// The two Bazar cards as a family that saved them, so Home goes through the
+/// real module filter rather than a canned list of widgets.
+AsyncValue<DashboardLayout> _bazarSavedLayout() {
+  ResolvedCard card(String id) => ResolvedCard(
+    definition: CardCatalog.find(id)!,
+    access: CardAccess.on,
+    canHide: true,
+  );
+  return AsyncData<DashboardLayout>(
+    DashboardLayout(
+      visible: [card('bazar_month'), card('bazar_fund')],
+      optionalHidden: const [],
+      required: const [],
+    ),
+  );
+}
 
 Future<void> _pump(
   WidgetTester tester,

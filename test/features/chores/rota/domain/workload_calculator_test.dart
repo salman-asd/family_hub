@@ -31,6 +31,11 @@ void main() {
       plannedAssigneeId: planned ?? who,
       difficulty: difficulty,
       status: status,
+      // effectiveStatus only counts a chore as done when the stamp is there,
+      // so a `completed` item without one is still open.
+      completedAt: status == OccurrenceStatus.completed
+          ? DateTime.utc(2026, 10, day, 10)
+          : null,
       coverForId: coverFor,
       estimatedMinutes: minutes,
     ),

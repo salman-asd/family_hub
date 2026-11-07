@@ -25,39 +25,44 @@ class _SectionCard extends ConsumerWidget {
           borderRadius: BorderRadius.circular(t.radiusMd),
           boxShadow: t.elevation1,
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: t.textPrimary,
-                  fontWeight: FontWeight.w700,
+        // The transparent Material is what lets the section's switches paint
+        // their ink on this card; a bare DecoratedBox hides the splash.
+        child: Material(
+          type: MaterialType.transparency,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: t.textPrimary,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.only(start: 8),
-              child: TextButton(
-                key: ValueKey<String>('reset_${section.name}'),
-                onPressed: () async {
-                  final ok = await _confirmReset(context);
-                  if (ok) {
-                    ref
-                        .read(choreSettingsEditorProvider.notifier)
-                        .resetSection(section);
-                  }
-                },
-                child: Text(l10n.choresSettingsResetSection),
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: 8),
+                child: TextButton(
+                  key: ValueKey<String>('reset_${section.name}'),
+                  onPressed: () async {
+                    final ok = await _confirmReset(context);
+                    if (ok) {
+                      ref
+                          .read(choreSettingsEditorProvider.notifier)
+                          .resetSection(section);
+                    }
+                  },
+                  child: Text(l10n.choresSettingsResetSection),
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-              child: child,
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+                child: child,
+              ),
+            ],
+          ),
         ),
       ),
     );

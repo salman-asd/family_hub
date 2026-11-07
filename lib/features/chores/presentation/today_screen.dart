@@ -61,7 +61,11 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
     } else if (!month.hasValue) {
       body = const LoadingView();
     } else {
-      body = Column(
+      // Header, helpers and sections share one viewport: at 2x text (or with
+      // long Bangla) the fixed top part was taller than the screen, and the
+      // list below it had no room left to scroll into.
+      body = ListView(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
         children: [
           TodayHeader(
             progress: TodayProgress.of(scoped),
@@ -71,7 +75,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
           ),
           HelpersHighlight(month: today.monthKey),
           const SizedBox(height: 8),
-          Expanded(child: _list(context, scoped)),
+          ..._sections(context, scoped),
         ],
       );
     }
@@ -82,63 +86,62 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
     );
   }
 
-  Widget _list(BuildContext context, List<ChoreItem> scoped) {
+  List<Widget> _sections(BuildContext context, List<ChoreItem> scoped) {
     final l10n = context.l10n;
     final t = context.tokens;
+    final formatters = ref.watch(appFormattersProvider);
     if (scoped.isEmpty) {
-      return EmptyState(
-        icon: Icons.wb_sunny_outlined,
-        title: l10n.todayEmptyTitle,
-        message: l10n.todayEmptyMessage,
-      );
+      return <Widget>[
+        EmptyState(
+          icon: Icons.wb_sunny_outlined,
+          title: l10n.todayEmptyTitle,
+          message: l10n.todayEmptyMessage,
+        ),
+      ];
     }
     final sections = TodaySections.of(scoped);
-    final formatters = ref.watch(appFormattersProvider);
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-      children: [
-        if (sections.overdue.isNotEmpty) ...[
-          SectionHeader(title: l10n.todaySectionOverdue),
-          for (final item in sections.overdue) TodayRow(item: item),
-          const SizedBox(height: 8),
-        ],
-        for (final (part, items) in groupByDayPart(sections.upcoming)) ...[
-          DayPartSection(part: part, count: items.length),
-          for (final item in items) TodayRow(item: item),
-        ],
-        if (sections.allDone)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24),
-            child: EmptyState(
-              icon: Icons.check_circle_outline_rounded,
-              title: l10n.todayAllDoneTitle,
-              message: l10n.todayAllDoneMessage,
-            ),
-          ),
-        if (sections.done.isNotEmpty) ...[
-          const SizedBox(height: 12),
-          InkWell(
-            onTap: () => setState(() => _doneExpanded = !_doneExpanded),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SectionHeader(
-                    title:
-                        '${l10n.todaySectionDone} '
-                        '(${formatters.number(sections.done.length)})',
-                  ),
-                ),
-                Icon(
-                  _doneExpanded ? Icons.expand_less : Icons.expand_more,
-                  color: t.textSecondary,
-                ),
-              ],
-            ),
-          ),
-          if (_doneExpanded)
-            for (final item in sections.done) TodayRow(item: item),
-        ],
+    return <Widget>[
+      if (sections.overdue.isNotEmpty) ...[
+        SectionHeader(title: l10n.todaySectionOverdue),
+        for (final item in sections.overdue) TodayRow(item: item),
+        const SizedBox(height: 8),
       ],
-    );
+      for (final (part, items) in groupByDayPart(sections.upcoming)) ...[
+        DayPartSection(part: part, count: items.length),
+        for (final item in items) TodayRow(item: item),
+      ],
+      if (sections.allDone)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: EmptyState(
+            icon: Icons.check_circle_outline_rounded,
+            title: l10n.todayAllDoneTitle,
+            message: l10n.todayAllDoneMessage,
+          ),
+        ),
+      if (sections.done.isNotEmpty) ...[
+        const SizedBox(height: 12),
+        InkWell(
+          onTap: () => setState(() => _doneExpanded = !_doneExpanded),
+          child: Row(
+            children: [
+              Expanded(
+                child: SectionHeader(
+                  title:
+                      '${l10n.todaySectionDone} '
+                      '(${formatters.number(sections.done.length)})',
+                ),
+              ),
+              Icon(
+                _doneExpanded ? Icons.expand_less : Icons.expand_more,
+                color: t.textSecondary,
+              ),
+            ],
+          ),
+        ),
+        if (_doneExpanded)
+          for (final item in sections.done) TodayRow(item: item),
+      ],
+    ];
   }
 }

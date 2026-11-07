@@ -80,6 +80,10 @@ Future<void> pumpEngagementApp(
     ),
   );
   await tester.pump(const Duration(milliseconds: 250));
+  // A single-value stream lands after the first frame, so one more frame is
+  // needed to paint it. `pumpAndSettle` cannot be used here: the loading
+  // shimmer repeats and never settles.
+  await tester.pump();
 }
 
 List<Member> engagementTestMembers() => <Member>[
@@ -96,3 +100,15 @@ List<Member> engagementTestMembers() => <Member>[
       relationship: 'other',
     ),
 ];
+
+/// Engagement screens are long lists and a `ListView` only builds what the
+/// viewport plus its cache reaches, so a section further down has to be
+/// scrolled to before it exists in the tree.
+Future<void> scrollTo(WidgetTester tester, Finder target) async {
+  await tester.scrollUntilVisible(
+    target,
+    300,
+    scrollable: find.byType(Scrollable).first,
+  );
+  await tester.pump();
+}

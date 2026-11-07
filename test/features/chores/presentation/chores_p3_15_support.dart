@@ -24,13 +24,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../support/in_memory_notification_backend.dart';
+
 import '../chores_test_helpers.dart';
 
 /// Shared harness for the P3-15 screen tests (Today, Verify, Detail, bar).
 ///
 /// 320 dp wide, English, `disableAnimations`, the in-memory chores backend and
-/// one acting member (`uid`, `role`). `overrides` come last so a test can
-/// replace any provider.
+/// one acting member (`uid`, `role`). Providers a test may need to change are
+/// named parameters, because Riverpod 3 rejects overriding the same provider
+/// twice; [overrides] can only add providers the harness left alone.
 Future<ChoresFixture> pumpP3Screen(
   WidgetTester tester, {
   Widget? home,
@@ -44,6 +47,7 @@ Future<ChoresFixture> pumpP3Screen(
   int themeIndex = 0,
   String languageCode = 'en',
   List<ChoreOccurrence> occurrences = const <ChoreOccurrence>[],
+  PermissionSettings? permissionSettings,
   List<Override> overrides = const <Override>[],
 }) async {
   tester.view
@@ -87,10 +91,11 @@ Future<ChoresFixture> pumpP3Screen(
           PermissionActor(uid: uid, role: role, isActive: true),
         ),
         permissionSettingsProvider.overrideWithValue(
-          PermissionSettings.defaults,
+          permissionSettings ?? PermissionSettings.defaults,
         ),
         // No running timer in a widget test.
         nowTickProvider.overrideWith((ref) => const Stream<DateTime>.empty()),
+        ...notificationTestOverrides(),
         ...overrides,
       ],
       child: _app(

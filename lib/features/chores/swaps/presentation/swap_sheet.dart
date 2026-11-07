@@ -14,6 +14,7 @@ import 'package:family_hub/features/chores/swaps/presentation/swap_providers.dar
 import 'package:family_hub/features/family/domain/member.dart';
 import 'package:family_hub/features/family/presentation/family_providers.dart';
 import 'package:family_hub/shared/widgets/app_avatar.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -31,17 +32,11 @@ extension SwapSheets on WidgetRef {
     final familyId = read(currentFamilyIdProvider);
     final uid = read(currentUidProvider);
     if (familyId == null || uid == null) return null;
-    final eligible = eligibleRecipients(
-      members: read(membersProvider).value ?? const <Member>[],
-      requesterId: uid,
-      day: occurrence.dateKey,
-      index: read(availabilityIndexProvider),
-    );
     final picked = await showModalBottomSheet<({String to, String reason})>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
-      builder: (_) => _SwapSheet(occurrence: occurrence, eligible: eligible),
+      builder: (_) => _SwapSheet(occurrence: occurrence, requesterId: uid),
     );
     if (picked == null) return null;
     final result = await read(requestSwapProvider)(
@@ -63,10 +58,10 @@ extension SwapSheets on WidgetRef {
 }
 
 class _SwapSheet extends ConsumerStatefulWidget {
-  const _SwapSheet({required this.occurrence, required this.eligible});
+  const _SwapSheet({required this.occurrence, required this.requesterId});
 
   final ChoreOccurrence occurrence;
-  final List<Member> eligible;
+  final String requesterId;
 
   @override
   ConsumerState<_SwapSheet> createState() => _SwapSheetState();
@@ -92,6 +87,22 @@ class _SwapSheetState extends ConsumerState<_SwapSheet> {
     final l10n = context.l10n;
     final t = context.tokens;
     final formatters = ref.watch(appFormattersProvider);
+    // The family list is a stream, so it is asked for here rather than before
+    // the sheet opened: a list that has not arrived shows as loading instead of
+    // a wrong "nobody is available".
+    final members = ref.watch(membersProvider);
+    if (!members.hasValue && members.isLoading) {
+      return const Padding(
+        padding: EdgeInsets.all(20),
+        child: LoadingView(lines: 3),
+      );
+    }
+    final eligible = eligibleRecipients(
+      members: members.value ?? const <Member>[],
+      requesterId: widget.requesterId,
+      day: widget.occurrence.dateKey,
+      index: ref.watch(availabilityIndexProvider),
+    );
     final month = ref.watch(monthItemsProvider(widget.occurrence.monthKey));
     final load = <String, int>{};
     for (final item in month.value?.items ?? const <ChoreItem>[]) {
@@ -100,7 +111,7 @@ class _SwapSheetState extends ConsumerState<_SwapSheet> {
     }
     final busiest = load.values.fold<int>(1, (a, b) => b > a ? b : a);
     Member? chosen;
-    for (final member in widget.eligible) {
+    for (final member in eligible) {
       if (member.uid == _to) chosen = member;
     }
 
@@ -125,7 +136,7 @@ class _SwapSheetState extends ConsumerState<_SwapSheet> {
               l10n.swapSheetPerson,
               style: TextStyle(color: t.textSecondary),
             ),
-            if (widget.eligible.isEmpty)
+            if (eligible.isEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: Text(
@@ -133,7 +144,7 @@ class _SwapSheetState extends ConsumerState<_SwapSheet> {
                   key: const Key('swap_nobody'),
                 ),
               ),
-            for (final member in widget.eligible)
+            for (final member in eligible)
               Semantics(
                 selected: member.uid == _to,
                 button: true,

@@ -68,16 +68,25 @@ class AvailabilityCard extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
+                  flex: 2,
                   child: Text(
                     memberName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
                 Icon(icon, size: 16, color: t.textSecondary),
                 const SizedBox(width: 4),
-                Text(
-                  label,
-                  style: TextStyle(color: t.textSecondary, fontSize: 12),
+                // Flexible, not fixed: a long status label (2x text, Bangla)
+                // must give way instead of pushing this row off the card.
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: t.textSecondary, fontSize: 12),
+                  ),
                 ),
               ],
             ),

@@ -45,3 +45,21 @@ The implementation and the applicable Firestore rules remain authoritative.
 Any Phase 5 feature that needs data beyond these contracts must identify its
 source, access policy, query bounds, offline behavior, and rules/tests before
 implementation.
+
+## Debts Phase 4 hands over (measured, not assumed)
+
+- **`memberStats` writes are unguarded.** `MemberStatsRepository.save` is a
+  plain batch `set`, so a phone that syncs from a read taken before another
+  phone wrote replaces that phone's document, including its finalised month.
+  Pinned by the last test in
+  `test/features/chores/achievements/concurrency/stats_sync_concurrency_test.dart`.
+  Phase 5 must not add a second writer to this document before the write is
+  guarded (compare-and-set, or a transaction that re-reads and merges).
+- **Home's listener inventory is 13, not 7.** Measured in
+  `test/features/dashboard/perf/home_listener_census_test.dart`; the ceiling
+  that test asserts is the measured number, so a new listener fails it. Do not
+  add a per-card stream to Home, and do not quote D-P4-14's seven as the current
+  figure. Converging on the shared month sources is Phase 5 work.
+- **Firestore document reads are still unmeasured,** so nothing in this contract
+  is a claim about quota headroom. See
+  [phase4_read_budget.md](./phase4_read_budget.md).

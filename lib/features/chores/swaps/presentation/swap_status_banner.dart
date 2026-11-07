@@ -53,6 +53,40 @@ class SwapStatusBanner extends ConsumerWidget {
             ),
           );
 
+    // The answer/cancel button sits under the message: on a narrow phone, or at
+    // 2x text, a label as long as "Answer the request" would otherwise leave the
+    // message no width at all (rule: text survives 2.0x and long Bangla).
+    final action = forMe
+        ? TextButton(
+            key: const Key('swap_banner_answer'),
+            style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+            onPressed: () =>
+                unawaited(ref.respondToSwapWithSheet(context, shown)),
+            child: Text(l10n.swapResponseTitle),
+          )
+        : mine
+        ? TextButton(
+            key: const Key('swap_banner_cancel'),
+            style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+            onPressed: () async {
+              final familyId = ref.read(currentFamilyIdProvider);
+              if (familyId == null || uid == null) return;
+              final result = await ref.read(cancelSwapProvider)(
+                familyId: familyId,
+                actorUid: uid,
+                requestId: shown.id,
+              );
+              final failure = result.failureOrNull;
+              if (failure != null && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(l10n.choresFailureMessage(failure))),
+                );
+              }
+            },
+            child: Text(l10n.swapBannerCancel),
+          )
+        : null;
+
     return Container(
       key: const Key('swap_banner'),
       margin: const EdgeInsets.only(bottom: 12),
@@ -62,40 +96,17 @@ class SwapStatusBanner extends ConsumerWidget {
         borderRadius: BorderRadius.circular(t.radiusMd),
         border: Border.all(color: t.outline),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.swap_horiz_rounded, color: t.textSecondary),
-          const SizedBox(width: 12),
-          Expanded(child: Text(text)),
-          if (forMe)
-            TextButton(
-              key: const Key('swap_banner_answer'),
-              style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
-              onPressed: () =>
-                  unawaited(ref.respondToSwapWithSheet(context, shown)),
-              child: Text(l10n.swapResponseTitle),
-            )
-          else if (mine)
-            TextButton(
-              key: const Key('swap_banner_cancel'),
-              style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
-              onPressed: () async {
-                final familyId = ref.read(currentFamilyIdProvider);
-                if (familyId == null || uid == null) return;
-                final result = await ref.read(cancelSwapProvider)(
-                  familyId: familyId,
-                  actorUid: uid,
-                  requestId: shown.id,
-                );
-                final failure = result.failureOrNull;
-                if (failure != null && context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(l10n.choresFailureMessage(failure))),
-                  );
-                }
-              },
-              child: Text(l10n.swapBannerCancel),
-            ),
+          Row(
+            children: [
+              Icon(Icons.swap_horiz_rounded, color: t.textSecondary),
+              const SizedBox(width: 12),
+              Expanded(child: Text(text)),
+            ],
+          ),
+          ?action,
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:family_hub/core/audit/audit_ref_type.dart';
+import 'package:family_hub/core/utils/value_equality.dart';
 import 'package:family_hub/features/chores/occurrences/domain/occurrence_draft.dart';
 
 /// The lifecycle event types (`choreOccurrences/{id}/events`).
@@ -61,28 +62,16 @@ final class OccurrencePatch {
   bool operator ==(Object other) =>
       other is OccurrencePatch &&
       other.occurrenceId == occurrenceId &&
-      _sameFields(other.fields, fields) &&
+      sameValue(other.fields, fields) &&
       other.removedFields.length == removedFields.length &&
       other.removedFields.containsAll(removedFields);
 
   @override
   int get hashCode => Object.hash(
     occurrenceId,
-    Object.hashAllUnordered(<int>[
-      for (final entry in fields.entries) Object.hash(entry.key, entry.value),
-    ]),
+    hashValue(fields),
     Object.hashAllUnordered(removedFields),
   );
-
-  static bool _sameFields(Map<String, Object?> a, Map<String, Object?> b) {
-    if (a.length != b.length) return false;
-    for (final entry in a.entries) {
-      if (!b.containsKey(entry.key) || b[entry.key] != entry.value) {
-        return false;
-      }
-    }
-    return true;
-  }
 
   @override
   String toString() =>

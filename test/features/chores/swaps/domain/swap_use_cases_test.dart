@@ -151,8 +151,10 @@ void main() {
     test('a chore that moved or started meanwhile is refused', () async {
       kit.seedChore(assignee: 'bob');
       expect(await take('dave'), const Conflict(code: 'concurrent_edit'));
+      // Back to cara, but somebody has already ticked it: the chore still
+      // belongs to the requester, so the refusal is the started one.
       kit.seedChore(started: true);
-      expect(await take('dave'), const Conflict(code: 'concurrent_edit'));
+      expect(await take('dave'), const Conflict(code: 'occurrence_started'));
     });
 
     test('a recipient who became unavailable cannot accept', () async {

@@ -80,7 +80,10 @@ void main() {
       final ids = choresEntries.map((e) => e.id).toList();
       expect(ids.toSet(), hasLength(ids.length));
       for (final entry in choresEntries) {
-        expect(entry.route, startsWith(AppRoutes.chores), reason: entry.id);
+        // The inbox tile is the one entry that is deliberately NOT under
+        // /chores: it is the module-neutral, top-level route (P3-27).
+        final prefix = entry.id == 'inbox' ? AppRoutes.inbox : AppRoutes.chores;
+        expect(entry.route, startsWith(prefix), reason: entry.id);
       }
     });
   });

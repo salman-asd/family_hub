@@ -32,3 +32,18 @@ Exact alarms use the user-granted `SCHEDULE_EXACT_ALARM` special access. Before
 store release, verify that this app's reminder use meets the current Google
 Play and Android exact-alarm policies. The app does not declare
 `USE_EXACT_ALARM`; when exact access is unavailable, it schedules inexactly.
+
+## Results
+
+**Not run — 2026-11-07.** No Android device was attached to the machine that
+finished Wave E, so every row above is still an open `[ ]`. The automated side
+of these behaviours is covered (`flutter test --exclude-tags golden`, and the
+two-phone reminder-plan tests in
+`test/features/notifications/concurrency/two_phone_reminder_plan_test.dart`),
+which is not evidence about a real notification drawer, battery manager or
+reboot.
+
+To close this file, record for each numbered step: device model, Android
+version, app flavor/build, result, and a screenshot path — on **two brands**,
+at least one with an aggressive battery manager. Steps 5, 6, 7 and 8 are the
+ones a test cannot stand in for.

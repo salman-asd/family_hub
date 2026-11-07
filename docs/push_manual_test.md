@@ -36,3 +36,20 @@ to the token shown in the device document.
 
 Record Android version, device model, app flavor, permission state, and any
 delivery or routing failures. Do not copy real FCM tokens into issues or logs.
+
+## Results
+
+**Not run — 2026-11-07**, and the sender-only rows are `N/A — Spark`: there is
+no push backend in this build (P4-15 and P4-26 are deferred, Appendix I), so a
+message can only come from the Firebase console. The rows that remain real work
+are the console sends in steps 5–7, the permission flow in step 3, and the
+sign-out / leave-family device-record checks in steps 8–10; the app can be built
+against `familyhub-dev` for them with
+
+```bash
+flutter build apk --flavor dev -t lib/main_dev.dart
+```
+
+Record device model, Android version, notification permission state, whether the
+system prompt appeared only after the in-app request, and what each tap opened.
+Do not paste FCM tokens here or in any issue.

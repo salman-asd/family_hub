@@ -694,6 +694,15 @@ Add golden tests for dashboard, calendar and expense form in each registered the
 
 ### Phase 4 acceptance gate
 
+> **Status (2026-11-07):** Steps 27–31 are delivered as P4-01 … P4-25 and the
+> automated gate is green (3275 tests, `flutter analyze` clean). The gate below
+> is **not** signed off: the first bullet is only partly met — Home measures 13
+> live listeners where the plan said seven
+> (`docs/phase4_read_budget.md`) — and the second and third are proven in tests
+> only; no device run, family UAT, rules-emulator run or Linux golden exists
+> yet. Evidence and the exact open rows: `docs/phase4_acceptance.md`. P4-26
+> (scheduled push sweeper) stays deferred with the Spark push sender.
+
 - Dashboard shows real data only, with the listener budget respected.
 - A reminder fires on a real device with the app closed; the 3-level switches behave exactly as labeled.
 - The daily celebration appears once per day and respects reduced motion.

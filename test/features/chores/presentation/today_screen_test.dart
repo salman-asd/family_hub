@@ -127,12 +127,18 @@ void main() {
     await pumpP3Screen(
       tester,
       home: const TodayScreen(),
-      occurrences: <ChoreOccurrence>[completed('a_20261024', 'cara')],
+      // A finished chore alone would show the "all done" state, so the day
+      // keeps one open chore and the done section is expanded by hand.
+      occurrences: <ChoreOccurrence>[
+        open('b_20261024', 'cara'),
+        completed('a_20261024', 'cara'),
+      ],
     );
     await tester.tap(find.text('Done today (1)'));
     await tester.pump();
 
-    final slidable = tester.widget<Slidable>(find.byType(Slidable));
+    // The finished row is the last one: overdue, then the day parts, then done.
+    final slidable = tester.widget<Slidable>(find.byType(Slidable).last);
     expect(slidable.startActionPane, isNull);
   });
 

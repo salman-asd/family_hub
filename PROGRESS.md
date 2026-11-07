@@ -2279,3 +2279,64 @@ duplicate on another device cannot be ruled out.
 
 P4-25 remains incomplete until the open rows in `docs/phase4_acceptance.md`
 have evidence. P4-26 is optional and deferred on Spark.
+
+## Wave E finish - P4-23, P4-24, P4-25 (2026-11-07)
+
+Finished the audit-first half of P4-23 and turned two of P4-25's "not verified"
+rows into measurements. No commit was made for this section; see the working
+tree.
+
+**P4-23 - audit and fixes.** `docs/phase4_polish_audit.md` is now a
+category/severity/location/status table of 20 findings plus the two carried to
+Phase 5, and it has **no open High item**. Fixed in `lib/`: the Today screen
+built a fixed header above an `Expanded` list, which overflowed at 2.0x text
+(one `ListView` now); the swap banner shared one `Row` between the message and
+its button, which left the message no width (button under the message);
+`swap_sheet.dart` read the family list before the sheet opened and reported
+"nobody is available" on a cold list (it watches and shows loading); the
+availability card, duty strip and starter-pack chip had fixed-width labels;
+the settings and template section cards were bare `DecoratedBox`es, so a switch
+inside them painted no ink (transparent `Material`); rota month bounds were
+computed as `DateKey(year, month + 1, 1)`, invalid in December;
+`OccurrencePatch` compared its nested field map by identity, so identical
+patches were unequal (now `core/utils/value_equality.dart`, which also returns
+the file to 289 lines).
+
+Test-side, the 61 red tests were triaged one by one, and most were **test bugs
+rather than product bugs**: the fake occurrence backend's `watchRange` was an
+`async*` generator whose `finally` never ran on cancel, so its live-listener
+counter never fell and the D-01 release assertions could not pass (an explicit
+`StreamController(onListen:, onCancel:)` now); a swap test expected
+`concurrent_edit` where `AcceptSwap` checks ownership before start, so the code
+is `occurrence_started`; the app-open hook tests asserted after one `pump()` and
+armed their failure after `listen`, so one passed vacuously. No assertion was
+weakened or deleted to get here.
+
+**P4-24** was already complete; nothing changed this round.
+
+**P4-25 - the two measurements.** `test/features/dashboard/perf/home_listener_census_test.dart`
+(5 tests) counts Home's live data listeners with an open stream per source: a
+Home showing every card holds **13**, one subscription per source, a rebuild
+adds none, and a cold re-entry doubles none of the ten session-wide sources.
+D-P4-14 planned seven; the six extra (budget, categories, fund transactions,
+contribution plans, availability, member stats) are recorded as an open Phase 5
+item, and the test pins the ceiling at the measured 13 so a new listener fails
+it. `test/features/chores/achievements/concurrency/stats_sync_concurrency_test.dart`
+(3 tests) and `test/features/notifications/concurrency/two_phone_reminder_plan_test.dart`
+(3 tests) cover the concurrency half of item 3. They also exposed the second
+open item: `MemberStatsRepository.save` is a blind batch `set`, so a phone that
+writes from a stale read replaces the other phone's document - Phase 5 needs a
+guarded write.
+
+| Gate | Result |
+| --- | --- |
+| `dart format .` | Passed; 3 test files reformatted and the re-run reports 0 changed. |
+| `flutter analyze` | Passed, no issues. |
+| `flutter test --exclude-tags golden` | **3275 passed, 0 failed, 0 skipped** (was 61 failing). |
+| `node tools/check_indexes.mjs` | Passed (`firestore.indexes.json OK`). |
+| Firestore rules emulator | NOT RUN - no Java on this machine. Run `npx firebase emulators:exec --only firestore --project demo-family-hub "npm --prefix firebase/rules_test test"`. |
+| Device checks, family UAT, owner copy review, Linux goldens | NOT RUN - `docs/reminders_manual_test.md` and `docs/push_manual_test.md` carry the procedures and an empty results section. |
+| P4-26 scheduled push sweeper | Deferred, as designed: it needs the push sender (Appendix I) that Spark does not provide. Nothing in Phase 4 blocks on it. |
+
+Phase 4 is **built and green in automation**, not signed off: `docs/phase4_acceptance.md`
+lists the rows that still need a person, a phone, or an emulator.

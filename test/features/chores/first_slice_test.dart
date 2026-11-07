@@ -14,7 +14,6 @@ import 'package:family_hub/features/chores/presentation/verify_queue_screen.dart
 import 'package:family_hub/features/chores/templates/domain/chore_template.dart';
 import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
 import 'package:family_hub/features/chores/templates/presentation/template_providers.dart';
-import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -42,6 +41,12 @@ void main() {
   const tomorrowId = 'tpl_1_20261025';
 
   late ChoresFixture fixture;
+
+  /// The verify step needs the family switch on in the document the use cases
+  /// read (`getPermissionSettings`) and in the provider the buttons ask.
+  final verifyOn = PermissionSettings.defaults.copyWith(
+    choreVerificationEnabled: true,
+  );
 
   GoRouter routerAt(String location) => GoRouter(
     initialLocation: location,
@@ -77,11 +82,7 @@ void main() {
       router: routerAt(location),
       uid: uid,
       role: role,
-      overrides: [
-        permissionSettingsProvider.overrideWithValue(
-          PermissionSettings.defaults.copyWith(choreVerificationEnabled: true),
-        ),
-      ],
+      permissionSettings: verifyOn,
     );
     await tester.pumpAndSettle();
   }
@@ -100,6 +101,7 @@ void main() {
 
   setUp(() {
     fixture = ChoresFixture();
+    fixture.backend.permissionSettings[familyId] = verifyOn;
     seedTemplate(
       fixture,
       ChoreTemplate(

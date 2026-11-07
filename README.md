@@ -54,4 +54,16 @@ The Emulator UI is at http://localhost:4000.
 
 ## Chores (Phase 3)
 
-Chore templates with slots and recurrence, rotating duty groups, a generated chore calendar (Agenda / Month / Week) with projected future chores, Today, subtasks with verification, comments, absences, swaps and covers, an inbox, a workload board and Home dashboard cards (Today, Overdue, Awaiting verification, This week). Reminders, badges and the celebration are Phase 4 (`docs/chores_phase4_contract.md`).
+Chore templates with slots and recurrence, rotating duty groups, a generated chore calendar (Agenda / Month / Week) with projected future chores, Today, subtasks with verification, comments, absences, swaps and covers, an inbox, a workload board and Home dashboard cards (Today, Overdue, Awaiting verification, This week).
+
+## Dashboard, notifications and engagement (Phase 4)
+
+Home renders real data through role-based card policy and a per-user layout;
+local reminders are planned on the phone with a Push/Normal choice per type that
+stays effectively Normal while the family is on Spark (no sender); stats, levels,
+badges and the once-a-day celebration are private by default, with an opt-in
+points-free level card. Evidence lives in `docs/phase4_acceptance.md`, the
+measured listener inventory in `docs/phase4_read_budget.md`, the polish audit in
+`docs/phase4_polish_audit.md` and what Phase 5 may build on in
+`docs/phase5_contract.md`. The Firestore rules suite needs a JDK 21+ on PATH and
+has not been run on this machine.

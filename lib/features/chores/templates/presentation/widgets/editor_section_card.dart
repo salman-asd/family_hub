@@ -30,25 +30,30 @@ class EditorSectionCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(t.radiusMd),
           boxShadow: t.elevation1,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Semantics(
-                header: true,
-                child: Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: t.textPrimary,
-                    fontWeight: FontWeight.w700,
+        // The transparent Material lets a switch or tile inside this section
+        // paint its ink on the card; a bare DecoratedBox swallows it.
+        child: Material(
+          type: MaterialType.transparency,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Semantics(
+                  header: true,
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: t.textPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 12),
-              child,
-              FieldErrorText(message: error),
-            ],
+                const SizedBox(height: 12),
+                child,
+                FieldErrorText(message: error),
+              ],
+            ),
           ),
         ),
       ),

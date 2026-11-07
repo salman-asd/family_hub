@@ -8,6 +8,9 @@ import 'package:family_hub/features/chores/swaps/domain/swap_request.dart';
 import 'package:family_hub/features/chores/swaps/presentation/swap_providers.dart';
 import 'package:family_hub/features/chores/swaps/presentation/swap_sheet.dart';
 import 'package:family_hub/features/chores/swaps/presentation/swap_status_banner.dart';
+import 'package:family_hub/features/family/domain/member.dart';
+import 'package:family_hub/features/family/presentation/family_providers.dart';
+import 'package:family_hub/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
@@ -74,6 +77,10 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 100));
     await tester.tap(find.text('open'));
+    // Two frames of sheet-open time: the route animation only starts once the
+    // family list behind it has been read, and a tap on a button that is still
+    // below the screen would miss.
+    await tester.pump(const Duration(milliseconds: 300));
     await tester.pump(const Duration(milliseconds: 300));
   }
 
@@ -170,6 +177,9 @@ void main() {
 
     expect(find.textContaining('asked you to take this chore'), findsOneWidget);
     await tester.tap(find.byKey(const Key('swap_banner_answer')));
+    // The answer sheet is opened after the chore has been re-read, so the
+    // sheet animation starts a frame late; it must be on screen before Accept.
+    await tester.pump(const Duration(milliseconds: 300));
     await tester.pump(const Duration(milliseconds: 300));
     await tester.tap(find.byKey(const Key('swap_accept')));
     await tester.pump(const Duration(milliseconds: 300));
@@ -197,4 +207,39 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.byKey(const Key('swap_banner')), findsNothing);
   });
+
+  testWidgets(
+    'the sheet waits for the family list instead of claiming nobody is free',
+    (tester) async {
+      await pumpP3Screen(
+        tester,
+        home: Scaffold(
+          body: Consumer(
+            builder: (context, ref, _) => TextButton(
+              onPressed: () =>
+                  ref.requestSwapWithSheet(context, occurrence: chore),
+              child: const Text('open'),
+            ),
+          ),
+        ),
+        sharedFixture: fixture,
+        occurrences: <ChoreOccurrence>[chore],
+        uid: 'cara',
+        height: 1400,
+        overrides: <Override>[
+          ...wired(),
+          membersProvider.overrideWith(
+            (ref) => const Stream<List<Member>>.empty(),
+          ),
+        ],
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.tap(find.text('open'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.byType(LoadingView), findsOneWidget);
+      expect(find.byKey(const Key('swap_nobody')), findsNothing);
+      expect(find.byKey(const Key('swap_send')), findsNothing);
+    },
+  );
 }

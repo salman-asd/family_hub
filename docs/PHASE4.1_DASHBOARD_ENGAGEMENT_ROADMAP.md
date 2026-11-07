@@ -48,10 +48,12 @@
 
 | Step | Status | Notes (from your tree and PROGRESS.md) |
 | --- | --- | --- |
-| P4-01 … P4-14 | ✅ **Implemented** | Written, **not yet compiled or run** (PROGRESS.md: P4-01 gate all `NOT RUN`, P4-13/P4-14 `Validation: pending`). PROGRESS.md has entries only for P4-01, 02, 13, 14. |
-| **C1 checkpoint** | ⬜ **Do next** | Run the catch-up gate and write the missing PROGRESS entries (below). |
+| P4-01 … P4-14 | ✅ **Implemented and now gated** | The full suite runs green on this tree as of 2026-11-07 (see the C1 row and PROGRESS.md "Wave E finish"); the compile/test failures the earlier notes predicted are fixed. Device and emulator evidence is still missing. |
+| **C1 checkpoint** | ✅ **Done** | The catch-up gate ran with Wave E: `dart format .` clean, `flutter analyze` no issues, `flutter test --exclude-tags golden` 3275 passed / 0 failed (PROGRESS.md, "Wave E finish"). The rules emulator and the device rows are still NOT RUN — no Java, no phone. |
 | P4-15 | ⏸ **Deferred** | Needs a push sender; see Appendix I. Blocks nothing. |
-| P4-16 … P4-25 | ⬜ To do | In the order of §4.2. |
+| P4-16 … P4-23 | ✅ **Implemented** | P4-23 is the polish audit itself: `docs/phase4_polish_audit.md`, no open High item. |
+| P4-24 | ✅ **Implemented** | Tablet layouts; tests at 360/600/840/1024 dp pass. |
+| P4-25 | 🟡 **Partly done — not signed off** | Read budget measured (13 Home listeners, above the seven planned) and the concurrency tests written; `docs/phase4_acceptance.md` keeps the device, UAT, copy-review, emulator and golden rows open. |
 | P4-26 | ⏸ Optional / deferred | Only meaningful after a push sender exists. |
 
 **Checkpoint C1 — catch-up gate (do before P4-16).** One commit, `P4-C1: gate and records`:

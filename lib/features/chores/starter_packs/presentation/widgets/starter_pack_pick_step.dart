@@ -139,7 +139,11 @@ class _CountChip extends StatelessWidget {
     children: <Widget>[
       ConfidenceChip(confidence: confidence, compact: true),
       const SizedBox(width: 4),
-      Text(label, style: Theme.of(context).textTheme.bodySmall),
+      // The label is the flexible half: at 2.0x Bangla it is wider than the
+      // line, and a Wrap cannot shrink a child it has already placed.
+      Flexible(
+        child: Text(label, style: Theme.of(context).textTheme.bodySmall),
+      ),
     ],
   );
 }

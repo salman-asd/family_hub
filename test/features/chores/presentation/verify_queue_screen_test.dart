@@ -5,7 +5,6 @@ import 'package:family_hub/features/chores/occurrences/domain/occurrence_status.
 import 'package:family_hub/features/chores/occurrences/presentation/occurrence_providers.dart';
 import 'package:family_hub/features/chores/presentation/verify_queue_screen.dart';
 import 'package:family_hub/features/chores/templates/domain/template_parts.dart';
-import 'package:family_hub/features/family/presentation/permission_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -36,7 +35,7 @@ void main() {
       uid: 'bob',
       role: Role.moderator,
       occurrences: <ChoreOccurrence>[waiting('a_20261024')],
-      overrides: [permissionSettingsProvider.overrideWithValue(verifyOn)],
+      permissionSettings: verifyOn,
     );
 
     expect(find.text('Approve'), findsOneWidget);
@@ -52,7 +51,7 @@ void main() {
       uid: 'bob',
       role: Role.moderator,
       occurrences: <ChoreOccurrence>[waiting('a_20261024', by: 'bob')],
-      overrides: [permissionSettingsProvider.overrideWithValue(verifyOn)],
+      permissionSettings: verifyOn,
     );
 
     expect(find.text('Approve'), findsNothing);
@@ -66,7 +65,7 @@ void main() {
       tester,
       home: const VerifyQueueScreen(),
       occurrences: <ChoreOccurrence>[waiting('a_20261024', by: 'dave')],
-      overrides: [permissionSettingsProvider.overrideWithValue(verifyOn)],
+      permissionSettings: verifyOn,
     );
 
     expect(find.text('Approve'), findsNothing);
@@ -81,8 +80,8 @@ void main() {
       home: const VerifyQueueScreen(),
       uid: 'bob',
       role: Role.moderator,
+      permissionSettings: verifyOn,
       overrides: [
-        permissionSettingsProvider.overrideWithValue(verifyOn),
         verifyQueueProvider.overrideWith(
           (ref) => Stream<List<ChoreOccurrence>>.error(StateError('failed')),
         ),
@@ -100,7 +99,7 @@ void main() {
       uid: 'bob',
       role: Role.moderator,
       occurrences: <ChoreOccurrence>[waiting('a_20261024')],
-      overrides: [permissionSettingsProvider.overrideWithValue(verifyOn)],
+      permissionSettings: verifyOn,
     );
 
     expect(find.byType(RefreshIndicator), findsOneWidget);
@@ -114,7 +113,7 @@ void main() {
       role: Role.moderator,
       textScale: 2,
       occurrences: <ChoreOccurrence>[waiting('a_20261024')],
-      overrides: [permissionSettingsProvider.overrideWithValue(verifyOn)],
+      permissionSettings: verifyOn,
     );
 
     expect(tester.takeException(), isNull);
