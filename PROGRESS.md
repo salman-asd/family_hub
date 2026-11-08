@@ -57,13 +57,18 @@
 - **Fixed:** `FirebaseAuthRepository.authStateChanges()` used `FirebaseAuth.authStateChanges()`, which does not fire on `User.reload()`. After "I have verified" the stream would never report `emailVerified == true`, so the Step 8 guard could not leave /verify-email. It now uses `userChanges()`.
 - **Fixed:** `auth_providers.dart` lived in `features/auth/domain/` but imports `flutter_riverpod`, breaking "domain has zero imports of flutter". Moved to `features/auth/presentation/`. `test/architecture/layer_boundaries_test.dart` now enforces the layer table.
 - **Fixed:** `FamilyHubApp` built a new `GoRouter` inside `build()`, resetting navigation on every theme/language change. The router is now a provider.
-- **Open (updated 2026-11-07):** the plan for two projects was collapsed to one, `familyhub-app-ai`
-  (both flavors still build; `.firebaserc` points all three aliases at it). The real
-  `android/app/src/{dev,prod}/google-services.json` are on the owner's machine and are
-  `skip-worktree`, so they are not in the commit. `firebase_options_*.dart` still contain
-  placeholder keys (`AIzaSy-dev-android-placeholder-key`) — run `flutterfire configure` for
-  `familyhub-app-ai` before testing against real Firebase. The emulator route
-  (`--dart-define=USE_EMULATOR=true`) does not need real keys.
+- **Done (2026-11-08):** the plan for two projects was collapsed to one, `familyhub-app-ai`
+  (both flavors still build; `.firebaserc` points all three aliases at it). `flutterfire_cli`
+  1.4.1 generated the real Android config and its values are in the `android` blocks of
+  `lib/core/firebase/firebase_options_{dev,prod}.dart`; the two `google-services.json` files are
+  the real ones. All four files are `skip-worktree`, so the commit still carries only the
+  placeholders. Non-Android platform blocks stay placeholders (Android-only app).
+  **Still open:** publishing the rules (the composite indexes deployed fine on 2026-11-08, but
+  `firebase deploy --only firestore:rules` fails with `HTTP 409 … releases/cloud.firestore already
+  exists` — upstream firebase/firebase-tools#10819, no CLI workaround; publish once from the
+  console, see `firebase/README.md`), and restricting the Android API key in Google Cloud.
+  Until the rules publish, the live project denies every client (`403` on an anonymous read), so
+  real-data use is blocked by that one step.
 - **Open:** Step 4 asked for a golden test of the theme settings screen and a widget test that switching themes changes the scaffold background instantly; neither exists (only controller/persistence tests).
 - **Open:** auth goldens were generated on Windows (`D:/...` in the logs). Linux CI renders fonts differently, so they may fail in CI; regenerate on CI or tag them and exclude from the CI run.
 - **Open:** `core/utils/clock.dart` imports `flutter_riverpod` (the `clockProvider`), so anything in domain that imports `Clock` pulls Flutter in transitively. Consider splitting the provider out in Step 9.
@@ -158,7 +163,9 @@ download in the authoring environment). Before merging run, in this order:
 - "Offline" in the banner = writes pending for more than 10 s (no listener-based detection).
 - Leaving sets BOTH `leftAt` and `removedAt` so the existing rejoin rule and routing work unchanged.
 - Generated l10n files were edited by hand (`tools` helper); run `flutter gen-l10n` to confirm they are identical.
-- `flutterfire configure`, real `google-services.json`, the upload keystore and `firebase deploy` are manual steps (`firebase/README.md`, `docs/RELEASE.md`).
+- `flutterfire configure` and the real `google-services.json` are done (2026-11-08, Android; see
+  `firebase/README.md`). The upload keystore and `firebase deploy` are still manual
+  (`firebase/README.md`, `docs/RELEASE.md`).
 
 
 ## Phase 1 hardening - Part B (H5-H8), written statically
@@ -2340,8 +2347,8 @@ guarded write.
 | `flutter analyze` | Passed, no issues. |
 | `flutter test --exclude-tags golden` | **3276 passed, 0 failed, 0 skipped** (was 61 failing). |
 | `node tools/check_indexes.mjs` | Passed (`firestore.indexes.json OK`). |
-| Firestore rules emulator | Ran 2026-11-07: **138 passed, 15 failed of 153.** `firebase/firestore.rules` did not compile at all before this run (15 compiler errors - dead helpers, a duplicate `dateKeyOk`, `todayKey(f)` with an unbound `f`, `String.substring`), so no rules test had ever executed and `firebase deploy --only firestore:rules` would have been refused. The 15 failures are one root cause: the emulator's 1000-expressions-per-request budget, exceeded by the chore-occurrence validators. See `docs/phase5_contract.md` debt. |
-| Device checks, family UAT, owner copy review, Linux goldens | Partly run: the dev APK installs and the app reaches the Bangla welcome screen on an Android emulator (API 37) wired to the Auth + Firestore emulators. That run exposed a startup crash no widget test could see — `celebrationOrchestrationProvider` edited the celebration controller while `app.dart` was building it — now fixed with a test (finding 25, `docs/phase4_polish_audit.md`). Family UAT, owner copy review, the reminder/push sheets and Linux goldens are still NOT RUN. |
+| Firestore rules emulator | Ran 2026-11-07: **138 passed, 15 failed of 153.** `firebase/firestore.rules` did not compile at all before this run (15 compiler errors - dead helpers, a duplicate `dateKeyOk`, `todayKey(f)` with an unbound `f`, `String.substring`), so no rules test had ever executed and `firebase deploy --only firestore:rules` would have been refused. The 15 failures are one root cause: the emulator's 1000-expressions-per-request budget, exceeded by the chore-occurrence validators. See `docs/phase5_contract.md` debt. Re-run 2026-11-08 after deleting the last dead helper (`role(f)`, never called): same 138/15, and `firebase deploy --only firestore:rules --dry-run` now reports a clean compile with **no warnings**. |
+| Device checks, family UAT, owner copy review, Linux goldens | Partly run: the dev APK installs and the app reaches the Bangla welcome screen on an Android emulator (API 37) wired to the Auth + Firestore emulators. That run exposed a startup crash no widget test could see — `celebrationOrchestrationProvider` edited the celebration controller while `app.dart` was building it — now fixed with a test (finding 25, `docs/phase4_polish_audit.md`). Family UAT, owner copy review, the reminder/push sheets and Linux goldens are still NOT RUN. Re-run 2026-11-08 with the real (non-emulator) dev APK: `FirebaseApp initialization successful`, the placeholder guard stays silent and the Bangla welcome screen renders — the config wiring works; Firestore writes still fail until the rules publish. |
 
 The rules gate had been reported as "no Java on this machine"; that was wrong.
 Android Studio ships OpenJDK 25 at `C:\Program Files\Android\Android Studio\jbr`,

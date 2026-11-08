@@ -24,37 +24,78 @@ npx firebase use dev          # or prod — both resolve to familyhub-app-ai
 npx firebase deploy --only firestore:rules,firestore:indexes
 ```
 
-## Real Firebase configuration (manual, once)
+**Deploy status, measured 2026-11-08 on `familyhub-app-ai`:** the indexes deployed successfully
+(the CLI reported `(default)` database success). The rules did **not** publish — the CLI uploaded
+the ruleset, then `POST …/v1/projects/familyhub-app-ai/releases` answered
+`HTTP 409, Release projects/familyhub-app-ai/releases/cloud.firestore already exists`, on every
+retry. That is upstream [firebase/firebase-tools#10819](https://github.com/firebase/firebase-tools/issues/10819);
+the maintainers call it a backend problem with large rules files and there is no CLI workaround.
+**Until it publishes, Firestore is in its console default: every client is denied** — confirmed with
+an unauthenticated REST read, which returns `403 PERMISSION_DENIED` (`Missing or insufficient
+permissions`). The app therefore cannot read or write real data yet.
 
-The repo ships placeholder keys in `lib/core/firebase/firebase_options_*.dart`. A non-emulator
-run with placeholders fails at startup with `FirebaseNotConfiguredException`.
+Do it once from the console, which creates the release the CLI insists already exists: Firestore →
+**Rules** → Edit rules → paste the whole contents of `firebase/firestore.rules` → **Publish**. Then
+re-run the command above; the CLI path should work for later changes.
 
-The real `android/app/src/{dev,prod}/google-services.json` for `familyhub-app-ai` are already on
-the owner's machine and are marked `skip-worktree`, so git keeps showing the committed
-placeholders. A fresh clone therefore needs both files put back and step 4 re-run.
+## Real Firebase configuration
 
-Before the CLI steps, in the Firebase console for `familyhub-app-ai`:
+**Status as of 2026-11-08: done for Android.** The `android` blocks of
+`lib/core/firebase/firebase_options_*.dart` and the two `google-services.json` files carry the
+real `familyhub-app-ai` values and all four files are `skip-worktree`, so the repo still shows
+placeholders to git and nothing sensitive gets committed. The `ios`/`macos`/`web`/`windows` blocks
+are still placeholders — the app is Android-only, and the startup guard checks only the current
+platform.
+
+Re-doing it (fresh clone, or the project's keys are rotated):
+
+```bash
+git update-index --no-skip-worktree lib/core/firebase/firebase_options_dev.dart \
+                                     lib/core/firebase/firebase_options_prod.dart \
+                                     android/app/src/dev/google-services.json \
+                                     android/app/src/prod/google-services.json
+```
+
+In the Firebase console for `familyhub-app-ai`:
 
 - Authentication → Sign-in method → enable **Email/Password** (the only provider this app uses).
 - Firestore Database → create in **Native mode**. The region is permanent — pick the
   one nearest Bangladesh that the console offers.
-- Project settings → Your apps → register **two Android apps**, `com.familyhub.family_hub.dev`
-  and `com.familyhub.family_hub`, with the debug SHA-1 for each.
+- Project settings → Your apps → both Android apps registered: `com.familyhub.family_hub.dev`
+  and `com.familyhub.family_hub`, each with the debug SHA-1.
 
-1. `dart pub global activate flutterfire_cli`
-2. `flutterfire configure` — run it interactively: choose project `familyhub-app-ai`, then both
-   Android apps. It writes a single `lib/firebase_options.dart` with a class named
-   `DefaultFirebaseOptions`; move its content into `lib/core/firebase/firebase_options_dev.dart`
-   and `_prod.dart`, rename the class to `DevFirebaseOptions` / `ProdFirebaseOptions`, and keep
-   the `static const String projectId` each file declares — the resolver and
-   `test/core/firebase/firebase_options_test.dart` read it.
-   `[VERIFY]` the non-interactive flag form (`--project`, `--android-app-id`, `--out`); the
-   flutterfire version installed here has not been checked, so this doc does not script the call.
-3. Put each app's `google-services.json` in `android/app/src/dev/` and
-   `android/app/src/prod/`, then keep them out of commits:
-   `git update-index --skip-worktree android/app/src/{dev,prod}/google-services.json`
-4. Android API keys are not secrets, but restrict them to the app's package name and
-   SHA-1 in the Google Cloud console.
+Then, verified against flutterfire_cli **1.4.1** on 2026-11-08:
+
+```bash
+npx firebase login                     # flutterfire reuses this session; no extra browser login
+dart pub global activate flutterfire_cli
+dart pub global run flutterfire_cli:flutterfire configure -y -p familyhub-app-ai \
+  --platforms android -a com.familyhub.family_hub.dev --out=build/fh_tmp/firebase_options_dev.dart
+dart pub global run flutterfire_cli:flutterfire configure -y -p familyhub-app-ai \
+  --platforms android -a com.familyhub.family_hub --out=build/fh_tmp/firebase_options_prod.dart
+```
+
+- Run it from the repo root. `flutterfire` is **not** on PATH unless you add
+  `%LOCALAPPDATA%\Pub\Cache\bin`; `dart pub global run flutterfire_cli:flutterfire …` needs no PATH
+  edit.
+- `-a` is `--android-package-name`; `--android-app-id` still parses but is deprecated.
+- It asks for an `android-out` path even with `-y`, and it reads that answer from stdin: pipe it a
+  path **relative to the project root** (`printf 'build/fh_tmp/google-services-dev.json\n' | …`).
+  An absolute path is rejected and the prompt then dies with `RangeError`.
+- Afterwards undo its side effects: it rewrites `firebase.json` (minified, plus a
+  `flutter.platforms` block that points at the generated files) and, if you accept the default,
+  writes `android/app/google-services.json`. `git checkout -- firebase.json`, delete that JSON, and
+  delete `build/fh_tmp/`. The app does not read either file — it passes explicit `FirebaseOptions`.
+- Transcribe the generated `apiKey` / `appId` / `messagingSenderId` into the matching `android`
+  block of `lib/core/firebase/firebase_options_dev.dart` / `_prod.dart`. Keep the
+  `DevFirebaseOptions` / `ProdFirebaseOptions` class names, the `static const String projectId`
+  (the resolver and `test/core/firebase/firebase_options_test.dart` read it) and the other
+  platform blocks untouched; do not use the CLI's `DefaultFirebaseOptions` shape directly.
+- Re-apply the skip-worktree flags (the command above with `--skip-worktree`), then run
+  `dart format .`, `flutter analyze`, `flutter test --exclude-tags golden` and
+  `flutter build apk --debug --flavor dev -t lib/main_dev.dart`.
+- Restrict the Android API key to the two package names + SHA-1s in Google Cloud Console →
+  APIs & Services → Credentials. Android keys ship inside the APK; the restriction is the control.
 
 ## Verify the rules
 
@@ -68,10 +109,25 @@ npx firebase emulators:exec --only firestore --project demo-family-hub \
   "npm --prefix firebase/rules_test test"
 ```
 
-Expected as of 2026-11-07: 138 pass, 15 fail. All 15 are chore-occurrence and
-comment writes that hit the emulator's 1000-expression budget — a Phase 5 rules
-redesign, documented as item 24 in `docs/phase4_polish_audit.md`. Do not read a
-green run of the other 18 files as proof that those 15 paths are enforced.
+Expected as of 2026-11-08 (re-measured): 138 pass, 15 fail. All 15 are chore-occurrence and
+comment writes that hit the emulator's 1000-expression budget — a Phase 5 rules redesign,
+documented as item 24 in `docs/phase4_polish_audit.md`. Do not read a green run of the other 18
+files as proof that those 15 paths are enforced.
+
+`emulators:exec` refuses to start if something already holds port 8080 (`Could not start Firestore
+Emulator, port taken`) — usually a `firebase emulators:start` left running for the app. Stop it, or
+run the suite from a scratch config that moves Firestore elsewhere; the tests read
+`FIRESTORE_EMULATOR_HOST`, so nothing needs to know the port. Create `scratch.firebase.json`
+(gitignore it or delete it after) as a copy of `firebase.json` with `"port": 8090` for firestore and
+no `auth`/`ui` blocks, then:
+
+```
+npx firebase emulators:exec --config scratch.firebase.json --only firestore \
+  --project demo-family-hub "npm --prefix firebase/rules_test test"
+```
+
+Check the rules compile — and that they compile without warnings, since an unused helper is dead
+code — with `npx firebase deploy --only firestore:rules --dry-run`. It performs no deploy.
 
 ## Marking an emulator user's e-mail verified
 

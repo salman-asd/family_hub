@@ -38,12 +38,13 @@ Locally, skip them: `flutter test --exclude-tags golden`.
 
 ## Firebase
 One Firebase project, `familyhub-app-ai`, backs both build flavors (aliases in `.firebaserc`).
-First-time wiring (`flutterfire configure`, `google-services.json`, deploying rules and
-indexes) is in `firebase/README.md`. The real `android/app/src/{dev,prod}/google-services.json`
-files are marked `skip-worktree` and must never be committed; their project number, app ids and
-API key must not be copied into any tracked file. Until `flutterfire configure` has been run, the
-app refuses to start against real Firebase (placeholder guard); it still runs against
-the emulators.
+Wiring (`flutterfire configure`, `google-services.json`, deploying rules and indexes) is in
+`firebase/README.md`; it is already done for Android on the owner's machine. The real
+`android/app/src/{dev,prod}/google-services.json` and the `android` blocks of
+`lib/core/firebase/firebase_options_{dev,prod}.dart` are marked `skip-worktree` and must never be
+committed — their project number, app ids and API key must not be copied into any tracked file.
+A run with placeholder keys against real Firebase fails at startup
+(`FirebaseNotConfiguredException`); `--dart-define=USE_EMULATOR=true` still works everywhere.
 
 ### Emulators
 Auth (9099), Firestore (8080), UI (4000):

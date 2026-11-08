@@ -1793,9 +1793,6 @@ service cloud.firestore {
     function roleIn(m) {
       return m.get('role', '');
     }
-    function role(f) {
-      return roleIn(me(f));
-    }
     // Active = approved, and not rejected (soft delete) or disabled.
     function isActiveMember(f) {
       let m = me(f);
